@@ -1,4 +1,4 @@
-# 竞品分析报告
+# 竞品分析报告(市场与用户可行性证据)
 
 **项目**: InfoCatcher  
 **日期**: 2026-07-18  
@@ -36,12 +36,12 @@
 
 ### 1.3 开源项目（间接竞品/可参考）
 
-| 项目 | GitHub | 类型 | 说明 |
-|------|--------|------|------|
-| **awesome-ai-tools** (eudk) | ⭐ 大量 | Awesome List | 大规模 AI 工具列表，纯 Markdown |
-| **free-ai-tools** (ShaikhWarsi) | ⭐ — | 免费工具列表 | 聚焦免费 AI 工具、价格对比 |
-| **awesome-open-source-ai-tools** | ⭐ 18 | 开源工具列表 | 聚焦开源 AI 工具 |
-| **ai-collection** | ⭐ — | 工具合集 | 通用 AI 工具合集 |
+| 项目                               | GitHub | 类型           | 说明                     |
+| -------------------------------- | ------ | ------------ | ---------------------- |
+| **awesome-ai-tools** (eudk)      | ⭐ 大量   | Awesome List | 大规模 AI 工具列表，纯 Markdown |
+| **free-ai-tools** (ShaikhWarsi)  | ⭐ —    | 免费工具列表       | 聚焦免费 AI 工具、价格对比        |
+| **awesome-open-source-ai-tools** | ⭐ 18   | 开源工具列表       | 聚焦开源 AI 工具             |
+| **ai-collection**                | ⭐ —    | 工具合集         | 通用 AI 工具合集             |
 
 **GitHub 发现**：无成熟的开源 AI 工具导航/对比平台项目。现有项目均为 Awesome List 形式（Markdown 列表），没有带 Web UI、搜索、对比功能的完整项目。**这意味着 InfoCatcher 可能成为该领域的首个开源 Web 平台。**
 

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eval Set Review - files-create-check</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Lora', Georgia, serif; background: #faf9f5; padding: 2rem; color: #141413; }
+    h1 { font-family: 'Poppins', sans-serif; margin-bottom: 0.5rem; font-size: 1.5rem; }
+    .description { color: #b0aea5; margin-bottom: 1.5rem; font-style: italic; max-width: 900px; }
+    .controls { margin-bottom: 1rem; display: flex; gap: 0.5rem; }
+    .btn { font-family: 'Poppins', sans-serif; padding: 0.5rem 1rem; border: none; border-radius: 6px; cursor: pointer; font-size: 0.875rem; font-weight: 500; }
+    .btn-add { background: #6a9bcc; color: white; }
+    .btn-add:hover { background: #5889b8; }
+    .btn-export { background: #d97757; color: white; }
+    .btn-export:hover { background: #c4613f; }
+    table { width: 100%; max-width: 1100px; border-collapse: collapse; background: white; border-radius: 6px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    th { font-family: 'Poppins', sans-serif; background: #141413; color: #faf9f5; padding: 0.75rem 1rem; text-align: left; font-size: 0.875rem; }
+    td { padding: 0.75rem 1rem; border-bottom: 1px solid #e8e6dc; vertical-align: top; }
+    tr:nth-child(even) td { background: #faf9f5; }
+    tr:hover td { background: #f3f1ea; }
+    .section-header td { background: #e8e6dc; font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 0.8rem; color: #141413; text-transform: uppercase; letter-spacing: 0.05em; }
+    .query-input { width: 100%; padding: 0.4rem; border: 1px solid #e8e6dc; border-radius: 4px; font-size: 0.875rem; font-family: 'Lora', Georgia, serif; resize: vertical; min-height: 60px; }
+    .query-input:focus { outline: none; border-color: #d97757; box-shadow: 0 0 0 2px rgba(217,119,87,0.15); }
+    .toggle { position: relative; display: inline-block; width: 44px; height: 24px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle .slider { position: absolute; inset: 0; background: #b0aea5; border-radius: 24px; cursor: pointer; transition: 0.2s; }
+    .toggle .slider::before { content: ""; position: absolute; width: 18px; height: 18px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: 0.2s; }
+    .toggle input:checked + .slider { background: #d97757; }
+    .toggle input:checked + .slider::before { transform: translateX(20px); }
+    .btn-delete { background: #c44; color: white; padding: 0.3rem 0.6rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem; font-family: 'Poppins', sans-serif; }
+    .btn-delete:hover { background: #a33; }
+    .summary { margin-top: 1rem; color: #b0aea5; font-size: 0.875rem; }
+  </style>
+</head>
+<body>
+  <h1>Eval Set Review: <span id="skill-name">files-create-check</span></h1>
+  <p class="description">Current description: <span id="skill-desc">在 Claude Code 准备于当前项目中创建文件，或准备进行多处/批量文件修改时，先向用户说明具体操作计划并取得确认，再执行并核验结果。只要任务会直接或间接新建一个或多个文件，必须使用本技能；当任务要修改同一文件中的多个独立内容区域，或修改一批现有文件时，也必须使用本技能。创建计划须列出文件路径和功能，修改计划须列出文件路径及准备修改的具体部分。即使创建或修改由 Write、Edit、脚本、构建命令、生成器、格式化器或其他工具间接完成，也要触发。不要用于仅修改单个现有文件中的一个内容点、仅创建文件夹、只读搜索、删除、移动或重命名且不会生成新文件的任务。</span></p>
+
+  <div class="controls">
+    <button class="btn btn-add" onclick="addRow()">+ Add Query</button>
+    <button class="btn btn-export" onclick="exportEvalSet()">Export Eval Set</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:65%">Query</th>
+        <th style="width:18%">Should Trigger</th>
+        <th style="width:10%">Actions</th>
+      </tr>
+    </thead>
+    <tbody id="eval-body"></tbody>
+  </table>
+
+  <p class="summary" id="summary"></p>
+
+  <script>
+    const EVAL_DATA = [{"query": "请在当前 InfoCatcher 项目的 03.需求分析/ 目录新增一份 API 数据源需求说明.md，并在 04.总体设计/ 新建数据源接入架构.md。前者写清用户需求，后者记录模块关系，完成后告诉我生成了哪些文件。", "should_trigger": true}, {"query": "在这个仓库里帮我搭一个最小的 TypeScript CLI：创建 package.json、tsconfig.json、src/index.ts 和 README.md，先别安装依赖。", "should_trigger": true}, {"query": "运行项目里的 scripts/export_report.py，把分析结果导出到 reports/。脚本最终会生成 CSV 和 Markdown，但具体文件名由日期决定；某个导出失败也继续处理其他格式。", "should_trigger": true}, {"query": "需要同时调整 vite.config.ts、package.json 和 src/config.ts，让开发服务器统一使用 4173 端口。请直接改好。", "should_trigger": true}, {"query": "修改 03.需求分析/软件需求规格说明书.md：补充数据源管理章节、更新非功能需求里的响应时间指标，并修订文档末尾的追踪矩阵。", "should_trigger": true}, {"query": "在当前项目根目录创建一个 CHANGELOG.md，用来记录从 0.1.0 开始的版本变化；目前先写文件标题、格式约定和第一个版本条目。", "should_trigger": true}, {"query": "执行 npm run generate:types。这个命令会根据 schema 在 src/generated/ 下产生若干 .ts 文件，我不确定具体数量，生成后请核对清单。", "should_trigger": true}, {"query": "给数据抓取模块增加重试配置：新建 config/retry.json，同时修改 src/fetcher.js 的 loadConfig 和 retryRequest 两个函数来读取并应用它。", "should_trigger": true}, {"query": "更新 tests/__snapshots__/ 页面快照：运行测试命令接受新的快照输出。它可能新建一些 .snap 文件，也可能覆盖已有快照。", "should_trigger": true}, {"query": "帮我批量整理 06.编码与单元测试/mvp：修改 index.html 的导航和页脚两个区域，再改 css/style.css 与 js/app.js，让三个文件保持一致。", "should_trigger": true}, {"query": "把 README.md 第一行标题里的 Info Catcher 改成 InfoCatcher，除此之外一个字符也不要动。", "should_trigger": false}, {"query": "只在当前项目里创建一个 empty-demo 文件夹，暂时不要往里面放任何文件。", "should_trigger": false}, {"query": "删除 reports/ 里上周生成的三个临时报告，不要创建替代文件，也不要修改其他内容。", "should_trigger": false}, {"query": "把 docs/a.md、docs/b.md、docs/c.md 分别重命名为 01-a.md、02-b.md、03-c.md，只改文件名，不复制、不生成新文件。", "should_trigger": false}, {"query": "先帮我阅读 scripts/generate_samples.py，告诉我它运行后可能产生哪些文件、放在哪里；这次不要运行脚本，也不要改项目。", "should_trigger": false}, {"query": "把 package.json 里的 version 从 0.2.0 改成 0.2.1，其他字段保持原样。", "should_trigger": false}, {"query": "请分析 03.需求分析/ 下现有文档是否缺少验收标准，只在聊天里给建议，先不要创建或修改任何文件。", "should_trigger": false}, {"query": "将 02.可行性研究/poc/verification_report.md 移动到 02.可行性研究/archive/，不要复制，文件内容保持不变。", "should_trigger": false}, {"query": "请先在回复里起草一份 CONTRIBUTING.md 的内容供我审阅，暂时不要保存到项目中。", "should_trigger": false}, {"query": "在用户目录 C:/Users/HelloWare/Documents/ 下创建 notes.txt，当前 InfoCatcher 项目内不要新增或修改任何文件。", "should_trigger": false}];
+
+    let evalItems = [...EVAL_DATA];
+
+    function render() {
+      const tbody = document.getElementById('eval-body');
+      tbody.innerHTML = '';
+
+      // Sort: should-trigger first, then should-not-trigger
+      const sorted = evalItems
+        .map((item, origIdx) => ({ ...item, origIdx }))
+        .sort((a, b) => (b.should_trigger ? 1 : 0) - (a.should_trigger ? 1 : 0));
+
+      let lastGroup = null;
+      sorted.forEach(item => {
+        const group = item.should_trigger ? 'trigger' : 'no-trigger';
+        if (group !== lastGroup) {
+          const headerRow = document.createElement('tr');
+          headerRow.className = 'section-header';
+          headerRow.innerHTML = `<td colspan="3">${item.should_trigger ? 'Should Trigger' : 'Should NOT Trigger'}</td>`;
+          tbody.appendChild(headerRow);
+          lastGroup = group;
+        }
+
+        const idx = item.origIdx;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><textarea class="query-input" onchange="updateQuery(${idx}, this.value)">${escapeHtml(item.query)}</textarea></td>
+          <td>
+            <label class="toggle">
+              <input type="checkbox" ${item.should_trigger ? 'checked' : ''} onchange="updateTrigger(${idx}, this.checked)">
+              <span class="slider"></span>
+            </label>
+            <span style="margin-left:8px;font-size:0.8rem;color:#b0aea5">${item.should_trigger ? 'Yes' : 'No'}</span>
+          </td>
+          <td><button class="btn-delete" onclick="deleteRow(${idx})">Delete</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+      updateSummary();
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function updateQuery(idx, value) { evalItems[idx].query = value; updateSummary(); }
+    function updateTrigger(idx, value) { evalItems[idx].should_trigger = value; render(); }
+    function deleteRow(idx) { evalItems.splice(idx, 1); render(); }
+
+    function addRow() {
+      evalItems.push({ query: '', should_trigger: true });
+      render();
+      const inputs = document.querySelectorAll('.query-input');
+      inputs[inputs.length - 1].focus();
+    }
+
+    function updateSummary() {
+      const trigger = evalItems.filter(i => i.should_trigger).length;
+      const noTrigger = evalItems.filter(i => !i.should_trigger).length;
+      document.getElementById('summary').textContent =
+        `${evalItems.length} queries total: ${trigger} should trigger, ${noTrigger} should not trigger`;
+    }
+
+    function exportEvalSet() {
+      const valid = evalItems.filter(i => i.query.trim() !== '');
+      const data = valid.map(i => ({ query: i.query.trim(), should_trigger: i.should_trigger }));
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'eval_set.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    render();
+  </script>
+</body>
+</html>
