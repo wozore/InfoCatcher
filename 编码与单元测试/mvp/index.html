@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InfoCatcher — AI工具场景化对比平台</title>
+<meta name="description" content="发现、对比、选择最适合你的AI工具。场景化深度对比，公开评测方法论，完全开源免费。">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <a href="#" class="logo" id="homeBtn">🔍 InfoCatcher</a>
+    <nav class="nav">
+      <button class="nav-btn active" data-view="tools">工具库</button>
+      <button class="nav-btn" data-view="scenes">场景导航</button>
+      <button class="nav-btn" data-view="compare">对比模式 <span class="badge" id="compareCount">0</span></button>
+      <button class="nav-btn" data-view="about">关于</button>
+    </nav>
+  </div>
+</header>
+
+<main id="app">
+
+  <!-- 工具库视图 -->
+  <section id="view-tools" class="view active">
+    <div class="hero">
+      <h1>找到最适合你的 AI 工具</h1>
+      <p>不再是泛泛的罗列。按<b>真实使用场景</b>对比，公开<b>评测方法论</b>，标注<b>每项信息的更新日期</b>。</p>
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="搜索工具名、场景、功能… 例如: 写论文、免费、编程" autocomplete="off">
+        <button id="searchClear" class="clear-btn" style="display:none">✕</button>
+      </div>
+    </div>
+
+    <div class="filters">
+      <div class="filter-group">
+        <span class="filter-label">分类:</span>
+        <button class="filter-chip active" data-category="all">全部</button>
+        <button class="filter-chip" data-category="对话">💬 对话</button>
+        <button class="filter-chip" data-category="AI编程">💻 AI编程</button>
+        <button class="filter-chip" data-category="AI图像">🎨 AI图像</button>
+        <button class="filter-chip" data-category="AI视频">🎬 AI视频</button>
+        <button class="filter-chip" data-category="AI搜索">🔎 AI搜索</button>
+        <button class="filter-chip" data-category="AI办公">📊 AI办公</button>
+        <button class="filter-chip" data-category="AI音频">🎵 AI音频</button>
+        <button class="filter-chip" data-category="AI音乐">🎵 AI音乐</button>
+        <button class="filter-chip" data-category="开源">🔓 开源</button>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">访问:</span>
+        <button class="filter-chip" data-access="all">全部</button>
+        <button class="filter-chip" data-access="开放">✅ 国内可访问</button>
+        <button class="filter-chip" data-access="受限">⚠️ 需科学上网</button>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">价格:</span>
+        <button class="filter-chip" data-price="all">全部</button>
+        <button class="filter-chip" data-price="free">🆓 有免费层</button>
+        <button class="filter-chip" data-price="paid">💰 仅付费</button>
+      </div>
+    </div>
+
+    <div class="stats-bar">
+      <span id="toolCount">26</span> 个工具
+      <span id="filteredInfo" style="display:none">（已筛选）</span>
+    </div>
+
+    <div class="tool-grid" id="toolGrid"></div>
+  </section>
+
+  <!-- 场景导航视图 -->
+  <section id="view-scenes" class="view">
+    <h2>按场景找工具</h2>
+    <p>不同场景对 AI 的要求不同——我们帮你匹配最合适的。</p>
+    <div class="scene-grid" id="sceneGrid"></div>
+  </section>
+
+  <!-- 对比模式视图 -->
+  <section id="view-compare" class="view">
+    <h2>工具对比</h2>
+    <p>选择 2-5 个工具进行多维度对比。</p>
+    <div id="compareSelection" class="compare-selection">
+      <p class="hint">在工具库中点击 <b>+对比</b> 按钮添加工具，或点击下方快捷选择：</p>
+    </div>
+    <div class="compare-table-wrap" id="compareTable"></div>
+  </section>
+
+  <!-- 关于视图 -->
+  <section id="view-about" class="view">
+    <h2>关于 InfoCatcher</h2>
+    <div class="about-content">
+      <h3>为什么做这个？</h3>
+      <p>在对 112 名 AI 用户的调查中，<b>60.7%</b> 的人觉得 AI 信息太分散，<b>63.4%</b> 曾因不了解而选错工具，仅 <b>10.7%</b> 信任网上现有的 AI 评测。</p>
+      <p>InfoCatcher 的目标：通过<b>场景化深度对比</b>、<b>公开评测方法论</b>和<b>开源透明</b>，帮你做出更明智的 AI 工具选择。</p>
+
+      <h3>评测方法论</h3>
+      <ul>
+        <li>每个工具的评分基于四个维度：综合能力、中文支持、易用性、性价比</li>
+        <li>"适用场景"标签基于真实用例测试，非厂商宣传材料</li>
+        <li>"不适合场景"如实标注——没有万能工具</li>
+        <li>每条信息标注"最后更新日期"和"信息来源"</li>
+        <li>利益声明：<b>本项目不接收任何 AI 工具厂商赞助</b></li>
+      </ul>
+
+      <h3>开源</h3>
+      <p>InfoCatcher 是一个开源免费项目，代码和数据托管在 GitHub。欢迎贡献、纠错、提出需求。</p>
+      <p>数据采集策略：官方 API + 网页公开信息 + 手动整理。所有数据标注来源。</p>
+    </div>
+  </section>
+</main>
+
+<!-- 工具详情弹窗 -->
+<div class="modal-overlay" id="modalOverlay" style="display:none">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<footer class="footer">
+  <p>InfoCatcher v0.1 MVP — 开源免费 · <span id="dataDate"></span> · 数据标注来源，评测方法公开 · 不接收厂商赞助</p>
+  <p style="margin-top:6px"><a href="https://github.com/YOUR_USERNAME/infocatcher/blob/main/CONTRIBUTING.md">如何贡献</a> · <a href="https://github.com/YOUR_USERNAME/infocatcher/issues/new?template=data-correction.yml">纠错数据</a> · <a href="https://github.com/YOUR_USERNAME/infocatcher/issues/new?template=new-tool.yml">推荐工具</a></p>
+</footer>
+
+<script src="js/app.js"></script>
+</body>
+</html>
