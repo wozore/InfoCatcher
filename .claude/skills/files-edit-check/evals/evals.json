@@ -1,5 +1,5 @@
 {
-  "skill_name": "files-create-check",
+  "skill_name": "files-edit-check",
   "evals": [
     {
       "id": 1,
@@ -47,7 +47,7 @@
       "files": [],
       "expectations": [
         "识别为单个文件中的单一内容点修改",
-        "不套用 files-create-check 的计划创建或批量修改确认模板",
+        "不套用 files-edit-check 的计划创建或批量修改确认模板",
         "不扩大修改范围"
       ]
     }

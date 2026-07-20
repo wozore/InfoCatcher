@@ -1,0 +1,62 @@
+/* ObDrawIO plugin styles */
+
+/* ── Diagram view ── */
+.drawio-view-container {
+	padding: 0;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+
+.drawio-iframe {
+	width: 100%;
+	flex: 1 1 0;
+	border: none;
+	min-height: 0;
+	display: block;
+}
+
+/* ── Diagram picker modal ── */
+.drawio-picker-search {
+	width: 100%;
+	margin-bottom: 8px;
+	padding: 6px 10px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius-s);
+	background: var(--background-primary);
+	color: var(--text-normal);
+	font-size: var(--font-ui-small);
+	box-sizing: border-box;
+}
+
+.drawio-picker-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	max-height: 320px;
+	overflow-y: auto;
+}
+
+.drawio-picker-item {
+	display: flex;
+	flex-direction: column;
+	padding: 8px 10px;
+	border-radius: var(--radius-s);
+	cursor: pointer;
+	gap: 2px;
+}
+
+.drawio-picker-item:hover {
+	background: var(--background-modifier-hover);
+}
+
+.drawio-picker-name {
+	font-size: var(--font-ui-medium);
+	color: var(--text-normal);
+}
+
+.drawio-picker-path {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-muted);
+}
