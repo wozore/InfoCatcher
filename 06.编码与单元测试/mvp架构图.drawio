@@ -1,0 +1,187 @@
+<mxGraphModel>
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+
+    <mxCell id="bg" value="" style="rounded=1;whiteSpace=wrap;fillColor=#fafbfc;strokeColor=#e2e5e9;" vertex="1" parent="1">
+      <mxGeometry x="20" y="20" width="1160" height="880" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="title" value="InfoCatcher MVP 架构图" style="text;fontSize=22;fontStyle=1;align=center;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+      <mxGeometry x="380" y="30" width="440" height="40" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="layer1-bg" value="" style="rounded=1;whiteSpace=wrap;fillColor=#eff6ff;strokeColor=#93c5fd;dashed=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="80" width="1120" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="layer1-label" value="浏览器 / 用户" style="text;fontSize=13;fontColor=#2563eb;fontStyle=1;align=left;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+      <mxGeometry x="50" y="82" width="120" height="20" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="user" value="👤 用户" style="rounded=1;whiteSpace=wrap;fillColor=#2563eb;strokeColor=#1d4ed8;fontColor=#ffffff;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="460" y="105" width="100" height="42" as="geometry"/>
+    </mxCell>
+    <mxCell id="ai-tool" value="🤖 AI 编码工具" style="rounded=1;whiteSpace=wrap;fillColor=#7c3aed;strokeColor=#6d28d9;fontColor=#ffffff;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="620" y="105" width="120" height="42" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="layer2-bg" value="" style="rounded=1;whiteSpace=wrap;fillColor=#ecfdf5;strokeColor=#6ee7b7;dashed=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="190" width="1120" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="layer2-label" value="入口层" style="text;fontSize=13;fontColor=#059669;fontStyle=1;align=left;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+      <mxGeometry x="50" y="192" width="80" height="20" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="index-html" value="&lt;b&gt;index.html&lt;/b&gt;&lt;br&gt;页面结构 · 5个视图容器&lt;br&gt;导航栏 · 弹窗 · 页脚" style="rounded=1;whiteSpace=wrap;fillColor=#059669;strokeColor=#047857;fontColor=#ffffff;fontSize=12;align=center;" vertex="1" parent="1">
+      <mxGeometry x="440" y="215" width="200" height="56" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="layer3-bg" value="" style="rounded=1;whiteSpace=wrap;fillColor=#fffbeb;strokeColor=#fcd34d;dashed=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="310" width="1120" height="200" as="geometry"/>
+    </mxCell>
+    <mxCell id="layer3-label" value="逻辑与样式层" style="text;fontSize=13;fontColor=#d97706;fontStyle=1;align=left;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+      <mxGeometry x="50" y="312" width="100" height="20" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="style-css" value="&lt;b&gt;style.css&lt;/b&gt;&lt;br&gt;CSS 变量体系&lt;br&gt;组件样式&lt;br&gt;响应式布局" style="rounded=1;whiteSpace=wrap;fillColor=#d97706;strokeColor=#b45309;fontColor=#ffffff;fontSize=12;align=center;" vertex="1" parent="1">
+      <mxGeometry x="60" y="340" width="150" height="72" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="app-js-box" value="&lt;b&gt;app.js&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;fillColor=#ea580c;strokeColor=#c2410c;fontColor=#ffffff;fontSize=13;fontStyle=1;align=center;" vertex="1" parent="1">
+      <mxGeometry x="240" y="340" width="900" height="155" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="js-state" value="全局状态&lt;br&gt;tools/glossary/compareList" style="rounded=1;whiteSpace=wrap;fillColor=#fff7ed;strokeColor=#fdba74;fontSize=10;align=center;" vertex="1" parent="1">
+      <mxGeometry x="260" y="368" width="130" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="js-load" value="loadData()&lt;br&gt;fetch JSON → 数组" style="rounded=1;whiteSpace=wrap;fillColor=#fff7ed;strokeColor=#fdba74;fontSize=10;align=center;" vertex="1" parent="1">
+      <mxGeometry x="402" y="368" width="130" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="js-search" value="搜索/筛选&lt;br&gt;getFilteredTools() + aliases" style="rounded=1;whiteSpace=wrap;fillColor=#fff7ed;strokeColor=#fdba74;fontSize=10;align=center;" vertex="1" parent="1">
+      <mxGeometry x="544" y="368" width="140" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="js-switch" value="switchView()&lt;br&gt;视图路由" style="rounded=1;whiteSpace=wrap;fillColor=#fff7ed;strokeColor=#fdba74;fontSize=10;align=center;" vertex="1" parent="1">
+      <mxGeometry x="696" y="368" width="120" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="js-events" value="DOMContentLoaded&lt;br&gt;事件绑定/初始化" style="rounded=1;whiteSpace=wrap;fillColor=#fff7ed;strokeColor=#fdba74;fontSize=10;align=center;" vertex="1" parent="1">
+      <mxGeometry x="828" y="368" width="130" height="40" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="js-render-tools" value="renderTools()" style="rounded=1;whiteSpace=wrap;fillColor=#fef3c7;strokeColor=#fbbf24;fontSize=10;align=center;" vertex="1" parent="1">
+      <mxGeometry x="260" y="422" width="100" height="30" as="geometry"/>
+    </mxCell>
+    <mxCell id="js-render-scenes" value="renderScenes()" style="rounded=1;whiteSpace=wrap;fillColor=#fef3c7;strokeColor=#fbbf24;fontSize=10;align=center;" vertex="1" parent="1">
+      <mxGeometry x="372" y="422" width="105" height="30" as="geometry"/>
+    </mxCell>
+    <mxCell id="js-render-compare" value="renderCompare()" style="rounded=1;whiteSpace=wrap;fillColor=#fef3c7;strokeColor=#fbbf24;fontSize=10;align=center;" vertex="1" parent="1">
+      <mxGeometry x="489" y="422" width="105" height="30" as="geometry"/>
+    </mxCell>
+    <mxCell id="js-render-glossary" value="renderGlossary()" style="rounded=1;whiteSpace=wrap;fillColor=#fef3c7;strokeColor=#fbbf24;fontSize=10;align=center;" vertex="1" parent="1">
+      <mxGeometry x="606" y="422" width="110" height="30" as="geometry"/>
+    </mxCell>
+    <mxCell id="js-modal" value="openDetail()" style="rounded=1;whiteSpace=wrap;fillColor=#fef3c7;strokeColor=#fbbf24;fontSize=10;align=center;" vertex="1" parent="1">
+      <mxGeometry x="728" y="422" width="95" height="30" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="layer4-bg" value="" style="rounded=1;whiteSpace=wrap;fillColor=#fef2f2;strokeColor=#fca5a5;dashed=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="530" width="1120" height="100" as="geometry"/>
+    </mxCell>
+    <mxCell id="layer4-label" value="数据层" style="text;fontSize=13;fontColor=#dc2626;fontStyle=1;align=left;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+      <mxGeometry x="50" y="532" width="80" height="20" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="tools-json" value="&lt;b&gt;tools.json&lt;/b&gt;&lt;br&gt;43个工具 · 25个字段" style="rounded=1;whiteSpace=wrap;fillColor=#dc2626;strokeColor=#b91c1c;fontColor=#ffffff;fontSize=12;align=center;" vertex="1" parent="1">
+      <mxGeometry x="300" y="558" width="170" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="glossary-json" value="&lt;b&gt;glossary.json&lt;/b&gt;&lt;br&gt;40个术语 · 6个分类" style="rounded=1;whiteSpace=wrap;fillColor=#dc2626;strokeColor=#b91c1c;fontColor=#ffffff;fontSize=12;align=center;" vertex="1" parent="1">
+      <mxGeometry x="570" y="558" width="170" height="50" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="layer5-bg" value="" style="rounded=1;whiteSpace=wrap;fillColor=#f5f3ff;strokeColor=#c4b5fd;dashed=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="650" width="1120" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="layer5-label" value="部署层" style="text;fontSize=13;fontColor=#7c3aed;fontStyle=1;align=left;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+      <mxGeometry x="50" y="652" width="80" height="20" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="ci-cd" value="&lt;b&gt;GitHub Actions&lt;/b&gt;&lt;br&gt;push main → deploy to Pages" style="rounded=1;whiteSpace=wrap;fillColor=#7c3aed;strokeColor=#6d28d9;fontColor=#ffffff;fontSize=12;align=center;" vertex="1" parent="1">
+      <mxGeometry x="340" y="676" width="230" height="44" as="geometry"/>
+    </mxCell>
+    <mxCell id="pages" value="&lt;b&gt;GitHub Pages&lt;/b&gt;&lt;br&gt;静态托管 · CDN分发" style="rounded=1;whiteSpace=wrap;fillColor=#7c3aed;strokeColor=#6d28d9;fontColor=#ffffff;fontSize=12;align=center;" vertex="1" parent="1">
+      <mxGeometry x="620" y="676" width="180" height="44" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="ext-bg" value="" style="rounded=1;whiteSpace=wrap;fillColor=#f8fafc;strokeColor=#94a3b8;dashed=1;dashPattern=8 8;" vertex="1" parent="1">
+      <mxGeometry x="40" y="760" width="1120" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="ext-label" value="🔌 AI 自定义扩展点（EXTENSION POINT）" style="text;fontSize=13;fontColor=#475569;fontStyle=1;align=left;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+      <mxGeometry x="50" y="762" width="280" height="20" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="ext1" value="新视图&lt;br&gt;nav+section+render" style="rounded=1;whiteSpace=wrap;fillColor=#e2e8f0;strokeColor=#94a3b8;fontSize=10;align=center;" vertex="1" parent="1">
+      <mxGeometry x="60" y="790" width="130" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="ext2" value="新筛选维度&lt;br&gt;filter-chip+过滤分支" style="rounded=1;whiteSpace=wrap;fillColor=#e2e8f0;strokeColor=#94a3b8;fontSize=10;align=center;" vertex="1" parent="1">
+      <mxGeometry x="200" y="790" width="140" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="ext3" value="新搜索别名&lt;br&gt;searchAliases 键值对" style="rounded=1;whiteSpace=wrap;fillColor=#e2e8f0;strokeColor=#94a3b8;fontSize=10;align=center;" vertex="1" parent="1">
+      <mxGeometry x="350" y="790" width="140" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="ext4" value="新对比维度&lt;br&gt;dims[] 数组条目" style="rounded=1;whiteSpace=wrap;fillColor=#e2e8f0;strokeColor=#94a3b8;fontSize=10;align=center;" vertex="1" parent="1">
+      <mxGeometry x="500" y="790" width="130" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="ext5" value="新数据源&lt;br&gt;fetch+JSON+渲染" style="rounded=1;whiteSpace=wrap;fillColor=#e2e8f0;strokeColor=#94a3b8;fontSize=10;align=center;" vertex="1" parent="1">
+      <mxGeometry x="640" y="790" width="130" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="ext6" value="新场景卡片&lt;br&gt;scenes[] 数组条目" style="rounded=1;whiteSpace=wrap;fillColor=#e2e8f0;strokeColor=#94a3b8;fontSize=10;align=center;" vertex="1" parent="1">
+      <mxGeometry x="780" y="790" width="130" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="ext7" value="CSS 变量复用&lt;br&gt;:root 自定义属性" style="rounded=1;whiteSpace=wrap;fillColor=#e2e8f0;strokeColor=#94a3b8;fontSize=10;align=center;" vertex="1" parent="1">
+      <mxGeometry x="920" y="790" width="125" height="40" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="arr1" style="edgeStyle=none;endArrow=classic;strokeColor=#2563eb;strokeWidth=2;" edge="1" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="510" y="147" as="sourcePoint"/>
+        <mxPoint x="540" y="215" as="targetPoint"/>
+      </mxGeometry>
+    </mxCell>
+
+    <mxCell id="arr2" style="edgeStyle=none;endArrow=classic;strokeColor=#059669;strokeWidth=2;" edge="1" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="540" y="271" as="sourcePoint"/>
+        <mxPoint x="690" y="340" as="targetPoint"/>
+      </mxGeometry>
+    </mxCell>
+
+    <mxCell id="arr3" style="edgeStyle=none;endArrow=classic;strokeColor=#059669;strokeWidth=2;" edge="1" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="530" y="271" as="sourcePoint"/>
+        <mxPoint x="135" y="340" as="targetPoint"/>
+        <Array as="points">
+          <mxPoint x="530" y="300"/>
+          <mxPoint x="135" y="300"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <mxCell id="arr4" style="edgeStyle=none;endArrow=classic;strokeColor=#ea580c;strokeWidth=2;" edge="1" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="500" y="495" as="sourcePoint"/>
+        <mxPoint x="385" y="558" as="targetPoint"/>
+      </mxGeometry>
+    </mxCell>
+
+    <mxCell id="arr5" style="edgeStyle=none;endArrow=classic;strokeColor=#ea580c;strokeWidth=2;" edge="1" parent="1">
+      <mxGeometry relative="1" as="geometry">
+        <mxPoint x="700" y="495" as="sourcePoint"/>
+        <mxPoint x="655" y="558" as="targetPoint"/>
+      </mxGeometry>
+    </mxCell>
+
+    <mxCell id="arr6" style="edgeStyle=none;endArrow=classic;strokeColor=#7c3aed;strokeWidth=2;" edge="1" parent="1" source="ci-cd" target="pages">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+  </root>
+</mxGraphModel>

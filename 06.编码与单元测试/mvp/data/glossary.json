@@ -1,0 +1,389 @@
+[
+  {
+    "term": "RAG",
+    "full_name": "Retrieval-Augmented Generation",
+    "category": "模型架构",
+    "summary": "检索增强生成技术：在模型生成回答前，先从外部知识库中检索相关信息，将检索结果作为上下文输入模型，使回答有据可依，显著减少幻觉。NotebookLM、秘塔AI搜索等工具的核心技术。",
+    "related_terms": ["Embedding", "向量数据库", "Token", "上下文窗口"],
+    "source": { "name": "Lewis et al. 2020", "url": "https://arxiv.org/abs/2005.11401" },
+    "relevance": "影响AI工具能否准确回答专业领域问题"
+  },
+  {
+    "term": "Transformer",
+    "full_name": "Transformer Architecture",
+    "category": "模型架构",
+    "summary": "2017年Google提出的深度学习架构，基于自注意力(Self-Attention)机制，是几乎所有现代大模型(GPT、Claude、Gemini等)的基础架构。替代了之前的RNN/LSTM，支持并行计算，大幅提升训练效率。",
+    "related_terms": ["自注意力机制", "Token", "上下文窗口"],
+    "source": { "name": "Vaswani et al. 2017", "url": "https://arxiv.org/abs/1706.03762" },
+    "relevance": "理解为何不同模型在处理长文本时表现不同"
+  },
+  {
+    "term": "MoE",
+    "full_name": "Mixture of Experts",
+    "category": "模型架构",
+    "summary": "混合专家模型架构：将多个专门的小型子网络组合，每次只激活部分专家处理特定输入。DeepSeek、通义千问等采用此架构，在保持性能的同时大幅降低计算成本。",
+    "related_terms": ["Transformer", "模型蒸馏", "Token"],
+    "source": { "name": "Shazeer et al. 2017", "url": "https://arxiv.org/abs/1701.06538" },
+    "relevance": "影响AI工具的运行速度和成本"
+  },
+  {
+    "term": "Mamba",
+    "full_name": "Mamba - State Space Model",
+    "category": "模型架构",
+    "summary": "2024年提出的新型序列模型架构，基于状态空间模型(SSM)，在长序列处理上比Transformer更高效，线性复杂度使其能处理无限上下文。被视为Transformer的潜在替代者。",
+    "related_terms": ["Transformer", "上下文窗口", "Token"],
+    "source": { "name": "Gu & Dao 2024", "url": "https://arxiv.org/abs/2312.00752" },
+    "relevance": "下一代AI架构，影响未来工具的长文本能力"
+  },
+  {
+    "term": "扩散模型",
+    "full_name": "Diffusion Model",
+    "category": "模型架构",
+    "summary": "一种生成模型：先从纯噪声开始，通过逐步去噪(Denoising)生成图像/视频。Midjourney、Stable Diffusion、DALL·E 3、即梦等图像工具均基于此架构。",
+    "related_terms": ["Stable Diffusion", "LoRA", "DiT"],
+    "source": { "name": "Ho et al. 2020", "url": "https://arxiv.org/abs/2006.11239" },
+    "relevance": "理解AI绘画和AI视频工具的工作原理"
+  },
+  {
+    "term": "DiT",
+    "full_name": "Diffusion Transformer",
+    "category": "模型架构",
+    "summary": "将扩散模型与Transformer结合的新型架构，用Transformer替代传统的U-Net进行去噪。Runway Gen-4、可灵等最新视频生成模型采用此架构，生成质量显著提升。",
+    "related_terms": ["扩散模型", "Transformer", "Token"],
+    "source": { "name": "Peebles & Xie 2023", "url": "https://arxiv.org/abs/2212.09748" },
+    "relevance": "代表AI图像/视频生成的最新技术方向"
+  },
+  {
+    "term": "自注意力机制",
+    "full_name": "Self-Attention",
+    "category": "模型架构",
+    "summary": "Transformer的核心机制：模型在处理一个词时，会计算它与其他所有词的相关程度（注意力权重），从而理解上下文关系。这是ChatGPT能理解长段落逻辑的基础。",
+    "related_terms": ["Transformer", "Token", "上下文窗口"],
+    "source": { "name": "Vaswani et al. 2017", "url": "https://arxiv.org/abs/1706.03762" },
+    "relevance": "影响模型的上下文理解和推理能力"
+  },
+  {
+    "term": "微调",
+    "full_name": "Fine-tuning",
+    "category": "训练与微调",
+    "summary": "在预训练大模型基础上，用特定领域数据进一步训练，使其在特定任务上表现更好。如用法律文件微调模型使其更擅长法律咨询。厂商和开发者常用此方法定制模型。",
+    "related_terms": ["LoRA", "RLHF", "SFT"],
+    "source": { "name": "Howard & Ruder 2018", "url": "https://arxiv.org/abs/1801.06146" },
+    "relevance": "决定AI工具能否在专业领域达到实用水平"
+  },
+  {
+    "term": "LoRA",
+    "full_name": "Low-Rank Adaptation",
+    "category": "训练与微调",
+    "summary": "一种高效的微调方法：在原始模型权重旁添加小型可训练矩阵，只更新这些参数。参数量仅为全量微调的万分之一。Stable Diffusion用户常用LoRA模型定制特定画风或角色。",
+    "related_terms": ["微调", "Stable Diffusion", "模型蒸馏"],
+    "source": { "name": "Hu et al. 2021", "url": "https://arxiv.org/abs/2106.09685" },
+    "relevance": "影响工具定制化和社区生态"
+  },
+  {
+    "term": "RLHF",
+    "full_name": "Reinforcement Learning from Human Feedback",
+    "category": "训练与微调",
+    "summary": "人类反馈强化学习：先收集人类对模型输出的偏好评价，训练一个奖励模型，再用强化学习优化大模型。ChatGPT和Claude的有用性和安全性很大程度上归功于RLHF。",
+    "related_terms": ["微调", "SFT", "模型对齐"],
+    "source": { "name": "Ouyang et al. 2022", "url": "https://arxiv.org/abs/2203.02155" },
+    "relevance": "决定AI工具输出是否有用和安全"
+  },
+  {
+    "term": "SFT",
+    "full_name": "Supervised Fine-Tuning",
+    "category": "训练与微调",
+    "summary": "有监督微调：使用人工标注的高质量问答对（指令数据）对预训练模型进行训练，让模型学会遵循指令、回答问题。这是从基础语言模型到对话助手的关键步骤。",
+    "related_terms": ["微调", "RLHF", "指令遵循"],
+    "source": { "name": "Wei et al. 2022", "url": "https://arxiv.org/abs/2109.01652" },
+    "relevance": "理解模型从基础能力到可用助手的过程"
+  },
+  {
+    "term": "模型蒸馏",
+    "full_name": "Model Distillation",
+    "category": "训练与微调",
+    "summary": "将大模型（教师模型）的知识转移到小模型（学生模型）的技术：让学生模型模仿教师模型的输出分布。DeepSeek等厂商用此方法在保持能力的同时大幅缩小模型体积。",
+    "related_terms": ["Token", "MoE", "量化"],
+    "source": { "name": "Hinton et al. 2015", "url": "https://arxiv.org/abs/1503.02531" },
+    "relevance": "影响免费版工具的实际性能"
+  },
+  {
+    "term": "Token",
+    "full_name": "词元",
+    "category": "推理与部署",
+    "summary": "大模型处理文本的最小单位。一个Token可以是：一个完整的词、子词或字符。中文平均1个汉字约等于1-2个Token。模型按Token计费，理解Token概念对评估使用成本至关重要。",
+    "related_terms": ["上下文窗口", "Temperature", "API"],
+    "source": { "name": "OpenAI Tokenizer", "url": "https://platform.openai.com/tokenizer" },
+    "relevance": "直接关系到使用AI工具的费用和文本容量"
+  },
+  {
+    "term": "上下文窗口",
+    "full_name": "Context Window",
+    "category": "推理与部署",
+    "summary": "模型一次能处理的最大Token数量，类似短期记忆容量。Gemini支持1M(约75万字)、Claude 200K、Kimi 200万字各不相同。窗口越大，能分析的文档越长。",
+    "related_terms": ["Token", "自注意力机制", "RAG"],
+    "source": { "name": "各厂商技术文档" },
+    "relevance": "决定工具能否处理长文档和大型项目"
+  },
+  {
+    "term": "Temperature",
+    "full_name": "温度参数",
+    "category": "推理与部署",
+    "summary": "控制模型生成文本随机性的参数（通常0-2）。低温(0.1-0.3)：输出更确定、聚焦，适合事实问答。高温(0.8-1.5)：输出更多样、有创意，适合头脑风暴。多数AI工具默认用0.7-1.0。",
+    "related_terms": ["Token", "推理"],
+    "source": { "name": "OpenAI API文档", "url": "https://platform.openai.com/docs/guides/text-generation" },
+    "relevance": "影响AI输出的创造性和准确性"
+  },
+  {
+    "term": "Top-P",
+    "full_name": "Nucleus Sampling",
+    "category": "推理与部署",
+    "summary": "另一个控制输出多样性的参数：模型只从累计概率达到P值的最小词集合中采样。Top-P=0.9意味着只考虑概率最高的90%的候选词。常与Temperature配合使用。",
+    "related_terms": ["Temperature", "Token", "推理"],
+    "source": { "name": "Holtzman et al. 2020", "url": "https://arxiv.org/abs/1904.09751" },
+    "relevance": "影响AI输出的可控性"
+  },
+  {
+    "term": "量化",
+    "full_name": "Quantization",
+    "category": "推理与部署",
+    "summary": "降低模型参数精度的技术（如从32位浮点数降到8位整数），可大幅减小模型体积和加速推理。Stable Diffusion本地运行、手机端AI均依赖此技术。量化后模型能力略有损失但明显更快。",
+    "related_terms": ["模型蒸馏", "推理", "Token"],
+    "source": { "name": "Nagel et al. 2021" },
+    "relevance": "影响工具在低配设备上的可用性"
+  },
+  {
+    "term": "推理",
+    "full_name": "Inference",
+    "category": "推理与部署",
+    "summary": "模型训练完成后，用新数据进行预测或生成的过程。用户每次向ChatGPT提问都是一次推理。推理速度和成本是选择AI工具的重要考量。",
+    "related_terms": ["Token", "量化", "API"],
+    "source": { "name": "通用AI术语" },
+    "relevance": "影响工具响应速度和单次使用成本"
+  },
+  {
+    "term": "VLM",
+    "full_name": "Vision-Language Model",
+    "category": "多模态",
+    "summary": "视觉语言模型：能同时理解图像和文本的多模态模型。ChatGPT(GPT-5.2)、Gemini可以直接识别图片内容，而不仅仅是检测物体。VLM实现了图像描述、图表解读、截图分析等功能。",
+    "related_terms": ["Token", "CLIP", "多模态"],
+    "source": { "name": "OpenAI, Google 技术文档" },
+    "relevance": "判断工具是否支持图像理解和分析"
+  },
+  {
+    "term": "TTS",
+    "full_name": "Text-to-Speech",
+    "category": "多模态",
+    "summary": "文本转语音技术：将书面文字转换为自然语音。ElevenLabs在此领域领先，声音逼真度接近真人。OpenAI TTS、豆包语音等也是常见选择。",
+    "related_terms": ["STT", "语音克隆"],
+    "source": { "name": "通用AI术语" },
+    "relevance": "影响配音和语音相关工具的选择"
+  },
+  {
+    "term": "STT",
+    "full_name": "Speech-to-Text",
+    "category": "多模态",
+    "summary": "语音转文本技术：将语音转换为文字。讯飞星火在此领域积累深厚，OpenAI Whisper是开源标杆。各种AI语音助手和语音输入功能的核心技术。",
+    "related_terms": ["TTS", "Whisper"],
+    "source": { "name": "通用AI术语" },
+    "relevance": "影响语音交互工具的使用体验"
+  },
+  {
+    "term": "CLIP",
+    "full_name": "Contrastive Language-Image Pre-training",
+    "category": "多模态",
+    "summary": "OpenAI开发的多模态模型：通过对比学习将图像和文本映射到同一向量空间。用于图像搜索、分类和引导AI图像生成。Stable Diffusion的底层核心组件之一。",
+    "related_terms": ["Embedding", "扩散模型", "VLM"],
+    "source": { "name": "Radford et al. 2021", "url": "https://arxiv.org/abs/2103.00020" },
+    "relevance": "影响文本和图像之间的理解与匹配能力"
+  },
+  {
+    "term": "Function Calling",
+    "full_name": "函数调用 / Tool Use",
+    "category": "Agent",
+    "summary": "模型在对话中能主动请求调用外部API或函数的能力。如ChatGPT调用计算器、Claude Code调用文件操作。这是构建AI Agent和工具链的关键技术。",
+    "related_terms": ["Tool Use", "Agent", "MCP"],
+    "source": { "name": "OpenAI, Anthropic API文档" },
+    "relevance": "决定工具能否与外部系统集成"
+  },
+  {
+    "term": "Tool Use",
+    "full_name": "工具使用 / 工具调用",
+    "category": "Agent",
+    "summary": "AI模型使用外部工具的能力：包括搜索网页、执行代码、调用API、操作文件等。Claude Code、ChatGPT的插件和技能即属此类。让AI从语言生成扩展到实际操作。",
+    "related_terms": ["Function Calling", "Agent", "MCP"],
+    "source": { "name": "Anthropic 技术文档" },
+    "relevance": "影响AI工具的自动化能力边界"
+  },
+  {
+    "term": "ReAct",
+    "full_name": "Reasoning + Acting",
+    "category": "Agent",
+    "summary": "一种Agent设计模式：模型通过循环执行「思考→行动→观察」来完成任务。每次行动后基于新信息重新思考，再决定下一步。Claude Code和Cursor Agent的核心范式。",
+    "related_terms": ["Agent", "Function Calling", "Tool Use"],
+    "source": { "name": "Yao et al. 2023", "url": "https://arxiv.org/abs/2210.03629" },
+    "relevance": "决定AI工具能否自主完成多步任务"
+  },
+  {
+    "term": "MCP",
+    "full_name": "Model Context Protocol",
+    "category": "Agent",
+    "summary": "Anthropic提出的开放协议，标准化AI模型与外部工具、数据源的连接方式。类似于AI界的通用接口：一个标准让模型连接数据库、API、文件系统等。Claude Code和Cursor均支持。",
+    "related_terms": ["Tool Use", "Function Calling", "Agent"],
+    "source": { "name": "Anthropic MCP 规范", "url": "https://modelcontextprotocol.io" },
+    "relevance": "影响AI工具生态的开放性和可扩展性"
+  },
+  {
+    "term": "Agent",
+    "full_name": "AI智能体",
+    "category": "Agent",
+    "summary": "能自主感知环境、制定计划、使用工具、执行多步任务并自我修正的AI系统。Claude Code是典型Agent——它能读取代码、编辑文件、运行测试，在过程中不断调整策略。",
+    "related_terms": ["ReAct", "Tool Use", "MCP"],
+    "source": { "name": "Anthropic 技术文档" },
+    "relevance": "代表AI工具自动化能力的最高形态"
+  },
+  {
+    "term": "Agent Loop",
+    "full_name": "智能体循环",
+    "category": "Agent",
+    "summary": "Agent在执行任务时的循环流程：接收任务→思考→行动→观察结果→再思考→再行动……直到任务完成或达到限制。Claude Code的编码过程中每步操作都遵循这个循环。",
+    "related_terms": ["Agent", "ReAct", "Tool Use"],
+    "source": { "name": "Anthropic 系统提示" },
+    "relevance": "影响AI工具的自主任务完成效率"
+  },
+  {
+    "term": "BLEU",
+    "full_name": "Bilingual Evaluation Understudy",
+    "category": "评估与基准",
+    "summary": "自动评估机器翻译和文本生成质量的指标：比较模型输出与人工参考译文之间的n-gram重合度。值0-100，越高越好。注意：BLEU高不等于质量好，只是词汇层面的匹配度。",
+    "related_terms": ["Perplexity", "MMLU", "HumanEval"],
+    "source": { "name": "Papineni et al. 2002", "url": "https://aclanthology.org/P02-1040/" },
+    "relevance": "判断翻译工具的客观质量衡量方式"
+  },
+  {
+    "term": "Perplexity",
+    "full_name": "困惑度",
+    "category": "评估与基准",
+    "summary": "衡量语言模型预测能力的指标：模型对下一个词的预测有多困惑。值越低说明模型预测越准。注意：低困惑度不代表模型有用（模型可能只学会了预测高频词）。",
+    "related_terms": ["Token", "MMLU"],
+    "source": { "name": "通用NLP评估指标" },
+    "relevance": "理解模型排名和评测报告的基础指标"
+  },
+  {
+    "term": "MMLU",
+    "full_name": "Massive Multitask Language Understanding",
+    "category": "评估与基准",
+    "summary": "大规模多任务语言理解测试：涵盖57个学科（从数学到法律），测试模型的知识广度和推理能力。是业界主流通用能力基准。Claude、GPT、Gemini等都在此基准上报告成绩。",
+    "related_terms": ["HumanEval", "Perplexity"],
+    "source": { "name": "Hendrycks et al. 2021", "url": "https://arxiv.org/abs/2009.03300" },
+    "relevance": "参考模型综合能力的权威指标之一"
+  },
+  {
+    "term": "HumanEval",
+    "full_name": "代码生成基准",
+    "category": "评估与基准",
+    "summary": "OpenAI发布的代码生成能力评测集：包含164个编程问题，要求模型生成通过测试用例的Python函数。SWE-bench在此基础上进一步评测完整项目级别的代码修改能力。",
+    "related_terms": ["MMLU", "SWE-bench"],
+    "source": { "name": "Chen et al. 2021", "url": "https://arxiv.org/abs/2107.03374" },
+    "relevance": "评估AI编程工具代码能力的核心标准"
+  },
+  {
+    "term": "SWE-bench",
+    "full_name": "Software Engineering Benchmark",
+    "category": "评估与基准",
+    "summary": "软件工程能力评测：模型需要从真实GitHub仓库中读取issue描述，修改代码文件使测试通过。Claude Code在此基准达到80.9%，大幅领先。是评估AI编程工具实战能力的最佳指标。",
+    "related_terms": ["HumanEval", "Agent", "代码能力"],
+    "source": { "name": "Jimenez et al. 2024", "url": "https://arxiv.org/abs/2310.06770" },
+    "relevance": "评估AI编程工具解决实际问题的能力"
+  },
+  {
+    "term": "Arena ELO",
+    "full_name": "Chatbot Arena / LMSYS ELO",
+    "category": "评估与基准",
+    "summary": "LMSYS组织的众包大模型评测：用户匿名对比两个模型的输出，基于百万级投票计算ELO评分。是目前最接近真实用户感受的排名，综合了主观判断和实际表现。",
+    "related_terms": ["MMLU", "评估"],
+    "source": { "name": "LMSYS Chatbot Arena", "url": "https://chat.lmsys.org" },
+    "relevance": "参考工具用户满意度的综合指标"
+  },
+  {
+    "term": "Embedding",
+    "full_name": "向量嵌入",
+    "category": "模型架构",
+    "summary": "将文字、图像等数据转换为高维向量（数字数组）的技术。相似的内容在向量空间中距离更近。语义搜索、RAG、图像搜索等场景的核心技术。",
+    "related_terms": ["RAG", "向量数据库", "CLIP"],
+    "source": { "name": "通用AI术语" },
+    "relevance": "影响AI工具搜索和召回能力的核心"
+  },
+  {
+    "term": "向量数据库",
+    "full_name": "Vector Database",
+    "category": "推理与部署",
+    "summary": "专门存储和检索向量嵌入的数据库，支持近似最近邻搜索（快速找到相似内容）。RAG系统和语义搜索的核心基础设施。常见选择：Pinecone、Weaviate、Milvus、Chroma。",
+    "related_terms": ["Embedding", "RAG", "语义搜索"],
+    "source": { "name": "通用技术术语" },
+    "relevance": "影响RAG类和搜索类工具的性能"
+  },
+  {
+    "term": "提示工程",
+    "full_name": "Prompt Engineering",
+    "category": "推理与部署",
+    "summary": "设计优化输入提示词(Prompt)以引导模型输出期望结果的技术。包括：Few-shot（给示例）、Chain-of-Thought（要求逐步思考）、角色设定等。好Prompt能显著提升工具输出质量。",
+    "related_terms": ["Temperature", "微调", "指令遵循"],
+    "source": { "name": "OpenAI Prompt Engineering Guide" },
+    "relevance": "直接影响用户从AI工具获取结果的质量"
+  },
+  {
+    "term": "指令遵循",
+    "full_name": "Instruction Following",
+    "category": "评估与基准",
+    "summary": "模型准确理解和遵循用户指令的能力。不同模型在指令遵循上的差异明显——有些能精确执行复杂的多步指令，有些容易偏离或遗漏要求。这是评估模型可用性的关键维度。",
+    "related_terms": ["SFT", "RLHF", "微调"],
+    "source": { "name": "通用AI术语" },
+    "relevance": "影响用户能否精确控制工具的输出"
+  },
+  {
+    "term": "模型对齐",
+    "full_name": "AI Alignment",
+    "category": "训练与微调",
+    "summary": "确保AI模型的目标和行为符合人类价值观和期望的过程。RLHF是主要手段之一。对齐良好的模型更安全、更有用、更少产生有害输出。Claude以对齐研究著称。",
+    "related_terms": ["RLHF", "SFT", "安全性"],
+    "source": { "name": "Anthropic 对齐研究" },
+    "relevance": "影响工具的安全性和可信赖程度"
+  },
+  {
+    "term": "开源模型",
+    "full_name": "Open Source Model",
+    "category": "推理与部署",
+    "summary": "模型权重（有时含训练代码）公开发布，可自由下载、使用、修改的AI模型。DeepSeek、Llama、Stable Diffusion、Mistral是典型代表。用户可自部署，无需调用厂商API。",
+    "related_terms": ["量化", "Stable Diffusion", "微调"],
+    "source": { "name": "通用AI术语" },
+    "relevance": "决定隐私性和本地化部署的可行性"
+  },
+  {
+    "term": "API",
+    "full_name": "Application Programming Interface",
+    "category": "推理与部署",
+    "summary": "应用程序编程接口：一种让不同软件相互通信的标准化方式。开发者和工具通过API调用AI模型的能力，如通过OpenAI API调用ChatGPT能力。几乎全部AI编程工具都通过API工作。",
+    "related_terms": ["Token", "推理", "Function Calling"],
+    "source": { "name": "通用技术术语" },
+    "relevance": "决定AI工具的可编程性和集成能力"
+  },
+  {
+    "term": "A/B测试",
+    "full_name": "对比测试",
+    "category": "评估与基准",
+    "summary": "将两种方案(A和B)同时呈现给用户，对比哪种效果更好的测试方法。在AI评估中常用于对比不同模型或不同Prompt的输出质量。Arena ELO即是大规模A/B测试。",
+    "related_terms": ["Arena ELO", "评估"],
+    "source": { "name": "通用评估方法" },
+    "relevance": "理性对比AI工具效果的方法论"
+  },
+  {
+    "term": "Stable Diffusion",
+    "full_name": "Stable Diffusion",
+    "category": "模型架构",
+    "summary": "Stability AI开发的开源图像生成模型系列，基于潜在扩散模型(Latent Diffusion)。因其开源特性催生了庞大的生态（ControlNet、LoRA、ComfyUI等），是本地部署AI绘画的标准选择。",
+    "related_terms": ["扩散模型", "LoRA", "开源模型"],
+    "source": { "name": "Rombach et al. 2022", "url": "https://arxiv.org/abs/2112.10752" },
+    "relevance": "理解开源AI图像生态的基础"
+  }
+]

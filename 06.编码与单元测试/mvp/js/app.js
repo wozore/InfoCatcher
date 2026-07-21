@@ -1,10 +1,29 @@
-/* ===== InfoCatcher MVP — 应用逻辑 ===== */
+/* ===== InfoCatcher MVP — 应用逻辑 =====
+ *
+ * 架构概要：
+ *   数据加载(loadData) → 全局状态(tools/glossary/compareList)
+ *   → 搜索过滤(getFilteredTools) → 视图渲染(render*)
+ *   → 用户交互 → 事件绑定(DOMContentLoaded)
+ *
+ * 扩展模式：
+ *   新增视图：1) index.html 加 nav+section  2) 本文件加 renderXxx()
+ *             3) switchView() 加分支  4) DOMContentLoaded 加事件绑定
+ *   新增筛选维度：1) index.html 加 filter-chip  2) getFilteredTools() 加过滤分支
+ *   新增数据源：1) data/ 加 JSON  2) loadData() 加 fetch
+ *
+ * 约束：
+ *   - 所有搜索/筛选为前端内存过滤，不发起网络请求
+ *   - 对比按钮状态变更后须同步 updateCompareCount() + renderTools()
+ *   - 数据文件中日期统一使用 ISO 格式 (YYYY-MM-DD)
+ */
 
 // ===== 全局状态 =====
 let tools = [];
+let glossary = [];
 let compareList = [];
 let currentView = 'tools';
 let activeFilters = { category: 'all', access: 'all', price: 'all' };
+let activeGlossaryCategory = 'all';
 
 // ===== 工具函数 =====
 function stars(rating) {
@@ -23,7 +42,9 @@ function hasFree(t) {
   return t.free_tier && !t.free_tier.includes('无免费') && !t.free_tier.startsWith('无(');
 }
 
-// ===== 数据加载 =====
+// 负责：异步加载 tools.json 和 glossary.json，存入全局状态
+// 失败时降级为空数组，由各渲染函数处理空状态 UI
+// EXTENSION POINT: 新增数据源时在此添加 fetch，并入全局状态
 async function loadData() {
   try {
     const resp = await fetch('data/tools.json');
@@ -35,9 +56,17 @@ async function loadData() {
     document.getElementById('toolGrid').innerHTML =
       '<div class="empty-state"><div class="empty-icon">⚠️</div><h3>数据加载失败</h3><p>请检查 data/tools.json 是否存在</p></div>';
   }
+  try {
+    const gResp = await fetch('data/glossary.json');
+    glossary = await gResp.json();
+  } catch (e) {
+    glossary = [];
+  }
 }
 
-// ===== 视图切换 =====
+// 负责：切换顶部导航活跃态 + 视图区显隐，触发对应渲染函数
+// 视图匹配方式：view 参数 → id="view-{view}" 容器 + data-view="{view}" 按钮
+// EXTENSION POINT: 新增视图时在末尾加 if (view === 'xxx') renderXxx();
 function switchView(view) {
   currentView = view;
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -50,9 +79,12 @@ function switchView(view) {
   if (view === 'scenes') renderScenes();
   if (view === 'compare') renderCompare();
   if (view === 'tools') renderTools();
+  if (view === 'glossary') renderGlossary();
 }
 
-// ===== 搜索和筛选 =====
+// 负责：文本搜索(关键词 OR 匹配) + 三维筛选(分类/访问/价格)叠加过滤
+// 两阶段过滤：先文本搜索缩小范围，再叠加 chip 筛选（AND 关系）
+// EXTENSION POINT: 新增筛选维度时在末尾按同样模式添加过滤分支
 function getFilteredTools() {
   const query = (document.getElementById('searchInput').value || '').toLowerCase().trim();
   let filtered = tools;
@@ -279,6 +311,9 @@ function renderCompare() {
     return;
   }
 
+  // 对比维度定义 —— 每个维度含 key（工具对象字段名或特殊值）、label、format
+  // has_free 为特殊 key：通过 hasFree() 函数判定而非直接取字段值
+  // EXTENSION POINT: 新增对比维度时在 dims[] 中追加 {key, label, format} 条目
   const dims = [
     { key: 'rating_overall', label: '综合评分', format: v => v.toFixed(1) },
     { key: 'rating_chinese', label: '中文支持', format: v => v.toFixed(1) },
@@ -309,6 +344,9 @@ function renderCompare() {
     '<tr><td class="dim">最适合</td>' +
       compareList.map(t => '<td style="font-size:12px">' + t.best_for.join('；') + '</td>').join('') +
     '</tr>' +
+    '<tr><td class="dim">不适合/限制</td>' +
+      compareList.map(t => '<td style="font-size:12px">' + (t.not_for || []).join('；') + '</td>').join('') +
+    '</tr>' +
     '</tbody></table>';
 }
 
@@ -326,7 +364,78 @@ function quickCompare(ids) {
   renderCompare();
 }
 
-// ===== 场景导航 =====
+// 负责：从 glossary[] 中按分类 + 关键词过滤，渲染可展开的术语卡片
+// 分类 chip 由数据中的 category 字段动态生成（不去重），点击切换筛选
+// EXTENSION POINT: 新增术语分类在 glossary.json 中直接添加即可，无需改代码
+function getFilteredGlossary() {
+  const query = (document.getElementById('glossarySearch')?.value || '').toLowerCase().trim();
+  let filtered = glossary;
+
+  if (activeGlossaryCategory !== 'all') {
+    filtered = filtered.filter(g => g.category === activeGlossaryCategory);
+  }
+
+  if (query) {
+    const keywords = query.split(/\s+/).filter(k => k.length > 0);
+    filtered = filtered.filter(g =>
+      keywords.some(kw =>
+        g.term.toLowerCase().includes(kw) ||
+        (g.full_name && g.full_name.toLowerCase().includes(kw)) ||
+        g.summary.toLowerCase().includes(kw) ||
+        (g.related_terms || []).some(r => r.toLowerCase().includes(kw))
+      )
+    );
+  }
+
+  return filtered;
+}
+
+function renderGlossary() {
+  const categories = [...new Set(glossary.map(g => g.category))];
+  const catEl = document.getElementById('glossaryCategories');
+  catEl.innerHTML =
+    '<button class="filter-chip' + (activeGlossaryCategory === 'all' ? ' active' : '') + '" data-cat="all">全部</button>' +
+    categories.map(c =>
+      '<button class="filter-chip' + (activeGlossaryCategory === c ? ' active' : '') + '" data-cat="' + c + '">' + c + '</button>'
+    ).join('');
+
+  catEl.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.addEventListener('click', function() {
+      activeGlossaryCategory = this.dataset.cat;
+      renderGlossary();
+    });
+  });
+
+  const filtered = getFilteredGlossary();
+  const list = document.getElementById('glossaryList');
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">📖</div><h3>没有匹配的概念</h3><p>试试调整筛选条件或搜索关键词</p></div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map(g => `
+    <div class="glossary-card" onclick="this.classList.toggle('expanded')">
+      <div class="glossary-card-head">
+        <span class="glossary-term">${g.term}</span>
+        ${g.full_name ? '<span class="glossary-fullname">' + g.full_name + '</span>' : ''}
+        <span class="glossary-cat">${g.category}</span>
+      </div>
+      <div class="glossary-card-body">
+        <p class="glossary-summary">${g.summary}</p>
+        ${g.related_terms && g.related_terms.length ? '<div class="glossary-related"><b>关联术语：</b>' + g.related_terms.join('、') + '</div>' : ''}
+        ${g.relevance ? '<div class="glossary-relevance"><b>实用意义：</b>' + g.relevance + '</div>' : ''}
+        <div class="glossary-source">
+          来源：${g.source.url ? '<a href="' + g.source.url + '" target="_blank" rel="noopener">' + g.source.name + '</a>' : g.source.name}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// 预定义的 12 个场景卡片，每个含 id/图标/名称/描述/搜索关键词
+// 匹配计数：统计 tools 中 scenes 字段与场景 q 数组有交集的工具数
+// EXTENSION POINT: 新增场景时在 scenes[] 中追加 {id, icon, name, desc, q} 条目
 function renderScenes() {
   const scenes = [
     { id: 'write-paper', icon: '📝', name: '写论文', desc: '学术写作、文献综述、论文润色', q: ['写论文'] },
@@ -367,7 +476,9 @@ function searchByScene(query) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// 增强搜索 — 支持中文关键词分拆匹配
+// 中文搜索别名映射 —— 将自然语言关键词映射为过滤函数
+// 在 getFilteredTools() 的文本搜索基础上叠加使用（AND 关系）
+// EXTENSION POINT: 新增中文搜索别名时按 '关键词': t => 条件 格式追加
 const searchAliases = {
   '免费': t => hasFree(t),
   '收费': t => !hasFree(t),
@@ -399,7 +510,9 @@ const searchAliases = {
   '数据分析': t => t.scenes.includes('数据分析'),
 };
 
-// ===== 事件绑定 =====
+// 负责：页面加载完成后初始化所有事件监听器
+// 执行顺序：loadData → 首次渲染(工具/场景/对比计数) → 绑定事件
+// EXTENSION POINT: 新增视图的事件绑定（搜索/筛选/导航）在此添加
 document.addEventListener('DOMContentLoaded', async () => {
   await loadData();
   renderTools();
@@ -471,4 +584,22 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.getElementById('searchInput').focus();
     }
   });
+
+  // 概念词典搜索
+  const glossarySearch = document.getElementById('glossarySearch');
+  const glossarySearchClear = document.getElementById('glossarySearchClear');
+  let glossaryTimer;
+  if (glossarySearch) {
+    glossarySearch.addEventListener('input', () => {
+      clearTimeout(glossaryTimer);
+      glossaryTimer = setTimeout(renderGlossary, 150);
+      glossarySearchClear.style.display = glossarySearch.value ? 'block' : 'none';
+    });
+    glossarySearchClear.addEventListener('click', () => {
+      glossarySearch.value = '';
+      glossarySearchClear.style.display = 'none';
+      renderGlossary();
+      glossarySearch.focus();
+    });
+  }
 });
