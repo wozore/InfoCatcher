@@ -60,6 +60,12 @@ $RECYCLE.BIN/
 output/
 outputs/
 
-# ===== 日志 =====
+# ===== 敏感信息（API Key / 环境变量） =====
+.env
+.env.*
+*.secret
+*_secret.*
+credentials.json
+service-account.json
 *.log
 logs/
