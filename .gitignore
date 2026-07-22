@@ -69,8 +69,8 @@ credentials.json
 service-account.json
 *.log
 # ===== MVP 独立仓库（避免嵌套 .git 冲突） =====
-# MVP 已有独立 git 仓库（github.com/wozore/InfoCatcher），
-# 工程仓库不再追踪其内部文件，避免两个 .git 交叉管理
-06.编码与单元测试/mvp/
+# mvp/ 源码仍由工程仓库追踪（属于 06.编码与单元测试 的交付物），
+# 仅排除内层 .git 目录，防止两个 git 仓库交叉管理
+06.编码与单元测试/mvp/.git/
 
 logs/

@@ -1,0 +1,79 @@
+name: 推荐新工具
+description: 推荐一个 InfoCatcher 还未收录的 AI 工具
+title: "[新工具] "
+labels: ["new-tool"]
+body:
+  - type: input
+    id: tool_name
+    attributes:
+      label: 工具名称
+      placeholder: 例如：文心一言
+    validations:
+      required: true
+  - type: input
+    id: vendor
+    attributes:
+      label: 开发商
+      placeholder: 例如：百度
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: 官网链接
+      placeholder: "https://..."
+    validations:
+      required: true
+  - type: checkboxes
+    id: category
+    attributes:
+      label: 分类
+      options:
+        - 对话/写作
+        - AI编程/IDE
+        - AI图像/绘画
+        - AI视频
+        - AI搜索
+        - AI办公/PPT
+        - AI音频/语音
+        - AI音乐
+        - 开源/本地部署
+    validations:
+      required: true
+  - type: textarea
+    id: free_tier
+    attributes:
+      label: 免费层说明
+      description: 免费版有什么限制？
+      placeholder: 例如：完全免费 / 每日50次 / 每月100万Token免费
+    validations:
+      required: true
+  - type: textarea
+    id: paid_tiers
+    attributes:
+      label: 付费层级
+      description: 付费版有哪些档次？价格是多少？
+      placeholder: "Pro: $20/月 — 无限使用"
+  - type: dropdown
+    id: access_level
+    attributes:
+      label: 国内访问
+      options:
+        - "国内可以直接访问"
+        - "需要科学上网"
+        - "不确定"
+  - type: textarea
+    id: strengths
+    attributes:
+      label: 核心优势
+      description: 这个工具最突出的优点是什么？
+  - type: textarea
+    id: weaknesses
+    attributes:
+      label: 主要不足
+      description: 有什么明显的短板？
+  - type: textarea
+    id: experience
+    attributes:
+      label: 你的使用体验
+      description: 你在什么场景下用过？实际效果如何？
