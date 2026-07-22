@@ -45,7 +45,8 @@ jobs:
       - name: Copy to deploy root
         run: |
           mkdir _site
-          cp -r * _site/
+          cp index.html _site/
+          cp -r css js data scripts _site/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
