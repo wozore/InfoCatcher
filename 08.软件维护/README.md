@@ -38,7 +38,7 @@
 | `data-correction.yml` | 结构化纠错（tool_name/field/current_info/correct_info/source 必填） |
 | `new-tool.yml` | 结构化新工具推荐 |
 
-**部署前必做**：模板中的仓库链接含 `YOUR_USERNAME` 占位符，上线前需替换为实际用户名。
+**部署前必做**：模板中的仓库链接含 `wozore` 占位符，上线前需替换为实际用户名。
 
 ## 四类维护活动（对照生命周期表）
 

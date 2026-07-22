@@ -15,7 +15,24 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # ===== Job 1: 校验（快速失败） =====
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run validation
+        run: node 06.编码与单元测试/mvp/scripts/validate.js
+
+  # ===== Job 2: 部署（依赖校验通过） =====
   deploy:
+    needs: validate
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

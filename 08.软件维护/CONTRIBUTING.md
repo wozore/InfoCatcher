@@ -13,7 +13,7 @@
 发现某个 AI 工具的信息有误或过时？
 
 - **方式 A：提交 Issue**（推荐，无需编程）
-  点击 [数据纠错 Issue](https://github.com/YOUR_USERNAME/infocatcher/issues/new?template=data-correction.yml)，填写结构化表单。
+  点击 [数据纠错 Issue](https://github.com/wozore/infocatcher/issues/new?template=data-correction.yml)，填写结构化表单。
 
 - **方式 B：直接改数据文件**
   编辑 `mvp/data/tools.json`，修改对应的工具条目，提交 PR。
@@ -22,7 +22,7 @@
 
 知道一个好用的 AI 工具但 InfoCatcher 还没收录？
 
-1. 提交 [新工具推荐 Issue](https://github.com/YOUR_USERNAME/infocatcher/issues/new?template=new-tool.yml)
+1. 提交 [新工具推荐 Issue](https://github.com/wozore/infocatcher/issues/new?template=new-tool.yml)
 2. 填写工具名称、分类、适用场景、免费/付费信息、你的使用体验
 
 ### 改进评测
@@ -35,7 +35,7 @@
 
 ### 改进代码
 
-- 查看 [Issues](https://github.com/YOUR_USERNAME/infocatcher/issues) 中标记 `help wanted` 的任务
+- 查看 [Issues](https://github.com/wozore/infocatcher/issues) 中标记 `help wanted` 的任务
 - Fork 仓库 → 修改 → 提交 PR
 - 确保 PR 描述说明了改了**什么**和**为什么**
 

@@ -38,9 +38,11 @@ mvp/
 │   └── style.css       # 样式 — CSS 变量体系、组件样式、响应式
 ├── js/
 │   └── app.js          # 逻辑 — 数据加载、搜索筛选、视图渲染、事件绑定
+├── scripts/
+│   └── validate.js     # 校验 — 部署前自动检查 JSON 格式和 HTML 完整性
 └── data/
     ├── tools.json      # 数据 — 43 个 AI 工具的结构化信息
-    └── glossary.json   # 数据 — 40 条 AI 概念术语
+    └── glossary.json   # 数据 — 43 条 AI 概念术语
 ```
 
 ### 各文件详细职责
@@ -119,7 +121,7 @@ mvp/
 
 #### `data/glossary.json`
 
-每个术语对象的字段（共 40 条记录）：
+每个术语对象的字段（共 43 条记录）：
 
 | 字段 | 类型 | 说明 |
 |------|------|------|
@@ -130,6 +132,24 @@ mvp/
 | `related_terms` | string[] | 关联术语 |
 | `source` | {name, url} | 释义来源 |
 | `relevance` | string | 该概念对 AI 工具选择的实际意义 |
+
+#### `scripts/validate.js`
+
+部署前的自动校验脚本，由 GitHub Actions CI 触发。用它可以在数据出错上到线上之前就把问题抓住。
+>1. **持续集成（CI）**：是一种开发实践，开发人员**频繁地将代码集成到共享版本库**中，每次集成都通过自动构建和自动测试来验证
+>2. **持续部署（CD）**：将最终产品**自动交付给用户**的过程
+>	“**持续**”并非表示“**一直在运行**”，而是表示“**随时可运行**”
+
+| 覆盖文件 | 校验内容 |
+|---------|---------|
+| `tools.json` | JSON 合法性、25 个必填字段不缺失、ID 唯一、评分 1-5 范围、日期 ISO 格式 |
+| `glossary.json` | JSON 合法性、必填字段（term/category/summary/source）、术语名称唯一 |
+| `index.html` | 关键 id 存在（9 个）、EXTENSION POINT 注释未被误删、导航按钮数量正确 |
+
+校验失败时 CI 显示红叉并阻止 Pages 部署。本地可手动运行验证：
+```bash
+node scripts/validate.js
+```
 
 ---
 

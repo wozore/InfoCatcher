@@ -237,7 +237,7 @@ function openDetail(id) {
 
     <div class="meta">最后更新: ${t.last_updated} · 信息来源: ${t.source} · 利益声明: 不接收厂商赞助</div>
     <div class="meta" style="margin-top:8px">
-      <a href="https://github.com/YOUR_USERNAME/infocatcher/issues/new?template=data-correction.yml&title=%5B%E6%95%B0%E6%8D%AE%E7%BA%A0%E9%94%99%5D+${encodeURIComponent(t.name)}" target="_blank" rel="noopener" style="color:var(--text-hint);font-size:12px">📢 信息有误？点此反馈</a>
+      <a href="https://github.com/wozore/infocatcher/issues/new?template=data-correction.yml&title=%5B%E6%95%B0%E6%8D%AE%E7%BA%A0%E9%94%99%5D+${encodeURIComponent(t.name)}" target="_blank" rel="noopener" style="color:var(--text-hint);font-size:12px">📢 信息有误？点此反馈</a>
     </div>
   `;
   overlay.style.display = 'flex';

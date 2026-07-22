@@ -15,11 +15,14 @@
 | `mvp/css/style.css` | 样式（CSS 变量 + 响应式 + 概念词典卡片） |
 | `mvp/js/app.js` | 搜索/筛选/对比/模态/场景导航/概念词典 |
 | `mvp/data/tools.json` | 43 个 AI 工具数据 |
-| `mvp/data/glossary.json` | 40 条 AI 概念术语 |
+| `mvp/data/glossary.json` | 43 条 AI 概念术语 |
+| `mvp/scripts/validate.js` | 部署前数据校验（CI 自动触发） |
+| `mvp模块.md` | MVP 架构文档（模块划分 + 扩展点说明） |
+| `mvp架构图.drawio` | MVP 架构关系图 |
 
 ## 部署前必做
 
-- ⚠️ `mvp/` 中索引/贡献反馈链接含 `YOUR_USERNAME` 占位符，部署前需替换为实际 GitHub 用户名。
+- ✅ 仓库链接中的 `wozore` 已在 2026-07-22 统一替换为实际 GitHub 用户名，如需 Fork 改仓库名请全局搜索 `wozore`。
 - 建议先以本地静态服务器测试（`python -m http.server`）再部署 GitHub Pages。
 - GitHub Pages 需在仓库 Settings → Pages 中将 Source 设为 **GitHub Actions**。
 
@@ -30,6 +33,6 @@
 - [X] B03 对比模式维度扩充：新增"不适合/限制"对比维度
 - [ ] B04 GitHub Pages 部署：CI/CD 已配置（`.github/workflows/deploy.yml`），待 push 后触发
 - [ ] B05 申请 YouTube/X API Key（为后续 B14 AI 热点聚合做准备）
-- [ ] B08 AI 概念词典开发：40 条术语/6 分类/可搜索展开
+- [X] B08 AI 概念词典开发：43 条术语/6 分类/可搜索展开
 
 > 单元测试策略待进入方案 3（含 Serverless 函数）后补；静态站阶段以浏览器端手测 + 内部自测为主。
