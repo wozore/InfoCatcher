@@ -1,0 +1,22 @@
+{
+  "tweets": [
+    {
+      "id": "x-ai-1",
+      "text": "We released a new open source AI model. Official documentation: https://example.com/model",
+      "createdAt": "2026-07-23T04:00:00Z",
+      "likeCount": 1200,
+      "retweetCount": 300,
+      "replyCount": 80,
+      "viewCount": 40000
+    },
+    {
+      "id": "x-ad-1",
+      "text": "This post is sponsored by Example AI. I tested the workflow and found important limits.",
+      "createdAt": "2026-07-23T05:00:00Z",
+      "likeCount": 100,
+      "retweetCount": 10,
+      "replyCount": 5,
+      "viewCount": 2000
+    }
+  ]
+}

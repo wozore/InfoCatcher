@@ -20,10 +20,13 @@
 // ===== 全局状态 =====
 let tools = [];
 let glossary = [];
+let hotspots = { items: [], events: [], provenance: [], assessments: [], coverage: null, generated_at: null };
 let compareList = [];
 let currentView = 'tools';
 let activeFilters = { category: 'all', access: 'all', price: 'all' };
 let activeGlossaryCategory = 'all';
+let activeTrendingPlatform = 'all';
+let trendingSort = 'score';
 
 // ===== 工具函数 =====
 function stars(rating) {
@@ -62,6 +65,12 @@ async function loadData() {
   } catch (e) {
     glossary = [];
   }
+  try {
+    const nResp = await fetch('data/hotspots.json');
+    hotspots = await nResp.json();
+  } catch (e) {
+    hotspots = { items: [], events: [], provenance: [], assessments: [], coverage: null, generated_at: null };
+  }
 }
 
 // 负责：切换顶部导航活跃态 + 视图区显隐，触发对应渲染函数
@@ -80,6 +89,7 @@ function switchView(view) {
   if (view === 'compare') renderCompare();
   if (view === 'tools') renderTools();
   if (view === 'glossary') renderGlossary();
+  if (view === 'trending') renderTrending();
 }
 
 // 负责：文本搜索(关键词 OR 匹配) + 三维筛选(分类/访问/价格)叠加过滤
@@ -433,6 +443,137 @@ function renderGlossary() {
   `).join('');
 }
 
+// ===== AI 热点 =====
+const platformMeta = {
+  youtube: { label: 'YouTube', icon: '▶️', cls: 'platform-youtube' },
+  x: { label: 'X', icon: '𝕏', cls: 'platform-x' },
+  bilibili: { label: 'B站', icon: '📺', cls: 'platform-bilibili' },
+};
+
+function escapeHtml(value) {
+  const div = document.createElement('div');
+  div.textContent = value == null ? '' : String(value);
+  return div.innerHTML;
+}
+
+function safeExternalUrl(value) {
+  try {
+    const url = new URL(value, window.location.href);
+    return ['http:', 'https:'].includes(url.protocol) ? url.href : '#';
+  } catch (e) { return '#'; }
+}
+
+function timeAgo(value) {
+  if (!value) return '时间未知';
+  const diff = Date.now() - new Date(value).getTime();
+  if (!Number.isFinite(diff)) return '时间未知';
+  const minutes = Math.max(0, Math.floor(diff / 60000));
+  if (minutes < 1) return '刚刚';
+  if (minutes < 60) return minutes + '分钟前';
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return hours + '小时前';
+  const days = Math.floor(hours / 24);
+  return days < 30 ? days + '天前' : new Date(value).toLocaleDateString('zh-CN');
+}
+
+function formatMetric(value) {
+  if (value == null) return null;
+  if (value >= 10000) return (value / 10000).toFixed(1) + '万';
+  if (value >= 1000) return (value / 1000).toFixed(1) + '千';
+  return String(value);
+}
+
+function getAssessment(contentId) {
+  return (hotspots.assessments || []).find(item => item.content_id === contentId);
+}
+
+function getProvenance(contentId) {
+  return (hotspots.provenance || []).find(item => item.content_id === contentId);
+}
+
+function getEvent(contentId) {
+  return (hotspots.events || []).find(event => (event.content_ids || []).includes(contentId));
+}
+
+function getFilteredTrending() {
+  let items = [...(hotspots.items || [])];
+  if (activeTrendingPlatform === 'bilibili_dynamic') {
+    items = items.filter(item => item.platform === 'bilibili' && item.content_type.startsWith('bilibili_dynamic'));
+  } else if (activeTrendingPlatform !== 'all') {
+    items = items.filter(item => item.platform === activeTrendingPlatform);
+  }
+  return items.sort((a, b) => {
+    if (trendingSort === 'recent') return new Date(b.published_at) - new Date(a.published_at);
+    return (getAssessment(b.id)?.final_score || 0) - (getAssessment(a.id)?.final_score || 0) || new Date(b.published_at) - new Date(a.published_at);
+  });
+}
+
+function renderTrendingStatus() {
+  const status = document.getElementById('trendingStatus');
+  const coverage = hotspots.coverage;
+  if (!coverage || coverage.status === 'not_run') {
+    status.innerHTML = '<div class="status-note status-neutral">数据流水线尚未运行。当前页面只展示已生成的静态内容。</div>';
+    return;
+  }
+  const degraded = [];
+  for (const [platform, info] of Object.entries(coverage.platforms || {})) {
+    if (info.status === 'degraded' || info.status === 'partial') degraded.push(platform);
+  }
+  if (coverage.platforms?.bilibili?.dynamic?.status === 'degraded') degraded.push('B站动态');
+  status.innerHTML = degraded.length
+    ? '<div class="status-note status-warn">部分数据降级：' + escapeHtml([...new Set(degraded)].join('、')) + '。缺失会降低判断置信度，不代表来源质量下降。</div>'
+    : '<div class="status-note status-ok">三平台数据已完成本轮构建时采集。</div>';
+}
+
+function renderTrending() {
+  renderTrendingStatus();
+  const items = getFilteredTrending();
+  const grid = document.getElementById('trendingGrid');
+  document.getElementById('trendingCount').textContent = items.length;
+  document.getElementById('trendingGenerated').textContent = hotspots.generated_at
+    ? '生成于 ' + timeAgo(hotspots.generated_at)
+    : '尚未采集';
+
+  if (!items.length) {
+    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">🔥</div><h3>暂无热点数据</h3><p>等待每日构建任务生成内容；采集失败不会用空结果覆盖上一版数据。</p></div>';
+    return;
+  }
+
+  grid.innerHTML = items.map(item => {
+    const meta = platformMeta[item.platform] || { label: item.platform, icon: '📰', cls: '' };
+    const assessment = getAssessment(item.id);
+    const provenance = getProvenance(item.id);
+    const event = getEvent(item.id);
+    const metrics = [];
+    if (item.metrics) {
+      [['views', '👁'], ['likes', '👍'], ['comments', '💬'], ['reposts', '🔄'], ['replies', '↩']].forEach(([key, icon]) => {
+        const value = formatMetric(item.metrics[key]);
+        if (value) metrics.push(icon + ' ' + value);
+      });
+    }
+    const commercial = assessment?.commercial_assessment;
+    const evidenceBadges = [];
+    if (provenance?.origin_status === 'confirmed') evidenceBadges.push('来源已确认');
+    else if (provenance?.origin_status === 'candidate') evidenceBadges.push('候选溯源');
+    if (event?.content_ids?.length > 1) evidenceBadges.push(event.content_ids.length + ' 个相关观点');
+    if (commercial && commercial.label !== 'none_confirmed') evidenceBadges.push('已披露商业关系');
+    if (item.content_type.startsWith('bilibili_dynamic')) evidenceBadges.push('B站动态');
+
+    const scoreDetails = assessment ? Object.entries(assessment.score_breakdown).map(([key, value]) =>
+      '<span>' + escapeHtml({ long_term_quality: '长期', recent_timeliness: '时效', light_user_experience: '真实体验', source_reliability: '来源', interaction_quality: '互动' }[key] || key) + ' ' + Math.round(value) + '</span>'
+    ).join('') : '';
+
+    return '<article class="trending-card ' + meta.cls + '">' +
+      '<div class="trending-card-head"><span>' + meta.icon + ' ' + meta.label + '</span><span>' + timeAgo(item.published_at) + '</span></div>' +
+      '<h3><a href="' + escapeHtml(safeExternalUrl(item.url)) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(item.title) + '</a></h3>' +
+      (item.description ? '<p class="trending-description">' + escapeHtml(item.description) + '</p>' : '') +
+      '<div class="trending-tags">' + (item.source_tags || []).map(tag => '<span class="tag scene">' + escapeHtml(tag) + '</span>').join('') + evidenceBadges.map(tag => '<span class="tag evidence">' + escapeHtml(tag) + '</span>').join('') + '</div>' +
+      '<div class="trending-meta"><span>👤 ' + escapeHtml(item.author_name) + '</span>' + (metrics.length ? '<span>' + metrics.join(' · ') + '</span>' : '<span>互动数据不可用</span>') + '</div>' +
+      (assessment ? '<details class="score-explain"><summary>价值分 ' + assessment.final_score.toFixed(1) + ' · 置信度 ' + Math.round(assessment.confidence * 100) + '%</summary><div class="score-breakdown">' + scoreDetails + '</div><p>异常：' + escapeHtml(assessment.anomaly_assessment.status) + '；商业标识：' + escapeHtml(commercial.label) + '（仅有证据时扣分）</p></details>' : '') +
+      '</article>';
+  }).join('');
+}
+
 // 预定义的 12 个场景卡片，每个含 id/图标/名称/描述/搜索关键词
 // 匹配计数：统计 tools 中 scenes 字段与场景 q 数组有交集的工具数
 // EXTENSION POINT: 新增场景时在 scenes[] 中追加 {id, icon, name, desc, q} 条目
@@ -518,6 +659,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderTools();
   renderScenes();
   updateCompareCount();
+  renderTrending();
 
   // 搜索
   const searchInput = document.getElementById('searchInput');
@@ -576,6 +718,23 @@ document.addEventListener('DOMContentLoaded', async () => {
       else renderTools();
     });
   });
+
+  // 热点平台筛选与排序
+  document.querySelectorAll('#trendingTabs [data-platform]').forEach(chip => {
+    chip.addEventListener('click', function() {
+      document.querySelectorAll('#trendingTabs [data-platform]').forEach(item => item.classList.remove('active'));
+      this.classList.add('active');
+      activeTrendingPlatform = this.dataset.platform;
+      renderTrending();
+    });
+  });
+  const trendingSortEl = document.getElementById('trendingSort');
+  if (trendingSortEl) {
+    trendingSortEl.addEventListener('change', function() {
+      trendingSort = this.value;
+      renderTrending();
+    });
+  }
 
   // 键盘快捷键
   document.addEventListener('keydown', function(e) {

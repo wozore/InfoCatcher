@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "generated_at": null,
+  "items": [],
+  "events": [],
+  "provenance": [],
+  "assessments": [],
+  "coverage": {
+    "status": "not_run",
+    "sources_total": 0,
+    "sources_terminal": 0,
+    "platforms": {
+      "youtube": { "status": "not_run", "items": 0 },
+      "x": { "status": "not_run", "items": 0 },
+      "bilibili": {
+        "status": "not_run",
+        "items": 0,
+        "video": { "status": "not_run" },
+        "dynamic": { "status": "not_run" },
+        "article": { "status": "not_run" }
+      }
+    }
+  }
+}

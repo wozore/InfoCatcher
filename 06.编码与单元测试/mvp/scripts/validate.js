@@ -116,12 +116,132 @@ function validateGlossary(data) {
   console.log(`  glossary.json: ${data.length} 条术语，全部通过`);
 }
 
-// ===== 3. index.html 完整性检查 =====
+// ===== 3. news-sources.json / hotspots.json 校验 =====
+const NEWS_PLATFORMS = ['youtube', 'x', 'bilibili'];
+const CONTENT_TYPES = [
+  'youtube_video', 'x_post', 'bilibili_video', 'bilibili_dynamic_video',
+  'bilibili_dynamic_repost', 'bilibili_dynamic_text', 'bilibili_article', 'unknown'
+];
+
+function validateNewsSources(data) {
+  if (!data || !Array.isArray(data.sources)) {
+    fail('news-sources.json.sources 应为数组');
+    return;
+  }
+  const ids = new Set();
+  for (let i = 0; i < data.sources.length; i++) {
+    const source = data.sources[i];
+    const tag = `news-sources.json.sources[${i}] (${source.name || '未知'})`;
+    checkRequired(source, tag, ['id', 'platform', 'name', 'profile_url', 'content_tags', 'enabled', 'collector']);
+    if (ids.has(source.id)) fail(`${tag}.id 重复: ${source.id}`);
+    ids.add(source.id);
+    if (!NEWS_PLATFORMS.includes(source.platform)) fail(`${tag}.platform 不支持: ${source.platform}`);
+    if (!Array.isArray(source.content_tags)) fail(`${tag}.content_tags 应为数组`);
+    if (source.enabled && source.content_tags.length === 0) fail(`${tag} 已启用但没有内容类型标签`);
+    if (source.enabled && !source.external_id) fail(`${tag} 已启用但 external_id 缺失`);
+  }
+  console.log(`  news-sources.json: ${data.sources.length} 个来源，全部通过`);
+}
+
+function validateNewsRegistry(data) {
+  if (!data || typeof data.videos !== 'object' || Array.isArray(data.videos)) return fail('news-registry.json.videos 应为对象');
+  const discovery = new Set(['discovered', 'backfill_candidate', 'filtered_non_ai', 'duplicate_observation', 'quota_paused', 'waiting_authorization', 'temporarily_failed', 'permanently_failed']);
+  const processing = new Set(['pending', 'details_fetched', 'analysis_pending', 'assessed', 'published', 'failed']);
+  for (const [key, record] of Object.entries(data.videos)) {
+    if (record.key && record.key !== key) fail(`news-registry.json key 不一致: ${key}`);
+    if (!key.startsWith(`${record.platform}:`)) fail(`news-registry.json key 平台前缀错误: ${key}`);
+    if (!discovery.has(record.discovery_status)) fail(`news-registry.json ${key} discovery_status 无效`);
+    if (!processing.has(record.processing_status)) fail(`news-registry.json ${key} processing_status 无效`);
+  }
+  if (data.stats?.count !== Object.keys(data.videos).length) fail('news-registry.json stats.count 与记录数不一致');
+  console.log(`  news-registry.json: ${Object.keys(data.videos).length} 条记录，通过`);
+}
+
+function validateNewsQuota(data) {
+  for (const platform of ['youtube', 'bilibili']) {
+    const account = data?.platforms?.[platform];
+    if (!account) { fail(`news-quota.json 缺少 ${platform}`); continue; }
+    if (account.consumed + account.remaining !== account.limit) fail(`news-quota.json ${platform} 余额计算错误`);
+    if (account.reserved < 0 || account.consumed < 0 || account.remaining < 0) fail(`news-quota.json ${platform} 存在负数`);
+    if (!Array.isArray(account.operations)) fail(`news-quota.json ${platform}.operations 应为数组`);
+  }
+  console.log('  news-quota.json: 两个平台额度账本通过');
+}
+
+function validateAuthorizations(data) {
+  if (!data || !Array.isArray(data.tasks)) return fail('pending-authorizations.json.tasks 应为数组');
+  const ids = new Set();
+  for (const task of data.tasks) {
+    if (!task.id || ids.has(task.id)) fail(`pending-authorizations.json id 缺失或重复: ${task.id}`);
+    ids.add(task.id);
+    if (!['pending', 'authorized', 'skipped', 'stopped'].includes(task.status)) fail(`授权任务 ${task.id} 状态无效`);
+    if (task.status !== 'pending' && !task.decision) fail(`授权任务 ${task.id} 已处理但缺少 decision`);
+  }
+  console.log(`  pending-authorizations.json: ${data.tasks.length} 个任务，通过`);
+}
+
+function validateNewsConfig(data) {
+  const layers = data?.time_layers;
+  if (!Array.isArray(layers) || layers.length !== 5) return fail('news-config.json.time_layers 应为五层');
+  let boundary = 0;
+  for (const layer of layers) {
+    if (layer.min_age_days !== boundary || layer.max_age_days <= boundary) fail(`时间层不连续: ${layer.id}`);
+    boundary = layer.max_age_days;
+  }
+  if (boundary !== 270) fail('时间层最远边界应为270天');
+  console.log('  news-config.json: 五层时间边界连续，通过');
+}
+
+function validateHotspots(data) {
+  if (!data || !Array.isArray(data.items)) {
+    fail('hotspots.json.items 应为数组');
+    return;
+  }
+  for (const key of ['events', 'provenance', 'assessments']) {
+    if (!Array.isArray(data[key])) fail(`hotspots.json.${key} 应为数组`);
+  }
+  const contentIds = new Set();
+  for (let i = 0; i < data.items.length; i++) {
+    const item = data.items[i];
+    const tag = `hotspots.json.items[${i}] (${item.title || '未知'})`;
+    checkRequired(item, tag, ['id', 'platform', 'native_id', 'content_type', 'url', 'title', 'published_at', 'source_id', 'metrics']);
+    if (contentIds.has(item.id)) fail(`${tag}.id 重复: ${item.id}`);
+    contentIds.add(item.id);
+    if (!NEWS_PLATFORMS.includes(item.platform)) fail(`${tag}.platform 不支持: ${item.platform}`);
+    if (!CONTENT_TYPES.includes(item.content_type)) fail(`${tag}.content_type 不支持: ${item.content_type}`);
+    if (Number.isNaN(new Date(item.published_at).getTime())) fail(`${tag}.published_at 不是有效日期`);
+    if (item.metrics && typeof item.metrics !== 'object') fail(`${tag}.metrics 应为对象`);
+  }
+
+  for (const event of data.events || []) {
+    for (const contentId of event.content_ids || []) {
+      if (!contentIds.has(contentId)) fail(`hotspots.json event ${event.id} 引用了不存在的 content_id: ${contentId}`);
+    }
+  }
+  for (const relation of data.provenance || []) {
+    if (!contentIds.has(relation.content_id)) fail(`hotspots.json provenance 引用了不存在的 content_id: ${relation.content_id}`);
+  }
+  for (const assessment of data.assessments || []) {
+    if (!contentIds.has(assessment.content_id)) fail(`hotspots.json assessment 引用了不存在的 content_id: ${assessment.content_id}`);
+    const commercial = assessment.commercial_assessment;
+    if (commercial?.penalty > 0 && (!Array.isArray(commercial.evidence) || commercial.evidence.length === 0)) {
+      fail(`hotspots.json assessment ${assessment.content_id} 商业扣分缺少证据`);
+    }
+    const anomaly = assessment.anomaly_assessment;
+    if (anomaly?.status !== 'insufficient_sample' && anomaly?.adjustment !== 0 && (!anomaly.evidence || anomaly.evidence.length === 0)) {
+      fail(`hotspots.json assessment ${assessment.content_id} 异常调整缺少依据`);
+    }
+  }
+  if (!data.coverage || typeof data.coverage !== 'object') fail('hotspots.json.coverage 缺失');
+  console.log(`  hotspots.json: ${data.items.length} 条内容 · ${(data.events || []).length} 个主题，通过`);
+}
+
+// ===== 4. index.html 完整性检查 =====
 function validateHtml(html) {
   // 检查关键 ID 是否存在（至少检查视图容器）
   const expected = [
-    'view-tools', 'view-scenes', 'view-compare', 'view-glossary', 'view-about',
-    'searchInput', 'toolGrid', 'sceneGrid', 'modalOverlay'
+    'view-tools', 'view-scenes', 'view-compare', 'view-glossary', 'view-trending', 'view-about',
+    'searchInput', 'toolGrid', 'sceneGrid', 'trendingGrid', 'modalOverlay'
   ];
   for (const id of expected) {
     const regex = new RegExp(`id=["']${id}["']`);
@@ -162,6 +282,36 @@ try {
   else validateGlossary(glossary);
 } catch (e) {
   fail(`glossary.json 解析失败：${e.message}`);
+}
+
+// news-sources.json
+try {
+  const raw = fs.readFileSync(path.join(MVP_DIR, 'data/news-sources.json'), 'utf8');
+  validateNewsSources(JSON.parse(raw));
+} catch (e) {
+  fail(`news-sources.json 解析失败：${e.message}`);
+}
+
+// news-config / registry / quota / authorizations
+for (const [file, validator] of [
+  ['news-config.json', validateNewsConfig],
+  ['news-registry.json', validateNewsRegistry],
+  ['news-quota.json', validateNewsQuota],
+  ['pending-authorizations.json', validateAuthorizations],
+]) {
+  try {
+    validator(JSON.parse(fs.readFileSync(path.join(MVP_DIR, 'data', file), 'utf8')));
+  } catch (e) {
+    fail(`${file} 解析失败：${e.message}`);
+  }
+}
+
+// hotspots.json
+try {
+  const raw = fs.readFileSync(path.join(MVP_DIR, 'data/hotspots.json'), 'utf8');
+  validateHotspots(JSON.parse(raw));
+} catch (e) {
+  fail(`hotspots.json 解析失败：${e.message}`);
 }
 
 // index.html

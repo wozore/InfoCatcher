@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "content_tags": [
+    "横向测评",
+    "即时资讯",
+    "深度解读",
+    "教程实践",
+    "行业观点",
+    "轻度用户体验",
+    "官方来源"
+  ],
+  "scoring": {
+    "weights": {
+      "long_term_quality": 0.3,
+      "recent_timeliness": 0.25,
+      "light_user_experience": 0.1,
+      "source_reliability": 0.2,
+      "interaction_quality": 0.15
+    },
+    "neutral_score": 50,
+    "half_life_days": {
+      "即时资讯": 2,
+      "行业观点": 14,
+      "横向测评": 21,
+      "教程实践": 45,
+      "深度解读": 45,
+      "官方来源": 7,
+      "default": 14
+    },
+    "commercial_penalties": {
+      "declared_sponsorship": 10,
+      "platform_ad_label": 10,
+      "affiliate_link": 8,
+      "declared_interest": 5,
+      "none_confirmed": 0,
+      "official_source": 0
+    }
+  },
+  "time_layers": [
+    { "id": "recent-1d", "min_age_days": 0, "max_age_days": 1 },
+    { "id": "recent-7d", "min_age_days": 1, "max_age_days": 7 },
+    { "id": "recent-30d", "min_age_days": 7, "max_age_days": 30 },
+    { "id": "recent-90d", "min_age_days": 30, "max_age_days": 90 },
+    { "id": "recent-270d", "min_age_days": 90, "max_age_days": 270 }
+  ],
+  "collection": {
+    "max_output_items": 100,
+    "output_retention_days": 30,
+    "registry_retention_days": 270,
+    "analysis_version": "rules-v1",
+    "request_timeout_ms": 15000,
+    "max_retries": 2,
+    "retry_base_ms": 750,
+    "concurrency": 5,
+    "youtube_max_per_source": 15,
+    "youtube_quota_units_per_run": 1000,
+    "youtube_playlist_page_size": 50,
+    "youtube_video_batch_size": 50,
+    "x_max_sources_per_run": 15,
+    "x_max_pages_per_source": 1,
+    "bilibili_max_per_route": 15,
+    "bilibili_rsshub_requests_per_run": 300,
+    "quota_low_watermark": 5,
+    "max_pages_per_source_layer": 3,
+    "max_items_per_source_layer": 150,
+    "stop_after_new_videos_per_source_layer": 1,
+    "lock_stale_after_ms": 900000,
+    "rsshub_base_url": "https://rsshub.app",
+    "twitter_api_base_url": "https://api.twitterapi.io"
+  },
+  "low_frequency_backfill": {
+    "enabled": true,
+    "cadence_classes": ["low_frequency"],
+    "min_quality_prior": 70,
+    "min_ai_relevance": 0.6,
+    "min_recent_new_videos": 1,
+    "stop_after_new_videos_per_source_layer": 1,
+    "max_pages_per_source_layer": 3,
+    "max_items_per_source_layer": 150,
+    "max_age_days": 270
+  },
+  "anomaly": {
+    "min_samples": 30,
+    "method": "mad",
+    "mad_threshold": 3.5,
+    "confirmed_adjustment": 0
+  },
+  "topic_entities": [
+    "openai", "chatgpt", "gpt", "anthropic", "claude", "gemini", "deepseek",
+    "llama", "mistral", "qwen", "通义", "文心", "豆包", "kimi", "grok",
+    "copilot", "cursor", "agent", "智能体", "rag", "多模态", "机器人"
+  ],
+  "ai_keywords": [
+    "ai", "人工智能", "machine learning", "llm", "大模型", "gpt", "claude",
+    "gemini", "deepseek", "openai", "anthropic", "多模态", "transformer",
+    "agent", "智能体", "copilot", "rag", "微调", "embedding", "推理模型",
+    "生成式", "aigc", "comfyui", "diffusion", "神经网络", "机器人"
+  ],
+  "light_user_signals": {
+    "task": ["实际使用", "实测", "上手", "工作流", "我用", "体验", "使用了"],
+    "cost": ["价格", "成本", "免费额度", "订阅", "付费", "性价比"],
+    "stability": ["稳定", "崩溃", "失败", "报错", "延迟", "可靠"],
+    "limits": ["限制", "局限", "不适合", "缺点", "门槛", "适合人群"]
+  },
+  "commercial_signals": {
+    "declared_sponsorship": ["本期由", "赞助", "sponsored by", "paid partnership"],
+    "platform_ad_label": ["广告", "推广", "advertisement"],
+    "affiliate_link": ["affiliate", "佣金链接", "推广链接"]
+  }
+}

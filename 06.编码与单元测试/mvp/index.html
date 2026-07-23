@@ -17,6 +17,7 @@
       <button class="nav-btn active" data-view="tools">工具库</button>
       <button class="nav-btn" data-view="scenes">场景导航</button>
       <button class="nav-btn" data-view="compare">对比模式 <span class="badge" id="compareCount">0</span></button>
+      <button class="nav-btn" data-view="trending">AI热点</button>
       <button class="nav-btn" data-view="glossary">AI概念</button>
       <button class="nav-btn" data-view="about">关于</button>
     </nav>
@@ -90,6 +91,32 @@
       <p class="hint">在工具库中点击 <b>+对比</b> 按钮添加工具，或点击下方快捷选择：</p>
     </div>
     <div class="compare-table-wrap" id="compareTable"></div>
+  </section>
+
+  <!-- AI 热点视图 -->
+  <section id="view-trending" class="view">
+    <div class="trending-hero">
+      <h1>AI 热点</h1>
+      <p>广泛采集 YouTube、X、Bilibili 的视频、动态、专栏和短消息，再以可追溯规则筛选与分组。</p>
+    </div>
+    <div class="trending-status" id="trendingStatus"></div>
+    <div class="trending-controls">
+      <div class="trending-tabs" id="trendingTabs">
+        <button class="filter-chip active" data-platform="all">全部</button>
+        <button class="filter-chip" data-platform="youtube">YouTube</button>
+        <button class="filter-chip" data-platform="x">X</button>
+        <button class="filter-chip" data-platform="bilibili">B站</button>
+        <button class="filter-chip" data-platform="bilibili_dynamic">B站动态</button>
+      </div>
+      <label class="trending-sort">排序
+        <select id="trendingSort">
+          <option value="score">综合价值</option>
+          <option value="recent">最新发布</option>
+        </select>
+      </label>
+    </div>
+    <div class="trending-summary"><span id="trendingCount">0</span> 条内容 · <span id="trendingGenerated">尚未采集</span></div>
+    <div class="trending-grid" id="trendingGrid"></div>
   </section>
 
   <!-- AI 概念视图 -->

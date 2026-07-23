@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "run_id": null,
+  "started_at": null,
+  "finished_at": null,
+  "platforms": {
+    "youtube": {
+      "limit": 1000,
+      "unit": "quota_units",
+      "reserved": 0,
+      "consumed": 0,
+      "remaining": 1000,
+      "status": "not_run",
+      "operations": []
+    },
+    "bilibili": {
+      "limit": 300,
+      "unit": "http_attempts",
+      "reserved": 0,
+      "consumed": 0,
+      "remaining": 300,
+      "status": "not_run",
+      "operations": []
+    }
+  },
+  "resume_events": []
+}
