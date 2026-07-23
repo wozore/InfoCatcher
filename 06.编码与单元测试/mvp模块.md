@@ -1,235 +1,294 @@
 # InfoCatcher MVP 模块文档
 
-> **版本**：v0.2
-> **最后更新**：2026-07-21
+> **版本**：v0.3（S2 / B14）
+>
+> **最后更新**：2026-07-23
+>
+> **环归属**：环 B · ④够用设计 / ⑥编码与单元测试
+>
 > **对应目录**：`06.编码与单元测试/mvp/`
+>
+> **前序需求**：[软件需求规格说明书.md](../03.需求分析/软件需求规格说明书.md) FR-NEWS、[AI热点质量评估标准.md](../03.需求分析/AI热点质量评估标准.md)
+>
+> **架构图**：[mvp架构图.drawio](mvp架构图.drawio)
 
 ---
 
-## 1. MVP 概览
+## 1. 当前 MVP 概览
 
-InfoCatcher MVP 是一个**纯静态前端应用**（方案1），无需后端服务器，可直接部署到 GitHub Pages。
+InfoCatcher MVP 仍是部署到 GitHub Pages 的**纯静态浏览器应用**。B14 没有引入运行时后端，而是在 GitHub Actions 中执行 Node.js 采集与处理脚本，再把结果写成浏览器可读取的静态 JSON。
 
-### 当前能力
-
-| 功能 | 对应视图 | 数据来源 |
-|------|---------|---------|
-| 工具信息库（43 个 AI 工具） | 工具库 | `data/tools.json` |
-| AI 概念词典（40 条术语） | AI 概念 | `data/glossary.json` |
-| 多维度搜索筛选（分类/访问/价格 + 中文别名） | 工具库 | 前端过滤 |
-| 场景导航（12 个使用场景） | 场景导航 | 硬编码场景列表 + 工具数据匹配 |
-| 多工具对比（2-5 个，10 个对比维度） | 对比模式 | 前端状态 `compareList` |
-| 工具详情弹窗 | 工具库 | 动态渲染 |
-| 关于/方法论 | 关于 | 静态 HTML |
-
-### 方案1 边界
-
-- 可做：静态数据 + 前端交互
-- 不做：用户系统、后端 API、运行时插件、个性化推荐、自动化采集
-
----
-
-## 2. 文件清单与职责
-
+```text
+浏览器运行时：HTML + CSS + JS → 读取静态 JSON → 内存筛选与渲染
+构建时管线：外部平台 → GitHub Actions / Node.js → 校验与原子写 → 静态 JSON
 ```
+
+### 1.1 六个用户视图
+
+| 视图 | 主要能力 | 数据来源 |
+|---|---|---|
+| 工具库 | 43 个 AI 工具、搜索、分类/访问/价格筛选、详情弹窗 | `data/tools.json` |
+| 场景导航 | 12 个场景入口并跳转至工具筛选 | 前端场景配置 + 工具数据 |
+| 对比模式 | 选择 2–5 个工具进行 10 维度比较 | 前端 `compareList` |
+| AI 热点 | YouTube、X、Bilibili 内容，按平台筛选、按评分/时间排序，展示覆盖与降级状态 | `data/hotspots.json` |
+| AI 概念 | 43 条术语、分类筛选、搜索和展开 | `data/glossary.json` |
+| 关于 | 项目定位、方法论与开源说明 | 静态 HTML |
+
+### 1.2 当前边界
+
+**已实现：**
+
+- 浏览器端六视图和静态 JSON 渲染；
+- GitHub Actions 每日构建时采集 YouTube、X、Bilibili；
+- B站视频、动态、专栏均可作为热点内容；
+- 规则评分、商业证据、异常提示、转载溯源和主题聚合；
+- 五层 UTC 历史窗口、持久 Registry、平台额度账本、授权任务和管理 CLI；
+- Node 20 零第三方依赖的单元测试与部署前校验。
+
+**仍不属于当前 MVP：**
+
+- 浏览器运行时直接调用平台 API；
+- 数据库、Serverless API、用户账户和实时推送；
+- AI 自动事实裁决、自动定性商单或作者动机；
+- B站内部 API、逆向 SDK或绕过平台风控；
+- 无限历史回溯。
+
+---
+
+## 2. 总体模块关系
+
+```text
+热点信息源清单.md
+        │ sync-news-sources.js
+        ▼
+news-sources.json ─────────────┐
+news-config.json ──────────────┤
+GitHub Secrets ────────────────┤
+YouTube / X / RSSHub ──────────┤
+                              ▼
+                         build-news.js
+     ┌──────────────┬──────────┼───────────┬────────────────┐
+     ▼              ▼          ▼           ▼                ▼
+ Registry       Scheduler    Quota      Authorization    评分/溯源/主题
+     │              │          │           │                │
+     └──────────────┴──────────┴───────────┴────────────────┘
+                              ▼
+       news-registry / news-state / news-quota /
+       pending-authorizations / hotspots.json
+                              │
+                              ▼
+                  app.js → AI 热点静态视图
+```
+
+构建写入顺序为状态文件在前、`hotspots.json` 在后，避免前端投影领先于持久状态。所有目标 JSON 使用唯一临时文件、`fsync` 和同盘 `rename` 原子替换。
+
+---
+
+## 3. 文件树与职责
+
+```text
 mvp/
-├── index.html          # 入口 — 页面结构、视图容器、导航栏
-├── css/
-│   └── style.css       # 样式 — CSS 变量体系、组件样式、响应式
-├── js/
-│   └── app.js          # 逻辑 — 数据加载、搜索筛选、视图渲染、事件绑定
+├── index.html                         # 六视图页面结构
+├── css/style.css                      # 通用、热点和响应式样式
+├── js/app.js                          # 数据加载、筛选、比较和六视图渲染
+├── data/
+│   ├── tools.json                     # 43 个工具
+│   ├── glossary.json                  # 43 条概念
+│   ├── hotspots.json                  # 前端热点投影
+│   ├── news-config.json               # 评分、时间层、额度和停止条件
+│   ├── news-sources.json              # 96 个标准化热点来源
+│   ├── news-state.json                # 构建、来源和历史游标状态
+│   ├── news-registry.json             # 检测视频的持久发现/处理记录
+│   ├── news-quota.json                # YouTube/B站额度账本
+│   └── pending-authorizations.json    # 超出默认范围的待授权任务
 ├── scripts/
-│   └── validate.js     # 校验 — 部署前自动检查 JSON 格式和 HTML 完整性
-└── data/
-    ├── tools.json      # 数据 — 43 个 AI 工具的结构化信息
-    └── glossary.json   # 数据 — 43 条 AI 概念术语
+│   ├── build-news.js                  # 热点构建总编排入口
+│   ├── sync-news-sources.js           # Markdown 来源清单转 JSON
+│   ├── news-storage.js                # JSON 原子写和构建锁
+│   ├── news-registry.js               # 视频索引、状态与批量防重
+│   ├── news-quota.js                  # 平台独立额度预留/消费/审计
+│   ├── news-scheduler.js              # 五层 UTC 调度与推进判定
+│   ├── news-youtube.js                # uploads playlist 历史适配器
+│   ├── news-bilibili.js               # RSSHub 可见历史及能力降级
+│   ├── news-authorization.js          # 待授权任务与决策规则
+│   ├── news-cli.js                    # 来源、授权、额度和锁管理入口
+│   ├── validate.js                    # 数据、引用与 HTML 契约校验
+│   ├── news-tests.test.js             # 内容规则与采集行为测试（17项）
+│   ├── news-foundation.test.js        # 状态、额度、调度和 CLI 测试（20项）
+│   └── news-fixtures/                 # 三平台确定性测试样本
+└── .github/workflows/
+    ├── collect-news.yml               # 定时/手动采集并提交生成数据
+    └── deploy.yml                     # 校验、测试并部署 GitHub Pages
 ```
 
-### 各文件详细职责
+---
 
-#### `index.html`
+## 4. 浏览器运行时模块
 
-| 区域 | 职责 | 关键 ID / 属性 |
-|------|------|---------------|
-| `<header>` | 导航栏 — 5 个视图按钮 + Logo 返回首页 | `.nav-btn[data-view]`, `#homeBtn` |
-| `#view-tools` | 工具库 — 搜索框 + 三维筛选（分类/访问/价格）+ 卡片网格 | `#searchInput`, `.filter-chip[data-category/access/price]`, `#toolGrid` |
-| `#view-scenes` | 场景导航 — 12 个场景卡片，点击跳转工具库搜索 | `#sceneGrid` |
-| `#view-compare` | 对比模式 — 已选工具 + 快捷方案 + 多维度对比表 | `#compareSelection`, `#compareTable` |
-| `#view-glossary` | AI 概念词典 — 搜索 + 分类筛选 + 可展开术语卡片 | `#glossarySearch`, `#glossaryCategories`, `#glossaryList` |
-| `#view-about` | 关于 — 项目介绍 + 评测方法论 + 开源说明 | 静态内容 |
-| `#modalOverlay` | 工具详情弹窗 — 评分/价格/优劣势/最适合场景 | `#modalContent` |
-| `<footer>` | 页脚 — 数据更新日期 + 贡献/纠错链接 | `#dataDate` |
+### 4.1 页面结构：`index.html`
 
-#### `app.js`
+| 区域 | 职责 | 关键标识 |
+|---|---|---|
+| 导航 | 六个视图切换 | `.nav-btn[data-view]` |
+| 工具库 | 搜索、筛选、卡片 | `#view-tools`, `#toolGrid` |
+| 场景导航 | 场景卡片 | `#view-scenes`, `#sceneGrid` |
+| 对比模式 | 选择区和对比表 | `#view-compare` |
+| AI 热点 | 状态、平台筛选、排序、Feed | `#view-trending`, `#trendingGrid` |
+| AI 概念 | 搜索、分类、术语列表 | `#view-glossary` |
+| 关于 | 静态方法论 | `#view-about` |
+| 详情弹窗 | 工具详情 | `#modalOverlay` |
 
-| 模块 | 函数 | 职责 |
-|------|------|------|
-| **全局状态** | 变量声明 (L4-9) | 工具数据、概念数据、对比列表、当前视图、筛选状态 |
-| **工具函数** | `stars()`, `scoreClass()`, `hasFree()` | 评分渲染、颜色分级、免费判断 |
-| **数据加载** | `loadData()` | 异步加载 tools.json + glossary.json，失败降级为空数组 |
-| **视图切换** | `switchView(view)` | 切换 active 视图，触发对应渲染函数 |
-| **搜索筛选** | `getFilteredTools()` | 文本搜索(关键词 OR + 中文别名) + 三维筛选叠加 |
-| **工具卡片** | `renderTools()` | 过滤 → 渲染卡片网格，含对比按钮状态 |
-| **详情弹窗** | `openDetail(id)`, `closeModal()` | 渲染完整工具信息弹窗 |
-| **对比模式** | `toggleCompare()`, `renderCompare()`, `removeCompare()`, `quickCompare()` | 对比列表 CRUD + 10 维度对比表 |
-| **概念词典** | `getFilteredGlossary()`, `renderGlossary()` | 术语搜索 + 按分类筛选 + 可展开卡片 |
-| **场景导航** | `renderScenes()`, `searchByScene()` | 场景卡片渲染 + 点击跳转搜索 |
-| **搜索别名** | `searchAliases` 对象 | 中文关键词 → 过滤函数映射，赋能自然语言搜索 |
-| **事件绑定** | `DOMContentLoaded` 回调 | 搜索/导航/筛选/快捷键/概念词典事件注册 |
+### 4.2 应用逻辑：`app.js`
 
-#### `style.css`
+| 模块 | 关键函数 | 作用 |
+|---|---|---|
+| 全局状态 | `tools`, `glossary`, `hotspots`, `compareList` | 保存静态数据和交互状态 |
+| 数据加载 | `loadData()` | 并行职责式加载三个前端 JSON，失败时降级为空状态 |
+| 视图切换 | `switchView()` | CSS class 切换并调用对应 render 函数 |
+| 工具发现 | `getFilteredTools()`, `renderTools()` | 文本与三维筛选叠加 |
+| 详情与对比 | `openDetail()`, `toggleCompare()`, `renderCompare()` | 工具决策交互 |
+| 概念词典 | `getFilteredGlossary()`, `renderGlossary()` | 搜索、分类和展开 |
+| AI 热点 | `getFilteredTrending()`, `renderTrendingStatus()`, `renderTrending()` | 平台过滤、排序、评分/主题/溯源展示 |
+| 安全输出 | `escapeHtml()`, `safeExternalUrl()` | 转义外部文本，仅允许 HTTP(S) 链接 |
+| 场景导航 | `renderScenes()`, `searchByScene()` | 场景到工具查询的跳转 |
 
-| 分区 | 涵盖 |
-|------|------|
-| `:root` | CSS 自定义属性（颜色/阴影/圆角/过渡） |
-| Header | 固定顶栏 + Logo + 导航按钮 + Badge |
-| Main / View | 布局容器 + 视图显隐 |
-| Hero | 首页标题 + 搜索框 |
-| Filters | 筛选 chip 组件 |
-| Tool Grid / Card | 工具卡片网格 + 卡片内部（评分/标签/对比按钮） |
-| Scene Grid | 场景卡片网格 |
-| Compare | 对比选择区 + 对比表格 |
-| Modal | 弹窗 + 评分网格 + 详情分段 |
-| Glossary | 概念搜索 + 分类筛选 + 可展开卡片 |
-| About | 关于页面排版 |
-| Footer | 页脚 |
-| Empty State | 空结果占位 |
-| Responsive | 移动端适配 |
+浏览器不会读取 `news-registry.json`、`news-quota.json` 等内部状态，只读取前端投影 `hotspots.json`。
 
-#### `data/tools.json`
+---
 
-每个工具对象的字段（共 43 条记录）：
+## 5. 热点构建时模块
 
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| `id` | string | 唯一标识（英文小写） |
-| `name` | string | 工具中文名 |
-| `vendor` | string | 开发商 |
-| `category` | string[] | 分类标签数组 |
-| `scenes` | string[] | 适用场景标签数组 |
-| `url` | string | 官网链接 |
-| `icon` | string | Emoji 图标 |
-| `free_tier` | string | 免费层说明 |
-| `paid_tiers` | {name, price, features}[] | 付费层级 |
-| `chinese_support` | number | 中文支持评分 (1-5) |
-| `access_level` | string | 国内访问 "开放"/"受限" |
-| `rating_overall/chinese/ease/price` | number | 四维评分 (1-5) |
-| `strengths/weaknesses` | string | 优势/不足描述 |
-| `best_for/not_for` | string[] | 最适合/不适合场景 |
-| `last_updated` | string | 信息更新日期 |
-| `source` | string | 信息来源 |
+### 5.1 总编排：`build-news.js`
 
-#### `data/glossary.json`
+主要阶段：
 
-每个术语对象的字段（共 43 条记录）：
+1. 读取配置、来源、旧热点和持久状态；
+2. 获取构建锁并建立本轮额度账本；
+3. 采集最新 Feed：YouTube RSS/Data API、TwitterAPI.io、Bilibili RSSHub；
+4. 对所有观察先写 Registry，非 AI 内容也标记为 `filtered_non_ai`；
+5. 执行当前时间层的 YouTube/B站受控历史 step；
+6. 标准化、去重、AI 过滤、评分、异常检测、溯源和主题聚合；
+7. 更新 Registry、调度状态、额度和待授权任务；
+8. 原子写入状态文件，最后替换 `hotspots.json`；
+9. 释放构建锁。
 
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| `term` | string | 术语名称（如 RAG、Token） |
-| `full_name` | string | 英文全称 |
-| `category` | string | 分类（模型架构/训练与微调/推理与部署/多模态/Agent/评估与基准） |
-| `summary` | string | 1-3 句简明释义 |
-| `related_terms` | string[] | 关联术语 |
-| `source` | {name, url} | 释义来源 |
-| `relevance` | string | 该概念对 AI 工具选择的实际意义 |
+X 继续采用来源轮转控制成本；严格历史分页当前只适用于 YouTube，B站按 RSSHub 可见范围处理。
 
-#### `scripts/validate.js`
+### 5.2 Registry：`news-registry.js`
 
-部署前的自动校验脚本，由 GitHub Actions CI 触发。用它可以在数据出错上到线上之前就把问题抓住。
->1. **持续集成（CI）**：是一种开发实践，开发人员**频繁地将代码集成到共享版本库**中，每次集成都通过自动构建和自动测试来验证
->2. **持续部署（CD）**：将最终产品**自动交付给用户**的过程
->	“**持续**”并非表示“**一直在运行**”，而是表示“**随时可运行**”
+- 首选唯一键：`platform:native_id`；
+- 无原生 ID 时使用按平台隔离的规范化 URL 哈希；
+- 启动时构造原生键、URL、来源三类内存索引；
+- 区分 discovery 与 processing 状态；
+- 已完成且 `analysis_version` 未变化时跳过重复详情和分析；
+- 不同平台相同 native ID 不冲突。
 
-| 覆盖文件 | 校验内容 |
-|---------|---------|
-| `tools.json` | JSON 合法性、25 个必填字段不缺失、ID 唯一、评分 1-5 范围、日期 ISO 格式 |
-| `glossary.json` | JSON 合法性、必填字段（term/category/summary/source）、术语名称唯一 |
-| `index.html` | 关键 id 存在（9 个）、EXTENSION POINT 注释未被误删、导航按钮数量正确 |
+### 5.3 时间调度：`news-scheduler.js`
 
-校验失败时 CI 显示红叉并阻止 Pages 部署。本地可手动运行验证：
+固定 UTC 半开窗口：
+
+```text
+[0,1) → [1,7) → [7,30) → [30,90) → [90,270) 天
+```
+
+当前层所有适用来源达到终态后才推进；`quota_paused`、`temporarily_failed`、`waiting_authorization` 等状态会阻止自动推进。来源层状态保存页游标、观察数、新增数、重复数、最旧时间和停止原因。
+
+### 5.4 平台适配器
+
+| 模块 | 策略 | 能力边界 |
+|---|---|---|
+| `news-youtube.js` | 获取 uploads playlist，按 `playlistItems.list` 分页；Registry 防重后用 `videos.list` 批量补详情 | 默认不用高成本 `search.list`；额度不足保存恢复游标 |
+| `news-bilibili.js` | 请求视频、动态、专栏 RSSHub 路由并按五层归类 | 无可靠日期分页；历史覆盖不足时 `history_unsupported`，不调用内部 API |
+
+### 5.5 额度、授权与管理
+
+- `news-quota.js`：YouTube 按 quota units、B站按 HTTP attempts 独立记账；请求前 reserve，实际发出后 consume；失败和重试仍消耗。
+- `news-authorization.js`：五层均无新内容后可创建待确认任务，决策支持 `continue`、`until-first`、`skip`、`stop`。
+- `news-cli.js`：提供单条/批量来源管理、授权处理、额度恢复记录、锁状态和带理由的强制解锁；不接受 API Key 参数。
+- `news-storage.js`：原子 JSON 写和 `.news-build.lock`；stale lock 不自动删除。
+
+---
+
+## 6. 数据文件分层
+
+| 类别 | 文件 | 谁读写 | 用途 |
+|---|---|---|---|
+| 内容主数据 | `tools.json`, `glossary.json` | 人工维护；浏览器读 | 工具库与概念词典 |
+| 来源/规则配置 | `news-sources.json`, `news-config.json` | CLI/同步脚本维护；构建读 | 采集来源、评分和安全上限 |
+| 前端投影 | `hotspots.json` | 构建写；浏览器读 | 内容、事件、溯源、评分和覆盖状态 |
+| 持久内部状态 | `news-state.json`, `news-registry.json` | 构建读写 | 游标恢复、发现/处理记录、防重 |
+| 运维审计 | `news-quota.json`, `pending-authorizations.json` | 构建/CLI 读写 | 成本、暂停、授权决策 |
+
+API Key 不属于任何 JSON 文件，只能由 GitHub Repository Secrets 注入为 `YOUTUBE_API_KEY` 和 `X_API_KEY`。
+
+---
+
+## 7. 测试与验证架构
+
+### 7.1 `news-tests.test.js`：内容语义层（17项）
+
+验证三平台输入能否被正确标准化，以及评分规则是否遵守产品约束：B站动态是一等内容、轻度用户体验必须有证据、商单无证据不扣分、低频不损害长期质量、小样本不误伤、MAD 只提示复核、转载/主题关系保留、X 轮转和 B站降级不误报。
+
+### 7.2 `news-foundation.test.js`：持久基础设施层（20项）
+
+验证原子写、构建锁、Registry 唯一性和状态机、额度预留/消费、五层边界、时间层推进、低频回溯资格、YouTube 分页防重与游标恢复、B站历史能力降级、授权边界和来源 CLI 原子导入。
+
+### 7.3 Fixture 与静态校验
+
+- `node scripts/build-news.js --fixture`：使用本地三平台样本运行完整内容管线，不请求真实 API、不写持久数据；当前预期为5条内容、5个主题。
+- `node scripts/validate.js`：校验 tools/glossary/news 配置、Registry、额度、授权、热点引用和 HTML DOM 契约。
+- `node --check scripts/*.js`：检查所有 Node.js 脚本语法。
+
+这些测试证明确定性规则和状态转换在本地成立，但不能替代真实平台响应、跨日 Actions 连续运行和浏览器线上冒烟测试。
+
+---
+
+## 8. CI/CD 与运维入口
+
+### 8.1 `collect-news.yml`
+
+每日 UTC 02:00 或手动触发：校验配置 → 注入 Secrets → 构建热点 → 运行37项测试与校验 → 提交变更的热点/状态数据。工作流使用 concurrency 防止同类 Action 并发。
+
+### 8.2 `deploy.yml`
+
+主分支 push 或手动触发：运行静态校验和37项测试 → 复制站点文件 → 上传 Pages artifact → 部署 GitHub Pages。
+
+### 8.3 常用命令
+
 ```bash
 node scripts/validate.js
+node --test scripts/news-tests.test.js scripts/news-foundation.test.js
+node scripts/build-news.js --fixture
+node scripts/news-cli.js authorization list
+node scripts/news-cli.js lock status
+node scripts/news-cli.js source import --file sources.json --dry-run
 ```
 
 ---
 
-## 3. 架构关系图
+## 9. 扩展点与修改约束
 
-> 参见同目录下的 `mvp架构图.drawio`
-
----
-
-## 4. 数据流
-
-```
-tools.json ──┐
-              ├── loadData() ──→ tools[] ──→ getFilteredTools() ──→ renderTools()
-glossary.json─┘                                      │                    │
-                                                     │              openDetail(id)
-                                              searchAliases      toggleCompare()
-                                                     │                    │
-                                              searchByScene()    renderCompare()
-                                                     │
-                                              renderScenes()
-
-glossary.json ──→ loadData() ──→ glossary[] ──→ getFilteredGlossary() ──→ renderGlossary()
-```
-
-**核心约束**：
-- 所有搜索/筛选均为**前端内存过滤**，不发起网络请求
-- 数据文件为**静态 JSON**，修改后重新部署即可更新内容
-- 视图切换通过 CSS class `.view.active` 控制显隐，非路由
+1. 新增浏览器视图时同步修改 `index.html`、`switchView()`、渲染函数、事件绑定和样式。
+2. 新增前端数据源时在 `loadData()` 中加载，并为失败情况提供空状态。
+3. 新增采集平台时单独建立适配器，不把平台细节继续堆入 `build-news.js`。
+4. 所有检测内容应先进入 Registry，再进入详情、分析和热点投影。
+5. 新网络操作必须先定义额度单位、操作成本、重试计费和暂停恢复方式。
+6. B站动态继续作为可独立展示、评分和参与主题的内容，不得降为单纯活跃度信号。
+7. 商业推广、异常和来源关系必须保留证据与置信度；未知不能当作零或负面事实。
+8. 采集失败不得用空结果覆盖上一版有效 `hotspots.json`。
+9. 不直接删除构建锁；先检查状态，必要时通过 CLI 带理由强制解锁并保留审计。
+10. 环 B 只维护够用架构；正式数据库 schema、Serverless 接口和综合验收设计留到环 C。
 
 ---
 
-## 5. AI 自定义功能扩展点
+## 10. 当前验证状态与下一验收点
 
-以下位置标注了 `EXTENSION POINT` 注释，方便 AI 编码工具识别并插入新功能。
-
-### 5.1 index.html — 视图级扩展
-
-| 位置 | 扩展方式 | 对应用例 |
-|------|---------|---------|
-| 导航栏 `.nav` | 新增 `<button class="nav-btn" data-view="xxx">` | UC-AI-04 新视图 |
-| `<main>` 内 | 新增 `<section id="view-xxx" class="view">` | UC-AI-04 新视图 |
-| 筛选区 `.filters` | 新增 `.filter-group` + `.filter-chip[data-xxx]` | UC-AI-03 新筛选维度 |
-| `<footer>` | 新增链接 | 通用 |
-
-### 5.2 app.js — 逻辑级扩展
-
-| 位置 | 扩展方式 | 对应用例 |
-|------|---------|---------|
-| `switchView()` | 新增 `if (view === 'xxx') renderXxx();` 分支 | UC-AI-04 新视图 |
-| `getFilteredTools()` | 新增筛选条件分支 | UC-AI-03 新筛选维度 |
-| `searchAliases` | 新增键值对 `'关键词': t => 条件` | UC-AI-03 搜索增强 |
-| `renderCompare()` 的 `dims[]` | 新增 `{key, label, format}` 条目 | UC-AI-05 新对比维度 |
-| `renderScenes()` 的 `scenes[]` | 新增场景对象 `{id, icon, name, desc, q}` | 场景扩展 |
-| `loadData()` | 新增 fetch 新 JSON 文件 | UC-AI-02 新数据源 |
-| `DOMContentLoaded` 回调 | 新增事件监听注册 | UC-AI-04 新交互 |
-
-### 5.3 style.css — 样式级扩展
-
-| 位置 | 扩展方式 | 对应用例 |
-|------|---------|---------|
-| `:root` | 直接使用已有 CSS 变量（`--primary`, `--surface` 等） | 所有 |
-| 文件末尾 | 新增视图样式块（参考 `.glossary-*` 模式） | UC-AI-04 |
-
-### 5.4 data/ — 数据级扩展
-
-| 位置 | 扩展方式 | 对应用例 |
-|------|---------|---------|
-| `tools.json` | 新增字段不影响现有渲染（前端按需读取） | UC-AI-02 |
-| `glossary.json` | 新增术语条目 | 内容扩充 |
-| 新建 `data/*.json` | 新数据文件 + `loadData()` 中 fetch | UC-AI-02 |
-
----
-
-## 6. 后续修改注意事项
-
-1. **视图切换机制**：`switchView()` 通过硬编码 if 分支匹配视图名。添加新视图时需同时修改 3 处：index.html（导航按钮 + 视图容器）、app.js（`switchView` + `DOMContentLoaded` 事件）、style.css（新视图样式）
-2. **搜索筛选叠加**：`getFilteredTools()` 中文本搜索和三维筛选是**叠加**关系（AND），修改时注意顺序不会影响结果
-3. **对比按钮状态同步**：`toggleCompare()` 调用后必须同步调用 `updateCompareCount()` + `renderTools()`，否则 UI 不一致
-4. **JSON 数据格式**：所有日期使用 ISO 格式 (`YYYY-MM-DD`)；评分使用 1-5 数值；数组字段即使空值也应为 `[]` 而非 `null`
-5. **CSS 变量体系**：所有颜色/阴影/圆角统一使用 `:root` 中的 CSS 自定义属性，不硬编码色值，确保深色模式可升级
-6. **无构建工具**：MVP 是纯 HTML/CSS/JS，无打包器/转译器。所有代码直接运行于浏览器，需兼容主流浏览器 ES6+
-7. **部署路径**：CI 将 `mvp/` 部署为站点根目录（`_site/`），文件内引用路径（`data/`, `css/`, `js/`）均为相对路径
+| 项目 | 状态 |
+|---|---|
+| 37项 Node 单元测试 | ✅ 本地通过 |
+| Fixture 5条内容 / 5个主题 | ✅ 本地通过 |
+| JSON、引用和 HTML 契约 | ✅ 本地通过 |
+| JavaScript 语法和 diff whitespace | ✅ 本地通过 |
+| 真实 YouTube/X/RSSHub 首次 Actions 采集 | ⏳ 待执行 |
+| 跨批次历史游标和 Registry 恢复 | ⏳ 待真实连续运行验证 |
+| GitHub Pages AI 热点线上浏览器冒烟 | ⏳ 待生成真实 `hotspots.json` 后验证 |
