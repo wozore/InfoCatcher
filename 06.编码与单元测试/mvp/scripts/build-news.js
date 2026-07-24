@@ -1,4 +1,84 @@
+/**
+ * build-news.js —— AI 热点构建总编排入口
+ *
+ * 在热点管线中的位置：GitHub Actions（collect-news.yml）调用此脚本，
+ * 它是整个热点系统的唯一入口，负责编排所有模块完成一次完整的构建运行。
+ *
+ * ═══════════════════════════════════════════════════════════════
+ * 模块依赖关系（数据流向）：
+ * ═══════════════════════════════════════════════════════════════
+ *
+ *   外部平台 API ──┐
+ *   news-sources   ├──→ 采集层（collectYouTube / collectX / collectBilibili）
+ *   news-config ───┘        │
+ *                            ▼
+ *                    标准化 + AI 过滤 + 去重
+ *                            │
+ *                ┌───────────┼───────────┐
+ *                ▼           ▼           ▼
+ *           Registry    Scheduler      Quota
+ *          (防重/状态)  (时间层推进)   (额度控制)
+ *                │           │           │
+ *                └───────────┼───────────┘
+ *                            ▼
+ *                  评分 / 溯源 / 主题聚合
+ *                            │
+ *                            ▼
+ *                     hotspots.json（前端投影，最后写入）
+ *
+ * ═══════════════════════════════════════════════════════════════
+ * 一次构建的完整流程（runCollection）：
+ * ═══════════════════════════════════════════════════════════════
+ *
+ *   Phase 1: 准备
+ *     - 读取 config / sources / 旧 hotspots / state
+ *     - 创建本轮 quota ledger 和 registry 内存索引
+ *     - 确定 X 平台本轮轮转的来源子集
+ *
+ *   Phase 2: 最新 Feed 采集（所有启用来源）
+ *     - YouTube RSS + Data API 统计补充
+ *     - X TwitterAPI.io（来源轮转，带 cursor 分页）
+ *     - Bilibili RSSHub（视频 / 动态 / 专栏三路由）
+ *     - 每条采集结果都写入 Registry（含非 AI 内容标记为 filtered_non_ai）
+ *
+ *   Phase 3: 历史层回溯（YouTube + Bilibili，受控单步）
+ *     - 读取 scheduler 状态，确定当前激活的时间层
+ *     - 对每个来源执行一个受控 step（一页或一批）
+ *     - 合格的历史内容合并到 freshItems
+ *
+ *   Phase 4: 内容处理
+ *     - 旧内容保留（按 output_retention_days 截断）
+ *     - 去重、排序、按 max_output_items 截断
+ *     - 评分、异常检测、溯源和主题聚合
+ *
+ *   Phase 5: 持久化（严格顺序）
+ *     - Registry → State → Quota → Authorizations → hotspots.json
+ *     - 前端投影最后写入，失败不破坏内部状态
+ *
+ * ═══════════════════════════════════════════════════════════════
+ * 扩展点：
+ * ═══════════════════════════════════════════════════════════════
+ *
+ *   - 新增采集平台：实现 collectXxx() 函数，在 collectSource() 增加分支，
+ *     在 runHistoricalLayerPass() 增加对应适配器调用。
+ *   - 新增评分维度：在 assessItem() 增加新函数，修改 scoring.weights 配置。
+ *   - 新增内容类型：在 CONTENT_TYPES 列表和 normalizeRssItem/normalizeTweet
+ *     中增加支持，更新 AI 关键词和信号配置。
+ *   - 调整时间层：修改 news-config.json 的 time_layers 数组，
+ *     validate.js 会自动检查连续性。
+ *
+ * 运行方式：
+ *   node scripts/build-news.js              # 真实采集（需要 Secrets）
+ *   node scripts/build-news.js --fixture    # 本地确定性测试（无网络）
+ *   node scripts/build-news.js --allow-empty # 允许空输出（调试用）
+ */
+
 'use strict';
+
+// ═══════════════════════════════════════════════════════════════
+// 第 1 部分：XML/RSS 解析与内容标准化
+// 将三个平台的原始格式转换为统一的内容模型
+// ═══════════════════════════════════════════════════════════════
 
 const fs = require('fs');
 const path = require('path');
@@ -19,14 +99,17 @@ const { createAuthorizationStore, createAuthorizationTask } = require('./news-au
 
 const MVP_DIR = path.resolve(__dirname, '..');
 const DATA_DIR = path.join(MVP_DIR, 'data');
-const SOURCES_PATH = path.join(DATA_DIR, 'news-sources.json');
-const CONFIG_PATH = path.join(DATA_DIR, 'news-config.json');
-const OUTPUT_PATH = path.join(DATA_DIR, 'hotspots.json');
-const STATE_PATH = path.join(DATA_DIR, 'news-state.json');
-const REGISTRY_PATH = path.join(DATA_DIR, 'news-registry.json');
-const QUOTA_PATH = path.join(DATA_DIR, 'news-quota.json');
-const AUTHORIZATIONS_PATH = path.join(DATA_DIR, 'pending-authorizations.json');
-const LOCK_PATH = path.join(DATA_DIR, '.news-build.lock');
+
+// ── 数据文件路径（按读写频率排列） ──────────────────────────
+// 前三个是每次构建的输入，后六个是构建输出
+const SOURCES_PATH = path.join(DATA_DIR, 'news-sources.json');         // 96 个来源（人工维护 + CLI）
+const CONFIG_PATH = path.join(DATA_DIR, 'news-config.json');           // 评分/时间层/额度配置
+const OUTPUT_PATH = path.join(DATA_DIR, 'hotspots.json');              // 前端热点投影（最后写入！）
+const STATE_PATH = path.join(DATA_DIR, 'news-state.json');             // 构建批次和来源游标
+const REGISTRY_PATH = path.join(DATA_DIR, 'news-registry.json');       // 持久视频记录
+const QUOTA_PATH = path.join(DATA_DIR, 'news-quota.json');             // 平台额度账本
+const AUTHORIZATIONS_PATH = path.join(DATA_DIR, 'pending-authorizations.json'); // 待授权任务
+const LOCK_PATH = path.join(DATA_DIR, '.news-build.lock');             // 构建并发锁（不入库）
 
 function decodeXml(value = '') {
   return value
@@ -155,6 +238,16 @@ function numberOrNull(value) {
   return Number.isFinite(n) ? n : null;
 }
 
+// ═══════════════════════════════════════════════════════════════
+// 第 2 部分：平台采集器
+// 每个平台一个采集函数，负责网络请求、原始数据解析和 AI 关键词初筛
+// X 采用来源轮转（每次只采集部分来源以控制日调用量）
+// Bilibili 发送三条 RSSHub 路由（视频/动态/专栏），取最差状态
+// ═══════════════════════════════════════════════════════════════
+
+  // beforeAttempt 回调用于在每次重试前检查额度。
+  // 如果额度不足（返回 false），立即抛出 quota_paused 并跳过后续重试——
+  // 额度不足不是网络问题，重试不会让额度恢复。
 async function requestText(url, options, config, beforeAttempt = null) {
   const timeout = config.collection.request_timeout_ms;
   let lastError;
@@ -166,6 +259,7 @@ async function requestText(url, options, config, beforeAttempt = null) {
       return await response.text();
     } catch (error) {
       lastError = error;
+      // 额度不足不是网络问题，立即终止重试并向上传递 quota_paused
       if (error.code === 'quota_paused') throw error;
       if (attempt < config.collection.max_retries) {
         await new Promise(resolve => setTimeout(resolve, config.collection.retry_base_ms * (attempt + 1)));
@@ -175,6 +269,11 @@ async function requestText(url, options, config, beforeAttempt = null) {
   throw lastError;
 }
 
+/**
+ * 通过 Data API 补充 YouTube RSS 缺少的互动数据（浏览量/点赞/评论）。
+ * 需要 YOUTUBE_API_KEY，每次调用消耗 1 quota unit（含重试）。
+ * 无 API Key 时降级为 rss_only，不影响 RSS 内容的采集。
+ */
 async function enrichYouTubeStatistics(items, context) {
   if (!context.youtubeApiKey || !items.length) return { items, status: 'rss_only' };
   try {
@@ -274,6 +373,20 @@ async function collectBilibili(source, context) {
   return { items, routeCoverage };
 }
 
+// ═══════════════════════════════════════════════════════════════
+// 第 3 部分：评分、溯源与主题聚合
+//
+// 评分公式（见 news-config.json scoring.weights）：
+//   基础分 = 0.30×长期专业质量 + 0.25×近期时效性 + 0.10×轻度用户体验
+//          + 0.20×来源可靠性 + 0.15×互动质量
+//   最终分 = clamp(基础分 - 商业推广扣分 - 异常调整, 0, 100)
+//
+// 时效分使用指数衰减：100 × exp(-ln(2) × 内容年龄天数 / 半衰期天数)
+// 轻度用户体验、商单和异常必须在有证据时才能扣分/加分，
+// 证据不足时保持中性（50 分、0 扣分、insufficient_sample）。
+// ═══════════════════════════════════════════════════════════════
+
+/** AI 关键词过滤：标题或描述包含任一配置关键词（大小写不敏感） */
 function matchesAi(item, config) {
   const text = `${item.title} ${item.description}`.toLowerCase();
   return config.ai_keywords.some(keyword => text.includes(keyword.toLowerCase()));
@@ -434,6 +547,17 @@ function applyAnomalyDetection(items, assessments, config) {
   }
 }
 
+// ═══════════════════════════════════════════════════════════════
+// 第 4 部分：溯源关系、事件聚合与去重
+//
+// 溯源（provenance）：识别重复观察、转载、评论、翻译和引用关系，
+//   每条记录通过 content_id 关联到内容条目。
+// 事件聚合（events）：按确定性关键词、显式 URL 关联或人工 topic_key
+//   将多条内容归入同一事件/主题，保留各自观点而不合并为单一结论。
+// 去重（dedupeItems）：按 url + title 组合去重，保留先出现的条目。
+// ═══════════════════════════════════════════════════════════════
+
+/** 将内容归入五层时间窗口（转发到 news-scheduler 的实现） */
 function classifyTimeLayer(item, config, now) {
   const ageDays = Math.max(0, (now - new Date(item.published_at).getTime()) / 86400000);
   return config.time_layers.find(layer => ageDays >= layer.min_age_days && ageDays < layer.max_age_days)?.id || 'older';
@@ -575,6 +699,7 @@ function initialState() {
   };
 }
 
+/** 根据平台分发到对应采集函数。新增平台时在此增加分支。 */
 async function collectSource(source, context) {
   if (source.platform === 'youtube') {
     const result = await collectYouTube(source, context);
@@ -590,6 +715,19 @@ async function collectSource(source, context) {
   throw Object.assign(new Error(`不支持的平台：${source.platform}`), { code: 'unsupported_platform' });
 }
 
+// ═══════════════════════════════════════════════════════════════
+// 第 5 部分：历史层受控回溯
+//
+// 在最新 Feed 采集完成后，对 YouTube 和 Bilibili 来源执行
+// 当前时间层的受控回溯（一次一页/一批，由 news-scheduler 管理进度）。
+// 采集到的历史内容经 AI 过滤后合并到 freshItems，
+// 再与最新 Feed 内容一起进入评分和输出。
+//
+// normalizeHistoricalYouTube/Bilibili 将平台原始详情/条目
+// 转换为与最新 Feed 相同的内容模型，以便统一评分。
+// ═══════════════════════════════════════════════════════════════
+
+/** 将 YouTube videos.list 详情转换为统一内容模型 */
 function normalizeHistoricalYouTube(detail, source, fetchedAt) {
   const snippet = detail.snippet || {};
   return {
@@ -711,6 +849,22 @@ async function runHistoricalLayerPass(options) {
   };
 }
 
+// ═══════════════════════════════════════════════════════════════
+// 第 6 部分：主构建编排（runCollection）
+//
+// 这是整个热点系统的核心编排函数，按 5 个 Phase 执行：
+//   Phase 1: 准备配置、来源、状态、额度、Registry
+//   Phase 2: 最新 Feed 采集（所有启用来源）
+//   Phase 3: 历史层受控回溯（YouTube + Bilibili 单步）
+//   Phase 4: 评分、溯源、主题聚合
+//   Phase 5: 原子写入（状态文件在前，hotspots.json 最后）
+//
+// 参数说明：
+//   options.collector —— 注入自定义采集函数（fixture 测试用）
+//   options.skipHistory —— 跳过历史回溯（fixture 测试默认开启）
+//   options.noWrite —— 跳过文件写入（fixture 测试默认开启）
+//   options.allowEmpty —— 允许空输出而不抛出错误
+// ═══════════════════════════════════════════════════════════════
 async function runCollection(options = {}) {
   const config = options.config || readJson(CONFIG_PATH);
   const sourcePayload = options.sourcePayload || readJson(SOURCES_PATH);
@@ -723,6 +877,9 @@ async function runCollection(options = {}) {
   const registryIndex = options.registryIndex || createRegistry(readJson(REGISTRY_PATH, null));
   const enabled = sourcePayload.sources.filter(source => source.enabled);
 
+  // X 来源轮转：每次构建只选取 x_max_sources_per_run 个来源，
+  // 从上次的 rotation_offset 开始循环取，控制日调用成本。
+  // 其余两个平台每次对所有启用来源执行全量采集。
   const xSources = enabled.filter(source => source.platform === 'x');
   const xLimit = Math.min(config.collection.x_max_sources_per_run, xSources.length);
   const offset = (state.x_rotation_offset || 0) % Math.max(1, xSources.length);
@@ -902,6 +1059,9 @@ async function runCollection(options = {}) {
     analysis_version: config.collection.analysis_version,
   };
 
+  // 写入顺序有严格依赖：Registry/State/Quota/Authorizations 是内部状态，
+  // hotspots.json 是面向浏览器的投影。先写内部状态，最后替换热点文件。
+  // 如果中间任何一步失败，旧 hotspots.json 保持不变，前端不会看到半成品。
   if (!options.noWrite) {
     writeJsonAtomic(REGISTRY_PATH, registry, runId);
     writeJsonAtomic(STATE_PATH, state, runId);
@@ -912,6 +1072,18 @@ async function runCollection(options = {}) {
   return { output, state, registry, quota: finalizedQuota, authorizations };
 }
 
+// ═══════════════════════════════════════════════════════════════
+// 第 7 部分：测试入口与主入口
+//
+// --fixture：使用本地 XML/JSON 样本运行完整采集+评分管线，
+//   不请求真实 API、不消费额度、不写持久文件（noWrite=true）。
+//   用于验证标准化→过滤→评分→溯源的确定性行为。
+//
+// --allow-empty：允许本轮采集无有效内容时不抛出错误，
+//   保留上一版 hotspots.json 不变（生产保护机制）。
+// ═══════════════════════════════════════════════════════════════
+
+/** 使用本地 fixture 样本运行完整内容管线（仅用于测试） */
 async function runFixtureBuild() {
   const fixtureDir = path.join(__dirname, 'news-fixtures');
   const youtubeSource = {

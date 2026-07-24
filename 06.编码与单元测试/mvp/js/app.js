@@ -1,53 +1,117 @@
-/* ===== InfoCatcher MVP — 应用逻辑 =====
+/**
+ * InfoCatcher MVP — 浏览器端应用逻辑（纯前端、零依赖、无构建工具）
  *
+ * ═══════════════════════════════════════════════════════════════
  * 架构概要：
- *   数据加载(loadData) → 全局状态(tools/glossary/compareList)
- *   → 搜索过滤(getFilteredTools) → 视图渲染(render*)
- *   → 用户交互 → 事件绑定(DOMContentLoaded)
+ * ═══════════════════════════════════════════════════════════════
  *
- * 扩展模式：
- *   新增视图：1) index.html 加 nav+section  2) 本文件加 renderXxx()
- *             3) switchView() 加分支  4) DOMContentLoaded 加事件绑定
- *   新增筛选维度：1) index.html 加 filter-chip  2) getFilteredTools() 加过滤分支
- *   新增数据源：1) data/ 加 JSON  2) loadData() 加 fetch
+ *   数据加载(loadData) → 全局状态(tools/glossary/hotspots/compareList)
+ *     → 搜索/过滤(getFilteredTools/getFilteredGlossary/getFilteredTrending)
+ *       → 视图渲染(renderTools/renderScenes/renderCompare/renderGlossary/renderTrending)
+ *         → 用户交互(点击/搜索/筛选/快捷键)
+ *           → 事件绑定(DOMContentLoaded)
  *
- * 约束：
- *   - 所有搜索/筛选为前端内存过滤，不发起网络请求
- *   - 对比按钮状态变更后须同步 updateCompareCount() + renderTools()
- *   - 数据文件中日期统一使用 ISO 格式 (YYYY-MM-DD)
+ * ═══════════════════════════════════════════════════════════════
+ * 六个视图：
+ * ═══════════════════════════════════════════════════════════════
+ *   工具库 (tools)     — 搜索 + 分类/访问/价格筛选 + 卡片网格 + 详情弹窗
+ *   场景导航 (scenes)  — 12 个场景入口, 点击跳转到工具库筛选结果
+ *   对比模式 (compare)  — 2-5 个工具并排比较 10+ 维度
+ *   AI热点 (trending)  — 三平台内容 feed, 平台筛选, 按评分/时间排序
+ *   AI概念 (glossary)  — 43 条术语, 分类筛选 + 搜索 + 可展开详情
+ *   关于 (about)       — 评测方法论和项目介绍 (纯 HTML, 无专属渲染函数)
+ *
+ * ═══════════════════════════════════════════════════════════════
+ * 安全约束：
+ * ═══════════════════════════════════════════════════════════════
+ *   - 所有渲染的外部文本通过 escapeHtml() 转义，防止 XSS
+ *   - 所有外部链接通过 safeExternalUrl() 校验，只允许 http/https 协议
+ *   - API Key 不存在于前端代码或静态 JSON 中，浏览器不直接调用平台 API
+ *   - 用户偏好仅存储在浏览器 localStorage，不上传服务器
+ *
+ * ═══════════════════════════════════════════════════════════════
+ * 扩展模式（新增功能时参考）：
+ * ═══════════════════════════════════════════════════════════════
+ *   新增视图：
+ *     1. index.html → 加 nav-btn + section 容器
+ *     2. 本文件 → 加 renderXxx() 函数
+ *     3. switchView() → 加 if (view === 'xxx') 分支
+ *     4. DOMContentLoaded → 加事件绑定
+ *   新增筛选维度：
+ *     1. index.html → 加 filter-chip
+ *     2. getFilteredTools() → 加过滤分支 (AND 叠加)
+ *   新增数据源：
+ *     1. data/ 目录 → 加 JSON 文件
+ *     2. loadData() → 加 fetch, 失败时降级为空状态
+ *
+ * ═══════════════════════════════════════════════════════════════
+ * 渲染约束：
+ * ═══════════════════════════════════════════════════════════════
+ *   - 所有搜索/筛选为前端内存过滤, 不发起网络请求
+ *   - 对比按钮状态变更后必须同步 updateCompareCount() + renderTools()
+ *   - 数据文件日期统一使用 ISO 格式 (YYYY-MM-DD)
+ *   - 视图切换靠 CSS class .view.active, 不使用前端路由库
  */
 
-// ===== 全局状态 =====
-let tools = [];
-let glossary = [];
-let hotspots = { items: [], events: [], provenance: [], assessments: [], coverage: null, generated_at: null };
-let compareList = [];
-let currentView = 'tools';
-let activeFilters = { category: 'all', access: 'all', price: 'all' };
-let activeGlossaryCategory = 'all';
-let activeTrendingPlatform = 'all';
-let trendingSort = 'score';
+// ═══════════════════════════════════════════════════════════════
+// 全局状态 —— 所有视图共享的数据和交互状态
+// ═══════════════════════════════════════════════════════════════
+let tools = [];               // tools.json 的完整内容
+let glossary = [];            // glossary.json 的完整内容
+let hotspots = {              // hotspots.json 的前端投影
+  items: [],                  //   热点内容条目
+  events: [],                 //   主题/事件聚合
+  provenance: [],             //   溯源关系 (转载/评论/引用)
+  assessments: [],            //   每条内容的评分详情
+  coverage: null,             //   采集覆盖状态
+  generated_at: null          //   构建时间
+};
+let compareList = [];         // 用户选中用于对比的工具 ID 列表 (最多 5 个)
+let currentView = 'tools';    // 当前激活的视图
+let activeFilters = {         // 工具库的筛选状态
+  category: 'all',            //   分类 (大语言模型/编程开发/图像生成/...)
+  access: 'all',              //   访问方式 (开放/受限)
+  price: 'all'                //   价格 (免费/付费/均有)
+};
+let activeGlossaryCategory = 'all'; // 概念词典的分类筛选
+let activeTrendingPlatform = 'all'; // 热点平台筛选 (youtube/x/bilibili/bilibili_dynamic)
+let trendingSort = 'score';         // 热点排序方式 (score=评分/recent=最新)
 
-// ===== 工具函数 =====
+// ═══════════════════════════════════════════════════════════════
+// 第 1 部分：通用工具函数
+// ═══════════════════════════════════════════════════════════════
+
+/** 1-5 分转换为 ★☆☆☆☆ 格式的星级显示 */
 function stars(rating) {
   const full = Math.floor(rating);
   const half = rating - full >= 0.5 ? 1 : 0;
   return '★'.repeat(full) + (half ? '☆' : '') + '☆'.repeat(5 - full - half);
 }
 
+/** 根据分值返回对应的 CSS class */
 function scoreClass(val) {
   if (val >= 4) return 'score-high';
   if (val >= 3) return 'score-mid';
   return 'score-low';
 }
 
+/** 判断工具是否有真正可用的免费层 */
 function hasFree(t) {
   return t.free_tier && !t.free_tier.includes('无免费') && !t.free_tier.startsWith('无(');
 }
 
-// 负责：异步加载 tools.json 和 glossary.json，存入全局状态
-// 失败时降级为空数组，由各渲染函数处理空状态 UI
-// EXTENSION POINT: 新增数据源时在此添加 fetch，并入全局状态
+// ═══════════════════════════════════════════════════════════════
+// 第 2 部分：数据加载
+// ═══════════════════════════════════════════════════════════════
+
+/**
+ * 异步加载所有静态数据文件。
+ * 使用独立的 try/catch 块确保一个文件失败不影响其他文件的加载。
+ * 失败时赋空值/空状态，由各渲染函数负责显示对应的错误提示。
+ *
+ * EXTENSION POINT: 新增数据源时在此添加 fetch + try/catch，
+ * 将加载结果存入一个全局变量。
+ */
 async function loadData() {
   try {
     const resp = await fetch('data/tools.json');
@@ -73,9 +137,17 @@ async function loadData() {
   }
 }
 
-// 负责：切换顶部导航活跃态 + 视图区显隐，触发对应渲染函数
-// 视图匹配方式：view 参数 → id="view-{view}" 容器 + data-view="{view}" 按钮
-// EXTENSION POINT: 新增视图时在末尾加 if (view === 'xxx') renderXxx();
+// ═══════════════════════════════════════════════════════════════
+// 第 3 部分：视图切换
+// ═══════════════════════════════════════════════════════════════
+
+/**
+ * 切换当前显示的视图。
+ * 实现方式：通过 CSS class .view.active 控制显隐（非路由），
+ * 切换后触发对应视图的渲染函数（首次渲染或重新渲染）。
+ *
+ * EXTENSION POINT: 新增视图时在末尾加 if (view === 'xxx') renderXxx();
+ */
 function switchView(view) {
   currentView = view;
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -92,9 +164,17 @@ function switchView(view) {
   if (view === 'trending') renderTrending();
 }
 
-// 负责：文本搜索(关键词 OR 匹配) + 三维筛选(分类/访问/价格)叠加过滤
-// 两阶段过滤：先文本搜索缩小范围，再叠加 chip 筛选（AND 关系）
-// EXTENSION POINT: 新增筛选维度时在末尾按同样模式添加过滤分支
+// ═══════════════════════════════════════════════════════════════
+// 第 4 部分：工具库 —— 搜索、筛选、卡片和详情
+// ═══════════════════════════════════════════════════════════════
+
+/**
+ * 工具搜索与筛选（两阶段过滤 + AND 叠加）。
+ * 阶段 1: 文本搜索（标题/描述/标签/别名关键词 OR 匹配）
+ * 阶段 2: 三维 chip 筛选叠加（分类 AND 访问 AND 价格）
+ *
+ * EXTENSION POINT: 新增筛选维度时在阶段 2 末尾按同样模式加 if (activeFilters.xxx !== 'all')
+ */
 function getFilteredTools() {
   const query = (document.getElementById('searchInput').value || '').toLowerCase().trim();
   let filtered = tools;
@@ -147,7 +227,16 @@ function getFilteredTools() {
   return filtered;
 }
 
-// ===== 渲染工具卡片 =====
+/**
+ * 渲染工具卡片网格。
+ * 1. 获取过滤后的工具列表
+ * 2. 更新工具计数和筛选提示
+ * 3. 空结果时显示空状态占位
+ * 4. 正常结果时渲染卡片（名称/图标/评分/场景标签/价格/访问/对比按钮）
+ *
+ * 注意：对比按钮在卡片 DOM 字符串中使用了 onclick 属性;
+ * event.stopPropagation() 防止点击对比按钮同时触发卡片的 openDetail。
+ */
 function renderTools() {
   const filtered = getFilteredTools();
   const grid = document.getElementById('toolGrid');
@@ -189,7 +278,11 @@ function renderTools() {
   }).join('');
 }
 
-// ===== 详情弹窗 =====
+/**
+ * 打开工具详情弹窗。
+ * 渲染完整的工具信息：评分、价格层级、优势/不足、最适/不适合场景、
+ * 信息来源和更新日期。支持点击遮罩层关闭。
+ */
 function openDetail(id) {
   const t = tools.find(x => x.id === id);
   if (!t) return;
@@ -267,7 +360,15 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeModal();
 });
 
-// ===== 对比模式 =====
+// ═══════════════════════════════════════════════════════════════
+// 第 5 部分：对比模式 —— 2-5 个工具并排比较
+//
+// 核心函数：
+//   toggleCompare()  — 添加/移除对比（上限 5 个，按钮状态同步）
+//   renderCompare()  — 渲染 10+ 维度对比表
+//   removeCompare()  — 从对比列表中移除单个工具
+//   quickCompare()   — 一键加载预设对比方案
+// ═══════════════════════════════════════════════════════════════
 function toggleCompare(id, btn) {
   const idx = compareList.findIndex(c => c.id === id);
   if (idx >= 0) {
@@ -374,9 +475,14 @@ function quickCompare(ids) {
   renderCompare();
 }
 
-// 负责：从 glossary[] 中按分类 + 关键词过滤，渲染可展开的术语卡片
-// 分类 chip 由数据中的 category 字段动态生成（不去重），点击切换筛选
-// EXTENSION POINT: 新增术语分类在 glossary.json 中直接添加即可，无需改代码
+// ═══════════════════════════════════════════════════════════════
+// 第 6 部分：概念词典 —— 术语搜索、分类筛选和可展开卡片
+//
+// 数据驱动：分类 chip 从 glossary.json 的 category 字段动态提取，
+// 新增术语分类无需修改前端代码。
+// ═══════════════════════════════════════════════════════════════
+
+/** 按分类 + 空格分隔关键词过滤术语（AND 关系） */
 function getFilteredGlossary() {
   const query = (document.getElementById('glossarySearch')?.value || '').toLowerCase().trim();
   let filtered = glossary;
@@ -443,19 +549,51 @@ function renderGlossary() {
   `).join('');
 }
 
-// ===== AI 热点 =====
+// ═══════════════════════════════════════════════════════════════
+// 第 7 部分：AI 热点视图 —— 安全输出 + 筛选 + 排序 + 状态 + 评分
+//
+// 安全设计：
+//   所有来自外部平台（YouTube/X/Bilibili）的文本字段（标题、描述、
+//   作者名、来源名）在渲染前都通过 escapeHtml() 转义，防止 XSS。
+//   所有外部链接通过 safeExternalUrl() 校验协议，只允许 http/https。
+//   这两个函数是安全边界——如果去掉，恶意内容可注入 <script> 或
+//   javascript: 链接。
+//
+// 数据查找：
+//   getAssessment() — 从评分数组中查找内容对应的评分详情
+//   getProvenance() — 查找溯源关系（转载/重复/评论）
+//   getEvent()      — 查找内容归属的主题/事件
+//
+// 筛选与排序：
+//   getFilteredTrending() — 按平台筛选，按评分(recent)或时间(score)排序
+//   renderTrendingStatus() — 渲染采集覆盖状态（降级/轮转/未运行）
+//   renderTrending() — 渲染热点 feed 卡片（评分/商业证据/溯源/关联事件）
+// ═══════════════════════════════════════════════════════════════
+
+/** 平台元数据：标签名、图标、CSS class */
 const platformMeta = {
   youtube: { label: 'YouTube', icon: '▶️', cls: 'platform-youtube' },
   x: { label: 'X', icon: '𝕏', cls: 'platform-x' },
   bilibili: { label: 'B站', icon: '📺', cls: 'platform-bilibili' },
 };
 
+/**
+ * HTML 转义 —— 前端 XSS 防护的第一道防线。
+ * 使用浏览器原生 textContent 赋值自动处理 & < > " ' 等特殊字符，
+ * 比手写正则替换更可靠（浏览器会处理所有 HTML 实体边界情况）。
+ * 所有来自外部数据源的文本内容在插入 innerHTML 前必须经过此函数。
+ */
 function escapeHtml(value) {
   const div = document.createElement('div');
   div.textContent = value == null ? '' : String(value);
   return div.innerHTML;
 }
 
+/**
+ * 外部链接安全校验。
+ * 只允许 http: 和 https: 协议，阻止 javascript:、data: 等危险协议。
+ * 解析失败或协议不合法时返回 '#'（无害占位符）。
+ */
 function safeExternalUrl(value) {
   try {
     const url = new URL(value, window.location.href);
@@ -463,6 +601,7 @@ function safeExternalUrl(value) {
   } catch (e) { return '#'; }
 }
 
+/** 相对时间显示：X分钟前 / X小时前 / X天前 / 具体日期 */
 function timeAgo(value) {
   if (!value) return '时间未知';
   const diff = Date.now() - new Date(value).getTime();
@@ -574,9 +713,14 @@ function renderTrending() {
   }).join('');
 }
 
-// 预定义的 12 个场景卡片，每个含 id/图标/名称/描述/搜索关键词
-// 匹配计数：统计 tools 中 scenes 字段与场景 q 数组有交集的工具数
-// EXTENSION POINT: 新增场景时在 scenes[] 中追加 {id, icon, name, desc, q} 条目
+// ═══════════════════════════════════════════════════════════════
+// 第 8 部分：场景导航 —— 12 个场景卡片，点击跳转到工具库搜索结果
+//
+// 每个场景有匹配计数（工具库中 scenes 字段与该场景关键词有交集的工具数）。
+// 点击场景卡片调用 searchByScene()：填入搜索关键词 → 清空筛选 → 跳转工具库。
+// ═══════════════════════════════════════════════════════════════
+
+/** 预定义的 12 个场景卡片，每个含 id/图标/名称/描述/搜索关键词 */
 function renderScenes() {
   const scenes = [
     { id: 'write-paper', icon: '📝', name: '写论文', desc: '学术写作、文献综述、论文润色', q: ['写论文'] },
@@ -617,9 +761,17 @@ function searchByScene(query) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// 中文搜索别名映射 —— 将自然语言关键词映射为过滤函数
-// 在 getFilteredTools() 的文本搜索基础上叠加使用（AND 关系）
-// EXTENSION POINT: 新增中文搜索别名时按 '关键词': t => 条件 格式追加
+// ═══════════════════════════════════════════════════════════════
+// 第 9 部分：中文搜索别名映射
+//
+// 将用户输入的自然语言关键词映射为过滤函数。
+// 在 getFilteredTools() 的文本搜索基础上叠加使用（AND 关系）。
+// 例如搜索"免费 写代码" → 先按文本匹配"免费""写代码"，
+// 再叠加 hasFree() 和 scenes 包含 '写代码' 的过滤。
+//
+// 格式：'关键词': arrowFunction(t) → boolean
+// EXTENSION POINT: 新增别名时按同样格式追加键值对
+// ═══════════════════════════════════════════════════════════════
 const searchAliases = {
   '免费': t => hasFree(t),
   '收费': t => !hasFree(t),
@@ -651,9 +803,16 @@ const searchAliases = {
   '数据分析': t => t.scenes.includes('数据分析'),
 };
 
-// 负责：页面加载完成后初始化所有事件监听器
-// 执行顺序：loadData → 首次渲染(工具/场景/对比计数) → 绑定事件
-// EXTENSION POINT: 新增视图的事件绑定（搜索/筛选/导航）在此添加
+// ═══════════════════════════════════════════════════════════════
+// 第 10 部分：页面初始化与事件绑定
+//
+// 执行顺序：
+//   1. loadData() — 异步加载所有 JSON 数据
+//   2. renderTools() + renderScenes() + renderTrending() — 首次渲染
+//   3. 绑定事件监听器（搜索/导航/筛选/快捷键/对比/词典/热点）
+//
+// EXTENSION POINT: 新视图的事件监听在此区域追加
+// ═══════════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', async () => {
   await loadData();
   renderTools();

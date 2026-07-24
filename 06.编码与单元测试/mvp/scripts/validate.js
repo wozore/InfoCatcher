@@ -1,12 +1,46 @@
 /**
- * InfoCatcher MVP 数据校验
+ * validate.js — InfoCatcher MVP 部署前数据与契约完整性校验
  *
- * 在 CI(Continuous Integration) 中自动运行，检查 tools.json / glossary.json 的格式和完整性。
- * 任何检查不通过时返回非零退出码，阻止部署。
+ * 在热点管线中的位置：CI/CD 的最后一道门禁，被 deploy.yml 和
+ * collect-news.yml 在执行部署或提交数据前调用。任何一项不通过
+ * 都会以非零退出码终止流水线，阻止错误数据上线。
+ *
+ * ═══════════════════════════════════════════════════════════════
+ * 校验范围（按执行顺序）：
+ * ═══════════════════════════════════════════════════════════════
+ *
+ *   1. tools.json       — 43 个工具的核心数据
+ *      必填字段、ID唯一、评分1-5范围、数组/字符串格式、日期ISO
+ *   2. glossary.json    — 43 条 AI 概念
+ *      术语唯一、分类非空、source 完整性
+ *   3. news-sources.json — 96 个热点来源
+ *      必填字段、ID 唯一、平台合法、启用来源必须有 ID 和标签
+ *   4. news-config.json  — 热点运行配置
+ *      五层时间窗口连续且 max=270
+ *   5. news-registry.json — 视频持久记录
+ *      键与平台一致性、发现/处理状态合法、stats.count 正确
+ *   6. news-quota.json   — 平台额度账本
+ *      consumed+remaining===limit、无负数、operations 为数组
+ *   7. pending-authorizations.json — 待授权任务
+ *      ID 唯一、状态合法、已处理任务必须有 decision
+ *   8. hotspots.json     — 前端热点投影
+ *      内容/事件/溯源/评分引用完整性、商业扣分和异常必须附证据
+ *   9. index.html        — 页面结构契约
+ *      六视图容器 ID 存在、EXTENSION POINT 注释未误删、导航按钮≥4
+ *
+ * ═══════════════════════════════════════════════════════════════
+ * 设计原则：
+ * ═══════════════════════════════════════════════════════════════
+ *   - fail() 只收集错误不中断执行，确保一次运行报告所有问题
+ *   - 每个 try/catch 独立包裹一个文件，一个文件损坏不阻止其他校验
+ *   - 校验逻辑与数据分离：校验规则写在这里，数据阈值（如最少工具数）
+ *     也是硬编码的防御值，与 tools.json 实际内容无关
  *
  * 用法：node scripts/validate.js
- * 无输出 = 全部通过；报错信息会写明哪个文件、哪个字段、什么值有问题。
+ * 无输出 + exit 0 = 全部通过；有报错 + exit 1 = 需要修复
  */
+
+'use strict';
 
 const fs = require('fs');
 const path = require('path');
@@ -14,12 +48,13 @@ const path = require('path');
 const MVP_DIR = path.resolve(__dirname, '..');
 let failed = false;
 
+/** 记录一个校验失败项。不中断执行，确保一次运行能报告所有问题 */
 function fail(msg) {
   console.error('❌', msg);
   failed = true;
 }
 
-// 批量检查必填字段
+/** 批量检查对象是否缺少必填字段 */
 function checkRequired(obj, path, fields) {
   for (const f of fields) {
     if (obj[f] === undefined || obj[f] === null) {
@@ -28,7 +63,13 @@ function checkRequired(obj, path, fields) {
   }
 }
 
-// ===== 1. tools.json 校验 =====
+// ═══════════════════════════════════════════════════════════════
+// 第 1 组：tools.json — 工具库核心数据
+//
+// 校验项：21 个必填字段、ID 唯一且格式合法、四维评分 1-5 范围、
+//   category/scenes/best_for/not_for 为数组、paid_tiers 为数组、
+//   access_level 取值合法、last_updated 为 YYYY-MM-DD 格式
+// ═══════════════════════════════════════════════════════════════
 const TOOL_REQUIRED = [
   'id', 'name', 'vendor', 'category', 'scenes', 'url', 'icon',
   'free_tier', 'paid_tiers',
@@ -85,7 +126,13 @@ function validateTools(data) {
   console.log(`  tools.json: ${data.length} 个工具，全部通过`);
 }
 
-// ===== 2. glossary.json 校验 =====
+// ═══════════════════════════════════════════════════════════════
+// 第 2 组：glossary.json — AI 概念词典
+//
+// 校验项：4 个必填字段、术语名称唯一、分类非空、
+//   source 对象包含 name 字段
+// ═══════════════════════════════════════════════════════════════
+
 const GLOSSARY_REQUIRED = ['term', 'category', 'summary', 'source'];
 
 function validateGlossary(data) {
@@ -116,7 +163,14 @@ function validateGlossary(data) {
   console.log(`  glossary.json: ${data.length} 条术语，全部通过`);
 }
 
-// ===== 3. news-sources.json / hotspots.json 校验 =====
+// ═══════════════════════════════════════════════════════════════
+// 第 3 组：热点配置、来源与持久状态
+//
+// 依次校验：news-sources → news-config → news-registry →
+//   news-quota → pending-authorizations
+// 每个文件独立 try/catch，一个文件损坏不阻止其他校验
+// ═══════════════════════════════════════════════════════════════
+
 const NEWS_PLATFORMS = ['youtube', 'x', 'bilibili'];
 const CONTENT_TYPES = [
   'youtube_video', 'x_post', 'bilibili_video', 'bilibili_dynamic_video',
@@ -192,6 +246,17 @@ function validateNewsConfig(data) {
   console.log('  news-config.json: 五层时间边界连续，通过');
 }
 
+// ═══════════════════════════════════════════════════════════════
+// 第 4 组：hotspots.json — 前端热点投影引用完整性
+//
+// 核心约束：
+//   - items/events/provenance/assessments 均为数组
+//   - 每条内容有完整的 id/platform/content_type/url/title/日期
+//   - events 的 content_ids 必须引用存在的 items
+//   - provenance 的 content_id 必须引用存在的 items
+//   - 商业扣分(penalty>0)必须有 evidence 数组且至少一条证据
+//   - 异常调整(adjustment≠0 且非insufficient_sample)必须有 evidence
+// ═══════════════════════════════════════════════════════════════
 function validateHotspots(data) {
   if (!data || !Array.isArray(data.items)) {
     fail('hotspots.json.items 应为数组');
@@ -236,7 +301,15 @@ function validateHotspots(data) {
   console.log(`  hotspots.json: ${data.items.length} 条内容 · ${(data.events || []).length} 个主题，通过`);
 }
 
-// ===== 4. index.html 完整性检查 =====
+// ═══════════════════════════════════════════════════════════════
+// 第 5 组：index.html — 页面 DOM 结构契约
+//
+// 校验项：
+//   - 六个视图容器 ID 必须存在（view-tools/scenes/compare/trending/glossary/about）
+//   - 关键交互元素 ID 必须存在（searchInput/toolGrid/sceneGrid/trendingGrid/modalOverlay）
+//   - EXTENSION POINT 注释至少 3 处（防止误删扩展点标记）
+//   - 导航按钮至少 4 个（确保基本导航可用）
+// ═══════════════════════════════════════════════════════════════
 function validateHtml(html) {
   // 检查关键 ID 是否存在（至少检查视图容器）
   const expected = [
@@ -259,7 +332,13 @@ function validateHtml(html) {
   console.log(`  index.html: ${epCount} 处扩展点 · ${navBtns} 个导航按钮，通过`);
 }
 
-// ===== 入口 =====
+// ═══════════════════════════════════════════════════════════════
+// 入口：按顺序校验所有数据文件 + HTML
+//
+// 每个文件独立 try/catch —— 一个文件的 JSON 解析失败
+// 不会阻止后续文件的校验，确保一次运行暴露所有问题。
+// failed 计数器在全部校验完成后统一判断退出码。
+// ═══════════════════════════════════════════════════════════════
 console.log('\n📋 InfoCatcher MVP 数据校验\n');
 
 // tools.json
@@ -292,7 +371,8 @@ try {
   fail(`news-sources.json 解析失败：${e.message}`);
 }
 
-// news-config / registry / quota / authorizations
+  // news-config → news-registry → news-quota → pending-authorizations
+  // 四个配置文件使用 [文件名, 校验函数] 配对批量执行
 for (const [file, validator] of [
   ['news-config.json', validateNewsConfig],
   ['news-registry.json', validateNewsRegistry],

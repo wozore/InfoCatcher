@@ -1,3 +1,31 @@
+/**
+ * news-tests.test.js — 内容语义与采集行为测试（17 项）
+ *
+ * 测试原理：
+ *   这些测试不请求真实 API（YouTube/X/RSSHub），而是使用本地夹具文件
+ *   （news-fixtures/youtube.xml、x.json、bilibili-dynamic.xml）作为输入，
+ *   验证从原始数据到最终热点的每一个确定性处理步骤。
+ *   夹具文件包含精心构造的样本数据，每条样本触发一种边界情况。
+ *
+ * 为什么需要这些测试：
+ *   评分、溯源、异常检测和 coverage 逻辑包含大量条件判断和数学公式
+ *   （指数衰减、MAD、加权求和）。手动验证无法保证在所有平台/内容类型/
+ *   边界条件下结果正确。这些测试在每次提交和部署前自动运行，
+ *   确保修改评分规则或新增平台不会破坏已有逻辑。
+ *
+ * 测试分组（按数据流向）：
+ *   第 1 组 — 输入解析与标准化（3 项）
+ *     验证三平台的原始格式能正确转换为统一内容模型
+ *   第 2 组 — 评分与证据公平性（7 项）
+ *     验证评分公式约束：无证据不扣分、低频不降权、小样本不误伤
+ *   第 3 组 — 溯源与异常（4 项）
+ *     验证溯源关系和异常检测不误删内容
+ *   第 4 组 — Coverage/降级/轮转（3 项）
+ *     验证采集覆盖状态不误报、B站降级不丢失内容
+ *
+ * 运行方式：node --test scripts/news-tests.test.js
+ */
+
 'use strict';
 
 const test = require('node:test');
@@ -33,6 +61,10 @@ function source(overrides = {}) {
   };
 }
 
+// ── 第 1 组：输入解析与标准化（3 项）─────────────────────────
+// 验证 YouTube Atom、B站动态 RSS、TwitterAPI.io JSON 三种原始格式
+// 是否能正确提取为统一字段：native_id、标题、描述、发布时间、互动量
+
 test('解析 YouTube Atom 并保留基础字段', () => {
   const entries = parseFeed(fixture('youtube.xml'));
   assert.equal(entries.length, 1);
@@ -55,6 +87,10 @@ test('TwitterAPI.io 响应可标准化并保留互动', () => {
   assert.equal(item.native_id, 'x-ai-1');
   assert.equal(item.metrics.views, 40000);
 });
+
+// ── 第 2 组：评分与证据公平性（7 项）──────────────────────────
+// 核心约束：评分必须有证据，无证据保持中性；
+// 低频/小样本/无基线不自动扣分；商业披露只在有明确证据时触发。
 
 test('近期资讯比同类型旧内容拥有更高时效分', () => {
   const recent = { published_at: '2026-07-23T06:00:00Z', source_tags: ['即时资讯'] };
@@ -83,6 +119,10 @@ test('低频优质来源不会因频率直接降低长期质量', () => {
   const assessment = assessItem(item, source({ cadence_class: 'low_frequency', quality_prior: 90 }), config, now);
   assert.equal(assessment.score_breakdown.long_term_quality, 90);
 });
+
+// ── 第 3 组：溯源与异常（4 项）────────────────────────────────
+// 异常检测不能自动删除内容（只标记 review）；
+// 重复观察保留溯源关系；多观点保留而不合并为单一结论。
 
 test('小样本异常状态为 insufficient_sample 且不扣分', () => {
   const item = normalizeRssItem(parseFeed(fixture('youtube.xml'))[0], source(), 'youtube_video', new Date(now).toISOString());
@@ -118,6 +158,10 @@ test('样本达到阈值后使用 MAD 标记异常但不删除内容', () => {
   assert.ok(assessments.at(-1).anomaly_assessment.evidence.length > 0);
   assert.equal(items.length, 6);
 });
+
+// ── 第 4 组：Coverage/降级/轮转（3 项）────────────────────────
+// X 来源轮转时整体状态不能误报为 complete；
+// B站多路由按最差结果聚合；动态降级保留内容并记录状态。
 
 test('X 来源轮转时整体覆盖状态不会误报 complete', async () => {
   const xSources = Array.from({ length: 3 }, (_, index) => source({

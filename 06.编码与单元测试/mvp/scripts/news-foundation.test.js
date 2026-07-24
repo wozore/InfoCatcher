@@ -1,3 +1,34 @@
+/**
+ * news-foundation.test.js — 持久基础设施与运维安全测试（20 项）
+ *
+ * 测试原理：
+ *   这些测试验证热点管线的"底盘"——存储安全、状态转换、额度控制和运维 CLI。
+ *   与 news-tests.test.js 不同，这些测试不依赖采集内容语义，
+ *   而是直接测试原子写、锁、Registry、Quota、Scheduler、平台适配器
+ *   和 CLI 在边界条件下的正确性。
+ *
+ * 为什么需要这些测试：
+ *   如果存储层损坏（半写 JSON）或锁失效（并发覆盖），采集到再多内容也没用。
+ *   这些测试模拟极端场景：构建中断、额度耗尽、历史不可分页、授权参数为零、
+ *   锁被占用——确保系统在这些情况下不损坏数据、不超额调用、不吞掉显式零值。
+ *
+ * 测试分组（按模块依赖顺序）：
+ *   第 1 组 — 存储与并发（4 项）
+ *     原子写、排他锁、归属校验、审计解锁、缺锁状态
+ *   第 2 组 — Registry 生命周期（3 项）
+ *     唯一性/防重、URL fallback隔离、发现/处理状态分离
+ *   第 3 组 — 额度账本（2 项）
+ *     预留→消费→暂停，失败请求计费，未发送不计费
+ *   第 4 组 — 时间调度与回溯（3 项）
+ *     五层半开边界、同层终态才推进、低频回溯资格
+ *   第 5 组 — 平台历史适配（3 项）
+ *     YouTube 防重→详情、游标恢复、B站 history_unsupported
+ *   第 6 组 — 授权与 CLI 安全（5 项）
+ *     授权防重复、四种决策边界、来源校验、原子导入、显式零值
+ *
+ * 运行方式：node --test scripts/news-foundation.test.js
+ */
+
 'use strict';
 
 const test = require('node:test');
@@ -37,6 +68,10 @@ const layers = [
   { id: 'recent-270d', min_age_days: 90, max_age_days: 270 },
 ];
 
+// ── 第 1 组：存储与并发（4 项）─────────────────────────────
+// 原子写：临时文件不残留、旧文件不受破坏
+// 锁：排他创建、归属校验、审计解锁、缺锁状态
+
 test('原子 JSON 写入替换目标且不遗留临时文件', () => {
   const directory = temporaryDirectory();
   const file = path.join(directory, 'state.json');
@@ -65,6 +100,11 @@ test('强制解锁必须提供理由并写入审计', () => {
   assert.equal(forceUnlock(lock, '确认任务已终止', audit), true);
   assert.equal(JSON.parse(fs.readFileSync(audit, 'utf8')).events[0].previous_lock.run_id, 'stale');
 });
+
+// ── 第 2 组：Registry 生命周期（3 项）───────────────────────
+// 唯一键：不同平台相同 native ID 不冲突
+// URL fallback：按平台隔离，无标识符拒绝
+// 状态分离：发现状态 vs 处理状态，分析版本升级触发重新处理
 
 test('Registry 以平台和原生 ID 唯一并批量防重', () => {
   const index = createRegistry();
@@ -101,6 +141,10 @@ test('Registry 分离发现与处理状态并支持分析版本升级', () => {
   assert.throws(() => updateLifecycle(record, { discovery_status: 'invalid' }), /无效/);
 });
 
+// ── 第 3 组：额度账本（2 项）────────────────────────────────
+// reserve → consume 三步流程：已发送但失败的请求仍消耗额度
+// 未发送的请求不消耗额度；余额为 0 时 exhausted
+
 test('额度预留、发送后消费与不足暂停均可审计', () => {
   const ledger = createQuotaLedger({ youtube_quota_units_per_run: 2, bilibili_rsshub_requests_per_run: 1 }, 'run');
   const reserved = reserveQuota(ledger, 'youtube', { operation: 'channels.list', cost: 1 });
@@ -120,6 +164,11 @@ test('失败的实际请求仍消费额度，未发送请求不消费', async ()
   assert.equal(ledger.platforms.bilibili.consumed, 1);
   assert.equal(finishQuotaLedger(ledger).platforms.bilibili.status, 'exhausted');
 });
+
+// ── 第 4 组：时间调度与回溯（3 项）──────────────────────────
+// UTC 半开区间：恰好 1/7/30/90/270 天进入后一层
+// 时间层优先：同层全部终态后才推进，阻断态阻止推进
+// 低频回溯：只在质量和 AI 相关度达到阈值且近期内容不足时触发
 
 test('UTC 半开时间层在 1/7/30/90/270 天边界无重叠', () => {
   validateTimeLayers(layers);
@@ -159,6 +208,11 @@ test('低频高质量来源仅在近期新内容不足时受控回溯', () => {
 function jsonResponse(value) {
   return { ok: true, status: 200, json: async () => value };
 }
+
+// ── 第 5 组：平台历史适配（3 项）────────────────────────────
+// YouTube：先 Registry 防重再批量补详情，效率优先
+// YouTube 游标：额度暂停保留游标供下一批恢复
+// B站历史：RSSHub 无分页时 history_unsupported，不伪装为空
 
 test('YouTube uploads playlist 先防重再批量获取新视频详情', async () => {
   const nowUtcMs = Date.parse('2026-07-23T00:00:00Z');
@@ -214,6 +268,11 @@ test('B站历史 feed 无对应层内容时标记 history_unsupported', async ()
   assert.equal(result.stop_reason, 'rsshub_feed_has_no_historical_pagination');
   assert.match(result.coverage_limitation, /visible_feed/);
 });
+
+// ── 第 6 组：授权与 CLI 安全（5 项）─────────────────────────
+// 授权：任务防重复、四种决策的安全边界、缺参数拒绝
+// CLI：来源 ID/HTTPS/标签/重复校验、原子导入、
+//   暂停游标优先恢复、显式零值不被吞掉
 
 test('不存在的锁文件返回 unlocked', () => {
   const directory = temporaryDirectory();
