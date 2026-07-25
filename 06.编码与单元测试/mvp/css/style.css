@@ -1,15 +1,47 @@
-/* ===== InfoCatcher MVP — 样式表 =====
+/**
+ * InfoCatcher MVP — 样式表（404 行，纯 CSS，无预处理/构建工具）
  *
- * CSS 变量体系（:root）：
- *   颜色/阴影/圆角/过渡统一在此定义，所有组件样式引用变量
- *   EXTENSION POINT: 新增组件直接使用已有变量，需要新色系时在 :root 追加
+ * ═══════════════════════════════════════════════════════════════
+ * 设计体系：
+ * ═══════════════════════════════════════════════════════════════
  *
- * 扩展模式（新增视图样式）：
- *   参考现有 .glossary-* 模式：父容器 → 搜索/筛选 → 项目列表 → 项目卡片
- *   放在对应功能分区中，命名统一用视图名前缀
+ *   CSS 变量（:root）— 所有颜色/阴影/圆角/过渡统一在此定义。
+ *     组件样式引用变量而非硬编码色值，保证视觉一致性，
+ *     并为未来深色模式升级预留单一入口。
+ *
+ *   响应式策略 — 通过 @media (max-width: 768px) 适配移动端。
+ *     主要调整：导航横排 → 纵排、卡片网格列数缩减、
+ *     筛选区横排变纵排、模态框全屏、对比表横向滚动。
+ *
+ *   命名约定 — 组件样式以功能分区，每个分区的选择器
+ *     以前缀区分（如 .tool-card-*、.glossary-*、.trending-*）。
+ *
+ * ═══════════════════════════════════════════════════════════════
+ * 分区一览：
+ * ═══════════════════════════════════════════════════════════════
+ *
+ *   :root / reset      — 变量定义 + 全局重置 + body 基线
+ *   Header             — 固定顶栏/Logo/导航/徽标
+ *   Main / View        — 视图容器 + 显隐控制
+ *   Hero               — 搜索框 + 首页标题
+ *   Filters            — 筛选 chip 组件
+ *   Tool Grid / Card   — 工具卡片网格 + 详情弹窗
+ *   Scene Grid         — 场景卡片网格
+ *   Compare            — 对比选择区 + 多维度对比表
+ *   Modal              — 详情弹窗 + 评分网格
+ *   Glossary           — 概念搜索/筛选/可展开卡片
+ *   About              — 关于页面排版
+ *   Footer             — 页脚
+ *   Empty State        — 空结果/空数据占位
+ *   Trending           — AI 热点卡片/筛选/状态/评分
+ *   Responsive         — 移动端适配（所有 @media 集中在此）
+ *
+ * EXTENSION POINT: 新增视图样式追加在对应区域末尾。
+ *   命名前缀统一为视图名（如 .subscribe-*），
+ *   颜色通过 var(--xxx) 引用 :root 中的变量。
  */
 
-/* EXTENSION POINT: 新增色系/阴影/圆角变量在此追加，组件样式引用已有变量即可 */
+/* EXTENSION POINT: 新增色系/阴影/圆角变量在此追加 */
 :root {
   --bg: #fafbfc;
   --surface: #ffffff;
@@ -32,6 +64,7 @@
   --transition: 0.15s ease;
 }
 
+/* ── 全局重置 + body 基线 ─────────────────────────────────── */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -42,7 +75,9 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ===== Header ===== */
+/* ═══ Header ═════════════════════════════════════════════════════
+   固定顶栏：sticky 定位 + backdrop-filter 毛玻璃效果。
+   .logo / .nav / .nav-btn / .badge ── 导航栏全套组件 */
 .header {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
@@ -97,12 +132,15 @@ body {
   margin-left: 4px;
 }
 
-/* ===== Main ===== */
+/* ═══ Main / View ═══════════════════════════════════════════════
+   视图容器：默认隐藏，.view.active 才显示。
+   switchView() 通过增减 .active class 控制六视图切换 */
 main { max-width: 1200px; margin: 0 auto; padding: 20px; }
 .view { display: none; }
 .view.active { display: block; }
 
-/* ===== Hero ===== */
+/* ═══ Hero ══════════════════════════════════════════════════════
+   首页搜索区：搜索框 + 标题 + 工具数量 + 筛选提示 */
 .hero { text-align: center; padding: 48px 20px 32px; }
 .hero h1 { font-size: 32px; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.5px; }
 .hero p { font-size: 16px; color: var(--text-secondary); max-width: 600px; margin: 0 auto 24px; }
@@ -141,7 +179,9 @@ main { max-width: 1200px; margin: 0 auto; padding: 20px; }
 }
 .clear-btn:hover { background: var(--text-hint); color: #fff; }
 
-/* ===== Filters ===== */
+/* ═══ Filters ═══════════════════════════════════════════════════
+   筛选 Chip 组件：分类/访问/价格三维筛选。
+   .filter-chip.active 高亮表示当前选中 */
 .filters {
   display: flex;
   flex-wrap: wrap;
@@ -166,7 +206,8 @@ main { max-width: 1200px; margin: 0 auto; padding: 20px; }
 .filter-chip:hover { border-color: var(--primary); color: var(--primary); }
 .filter-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-/* ===== Tool Grid ===== */
+/* ═══ Tool Grid ═════════════════════════════════════════════════
+   工具卡片网格 + 卡片内部：名称/图标/评分/标签/对比按钮 */
 .stats-bar { font-size: 14px; color: var(--text-secondary); margin-bottom: 16px; }
 .stats-bar span { font-weight: 700; color: var(--text); }
 
@@ -229,7 +270,8 @@ main { max-width: 1200px; margin: 0 auto; padding: 20px; }
 .compare-toggle.selected { background: var(--primary); color: #fff; }
 .compare-toggle.selected::after { content: " ✓"; }
 
-/* ===== Scene Grid ===== */
+/* ═══ Scene Grid ════════════════════════════════════════════════
+   12 个场景入口卡片：图标 + 名称 + 匹配工具数 */
 .scene-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -250,7 +292,9 @@ main { max-width: 1200px; margin: 0 auto; padding: 20px; }
 .scene-card p { font-size: 14px; color: var(--text-secondary); }
 .scene-card .scene-icon { font-size: 32px; margin-bottom: 8px; display: block; }
 
-/* ===== Compare ===== */
+/* ═══ Compare ═══════════════════════════════════════════════════
+   对比选择区 + 10+ 维度横向对比表格
+   表格首列固定（sticky），便于横向滚动时始终看到维度名称 */
 .compare-selection { margin-bottom: 24px; }
 .compare-selection .hint { color: var(--text-hint); font-size: 14px; }
 .selected-tools { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
@@ -285,7 +329,9 @@ main { max-width: 1200px; margin: 0 auto; padding: 20px; }
 .compare-table .score-mid { color: var(--warn); font-weight: 700; }
 .compare-table .score-low { color: var(--danger); font-weight: 700; }
 
-/* ===== Modal ===== */
+/* ═══ Modal ═════════════════════════════════════════════════════
+   工具详情弹窗：全屏遮罩 + 居中面板。
+   评分四维网格、价格层级列表、优劣势/最适不适合场景 */
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -335,7 +381,9 @@ main { max-width: 1200px; margin: 0 auto; padding: 20px; }
 .modal .section ul { padding-left: 20px; }
 .modal .meta { font-size: 12px; color: var(--text-hint); margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
 
-/* ===== Glossary ===== */
+/* ═══ Glossary ══════════════════════════════════════════════════
+   概念词典：搜索框 + 动态分类 chip + 可展开术语卡片
+   .glossary-card.expanded 展开显示释义/关联术语/实用意义 */
 .glossary-search-box {
   max-width: 560px;
   margin: 16px 0 24px;
@@ -419,13 +467,15 @@ main { max-width: 1200px; margin: 0 auto; padding: 20px; }
 .glossary-source a { color: var(--primary); text-decoration: none; }
 .glossary-source a:hover { text-decoration: underline; }
 
-/* ===== About ===== */
+/* ═══ About ═════════════════════════════════════════════════════
+   关于页面排版：介绍/方法论/开源说明 */
 .about-content { max-width: 680px; }
 .about-content h3 { margin: 24px 0 8px; font-size: 18px; }
 .about-content p, .about-content li { font-size: 15px; color: var(--text-secondary); margin-bottom: 8px; }
 .about-content ul { padding-left: 24px; }
 
-/* ===== Footer ===== */
+/* ═══ Footer ════════════════════════════════════════════════════
+   页脚：数据更新日期 + 贡献/纠错链接 */
 .footer {
   text-align: center;
   padding: 32px 20px;
@@ -435,7 +485,9 @@ main { max-width: 1200px; margin: 0 auto; padding: 20px; }
   margin-top: 40px;
 }
 
-/* ===== Responsive ===== */
+/* ═══ Responsive ════════════════════════════════════════════════
+   移动端适配（max-width: 768px）：
+   导航竖排、卡片单列、筛选叠放、模态全屏、对比表横向滚动 */
 @media (max-width: 768px) {
   .header-inner { flex-direction: column; height: auto; padding: 12px 16px; gap: 8px; }
   .nav { overflow-x: auto; width: 100%; padding-bottom: 4px; }
@@ -451,7 +503,9 @@ main { max-width: 1200px; margin: 0 auto; padding: 20px; }
   .compare-table th, .compare-table td { padding: 8px; }
 }
 
-/* ===== Empty State ===== */
+/* ═══ Empty State ═══════════════════════════════════════════════
+   统一空状态占位：图标 + 标题 + 提示文字
+   各渲染函数在数据为空时输出 .empty-state 结构 */
 .empty-state {
   text-align: center;
   padding: 60px 20px;
@@ -460,9 +514,11 @@ main { max-width: 1200px; margin: 0 auto; padding: 20px; }
 .empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
 .empty-state h3 { font-size: 18px; color: var(--text-secondary); margin-bottom: 8px; }
 
+/* ═══ Trending ══════════════════════════════════════════════════
+   AI 热点 Feed：平台筛选 chip + 排序按钮 + 覆盖状态条
+   + 热点卡片（平台标识/标题/描述/标签/指标/可解释评分）
+   选择器命名以 .trending- 为前缀，与其他视图隔离 */
 /* EXTENSION POINT: 新增视图样式追加在此之后，命名前缀统一为视图名 */
-
-/* ===== Trending ===== */
 .trending-hero { text-align: center; padding: 28px 16px 20px; }
 .trending-hero h1 { font-size: 28px; margin-bottom: 8px; }
 .trending-hero p { max-width: 720px; margin: 0 auto; color: var(--text-secondary); line-height: 1.6; }

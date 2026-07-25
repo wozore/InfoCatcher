@@ -81,7 +81,7 @@ let trendingSort = 'score';         // 热点排序方式 (score=评分/recent=�
 // 第 1 部分：通用工具函数
 // ═══════════════════════════════════════════════════════════════
 
-/** 1-5 分转换为 ★☆☆☆☆ 格式的星级显示 */
+/** 1-5 分转换为 ★☆☆☆☆ 格式的星级显示，EXTENSION POINT：MVP完成后实现非完整填充的☆ */
 function stars(rating) {
   const full = Math.floor(rating);
   const half = rating - full >= 0.5 ? 1 : 0;
@@ -145,6 +145,9 @@ async function loadData() {
  * 切换当前显示的视图。
  * 实现方式：通过 CSS class .view.active 控制显隐（非路由），
  * 切换后触发对应视图的渲染函数（首次渲染或重新渲染）。
+ * 1. 先清 → 所有面板消失，按钮变灰
+ * 2. 再加 → 新面板出现，新按钮高亮
+ * 3. 再渲染 → 往面板里填数据
  *
  * EXTENSION POINT: 新增视图时在末尾加 if (view === 'xxx') renderXxx();
  */
@@ -174,6 +177,7 @@ function switchView(view) {
  * 阶段 2: 三维 chip 筛选叠加（分类 AND 访问 AND 价格）
  *
  * EXTENSION POINT: 新增筛选维度时在阶段 2 末尾按同样模式加 if (activeFilters.xxx !== 'all')
+ * EXTENSION POINT: 方案一——>方案三变迁中时，设置特殊窗口显示的属性，在特殊窗口搜索时才会显示
  */
 function getFilteredTools() {
   const query = (document.getElementById('searchInput').value || '').toLowerCase().trim();
@@ -185,7 +189,7 @@ function getFilteredTools() {
     const hasAliasMatch = keywords.some(kw => kw in searchAliases);
 
     filtered = filtered.filter(t => {
-      // 对每个关键词，检查是否命中任何字段
+      // 对每个关键词，检查是否命中任何字段(搜索关键词)
       return keywords.some(kw => {
         const q = kw.toLowerCase();
         return (
@@ -201,7 +205,7 @@ function getFilteredTools() {
       });
     });
 
-    // 中文别名过滤 — 在关键词匹配结果上叠加
+    // 中文别名过滤 — 在关键词匹配结果上叠加(判断关键词是否为真)
     for (const [kw, fn] of Object.entries(searchAliases)) {
       if (query.includes(kw)) {
         filtered = filtered.filter(fn);
@@ -236,6 +240,8 @@ function getFilteredTools() {
  *
  * 注意：对比按钮在卡片 DOM 字符串中使用了 onclick 属性;
  * event.stopPropagation() 防止点击对比按钮同时触发卡片的 openDetail。
+ * EXTENSION POINT: 方案一——>方案三变迁中时，实现在对比页面也能自定义添加工具
+ * EXTENSION POINT: 方案一——>方案三变迁中时，卡片实现动态效果-描述：默认显示工具大头照，悬停时工具照向左迁移，右边显示简略的信息，点击进入详情
  */
 function renderTools() {
   const filtered = getFilteredTools();
@@ -259,17 +265,20 @@ function renderTools() {
           <div class="tool-card-name">${t.icon} ${t.name}</div>
           <div class="tool-card-vendor">${t.vendor}</div>
         </div>
+        
         <div style="text-align:right">
           <div class="rating-stars">${stars(t.rating_overall)}</div>
           <div class="rating-num">${t.rating_overall.toFixed(1)}</div>
         </div>
       </div>
+
       <div class="tool-card-desc">${t.strengths}</div>
       <div class="tool-card-tags">
         ${t.scenes.slice(0,3).map(s => '<span class="tag scene">' + s + '</span>').join('')}
         ${hasFree(t) ? '<span class="tag free">免费可用</span>' : '<span class="tag paid">仅付费</span>'}
         <span class="tag ${t.access_level === '开放' ? 'open' : 'restricted'}">${t.access_level === '开放' ? '国内可用' : '需科学上网'}</span>
       </div>
+
       <div class="tool-card-footer" onclick="event.stopPropagation()">
         <span style="font-size:12px;color:var(--text-hint)">更新: ${t.last_updated}</span>
         <button class="compare-toggle ${isSelected ? 'selected' : ''}" onclick="toggleCompare('${t.id}', this)">${isSelected ? '已选' : '+对比'}</button>
@@ -368,13 +377,16 @@ document.addEventListener('keydown', function(e) {
 //   renderCompare()  — 渲染 10+ 维度对比表
 //   removeCompare()  — 从对比列表中移除单个工具
 //   quickCompare()   — 一键加载预设对比方案
+// EXTENSION POINT：方案一——>方案三时，将对比简略结果【renderCompare()】显示为柱状图
 // ═══════════════════════════════════════════════════════════════
 function toggleCompare(id, btn) {
   const idx = compareList.findIndex(c => c.id === id);
+  // 如果工具已在清单
   if (idx >= 0) {
     compareList.splice(idx, 1);
     if (btn) { btn.classList.remove('selected'); btn.textContent = '+对比'; }
   } else {
+    // 如果工具数量达到上限
     if (compareList.length >= 5) {
       alert('最多对比 5 个工具');
       return;
@@ -385,9 +397,11 @@ function toggleCompare(id, btn) {
   }
   updateCompareCount();
   renderTools();
+  // 如果当前页面为compare页面，那么重渲染
   if (currentView === 'compare') renderCompare();
 }
 
+// 更新对比工具模型的数量
 function updateCompareCount() {
   document.getElementById('compareCount').textContent = compareList.length;
 }
@@ -468,6 +482,7 @@ function removeCompare(id) {
   renderCompare();
 }
 
+// 快捷组合比较
 function quickCompare(ids) {
   compareList = ids.map(id => tools.find(t => t.id === id)).filter(Boolean).slice(0, 5);
   updateCompareCount();
@@ -762,7 +777,7 @@ function searchByScene(query) {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// 第 9 部分：中文搜索别名映射
+// 第 9 部分：搜索别名映射
 //
 // 将用户输入的自然语言关键词映射为过滤函数。
 // 在 getFilteredTools() 的文本搜索基础上叠加使用（AND 关系）。
@@ -770,7 +785,7 @@ function searchByScene(query) {
 // 再叠加 hasFree() 和 scenes 包含 '写代码' 的过滤。
 //
 // 格式：'关键词': arrowFunction(t) → boolean
-// EXTENSION POINT: 新增别名时按同样格式追加键值对
+// EXTENSION POINT: 新增别名时按同样格式追加键值对，让英文字符区分大写小写
 // ═══════════════════════════════════════════════════════════════
 const searchAliases = {
   '免费': t => hasFree(t),
@@ -789,6 +804,8 @@ const searchAliases = {
   '国内': t => t.access_level === '开放',
   '可用': t => t.access_level === '开放',
   '科学上网': t => t.access_level === '受限',
+  'vpn': t => t.access_level === '受限',
+  '梯子': t => t.access_level === '受限',
   '开源': t => t.category.includes('开源'),
   '音乐': t => t.category.some(c => c.includes('音乐') || c.includes('音频')),
   '语音': t => t.category.some(c => c.includes('语音')),
@@ -805,6 +822,7 @@ const searchAliases = {
 
 // ═══════════════════════════════════════════════════════════════
 // 第 10 部分：页面初始化与事件绑定
+// 注册事件，在DOM树被建立完时触发运行
 //
 // 执行顺序：
 //   1. loadData() — 异步加载所有 JSON 数据

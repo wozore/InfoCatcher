@@ -1,0 +1,230 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="第 1 页" id="gjFctlKYMQCU8rPyUs3Q">
+    <mxGraphModel dx="1686" dy="1302" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <UserObject label="" mermaidData="{&#xa;  &quot;data&quot;: &quot;flowchart TB\n    subgraph GitHub[\&quot;GitHub 平台\&quot;]\n        Secrets[(\&quot;🔐 GitHub&lt;br/&gt;Repository Secrets&lt;br/&gt;&lt;b&gt;YOUTUBE_API_KEY&lt;/b&gt;&lt;br/&gt;&lt;b&gt;X_API_KEY&lt;/b&gt;\&quot;)]\n        Actions[\&quot;⚙️ GitHub Actions&lt;br/&gt;collect-news.yml\&quot;]\n        Repo[(\&quot;📦 代码仓库\&quot;)]\n        Pages[\&quot;🌐 GitHub Pages&lt;br/&gt;静态站点\&quot;]\n    end\n\n    subgraph Runner[\&quot;GitHub Actions Runner (临时 Ubuntu 虚拟机)\&quot;]\n        Env[\&quot;📥 注入环境变量&lt;br/&gt;&lt;code&gt;process.env.YOUTUBE_API_KEY&lt;/code&gt;&lt;br/&gt;&lt;code&gt;process.env.X_API_KEY&lt;/code&gt;\&quot;]\n        Script[\&quot;📜 Node.js 构建脚本&lt;br/&gt;build-news.js\&quot;]\n    end\n\n    subgraph External[\&quot;外部平台 API\&quot;]\n        YouTube[\&quot;▶️ YouTube Data API&lt;br/&gt;&lt;code&gt;?key=YOUR_API_KEY&lt;/code&gt;\&quot;]\n        X[\&quot;𝕏 X (Twitter) API&lt;br/&gt;&lt;code&gt;X-API-Key Header&lt;/code&gt;\&quot;]\n        Bilibili[\&quot;📺 Bilibili RSS&lt;br/&gt;(无需 API Key)\&quot;]\n    end\n\n    subgraph Frontend[\&quot;浏览器前端\&quot;]\n        AppJS[\&quot;📄 app.js&lt;br/&gt;读取静态 JSON\&quot;]\n        HotJSON[(\&quot;📊 data/hotspots.json&lt;br/&gt;data/news-state.json&lt;br/&gt;等等\&quot;)]\n    end\n\n    Secrets --&gt;|\&quot;&lt;code&gt;${{ secrets.YOUTUBE_API_KEY }}&lt;/code&gt;\&quot;| Actions\n    Secrets --&gt;|\&quot;&lt;code&gt;${{ secrets.X_API_KEY }}&lt;/code&gt;\&quot;| Actions\n    Actions --&gt;|\&quot;设定环境变量\&quot;| Env\n    Env --&gt;|\&quot;&lt;code&gt;process.env.YOUTUBE_API_KEY&lt;/code&gt;\&quot;| Script\n    Env --&gt;|\&quot;&lt;code&gt;process.env.X_API_KEY&lt;/code&gt;\&quot;| Script\n    Script --&gt;|\&quot;HTTPS ?key=API_KEY\&quot;| YouTube\n    Script --&gt;|\&quot;HTTPS X-API-Key Header\&quot;| X\n    Script --&gt;|\&quot;HTTPS RSS\&quot;| Bilibili\n    YouTube --&gt;|\&quot;返回 JSON 数据\&quot;| Script\n    X --&gt;|\&quot;返回 JSON 数据\&quot;| Script\n    Bilibili --&gt;|\&quot;返回 RSS 数据\&quot;| Script\n    Script --&gt;|\&quot;生成静态 JSON\&quot;| Repo\n    Repo --&gt;|\&quot;git push\&quot;| Pages\n    Pages --&gt;|\&quot;HTTP 静态资源\&quot;| AppJS\n    AppJS --&gt;|\&quot;fetch 读取\&quot;| HotJSON\n\n    style Secrets fill:#FEE2E2,stroke:#DC2626,stroke-width:2px\n    style Env fill:#FEF3C7,stroke:#F59E0B\n    style Script fill:#DBEAFE,stroke:#3B82F6\n    style YouTube fill:#ECFDF5,stroke:#10B981\n    style X fill:#F5F3FF,stroke:#8B5CF6\n    style AppJS fill:#F0FDF4,stroke:#22C55E\n    style HotJSON fill:#F0FDF4,stroke:#22C55E\n    style Actions fill:#FEF3C7,stroke:#F59E0B\n\n    classDef noKey fill:#F0FDF4,stroke:#22C55E,stroke-dasharray: 5 5\n    classDef hasKey fill:#FEE2E2,stroke:#DC2626\n    classDef transit fill:#FEF3C7,stroke:#F59E0B\n\n    class AppJS,HotJSON,Pages noKey\n    class Secrets,Env hasKey\n    class Actions,Script transit\n&quot;,&#xa;  &quot;config&quot;: null&#xa;}" id="32">
+          <mxCell connectable="0" parent="1" style="group;transparentBounds=1;editIcon=1;lockedGroup=0;groupPadding=10;" vertex="1">
+            <mxGeometry as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="GitHub 平台" mermaidId="n:GitHub" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;verticalAlign=top;fillColor=light-dark(#ffffde,#1f2020);strokeColor=light-dark(#aaaa33,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="GitHub 平台" id="2">
+          <mxCell parent="32" style="html=1;whiteSpace=wrap;strokeWidth=1;verticalAlign=top;fillColor=light-dark(#ffffde,#1f2020);strokeColor=light-dark(#aaaa33,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="1020" width="263" x="1131" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="🔐 GitHub&#xa;Repository Secrets&#xa;&lt;b&gt;YOUTUBE_API_KEY&lt;/b&gt;&#xa;&lt;b&gt;X_API_KEY&lt;/b&gt;" mermaidId="n:Secrets" mermaidBaseStyle="html=1;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;strokeWidth=2;whiteSpace=wrap;fillColor=#FEE2E2;strokeColor=#DC2626;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="🔐 GitHub&#xa;Repository Secrets&#xa;&lt;b&gt;YOUTUBE_API_KEY&lt;/b&gt;&#xa;&lt;b&gt;X_API_KEY&lt;/b&gt;" id="3">
+          <mxCell parent="2" style="html=1;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;strokeWidth=2;whiteSpace=wrap;fillColor=#FEE2E2;strokeColor=#DC2626;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="120" width="158" x="53" y="45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="⚙️ GitHub Actions&#xa;collect-news.yml" mermaidId="n:Actions" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#FEF3C7;strokeColor=#F59E0B;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="⚙️ GitHub Actions&#xa;collect-news.yml" id="4">
+          <mxCell parent="2" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#FEF3C7;strokeColor=#F59E0B;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="73" width="193" x="35" y="234" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="📦 代码仓库" mermaidId="n:Repo" mermaidBaseStyle="html=1;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;strokeWidth=1;whiteSpace=wrap;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="📦 代码仓库" id="5">
+          <mxCell parent="2" style="html=1;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;strokeWidth=1;whiteSpace=wrap;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="67" width="106" x="83" y="758" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="🌐 GitHub Pages&#xa;静态站点" mermaidId="n:Pages" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#F0FDF4;strokeColor=#22C55E;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;dashed=1;dashPattern=5 5;fixDash=1;" mermaidBaseValue="🌐 GitHub Pages&#xa;静态站点" id="6">
+          <mxCell parent="2" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#F0FDF4;strokeColor=#22C55E;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;dashed=1;dashPattern=5 5;fixDash=1;" vertex="1">
+            <mxGeometry height="73" width="181" x="46" y="922" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="&lt;code&gt;${{ secrets.YOUTUBE_API_KEY }}&lt;/code&gt;" mermaidId="e:Secrets-&gt;Actions#0" mermaidBaseStyle="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0.35;exitY=1;entryX=0.38;entryY=0;" mermaidBaseValue="&lt;code&gt;${{ secrets.YOUTUBE_API_KEY }}&lt;/code&gt;" id="26">
+          <mxCell edge="1" parent="2" source="3" style="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0.35;exitY=1;entryX=0.38;entryY=0;" target="4">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points">
+                <mxPoint x="45" y="188" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="&lt;code&gt;${{ secrets.X_API_KEY }}&lt;/code&gt;" mermaidId="e:Secrets-&gt;Actions#1" mermaidBaseStyle="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0.35;exitY=0.93;entryX=0.38;entryY=0;" mermaidBaseValue="&lt;code&gt;${{ secrets.X_API_KEY }}&lt;/code&gt;" id="27">
+          <mxCell edge="1" parent="2" source="3" style="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0.35;exitY=0.93;entryX=0.38;entryY=0;" target="4">
+            <mxGeometry relative="1" x="0.1134" y="-21" as="geometry">
+              <mxPoint as="offset" />
+              <Array as="points">
+                <mxPoint x="45" y="188" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="git push" mermaidId="e:Repo-&gt;Pages#0" mermaidBaseStyle="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0.5;exitY=1;entryX=0.5;entryY=0;" mermaidBaseValue="git push" id="28">
+          <mxCell edge="1" parent="2" source="5" style="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="6">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="GitHub Actions Runner (临时 Ubuntu 虚拟机)" mermaidId="n:Runner" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;verticalAlign=top;fillColor=light-dark(#ffffde,#1f2020);strokeColor=light-dark(#aaaa33,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="GitHub Actions Runner (临时 Ubuntu 虚拟机)" id="7">
+          <mxCell parent="32" style="html=1;whiteSpace=wrap;strokeWidth=1;verticalAlign=top;fillColor=light-dark(#ffffde,#1f2020);strokeColor=light-dark(#aaaa33,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="305" width="346" x="381" y="356" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="📥 注入环境变量&#xa;&lt;code&gt;process.env.YOUTUBE_API_KEY&lt;/code&gt;&#xa;&lt;code&gt;process.env.X_API_KEY&lt;/code&gt;" mermaidId="n:Env" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#FEE2E2;strokeColor=#F59E0B;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="📥 注入环境变量&#xa;&lt;code&gt;process.env.YOUTUBE_API_KEY&lt;/code&gt;&#xa;&lt;code&gt;process.env.X_API_KEY&lt;/code&gt;" id="8">
+          <mxCell parent="7" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#FEE2E2;strokeColor=#F59E0B;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="93" width="276" x="35" y="45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="📜 Node.js 构建脚本&#xa;build-news.js" mermaidId="n:Script" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#FEF3C7;strokeColor=#3B82F6;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="📜 Node.js 构建脚本&#xa;build-news.js" id="9">
+          <mxCell parent="7" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#FEF3C7;strokeColor=#3B82F6;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="73" width="210" x="68" y="207" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="&lt;code&gt;process.env.YOUTUBE_API_KEY&lt;/code&gt;" mermaidId="e:Env-&gt;Script#0" mermaidBaseStyle="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0.38;exitY=0.96;entryX=0.34;entryY=0.11;" mermaidBaseValue="&lt;code&gt;process.env.YOUTUBE_API_KEY&lt;/code&gt;" id="29">
+          <mxCell edge="1" parent="7" source="8" style="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0.38;exitY=0.96;entryX=0.34;entryY=0.11;" target="9">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points">
+                <mxPoint x="49" y="168" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="&lt;code&gt;process.env.X_API_KEY&lt;/code&gt;" mermaidId="e:Env-&gt;Script#1" mermaidBaseStyle="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0.38;exitY=0.88;entryX=0.34;entryY=0.18;" mermaidBaseValue="&lt;code&gt;process.env.X_API_KEY&lt;/code&gt;" id="30">
+          <mxCell edge="1" parent="7" source="8" style="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0.38;exitY=0.88;entryX=0.34;entryY=0.18;" target="9">
+            <mxGeometry relative="1" x="0.2097" y="-17" as="geometry">
+              <mxPoint as="offset" />
+              <Array as="points">
+                <mxPoint x="49" y="168" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="外部平台 API" mermaidId="n:External" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;verticalAlign=top;fillColor=light-dark(#ffffde,#1f2020);strokeColor=light-dark(#aaaa33,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="外部平台 API" id="10">
+          <mxCell parent="32" style="html=1;whiteSpace=wrap;strokeWidth=1;verticalAlign=top;fillColor=light-dark(#ffffde,#1f2020);strokeColor=light-dark(#aaaa33,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="143" width="825" x="106" y="710" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="▶️ YouTube Data API&#xa;&lt;code&gt;?key=YOUR_API_KEY&lt;/code&gt;" mermaidId="n:YouTube" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#ECFDF5;strokeColor=#10B981;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="▶️ YouTube Data API&#xa;&lt;code&gt;?key=YOUR_API_KEY&lt;/code&gt;" id="11">
+          <mxCell parent="10" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#ECFDF5;strokeColor=#10B981;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="73" width="209" x="581" y="45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="𝕏 X (Twitter) API&#xa;&lt;code&gt;X-API-Key Header&lt;/code&gt;" mermaidId="n:X" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#F5F3FF;strokeColor=#8B5CF6;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="𝕏 X (Twitter) API&#xa;&lt;code&gt;X-API-Key Header&lt;/code&gt;" id="12">
+          <mxCell parent="10" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#F5F3FF;strokeColor=#8B5CF6;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="73" width="188" x="274" y="45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="📺 Bilibili RSS&#xa;(无需 API Key)" mermaidId="n:Bilibili" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="📺 Bilibili RSS&#xa;(无需 API Key)" id="13">
+          <mxCell parent="10" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=light-dark(#ECECFF,#1f2020);strokeColor=light-dark(#9370DB,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="73" width="162" x="35" y="45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="浏览器前端" mermaidId="n:Frontend" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;verticalAlign=top;fillColor=light-dark(#ffffde,#1f2020);strokeColor=light-dark(#aaaa33,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" mermaidBaseValue="浏览器前端" id="14">
+          <mxCell parent="32" style="html=1;whiteSpace=wrap;strokeWidth=1;verticalAlign=top;fillColor=light-dark(#ffffde,#1f2020);strokeColor=light-dark(#aaaa33,#cccccc);fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;" vertex="1">
+            <mxGeometry height="313" width="248" x="1143" y="1069" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="📄 app.js&#xa;读取静态 JSON" mermaidId="n:AppJS" mermaidBaseStyle="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#F0FDF4;strokeColor=#22C55E;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;dashed=1;dashPattern=5 5fill:#F0FDF4;fixDash=1;" mermaidBaseValue="📄 app.js&#xa;读取静态 JSON" id="15">
+          <mxCell parent="14" style="html=1;whiteSpace=wrap;strokeWidth=1;fillColor=#F0FDF4;strokeColor=#22C55E;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;dashed=1;dashPattern=5 5fill:#F0FDF4;fixDash=1;" vertex="1">
+            <mxGeometry height="73" width="165" x="42" y="45" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="📊 data/hotspots.json&#xa;data/news-state.json&#xa;等等" mermaidId="n:HotJSON" mermaidBaseStyle="html=1;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;strokeWidth=1;whiteSpace=wrap;fillColor=#F0FDF4;strokeColor=#22C55E;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;dashed=1;dashPattern=5 5fill:#F0FDF4;fixDash=1;" mermaidBaseValue="📊 data/hotspots.json&#xa;data/news-state.json&#xa;等等" id="16">
+          <mxCell parent="14" style="html=1;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;strokeWidth=1;whiteSpace=wrap;fillColor=#F0FDF4;strokeColor=#22C55E;fontColor=light-dark(#333333,#cccccc);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontSize=16;dashed=1;dashPattern=5 5fill:#F0FDF4;fixDash=1;" vertex="1">
+            <mxGeometry height="101" width="178" x="35" y="187" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="fetch 读取" mermaidId="e:AppJS-&gt;HotJSON#0" mermaidBaseStyle="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0.5;exitY=1;entryX=0.5;entryY=0;" mermaidBaseValue="fetch 读取" id="31">
+          <mxCell edge="1" parent="14" source="15" style="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="16">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="设定环境变量" mermaidId="e:Actions-&gt;Env#0" mermaidBaseStyle="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0.5;exitY=1;entryX=1;entryY=0.35;" mermaidBaseValue="设定环境变量" id="17">
+          <mxCell edge="1" parent="32" source="4" style="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0.5;exitY=1;entryX=1;entryY=0.35;" target="8">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points">
+                <mxPoint x="1263" y="342" />
+                <mxPoint x="1263" y="376" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="HTTPS ?key=API_KEY" mermaidId="e:Script-&gt;YouTube#0" mermaidBaseStyle="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=1;exitY=0.678082191780822;entryX=0;entryY=0.678082191780822;curved=1;exitX=1;exitY=0.68;entryX=0;entryY=0.68;" mermaidBaseValue="HTTPS ?key=API_KEY" id="18">
+          <mxCell edge="1" parent="32" source="9" style="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=1;exitY=0.68;entryX=0;entryY=0.68;" target="11">
+            <mxGeometry relative="1" as="geometry">
+              <mxPoint as="offset" />
+              <Array as="points">
+                <mxPoint x="673" y="782" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="HTTPS X-API-Key Header" mermaidId="e:Script-&gt;X#0" mermaidBaseStyle="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0.5619047619047619;exitY=1;entryX=0.5691489361702128;entryY=0;curved=1;exitX=0.56;exitY=1;entryX=0.57;entryY=0;" mermaidBaseValue="HTTPS X-API-Key Header" id="19">
+          <mxCell edge="1" parent="32" source="9" style="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0.56;exitY=1;entryX=0.57;entryY=0;" target="12">
+            <mxGeometry relative="1" as="geometry">
+              <mxPoint as="offset" />
+              <Array as="points">
+                <mxPoint x="614" y="696" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="HTTPS RSS" mermaidId="e:Script-&gt;Bilibili#0" mermaidBaseStyle="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0;exitY=0.678082191780822;entryX=1;entryY=0.678082191780822;curved=1;exitX=0;exitY=0.68;entryX=1;entryY=0.68;" mermaidBaseValue="HTTPS RSS" id="20">
+          <mxCell edge="1" parent="32" source="9" style="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0;exitY=0.68;entryX=1;entryY=0.68;" target="13">
+            <mxGeometry relative="1" as="geometry">
+              <mxPoint as="offset" />
+              <Array as="points">
+                <mxPoint x="376" y="745" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="返回 JSON 数据" mermaidId="e:YouTube-&gt;Script#0" mermaidBaseStyle="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0;exitY=0.3219178082191781;entryX=1;entryY=0.3219178082191781;curved=1;exitX=0;exitY=0.32;entryX=1;entryY=0.32;" mermaidBaseValue="返回 JSON 数据" id="21">
+          <mxCell edge="1" parent="32" source="11" style="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0;exitY=0.32;entryX=1;entryY=0.32;" target="9">
+            <mxGeometry relative="1" as="geometry">
+              <mxPoint as="offset" />
+              <Array as="points">
+                <mxPoint x="673" y="629" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="返回 JSON 数据" mermaidId="e:X-&gt;Script#0" mermaidBaseStyle="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0.4308510638297872;exitY=0;entryX=0.4380952380952381;entryY=1;curved=1;exitX=0.43;exitY=0;entryX=0.44;entryY=1;" mermaidBaseValue="返回 JSON 数据" id="22">
+          <mxCell edge="1" parent="32" source="12" style="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0.43;exitY=0;entryX=0.44;entryY=1;" target="9">
+            <mxGeometry relative="1" as="geometry">
+              <mxPoint as="offset" />
+              <Array as="points">
+                <mxPoint x="447" y="696" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="返回 RSS 数据" mermaidId="e:Bilibili-&gt;Script#0" mermaidBaseStyle="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=1;exitY=0.3219178082191781;entryX=0;entryY=0.3219178082191781;curved=1;exitX=1;exitY=0.32;entryX=0;entryY=0.32;" mermaidBaseValue="返回 RSS 数据" id="23">
+          <mxCell edge="1" parent="32" source="13" style="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=1;exitY=0.32;entryX=0;entryY=0.32;" target="9">
+            <mxGeometry relative="1" as="geometry">
+              <mxPoint as="offset" />
+              <Array as="points">
+                <mxPoint x="376" y="635" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="生成静态 JSON" mermaidId="e:Script-&gt;Repo#0" mermaidBaseStyle="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=1;exitY=0.77;entryX=0.5;entryY=0;" mermaidBaseValue="生成静态 JSON" id="24">
+          <mxCell edge="1" parent="32" source="9" style="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=1;exitY=0.77;entryX=0.5;entryY=0;" target="5">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points">
+                <mxPoint x="886" y="661" />
+                <mxPoint x="1267" y="696" />
+                <mxPoint x="1267" y="730" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="HTTP 静态资源" mermaidId="e:Pages-&gt;AppJS#0" mermaidBaseStyle="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0.5;exitY=1;entryX=0.5;entryY=0;" mermaidBaseValue="HTTP 静态资源" id="25">
+          <mxCell edge="1" parent="32" source="6" style="curved=1;startArrow=none;endArrow=block;endSize=7;strokeColor=light-dark(#333333,#cccccc);html=1;fontSize=16;labelBackgroundColor=light-dark(#E8E8E88D,#2a2a2a8D);fontFamily=Trebuchet MS,Verdana,Arial,sans-serif;fontColor=light-dark(#333333,#cccccc);exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="15">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
