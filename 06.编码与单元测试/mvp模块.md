@@ -1,8 +1,10 @@
 # InfoCatcher MVP 模块文档
 
-> **版本**：v0.3（S2 / B14）
+> **版本**：v0.4（S2 / B14）
 >
-> **最后更新**：2026-07-23
+> **最后更新**：2026-07-26
+>
+> **当前说明**：本文件描述当前实现。B站仍是支持的热点内容类型，但默认 `all` 构建采用人工精选，不访问B站网络；RSSHub仅保留为显式 `bilibili-only` 诊断入口。
 >
 > **环归属**：环 B · ④够用设计 / ⑥编码与单元测试
 >
@@ -39,8 +41,9 @@ InfoCatcher MVP 仍是部署到 GitHub Pages 的**纯静态浏览器应用**。B
 **已实现：**
 
 - 浏览器端六视图和静态 JSON 渲染；
-- GitHub Actions 每日构建时采集 YouTube、X、Bilibili；
+- GitHub Actions 每日构建时自动采集 YouTube/X；B站默认采用人工精选，人工条目与其他平台进入同一处理管线；
 - B站视频、动态、专栏均可作为热点内容；
+- B站默认网络采集暂停；显式 `bilibili-only` 诊断支持 Provider 单次探测和 Cloudflare 快速熔断；
 - 规则评分、商业证据、异常提示、转载溯源和主题聚合；
 - 五层 UTC 历史窗口、持久 Registry、平台额度账本、授权任务和管理 CLI；
 - Node 20 零第三方依赖的单元测试与部署前校验。
@@ -63,8 +66,10 @@ InfoCatcher MVP 仍是部署到 GitHub Pages 的**纯静态浏览器应用**。B
         ▼
 news-sources.json ─────────────┐
 news-config.json ──────────────┤
+news-manual-items.json ────────┤  ← B站人工精选暂存
 GitHub Secrets ────────────────┤
-YouTube / X / RSSHub ──────────┤
+YouTube / X ───────────────────┤
+RSSHub（仅显式诊断）───────────┤
                               ▼
                          build-news.js
      ┌──────────────┬──────────┼───────────┬────────────────┐
@@ -97,6 +102,7 @@ mvp/
 │   ├── hotspots.json                  # 前端热点投影
 │   ├── news-config.json               # 评分、时间层、额度和停止条件
 │   ├── news-sources.json              # 96 个标准化热点来源
+│   ├── news-manual-items.json          # B站人工精选暂存
 │   ├── news-state.json                # 构建、来源和历史游标状态
 │   ├── news-registry.json             # 检测视频的持久发现/处理记录
 │   ├── news-quota.json                # YouTube/B站额度账本
@@ -109,11 +115,12 @@ mvp/
 │   ├── news-quota.js                  # 平台独立额度预留/消费/审计
 │   ├── news-scheduler.js              # 五层 UTC 调度与推进判定
 │   ├── news-youtube.js                # uploads playlist 历史适配器
-│   ├── news-bilibili.js               # RSSHub 可见历史及能力降级
+│   ├── news-bilibili.js               # B站历史适配器（当前默认暂停）
+│   ├── news-manual.js                 # B站人工条目校验与标准化
 │   ├── news-authorization.js          # 待授权任务与决策规则
-│   ├── news-cli.js                    # 来源、授权、额度和锁管理入口
+│   ├── news-cli.js                    # 来源、人工内容、授权、额度和锁管理入口
 │   ├── validate.js                    # 数据、引用与 HTML 契约校验
-│   ├── news-tests.test.js             # 内容规则与采集行为测试（17项）
+│   ├── news-tests.test.js             # 内容规则与采集行为测试（23项）
 │   ├── news-foundation.test.js        # 状态、额度、调度和 CLI 测试（20项）
 │   └── news-fixtures/                 # 三平台确定性测试样本
 └── .github/workflows/
@@ -162,17 +169,17 @@ mvp/
 
 主要阶段：
 
-1. 读取配置、来源、旧热点和持久状态；
+1. 读取配置、来源、旧热点、人工精选暂存和持久状态；
 2. 获取构建锁并建立本轮额度账本；
-3. 采集最新 Feed：YouTube RSS/Data API、TwitterAPI.io、Bilibili RSSHub；
+3. 采集最新 Feed：YouTube RSS/Data API、TwitterAPI.io；B站默认读取人工精选暂存，显式诊断才探测RSSHub；
 4. 对所有观察先写 Registry，非 AI 内容也标记为 `filtered_non_ai`；
-5. 执行当前时间层的 YouTube/B站受控历史 step；
+5. 执行当前时间层的 YouTube 受控历史 step；B站默认不做自动历史回溯；
 6. 标准化、去重、AI 过滤、评分、异常检测、溯源和主题聚合；
 7. 更新 Registry、调度状态、额度和待授权任务；
 8. 原子写入状态文件，最后替换 `hotspots.json`；
 9. 释放构建锁。
 
-X 继续采用来源轮转控制成本；严格历史分页当前只适用于 YouTube，B站按 RSSHub 可见范围处理。
+X 继续采用来源轮转控制成本；B站默认不做自动历史分页，人工条目直接进入统一处理管线；显式 `bilibili-only` 诊断遇到 Cloudflare 后快速熔断。
 
 ### 5.2 Registry：`news-registry.js`
 
@@ -198,13 +205,14 @@ X 继续采用来源轮转控制成本；严格历史分页当前只适用于 Yo
 | 模块 | 策略 | 能力边界 |
 |---|---|---|
 | `news-youtube.js` | 获取 uploads playlist，按 `playlistItems.list` 分页；Registry 防重后用 `videos.list` 批量补详情 | 默认不用高成本 `search.list`；额度不足保存恢复游标 |
-| `news-bilibili.js` | 请求视频、动态、专栏 RSSHub 路由并按五层归类 | 无可靠日期分页；历史覆盖不足时 `history_unsupported`，不调用内部 API |
+| `news-bilibili.js` | 当前默认暂停自动请求；仅保留显式诊断/历史能力边界记录 | 不调用内部 API，不绕过风控 |
+| `news-manual.js` | 校验B站公开链接、source_id、内容类型和日期，生成统一人工条目 | 不访问B站网络，不接受Cookie或Token |
 
 ### 5.5 额度、授权与管理
 
 - `news-quota.js`：YouTube 按 quota units、B站按 HTTP attempts 独立记账；请求前 reserve，实际发出后 consume；失败和重试仍消耗。
 - `news-authorization.js`：五层均无新内容后可创建待确认任务，决策支持 `continue`、`until-first`、`skip`、`stop`。
-- `news-cli.js`：提供单条/批量来源管理、授权处理、额度恢复记录、锁状态和带理由的强制解锁；不接受 API Key 参数。
+- `news-cli.js`：提供单条/批量来源管理、B站人工内容 `content add/import/list`、授权处理、额度恢复记录、锁状态和带理由的强制解锁；不接受 API Key 参数。
 - `news-storage.js`：原子 JSON 写和 `.news-build.lock`；stale lock 不自动删除。
 
 ---
@@ -225,9 +233,9 @@ API Key 不属于任何 JSON 文件，只能由 GitHub Repository Secrets 注入
 
 ## 7. 测试与验证架构
 
-### 7.1 `news-tests.test.js`：内容语义层（17项）
+### 7.1 `news-tests.test.js`：内容语义层（23项）
 
-验证三平台输入能否被正确标准化，以及评分规则是否遵守产品约束：B站动态是一等内容、轻度用户体验必须有证据、商单无证据不扣分、低频不损害长期质量、小样本不误伤、MAD 只提示复核、转载/主题关系保留、X 轮转和 B站降级不误报。
+验证三平台输入能否被正确标准化，以及评分规则、B站人工条目和Provider熔断是否遵守产品约束：B站动态是一等内容、轻度用户体验必须有证据、商单无证据不扣分、低频不损害长期质量、小样本不误伤、MAD 只提示复核、转载/主题关系保留、X 轮转和B站人工/降级状态不误报。
 
 ### 7.2 `news-foundation.test.js`：持久基础设施层（20项）
 
@@ -247,11 +255,11 @@ API Key 不属于任何 JSON 文件，只能由 GitHub Repository Secrets 注入
 
 ### 8.1 `collect-news.yml`
 
-每日 UTC 02:00 或手动触发：校验配置 → 注入 Secrets → 构建热点 → 运行37项测试与校验 → 提交变更的热点/状态数据。工作流使用 concurrency 防止同类 Action 并发。
+每日 UTC 02:00 或手动触发：校验配置 → 注入 Secrets → 构建热点（YouTube/X自动采集 + B站人工暂存；B站默认不请求网络）→ 运行43项测试与校验 → 提交变更的热点/状态数据。工作流使用 concurrency 防止同类 Action 并发。
 
 ### 8.2 `deploy.yml`
 
-主分支 push 或手动触发：运行静态校验和37项测试 → 复制站点文件 → 上传 Pages artifact → 部署 GitHub Pages。
+主分支 push 或手动触发：运行静态校验和43项测试 → 复制站点文件 → 上传 Pages artifact → 部署 GitHub Pages。
 
 ### 8.3 常用命令
 
@@ -285,7 +293,7 @@ node scripts/news-cli.js source import --file sources.json --dry-run
 
 | 项目 | 状态 |
 |---|---|
-| 37项 Node 单元测试 | ✅ 本地通过 |
+| 43项 Node 单元测试 | ✅ 本地通过 |
 | Fixture 5条内容 / 5个主题 | ✅ 本地通过 |
 | JSON、引用和 HTML 契约 | ✅ 本地通过 |
 | JavaScript 语法和 diff whitespace | ✅ 本地通过 |

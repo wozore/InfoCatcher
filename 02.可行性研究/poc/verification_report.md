@@ -96,24 +96,24 @@
 
 ---
 
-## 六、Cloudflare 绕过方案专项评估
+## 六、Cloudflare 方案专项评估（历史 PoC，当前不采用）
 
-> 背景：W1 抓取测试中，OpenAI (openai.com) 和 Anthropic (claude.ai) 均返回 HTTP 403，确认受 Cloudflare/WAF 保护。以下为针对本项目预算（零成本/极低成本）和场景（低频采集，每天几次到几十次）的可行方案。
+> 本节最初针对 OpenAI/Claude 网站的Cloudflare 403编写，属于历史可行性材料。它没有验证 `rsshub.app` 或B站路由，也不构成 InfoCatcher 当前的自动采集批准。当前项目不使用 FlareSolverr、cloudscraper、Playwright + Stealth、代理、Cookie复用或验证码处理来绕过第三方访问保护。
 
 ### 6.1 方案汇总
 
 | 方案 | 类型 | 费用 | 可靠性 | 复杂度 | 本项目推荐 |
 |------|------|:---:|:---:|:---:|:---:|
-| **FlareSolverr** | 开源本地代理 (Docker) | 免费 | ⭐⭐⭐⭐ | 低 | ✅ **首选** |
-| **cloudscraper** | Python pip 包 | 免费 | ⭐⭐⭐ | 极低 | ⚠️ 备选 |
-| **Playwright + Stealth** | 无头浏览器 + 反检测 | 免费 | ⭐⭐⭐⭐⭐ | 中 | ⚠️ 后备 |
+| **FlareSolverr** | 历史候选；当前不采用 | 需Docker和浏览器，可能处理部分挑战，但不等于适用于RSSHub/B站 |
+| **cloudscraper** | 历史候选；当前不采用 | 对现代挑战不稳定，仍属于规避访问保护 |
+| **Playwright + Stealth** | 历史候选；当前不采用 | 资源成本高，且涉及自动化反检测 |
 | Bright Data Web Unlocker | 付费 API 代理 | $0.75/1K 请求 | ⭐⭐⭐⭐⭐ | 极低 | ❌ 超预算 |
 | ScraperAPI | 付费 API | $49/月起 | ⭐⭐⭐ | 极低 | ❌ 超预算 |
 | Capsolver | 付费 CAPTCHA 解算 | 按次计费 | ⭐⭐⭐⭐ | 低 | ❌ 超预算 |
 
 ### 6.2 详细分析
 
-#### 方案 A：FlareSolverr（首选）
+#### 方案 A：FlareSolverr（历史候选，不实施）
 
 **原理**：在本地运行一个代理服务器 (localhost:8191)，内置真实 Chromium 浏览器 + undetected-chromedriver。你发送 URL 给它 → 它用浏览器打开页面 → 等待 Cloudflare 挑战自动通过 → 返回 HTML 和 cf_clearance cookie。
 
@@ -151,7 +151,7 @@ cookies = resp.json()["solution"]["cookies"]
 
 **本项目适用性**：⭐⭐⭐⭐⭐ — 低频采集场景完美匹配。每天几十次请求时，Docker 资源消耗可忽略。如果触发 CAPTCHA（概率较低），可切换手动方式。
 
-#### 方案 B：cloudscraper（备选）
+#### 方案 B：cloudscraper（历史候选，不实施）
 
 **原理**：纯 Python 库，模拟浏览器 JS 引擎来通过 Cloudflare 的 JS 挑战。不需要 Docker，不需要真实浏览器。
 
@@ -180,7 +180,7 @@ print(resp.text)
 
 **本项目适用性**：⭐⭐⭐ — 适合作为轻量备选。当目标网站 Cloudflare 配置较为宽松时使用；遇到失败则降级到 FlareSolverr。
 
-#### 方案 C：Playwright + puppeteer-extra-stealth（后备）
+#### 方案 C：Playwright + puppeteer-extra-stealth（历史候选，不实施）
 
 **原理**：直接使用无头浏览器 + 反检测插件，最逼真地模拟人类用户。
 
@@ -219,7 +219,7 @@ with sync_playwright() as p:
 
 **本项目适用性**：⭐⭐⭐⭐ — 作为 FlareSolverr 失败时的最终后备方案。当目标网站使用特别激进的 Cloudflare 配置时启用。
 
-### 6.3 推荐组合策略
+### 6.3 历史组合策略（当前不实施）
 
 ```
 目标网站 → cloudscraper (轻量快速尝试)
@@ -235,13 +235,11 @@ with sync_playwright() as p:
                                                   └─ 仍失败 → 手动整理
 ```
 
-**日常使用推荐**：直接使用 FlareSolverr 作为默认方案（可靠性高，配置一次永久使用），跳过 cloudscraper 的不可靠尝试。仅在 FlareSolverr 遇到 CAPTCHA 时才启用 Playwright。
+**历史评估结论，不代表当前批准方案**：早期报告曾建议对受保护站点使用FlareSolverr；该建议仅针对当时的OpenAI/Claude抓取测试，未验证RSSHub/B站，也不适用于当前InfoCatcher边界。
 
-### 6.4 对验证结论的修正
+### 6.4 对验证结论的当前修正
 
-原验证报告（第 五 节第 2 条）写"海外工具更适合手动整理"，现修正为：
-
-> **海外工具可通过 FlareSolverr (免费开源) 实现自动化抓取**。OpenAI、Claude 等 Cloudflare 保护网站的 403 错误可被 FlareSolverr 绕过。推荐在 W3 数据采集脚本中集成 FlareSolverr 作为 Cloudflare 站点的默认采集方式。
+当前项目不把Cloudflare绕过方案接入B站或RSSHub；B站默认改为人工精选，显式诊断只做一次Provider探测并快速熔断。
 
 ---
 
