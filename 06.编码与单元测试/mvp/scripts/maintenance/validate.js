@@ -76,8 +76,13 @@ const TOOL_REQUIRED = [
   'rating_overall', 'rating_chinese', 'rating_ease', 'rating_price',
   'access_level', 'access_barrier',
   'strengths', 'weaknesses', 'best_for', 'not_for',
-  'last_updated', 'source'
+  'last_updated', 'source', 'card_kind', 'entity_kind'
 ];
+
+function isHttpUrl(value) {
+  try { return ['http:', 'https:'].includes(new URL(value).protocol); }
+  catch { return false; }
+}
 
 function validateTools(data) {
   const ids = new Map();
@@ -114,9 +119,14 @@ function validateTools(data) {
     if (t.paid_tiers !== undefined && !Array.isArray(t.paid_tiers))
       fail(`${tag}.paid_tiers 应为数组`);
 
-    // access_level 取值
+    // 访问与卡片类型
     if (t.access_level && !['开放', '受限'].includes(t.access_level))
       fail(`${tag}.access_level = "${t.access_level}"，应为"开放"或"受限"`);
+    if (t.card_kind && !['collection', 'concrete'].includes(t.card_kind))
+      fail(`${tag}.card_kind = "${t.card_kind}"，应为 collection 或 concrete`);
+    if (t.entity_kind && !['product', 'model', 'service', 'open_source_project', 'other'].includes(t.entity_kind))
+      fail(`${tag}.entity_kind = "${t.entity_kind}" 无效`);
+    if (t.url && !isHttpUrl(t.url)) fail(`${tag}.url 仅允许 HTTP/HTTPS`);
 
     // 日期格式 YYYY-MM-DD
     if (t.last_updated && !/^\d{4}-\d{2}-\d{2}$/.test(t.last_updated))
@@ -124,6 +134,85 @@ function validateTools(data) {
   }
 
   console.log(`  tools.json: ${data.length} 个工具，全部通过`);
+}
+
+function validateToolIntelligence(data, tools) {
+  if (!data || data.schema_version !== 1 || !Array.isArray(data.collections)) {
+    return fail('tool-intelligence.json 应包含 schema_version=1 和 collections 数组');
+  }
+  if (Number.isNaN(new Date(data.catalog_queried_at).getTime())) fail('tool-intelligence.json.catalog_queried_at 不是有效日期');
+
+  const toolIds = new Set(tools.map(tool => tool.id));
+  const collectionToolIds = new Set(tools.filter(tool => tool.card_kind === 'collection').map(tool => tool.id));
+  const seenCollections = new Set();
+
+  for (const [collectionIndex, collection] of data.collections.entries()) {
+    const tag = `tool-intelligence.json.collections[${collectionIndex}] (${collection.tool_id || '未知'})`;
+    checkRequired(collection, tag, ['tool_id', 'status', 'items', 'sources']);
+    if (!toolIds.has(collection.tool_id)) fail(`${tag}.tool_id 引用了不存在的工具`);
+    if (seenCollections.has(collection.tool_id)) fail(`${tag}.tool_id 重复`);
+    seenCollections.add(collection.tool_id);
+    if (!['verified', 'partial', 'conflict', 'unavailable'].includes(collection.status)) fail(`${tag}.status 无效`);
+    if (!Array.isArray(collection.items) || collection.items.length === 0) fail(`${tag}.items 应为非空数组`);
+    if (!Array.isArray(collection.sources) || collection.sources.length === 0) fail(`${tag}.sources 应为非空数组`);
+
+    const sourceIds = new Set();
+    for (const [sourceIndex, source] of (collection.sources || []).entries()) {
+      const sourceTag = `${tag}.sources[${sourceIndex}]`;
+      checkRequired(source, sourceTag, ['id', 'url', 'title', 'publisher', 'source_type', 'queried_at']);
+      if (sourceIds.has(source.id)) fail(`${sourceTag}.id 重复`);
+      sourceIds.add(source.id);
+      if (!isHttpUrl(source.url)) fail(`${sourceTag}.url 仅允许 HTTP/HTTPS`);
+      if (!['official', 'secondary'].includes(source.source_type)) fail(`${sourceTag}.source_type 无效`);
+      if (Number.isNaN(new Date(source.queried_at).getTime())) fail(`${sourceTag}.queried_at 不是有效日期`);
+    }
+
+    const itemIds = new Set();
+    for (const [itemIndex, item] of (collection.items || []).entries()) {
+      const itemTag = `${tag}.items[${itemIndex}] (${item.name || '未知'})`;
+      checkRequired(item, itemTag, ['id', 'kind', 'name', 'status', 'official_url', 'source_refs']);
+      if (itemIds.has(item.id)) fail(`${itemTag}.id 重复`);
+      itemIds.add(item.id);
+      if (!['api_model', 'product_variant', 'subscription_plan'].includes(item.kind)) fail(`${itemTag}.kind 无效`);
+      if (!['active', 'legacy_supported', 'deprecated', 'retired', 'unknown'].includes(item.status)) fail(`${itemTag}.status 无效`);
+      if (!isHttpUrl(item.official_url)) fail(`${itemTag}.official_url 仅允许 HTTP/HTTPS`);
+      for (const ref of item.source_refs || []) if (!sourceIds.has(ref)) fail(`${itemTag}.source_refs 引用了不存在的来源: ${ref}`);
+
+      if (item.kind === 'api_model') {
+        const context = item.one_m_context;
+        if (!context || !['native', 'conditional', 'not_supported', 'unknown'].includes(context.status)) fail(`${itemTag}.one_m_context.status 无效`);
+        if (context?.status !== 'unknown' && (!Number.isInteger(context.tokens) || context.tokens <= 0)) fail(`${itemTag}.one_m_context.tokens 应为正整数`);
+        const pricing = item.api_pricing;
+        if (!pricing || !['provided', 'not_provided', 'not_applicable', 'conflict'].includes(pricing.status)) fail(`${itemTag}.api_pricing.status 无效`);
+        for (const [rateIndex, rate] of (pricing?.rate_cards || []).entries()) {
+          const rateTag = `${itemTag}.api_pricing.rate_cards[${rateIndex}]`;
+          checkRequired(rate, rateTag, ['label', 'currency', 'unit', 'input_cached', 'input_uncached', 'output', 'conditions', 'source_refs']);
+          if (rate.unit !== 'per_1m_tokens') fail(`${rateTag}.unit 应为 per_1m_tokens`);
+          for (const field of ['input_cached', 'input_uncached', 'output']) {
+            if (rate[field] !== null && (typeof rate[field] !== 'number' || rate[field] < 0)) fail(`${rateTag}.${field} 应为非负数字或 null`);
+          }
+          for (const ref of rate.source_refs || []) if (!sourceIds.has(ref)) fail(`${rateTag}.source_refs 引用了不存在的来源: ${ref}`);
+        }
+        if (!item.cache_hit_rate || !['provided', 'not_provided', 'not_applicable', 'conflict'].includes(item.cache_hit_rate.status)) fail(`${itemTag}.cache_hit_rate.status 无效`);
+        if (item.cache_hit_rate?.status === 'provided' && !(Number.isFinite(item.cache_hit_rate.min_percent) && Number.isFinite(item.cache_hit_rate.max_percent))) fail(`${itemTag}.cache_hit_rate 缺少可靠区间`);
+      }
+
+      if (item.kind === 'subscription_plan') {
+        const plan = item.plan;
+        if (!plan) fail(`${itemTag}.plan 缺失`);
+        else {
+          if (plan.amount !== null && (typeof plan.amount !== 'number' || plan.amount < 0)) fail(`${itemTag}.plan.amount 应为非负数字或 null`);
+          if (!plan.currency) fail(`${itemTag}.plan.currency 缺失`);
+          if (!['month', 'year', 'usage', 'custom', 'unknown'].includes(plan.billing_period)) fail(`${itemTag}.plan.billing_period 无效`);
+          if (!Array.isArray(plan.included_models)) fail(`${itemTag}.plan.included_models 应为数组`);
+          if (!['verified', 'partial', 'not_listed'].includes(plan.included_models_status)) fail(`${itemTag}.plan.included_models_status 无效`);
+        }
+      }
+    }
+  }
+
+  for (const toolId of collectionToolIds) if (!seenCollections.has(toolId)) fail(`集合工具 ${toolId} 缺少 tool-intelligence 数据`);
+  console.log(`  tool-intelligence.json: ${data.collections.length} 个集合，通过`);
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -333,6 +422,8 @@ function validateScenes(data) {
 
   const toolData = JSON.parse(fs.readFileSync(CATALOG_FILES.tools, 'utf8'));
   const toolIds = new Set(toolData.map(tool => tool.id));
+  const intelligence = JSON.parse(fs.readFileSync(CATALOG_FILES.toolIntelligence, 'utf8'));
+  const collectionMap = new Map((intelligence.collections || []).map(collection => [collection.tool_id, collection]));
   const sceneIds = new Set();
   const categories = new Set(['writing', 'coding', 'design', 'video', 'audio', 'research', 'office', 'learning']);
 
@@ -359,6 +450,18 @@ function validateScenes(data) {
       if (new Set(task.tools).size !== task.tools.length) fail(`${taskTag} tools 存在重复 ID`);
       for (const toolId of task.tools) {
         if (!toolIds.has(toolId)) fail(`${taskTag} 引用了不存在的工具: ${toolId}`);
+      }
+      if (task.recommendations !== undefined && !Array.isArray(task.recommendations)) {
+        fail(`${taskTag} recommendations 应为数组`);
+      }
+      for (const [recommendationIndex, recommendation] of (task.recommendations || []).entries()) {
+        const recommendationTag = `${taskTag}.recommendations[${recommendationIndex}]`;
+        checkRequired(recommendation, recommendationTag, ['tool_id', 'item_id', 'reason']);
+        if (!task.tools.includes(recommendation.tool_id)) fail(`${recommendationTag}.tool_id 必须同时存在于 tools`);
+        const collection = collectionMap.get(recommendation.tool_id);
+        if (!collection) fail(`${recommendationTag}.tool_id 没有集合情报: ${recommendation.tool_id}`);
+        else if (!(collection.items || []).some(item => item.id === recommendation.item_id)) fail(`${recommendationTag}.item_id 不存在: ${recommendation.item_id}`);
+        if (typeof recommendation.reason !== 'string' || !recommendation.reason.trim()) fail(`${recommendationTag}.reason 不能为空`);
       }
     }
   });
@@ -396,14 +499,26 @@ function validateHtml(html) {
 // ═══════════════════════════════════════════════════════════════
 console.log('\n📋 InfoCatcher MVP 数据校验\n');
 
+let validatedTools = [];
+
 // tools.json
 try {
   const tools = JSON.parse(fs.readFileSync(CATALOG_FILES.tools, 'utf8'));
   if (!Array.isArray(tools)) fail('tools.json 应为数组');
   else if (tools.length < 20) fail(`tools.json 仅有 ${tools.length} 个工具，预期至少 20 个`);
-  else validateTools(tools);
+  else {
+    validatedTools = tools;
+    validateTools(tools);
+  }
 } catch (e) {
   fail(`tools.json 解析失败：${e.message}`);
+}
+
+// tool-intelligence.json
+try {
+  validateToolIntelligence(JSON.parse(fs.readFileSync(CATALOG_FILES.toolIntelligence, 'utf8')), validatedTools);
+} catch (e) {
+  fail(`tool-intelligence.json 解析失败：${e.message}`);
 }
 
 // glossary.json

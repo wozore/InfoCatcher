@@ -1,0 +1,306 @@
+{
+  "schema_version": 1,
+  "catalog_queried_at": "2026-07-26T10:35:25Z",
+  "collections": [
+    {
+      "tool_id": "chatgpt",
+      "status": "verified",
+      "items": [
+        {
+          "id": "gpt-5.6-sol",
+          "kind": "api_model",
+          "name": "GPT-5.6 Sol",
+          "status": "active",
+          "summary": "面向复杂专业工作的旗舰模型。",
+          "official_url": "https://developers.openai.com/api/docs/models/compare",
+          "one_m_context": {
+            "status": "native",
+            "tokens": 1050000,
+            "conditions": "API 默认上下文窗口为 1,050,000 tokens。",
+            "source_refs": ["openai-model-compare"]
+          },
+          "api_pricing": {
+            "status": "provided",
+            "rate_cards": [
+              {
+                "label": "Standard · 短上下文",
+                "currency": "USD",
+                "unit": "per_1m_tokens",
+                "input_cached": 0.5,
+                "input_uncached": 5,
+                "output": 30,
+                "conditions": "Standard 服务层级，短上下文请求。",
+                "source_refs": ["openai-api-pricing"]
+              },
+              {
+                "label": "Standard · 长上下文",
+                "currency": "USD",
+                "unit": "per_1m_tokens",
+                "input_cached": 1,
+                "input_uncached": 10,
+                "output": 45,
+                "conditions": "Standard 服务层级，长上下文请求；以官方长上下文计费条件为准。",
+                "source_refs": ["openai-api-pricing"]
+              }
+            ],
+            "additional_charges": [
+              {"label": "短上下文缓存写入", "value": 6.25, "currency": "USD", "unit": "per_1m_tokens", "source_refs": ["openai-api-pricing"]},
+              {"label": "长上下文缓存写入", "value": 12.5, "currency": "USD", "unit": "per_1m_tokens", "source_refs": ["openai-api-pricing"]}
+            ]
+          },
+          "cache_hit_rate": {"status": "not_provided", "note": "官方提供缓存计价，但未提供可靠的平均缓存命中率区间。"},
+          "applicable_scenarios": [
+            {"title": "复杂专业工作", "description": "官方将其定位为处理复杂专业工作的旗舰模型。"}
+          ],
+          "inapplicable_scenarios": [
+            {"title": "成本敏感型高频调用", "description": "同系列存在官方定位为平衡成本或成本敏感工作负载的更低价变体。"}
+          ],
+          "source_refs": ["openai-model-compare", "openai-api-pricing"]
+        },
+        {
+          "id": "gpt-5.6-terra",
+          "kind": "api_model",
+          "name": "GPT-5.6 Terra",
+          "status": "active",
+          "summary": "在智能水平与成本之间取得平衡的 GPT-5.6 变体。",
+          "official_url": "https://developers.openai.com/api/docs/models/compare",
+          "one_m_context": {"status": "native", "tokens": 1050000, "conditions": "API 默认上下文窗口为 1,050,000 tokens。", "source_refs": ["openai-model-compare"]},
+          "api_pricing": {
+            "status": "provided",
+            "rate_cards": [
+              {"label": "Standard · 短上下文", "currency": "USD", "unit": "per_1m_tokens", "input_cached": 0.25, "input_uncached": 2.5, "output": 15, "conditions": "Standard 服务层级，短上下文请求。", "source_refs": ["openai-api-pricing"]},
+              {"label": "Standard · 长上下文", "currency": "USD", "unit": "per_1m_tokens", "input_cached": 0.5, "input_uncached": 5, "output": 22.5, "conditions": "Standard 服务层级，长上下文请求；以官方长上下文计费条件为准。", "source_refs": ["openai-api-pricing"]}
+            ]
+          },
+          "cache_hit_rate": {"status": "not_provided", "note": "官方未提供可靠的平均缓存命中率区间。"},
+          "applicable_scenarios": [{"title": "通用专业任务", "description": "官方定位强调智能水平与调用成本的平衡。"}],
+          "inapplicable_scenarios": [{"title": "只追求最高能力或最低成本", "description": "同系列另有旗舰 Sol 与成本优化 Luna 变体。"}],
+          "source_refs": ["openai-model-compare", "openai-api-pricing"]
+        },
+        {
+          "id": "gpt-5.6-luna",
+          "kind": "api_model",
+          "name": "GPT-5.6 Luna",
+          "status": "active",
+          "summary": "针对成本敏感工作负载优化的 GPT-5.6 变体。",
+          "official_url": "https://developers.openai.com/api/docs/models/compare",
+          "one_m_context": {"status": "native", "tokens": 1050000, "conditions": "API 默认上下文窗口为 1,050,000 tokens。", "source_refs": ["openai-model-compare"]},
+          "api_pricing": {
+            "status": "provided",
+            "rate_cards": [
+              {"label": "Standard · 短上下文", "currency": "USD", "unit": "per_1m_tokens", "input_cached": 0.1, "input_uncached": 1, "output": 6, "conditions": "Standard 服务层级，短上下文请求。", "source_refs": ["openai-api-pricing"]},
+              {"label": "Standard · 长上下文", "currency": "USD", "unit": "per_1m_tokens", "input_cached": 0.2, "input_uncached": 2, "output": 9, "conditions": "Standard 服务层级，长上下文请求；以官方长上下文计费条件为准。", "source_refs": ["openai-api-pricing"]}
+            ]
+          },
+          "cache_hit_rate": {"status": "not_provided", "note": "官方未提供可靠的平均缓存命中率区间。"},
+          "applicable_scenarios": [{"title": "成本敏感型 API 工作负载", "description": "官方明确将其定位为成本优化变体。"}],
+          "inapplicable_scenarios": [{"title": "要求同系列最高能力", "description": "复杂高要求工作应比较同系列 Sol 或 Terra。"}],
+          "source_refs": ["openai-model-compare", "openai-api-pricing"]
+        },
+        {
+          "id": "chatgpt-go",
+          "kind": "subscription_plan",
+          "name": "ChatGPT Go",
+          "status": "active",
+          "summary": "面向需要更多消息、上传和图像生成额度的个人订阅。",
+          "official_url": "https://openai.com/index/introducing-chatgpt-go",
+          "plan": {"amount": 8, "currency": "USD", "billing_period": "month", "conditions": "美国显示价格；部分市场采用本地化定价。", "included_models": [], "included_models_status": "not_listed", "source_refs": ["openai-chatgpt-go"]},
+          "source_refs": ["openai-chatgpt-go", "openai-chatgpt-pricing"]
+        },
+        {
+          "id": "chatgpt-plus",
+          "kind": "subscription_plan",
+          "name": "ChatGPT Plus",
+          "status": "active",
+          "summary": "面向高级工作与生产力任务的个人订阅。",
+          "official_url": "https://chatgpt.com/pricing",
+          "plan": {"amount": 20, "currency": "USD", "billing_period": "month", "conditions": "美国显示价格；权益和模型随官方计划页调整。", "included_models": ["GPT-5.6 系列"], "included_models_status": "partial", "source_refs": ["openai-chatgpt-go", "openai-chatgpt-pricing"]},
+          "source_refs": ["openai-chatgpt-go", "openai-chatgpt-pricing"]
+        },
+        {
+          "id": "chatgpt-pro",
+          "kind": "subscription_plan",
+          "name": "ChatGPT Pro",
+          "status": "active",
+          "summary": "面向研究、编程和高使用量需求的个人订阅。",
+          "official_url": "https://chatgpt.com/pricing",
+          "plan": {"amount": 200, "currency": "USD", "billing_period": "month", "conditions": "美国显示价格；合理使用限制和具体模型权益以官方计划页为准。", "included_models": ["GPT-5.6 Sol Pro"], "included_models_status": "partial", "source_refs": ["openai-chatgpt-go", "openai-chatgpt-pricing"]},
+          "source_refs": ["openai-chatgpt-go", "openai-chatgpt-pricing"]
+        }
+      ],
+      "sources": [
+        {"id": "openai-model-compare", "url": "https://developers.openai.com/api/docs/models/compare", "title": "Compare models", "publisher": "OpenAI", "source_type": "official", "queried_at": "2026-07-26T10:35:25Z"},
+        {"id": "openai-api-pricing", "url": "https://developers.openai.com/api/docs/pricing", "title": "OpenAI API pricing", "publisher": "OpenAI", "source_type": "official", "queried_at": "2026-07-26T10:35:25Z"},
+        {"id": "openai-chatgpt-pricing", "url": "https://chatgpt.com/pricing", "title": "ChatGPT pricing", "publisher": "OpenAI", "source_type": "official", "queried_at": "2026-07-26T10:35:25Z"},
+        {"id": "openai-chatgpt-go", "url": "https://openai.com/index/introducing-chatgpt-go", "title": "Introducing ChatGPT Go", "publisher": "OpenAI", "source_type": "official", "queried_at": "2026-07-26T10:35:25Z"}
+      ]
+    },
+    {
+      "tool_id": "claude",
+      "status": "verified",
+      "items": [
+        {
+          "id": "claude-fable-5",
+          "kind": "api_model",
+          "name": "Claude Fable 5",
+          "status": "active",
+          "summary": "面向长时间、复杂和异步工作的高能力模型。",
+          "official_url": "https://www.anthropic.com/claude/fable",
+          "one_m_context": {"status": "native", "tokens": 1000000, "conditions": "API 默认支持 1M 上下文。", "source_refs": ["anthropic-context"]},
+          "api_pricing": {"status": "provided", "rate_cards": [{"label": "Claude API · Standard", "currency": "USD", "unit": "per_1m_tokens", "input_cached": 1, "input_uncached": 10, "output": 50, "conditions": "缓存命中价对应 5 分钟缓存命中与刷新。", "source_refs": ["anthropic-api-pricing"]}]},
+          "cache_hit_rate": {"status": "not_provided", "note": "官方提供缓存价格乘数，但未提供平均缓存命中率区间。"},
+          "applicable_scenarios": [{"title": "长时间复杂任务", "description": "官方将其定位为可持续处理长时间、复杂和异步工作。"}],
+          "inapplicable_scenarios": [{"title": "预算敏感型常规调用", "description": "同系列有价格更低的 Sonnet 与 Haiku。"}],
+          "source_refs": ["anthropic-fable", "anthropic-api-pricing", "anthropic-context"]
+        },
+        {
+          "id": "claude-opus-4.8",
+          "kind": "api_model",
+          "name": "Claude Opus 4.8",
+          "status": "active",
+          "summary": "面向严肃编码、知识工作和智能体流程的高能力模型。",
+          "official_url": "https://www.anthropic.com/claude/opus",
+          "one_m_context": {"status": "native", "tokens": 1000000, "conditions": "API 默认支持 1M 上下文。", "source_refs": ["anthropic-context"]},
+          "api_pricing": {"status": "provided", "rate_cards": [{"label": "Claude API · Standard", "currency": "USD", "unit": "per_1m_tokens", "input_cached": 0.5, "input_uncached": 5, "output": 25, "conditions": "缓存命中价对应 5 分钟缓存命中与刷新。", "source_refs": ["anthropic-api-pricing"]}]},
+          "cache_hit_rate": {"status": "not_provided", "note": "官方未提供平均缓存命中率区间。"},
+          "applicable_scenarios": [{"title": "高要求编码与知识工作", "description": "官方用例包括软件工程、智能体工作流和高风险企业任务。"}],
+          "inapplicable_scenarios": [{"title": "低成本批量简单任务", "description": "较低价模型通常更适合简单高频调用。"}],
+          "source_refs": ["anthropic-opus", "anthropic-api-pricing", "anthropic-context"]
+        },
+        {
+          "id": "claude-sonnet-5",
+          "kind": "api_model",
+          "name": "Claude Sonnet 5",
+          "status": "active",
+          "summary": "兼顾速度、能力和成本的当前 Sonnet 模型。",
+          "official_url": "https://www.anthropic.com/claude/sonnet",
+          "one_m_context": {"status": "native", "tokens": 1000000, "conditions": "API 默认支持 1M 上下文。", "source_refs": ["anthropic-context"]},
+          "api_pricing": {"status": "provided", "rate_cards": [
+            {"label": "引导价（截至 2026-08-31）", "currency": "USD", "unit": "per_1m_tokens", "input_cached": 0.2, "input_uncached": 2, "output": 10, "conditions": "2026-08-31 前有效；缓存命中价对应 5 分钟缓存。", "source_refs": ["anthropic-api-pricing"]},
+            {"label": "标准价（自 2026-09-01）", "currency": "USD", "unit": "per_1m_tokens", "input_cached": 0.3, "input_uncached": 3, "output": 15, "conditions": "自 2026-09-01 起生效；缓存命中价对应 5 分钟缓存。", "source_refs": ["anthropic-api-pricing"]}
+          ]},
+          "cache_hit_rate": {"status": "not_provided", "note": "官方未提供平均缓存命中率区间。"},
+          "applicable_scenarios": [{"title": "通用写作、研究与编码", "description": "当前 Sonnet 在速度、能力和成本之间取得平衡。"}],
+          "inapplicable_scenarios": [{"title": "只追求最高能力", "description": "应同时比较 Fable 或 Opus。"}],
+          "source_refs": ["anthropic-sonnet", "anthropic-api-pricing", "anthropic-context"]
+        },
+        {
+          "id": "claude-haiku-4.5",
+          "kind": "api_model",
+          "name": "Claude Haiku 4.5",
+          "status": "active",
+          "summary": "面向低延迟和成本敏感调用的快速模型。",
+          "official_url": "https://docs.anthropic.com/en/docs/about-claude/models/overview",
+          "one_m_context": {"status": "not_supported", "tokens": 200000, "conditions": "官方模型概览列出的上下文窗口为 200k。", "source_refs": ["anthropic-models", "anthropic-context"]},
+          "api_pricing": {"status": "provided", "rate_cards": [{"label": "Claude API · Standard", "currency": "USD", "unit": "per_1m_tokens", "input_cached": 0.1, "input_uncached": 1, "output": 5, "conditions": "缓存命中价对应 5 分钟缓存命中与刷新。", "source_refs": ["anthropic-api-pricing"]}]},
+          "cache_hit_rate": {"status": "not_provided", "note": "官方未提供平均缓存命中率区间。"},
+          "applicable_scenarios": [{"title": "低延迟与成本敏感任务", "description": "官方比较表将其列为速度最快的当前 Claude 模型。"}],
+          "inapplicable_scenarios": [{"title": "必须使用 1M 上下文", "description": "当前官方上下文窗口为 200k。"}],
+          "source_refs": ["anthropic-models", "anthropic-api-pricing", "anthropic-context"]
+        },
+        {"id": "claude-pro", "kind": "subscription_plan", "name": "Claude Pro", "status": "active", "summary": "面向日常生产力的个人订阅。", "official_url": "https://support.anthropic.com/en/articles/11049762-choosing-a-claude-ai-plan", "plan": {"amount": 20, "currency": "USD", "billing_period": "month", "conditions": "美国月付价格；另有 $200/年年付。API 使用量另行计费。", "included_models": [], "included_models_status": "not_listed", "source_refs": ["anthropic-plans"]}, "source_refs": ["anthropic-plans"]},
+        {"id": "claude-max-5x", "kind": "subscription_plan", "name": "Claude Max 5x", "status": "active", "summary": "每个会话约为 Pro 5 倍容量的个人订阅。", "official_url": "https://support.anthropic.com/en/articles/11049762-choosing-a-claude-ai-plan", "plan": {"amount": 100, "currency": "USD", "billing_period": "month", "conditions": "月付；使用限制仍适用。", "included_models": [], "included_models_status": "not_listed", "source_refs": ["anthropic-plans"]}, "source_refs": ["anthropic-plans"]},
+        {"id": "claude-max-20x", "kind": "subscription_plan", "name": "Claude Max 20x", "status": "active", "summary": "每个会话约为 Pro 20 倍容量的个人订阅。", "official_url": "https://support.anthropic.com/en/articles/11049762-choosing-a-claude-ai-plan", "plan": {"amount": 200, "currency": "USD", "billing_period": "month", "conditions": "月付；使用限制仍适用。", "included_models": [], "included_models_status": "not_listed", "source_refs": ["anthropic-plans"]}, "source_refs": ["anthropic-plans"]}
+      ],
+      "sources": [
+        {"id": "anthropic-models", "url": "https://docs.anthropic.com/en/docs/about-claude/models/overview", "title": "Models overview", "publisher": "Anthropic", "source_type": "official", "queried_at": "2026-07-26T10:35:25Z"},
+        {"id": "anthropic-api-pricing", "url": "https://docs.anthropic.com/en/docs/about-claude/pricing", "title": "Claude Platform pricing", "publisher": "Anthropic", "source_type": "official", "queried_at": "2026-07-26T10:35:25Z"},
+        {"id": "anthropic-context", "url": "https://docs.anthropic.com/en/docs/build-with-claude/context-windows", "title": "Context windows", "publisher": "Anthropic", "source_type": "official", "queried_at": "2026-07-26T10:35:25Z"},
+        {"id": "anthropic-fable", "url": "https://www.anthropic.com/claude/fable", "title": "Claude Fable 5", "publisher": "Anthropic", "source_type": "official", "queried_at": "2026-07-26T10:35:25Z"},
+        {"id": "anthropic-opus", "url": "https://www.anthropic.com/claude/opus", "title": "Claude Opus 4.8", "publisher": "Anthropic", "source_type": "official", "queried_at": "2026-07-26T10:35:25Z"},
+        {"id": "anthropic-sonnet", "url": "https://www.anthropic.com/claude/sonnet", "title": "Claude Sonnet 5", "publisher": "Anthropic", "source_type": "official", "queried_at": "2026-07-26T10:35:25Z"},
+        {"id": "anthropic-plans", "url": "https://support.anthropic.com/en/articles/11049762-choosing-a-claude-ai-plan", "title": "Choose a Claude plan", "publisher": "Anthropic", "source_type": "official", "queried_at": "2026-07-26T10:35:25Z"}
+      ]
+    },
+    {
+      "tool_id": "gemini",
+      "status": "partial",
+      "items": [
+        {
+          "id": "gemini-3.5-flash",
+          "kind": "api_model",
+          "name": "Gemini 3.5 Flash",
+          "status": "active",
+          "summary": "结合较强智能、速度、搜索和 grounding 能力的 Flash 模型。",
+          "official_url": "https://ai.google.dev/gemini-api/docs/whats-new-gemini-3.5",
+          "one_m_context": {"status": "native", "tokens": 1000000, "conditions": "官方文档明确支持 1M 输入上下文。", "source_refs": ["google-gemini-35"]},
+          "api_pricing": {"status": "provided", "rate_cards": [{"label": "Gemini Developer API · Standard", "currency": "USD", "unit": "per_1m_tokens", "input_cached": 0.15, "input_uncached": 1.5, "output": 9, "conditions": "文本/图像/视频输入；context caching 另有每百万 tokens 每小时 $1 存储费。", "source_refs": ["google-api-pricing"]}], "additional_charges": [{"label": "缓存存储（每小时）", "value": 1, "currency": "USD", "unit": "per_1m_tokens_per_hour", "source_refs": ["google-api-pricing"]}]},
+          "cache_hit_rate": {"status": "not_provided", "note": "官方提供缓存读取与存储价格，但未提供平均命中率区间。"},
+          "applicable_scenarios": [{"title": "速度与搜索 grounding 并重", "description": "官方定位强调速度、智能以及搜索和 grounding。"}],
+          "inapplicable_scenarios": [{"title": "需要明确最高阶 Pro 能力", "description": "应另行比较 Gemini Pro 系列。"}],
+          "source_refs": ["google-gemini-35", "google-api-pricing"]
+        },
+        {
+          "id": "gemini-2.5-pro",
+          "kind": "api_model",
+          "name": "Gemini 2.5 Pro",
+          "status": "active",
+          "summary": "擅长编程和复杂推理的稳定多用途模型。",
+          "official_url": "https://ai.google.dev/gemini-api/docs/pricing",
+          "one_m_context": {"status": "native", "tokens": 1000000, "conditions": "官方模型文档列为 1M 上下文；价格按 200k prompt 阈值分层。", "source_refs": ["google-api-pricing"]},
+          "api_pricing": {"status": "provided", "rate_cards": [
+            {"label": "Standard · prompts ≤ 200k", "currency": "USD", "unit": "per_1m_tokens", "input_cached": 0.125, "input_uncached": 1.25, "output": 10, "conditions": "prompt 不超过 200k tokens；缓存另有存储费。", "source_refs": ["google-api-pricing"]},
+            {"label": "Standard · prompts > 200k", "currency": "USD", "unit": "per_1m_tokens", "input_cached": 0.25, "input_uncached": 2.5, "output": 15, "conditions": "prompt 超过 200k tokens；缓存另有存储费。", "source_refs": ["google-api-pricing"]}
+          ], "additional_charges": [{"label": "缓存存储（每小时）", "value": 4.5, "currency": "USD", "unit": "per_1m_tokens_per_hour", "source_refs": ["google-api-pricing"]}]},
+          "cache_hit_rate": {"status": "not_provided", "note": "官方未提供平均缓存命中率区间。"},
+          "applicable_scenarios": [{"title": "编程与复杂推理", "description": "官方定价页将其描述为擅长编程和复杂推理的多用途模型。"}],
+          "inapplicable_scenarios": [{"title": "极低成本简单调用", "description": "可比较 Flash 或 Flash-Lite 系列。"}],
+          "source_refs": ["google-api-pricing"]
+        },
+        {"id": "google-ai-pro", "kind": "subscription_plan", "name": "Google AI Pro", "status": "active", "summary": "提供更高 Gemini 使用量和 Google 应用集成的个人订阅。", "official_url": "https://gemini.google/about", "plan": {"amount": 19.99, "currency": "USD", "billing_period": "month", "conditions": "美国显示价格；地区可用性、税费与权益以官方页面为准。", "included_models": ["Gemini 3 Pro"], "included_models_status": "partial", "source_refs": ["google-consumer-plans"]}, "source_refs": ["google-consumer-plans"]},
+        {"id": "google-ai-ultra-5x", "kind": "subscription_plan", "name": "Google AI Ultra 5x", "status": "active", "summary": "相对 AI Pro 提供约 5 倍使用上限的高阶订阅。", "official_url": "https://gemini.google/about", "plan": {"amount": 99.99, "currency": "USD", "billing_period": "month", "conditions": "美国起始价格；地区、权益和使用限制以官方页面为准。", "included_models": [], "included_models_status": "not_listed", "source_refs": ["google-consumer-plans"]}, "source_refs": ["google-consumer-plans"]},
+        {"id": "google-ai-ultra-20x", "kind": "subscription_plan", "name": "Google AI Ultra 20x", "status": "active", "summary": "相对 AI Pro 提供约 20 倍使用上限的高阶订阅。", "official_url": "https://gemini.google/about", "plan": {"amount": 199.99, "currency": "USD", "billing_period": "month", "conditions": "美国显示价格；地区、权益和使用限制以官方页面为准。", "included_models": [], "included_models_status": "not_listed", "source_refs": ["google-consumer-plans"]}, "source_refs": ["google-consumer-plans"]}
+      ],
+      "sources": [
+        {"id": "google-gemini-35", "url": "https://ai.google.dev/gemini-api/docs/whats-new-gemini-3.5", "title": "What's new in Gemini 3.5 Flash", "publisher": "Google", "source_type": "official", "queried_at": "2026-07-26T10:35:25Z"},
+        {"id": "google-api-pricing", "url": "https://ai.google.dev/gemini-api/docs/pricing", "title": "Gemini Developer API pricing", "publisher": "Google", "source_type": "official", "queried_at": "2026-07-26T10:35:25Z"},
+        {"id": "google-consumer-plans", "url": "https://gemini.google/about", "title": "Gemini plans", "publisher": "Google", "source_type": "official", "queried_at": "2026-07-26T10:35:25Z"}
+      ]
+    },
+    {
+      "tool_id": "deepseek",
+      "status": "verified",
+      "items": [
+        {
+          "id": "deepseek-v4-flash",
+          "kind": "api_model",
+          "name": "DeepSeek-V4-Flash",
+          "status": "active",
+          "summary": "支持思考与非思考模式的低成本 API 模型。",
+          "official_url": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing",
+          "one_m_context": {"status": "native", "tokens": 1000000, "conditions": "官方模型价格页列出的上下文长度为 1M。", "source_refs": ["deepseek-pricing-cn"]},
+          "api_pricing": {"status": "provided", "rate_cards": [
+            {"label": "中国区人民币价格", "currency": "CNY", "unit": "per_1m_tokens", "input_cached": 0.02, "input_uncached": 1, "output": 2, "conditions": "以中文官方价格页及实际账户结算为准。", "source_refs": ["deepseek-pricing-cn"]},
+            {"label": "美元价格", "currency": "USD", "unit": "per_1m_tokens", "input_cached": 0.0028, "input_uncached": 0.14, "output": 0.28, "conditions": "以英文官方价格页及实际账户结算为准。", "source_refs": ["deepseek-pricing-en"]}
+          ]},
+          "cache_hit_rate": {"status": "not_provided", "note": "官方说明缓存为 best-effort，未提供可普遍适用的平均命中率区间。"},
+          "applicable_scenarios": [{"title": "成本敏感的高频 API 调用", "description": "官方价格显著区分缓存命中与未命中，且该变体并发限制更高。"}],
+          "inapplicable_scenarios": [{"title": "要求更高规格变体", "description": "需要更高阶配置时应比较 V4 Pro。"}],
+          "source_refs": ["deepseek-pricing-cn", "deepseek-pricing-en", "deepseek-cache"]
+        },
+        {
+          "id": "deepseek-v4-pro",
+          "kind": "api_model",
+          "name": "DeepSeek-V4-Pro",
+          "status": "active",
+          "summary": "DeepSeek V4 的 Pro API 变体。",
+          "official_url": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing",
+          "one_m_context": {"status": "native", "tokens": 1000000, "conditions": "官方模型价格页列出的上下文长度为 1M。", "source_refs": ["deepseek-pricing-cn"]},
+          "api_pricing": {"status": "provided", "rate_cards": [
+            {"label": "中国区人民币价格", "currency": "CNY", "unit": "per_1m_tokens", "input_cached": 0.025, "input_uncached": 3, "output": 6, "conditions": "以中文官方价格页及实际账户结算为准。", "source_refs": ["deepseek-pricing-cn"]},
+            {"label": "美元价格", "currency": "USD", "unit": "per_1m_tokens", "input_cached": 0.003625, "input_uncached": 0.435, "output": 0.87, "conditions": "以英文官方价格页及实际账户结算为准。", "source_refs": ["deepseek-pricing-en"]}
+          ]},
+          "cache_hit_rate": {"status": "not_provided", "note": "官方未提供可普遍适用的平均缓存命中率区间。"},
+          "applicable_scenarios": [{"title": "需要 V4 Pro 规格的推理和开发任务", "description": "作为 V4 Pro 变体，应结合实际质量、并发和预算评估。"}],
+          "inapplicable_scenarios": [{"title": "优先最低成本或更高并发", "description": "官方表中 V4 Flash 价格更低且并发限制更高。"}],
+          "source_refs": ["deepseek-pricing-cn", "deepseek-pricing-en", "deepseek-cache"]
+        }
+      ],
+      "sources": [
+        {"id": "deepseek-pricing-cn", "url": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing", "title": "模型与价格", "publisher": "DeepSeek", "source_type": "official", "queried_at": "2026-07-26T10:35:25Z"},
+        {"id": "deepseek-pricing-en", "url": "https://api-docs.deepseek.com/quick_start/pricing", "title": "Models & Pricing", "publisher": "DeepSeek", "source_type": "official", "queried_at": "2026-07-26T10:35:25Z"},
+        {"id": "deepseek-cache", "url": "https://api-docs.deepseek.com/guides/kv_cache", "title": "Context Caching", "publisher": "DeepSeek", "source_type": "official", "queried_at": "2026-07-26T10:35:25Z"}
+      ]
+    }
+  ]
+}

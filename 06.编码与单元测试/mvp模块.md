@@ -29,7 +29,7 @@ InfoCatcher MVP 仍是部署到 GitHub Pages 的**纯静态浏览器应用**。B
 
 | 视图 | 主要能力 | 数据来源 |
 |---|---|---|
-| 工具库 | 43 个 AI 工具、搜索、分类/访问/价格筛选、详情弹窗 | `data/catalog/tools.json` |
+| 工具库 | 43 个 AI 工具、搜索、分类/访问/价格筛选、详情弹窗；集合卡片展示已核实的具体模型、变体和套餐 | `data/catalog/tools.json` + `data/catalog/tool-intelligence.json` |
 | 场景导航 | 12 个可搜索场景、子任务展开与工具映射 | `data/catalog/scenes.json` + 工具数据 |
 | 对比模式 | 选择 2–5 个工具进行 10 维度比较 | 前端 `compareList` |
 | AI 热点 | YouTube、X、Bilibili 内容，按平台筛选、按评分/时间排序，展示覆盖与降级状态 | `data/news/output/hotspots.json` |
@@ -98,7 +98,8 @@ mvp/
 ├── js/app.js                          # 数据加载、筛选、比较和六视图渲染
 ├── data/
 │   ├── catalog/                       # 前端主数据
-│   │   ├── tools.json                 # 43 个工具
+│   │   ├── tools.json                 # 43 个工具及集合/具体卡片分类
+│   │   ├── tool-intelligence.json     # 模型、变体、套餐、价格与来源核验
 │   │   ├── glossary.json              # 43 条概念
 │   │   └── scenes.json                # 12 个场景及任务—工具映射
 │   └── news/
@@ -145,7 +146,7 @@ mvp/
 | 模块 | 关键函数 | 作用 |
 |---|---|---|
 | 全局状态 | `tools`, `glossary`, `scenes`, `hotspots`, `compareList` | 保存静态数据和交互状态 |
-| 数据加载 | `loadData()` | 按职责加载四个前端 JSON，失败时降级为空状态 |
+| 数据加载 | `loadData()` | 按职责加载五个前端 JSON；工具情报失败时保留旧工具卡片并降级说明 |
 | 视图切换 | `switchView()` | CSS class 切换并调用对应 render 函数 |
 | 工具发现 | `getFilteredTools()`, `renderTools()` | 文本与三维筛选叠加 |
 | 详情与对比 | `openDetail()`, `toggleCompare()`, `renderCompare()` | 工具决策交互 |

@@ -57,6 +57,8 @@
 // 全局状态 —— 所有视图共享的数据和交互状态
 // ═══════════════════════════════════════════════════════════════
 let tools = [];               // tools.json 的完整内容
+let toolIntelligence = { collections: [] }; // 具体模型、变体、套餐与可追溯来源
+let toolIntelligenceById = new Map();        // tool_id → 集合情报
 let glossary = [];            // glossary.json 的完整内容
 let scenes = [];              // scenes.json 的场景、子任务和工具映射
 let hotspots = {              // hotspots.json 的前端投影
@@ -125,6 +127,15 @@ async function loadData() {
       '<div class="empty-state"><div class="empty-icon">⚠️</div><h3>数据加载失败</h3><p>请检查 data/catalog/tools.json 是否存在</p></div>';
   }
   try {
+    const iResp = await fetch('data/catalog/tool-intelligence.json');
+    toolIntelligence = await iResp.json();
+    const collections = Array.isArray(toolIntelligence.collections) ? toolIntelligence.collections : [];
+    toolIntelligenceById = new Map(collections.map(collection => [collection.tool_id, collection]));
+  } catch (e) {
+    toolIntelligence = { collections: [] };
+    toolIntelligenceById = new Map();
+  }
+  try {
     const gResp = await fetch('data/catalog/glossary.json');
     glossary = await gResp.json();
   } catch (e) {
@@ -187,6 +198,24 @@ function switchView(view) {
  * EXTENSION POINT: 新增筛选维度时在阶段 2 末尾按同样模式加 if (activeFilters.xxx !== 'all')
  * EXTENSION POINT: 方案一——>方案三变迁中时，设置特殊窗口显示的属性，在特殊窗口搜索时才会显示
  */
+function getToolIntelligence(toolId) {
+  return toolIntelligenceById.get(toolId) || null;
+}
+
+function getToolSearchText(tool) {
+  const collection = getToolIntelligence(tool.id);
+  const itemText = (collection?.items || []).flatMap(item => [
+    item.name,
+    item.summary,
+    ...(item.applicable_scenarios || []).flatMap(scene => [scene.title, scene.description]),
+    ...(item.inapplicable_scenarios || []).flatMap(scene => [scene.title, scene.description]),
+  ]).filter(Boolean);
+  return [
+    tool.name, tool.vendor, ...(tool.category || []), ...(tool.scenes || []),
+    tool.strengths, tool.weaknesses, tool.free_tier, tool.access_barrier, ...itemText,
+  ].join(' ').toLowerCase();
+}
+
 function getFilteredTools() {
   const query = (document.getElementById('searchInput').value || '').toLowerCase().trim();
   let filtered = tools;
@@ -197,20 +226,8 @@ function getFilteredTools() {
     const hasAliasMatch = keywords.some(kw => kw in searchAliases);
 
     filtered = filtered.filter(t => {
-      // 对每个关键词，检查是否命中任何字段(搜索关键词)
-      return keywords.some(kw => {
-        const q = kw.toLowerCase();
-        return (
-          t.name.toLowerCase().includes(q) ||
-          t.vendor.toLowerCase().includes(q) ||
-          t.category.some(c => c.includes(q)) ||
-          t.scenes.some(s => s.includes(q)) ||
-          t.strengths.toLowerCase().includes(q) ||
-          t.weaknesses.toLowerCase().includes(q) ||
-          (t.free_tier && t.free_tier.toLowerCase().includes(q)) ||
-          (t.access_barrier && t.access_barrier.toLowerCase().includes(q))
-        );
-      });
+      const searchText = getToolSearchText(t);
+      return keywords.some(kw => searchText.includes(kw.toLowerCase()));
     });
 
     // 中文别名过滤 — 在关键词匹配结果上叠加(判断关键词是否为真)
@@ -266,6 +283,14 @@ function renderTools() {
 
   grid.innerHTML = filtered.map(t => {
     const isSelected = compareList.some(c => c.id === t.id);
+    const intelligence = getToolIntelligence(t.id);
+    const collectionItems = intelligence?.items || [];
+    const collectionSummary = t.card_kind === 'collection'
+      ? '<div class="collection-summary"><span class="collection-label">模型 / 套餐集合</span><span>' + collectionItems.length + ' 个已核实项</span></div>' +
+        '<div class="collection-quick-list">' + collectionItems.slice(0, 5).map(item =>
+          '<button type="button" onclick="event.stopPropagation();openDetail(\'' + escapeHtml(t.id) + '\',\'' + escapeHtml(item.id) + '\')">' + escapeHtml(item.name) + '</button>'
+        ).join('') + (collectionItems.length > 5 ? '<span>+' + (collectionItems.length - 5) + '</span>' : '') + '</div>'
+      : '';
     return `
     <div class="tool-card" onclick="openDetail('${t.id}')">
       <div class="tool-card-header">
@@ -280,7 +305,8 @@ function renderTools() {
         </div>
       </div>
 
-      <div class="tool-card-desc">${t.strengths}</div>
+      <div class="tool-card-desc">${escapeHtml(t.strengths)}</div>
+      ${collectionSummary}
       <div class="tool-card-tags">
         ${t.scenes.slice(0,3).map(s => '<span class="tag scene">' + s + '</span>').join('')}
         ${hasFree(t) ? '<span class="tag free">免费可用</span>' : '<span class="tag paid">仅付费</span>'}
@@ -300,7 +326,80 @@ function renderTools() {
  * 渲染完整的工具信息：评分、价格层级、优势/不足、最适/不适合场景、
  * 信息来源和更新日期。支持点击遮罩层关闭。
  */
-function openDetail(id) {
+function formatPrice(value, currency) {
+  if (value === null || value === undefined) return '未提供';
+  const symbol = currency === 'USD' ? '$' : currency === 'CNY' ? '¥' : currency + ' ';
+  return symbol + Number(value).toLocaleString('zh-CN', { maximumFractionDigits: 6 });
+}
+
+function renderScenarioExplanations(title, items) {
+  if (!Array.isArray(items) || items.length === 0) return '';
+  return '<div class="intelligence-scenarios"><h5>' + title + '</h5>' + items.map(item =>
+    '<div><b>' + escapeHtml(item.title) + '：</b>' + escapeHtml(item.description) + '</div>'
+  ).join('') + '</div>';
+}
+
+function renderIntelligenceItem(item, sourceMap, selectedItemId) {
+  const contextLabels = { native: '原生支持 1M', conditional: '特定条件支持 1M', not_supported: '不支持 1M', unknown: '1M 支持情况未知' };
+  const context = item.one_m_context;
+  const contextHtml = context
+    ? '<div class="intelligence-context"><b>1M 上下文：</b>' + escapeHtml(contextLabels[context.status] || '未知') +
+      (context.tokens ? '（' + Number(context.tokens).toLocaleString('zh-CN') + ' tokens）' : '') +
+      (context.conditions ? '<p>' + escapeHtml(context.conditions) + '</p>' : '') + '</div>'
+    : '';
+
+  const rateCards = item.api_pricing?.rate_cards || [];
+  const pricingHtml = rateCards.length
+    ? '<div class="intelligence-pricing"><h5>API 价格</h5>' + rateCards.map(rate =>
+      '<div class="rate-card"><b>' + escapeHtml(rate.label) + '</b>' +
+      '<div class="rate-grid"><span>输入（缓存命中）<strong>' + formatPrice(rate.input_cached, rate.currency) + '</strong></span>' +
+      '<span>输入（缓存未命中）<strong>' + formatPrice(rate.input_uncached, rate.currency) + '</strong></span>' +
+      '<span>输出<strong>' + formatPrice(rate.output, rate.currency) + '</strong></span></div>' +
+      '<small>单位：每百万 tokens · ' + escapeHtml(rate.conditions) + '</small></div>'
+    ).join('') + '</div>'
+    : '';
+
+  const cacheHtml = item.kind === 'api_model'
+    ? '<div class="cache-status"><b>平均缓存命中率区间：</b>' +
+      (item.cache_hit_rate?.status === 'provided'
+        ? escapeHtml(item.cache_hit_rate.min_percent + '%–' + item.cache_hit_rate.max_percent + '%')
+        : '官方未提供可靠区间，不作估算') + '</div>'
+    : '';
+
+  const plan = item.plan;
+  const planHtml = plan
+    ? '<div class="plan-card"><h5>套餐信息</h5><p><b>' + formatPrice(plan.amount, plan.currency) +
+      ' / ' + escapeHtml({ month: '月', year: '年', usage: '按量', custom: '定制', unknown: '周期未知' }[plan.billing_period] || plan.billing_period) +
+      '</b></p><p>' + escapeHtml(plan.conditions || '') + '</p><p><b>主要模型：</b>' +
+      (plan.included_models.length ? plan.included_models.map(escapeHtml).join('、') : '官方未明确列出全部模型') + '</p></div>'
+    : '';
+
+  const sources = (item.source_refs || []).map(ref => sourceMap.get(ref)).filter(Boolean);
+  const sourcesHtml = '<div class="intelligence-sources"><b>资料来源：</b>' + sources.map(source =>
+    '<a href="' + escapeHtml(safeExternalUrl(source.url)) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(source.title) + '</a>'
+  ).join(' · ') + (sources[0] ? '<span>查询于 ' + escapeHtml(sources[0].queried_at.slice(0, 10)) + '</span>' : '') + '</div>';
+
+  return '<details class="intelligence-item"' + (item.id === selectedItemId ? ' open' : '') + '>' +
+    '<summary><span><b>' + escapeHtml(item.name) + '</b><small>' + escapeHtml(item.kind === 'api_model' ? 'API 模型' : item.kind === 'subscription_plan' ? '订阅套餐' : '产品变体') + '</small></span><span>查看详情</span></summary>' +
+    '<div class="intelligence-item-body"><p>' + escapeHtml(item.summary || '') + '</p>' + contextHtml + pricingHtml + cacheHtml + planHtml +
+    renderScenarioExplanations('适用场景及说明', item.applicable_scenarios) +
+    renderScenarioExplanations('不适用场景及说明', item.inapplicable_scenarios) + sourcesHtml + '</div></details>';
+}
+
+function renderCollectionIntelligence(tool, selectedItemId) {
+  const collection = getToolIntelligence(tool.id);
+  if (!collection) {
+    return tool.card_kind === 'collection'
+      ? '<div class="intelligence-unavailable">具体型号资料暂不可用；不会根据品牌名称自动推测推荐。</div>'
+      : '';
+  }
+  const sourceMap = new Map((collection.sources || []).map(source => [source.id, source]));
+  const statusText = { verified: '已核实', partial: '部分核实', conflict: '资料冲突', unavailable: '资料不可用' }[collection.status] || collection.status;
+  return '<div class="section intelligence-section"><div class="intelligence-heading"><h4>当前具体模型与套餐</h4><span class="intelligence-status status-' + escapeHtml(collection.status) + '">' + escapeHtml(statusText) + '</span></div>' +
+    (collection.items || []).map(item => renderIntelligenceItem(item, sourceMap, selectedItemId)).join('') + '</div>';
+}
+
+function openDetail(id, selectedItemId = null) {
   const t = tools.find(x => x.id === id);
   if (!t) return;
 
@@ -309,7 +408,9 @@ function openDetail(id) {
   content.innerHTML = `
     <button class="modal-close" onclick="closeModal()">✕</button>
     <h2>${t.icon} ${t.name}</h2>
-    <div class="vendor">${t.vendor} · <a href="${t.url}" target="_blank" rel="noopener">官网 ↗</a></div>
+    <div class="vendor">${escapeHtml(t.vendor)} · <a href="${escapeHtml(safeExternalUrl(t.url))}" target="_blank" rel="noopener noreferrer">官网 ↗</a></div>
+
+    ${renderCollectionIntelligence(t, selectedItemId)}
 
     <div class="scores">
       <div class="score-item"><div class="score-val ${scoreClass(t.rating_overall)}">${t.rating_overall.toFixed(1)}</div><div class="score-label">综合</div></div>
@@ -340,12 +441,12 @@ function openDetail(id) {
     </div>
 
     <div class="section">
-      <h4>最适合</h4>
+      <h4>适用场景及说明</h4>
       <ul>${t.best_for.map(b => '<li>' + b + '</li>').join('')}</ul>
     </div>
 
     <div class="section">
-      <h4>不适合</h4>
+      <h4>不适用场景及说明</h4>
       <ul>${t.not_for.map(n => '<li>' + n + '</li>').join('')}</ul>
     </div>
 
@@ -355,7 +456,7 @@ function openDetail(id) {
       ${t.chinese_note ? '<p style="margin-top:4px"><b>中文支持：</b>' + t.chinese_note + '</p>' : ''}
     </div>
 
-    <div class="meta">最后更新: ${t.last_updated} · 信息来源: ${t.source} · 利益声明: 不接收厂商赞助</div>
+    <div class="meta">最后更新: ${escapeHtml(t.last_updated)} · 信息来源: <a href="${escapeHtml(safeExternalUrl(t.url))}" target="_blank" rel="noopener noreferrer">${escapeHtml(t.source)}</a> · 利益声明: 不接收厂商赞助</div>
     <div class="meta" style="margin-top:8px">
       <a href="https://github.com/wozore/infocatcher/issues/new?template=data-correction.yml&title=%5B%E6%95%B0%E6%8D%AE%E7%BA%A0%E9%94%99%5D+${encodeURIComponent(t.name)}" target="_blank" rel="noopener" style="color:var(--text-hint);font-size:12px">📢 信息有误？点此反馈</a>
     </div>
@@ -780,11 +881,16 @@ function getSceneToolIds(scene) {
   return [...new Set((scene.tasks || []).flatMap(task => task.tools || []))];
 }
 
-function renderSceneToolCard(tool) {
+function renderSceneToolCard(tool, selectedItemId = null) {
   const isSelected = compareList.some(item => item.id === tool.id);
-  return '<div class="tool-card scene-tool-card" onclick="openDetail(\'' + escapeHtml(tool.id) + '\')">' +
+  const collection = getToolIntelligence(tool.id);
+  const specificLabel = selectedItemId
+    ? collection?.items?.find(item => item.id === selectedItemId)?.name
+    : null;
+  return '<div class="tool-card scene-tool-card" onclick="openDetail(\'' + escapeHtml(tool.id) + '\',' + (selectedItemId ? '\'' + escapeHtml(selectedItemId) + '\'' : 'null') + ')">' +
     '<div class="tool-card-header">' +
       '<div><div class="tool-card-name">' + escapeHtml(tool.icon + ' ' + tool.name) + '</div>' +
+      (specificLabel ? '<div class="scene-specific-recommendation">具体推荐：' + escapeHtml(specificLabel) + '</div>' : '') +
       '<div class="tool-card-vendor">' + escapeHtml(tool.vendor) + '</div></div>' +
       '<div class="scene-tool-rating"><div class="rating-stars">' + stars(tool.rating_overall) + '</div>' +
       '<div class="rating-num">' + tool.rating_overall.toFixed(1) + '</div></div>' +
@@ -826,17 +932,24 @@ function renderScenes() {
     const toolIds = getSceneToolIds(scene);
     const taskRows = (scene.tasks || []).map((task, taskIndex) => {
       const matchedTools = (task.tools || []).map(toolId => tools.find(tool => tool.id === toolId)).filter(Boolean);
-      const toolButtons = matchedTools.map(tool =>
-        '<button class="scene-tool-button" type="button" onclick="toggleSceneToolCard(\'' + escapeHtml(scene.id) + '\',' + taskIndex + ',\'' + escapeHtml(tool.id) + '\',this)">' +
+      const recommendationByTool = new Map((task.recommendations || []).map(item => [item.tool_id, item]));
+      const toolButtons = matchedTools.map(tool => {
+        const recommendation = recommendationByTool.get(tool.id);
+        const label = recommendation
+          ? getToolIntelligence(tool.id)?.items?.find(item => item.id === recommendation.item_id)?.name
+          : null;
+        return '<button class="scene-tool-button" type="button" onclick="toggleSceneToolCard(\'' + escapeHtml(scene.id) + '\',' + taskIndex + ',\'' + escapeHtml(tool.id) + '\',' + (recommendation ? '\'' + escapeHtml(recommendation.item_id) + '\'' : 'null') + ',this)">' +
           '<span class="scene-tool-button-icon" aria-hidden="true">' + escapeHtml(tool.icon) + '</span>' +
-          '<span>' + escapeHtml(tool.name) + '</span>' +
-        '</button>'
-      ).join('');
+          '<span>' + escapeHtml(label || tool.name) + '</span>' +
+        '</button>';
+      }).join('');
+      const recommendationNotes = (task.recommendations || []).map(item => item.reason).filter(Boolean);
       return '<div class="scene-task-item">' +
         '<div class="scene-task-line">' +
           '<span class="scene-task-name">' + escapeHtml(task.task) + '</span>' +
           '<div class="scene-task-tools">' + toolButtons + '</div>' +
         '</div>' +
+        (recommendationNotes.length ? '<div class="scene-recommendation-reason">推荐依据：' + recommendationNotes.map(escapeHtml).join('；') + '</div>' : '') +
         '<div class="scene-tool-preview" id="scene-tool-preview-' + escapeHtml(scene.id) + '-' + taskIndex + '" hidden></div>' +
       '</div>';
     }).join('');
@@ -858,7 +971,7 @@ function renderScenes() {
   }).join('');
 }
 
-function toggleSceneToolCard(sceneId, taskIndex, toolId, button) {
+function toggleSceneToolCard(sceneId, taskIndex, toolId, selectedItemId, button) {
   const tasks = document.getElementById('scene-tasks-' + sceneId);
   const preview = document.getElementById('scene-tool-preview-' + sceneId + '-' + taskIndex);
   const tool = tools.find(item => item.id === toolId);
@@ -873,7 +986,7 @@ function toggleSceneToolCard(sceneId, taskIndex, toolId, button) {
 
   if (!isCurrent) {
     button.classList.add('active');
-    preview.innerHTML = renderSceneToolCard(tool);
+    preview.innerHTML = renderSceneToolCard(tool, selectedItemId);
     preview.hidden = false;
   }
 }

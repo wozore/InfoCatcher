@@ -11,7 +11,7 @@
 
 - **搜索**：输入关键词（工具名、功能、甚至中文别名如"写代码"）即可搜索
 - **筛选**：按分类、访问方式（国内/受限）、价格（免费/付费）三维叠加筛选
-- **详情**：点击工具卡片查看完整评分、价格层级、优势/不足、最适合场景
+- **详情**：点击具体工具卡片查看完整评分、价格层级、优势/不足和适用说明；集合卡片可继续查看已核实的具体模型、变体、套餐、API价格、1M上下文状态与官方来源
 
 ### 场景导航
 不知道该用哪个工具？选择你的使用场景，InfoCatcher 为你匹配合适的工具。
@@ -93,7 +93,7 @@ node scripts/news-cli.js content import --file manual-items.json --dry-run
 
 - **纠错**：[提交 Issue](https://github.com/wozore/InfoCatcher/issues/new?template=data-correction.yml)
 - **推荐工具**：[提交 Issue](https://github.com/wozore/InfoCatcher/issues/new?template=new-tool.yml)
-- **直接 PR**：修改 `data/catalog/tools.json` 或 `data/catalog/glossary.json` 后提交 Pull Request
+- **直接 PR**：稳定工具信息修改 `data/catalog/tools.json`；模型、变体、套餐、价格和来源核验修改 `data/catalog/tool-intelligence.json`；术语修改 `data/catalog/glossary.json`。动态事实必须引用官方优先的精确 URL，并记录实际查询时间；未知或冲突数据不得估算。
 
 ## 技术栈
 

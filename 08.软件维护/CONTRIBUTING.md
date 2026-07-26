@@ -16,7 +16,7 @@
   点击 [数据纠错 Issue](https://github.com/wozore/infocatcher/issues/new?template=data-correction.yml)，填写结构化表单。
 
 - **方式 B：直接改数据文件**
-  编辑 `mvp/data/catalog/tools.json`，修改对应的工具条目，提交 PR。
+  稳定工具属性编辑 `mvp/data/catalog/tools.json`；具体模型、变体、套餐、API价格和核验来源编辑 `mvp/data/catalog/tool-intelligence.json`，提交 PR。
 
 ### 推荐新工具
 
@@ -43,12 +43,22 @@
 
 新增或移动文件时必须先判断所属模块，不得继续在 `mvp/data/` 或 `mvp/scripts/` 根目录平铺业务文件：
 
-- 工具、概念和场景主数据放入 `mvp/data/catalog/`；
+- 工具、具体模型/套餐情报、概念和场景主数据放入 `mvp/data/catalog/`；其中高频变化且需追溯的字段集中在 `tool-intelligence.json`；
 - 热点配置、来源、人工暂存、运行状态和公开投影分别放入 `mvp/data/news/config/`、`sources/`、`manual/`、`runtime/`、`output/`；
 - Node 脚本实现按职责放入 `scripts/shared/`、`core/`、`collectors/`、`content/`、`pipeline/`、`cli/`、`maintenance/` 或 `tests/`；
 - `scripts/` 根目录仅保留 README 和 CI 使用的稳定兼容入口，不得放新的业务实现；
 - 新增 Node 数据路径必须在 `scripts/shared/paths.js` 登记，不得在多个脚本中重复硬编码；
 - 不通过复制文件或符号链接维护两套路径；数据结构改变时必须同步 `validate.js` 与相关测试。
+
+## 模型、套餐与价格情报规范
+
+- 推荐对象优先使用具体模型、产品版本、变体或套餐；泛化品牌/入口必须标为 `collection` 并提供已核实子项。
+- 模型、价格、套餐、上下文长度和弃用状态必须优先引用官方文档、定价页、套餐页或发布公告；搜索摘要不能直接作为入库事实。
+- 每个来源必须保存精确 URL 和实际 UTC `queried_at`；`last_updated` 只表示 InfoCatcher 编辑日期，不能冒充资料查询时间。
+- API 价格分别保存缓存命中输入、缓存未命中输入和输出价格，并明确币种、每百万 tokens 单位、地区、长上下文或服务层级条件。
+- 官方未提供价格、包含模型、平均缓存命中率区间或上下文结论时使用明确的未知状态，不填 `0`、不根据折扣比例推算、不自行补全。
+- 套餐需标注金额、币种、周期、地区/税费条件和官方明确列出的主要模型；不同地区价格不得合并成统一结论。
+- 场景中的集合推荐必须通过 `recommendations` 显式引用具体 `item_id` 并给出理由，不通过品牌名自动猜测。
 
 ## 数据规范
 
