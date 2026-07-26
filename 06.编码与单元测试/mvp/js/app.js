@@ -669,14 +669,24 @@ function renderTrendingStatus() {
     status.innerHTML = '<div class="status-note status-neutral">数据流水线尚未运行。当前页面只展示已生成的静态内容。</div>';
     return;
   }
+  const notes = [];
+  const bilibili = coverage.platforms?.bilibili;
+  if (bilibili?.status === 'manual_curated') {
+    notes.push('<div class="status-note status-neutral">B站当前采用人工精选收录，自动订阅已暂停；已有内容仍保留原始链接，未收录不代表来源近期没有更新。</div>');
+  } else if (bilibili?.reason === 'rsshub_provider_blocked') {
+    notes.push('<div class="status-note status-warn">B站自动订阅入口被服务提供方拦截，本轮已快速停止后续请求；页面继续展示上一版及人工精选内容。</div>');
+  }
   const degraded = [];
   for (const [platform, info] of Object.entries(coverage.platforms || {})) {
     if (info.status === 'degraded' || info.status === 'partial') degraded.push(platform);
   }
   if (coverage.platforms?.bilibili?.dynamic?.status === 'degraded') degraded.push('B站动态');
-  status.innerHTML = degraded.length
-    ? '<div class="status-note status-warn">部分数据降级：' + escapeHtml([...new Set(degraded)].join('、')) + '。缺失会降低判断置信度，不代表来源质量下降。</div>'
-    : '<div class="status-note status-ok">三平台数据已完成本轮构建时采集。</div>';
+  if (degraded.length) {
+    notes.push('<div class="status-note status-warn">部分数据降级：' + escapeHtml([...new Set(degraded)].join('、')) + '。缺失会降低判断置信度，不代表来源质量下降。</div>');
+  }
+  status.innerHTML = notes.length
+    ? notes.join('')
+    : '<div class="status-note status-ok">本轮自动来源采集已完成。</div>';
 }
 
 function renderTrending() {

@@ -47,8 +47,9 @@
 
 const fs = require('fs');
 const path = require('path');
-const { readJson, writeJsonAtomic, inspectLock, forceUnlock } = require('./news-storage');
+const { readJson, writeJsonAtomic, inspectLock, forceUnlock, acquireLock, releaseLock } = require('./news-storage');
 const { createAuthorizationStore, decideAuthorization } = require('./news-authorization');
+const { normalizeManualItem, importManualItems } = require('./news-manual');
 
 const MVP_DIR = path.resolve(__dirname, '..');
 const DATA_DIR = path.join(MVP_DIR, 'data');
@@ -58,6 +59,8 @@ const FILES = {
   sources: path.join(DATA_DIR, 'news-sources.json'),
   authorizations: path.join(DATA_DIR, 'pending-authorizations.json'),
   quota: path.join(DATA_DIR, 'news-quota.json'),
+  registry: path.join(DATA_DIR, 'news-registry.json'),
+  manualItems: path.join(DATA_DIR, 'news-manual-items.json'),
   lock: path.join(DATA_DIR, '.news-build.lock'),
   audit: path.join(DATA_DIR, 'news-admin-audit.json'),
 };
@@ -238,6 +241,72 @@ function sourceCommand(action, flags) {
   throw new Error(`未知 source 命令: ${action}`);
 }
 
+function contentCommand(action, flags) {
+  const initialPayload = readJson(FILES.manualItems, { schema_version: 1, updated_at: null, items: [] });
+  if (action === 'list') return initialPayload.items;
+  const sources = readJson(FILES.sources, { sources: [] }).sources;
+
+  const rejectDuplicates = (payload, registry, items) => {
+    for (const item of items) {
+      if (payload.items.some(entry => entry.native_id === item.native_id)) throw new Error(`人工内容已存在: bilibili:${item.native_id}`);
+      if (registry.videos?.[`bilibili:${item.native_id}`]) throw new Error(`Registry 已存在: bilibili:${item.native_id}`);
+    }
+  };
+
+  if (action === 'add') {
+    const item = normalizeManualItem({
+      source_id: flags.source_id,
+      content_type: flags.type,
+      url: flags.url,
+      title: flags.title,
+      description: flags.summary,
+      published_at: flags.published_at,
+    }, sources);
+    rejectDuplicates(initialPayload, readJson(FILES.registry, { videos: {} }), [item]);
+    if (flags.dry_run) return { added: item, dry_run: true };
+
+    const runId = `manual-content-${Date.now()}`;
+    acquireLock(FILES.lock, { run_id: runId, pid: process.pid, started_at: new Date().toISOString(), operation: 'manual_content_add' });
+    try {
+      const payload = readJson(FILES.manualItems, { schema_version: 1, updated_at: null, items: [] });
+      rejectDuplicates(payload, readJson(FILES.registry, { videos: {} }), [item]);
+      payload.items.push(item);
+      payload.updated_at = new Date().toISOString();
+      save(FILES.manualItems, payload, 'content-add');
+    } finally { releaseLock(FILES.lock, runId); }
+    return { added: item.native_id, dry_run: false };
+  }
+
+  if (action === 'import') {
+    if (!flags.file) throw new Error('content import 缺少 --file');
+    const input = JSON.parse(fs.readFileSync(path.resolve(flags.file), 'utf8'));
+    const previewPayload = structuredClone(initialPayload);
+    const preview = importManualItems(previewPayload, input, sources, Boolean(flags.allow_partial));
+    rejectDuplicates(initialPayload, readJson(FILES.registry, { videos: {} }), preview.added);
+    if (flags.dry_run || !preview.committed) {
+      return { ...preview, added: preview.added.map(item => item.native_id), dry_run: Boolean(flags.dry_run) };
+    }
+
+    const runId = `manual-content-import-${Date.now()}`;
+    acquireLock(FILES.lock, { run_id: runId, pid: process.pid, started_at: new Date().toISOString(), operation: 'manual_content_import' });
+    try {
+      const payload = readJson(FILES.manualItems, { schema_version: 1, updated_at: null, items: [] });
+      const result = importManualItems(payload, input, sources, Boolean(flags.allow_partial));
+      const registry = readJson(FILES.registry, { videos: {} });
+      for (const item of result.added) {
+        if (registry.videos?.[`bilibili:${item.native_id}`]) throw new Error(`Registry 已存在: bilibili:${item.native_id}`);
+      }
+      if (result.committed) {
+        payload.updated_at = new Date().toISOString();
+        save(FILES.manualItems, payload, 'content-import');
+      }
+      return { ...result, added: result.added.map(item => item.native_id), dry_run: false };
+    } finally { releaseLock(FILES.lock, runId); }
+  }
+
+  throw new Error(`未知 content 命令: ${action}`);
+}
+
 function authorizationCommand(action, flags) {
   const store = createAuthorizationStore(readJson(FILES.authorizations, null));
   if (action === 'list') return store.tasks.filter(task => task.status === 'pending');
@@ -279,10 +348,11 @@ function main(argv = process.argv.slice(2)) {
   const [group, action] = positional;
   let result;
   if (group === 'source') result = sourceCommand(action, flags);
+  else if (group === 'content') result = contentCommand(action, flags);
   else if (group === 'authorization') result = authorizationCommand(action, flags);
   else if (group === 'quota') result = quotaCommand(action, flags);
   else if (group === 'lock') result = lockCommand(action, flags);
-  else throw new Error('用法: news-cli.js source|authorization|quota|lock <action> [options]');
+  else throw new Error('用法: news-cli.js source|content|authorization|quota|lock <action> [options]');
   console.log(JSON.stringify(result, null, 2));
   return result;
 }
@@ -292,4 +362,4 @@ if (require.main === module) {
   catch (error) { console.error(`❌ ${error.message}`); process.exitCode = 1; }
 }
 
-module.exports = { parseArgs, normalizeTags, validateSource, importSources, optionalNumber, main, FILES };
+module.exports = { parseArgs, normalizeTags, validateSource, importSources, optionalNumber, contentCommand, main, FILES };

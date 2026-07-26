@@ -234,9 +234,26 @@ function validateAuthorizations(data) {
   console.log(`  pending-authorizations.json: ${data.tasks.length} 个任务，通过`);
 }
 
+function validateManualItems(data) {
+  if (!data || !Array.isArray(data.items)) return fail('news-manual-items.json.items 应为数组');
+  const sources = JSON.parse(fs.readFileSync(path.join(MVP_DIR, 'data/news-sources.json'), 'utf8')).sources;
+  const { normalizeManualItem } = require('./news-manual');
+  const keys = new Set();
+  for (let index = 0; index < data.items.length; index++) {
+    try {
+      const item = normalizeManualItem(data.items[index], sources, data.items[index].fetched_at || new Date().toISOString());
+      const key = `bilibili:${item.native_id}`;
+      if (keys.has(key)) fail(`news-manual-items.json 内容重复: ${key}`);
+      keys.add(key);
+    } catch (error) { fail(`news-manual-items.json.items[${index}] ${error.message}`); }
+  }
+  console.log(`  news-manual-items.json: ${data.items.length} 条人工内容，通过`);
+}
+
 function validateNewsConfig(data) {
   const layers = data?.time_layers;
   if (!Array.isArray(layers) || layers.length !== 5) return fail('news-config.json.time_layers 应为五层');
+  if (!['manual', 'rsshub'].includes(data?.collection?.bilibili_collection_mode)) fail('news-config.json collection.bilibili_collection_mode 应为 manual 或 rsshub');
   let boundary = 0;
   for (const layer of layers) {
     if (layer.min_age_days !== boundary || layer.max_age_days <= boundary) fail(`时间层不连续: ${layer.id}`);
@@ -375,6 +392,7 @@ try {
   // 四个配置文件使用 [文件名, 校验函数] 配对批量执行
 for (const [file, validator] of [
   ['news-config.json', validateNewsConfig],
+  ['news-manual-items.json', validateManualItems],
   ['news-registry.json', validateNewsRegistry],
   ['news-quota.json', validateNewsQuota],
   ['pending-authorizations.json', validateAuthorizations],

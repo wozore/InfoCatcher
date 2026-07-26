@@ -58,6 +58,7 @@
     "youtube_video_batch_size": 50,
     "x_max_sources_per_run": 15,
     "x_max_pages_per_source": 1,
+    "bilibili_collection_mode": "manual",
     "bilibili_max_per_route": 15,
     "bilibili_rsshub_requests_per_run": 300,
     "quota_low_watermark": 5,

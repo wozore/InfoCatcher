@@ -95,6 +95,7 @@ const {
 } = require('./news-scheduler');
 const { collectYouTubeLayerStep } = require('./news-youtube');
 const { collectBilibiliLayerStep } = require('./news-bilibili');
+const { normalizeManualItem } = require('./news-manual');
 const { createAuthorizationStore, createAuthorizationTask } = require('./news-authorization');
 
 const MVP_DIR = path.resolve(__dirname, '..');
@@ -109,7 +110,19 @@ const STATE_PATH = path.join(DATA_DIR, 'news-state.json');             // 构建
 const REGISTRY_PATH = path.join(DATA_DIR, 'news-registry.json');       // 持久视频记录
 const QUOTA_PATH = path.join(DATA_DIR, 'news-quota.json');             // 平台额度账本
 const AUTHORIZATIONS_PATH = path.join(DATA_DIR, 'pending-authorizations.json'); // 待授权任务
+const MANUAL_ITEMS_PATH = path.join(DATA_DIR, 'news-manual-items.json');       // B站人工精选暂存
 const LOCK_PATH = path.join(DATA_DIR, '.news-build.lock');             // 构建并发锁（不入库）
+
+const PLATFORM_SCOPES = new Set(['all', 'bilibili-only']);
+const EMPTY_OUTPUT = { items: [], events: [], provenance: [], assessments: [], coverage: {} };
+
+function resolvePlatformScope(value = 'all') {
+  const scope = String(value || 'all').trim();
+  if (!PLATFORM_SCOPES.has(scope)) {
+    throw new Error(`无效 NEWS_PLATFORM_SCOPE: ${scope}；仅支持 all 或 bilibili-only`);
+  }
+  return scope;
+}
 
 function decodeXml(value = '') {
   return value
@@ -250,17 +263,24 @@ function numberOrNull(value) {
   // 额度不足不是网络问题，重试不会让额度恢复。
 async function requestText(url, options, config, beforeAttempt = null) {
   const timeout = config.collection.request_timeout_ms;
+  const fetchImpl = options.fetchImpl || fetch;
+  const requestOptions = { ...options };
+  delete requestOptions.fetchImpl;
   let lastError;
   for (let attempt = 0; attempt <= config.collection.max_retries; attempt++) {
     try {
       if (beforeAttempt && beforeAttempt(attempt) === false) throw Object.assign(new Error('请求额度不足'), { code: 'quota_paused' });
-      const response = await fetch(url, { ...options, signal: AbortSignal.timeout(timeout) });
-      if (!response.ok) throw Object.assign(new Error(`HTTP ${response.status}`), { code: `http_${response.status}` });
+      const response = await fetchImpl(url, { ...requestOptions, signal: AbortSignal.timeout(timeout) });
+      if (!response.ok) {
+        const body = await response.text();
+        const cloudflare = response.status === 403 && (/cloudflare/i.test(response.headers?.get?.('server') || '') || /just a moment/i.test(body));
+        throw Object.assign(new Error(`HTTP ${response.status}`), { code: cloudflare ? 'cloudflare_challenge' : `http_${response.status}` });
+      }
       return await response.text();
     } catch (error) {
       lastError = error;
       // 额度不足不是网络问题，立即终止重试并向上传递 quota_paused
-      if (error.code === 'quota_paused') throw error;
+      if (error.code === 'quota_paused' || error.code === 'cloudflare_challenge') throw error;
       if (attempt < config.collection.max_retries) {
         await new Promise(resolve => setTimeout(resolve, config.collection.retry_base_ms * (attempt + 1)));
       }
@@ -338,6 +358,25 @@ async function collectX(source, context) {
   return items;
 }
 
+async function probeBilibiliProvider(source, context) {
+  const probeConfig = { ...context.config, collection: { ...context.config.collection, max_retries: 0 } };
+  const base = context.config.collection.rsshub_base_url.replace(/\/$/, '');
+  try {
+    const xml = await requestText(`${base}/bilibili/user/video/${source.external_id}`, { fetchImpl: context.fetchImpl }, probeConfig, attempt => {
+      const reservation = reserveQuota(context.quota, 'bilibili', {
+        source_id: source.id, layer_id: 'provider-probe', operation: 'rsshub:provider-probe', cost: 1, attempt: attempt + 1,
+      });
+      if (!reservation.accepted) return false;
+      consumeQuota(context.quota, 'bilibili', reservation.reservation_id, 'sent');
+      return true;
+    });
+    return { blocked: false, xml };
+  } catch (error) {
+    if (error.code === 'cloudflare_challenge') return { blocked: true, reason: 'cloudflare_challenge' };
+    return { blocked: true, reason: error.code || error.name || 'provider_probe_failed' };
+  }
+}
+
 async function collectBilibili(source, context) {
   const base = context.config.collection.rsshub_base_url.replace(/\/$/, '');
   const routes = [
@@ -349,7 +388,7 @@ async function collectBilibili(source, context) {
   const routeCoverage = {};
   for (const route of routes) {
     try {
-      const xml = await requestText(`${base}${route.path}`, {}, context.config, attempt => {
+      const xml = await requestText(`${base}${route.path}`, { fetchImpl: context.fetchImpl }, context.config, attempt => {
         const reservation = reserveQuota(context.quota, 'bilibili', {
           source_id: source.id,
           layer_id: 'recent-feed',
@@ -785,7 +824,8 @@ function historicalPageToken(progress) {
 
 async function runHistoricalLayerPass(options) {
   const { config, sourcePayload, state, registryIndex, quota, now, fetchedAt, youtubeApiKey } = options;
-  const sources = sourcePayload.sources.filter(source => source.enabled && ['youtube', 'bilibili'].includes(source.platform));
+  const sourceScope = options.sources || sourcePayload.sources;
+  const sources = sourceScope.filter(source => source.enabled && ['youtube', 'bilibili'].includes(source.platform));
   if (!sources.length) return { status: 'not_applicable', active_layer: null, items: [] };
   const historicalItems = [];
   const scheduler = createSchedulerState(state.history_scheduler || null);
@@ -854,7 +894,7 @@ async function runHistoricalLayerPass(options) {
 //
 // 这是整个热点系统的核心编排函数，按 5 个 Phase 执行：
 //   Phase 1: 准备配置、来源、状态、额度、Registry
-//   Phase 2: 最新 Feed 采集（所有启用来源）
+//   Phase 2: 最新 Feed 采集（本轮作用域内的启用来源）
 //   Phase 3: 历史层受控回溯（YouTube + Bilibili 单步）
 //   Phase 4: 评分、溯源、主题聚合
 //   Phase 5: 原子写入（状态文件在前，hotspots.json 最后）
@@ -863,23 +903,36 @@ async function runHistoricalLayerPass(options) {
 //   options.collector —— 注入自定义采集函数（fixture 测试用）
 //   options.skipHistory —— 跳过历史回溯（fixture 测试默认开启）
 //   options.noWrite —— 跳过文件写入（fixture 测试默认开启）
+//   options.oldOutput —— 注入旧热点投影（fixture 测试应传空投影，避免读取生产数据）
+//   options.platformScope —— all 或 bilibili-only；后者只发出 B站网络请求
 //   options.allowEmpty —— 允许空输出而不抛出错误
 // ═══════════════════════════════════════════════════════════════
 async function runCollection(options = {}) {
   const config = options.config || readJson(CONFIG_PATH);
   const sourcePayload = options.sourcePayload || readJson(SOURCES_PATH);
-  const oldOutput = readJson(OUTPUT_PATH, { items: [], events: [], provenance: [], assessments: [], coverage: {} });
+  const oldOutput = options.oldOutput ?? readJson(OUTPUT_PATH, EMPTY_OUTPUT);
   const state = options.state || readJson(STATE_PATH, initialState());
+  const platformScope = resolvePlatformScope(options.platformScope ?? 'all');
   const now = options.now || Date.now();
   const fetchedAt = new Date(now).toISOString();
   const runId = `run-${fetchedAt.replace(/[-:.TZ]/g, '')}`;
   const quota = options.quota || createQuotaLedger(config.collection, runId, fetchedAt);
   const registryIndex = options.registryIndex || createRegistry(readJson(REGISTRY_PATH, null));
-  const enabled = sourcePayload.sources.filter(source => source.enabled);
+  const allEnabled = sourcePayload.sources.filter(source => source.enabled);
+  const bilibiliManual = config.collection.bilibili_collection_mode === 'manual';
+  const bilibiliAutomatedPaused = bilibiliManual && platformScope === 'all' && !options.collector;
+  const enabled = platformScope === 'bilibili-only'
+    ? allEnabled.filter(source => source.platform === 'bilibili')
+    : allEnabled.filter(source => !(bilibiliAutomatedPaused && source.platform === 'bilibili'));
+  const manualPayload = options.manualItems ?? readJson(MANUAL_ITEMS_PATH, { schema_version: 1, items: [] });
+  const manualItems = (manualPayload.items || [])
+    .map(item => normalizeManualItem(item, sourcePayload.sources, fetchedAt))
+    .filter(item => registryIndex.byKey.get(`bilibili:${item.native_id}`)?.processing_status !== 'published');
 
   // X 来源轮转：每次构建只选取 x_max_sources_per_run 个来源，
   // 从上次的 rotation_offset 开始循环取，控制日调用成本。
-  // 其余两个平台每次对所有启用来源执行全量采集。
+  // bilibili-only 不选择 X 来源，并保留原有轮转游标。
+  const allXSources = allEnabled.filter(source => source.platform === 'x');
   const xSources = enabled.filter(source => source.platform === 'x');
   const xLimit = Math.min(config.collection.x_max_sources_per_run, xSources.length);
   const offset = (state.x_rotation_offset || 0) % Math.max(1, xSources.length);
@@ -893,25 +946,50 @@ async function runCollection(options = {}) {
     quota,
     xApiKey: options.xApiKey ?? process.env.X_API_KEY,
     youtubeApiKey: options.youtubeApiKey ?? process.env.YOUTUBE_API_KEY,
+    fetchImpl: options.fetchImpl,
   };
-  const freshItems = [];
+  const freshItems = [...manualItems.filter(item => matchesAi(item, config))];
   const observedRegistryResults = [];
   const coverage = {
     status: 'running',
+    platform_scope: platformScope,
     sources_total: enabled.length,
     sources_attempted: selected.length,
     sources_terminal: 0,
     platforms: {
-      youtube: { status: 'not_run', items: 0 },
-      x: { status: 'rotating', items: 0, attempted: selectedX.length, total: xSources.length },
-      bilibili: {
+      youtube: platformScope === 'bilibili-only'
+        ? { status: 'not_run', items: 0, reason: 'excluded_by_platform_scope' }
+        : { status: 'not_run', items: 0 },
+      x: platformScope === 'bilibili-only'
+        ? { status: 'not_run', items: 0, attempted: 0, total: allXSources.length, reason: 'excluded_by_platform_scope' }
+        : { status: 'rotating', items: 0, attempted: selectedX.length, total: xSources.length },
+      bilibili: bilibiliAutomatedPaused ? {
+        status: 'manual_curated', items: freshItems.filter(item => item.platform === 'bilibili').length,
+        reason: 'automated_collection_paused',
+        video: { status: 'not_run' }, dynamic: { status: 'not_run' }, article: { status: 'not_run' },
+      } : {
         status: 'not_run', items: 0,
         video: { status: 'not_run' }, dynamic: { status: 'not_run' }, article: { status: 'not_run' },
       },
     },
   };
 
-  for (const source of selected) {
+  let providerBlocked = null;
+  if (platformScope === 'bilibili-only' && !options.collector && selected[0]) {
+    const probe = await probeBilibiliProvider(selected[0], context);
+    if (probe.blocked) {
+      providerBlocked = probe.reason;
+      coverage.sources_terminal = selected.length;
+      coverage.platforms.bilibili = {
+        status: 'degraded', items: 0, reason: 'rsshub_provider_blocked', provider_reason: probe.reason,
+        video: { status: 'degraded', items: 0, reason: probe.reason },
+        dynamic: { status: 'not_run', items: 0, reason: 'provider_circuit_open' },
+        article: { status: 'not_run', items: 0, reason: 'provider_circuit_open' },
+      };
+    }
+  }
+
+  for (const source of providerBlocked ? [] : selected) {
     try {
       const result = options.collector
         ? await options.collector(source, context)
@@ -965,10 +1043,10 @@ async function runCollection(options = {}) {
   }
 
   const skipHistory = options.skipHistory ?? Boolean(options.collector);
-  const history = skipHistory
-    ? { status: 'skipped', active_layer: state.history_scheduler?.active_layer || null, items: [] }
+  const history = skipHistory || providerBlocked
+    ? { status: providerBlocked ? 'provider_circuit_open' : 'skipped', active_layer: state.history_scheduler?.active_layer || null, items: [] }
     : await runHistoricalLayerPass({
-      config, sourcePayload, state, registryIndex, quota, now, fetchedAt,
+      config, sourcePayload, sources: enabled, state, registryIndex, quota, now, fetchedAt,
       youtubeApiKey: context.youtubeApiKey,
     });
   freshItems.push(...(history.items || []).filter(item => matchesAi(item, config)));
@@ -990,8 +1068,10 @@ async function runCollection(options = {}) {
   coverage.time_layers = Object.fromEntries(config.time_layers.map(layer => [layer.id, { items: 0 }]));
   coverage.time_layers.older = { items: 0 };
   for (const item of items) coverage.time_layers[classifyTimeLayer(item, config, now)].items++;
-  coverage.status = coverage.sources_terminal === selected.length ? 'complete' : 'partial';
-  if (selectedX.length < xSources.length) {
+  coverage.status = providerBlocked
+    ? 'partial'
+    : coverage.sources_terminal === selected.length ? 'complete' : 'partial';
+  if (platformScope === 'all' && selectedX.length < xSources.length) {
     coverage.platforms.x.status = coverage.platforms.x.status === 'degraded' ? 'degraded' : 'rotating';
     if (coverage.status === 'complete') coverage.status = 'rotating';
   }
@@ -999,7 +1079,9 @@ async function runCollection(options = {}) {
   state.schema_version = 1;
   state.last_run = { run_id: runId, started_at: fetchedAt, completed_at: new Date().toISOString(), status: coverage.status };
   state.active_layer = resolveActiveLayer(state, enabled, config);
-  state.x_rotation_offset = xSources.length ? (offset + xLimit) % xSources.length : 0;
+  state.x_rotation_offset = platformScope === 'all' && xSources.length
+    ? (offset + xLimit) % xSources.length
+    : state.x_rotation_offset || 0;
   coverage.active_layer = state.active_layer;
   coverage.time_layer_scope = 'latest-feed-observation';
 
@@ -1108,7 +1190,8 @@ async function runFixtureBuild() {
     .map(item => normalizeRssItem(item, bilibiliSource, 'bilibili_dynamic', fetchedAt));
   return runCollection({
     sourcePayload: { schema_version: 1, sources: [youtubeSource, xSource, bilibiliSource] },
-    state: initialState(), now: fixedNow, noWrite: true, allowEmpty: false, skipHistory: true,
+    state: initialState(), oldOutput: EMPTY_OUTPUT,
+    now: fixedNow, noWrite: true, allowEmpty: false, skipHistory: true,
     collector: async current => {
       if (current.platform === 'youtube') return { items: youtubeItems, routeCoverage: null };
       if (current.platform === 'x') return { items: xItems, routeCoverage: null };
@@ -1139,7 +1222,9 @@ async function main() {
   }
   try {
     const allowEmpty = process.argv.includes('--allow-empty');
-    const result = await runCollection({ allowEmpty });
+    const platformScope = resolvePlatformScope(process.env.NEWS_PLATFORM_SCOPE || 'all');
+    console.log(`ℹ️ 采集范围：${platformScope}`);
+    const result = await runCollection({ allowEmpty, platformScope });
     console.log(`✅ 热点构建完成：${result.output.items.length} 条内容，${result.output.events.length} 个主题`);
     console.log(`   覆盖：${result.output.coverage.sources_terminal}/${result.output.coverage.sources_attempted} 个本轮来源`);
   } finally {
@@ -1156,6 +1241,7 @@ if (require.main === module) {
 
 module.exports = {
   parseFeed,
+  resolvePlatformScope,
   normalizeRssItem,
   normalizeTweet,
   inferBilibiliType,

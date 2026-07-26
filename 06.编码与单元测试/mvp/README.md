@@ -69,6 +69,24 @@ node scripts/news-cli.js lock status
 
 真实采集所需 `YOUTUBE_API_KEY` 和 `X_API_KEY` 只能配置为 GitHub Repository Secrets，不得写入命令、JSON 或前端代码。
 
+手动诊断 B站 RSSHub 时，在 GitHub Actions 的 `Collect AI News` → `Run workflow` 中将 `platform_scope` 选择为 `bilibili-only`。该模式不会请求 YouTube 或 X，也不会推进 X 轮转游标；检测到 RSSHub Provider 的 Cloudflare 挑战后只记录一次真实探测并立即熔断，不再遍历全部来源。定时任务和默认手动运行使用 `all`，其中B站自动网络采集已暂停，改为人工精选收录；已有 YouTube/X 与B站热点投影会按保留规则继续展示。
+
+B站人工内容只写入独立的 `data/news-manual-items.json`，不会直接覆盖 `hotspots.json`。命令不访问B站网络，也不接受 Cookie、Token 或 API Key：
+
+```bash
+# 先预览，不写文件
+node scripts/news-cli.js content add --source-id bilibili-123 --type bilibili_dynamic_text --url https://www.bilibili.com/opus/123456 --title "Claude AI 实测" --summary "实际使用 Claude 完成工作流" --published-at 2026-07-25T08:00:00Z --dry-run
+
+# 确认后去掉 --dry-run 写入人工暂存
+node scripts/news-cli.js content add --source-id bilibili-123 --type bilibili_video --url https://www.bilibili.com/video/BV1example --title "AI 模型发布" --summary "内容摘要" --published-at 2026-07-25T08:00:00Z
+
+# 查看暂存内容，或原子批量导入
+node scripts/news-cli.js content list
+node scripts/news-cli.js content import --file manual-items.json --dry-run
+```
+
+允许的类型为 `bilibili_video`、`bilibili_dynamic_text`、`bilibili_dynamic_repost`、`bilibili_article`；`source-id` 必须对应已有B站来源。正常热点构建会复用 Registry 防重、AI过滤、评分、主题和溯源管线消费这些条目。
+
 ## 贡献
 
 发现信息有误或有新工具推荐？

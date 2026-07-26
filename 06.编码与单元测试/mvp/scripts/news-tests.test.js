@@ -1,5 +1,5 @@
 /**
- * news-tests.test.js — 内容语义与采集行为测试（17 项）
+ * news-tests.test.js — 内容语义与采集行为测试（23 项）
  *
  * 测试原理：
  *   这些测试不请求真实 API（YouTube/X/RSSHub），而是使用本地夹具文件
@@ -20,8 +20,8 @@
  *     验证评分公式约束：无证据不扣分、低频不降权、小样本不误伤
  *   第 3 组 — 溯源与异常（4 项）
  *     验证溯源关系和异常检测不误删内容
- *   第 4 组 — Coverage/降级/轮转（3 项）
- *     验证采集覆盖状态不误报、B站降级不丢失内容
+ *   第 4 组 — Coverage/降级/轮转/诊断范围（5 项）
+ *     验证采集覆盖状态不误报、B站降级不丢失内容、单平台诊断不调用其他 API
  *
  * 运行方式：node --test scripts/news-tests.test.js
  */
@@ -44,13 +44,16 @@ const {
   buildProvenance,
   buildEvents,
   applyAnomalyDetection,
+  resolvePlatformScope,
   runCollection,
 } = require('./build-news');
+const { parseBilibiliUrl, normalizeManualItem, importManualItems } = require('./news-manual');
 
 const MVP_DIR = path.resolve(__dirname, '..');
 const config = JSON.parse(fs.readFileSync(path.join(MVP_DIR, 'data/news-config.json'), 'utf8'));
 const fixture = name => fs.readFileSync(path.join(__dirname, 'news-fixtures', name), 'utf8');
 const now = new Date('2026-07-23T12:00:00Z').getTime();
+const emptyOutput = () => ({ items: [], events: [], provenance: [], assessments: [], coverage: {} });
 
 function source(overrides = {}) {
   return {
@@ -174,6 +177,7 @@ test('X 来源轮转时整体覆盖状态不会误报 complete', async () => {
     config: rotationConfig,
     sourcePayload: { schema_version: 1, sources: xSources },
     state: { schema_version: 1, sources: {}, x_rotation_offset: 0 },
+    oldOutput: emptyOutput(),
     now, noWrite: true,
     collector: async current => ({
       items: [normalizeTweet({ id: `tweet-${current.id}`, text: 'New AI model release', createdAt: '2026-07-23T04:00:00Z' }, current, new Date(now).toISOString())],
@@ -234,13 +238,114 @@ test('多来源 B站路由状态按最差结果聚合，不被后续成功掩盖
   const dynamic = normalizeRssItem(parseFeed(fixture('bilibili-dynamic.xml'))[1], sources[1], 'bilibili_dynamic', new Date(now).toISOString());
   const result = await runCollection({
     config, sourcePayload: { schema_version: 1, sources },
-    state: { schema_version: 1, sources: {}, x_rotation_offset: 0 }, now, noWrite: true,
+    state: { schema_version: 1, sources: {}, x_rotation_offset: 0 }, oldOutput: emptyOutput(), now, noWrite: true,
     collector: async current => current.id === 'bi-a'
       ? { items: [], routeCoverage: { video: { status: 'success', items: 0 }, dynamic: { status: 'degraded', items: 0, reason: 'timeout' }, article: { status: 'success', items: 0 } } }
       : { items: [dynamic], routeCoverage: { video: { status: 'success', items: 0 }, dynamic: { status: 'success', items: 1 }, article: { status: 'success', items: 0 } } },
   });
   assert.equal(result.output.coverage.platforms.bilibili.dynamic.status, 'degraded');
   assert.ok(result.output.coverage.platforms.bilibili.dynamic.reasons.includes('timeout'));
+});
+
+test('B站单平台范围不调用 YouTube/X 并保留旧投影', async () => {
+  const sources = [
+    source({ id: 'yt-scope', platform: 'youtube', external_id: 'yt' }),
+    source({ id: 'x-scope', platform: 'x', external_id: 'x', handle: 'x' }),
+    source({ id: 'bi-scope', platform: 'bilibili', external_id: 'bi' }),
+  ];
+  const calls = [];
+  const oldYoutube = normalizeRssItem(parseFeed(fixture('youtube.xml'))[0], sources[0], 'youtube_video', new Date(now).toISOString());
+  const dynamic = normalizeRssItem(parseFeed(fixture('bilibili-dynamic.xml'))[1], sources[2], 'bilibili_dynamic', new Date(now).toISOString());
+  const result = await runCollection({
+    config, sourcePayload: { schema_version: 1, sources }, platformScope: 'bilibili-only',
+    state: { schema_version: 1, sources: {}, x_rotation_offset: 7 },
+    oldOutput: { ...emptyOutput(), items: [oldYoutube] }, now, noWrite: true,
+    collector: async current => {
+      calls.push(current.platform);
+      return {
+        items: [dynamic],
+        routeCoverage: {
+          video: { status: 'success', items: 0 },
+          dynamic: { status: 'success', items: 1 },
+          article: { status: 'success', items: 0 },
+        },
+      };
+    },
+  });
+  assert.deepEqual(calls, ['bilibili']);
+  assert.equal(result.output.coverage.platform_scope, 'bilibili-only');
+  assert.equal(result.output.coverage.platforms.youtube.status, 'not_run');
+  assert.equal(result.output.coverage.platforms.x.status, 'not_run');
+  assert.equal(result.state.x_rotation_offset, 7);
+  assert.ok(result.output.items.some(item => item.platform === 'youtube'));
+  assert.equal(result.quota.platforms.youtube.consumed, 0);
+});
+
+test('采集范围拒绝未知值', () => {
+  assert.equal(resolvePlatformScope('all'), 'all');
+  assert.equal(resolvePlatformScope('bilibili-only'), 'bilibili-only');
+  assert.throws(() => resolvePlatformScope('youtube-only'), /无效 NEWS_PLATFORM_SCOPE/);
+});
+
+test('人工B站内容校验链接类型并形成统一模型', () => {
+  const sources = [source({ id: 'bi-manual', platform: 'bilibili', external_id: '123' })];
+  const item = normalizeManualItem({
+    source_id: 'bi-manual', content_type: 'bilibili_dynamic_text',
+    url: 'https://www.bilibili.com/opus/123456', title: 'Claude AI 实测',
+    summary: '实际使用 Claude AI 完成工作流', published_at: '2026-07-25T08:00:00Z',
+  }, sources, '2026-07-25T09:00:00Z');
+  assert.equal(item.native_id, 'dynamic-123456');
+  assert.equal(item.acquisition_method, 'manual_curated');
+  assert.equal(item.metrics.views, null);
+  assert.throws(() => parseBilibiliUrl('https://example.com/opus/1'), /只允许/);
+  assert.throws(() => normalizeManualItem({ ...item, url: 'https://www.bilibili.com/video/BV1abc', content_type: 'bilibili_article' }, sources), /不匹配/);
+});
+
+test('人工B站批量导入默认全有或全无并防重复', () => {
+  const sources = [source({ id: 'bi-manual', platform: 'bilibili', external_id: '123' })];
+  const payload = { schema_version: 1, items: [] };
+  const valid = { source_id: 'bi-manual', content_type: 'bilibili_video', url: 'https://www.bilibili.com/video/BV1abc', title: 'AI 模型发布', summary: '新的 AI 模型发布', published_at: '2026-07-25T08:00:00Z' };
+  const failed = importManualItems(payload, [valid, { ...valid, url: 'https://example.com/x' }], sources);
+  assert.equal(failed.committed, false);
+  assert.equal(payload.items.length, 0);
+  const success = importManualItems(payload, [valid], sources);
+  assert.equal(success.committed, true);
+  assert.equal(payload.items.length, 1);
+});
+
+test('默认人工模式不调用B站网络并消费人工条目', async () => {
+  const manualConfig = JSON.parse(JSON.stringify(config));
+  manualConfig.collection.bilibili_collection_mode = 'manual';
+  const bi = source({ id: 'bi-manual', platform: 'bilibili', external_id: '123' });
+  const manual = { source_id: bi.id, content_type: 'bilibili_article', url: 'https://www.bilibili.com/read/cv123', title: 'Claude AI 深度解读', description: 'Claude AI 深度解读和实际使用', published_at: '2026-07-23T08:00:00Z' };
+  let calls = 0;
+  const result = await runCollection({
+    config: manualConfig, sourcePayload: { schema_version: 1, sources: [bi] },
+    state: { schema_version: 1, sources: {}, x_rotation_offset: 0 }, oldOutput: emptyOutput(),
+    manualItems: { schema_version: 1, items: [manual] }, now, noWrite: true, skipHistory: true,
+    fetchImpl: async () => { calls++; throw new Error('不应调用网络'); },
+  });
+  assert.equal(calls, 0);
+  assert.equal(result.output.coverage.platforms.bilibili.status, 'manual_curated');
+  assert.equal(result.output.items[0].acquisition_method, 'manual_curated');
+});
+
+test('B站诊断遇到Cloudflare后只探测一次并打开断路器', async () => {
+  const biSources = [1, 2, 3].map(index => source({ id: `bi-${index}`, platform: 'bilibili', external_id: String(index) }));
+  let calls = 0;
+  const result = await runCollection({
+    config, sourcePayload: { schema_version: 1, sources: biSources }, platformScope: 'bilibili-only',
+    state: { schema_version: 1, sources: {}, x_rotation_offset: 0 }, oldOutput: emptyOutput(),
+    manualItems: { schema_version: 1, items: [] }, now, noWrite: true, allowEmpty: true,
+    fetchImpl: async () => {
+      calls++;
+      return { ok: false, status: 403, headers: { get: key => key === 'server' ? 'cloudflare' : null }, text: async () => '<title>Just a moment...</title>' };
+    },
+  });
+  assert.equal(calls, 1);
+  assert.equal(result.quota.platforms.bilibili.consumed, 1);
+  assert.equal(result.output.coverage.platforms.bilibili.reason, 'rsshub_provider_blocked');
+  assert.equal(result.output.coverage.history.status, 'provider_circuit_open');
 });
 
 test('采集批次保留 B站动态且显式记录动态降级', async () => {
@@ -254,7 +359,8 @@ test('采集批次保留 B站动态且显式记录动态降级', async () => {
   const yt = normalizeRssItem(parseFeed(fixture('youtube.xml'))[0], sources.sources[0], 'youtube_video', new Date(now).toISOString());
   const dynamic = normalizeRssItem(parseFeed(fixture('bilibili-dynamic.xml'))[1], sources.sources[1], 'bilibili_dynamic', new Date(now).toISOString());
   const result = await runCollection({
-    config, sourcePayload: sources, state: { schema_version: 1, sources: {}, x_rotation_offset: 0 }, now, noWrite: true,
+    config, sourcePayload: sources,
+    state: { schema_version: 1, sources: {}, x_rotation_offset: 0 }, oldOutput: emptyOutput(), now, noWrite: true,
     collector: async current => current.platform === 'youtube'
       ? { items: [yt], routeCoverage: null }
       : { items: [dynamic], routeCoverage: { video: { status: 'success', items: 0 }, dynamic: { status: 'degraded', items: 1, reason: 'fixture' }, article: { status: 'success', items: 0 } } },

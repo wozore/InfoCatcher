@@ -4,6 +4,15 @@ on:
   schedule:
     - cron: '0 2 * * *'
   workflow_dispatch:
+    inputs:
+      platform_scope:
+        description: '本次采集范围（诊断 B站时选择 bilibili-only）'
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - bilibili-only
 
 permissions:
   contents: write
@@ -33,6 +42,7 @@ jobs:
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           X_API_KEY: ${{ secrets.X_API_KEY }}
+          NEWS_PLATFORM_SCOPE: ${{ github.event.inputs.platform_scope || 'all' }}
         run: node scripts/build-news.js
 
       - name: Test generated data
