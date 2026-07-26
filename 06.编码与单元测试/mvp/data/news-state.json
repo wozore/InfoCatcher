@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
   "last_run": {
-    "run_id": "run-20260724051949132",
-    "started_at": "2026-07-24T05:19:49.132Z",
-    "completed_at": "2026-07-24T05:23:47.457Z",
-    "status": "rotating"
+    "run_id": "run-20260725153000778",
+    "started_at": "2026-07-25T15:30:00.778Z",
+    "completed_at": "2026-07-25T15:32:17.484Z",
+    "status": "complete"
   },
-  "active_layer": "recent-1d",
+  "active_layer": null,
   "sources": {
     "youtube-ucxzcjldbc09xxgz6gcdrc6a": {
       "status": "degraded",
@@ -422,7 +422,7 @@
       "attempts": 1,
       "last_native_id": null,
       "last_published_at": null,
-      "fetched_at": "2026-07-24T05:19:49.132Z",
+      "fetched_at": "2026-07-25T15:30:00.778Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": {
@@ -448,7 +448,7 @@
       "attempts": 1,
       "last_native_id": null,
       "last_published_at": null,
-      "fetched_at": "2026-07-24T05:19:49.132Z",
+      "fetched_at": "2026-07-25T15:30:00.778Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": {
@@ -474,7 +474,7 @@
       "attempts": 1,
       "last_native_id": null,
       "last_published_at": null,
-      "fetched_at": "2026-07-24T05:19:49.132Z",
+      "fetched_at": "2026-07-25T15:30:00.778Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": {
@@ -500,7 +500,7 @@
       "attempts": 1,
       "last_native_id": null,
       "last_published_at": null,
-      "fetched_at": "2026-07-24T05:19:49.132Z",
+      "fetched_at": "2026-07-25T15:30:00.778Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": {
@@ -526,7 +526,7 @@
       "attempts": 1,
       "last_native_id": null,
       "last_published_at": null,
-      "fetched_at": "2026-07-24T05:19:49.132Z",
+      "fetched_at": "2026-07-25T15:30:00.778Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": {
@@ -552,7 +552,7 @@
       "attempts": 1,
       "last_native_id": null,
       "last_published_at": null,
-      "fetched_at": "2026-07-24T05:19:49.132Z",
+      "fetched_at": "2026-07-25T15:30:00.778Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": {
@@ -578,7 +578,7 @@
       "attempts": 1,
       "last_native_id": null,
       "last_published_at": null,
-      "fetched_at": "2026-07-24T05:19:49.132Z",
+      "fetched_at": "2026-07-25T15:30:00.778Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": {
@@ -604,7 +604,7 @@
       "attempts": 1,
       "last_native_id": null,
       "last_published_at": null,
-      "fetched_at": "2026-07-24T05:19:49.132Z",
+      "fetched_at": "2026-07-25T15:30:00.778Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": {
@@ -630,7 +630,7 @@
       "attempts": 1,
       "last_native_id": null,
       "last_published_at": null,
-      "fetched_at": "2026-07-24T05:19:49.132Z",
+      "fetched_at": "2026-07-25T15:30:00.778Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": {
@@ -656,7 +656,7 @@
       "attempts": 1,
       "last_native_id": null,
       "last_published_at": null,
-      "fetched_at": "2026-07-24T05:19:49.132Z",
+      "fetched_at": "2026-07-25T15:30:00.778Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": {
@@ -682,7 +682,7 @@
       "attempts": 1,
       "last_native_id": null,
       "last_published_at": null,
-      "fetched_at": "2026-07-24T05:19:49.132Z",
+      "fetched_at": "2026-07-25T15:30:00.778Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": {
@@ -708,7 +708,7 @@
       "attempts": 1,
       "last_native_id": null,
       "last_published_at": null,
-      "fetched_at": "2026-07-24T05:19:49.132Z",
+      "fetched_at": "2026-07-25T15:30:00.778Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": {
@@ -734,7 +734,7 @@
       "attempts": 1,
       "last_native_id": null,
       "last_published_at": null,
-      "fetched_at": "2026-07-24T05:19:49.132Z",
+      "fetched_at": "2026-07-25T15:30:00.778Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": {
@@ -760,7 +760,7 @@
       "attempts": 1,
       "last_native_id": null,
       "last_published_at": null,
-      "fetched_at": "2026-07-24T05:19:49.132Z",
+      "fetched_at": "2026-07-25T15:30:00.778Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": {
@@ -786,7 +786,7 @@
       "attempts": 1,
       "last_native_id": null,
       "last_published_at": null,
-      "fetched_at": "2026-07-24T05:19:49.132Z",
+      "fetched_at": "2026-07-25T15:30:00.778Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": {
@@ -812,7 +812,7 @@
       "attempts": 1,
       "last_native_id": null,
       "last_published_at": null,
-      "fetched_at": "2026-07-24T05:19:49.132Z",
+      "fetched_at": "2026-07-25T15:30:00.778Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": {
@@ -838,7 +838,7 @@
       "attempts": 1,
       "last_native_id": null,
       "last_published_at": null,
-      "fetched_at": "2026-07-24T05:19:49.132Z",
+      "fetched_at": "2026-07-25T15:30:00.778Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": {
@@ -864,7 +864,7 @@
       "attempts": 1,
       "last_native_id": null,
       "last_published_at": null,
-      "fetched_at": "2026-07-24T05:19:49.132Z",
+      "fetched_at": "2026-07-25T15:30:00.778Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": {
@@ -890,7 +890,7 @@
       "attempts": 1,
       "last_native_id": null,
       "last_published_at": null,
-      "fetched_at": "2026-07-24T05:19:49.132Z",
+      "fetched_at": "2026-07-25T15:30:00.778Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": {
@@ -916,7 +916,7 @@
       "attempts": 1,
       "last_native_id": null,
       "last_published_at": null,
-      "fetched_at": "2026-07-24T05:19:49.132Z",
+      "fetched_at": "2026-07-25T15:30:00.778Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": {
@@ -1351,121 +1351,121 @@
       "bilibili-3031494": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-431556168": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-12566101": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-1814756990": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-1567748478": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-59807853": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-823532": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-615957867": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-344849038": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-295428344": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-19319172": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-4401694": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-371846699": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-604515161": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-257271972": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-1560961": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-49975325": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-245645656": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-525013177": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-319767228": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "x-openai": {
@@ -1821,121 +1821,121 @@
       "bilibili-3031494": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-431556168": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-12566101": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-1814756990": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-1567748478": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-59807853": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-823532": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-615957867": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-344849038": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-295428344": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-19319172": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-4401694": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-371846699": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-604515161": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-257271972": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-1560961": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-49975325": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-245645656": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-525013177": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-319767228": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "x-openai": {
@@ -2291,121 +2291,121 @@
       "bilibili-3031494": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-431556168": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-12566101": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-1814756990": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-1567748478": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-59807853": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-823532": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-615957867": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-344849038": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-295428344": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-19319172": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-4401694": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-371846699": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-604515161": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-257271972": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-1560961": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-49975325": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-245645656": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-525013177": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-319767228": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "x-openai": {
@@ -2761,121 +2761,121 @@
       "bilibili-3031494": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-431556168": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-12566101": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-1814756990": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-1567748478": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-59807853": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-823532": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-615957867": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-344849038": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-295428344": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-19319172": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-4401694": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-371846699": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-604515161": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-257271972": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-1560961": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-49975325": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-245645656": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-525013177": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-319767228": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "x-openai": {
@@ -3231,121 +3231,121 @@
       "bilibili-3031494": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-431556168": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-12566101": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-1814756990": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-1567748478": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-59807853": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-823532": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-615957867": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-344849038": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-295428344": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-19319172": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-4401694": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-371846699": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-604515161": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-257271972": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-1560961": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-49975325": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-245645656": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-525013177": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "bilibili-319767228": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "error_code": null
       },
       "x-openai": {
@@ -7421,7 +7421,7 @@
         "duplicate_count": 0,
         "filtered_count": 0,
         "stop_reason": "one_or_more_routes_failed",
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "coverage_limitation": null,
         "routes": [
           {
@@ -7455,7 +7455,7 @@
         "duplicate_count": 0,
         "filtered_count": 0,
         "stop_reason": "one_or_more_routes_failed",
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "coverage_limitation": null,
         "routes": [
           {
@@ -7489,7 +7489,7 @@
         "duplicate_count": 0,
         "filtered_count": 0,
         "stop_reason": "one_or_more_routes_failed",
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "coverage_limitation": null,
         "routes": [
           {
@@ -7523,7 +7523,7 @@
         "duplicate_count": 0,
         "filtered_count": 0,
         "stop_reason": "one_or_more_routes_failed",
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "coverage_limitation": null,
         "routes": [
           {
@@ -7557,7 +7557,7 @@
         "duplicate_count": 0,
         "filtered_count": 0,
         "stop_reason": "one_or_more_routes_failed",
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "coverage_limitation": null,
         "routes": [
           {
@@ -7591,7 +7591,7 @@
         "duplicate_count": 0,
         "filtered_count": 0,
         "stop_reason": "one_or_more_routes_failed",
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "coverage_limitation": null,
         "routes": [
           {
@@ -7625,7 +7625,7 @@
         "duplicate_count": 0,
         "filtered_count": 0,
         "stop_reason": "one_or_more_routes_failed",
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "coverage_limitation": null,
         "routes": [
           {
@@ -7659,7 +7659,7 @@
         "duplicate_count": 0,
         "filtered_count": 0,
         "stop_reason": "one_or_more_routes_failed",
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "coverage_limitation": null,
         "routes": [
           {
@@ -7693,7 +7693,7 @@
         "duplicate_count": 0,
         "filtered_count": 0,
         "stop_reason": "one_or_more_routes_failed",
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "coverage_limitation": null,
         "routes": [
           {
@@ -7727,7 +7727,7 @@
         "duplicate_count": 0,
         "filtered_count": 0,
         "stop_reason": "one_or_more_routes_failed",
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "coverage_limitation": null,
         "routes": [
           {
@@ -7761,7 +7761,7 @@
         "duplicate_count": 0,
         "filtered_count": 0,
         "stop_reason": "one_or_more_routes_failed",
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "coverage_limitation": null,
         "routes": [
           {
@@ -7795,7 +7795,7 @@
         "duplicate_count": 0,
         "filtered_count": 0,
         "stop_reason": "one_or_more_routes_failed",
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "coverage_limitation": null,
         "routes": [
           {
@@ -7829,7 +7829,7 @@
         "duplicate_count": 0,
         "filtered_count": 0,
         "stop_reason": "one_or_more_routes_failed",
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "coverage_limitation": null,
         "routes": [
           {
@@ -7863,7 +7863,7 @@
         "duplicate_count": 0,
         "filtered_count": 0,
         "stop_reason": "one_or_more_routes_failed",
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "coverage_limitation": null,
         "routes": [
           {
@@ -7897,7 +7897,7 @@
         "duplicate_count": 0,
         "filtered_count": 0,
         "stop_reason": "one_or_more_routes_failed",
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "coverage_limitation": null,
         "routes": [
           {
@@ -7931,7 +7931,7 @@
         "duplicate_count": 0,
         "filtered_count": 0,
         "stop_reason": "one_or_more_routes_failed",
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "coverage_limitation": null,
         "routes": [
           {
@@ -7965,7 +7965,7 @@
         "duplicate_count": 0,
         "filtered_count": 0,
         "stop_reason": "one_or_more_routes_failed",
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "coverage_limitation": null,
         "routes": [
           {
@@ -7999,7 +7999,7 @@
         "duplicate_count": 0,
         "filtered_count": 0,
         "stop_reason": "one_or_more_routes_failed",
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "coverage_limitation": null,
         "routes": [
           {
@@ -8033,7 +8033,7 @@
         "duplicate_count": 0,
         "filtered_count": 0,
         "stop_reason": "one_or_more_routes_failed",
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "coverage_limitation": null,
         "routes": [
           {
@@ -8067,7 +8067,7 @@
         "duplicate_count": 0,
         "filtered_count": 0,
         "stop_reason": "one_or_more_routes_failed",
-        "checked_at": "2026-07-24T05:19:49.132Z",
+        "checked_at": "2026-07-25T15:30:00.778Z",
         "coverage_limitation": null,
         "routes": [
           {

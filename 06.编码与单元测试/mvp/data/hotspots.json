@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-24T05:19:49.132Z",
+  "generated_at": "2026-07-25T15:30:00.778Z",
   "items": [
     {
       "id": "youtube-4587f50f675c07eb2f97",
@@ -5990,12 +5990,12 @@
       "event_id": "event-bcc457ca89791226a30e",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.92163403401676,
+        "recent_timeliness": 95.33458256094517,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 62.5,
+      "final_score": 61.3,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6016,19 +6016,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube-2434119ecad67e7aa366",
       "event_id": "event-7faf53faa1fc1860f748",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 96.45574343751994,
+        "recent_timeliness": 58.888837510598144,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 61.6,
+      "final_score": 52.2,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6049,19 +6049,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube:jPPiZ22DY3g",
       "event_id": "event-d4f0bc5a29de06b510f9",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.58083640033898,
+        "recent_timeliness": 97.42076655832335,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 62.4,
+      "final_score": 61.9,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6082,19 +6082,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube:O7XOUK4B5pg",
       "event_id": "event-0e865b5055188573045b",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.58071212849472,
+        "recent_timeliness": 97.42064498213695,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 62.4,
+      "final_score": 61.9,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6115,19 +6115,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube:DHTnxP6oUIk",
       "event_id": "event-d4f0bc5a29de06b510f9",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.5776586404719,
+        "recent_timeliness": 97.41765772922146,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 62.4,
+      "final_score": 61.9,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6148,19 +6148,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube:2ckOjFrGz5c",
       "event_id": "event-acb627e3befc70cd883a",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 89.66056727903882,
+        "recent_timeliness": 54.740198866680664,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 59.9,
+      "final_score": 51.2,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6181,19 +6181,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube:IDLUJK8mLlI",
       "event_id": "event-bcd93a783aa2a74188a1",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 89.23360053834205,
+        "recent_timeliness": 54.47952413525206,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 59.8,
+      "final_score": 51.1,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6214,19 +6214,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "x-13620054002ca95674b8",
       "event_id": "event-2b2de0c6c18dc299728a",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 96.65740465903666,
+        "recent_timeliness": 83.94753631880931,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 67.7,
+      "final_score": 64.5,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6247,19 +6247,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube:-_p2a6uWfjk",
       "event_id": "event-8bd163416e6bdea419f5",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 96.56262621822262,
+        "recent_timeliness": 83.86522067387199,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 67.6,
+      "final_score": 64.5,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6280,19 +6280,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube:t8Ej9aeW388",
       "event_id": "event-df61500353bd41fa952c",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 96.56030221451883,
+        "recent_timeliness": 83.86320226270094,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 67.6,
+      "final_score": 64.5,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6313,19 +6313,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube:wMN7fI57ldo",
       "event_id": "event-4c544b0fbd5813215e5a",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 88.10788167804868,
+        "recent_timeliness": 53.79224235519538,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 59.5,
+      "final_score": 50.9,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6346,19 +6346,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube:wSYICJzrIbs",
       "event_id": "event-99ad3cc8d9098e78773c",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 88.08879882932365,
+        "recent_timeliness": 53.7805917604484,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 59.5,
+      "final_score": 50.9,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6379,19 +6379,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube:T1qha9jyy5s",
       "event_id": "event-1a27bc65f42ddf693260",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 87.99768224961808,
+        "recent_timeliness": 53.72496262665526,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 59.5,
+      "final_score": 50.9,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6412,19 +6412,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube:ROFL9DUQ2rk",
       "event_id": "event-bd113c9cc7f9c3fb129a",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 87.99732926800343,
+        "recent_timeliness": 53.724747121842285,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 59.5,
+      "final_score": 50.9,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6445,19 +6445,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube:zq88iLsSfMA",
       "event_id": "event-ade398bff01558ed07ea",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 96.37599891987081,
+        "recent_timeliness": 83.70313374466325,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 67.6,
+      "final_score": 64.4,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6478,19 +6478,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "x-d6c1d3cd28753f93c5d1",
       "event_id": "event-43a33c000ff22b8447ec",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 96.11160333020912,
+        "recent_timeliness": 83.47350458749777,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 67.5,
+      "final_score": 64.4,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6511,19 +6511,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube:E0ZMOschrTU",
       "event_id": "event-43a33c000ff22b8447ec",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 96.09309969860035,
+        "recent_timeliness": 83.45743407234183,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 67.5,
+      "final_score": 64.4,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6544,19 +6544,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "x-fe4ff42a0f97484f72ce",
       "event_id": "event-3386b4d46648144b1f40",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.35925790470631,
+        "recent_timeliness": 97.20399445961759,
         "light_user_experience": 50,
         "source_reliability": 70,
         "interaction_quality": 50
       },
-      "final_score": 66.3,
+      "final_score": 65.8,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6577,19 +6577,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube:TLjcOMxqmF4",
       "event_id": "event-e5927c53ade35b8fb69a",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 95.93574269142321,
+        "recent_timeliness": 83.32076856676964,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 67.5,
+      "final_score": 64.3,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6610,19 +6610,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube:UTfg-_EGurw",
       "event_id": "event-b3c0e43f65596852a67c",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 95.85880875308393,
+        "recent_timeliness": 83.25395097937768,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 67.5,
+      "final_score": 64.3,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6643,19 +6643,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "x-16d214f4e980b00135b4",
       "event_id": "event-d4f0bc5a29de06b510f9",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 95.842001410171,
+        "recent_timeliness": 83.23935370113931,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 67.5,
+      "final_score": 64.3,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6676,19 +6676,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube:oikd-FocWrI",
       "event_id": "event-df61500353bd41fa952c",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 95.81597232415558,
+        "recent_timeliness": 83.21674728364515,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 67.5,
+      "final_score": 64.3,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6709,19 +6709,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "x-f38349763959ca20c7c6",
       "event_id": "event-d4f0bc5a29de06b510f9",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 95.81498401718316,
+        "recent_timeliness": 83.21588893310538,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 67.5,
+      "final_score": 64.3,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6742,19 +6742,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube:jfyea8LZX-o",
       "event_id": "event-d4f0bc5a29de06b510f9",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.32137567573956,
+        "recent_timeliness": 97.16693395763465,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 62.3,
+      "final_score": 61.8,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6775,19 +6775,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube:34D1imLordU",
       "event_id": "event-5c13324abe32b53c39d9",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.29322573378991,
+        "recent_timeliness": 97.13939463357954,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 52.3,
+      "final_score": 51.8,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "declared_sponsorship",
@@ -6814,19 +6814,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube-79cb47f53f3337d34b50",
       "event_id": "event-d4f0bc5a29de06b510f9",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 95.53854921896365,
+        "recent_timeliness": 82.97580365101886,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 67.4,
+      "final_score": 64.2,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6847,19 +6847,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube:LfOg0q3AHMU",
       "event_id": "event-c09e669a1a07600816f4",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 84.59538443582227,
+        "recent_timeliness": 51.64776788449801,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 58.6,
+      "final_score": 50.4,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6880,19 +6880,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube:ILnUlHxyooA",
       "event_id": "event-1451d6576ea63c01cc16",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 84.20334596947163,
+        "recent_timeliness": 51.40841780828631,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 58.6,
+      "final_score": 50.4,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6913,19 +6913,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube:OT6408Sfc74",
       "event_id": "event-7d3194f79e645c42e439",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 84.05654751486328,
+        "recent_timeliness": 51.31879338539397,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 58.5,
+      "final_score": 50.3,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6946,19 +6946,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube:fVddV5rpXug",
       "event_id": "event-bb2c8c847a7bfd677d38",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 84.04238742601369,
+        "recent_timeliness": 51.31014826855923,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 58.5,
+      "final_score": 50.3,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -6979,19 +6979,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube:4EWmnmJwPU0",
       "event_id": "event-fe3e5798356a28f572db",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 84.00969347929515,
+        "recent_timeliness": 51.29018773072838,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 58.5,
+      "final_score": 50.3,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -7012,19 +7012,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "x-80369133ce1998574839",
       "event_id": "event-8200695d9a3dc28c25f0",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 95.1396199918419,
+        "recent_timeliness": 82.62933122192176,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 67.3,
+      "final_score": 64.2,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -7045,19 +7045,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "x-1a4bd0566821f8d4c6be",
       "event_id": "event-ade398bff01558ed07ea",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 95.11367265325721,
+        "recent_timeliness": 82.60679580256203,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 67.3,
+      "final_score": 64.2,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -7078,19 +7078,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube:BBl8bNJP6ds",
       "event_id": "event-44ad022d663392b502ce",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.2191710922052,
+        "recent_timeliness": 97.06694635727285,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 62.3,
+      "final_score": 61.8,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -7111,19 +7111,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "x-5847b0d09748e3afd547",
       "event_id": "event-483a2cf0c7d3ced5d7c7",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 95.08032218735178,
+        "recent_timeliness": 82.5778307226727,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 67.3,
+      "final_score": 64.1,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -7144,19 +7144,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "x-a5eecb28ff93840bfd6f",
       "event_id": "event-17895ed2c34868bcafdc",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 95.07411113780718,
+        "recent_timeliness": 82.57243638884941,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 67.3,
+      "final_score": 64.1,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -7177,19 +7177,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube:lR58Dge8jE8",
       "event_id": "event-df61500353bd41fa952c",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 95.06267079282829,
+        "recent_timeliness": 82.56250038054252,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 67.3,
+      "final_score": 64.1,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -7210,19 +7210,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "youtube-451318fc695a19f2dbfe",
       "event_id": "event-34313a5d637303078799",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 98.30413457751149,
+        "recent_timeliness": 93.7913368267332,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 54.1,
+      "final_score": 52.9,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "affiliate_link",
@@ -7248,19 +7248,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "x-a44ca4b708509518044b",
       "event_id": "event-58ea517721a31121dc71",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.19640840534947,
+        "recent_timeliness": 97.04467743001162,
         "light_user_experience": 50,
         "source_reliability": 70,
         "interaction_quality": 50
       },
-      "final_score": 66.3,
+      "final_score": 65.8,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -7281,1301 +7281,14 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
       "content_id": "x-83407c41da1f30d54f30",
       "event_id": "event-25f0a585799ba2cf9260",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 94.78243176079296,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 67.2,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 9,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "youtube:Bc8SMuzWvgc",
-      "event_id": "event-d234304b032a361fad48",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 94.76874562913137,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 67.2,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 3,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-f29711b539be9895c70b",
-      "event_id": "event-10589d0e1d6bf368fbb9",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 94.6757106272249,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 67.2,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 9,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-dc8e352d7c2d94bad11a",
-      "event_id": "event-5d72436256ada53828b5",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 94.63492130149199,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 67.2,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 5,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-a81c63a2d54f46d92137",
-      "event_id": "event-f64a75c7eb08895ca6ef",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 93.99663389966524,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 67,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 9,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "youtube:E3dDr_QtBuo",
-      "event_id": "event-ade398bff01558ed07ea",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 93.98392293178597,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 67,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 8,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "youtube:yRtUkbq_hHo",
-      "event_id": "event-6582d31ecca23af3112a",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 99.02257982990389,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 62.3,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 2,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "youtube-d18247c16e33ad96d5ea",
-      "event_id": "event-b3efb2b79652b76aa273",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 93.82432054556017,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 67,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 4,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "youtube-df0d651e903930f29988",
-      "event_id": "event-e41655eab48df6ba902b",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 78.55504605726308,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 57.1,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 4,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "youtube:YOIJOfUSYiU",
-      "event_id": "event-d4f0bc5a29de06b510f9",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 98.90994331577961,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 62.2,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 4,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "youtube:sF248PxKjeQ",
-      "event_id": "event-a211784b54330c40155f",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 78.13707184419401,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 57,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 2,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "youtube:D4yCCUzqERE",
-      "event_id": "event-aa4cf1a33e1be56b7014",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 98.90370124461641,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 62.2,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 1,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "youtube-f25a6c8fe6729e92d472",
-      "event_id": "event-495c93d15a42a856f06f",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 97.64620973193307,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 61.9,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 1,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "youtube:F0DKg84QPwM",
-      "event_id": "event-cec270141cdee2fb291a",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 77.87204814783082,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 57,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 2,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "youtube:mEL4_t3an78",
-      "event_id": "event-a3e690053061793bb12a",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 98.89403915428831,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 62.2,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 2,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-a5c2b3193e3c724bd781",
-      "event_id": "event-5486d1222bef3715566e",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 98.83337293316838,
-        "light_user_experience": 50,
-        "source_reliability": 70,
-        "interaction_quality": 50
-      },
-      "final_score": 66.2,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 8,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "youtube-c2c92013cb05151d81d2",
-      "event_id": "event-d4f0bc5a29de06b510f9",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 92.71604846419297,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 66.7,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 2,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "youtube:MX95QbxSc9Q",
-      "event_id": "event-d4f0bc5a29de06b510f9",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 92.16725382953267,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 66.5,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 8,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-d3bf4604d68071904091",
-      "event_id": "event-61fa21632f3a5858e23b",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 98.57589489400324,
-        "light_user_experience": 50,
-        "source_reliability": 70,
-        "interaction_quality": 50
-      },
-      "final_score": 66.1,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 8,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "youtube-9fde06cc925664ba6514",
-      "event_id": "event-e06265aa18902a3edcc8",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 96.81773047703176,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 61.7,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 3,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "youtube-9586d651afdcab763d8e",
-      "event_id": "event-ade398bff01558ed07ea",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 94.96015770908879,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 61.2,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 1,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "youtube-46967e48ca7251ac1b50",
-      "event_id": "event-d4f0bc5a29de06b510f9",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 66.2503689231227,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 54.1,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 4,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-e2cf653f5405f37a408e",
-      "event_id": "event-361f3eaa6b416ea33268",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 88.71988973161837,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 65.7,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 9,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-6bccfd16f3048b4b9bc5",
-      "event_id": "event-5e4bdece91c50d567341",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 97.97510410959455,
-        "light_user_experience": 50,
-        "source_reliability": 70,
-        "interaction_quality": 50
-      },
-      "final_score": 66,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 8,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-aee050f5709b52421ad3",
-      "event_id": "event-d956b49fbff6e3fcfd70",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 97.95442552514861,
-        "light_user_experience": 50,
-        "source_reliability": 70,
-        "interaction_quality": 50
-      },
-      "final_score": 66,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 8,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "youtube-cdc6c158856694c6729b",
-      "event_id": "event-8ecb7e007bc008947275",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 86.90023543214944,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 65.2,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 4,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-316dfab643df584e43b1",
-      "event_id": "event-6123d8e5b9c16cbe26d0",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 86.4414246847413,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 65.1,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 9,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "youtube-791cdb514949bec61d3a",
-      "event_id": "event-3205f540364da88c538c",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 95.22198838421969,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 61.3,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 2,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-3a0cdc174a5da1e696a9",
-      "event_id": "event-4c16c1d6c80e1dfae393",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 86.22641667238791,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 65.1,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 1,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-3192cd094f8de8d853e2",
-      "event_id": "event-d4f0bc5a29de06b510f9",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 85.74148195056807,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 64.9,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 9,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-35fe55da7da312385623",
-      "event_id": "event-b66f5bd13c8c43c22958",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 85.26963276460468,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 64.8,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 9,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-4428b9ec45abaaf5be28",
-      "event_id": "event-7b40124946d5be9b4344",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 97.4977138201711,
-        "light_user_experience": 50,
-        "source_reliability": 70,
-        "interaction_quality": 50
-      },
-      "final_score": 65.9,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 8,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-e604df34469c8e2bae52",
-      "event_id": "event-5d72436256ada53828b5",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 84.93090653756114,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 64.7,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 5,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-5e49714190b44db1275f",
-      "event_id": "event-3a8952ef0be08bbf5694",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 84.71907310709946,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 64.7,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 5,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "youtube-16184990c83c7386d78f",
-      "event_id": "event-d4f0bc5a29de06b510f9",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 84.69548241543148,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 64.7,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 3,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-e1699fb4149f44f5b447",
-      "event_id": "event-6279474228591a57c002",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 84.65588812596938,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 64.7,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 9,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "youtube-484f9585df90f05fad10",
-      "event_id": "event-495c93d15a42a856f06f",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 83.63281249719358,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 64.4,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 2,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-81ee1b63c9444b8fcf49",
-      "event_id": "event-7faf53faa1fc1860f748",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 97.0524743646221,
-        "light_user_experience": 50,
-        "source_reliability": 70,
-        "interaction_quality": 50
-      },
-      "final_score": 65.8,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 8,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-58da6744f8bbca11e977",
-      "event_id": "event-f1038597ead78bd3deb2",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 97.04745680446239,
-        "light_user_experience": 50,
-        "source_reliability": 70,
-        "interaction_quality": 50
-      },
-      "final_score": 65.8,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 8,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-c57866c1fa2046935984",
-      "event_id": "event-2e99a7d03ae1fff8bb0f",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 82.40138676986297,
+        "recent_timeliness": 82.31911109854472,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
@@ -8601,415 +7314,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
-      "content_id": "youtube-07d4a76522146cf2a98e",
-      "event_id": "event-55945dd54727ea967da9",
+      "content_id": "youtube:Bc8SMuzWvgc",
+      "event_id": "event-d234304b032a361fad48",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 93.62965227708102,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 60.9,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 3,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "youtube-afcd8469e1e1c7db4c36",
-      "event_id": "event-8c32038f6004da3d0983",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 79.31920791439123,
+        "recent_timeliness": 82.30722461101922,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 63.3,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 4,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "youtube-c6dc6baf97dc9111fa20",
-      "event_id": "event-3a76d3863109aa9d82d9",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 43.81778177426069,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 48.5,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 4,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-f2f361e25ac16538949f",
-      "event_id": "event-7d3194f79e645c42e439",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 78.96329409074808,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 63.2,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 5,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-f374a1a4a7c88d5c2fe8",
-      "event_id": "event-5d72436256ada53828b5",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 78.85224072398384,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 63.2,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 5,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-67847c064f92265062f0",
-      "event_id": "event-a3f35d6a513f4d716029",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 78.71129815064522,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 63.2,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 5,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-b6ca0ccb30166714b924",
-      "event_id": "event-567c3ad22f6224d04b05",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 78.3443732140886,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 63.1,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 9,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-97eff6b313b40af50506",
-      "event_id": "event-4af00ad33f3f1b8b98f7",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 78.2869295415886,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 63.1,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 9,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-389c77d697014d0f2677",
-      "event_id": "event-5d72436256ada53828b5",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 78.03065292517535,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 63,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 5,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-597cbca23f3cba2978a7",
-      "event_id": "event-bcb8223c06d3940a0b11",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 78.02492967189285,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 63,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 9,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-856e79efb701475b2872",
-      "event_id": "event-69c1e36ad13b2b0769a2",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 78.00812004292763,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 63,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 9,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "x-d0a381da356128450a37",
-      "event_id": "event-0a3d8563c01cd1ae704e",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 78.00311361946876,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 63,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 1,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
-    },
-    {
-      "content_id": "youtube-945d7a8667300951d99e",
-      "event_id": "event-b51f754463926153e9b9",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 77.99408498947099,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 63,
+      "final_score": 64.1,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -9030,19 +7347,316 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
-      "content_id": "x-5917990beb991b068adb",
-      "event_id": "event-991233f64674f66337ea",
+      "content_id": "x-f29711b539be9895c70b",
+      "event_id": "event-10589d0e1d6bf368fbb9",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 77.96637987855568,
+        "recent_timeliness": 82.22642315324148,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 63,
+      "final_score": 64.1,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 9,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-dc8e352d7c2d94bad11a",
+      "event_id": "event-5d72436256ada53828b5",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 82.19099737892587,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 64,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 5,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-a81c63a2d54f46d92137",
+      "event_id": "event-f64a75c7eb08895ca6ef",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 81.63664093788854,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 63.9,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 9,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "youtube:E3dDr_QtBuo",
+      "event_id": "event-ade398bff01558ed07ea",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 81.6256013859633,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 63.9,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 8,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "youtube:yRtUkbq_hHo",
+      "event_id": "event-6582d31ecca23af3112a",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 96.87461947828314,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 61.7,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 2,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "youtube-d18247c16e33ad96d5ea",
+      "event_id": "event-b3efb2b79652b76aa273",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 81.48698575520513,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 63.9,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 4,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "youtube-df0d651e903930f29988",
+      "event_id": "event-e41655eab48df6ba902b",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 47.959978100218194,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 49.5,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 4,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "youtube:YOIJOfUSYiU",
+      "event_id": "event-d4f0bc5a29de06b510f9",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 96.76442623282443,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 61.7,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 4,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "youtube:sF248PxKjeQ",
+      "event_id": "event-a211784b54330c40155f",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 47.70479354987579,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 49.4,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 2,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "youtube:D4yCCUzqERE",
+      "event_id": "event-aa4cf1a33e1be56b7014",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 96.75831956230819,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 61.7,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -9059,18 +7673,381 @@
         "evidence": []
       },
       "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "youtube-f25a6c8fe6729e92d472",
+      "event_id": "event-495c93d15a42a856f06f",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 93.16361500136414,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 60.8,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 1,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "youtube:F0DKg84QPwM",
+      "event_id": "event-cec270141cdee2fb291a",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 47.54298942255911,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 49.4,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 2,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "youtube:mEL4_t3an78",
+      "event_id": "event-a3e690053061793bb12a",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 96.7488670583893,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 61.7,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 2,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-a5c2b3193e3c724bd781",
+      "event_id": "event-5486d1222bef3715566e",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 96.68951678599412,
+        "light_user_experience": 50,
+        "source_reliability": 70,
+        "interaction_quality": 50
+      },
+      "final_score": 65.7,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 8,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "youtube-c2c92013cb05151d81d2",
+      "event_id": "event-d4f0bc5a29de06b510f9",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 80.5244447979977,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 63.6,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 2,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
         "status": "official_source",
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
-      "content_id": "x-af26eecf24dfb46bcc3a",
-      "event_id": "event-722dd83cc51c10196e88",
+      "content_id": "youtube:MX95QbxSc9Q",
+      "event_id": "event-d4f0bc5a29de06b510f9",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 96.19572719372793,
+        "recent_timeliness": 80.04781336259732,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 63.5,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 8,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-d3bf4604d68071904091",
+      "event_id": "event-61fa21632f3a5858e23b",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 96.43762386307712,
+        "light_user_experience": 50,
+        "source_reliability": 70,
+        "interaction_quality": 50
+      },
+      "final_score": 65.6,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 8,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "youtube-9fde06cc925664ba6514",
+      "event_id": "event-e06265aa18902a3edcc8",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 92.37316832092323,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 60.6,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 3,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "youtube-9586d651afdcab763d8e",
+      "event_id": "event-ade398bff01558ed07ea",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 88.49685558000692,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 59.6,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 1,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "youtube-46967e48ca7251ac1b50",
+      "event_id": "event-d4f0bc5a29de06b510f9",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 40.44764024921052,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 47.6,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 4,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-e2cf653f5405f37a408e",
+      "event_id": "event-361f3eaa6b416ea33268",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 77.0537569441089,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 62.8,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 9,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-6bccfd16f3048b4b9bc5",
+      "event_id": "event-5e4bdece91c50d567341",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 95.84986520514651,
         "light_user_experience": 50,
         "source_reliability": 70,
         "interaction_quality": 50
@@ -9086,7 +8063,7 @@
       "anomaly_assessment": {
         "status": "insufficient_sample",
         "method": "mad",
-        "sample_count": 1,
+        "sample_count": 8,
         "min_samples": 30,
         "adjustment": 0,
         "evidence": []
@@ -9096,19 +8073,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
-      "content_id": "youtube-6135861cb5287766343e",
-      "event_id": "event-f19e57cc78690b7d129d",
+      "content_id": "x-aee050f5709b52421ad3",
+      "event_id": "event-d956b49fbff6e3fcfd70",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 96.17396676320755,
+        "recent_timeliness": 95.82963517273376,
         "light_user_experience": 50,
-        "source_reliability": 50,
+        "source_reliability": 70,
         "interaction_quality": 50
       },
-      "final_score": 61.5,
+      "final_score": 65.5,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -9119,7 +8096,7 @@
       "anomaly_assessment": {
         "status": "insufficient_sample",
         "method": "mad",
-        "sample_count": 1,
+        "sample_count": 8,
         "min_samples": 30,
         "adjustment": 0,
         "evidence": []
@@ -9129,19 +8106,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
-      "content_id": "x-eafe8bf5d212840a81bd",
-      "event_id": "event-ac9e1bbfbea16903579a",
+      "content_id": "youtube-cdc6c158856694c6729b",
+      "event_id": "event-8ecb7e007bc008947275",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 77.66859217268993,
+        "recent_timeliness": 75.47337625903674,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 62.9,
+      "final_score": 62.4,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -9152,7 +8129,7 @@
       "anomaly_assessment": {
         "status": "insufficient_sample",
         "method": "mad",
-        "sample_count": 1,
+        "sample_count": 4,
         "min_samples": 30,
         "adjustment": 0,
         "evidence": []
@@ -9162,19 +8139,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
-      "content_id": "x-1003d67da5931198553b",
-      "event_id": "event-7d1ed20c3eaa8a267d8d",
+      "content_id": "x-316dfab643df584e43b1",
+      "event_id": "event-6123d8e5b9c16cbe26d0",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 77.65693219267209,
+        "recent_timeliness": 75.07489637001663,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 62.9,
+      "final_score": 62.3,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -9195,19 +8172,184 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
-      "content_id": "x-c58f190242224520669b",
-      "event_id": "event-fe1b6743926d111070d7",
+      "content_id": "youtube-791cdb514949bec61d3a",
+      "event_id": "event-3205f540364da88c538c",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 77.4831304105488,
+        "recent_timeliness": 90.8506811462101,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 60.2,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 2,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-3a0cdc174a5da1e696a9",
+      "event_id": "event-4c16c1d6c80e1dfae393",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 74.88816062028756,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 62.9,
+      "final_score": 62.2,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 1,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-3192cd094f8de8d853e2",
+      "event_id": "event-d4f0bc5a29de06b510f9",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 74.46699190263138,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 62.1,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 9,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-35fe55da7da312385623",
+      "event_id": "event-b66f5bd13c8c43c22958",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 74.05718805143766,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 62,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 9,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-4428b9ec45abaaf5be28",
+      "event_id": "event-7b40124946d5be9b4344",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 95.38283028533361,
+        "light_user_experience": 50,
+        "source_reliability": 70,
+        "interaction_quality": 50
+      },
+      "final_score": 65.3,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 8,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-e604df34469c8e2bae52",
+      "event_id": "event-5d72436256ada53828b5",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 73.76300228939307,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 61.9,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -9228,19 +8370,52 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
-      "content_id": "youtube-88ab64854a6c49cc3544",
-      "event_id": "event-91301c39b08793ee086d",
+      "content_id": "x-5e49714190b44db1275f",
+      "event_id": "event-3a8952ef0be08bbf5694",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 77.37061174707071,
+        "recent_timeliness": 73.5790236830985,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 62.8,
+      "final_score": 61.9,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 5,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "youtube-16184990c83c7386d78f",
+      "event_id": "event-d4f0bc5a29de06b510f9",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 73.55853502573623,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 61.9,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -9261,19 +8436,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     },
     {
-      "content_id": "x-78c7f163e3481606407e",
-      "event_id": "event-d49b710f5312bbca7efb",
+      "content_id": "x-e1699fb4149f44f5b447",
+      "event_id": "event-6279474228591a57c002",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 77.36520290422149,
+        "recent_timeliness": 73.52414714759735,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 62.8,
+      "final_score": 61.9,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -9294,24 +8469,852 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-07-24T05:19:49.132Z"
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "youtube-484f9585df90f05fad10",
+      "event_id": "event-495c93d15a42a856f06f",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 72.63559982102153,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 61.7,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 2,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-81ee1b63c9444b8fcf49",
+      "event_id": "event-7faf53faa1fc1860f748",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 94.94724879566613,
+        "light_user_experience": 50,
+        "source_reliability": 70,
+        "interaction_quality": 50
+      },
+      "final_score": 65.2,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 8,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-58da6744f8bbca11e977",
+      "event_id": "event-f1038597ead78bd3deb2",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 94.94234007452377,
+        "light_user_experience": 50,
+        "source_reliability": 70,
+        "interaction_quality": 50
+      },
+      "final_score": 65.2,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 8,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-c57866c1fa2046935984",
+      "event_id": "event-2e99a7d03ae1fff8bb0f",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 71.56609918282764,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 61.4,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 9,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "youtube-07d4a76522146cf2a98e",
+      "event_id": "event-55945dd54727ea967da9",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 89.33144360032385,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 59.8,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 3,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "youtube-afcd8469e1e1c7db4c36",
+      "event_id": "event-8c32038f6004da3d0983",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 68.88920834012913,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 60.7,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 4,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "youtube-c6dc6baf97dc9111fa20",
+      "event_id": "event-3a76d3863109aa9d82d9",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 26.75193968776727,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 44.2,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 4,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-f2f361e25ac16538949f",
+      "event_id": "event-7d3194f79e645c42e439",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 68.5800950472361,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 60.6,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 5,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-f374a1a4a7c88d5c2fe8",
+      "event_id": "event-5d72436256ada53828b5",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 68.4836445313894,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 60.6,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 5,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-67847c064f92265062f0",
+      "event_id": "event-a3f35d6a513f4d716029",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 68.36123506016526,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 60.6,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 5,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-b6ca0ccb30166714b924",
+      "event_id": "event-567c3ad22f6224d04b05",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 68.04255854959143,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 60.5,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 9,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-97eff6b313b40af50506",
+      "event_id": "event-4af00ad33f3f1b8b98f7",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 67.99266837510879,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 60.5,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 9,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-389c77d697014d0f2677",
+      "event_id": "event-5d72436256ada53828b5",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 67.77009059495937,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 60.4,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 5,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-597cbca23f3cba2978a7",
+      "event_id": "event-bcb8223c06d3940a0b11",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 67.76511991511866,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 60.4,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 9,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-856e79efb701475b2872",
+      "event_id": "event-69c1e36ad13b2b0769a2",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 67.75052065143015,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 60.4,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 9,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-d0a381da356128450a37",
+      "event_id": "event-0a3d8563c01cd1ae704e",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 67.7461725425954,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 60.4,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 1,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "youtube-945d7a8667300951d99e",
+      "event_id": "event-b51f754463926153e9b9",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 67.7383311232306,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 60.4,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 3,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-5917990beb991b068adb",
+      "event_id": "event-991233f64674f66337ea",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 67.7142690680473,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 60.4,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 1,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-af26eecf24dfb46bcc3a",
+      "event_id": "event-722dd83cc51c10196e88",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 94.10908586038373,
+        "light_user_experience": 50,
+        "source_reliability": 70,
+        "interaction_quality": 50
+      },
+      "final_score": 65,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 1,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "youtube-6135861cb5287766343e",
+      "event_id": "event-f19e57cc78690b7d129d",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 94.08779744889246,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 61,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 1,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-eafe8bf5d212840a81bd",
+      "event_id": "event-ac9e1bbfbea16903579a",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 67.45563865745801,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 60.4,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 1,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-1003d67da5931198553b",
+      "event_id": "event-7d1ed20c3eaa8a267d8d",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 67.44551189480103,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 60.4,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 9,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-c58f190242224520669b",
+      "event_id": "event-fe1b6743926d111070d7",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 67.29456400344664,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 60.3,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 5,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "youtube-88ab64854a6c49cc3544",
+      "event_id": "event-91301c39b08793ee086d",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 67.19684086860569,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 60.3,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 3,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
+    },
+    {
+      "content_id": "x-78c7f163e3481606407e",
+      "event_id": "event-d49b710f5312bbca7efb",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 67.19214325611412,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 60.3,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 9,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-07-25T15:30:00.778Z"
     }
   ],
   "coverage": {
-    "status": "rotating",
-    "sources_total": 94,
-    "sources_attempted": 78,
-    "sources_terminal": 78,
+    "status": "complete",
+    "platform_scope": "bilibili-only",
+    "sources_total": 20,
+    "sources_attempted": 20,
+    "sources_terminal": 20,
     "platforms": {
       "youtube": {
-        "status": "degraded",
-        "items": 277
+        "status": "not_run",
+        "items": 0,
+        "reason": "excluded_by_platform_scope"
       },
       "x": {
-        "status": "rotating",
-        "items": 229,
-        "attempted": 15,
-        "total": 31
+        "status": "not_run",
+        "items": 0,
+        "attempted": 0,
+        "total": 31,
+        "reason": "excluded_by_platform_scope"
       },
       "bilibili": {
         "status": "partial",
@@ -9341,10 +9344,10 @@
     },
     "time_layers": {
       "recent-1d": {
-        "items": 59
+        "items": 0
       },
       "recent-7d": {
-        "items": 41
+        "items": 100
       },
       "recent-30d": {
         "items": 0
@@ -9359,7 +9362,7 @@
         "items": 0
       }
     },
-    "active_layer": "recent-1d",
+    "active_layer": null,
     "time_layer_scope": "latest-feed-observation",
     "history": {
       "status": "blocked",
@@ -9367,7 +9370,7 @@
     },
     "registry": {
       "total": 2450,
-      "observations_in_run": 630,
+      "observations_in_run": 0,
       "new_in_projection": 0,
       "analysis_version": "rules-v1"
     }
