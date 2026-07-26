@@ -15,7 +15,7 @@
  * 六个视图：
  * ═══════════════════════════════════════════════════════════════
  *   工具库 (tools)     — 搜索 + 分类/访问/价格筛选 + 卡片网格 + 详情弹窗
- *   场景导航 (scenes)  — 12 个场景入口, 点击跳转到工具库筛选结果
+ *   场景模式 (scenes)  — 12 个场景入口，可展开子任务并查看匹配工具卡片
  *   对比模式 (compare)  — 2-5 个工具并排比较 10+ 维度
  *   AI热点 (trending)  — 三平台内容 feed, 平台筛选, 按评分/时间排序
  *   AI概念 (glossary)  — 43 条术语, 分类筛选 + 搜索 + 可展开详情
@@ -754,14 +754,14 @@ function renderTrending() {
 // ═══════════════════════════════════════════════════════════════
 
 const scenePalette = {
-  writing: { accent: '#d97706', light: '#fffbeb' },
-  coding: { accent: '#047857', light: '#ecfdf5' },
-  design: { accent: '#be185d', light: '#fdf2f8' },
-  video: { accent: '#b91c1c', light: '#fef2f2' },
-  audio: { accent: '#6d28d9', light: '#faf5ff' },
-  research: { accent: '#4338ca', light: '#eef2ff' },
-  office: { accent: '#0e7490', light: '#ecfeff' },
-  learning: { accent: '#1d4ed8', light: '#eff6ff' },
+  writing: { accent: '#d97706', border: '#92400e' },
+  coding: { accent: '#047857', border: '#064e3b' },
+  design: { accent: '#be185d', border: '#831843' },
+  video: { accent: '#b91c1c', border: '#7f1d1d' },
+  audio: { accent: '#6d28d9', border: '#4c1d95' },
+  research: { accent: '#4338ca', border: '#312e81' },
+  office: { accent: '#0e7490', border: '#164e63' },
+  learning: { accent: '#1d4ed8', border: '#1e3a8a' },
 };
 
 function getFilteredScenes() {
@@ -778,6 +778,32 @@ function getFilteredScenes() {
 
 function getSceneToolIds(scene) {
   return [...new Set((scene.tasks || []).flatMap(task => task.tools || []))];
+}
+
+function renderSceneToolCard(tool) {
+  const isSelected = compareList.some(item => item.id === tool.id);
+  return '<div class="tool-card scene-tool-card" onclick="openDetail(\'' + escapeHtml(tool.id) + '\')">' +
+    '<div class="tool-card-header">' +
+      '<div><div class="tool-card-name">' + escapeHtml(tool.icon + ' ' + tool.name) + '</div>' +
+      '<div class="tool-card-vendor">' + escapeHtml(tool.vendor) + '</div></div>' +
+      '<div class="scene-tool-rating"><div class="rating-stars">' + stars(tool.rating_overall) + '</div>' +
+      '<div class="rating-num">' + tool.rating_overall.toFixed(1) + '</div></div>' +
+    '</div>' +
+    '<div class="tool-card-desc">' + escapeHtml(tool.strengths) + '</div>' +
+    '<div class="tool-card-tags">' +
+      tool.scenes.slice(0, 3).map(scene => '<span class="tag scene">' + escapeHtml(scene) + '</span>').join('') +
+      (hasFree(tool) ? '<span class="tag free">免费可用</span>' : '<span class="tag paid">仅付费</span>') +
+      '<span class="tag ' + (tool.access_level === '开放' ? 'open' : 'restricted') + '">' +
+        (tool.access_level === '开放' ? '国内可用' : '需科学上网') +
+      '</span>' +
+    '</div>' +
+    '<div class="tool-card-footer" onclick="event.stopPropagation()">' +
+      '<span class="scene-tool-updated">更新: ' + escapeHtml(tool.last_updated) + '</span>' +
+      '<button class="compare-toggle ' + (isSelected ? 'selected' : '') + '" onclick="toggleCompare(\'' + escapeHtml(tool.id) + '\', this)">' +
+        (isSelected ? '已选' : '+对比') +
+      '</button>' +
+    '</div>' +
+  '</div>';
 }
 
 function renderScenes() {
@@ -798,15 +824,24 @@ function renderScenes() {
   list.innerHTML = filtered.map(scene => {
     const palette = scenePalette[scene.category] || scenePalette.learning;
     const toolIds = getSceneToolIds(scene);
-    const taskRows = (scene.tasks || []).map(task => {
+    const taskRows = (scene.tasks || []).map((task, taskIndex) => {
       const matchedTools = (task.tools || []).map(toolId => tools.find(tool => tool.id === toolId)).filter(Boolean);
+      const toolButtons = matchedTools.map(tool =>
+        '<button class="scene-tool-button" type="button" onclick="toggleSceneToolCard(\'' + escapeHtml(scene.id) + '\',' + taskIndex + ',\'' + escapeHtml(tool.id) + '\',this)">' +
+          '<span class="scene-tool-button-icon" aria-hidden="true">' + escapeHtml(tool.icon) + '</span>' +
+          '<span>' + escapeHtml(tool.name) + '</span>' +
+        '</button>'
+      ).join('');
       return '<div class="scene-task-item">' +
-        '<span class="scene-task-name">' + escapeHtml(task.task) + '</span>' +
-        '<span class="scene-task-tools">' + matchedTools.map(tool => escapeHtml(tool.icon + ' ' + tool.name)).join('、') + '</span>' +
+        '<div class="scene-task-line">' +
+          '<span class="scene-task-name">' + escapeHtml(task.task) + '</span>' +
+          '<div class="scene-task-tools">' + toolButtons + '</div>' +
+        '</div>' +
+        '<div class="scene-tool-preview" id="scene-tool-preview-' + escapeHtml(scene.id) + '-' + taskIndex + '" hidden></div>' +
       '</div>';
     }).join('');
 
-    return '<div class="scene-group" style="--scene-accent:' + palette.accent + ';--scene-accent-light:' + palette.light + '">' +
+    return '<div class="scene-group" style="--scene-accent:' + palette.accent + ';--scene-border:' + palette.border + '">' +
       '<button class="scene-row" type="button" data-scene-id="' + escapeHtml(scene.id) + '" aria-expanded="false" onclick="toggleSceneTasks(\'' + escapeHtml(scene.id) + '\')">' +
         '<span class="scene-row-left">' +
           '<span class="scene-row-icon" aria-hidden="true">' + escapeHtml(scene.icon) + '</span>' +
@@ -823,6 +858,26 @@ function renderScenes() {
   }).join('');
 }
 
+function toggleSceneToolCard(sceneId, taskIndex, toolId, button) {
+  const tasks = document.getElementById('scene-tasks-' + sceneId);
+  const preview = document.getElementById('scene-tool-preview-' + sceneId + '-' + taskIndex);
+  const tool = tools.find(item => item.id === toolId);
+  if (!tasks || !preview || !tool) return;
+
+  const isCurrent = button.classList.contains('active') && !preview.hidden;
+  tasks.querySelectorAll('.scene-tool-button.active').forEach(item => item.classList.remove('active'));
+  tasks.querySelectorAll('.scene-tool-preview').forEach(item => {
+    item.hidden = true;
+    item.innerHTML = '';
+  });
+
+  if (!isCurrent) {
+    button.classList.add('active');
+    preview.innerHTML = renderSceneToolCard(tool);
+    preview.hidden = false;
+  }
+}
+
 function toggleSceneTasks(sceneId) {
   const selectedRow = document.querySelector('.scene-row[data-scene-id="' + sceneId + '"]');
   const selectedTasks = document.getElementById('scene-tasks-' + sceneId);
@@ -833,7 +888,14 @@ function toggleSceneTasks(sceneId) {
     row.classList.remove('expanded');
     row.setAttribute('aria-expanded', 'false');
   });
-  document.querySelectorAll('.scene-tasks').forEach(tasks => { tasks.hidden = true; });
+  document.querySelectorAll('.scene-tasks').forEach(tasks => {
+    tasks.hidden = true;
+    tasks.querySelectorAll('.scene-tool-button.active').forEach(button => button.classList.remove('active'));
+    tasks.querySelectorAll('.scene-tool-preview').forEach(preview => {
+      preview.hidden = true;
+      preview.innerHTML = '';
+    });
+  });
 
   if (shouldOpen) {
     selectedRow.classList.add('expanded');
