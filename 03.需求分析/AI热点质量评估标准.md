@@ -4,7 +4,7 @@
 >
 > **前序文档**：[软件需求规格说明书.md](软件需求规格说明书.md) FR-NEWS、[热点信息源清单.md](../热点信息源清单.md)
 >
-> **后序实现**：[mvp/data/news-config.json](../06.编码与单元测试/mvp/data/news-config.json)、[mvp/scripts/build-news.js](../06.编码与单元测试/mvp/scripts/build-news.js)
+> **后序实现**：[news-config.json](../06.编码与单元测试/mvp/data/news/config/news-config.json)、[build-news.js](../06.编码与单元测试/mvp/scripts/build-news.js)
 >
 > **用途**：统一人工审核、规则评分和未来 AI 辅助判断的判定口径。本文件定义“怎样判断”，不代表当前所有能力均已自动实现。
 

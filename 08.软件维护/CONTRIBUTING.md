@@ -16,7 +16,7 @@
   点击 [数据纠错 Issue](https://github.com/wozore/infocatcher/issues/new?template=data-correction.yml)，填写结构化表单。
 
 - **方式 B：直接改数据文件**
-  编辑 `mvp/data/tools.json`，修改对应的工具条目，提交 PR。
+  编辑 `mvp/data/catalog/tools.json`，修改对应的工具条目，提交 PR。
 
 ### 推荐新工具
 
@@ -39,9 +39,20 @@
 - Fork 仓库 → 修改 → 提交 PR
 - 确保 PR 描述说明了改了**什么**和**为什么**
 
+## 模块化存储规则
+
+新增或移动文件时必须先判断所属模块，不得继续在 `mvp/data/` 或 `mvp/scripts/` 根目录平铺业务文件：
+
+- 工具、概念和场景主数据放入 `mvp/data/catalog/`；
+- 热点配置、来源、人工暂存、运行状态和公开投影分别放入 `mvp/data/news/config/`、`sources/`、`manual/`、`runtime/`、`output/`；
+- Node 脚本实现按职责放入 `scripts/shared/`、`core/`、`collectors/`、`content/`、`pipeline/`、`cli/`、`maintenance/` 或 `tests/`；
+- `scripts/` 根目录仅保留 README 和 CI 使用的稳定兼容入口，不得放新的业务实现；
+- 新增 Node 数据路径必须在 `scripts/shared/paths.js` 登记，不得在多个脚本中重复硬编码；
+- 不通过复制文件或符号链接维护两套路径；数据结构改变时必须同步 `validate.js` 与相关测试。
+
 ## 数据规范
 
-所有工具数据存储在 `mvp/data/tools.json`。每个工具包含：
+所有工具数据存储在 `mvp/data/catalog/tools.json`。每个工具包含：
 
 | 字段 | 说明 | 是否必填 |
 |------|------|:---:|

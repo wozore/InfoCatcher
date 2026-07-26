@@ -29,11 +29,11 @@ InfoCatcher MVP 仍是部署到 GitHub Pages 的**纯静态浏览器应用**。B
 
 | 视图 | 主要能力 | 数据来源 |
 |---|---|---|
-| 工具库 | 43 个 AI 工具、搜索、分类/访问/价格筛选、详情弹窗 | `data/tools.json` |
-| 场景导航 | 12 个场景入口并跳转至工具筛选 | 前端场景配置 + 工具数据 |
+| 工具库 | 43 个 AI 工具、搜索、分类/访问/价格筛选、详情弹窗 | `data/catalog/tools.json` |
+| 场景导航 | 12 个可搜索场景、子任务展开与工具映射 | `data/catalog/scenes.json` + 工具数据 |
 | 对比模式 | 选择 2–5 个工具进行 10 维度比较 | 前端 `compareList` |
-| AI 热点 | YouTube、X、Bilibili 内容，按平台筛选、按评分/时间排序，展示覆盖与降级状态 | `data/hotspots.json` |
-| AI 概念 | 43 条术语、分类筛选、搜索和展开 | `data/glossary.json` |
+| AI 热点 | YouTube、X、Bilibili 内容，按平台筛选、按评分/时间排序，展示覆盖与降级状态 | `data/news/output/hotspots.json` |
+| AI 概念 | 43 条术语、分类筛选、搜索和展开 | `data/catalog/glossary.json` |
 | 关于 | 项目定位、方法论与开源说明 | 静态 HTML |
 
 ### 1.2 当前边界
@@ -97,32 +97,27 @@ mvp/
 ├── css/style.css                      # 通用、热点和响应式样式
 ├── js/app.js                          # 数据加载、筛选、比较和六视图渲染
 ├── data/
-│   ├── tools.json                     # 43 个工具
-│   ├── glossary.json                  # 43 条概念
-│   ├── hotspots.json                  # 前端热点投影
-│   ├── news-config.json               # 评分、时间层、额度和停止条件
-│   ├── news-sources.json              # 96 个标准化热点来源
-│   ├── news-manual-items.json          # B站人工精选暂存
-│   ├── news-state.json                # 构建、来源和历史游标状态
-│   ├── news-registry.json             # 检测视频的持久发现/处理记录
-│   ├── news-quota.json                # YouTube/B站额度账本
-│   └── pending-authorizations.json    # 超出默认范围的待授权任务
+│   ├── catalog/                       # 前端主数据
+│   │   ├── tools.json                 # 43 个工具
+│   │   ├── glossary.json              # 43 条概念
+│   │   └── scenes.json                # 12 个场景及任务—工具映射
+│   └── news/
+│       ├── config/news-config.json    # 评分、时间层、额度和停止条件
+│       ├── sources/news-sources.json  # 96 个标准化热点来源
+│       ├── manual/news-manual-items.json # B站人工精选暂存
+│       ├── runtime/                   # 状态、Registry、额度、授权、锁与审计
+│       └── output/hotspots.json       # 前端热点投影
 ├── scripts/
-│   ├── build-news.js                  # 热点构建总编排入口
-│   ├── sync-news-sources.js           # Markdown 来源清单转 JSON
-│   ├── news-storage.js                # JSON 原子写和构建锁
-│   ├── news-registry.js               # 视频索引、状态与批量防重
-│   ├── news-quota.js                  # 平台独立额度预留/消费/审计
-│   ├── news-scheduler.js              # 五层 UTC 调度与推进判定
-│   ├── news-youtube.js                # uploads playlist 历史适配器
-│   ├── news-bilibili.js               # B站历史适配器（当前默认暂停）
-│   ├── news-manual.js                 # B站人工条目校验与标准化
-│   ├── news-authorization.js          # 待授权任务与决策规则
-│   ├── news-cli.js                    # 来源、人工内容、授权、额度和锁管理入口
-│   ├── validate.js                    # 数据、引用与 HTML 契约校验
-│   ├── news-tests.test.js             # 内容规则与采集行为测试（23项）
-│   ├── news-foundation.test.js        # 状态、额度、调度和 CLI 测试（20项）
-│   └── news-fixtures/                 # 三平台确定性测试样本
+│   ├── build-news.js / news-cli.js / validate.js / sync-news-sources.js # 稳定兼容入口
+│   ├── news-tests.test.js / news-foundation.test.js # 稳定测试入口
+│   ├── shared/paths.js                # 所有 Node 数据路径契约
+│   ├── core/                          # 存储、Registry、额度、调度、授权
+│   ├── collectors/                    # YouTube/B站适配器
+│   ├── content/                       # B站人工内容标准化
+│   ├── pipeline/                      # 热点构建总编排
+│   ├── cli/                           # 管理 CLI 实现
+│   ├── maintenance/                   # 校验与来源同步实现
+│   └── tests/                         # 43项测试与 fixtures
 └── .github/workflows/
     ├── collect-news.yml               # 定时/手动采集并提交生成数据
     └── deploy.yml                     # 校验、测试并部署 GitHub Pages
@@ -138,7 +133,7 @@ mvp/
 |---|---|---|
 | 导航 | 六个视图切换 | `.nav-btn[data-view]` |
 | 工具库 | 搜索、筛选、卡片 | `#view-tools`, `#toolGrid` |
-| 场景导航 | 场景卡片 | `#view-scenes`, `#sceneGrid` |
+| 场景导航 | 场景搜索、单列场景行和任务展开 | `#view-scenes`, `#sceneSearch`, `#sceneList` |
 | 对比模式 | 选择区和对比表 | `#view-compare` |
 | AI 热点 | 状态、平台筛选、排序、Feed | `#view-trending`, `#trendingGrid` |
 | AI 概念 | 搜索、分类、术语列表 | `#view-glossary` |
@@ -149,17 +144,26 @@ mvp/
 
 | 模块 | 关键函数 | 作用 |
 |---|---|---|
-| 全局状态 | `tools`, `glossary`, `hotspots`, `compareList` | 保存静态数据和交互状态 |
-| 数据加载 | `loadData()` | 并行职责式加载三个前端 JSON，失败时降级为空状态 |
+| 全局状态 | `tools`, `glossary`, `scenes`, `hotspots`, `compareList` | 保存静态数据和交互状态 |
+| 数据加载 | `loadData()` | 按职责加载四个前端 JSON，失败时降级为空状态 |
 | 视图切换 | `switchView()` | CSS class 切换并调用对应 render 函数 |
 | 工具发现 | `getFilteredTools()`, `renderTools()` | 文本与三维筛选叠加 |
 | 详情与对比 | `openDetail()`, `toggleCompare()`, `renderCompare()` | 工具决策交互 |
 | 概念词典 | `getFilteredGlossary()`, `renderGlossary()` | 搜索、分类和展开 |
 | AI 热点 | `getFilteredTrending()`, `renderTrendingStatus()`, `renderTrending()` | 平台过滤、排序、评分/主题/溯源展示 |
 | 安全输出 | `escapeHtml()`, `safeExternalUrl()` | 转义外部文本，仅允许 HTTP(S) 链接 |
-| 场景导航 | `renderScenes()`, `searchByScene()` | 场景到工具查询的跳转 |
+| 场景导航 | `getFilteredScenes()`, `renderScenes()`, `toggleSceneTasks()` | 相关词搜索、整卡高亮与任务—工具展开 |
 
-浏览器不会读取 `news-registry.json`、`news-quota.json` 等内部状态，只读取前端投影 `hotspots.json`。
+浏览器不会读取 `data/news/runtime/` 中的 Registry、额度等内部状态，只读取 `data/catalog/` 主数据与前端投影 `data/news/output/hotspots.json`。
+
+### 4.3 模块化存储约定
+
+- `data/` 根目录不得新增 JSON；主数据、新闻配置、来源、人工暂存、运行状态和公开输出必须进入对应子模块；
+- `scripts/` 根目录只允许稳定兼容入口，不得新增业务实现；
+- 新脚本必须归入 `shared/core/collectors/content/pipeline/cli/maintenance/tests` 之一；
+- 新 Node 数据路径必须先登记到 `scripts/shared/paths.js`，不得在多个脚本重复硬编码；
+- 每份数据只保留一个权威路径，不通过副本或符号链接兼容旧位置；
+- 新增或修改数据结构时必须同步 `maintenance/validate.js` 与相关测试。
 
 ---
 
@@ -245,7 +249,7 @@ API Key 不属于任何 JSON 文件，只能由 GitHub Repository Secrets 注入
 
 - `node scripts/build-news.js --fixture`：使用本地三平台样本运行完整内容管线，不请求真实 API、不写持久数据；当前预期为5条内容、5个主题。
 - `node scripts/validate.js`：校验 tools/glossary/news 配置、Registry、额度、授权、热点引用和 HTML DOM 契约。
-- `node --check scripts/*.js`：检查所有 Node.js 脚本语法。
+- 递归 `node --check`：检查根兼容入口与各模块目录中的所有 Node.js 脚本语法。
 
 这些测试证明确定性规则和状态转换在本地成立，但不能替代真实平台响应、跨日 Actions 连续运行和浏览器线上冒烟测试。
 

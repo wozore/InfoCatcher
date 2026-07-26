@@ -58,6 +58,7 @@
 // ═══════════════════════════════════════════════════════════════
 let tools = [];               // tools.json 的完整内容
 let glossary = [];            // glossary.json 的完整内容
+let scenes = [];              // scenes.json 的场景、子任务和工具映射
 let hotspots = {              // hotspots.json 的前端投影
   items: [],                  //   热点内容条目
   events: [],                 //   主题/事件聚合
@@ -114,23 +115,30 @@ function hasFree(t) {
  */
 async function loadData() {
   try {
-    const resp = await fetch('data/tools.json');
+    const resp = await fetch('data/catalog/tools.json');
     tools = await resp.json();
     document.getElementById('dataDate').textContent =
       '数据更新: ' + new Date().toISOString().slice(0, 10);
   } catch (e) {
     tools = [];
     document.getElementById('toolGrid').innerHTML =
-      '<div class="empty-state"><div class="empty-icon">⚠️</div><h3>数据加载失败</h3><p>请检查 data/tools.json 是否存在</p></div>';
+      '<div class="empty-state"><div class="empty-icon">⚠️</div><h3>数据加载失败</h3><p>请检查 data/catalog/tools.json 是否存在</p></div>';
   }
   try {
-    const gResp = await fetch('data/glossary.json');
+    const gResp = await fetch('data/catalog/glossary.json');
     glossary = await gResp.json();
   } catch (e) {
     glossary = [];
   }
   try {
-    const nResp = await fetch('data/hotspots.json');
+    const sResp = await fetch('data/catalog/scenes.json');
+    const sceneData = await sResp.json();
+    scenes = Array.isArray(sceneData.scenes) ? sceneData.scenes : [];
+  } catch (e) {
+    scenes = [];
+  }
+  try {
+    const nResp = await fetch('data/news/output/hotspots.json');
     hotspots = await nResp.json();
   } catch (e) {
     hotspots = { items: [], events: [], provenance: [], assessments: [], coverage: null, generated_at: null };
@@ -739,51 +747,99 @@ function renderTrending() {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// 第 8 部分：场景导航 —— 12 个场景卡片，点击跳转到工具库搜索结果
+// 第 8 部分：场景导航 —— 可搜索场景列表 + 子任务/工具映射
 //
-// 每个场景有匹配计数（工具库中 scenes 字段与该场景关键词有交集的工具数）。
-// 点击场景卡片调用 searchByScene()：填入搜索关键词 → 清空筛选 → 跳转工具库。
+// 场景数据来自 scenes.json；搜索匹配名称、简介、关联词和子任务名。
+// 每行展示场景图标、名称、去重后的工具数量和简介；点击后展开任务—工具映射。
 // ═══════════════════════════════════════════════════════════════
 
-/** 预定义的 12 个场景卡片，每个含 id/图标/名称/描述/搜索关键词 */
-function renderScenes() {
-  const scenes = [
-    { id: 'write-paper', icon: '📝', name: '写论文', desc: '学术写作、文献综述、论文润色', q: ['写论文'] },
-    { id: 'write-report', icon: '📋', name: '写周报/报告', desc: '工作周报、项目报告、方案撰写', q: ['写周报', '办公文档处理'] },
-    { id: 'write-code', icon: '💻', name: '写代码', desc: '编程辅助、代码审查、架构设计', q: ['写代码', '项目开发'] },
-    { id: 'translate', icon: '🌍', name: '翻译文档', desc: '中英互译、多语言翻译、论文翻译', q: ['翻译文档'] },
-    { id: 'research', icon: '🔬', name: '深度研究', desc: '文献调研、数据分析、长文档分析', q: ['深度研究', '长文档分析', '搜索研究'] },
-    { id: 'design', icon: '🎨', name: '设计配图', desc: '海报设计、插画、概念艺术、营销素材', q: ['设计配图', '海报设计'] },
-    { id: 'video', icon: '🎬', name: '视频制作', desc: '短视频生成、特效合成、后期处理', q: ['视频制作', '短视频创作'] },
-    { id: 'brainstorm', icon: '💡', name: '头脑风暴', desc: '创意发散、问题讨论、思路整理', q: ['头脑风暴'] },
-    { id: 'ppt', icon: '📊', name: 'PPT制作', desc: '演示文稿、方案汇报、课题展示', q: ['PPT制作', '演示文稿'] },
-    { id: 'study', icon: '📚', name: '学习辅导', desc: '知识答疑、习题讲解、技能学习', q: ['学习辅导'] },
-    { id: 'music', icon: '🎵', name: '音乐创作', desc: 'AI编曲、歌曲制作、背景配乐', q: ['音乐创作', '背景音乐'] },
-    { id: 'voice', icon: '🎙️', name: '配音/语音', desc: 'AI配音、有声书、播客旁白', q: ['配音', '有声书'] },
-  ];
+const scenePalette = {
+  writing: { accent: '#d97706', light: '#fffbeb' },
+  coding: { accent: '#047857', light: '#ecfdf5' },
+  design: { accent: '#be185d', light: '#fdf2f8' },
+  video: { accent: '#b91c1c', light: '#fef2f2' },
+  audio: { accent: '#6d28d9', light: '#faf5ff' },
+  research: { accent: '#4338ca', light: '#eef2ff' },
+  office: { accent: '#0e7490', light: '#ecfeff' },
+  learning: { accent: '#1d4ed8', light: '#eff6ff' },
+};
 
-  document.getElementById('sceneGrid').innerHTML = scenes.map(s => {
-    const matched = tools.filter(t => t.scenes.some(ts => s.q.includes(ts))).length;
-    return `
-    <div class="scene-card" onclick="searchByScene('${s.q.join(' ')}')">
-      <span class="scene-icon">${s.icon}</span>
-      <h3>${s.name}</h3>
-      <p>${s.desc}</p>
-      <p style="margin-top:8px;font-size:13px;color:var(--text-hint)">${matched} 个匹配工具 →</p>
-    </div>`;
+function getFilteredScenes() {
+  const query = (document.getElementById('sceneSearch')?.value || '').toLowerCase().trim();
+  if (!query) return scenes;
+  const keywords = query.split(/\s+/).filter(keyword => keyword.length > 0);
+  return scenes.filter(scene => keywords.some(keyword =>
+    scene.name.toLowerCase().includes(keyword) ||
+    scene.description.toLowerCase().includes(keyword) ||
+    (scene.search_terms || []).some(term => term.toLowerCase().includes(keyword)) ||
+    (scene.tasks || []).some(task => task.task.toLowerCase().includes(keyword))
+  ));
+}
+
+function getSceneToolIds(scene) {
+  return [...new Set((scene.tasks || []).flatMap(task => task.tools || []))];
+}
+
+function renderScenes() {
+  const filtered = getFilteredScenes();
+  const list = document.getElementById('sceneList');
+  if (!list) return;
+
+  if (!scenes.length) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><h3>场景数据加载失败</h3><p>请稍后刷新页面，或检查 data/catalog/scenes.json 是否存在。</p></div>';
+    return;
+  }
+
+  if (!filtered.length) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">🧭</div><h3>没有匹配的场景</h3><p>试试“论文”“代码”“配图”“视频”或其他需求关键词。</p></div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map(scene => {
+    const palette = scenePalette[scene.category] || scenePalette.learning;
+    const toolIds = getSceneToolIds(scene);
+    const taskRows = (scene.tasks || []).map(task => {
+      const matchedTools = (task.tools || []).map(toolId => tools.find(tool => tool.id === toolId)).filter(Boolean);
+      return '<div class="scene-task-item">' +
+        '<span class="scene-task-name">' + escapeHtml(task.task) + '</span>' +
+        '<span class="scene-task-tools">' + matchedTools.map(tool => escapeHtml(tool.icon + ' ' + tool.name)).join('、') + '</span>' +
+      '</div>';
+    }).join('');
+
+    return '<div class="scene-group" style="--scene-accent:' + palette.accent + ';--scene-accent-light:' + palette.light + '">' +
+      '<button class="scene-row" type="button" data-scene-id="' + escapeHtml(scene.id) + '" aria-expanded="false" onclick="toggleSceneTasks(\'' + escapeHtml(scene.id) + '\')">' +
+        '<span class="scene-row-left">' +
+          '<span class="scene-row-icon" aria-hidden="true">' + escapeHtml(scene.icon) + '</span>' +
+          '<span class="scene-row-info">' +
+            '<span class="scene-row-name">' + escapeHtml(scene.name) + '</span>' +
+            '<span class="scene-row-count">' + toolIds.length + ' 个匹配工具</span>' +
+          '</span>' +
+        '</span>' +
+        '<span class="scene-row-desc">' + escapeHtml(scene.description) + '</span>' +
+        '<span class="scene-row-arrow" aria-hidden="true">⌄</span>' +
+      '</button>' +
+      '<div class="scene-tasks" id="scene-tasks-' + escapeHtml(scene.id) + '" hidden>' + taskRows + '</div>' +
+    '</div>';
   }).join('');
 }
 
-function searchByScene(query) {
-  document.getElementById('searchInput').value = query;
-  activeFilters = { category: 'all', access: 'all', price: 'all' };
-  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-  document.querySelectorAll('.filter-chip[data-category="all"]').forEach(c => c.classList.add('active'));
-  document.querySelectorAll('.filter-chip[data-access="all"]').forEach(c => c.classList.add('active'));
-  document.querySelectorAll('.filter-chip[data-price="all"]').forEach(c => c.classList.add('active'));
-  switchView('tools');
-  renderTools();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+function toggleSceneTasks(sceneId) {
+  const selectedRow = document.querySelector('.scene-row[data-scene-id="' + sceneId + '"]');
+  const selectedTasks = document.getElementById('scene-tasks-' + sceneId);
+  if (!selectedRow || !selectedTasks) return;
+  const shouldOpen = selectedTasks.hidden;
+
+  document.querySelectorAll('.scene-row.expanded').forEach(row => {
+    row.classList.remove('expanded');
+    row.setAttribute('aria-expanded', 'false');
+  });
+  document.querySelectorAll('.scene-tasks').forEach(tasks => { tasks.hidden = true; });
+
+  if (shouldOpen) {
+    selectedRow.classList.add('expanded');
+    selectedRow.setAttribute('aria-expanded', 'true');
+    selectedTasks.hidden = false;
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -863,6 +919,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderTools();
     searchInput.focus();
   });
+
+  // 场景搜索
+  const sceneSearch = document.getElementById('sceneSearch');
+  const sceneSearchClear = document.getElementById('sceneSearchClear');
+  let sceneTimer;
+  if (sceneSearch) {
+    sceneSearch.addEventListener('input', () => {
+      clearTimeout(sceneTimer);
+      sceneTimer = setTimeout(renderScenes, 150);
+      sceneSearchClear.style.display = sceneSearch.value ? 'flex' : 'none';
+    });
+    sceneSearchClear.addEventListener('click', () => {
+      sceneSearch.value = '';
+      sceneSearchClear.style.display = 'none';
+      renderScenes();
+      sceneSearch.focus();
+    });
+  }
 
   // 导航按钮
   document.querySelectorAll('.nav-btn').forEach(btn => {

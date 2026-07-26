@@ -71,7 +71,7 @@ node scripts/news-cli.js lock status
 
 手动诊断 B站 RSSHub 时，在 GitHub Actions 的 `Collect AI News` → `Run workflow` 中将 `platform_scope` 选择为 `bilibili-only`。该模式不会请求 YouTube 或 X，也不会推进 X 轮转游标；检测到 RSSHub Provider 的 Cloudflare 挑战后只记录一次真实探测并立即熔断，不再遍历全部来源。定时任务和默认手动运行使用 `all`，其中B站自动网络采集已暂停，改为人工精选收录；已有 YouTube/X 与B站热点投影会按保留规则继续展示。
 
-B站人工内容只写入独立的 `data/news-manual-items.json`，不会直接覆盖 `hotspots.json`。命令不访问B站网络，也不接受 Cookie、Token 或 API Key：
+B站人工内容只写入独立的 `data/news/manual/news-manual-items.json`，不会直接覆盖 `data/news/output/hotspots.json`。命令不访问B站网络，也不接受 Cookie、Token 或 API Key：
 
 ```bash
 # 先预览，不写文件
@@ -93,7 +93,7 @@ node scripts/news-cli.js content import --file manual-items.json --dry-run
 
 - **纠错**：[提交 Issue](https://github.com/wozore/InfoCatcher/issues/new?template=data-correction.yml)
 - **推荐工具**：[提交 Issue](https://github.com/wozore/InfoCatcher/issues/new?template=new-tool.yml)
-- **直接 PR**：修改 `data/tools.json` 或 `data/glossary.json` 后提交 Pull Request
+- **直接 PR**：修改 `data/catalog/tools.json` 或 `data/catalog/glossary.json` 后提交 Pull Request
 
 ## 技术栈
 

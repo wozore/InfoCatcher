@@ -14,28 +14,21 @@
 | `mvp/index.html` | 6 视图入口（工具库/场景导航/对比/AI热点/概念词典/关于） |
 | `mvp/css/style.css` | 样式（CSS 变量 + 响应式 + 热点/概念词典卡片） |
 | `mvp/js/app.js` | 搜索/筛选/对比/场景/热点/概念词典前端逻辑 |
-| `mvp/data/tools.json` | 43 个 AI 工具数据 |
-| `mvp/data/glossary.json` | 43 条 AI 概念术语 |
-| `mvp/data/news-sources.json` | 96 个初始热点来源（YouTube 45 / B站 20 / X 31） |
-| `mvp/data/news-config.json` | 热点评分、五层时间窗口、成本和异常配置 |
-| `mvp/data/news-state.json` | 构建批次、来源覆盖、时间层状态和恢复游标 |
-| `mvp/data/news-registry.json` | 持久视频发现/处理状态与批量防重索引 |
-| `mvp/data/news-quota.json` | YouTube quota units 账本；B站请求仅在显式诊断时记录 |
-| `mvp/data/pending-authorizations.json` | 超出默认回溯边界的待授权任务 |
-| `mvp/data/news-manual-items.json` | B站人工精选暂存（不自动访问B站） |
-| `mvp/scripts/news-manual.js` | B站人工内容链接、类型、日期和来源校验 |
-| `mvp/scripts/build-news.js` | YouTube/X 构建时采集、B站人工暂存消费、标准化、主题/溯源和评分编排 |
-| `mvp/scripts/news-storage.js` | JSON 原子写、构建锁和强制解锁审计 |
-| `mvp/scripts/news-registry.js` | 视频 Registry、状态机和 Map 防重 |
-| `mvp/scripts/news-quota.js` | 平台独立额度预留、消费和审计 |
-| `mvp/scripts/news-scheduler.js` | 五层 UTC 边界与时间层优先推进 |
-| `mvp/scripts/news-youtube.js` | uploads playlist 分页与批量详情适配器 |
-| `mvp/scripts/news-bilibili.js` | B站历史适配器（当前默认暂停） |
-| `mvp/scripts/news-authorization.js` | 待授权回溯任务和决策边界 |
-| `mvp/scripts/news-cli.js` | 来源、B站人工内容、授权、额度和构建锁管理入口 |
-| `mvp/scripts/news-tests.test.js` | 既有采集、规则、动态、降级与异常测试 |
-| `mvp/scripts/news-foundation.test.js` | Registry、额度、调度、平台回溯和 CLI 测试 |
-| `mvp/scripts/validate.js` | 部署前数据与引用完整性校验（CI 自动触发） |
+| `mvp/data/catalog/` | 工具、概念和场景主数据（`tools.json` / `glossary.json` / `scenes.json`） |
+| `mvp/data/news/config/` | 热点评分、五层时间窗口、成本和异常配置 |
+| `mvp/data/news/sources/` | 96 个初始热点来源（YouTube 45 / B站 20 / X 31） |
+| `mvp/data/news/manual/` | B站人工精选暂存（不自动访问B站） |
+| `mvp/data/news/runtime/` | 构建状态、Registry、额度、授权、锁和运维审计 |
+| `mvp/data/news/output/` | 浏览器读取的热点投影 `hotspots.json` |
+| `mvp/scripts/shared/` | Node 路径契约；新增数据文件路径统一在此登记 |
+| `mvp/scripts/core/` | JSON存储、Registry、额度、调度和授权基础设施 |
+| `mvp/scripts/collectors/` | YouTube/B站采集适配器 |
+| `mvp/scripts/content/` | B站人工内容链接、类型、日期和来源校验 |
+| `mvp/scripts/pipeline/` | YouTube/X采集、人工内容消费、评分和热点编排 |
+| `mvp/scripts/cli/` | 来源、人工内容、授权、额度和构建锁管理实现 |
+| `mvp/scripts/maintenance/` | 数据校验和来源同步实现 |
+| `mvp/scripts/tests/` | 43项测试与本地fixture |
+| `mvp/scripts/*.js` | 稳定命令/测试兼容入口；根目录不存放业务实现 |
 | `mvp/README.md` | MVP 使用说明（面向用户） |
 | `mvp模块.md` | MVP 架构文档（模块划分 + 扩展点说明） |
 | `mvp架构图.drawio` | MVP 架构关系图 |

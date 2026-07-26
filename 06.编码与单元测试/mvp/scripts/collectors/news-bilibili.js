@@ -27,9 +27,9 @@
 
 'use strict';
 
-const { withQuota } = require('./news-quota');
-const { bulkDiscover } = require('./news-registry');
-const { classifyTimeLayer } = require('./news-scheduler');
+const { withQuota } = require('../core/news-quota');
+const { bulkDiscover } = require('../core/news-registry');
+const { classifyTimeLayer } = require('../core/news-scheduler');
 
 /**
  * 将 RSSHub 返回的条目标准化为 candidate 列表。

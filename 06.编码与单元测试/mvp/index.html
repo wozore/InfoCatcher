@@ -80,8 +80,12 @@
   <!-- 场景导航视图 -->
   <section id="view-scenes" class="view">
     <h2>按场景找工具</h2>
-    <p>不同场景对 AI 的要求不同——我们帮你匹配最合适的。</p>
-    <div class="scene-grid" id="sceneGrid"></div>
+    <p>不同场景对 AI 的要求不同——搜索你的需求，找到最合适的工具。</p>
+    <div class="scene-search-box">
+      <input type="text" id="sceneSearch" placeholder="搜索场景或需求关键词…" autocomplete="off">
+      <button id="sceneSearchClear" class="clear-btn" style="display:none" aria-label="清除场景搜索">✕</button>
+    </div>
+    <div class="scene-list" id="sceneList"></div>
   </section>
 
   <!-- 对比模式视图 -->

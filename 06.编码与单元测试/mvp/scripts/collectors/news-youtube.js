@@ -39,9 +39,9 @@
 
 'use strict';
 
-const { withQuota } = require('./news-quota');
-const { bulkDiscover, needsExpensiveProcessing, updateLifecycle } = require('./news-registry');
-const { classifyTimeLayer } = require('./news-scheduler');
+const { withQuota } = require('../core/news-quota');
+const { bulkDiscover, needsExpensiveProcessing, updateLifecycle } = require('../core/news-registry');
+const { classifyTimeLayer } = require('../core/news-scheduler');
 
 const YOUTUBE_API = 'https://www.googleapis.com/youtube/v3';
 

@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "scenes": [
+    {
+      "id": "write-paper",
+      "name": "写论文",
+      "icon": "📝",
+      "category": "writing",
+      "description": "从选题调研、文献整理到初稿撰写和语言润色，找到适合学术写作各阶段的工具。",
+      "search_terms": ["论文", "学术", "写作", "文献", "综述", "润色", "开题", "答辩", "期刊", "投稿"],
+      "tasks": [
+        { "task": "文献检索与事实核查", "tools": ["perplexity", "mishu", "notebooklm"] },
+        { "task": "论文初稿与结构梳理", "tools": ["claude", "chatgpt", "kimi"] },
+        { "task": "语言润色与翻译", "tools": ["gemini", "deepseek", "tongyi"] }
+      ]
+    },
+    {
+      "id": "write-report",
+      "name": "写周报/报告",
+      "icon": "📋",
+      "category": "office",
+      "description": "整理工作进展、会议材料和数据结论，快速生成结构清晰的周报、总结与项目报告。",
+      "search_terms": ["周报", "报告", "总结", "汇报", "办公", "会议", "纪要", "工作", "文档"],
+      "tasks": [
+        { "task": "周报与工作总结", "tools": ["chatgpt", "tongyi", "doubao"] },
+        { "task": "会议纪要与知识整理", "tools": ["notion-ai", "kimi", "claude"] },
+        { "task": "数据报告与结论提炼", "tools": ["julius", "gemini", "grok"] }
+      ]
+    },
+    {
+      "id": "write-code",
+      "name": "写代码",
+      "icon": "💻",
+      "category": "coding",
+      "description": "覆盖代码生成、项目开发、调试修复和代码审查，按不同编程任务选择合适的AI工具。",
+      "search_terms": ["代码", "编程", "开发", "程序", "调试", "重构", "修复", "审查", "前端", "全栈"],
+      "tasks": [
+        { "task": "代码补全与日常开发", "tools": ["copilot", "cursor", "trae"] },
+        { "task": "项目开发与架构设计", "tools": ["claude-code", "windsurf", "replit"] },
+        { "task": "快速原型与前端界面", "tools": ["bolt", "v0", "cursor"] },
+        { "task": "调试、重构与代码审查", "tools": ["claude-code", "copilot", "deepseek"] }
+      ]
+    },
+    {
+      "id": "translate",
+      "name": "翻译文档",
+      "icon": "🌍",
+      "category": "writing",
+      "description": "处理多语言互译、长文档翻译和学术表达，在保留原意的同时改善术语与行文质量。",
+      "search_terms": ["翻译", "互译", "英文", "中文", "多语言", "文档", "论文翻译", "本地化"],
+      "tasks": [
+        { "task": "通用文档翻译", "tools": ["gemini", "chatgpt", "tongyi"] },
+        { "task": "长文档与上下文翻译", "tools": ["claude", "kimi", "notebooklm"] },
+        { "task": "学术与技术表达润色", "tools": ["deepseek", "claude", "wenxin"] }
+      ]
+    },
+    {
+      "id": "research",
+      "name": "深度研究",
+      "icon": "🔬",
+      "category": "research",
+      "description": "围绕复杂问题进行资料检索、来源核验、长文档分析和数据解读，形成可追溯的研究结论。",
+      "search_terms": ["研究", "调研", "检索", "搜索", "资料", "事实核查", "数据分析", "长文档", "来源"],
+      "tasks": [
+        { "task": "资料检索与来源追踪", "tools": ["perplexity", "mishu", "tiangong"] },
+        { "task": "长文档阅读与知识整理", "tools": ["notebooklm", "kimi", "claude"] },
+        { "task": "数据分析与图表解读", "tools": ["julius", "chatgpt", "gemini"] },
+        { "task": "事实核查与多源对照", "tools": ["perplexity", "mishu", "grok"] }
+      ]
+    },
+    {
+      "id": "design",
+      "name": "设计配图",
+      "icon": "🎨",
+      "category": "design",
+      "description": "生成插画、海报、概念图和营销视觉，并根据风格、文字表现与可控性选择创作工具。",
+      "search_terms": ["设计", "配图", "画图", "绘画", "插画", "海报", "图片", "视觉", "Logo", "营销素材"],
+      "tasks": [
+        { "task": "概念艺术与高质量插画", "tools": ["midjourney", "stable-diffusion", "leonardo"] },
+        { "task": "海报与营销素材", "tools": ["ideogram", "dalle", "nano-banana"] },
+        { "task": "中文创意与快速出图", "tools": ["jimeng", "nano-banana", "hunyuan"] }
+      ]
+    },
+    {
+      "id": "video",
+      "name": "视频制作",
+      "icon": "🎬",
+      "category": "video",
+      "description": "从文生视频、短视频创作到数字人口播和后期特效，匹配不同制作流程所需的工具。",
+      "search_terms": ["视频", "短视频", "生成", "剪辑", "特效", "后期", "数字人", "口播", "营销视频"],
+      "tasks": [
+        { "task": "文生视频与创意短片", "tools": ["kling", "hailuo", "jimeng"] },
+        { "task": "特效与专业后期", "tools": ["runway", "kling"] },
+        { "task": "数字人口播与营销视频", "tools": ["heygen", "runway", "kling"] }
+      ]
+    },
+    {
+      "id": "brainstorm",
+      "name": "头脑风暴",
+      "icon": "💡",
+      "category": "learning",
+      "description": "围绕主题发散创意、比较不同观点并整理思路，适合选题、策划和问题拆解。",
+      "search_terms": ["头脑风暴", "创意", "灵感", "策划", "想法", "选题", "思路", "讨论", "发散"],
+      "tasks": [
+        { "task": "创意发散与选题", "tools": ["chatgpt", "claude", "doubao"] },
+        { "task": "多角度观点讨论", "tools": ["poe", "grok", "gemini"] },
+        { "task": "创意写作与内容策划", "tools": ["doubao", "hailuo", "wenxin"] }
+      ]
+    },
+    {
+      "id": "ppt",
+      "name": "PPT制作",
+      "icon": "📊",
+      "category": "office",
+      "description": "从大纲、文案到版式和演示成稿，快速完成课程展示、方案汇报和项目路演。",
+      "search_terms": ["PPT", "演示", "幻灯片", "汇报", "路演", "课件", "方案", "展示", "大纲"],
+      "tasks": [
+        { "task": "一键生成演示文稿", "tools": ["gamma"] },
+        { "task": "大纲与讲稿整理", "tools": ["chatgpt", "claude", "tongyi"] },
+        { "task": "配图与视觉素材", "tools": ["ideogram", "dalle", "nano-banana"] }
+      ]
+    },
+    {
+      "id": "study",
+      "name": "学习辅导",
+      "icon": "📚",
+      "category": "learning",
+      "description": "用于知识答疑、习题讲解、资料整理和个性化学习，在理解过程而不只是得到答案。",
+      "search_terms": ["学习", "辅导", "答疑", "习题", "考试", "复习", "课程", "知识", "数学", "笔记"],
+      "tasks": [
+        { "task": "知识答疑与概念讲解", "tools": ["chatgpt", "tongyi", "wenxin"] },
+        { "task": "课程资料与笔记整理", "tools": ["notebooklm", "kimi", "notion-ai"] },
+        { "task": "编程与实践学习", "tools": ["replit", "copilot", "deepseek"] },
+        { "task": "数学与逻辑解题", "tools": ["deepseek", "gemini", "chatgpt"] }
+      ]
+    },
+    {
+      "id": "music",
+      "name": "音乐创作",
+      "icon": "🎵",
+      "category": "audio",
+      "description": "生成完整歌曲、背景音乐和配乐素材，覆盖灵感试听、风格探索与内容配乐需求。",
+      "search_terms": ["音乐", "歌曲", "作曲", "编曲", "配乐", "背景音乐", "旋律", "音频"],
+      "tasks": [
+        { "task": "完整歌曲生成", "tools": ["suno", "udio"] },
+        { "task": "背景音乐与视频配乐", "tools": ["udio", "suno"] },
+        { "task": "风格探索与灵感试听", "tools": ["suno", "udio"] }
+      ]
+    },
+    {
+      "id": "voice",
+      "name": "配音/语音",
+      "icon": "🎙️",
+      "category": "audio",
+      "description": "制作视频旁白、有声书、播客和多语言配音，兼顾自然度、音色选择与制作效率。",
+      "search_terms": ["配音", "语音", "旁白", "有声书", "播客", "声音", "口播", "音色", "朗读"],
+      "tasks": [
+        { "task": "视频旁白与专业配音", "tools": ["elevenlabs", "xinghuo"] },
+        { "task": "有声书与长文本朗读", "tools": ["elevenlabs", "xinghuo"] },
+        { "task": "数字人多语言口播", "tools": ["heygen", "elevenlabs"] }
+      ]
+    }
+  ]
+}
