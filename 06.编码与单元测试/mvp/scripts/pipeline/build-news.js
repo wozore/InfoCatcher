@@ -98,6 +98,7 @@ const { collectBilibiliLayerStep } = require('../collectors/news-bilibili');
 const { normalizeManualItem } = require('../content/news-manual');
 const { createAuthorizationStore, createAuthorizationTask } = require('../core/news-authorization');
 const { NEWS_FILES, DIRS } = require('../shared/paths');
+const { generateRss } = require('../content/generate-rss');
 
 // ── 数据文件路径（按读写频率排列） ──────────────────────────
 // 前两个是每次构建的配置输入，后六个是构建状态/输出
@@ -1225,6 +1226,7 @@ async function main() {
     const result = await runCollection({ allowEmpty, platformScope });
     console.log(`✅ 热点构建完成：${result.output.items.length} 条内容，${result.output.events.length} 个主题`);
     console.log(`   覆盖：${result.output.coverage.sources_terminal}/${result.output.coverage.sources_attempted} 个本轮来源`);
+    generateRss();
   } finally {
     releaseLock(LOCK_PATH, runId);
   }

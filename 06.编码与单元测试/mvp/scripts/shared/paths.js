@@ -58,4 +58,6 @@ const ACQUISITION_FILES = Object.freeze({
   intelSources: path.join(ACQUISITION_DIR, 'intel-sources.json'),
 });
 
-module.exports = { DIRS, CATALOG_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH };
+const RSS_FEED_PATH = path.join(MVP_DIR, 'feed.xml');
+
+module.exports = { DIRS, CATALOG_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH };

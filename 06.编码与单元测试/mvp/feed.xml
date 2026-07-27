@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>InfoCatcher AI 热点</title>
+    <link>https://wozore.github.io/InfoCatcher</link>
+    <description>AI 工具情报与行业热点，每日自动采集 + 人工精选</description>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 27 Jul 2026 11:07:08 GMT</lastBuildDate>
+    <generator>InfoCatcher RSS Engine</generator>
+    <atom:link href="https://wozore.github.io/InfoCatcher/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>We tested Nemotron 3 Ultra on agentic chip design. 
+
+The task is RTL coding: a model iteratively writes the code that defines a chip&apos;s logic, runs it through a simulator, reads the</title>
+      <link>https://x.com/NVIDIAAI/status/2081541801031110903</link>
+      <description><![CDATA[We tested Nemotron 3 Ultra on agentic chip design. 
+
+The task is RTL coding: a model iteratively writes the code that defines a chip&apos;s logic, runs it through a simulator, reads the failures, and rewrites. 
+
+Across nine categories of real design work, Nemotron 3 Ultra averaged a 97.1% pass rate at 6,629 tokens per iteration, best of the open models tested on both.]]></description>
+      <author>NVIDIA AI</author>
+      <pubDate>Mon, 27 Jul 2026 00:46:53 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/NVIDIAAI/status/2081541801031110903</guid>
+      <category>x</category>
+      <category>官方来源</category>
+    </item>
+    <item>
+      <title>AI Fuels Nuclear Renaissance in Asia | Bloomberg Tech: Asia 7/24/2026</title>
+      <link>https://www.youtube.com/watch?v=fniOkNQT2pM</link>
+      <description><![CDATA[The AI infrastructure buildout is driving a surge in electricity demand, and more and more governments and companies are looking at nuclear power as the best solution available. Bloomberg Tech: Asia&apos;s Shery Ahn speaks with former International Energy Agency executive director Nobuo Tanaka about why Asia is leading the nuclear renaissance. We also hear from startups Helical Fusion and OpenStar, who are pursuing the elusive promise of nuclear fusion.&amp;#13; &amp;#13; Chapters:&amp;#13; 00:03:47 - IEA Executive Director Emeritus Nobuo Tanaka on nuclear energy outlook&amp;#13; 00:11:48 - Helical Fusion Co-Found]]></description>
+      <author>Bloomberg Tech</author>
+      <pubDate>Sun, 26 Jul 2026 22:25:34 GMT</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/watch?v=fniOkNQT2pM</guid>
+      <category>youtube</category>
+      <category>即时资讯</category>
+    </item>
+    <item>
+      <title>Cohere has released open-source models Transcribe, Command A+, and North Mini Code so far this year, all available under Apache 2.0. With more to come... 
+
+Own your AI. https://t.c</title>
+      <link>https://x.com/cohere/status/2081470432415260682</link>
+      <description><![CDATA[Cohere has released open-source models Transcribe, Command A+, and North Mini Code so far this year, all available under Apache 2.0. With more to come... 
+
+Own your AI. https://t.co/IiZiHDjwIK]]></description>
+      <author>Cohere</author>
+      <pubDate>Sun, 26 Jul 2026 20:03:17 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/cohere/status/2081470432415260682</guid>
+      <category>x</category>
+      <category>官方来源</category>
+    </item>
+    <item>
+      <title>Yes, open-source / open-weight models are important for a healthy AI ecosystem. That&apos;s how we can verify things, check claims, and keep up outside the closed labs. Plus, it gives u</title>
+      <link>https://x.com/rasbt/status/2081374704753950742</link>
+      <description><![CDATA[Yes, open-source / open-weight models are important for a healthy AI ecosystem. That&apos;s how we can verify things, check claims, and keep up outside the closed labs. Plus, it gives us the freedom to run AI on our own hardware if we are not ready to share personal data and IPs with closed labs through using their models. (Not that proprietary models are bad, actually I use them a lot as well, but it wouldn&apos;t healthy not to have any alternatives.)
+
+Anyway, while pretty much everyone is waiting for the Kimi K3 and Ling 3.0 weights to land on the model hub any day now, there were quite a few other i]]></description>
+      <author>Sebastian Raschka</author>
+      <pubDate>Sun, 26 Jul 2026 13:42:54 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/rasbt/status/2081374704753950742</guid>
+      <category>x</category>
+      <category>行业观点</category>
+      <category>深度解读</category>
+    </item>
+    <item>
+      <title>Python Tutorial for beginners - learn the basics step by step in 20 min</title>
+      <link>https://www.youtube.com/watch?v=Js05B8Z1ivE</link>
+      <description><![CDATA[Never written a line of code before? Start with this Python tutorial to learn the basics. To go deeper, check out the DataCamp courses below: DataCamp Python Programming Fundamentals track - https://datacamp.pxf.io/QYGQox DataCamp Associate Python Developer track - https://datacamp.pxf.io/PzADXN Get 25% Off DataCamp - https://datacamp.pxf.io/7XDN2d This Python tutorial for beginners takes you from zero to writing real Python programs in just 20 minutes - every core concept explained clearly, step by step, with a working project at the end. If you&apos;re looking to learn Python fast, this is the fa]]></description>
+      <author>Tech With Tim</author>
+      <pubDate>Sun, 26 Jul 2026 13:00:10 GMT</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/watch?v=Js05B8Z1ivE</guid>
+      <category>youtube</category>
+      <category>教程实践</category>
+    </item>
+    <item>
+      <title>The Fastest Way Into AI Engineering if You Already Have a Job</title>
+      <link>https://www.youtube.com/shorts/iOaPHGP6s2w</link>
+      <description><![CDATA[If you&apos;re already employed, the fastest path into AI engineering is to become the AI person on your team. Volunteer to build the AI feature nobody else wants to own. Ship one thing with AI inside your current company. An internal transfer to an AI or AI-adjacent role is almost always easier than landing one completely from scratch. So if you can learn inside your company, even if it isn&apos;t your main role, you build real use cases and experience you can point back to later, and that makes everything easier. I&apos;ve seen this work firsthand helping developers land these jobs. #techwithtim #aienginee]]></description>
+      <author>Tech With Tim</author>
+      <pubDate>Sun, 26 Jul 2026 12:00:01 GMT</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/shorts/iOaPHGP6s2w</guid>
+      <category>youtube</category>
+      <category>教程实践</category>
+    </item>
+    <item>
+      <title>Why AI Makes the Humanities More Important Than Ever</title>
+      <link>https://www.youtube.com/watch?v=l-QPwk_f4eE</link>
+      <description><![CDATA[Learn more about Human Centered AI here → https://ibm.biz/~tQF2ZHKWO AI can generate answers, but judgment still matters. Jeff Crume explores why the humanities remain essential in an AI-driven world filled with powerful language models and automation. Learn how ethics, interpretation, and critical thinking help us use AI responsibly. AI news moves fast. Sign up for a monthly newsletter for AI updates from IBM → https://ibm.biz/~r3J4xS2nu #humanities #ai #aieducation #aiandsociety #responsibleai]]></description>
+      <author>IBM Technology</author>
+      <pubDate>Sun, 26 Jul 2026 11:00:22 GMT</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/watch?v=l-QPwk_f4eE</guid>
+      <category>youtube</category>
+      <category>官方来源</category>
+    </item>
+    <item>
+      <title>LingBot-World 2.0: You can LIVE and CONTROL an AI WORLD!</title>
+      <link>https://www.youtube.com/watch?v=7gUV_Wil3Jo</link>
+      <description><![CDATA[You can try LingBot-World 2.0 online right now through Reactor, download the open-source weights from Hugging Face, or explore the full project on GitHub. I’ll leave all the links below, and make sure to follow @robbyant_brain for more updates. 🔗 My Links: Sponsor a Video or Do a Demo of Your Product, Contact me: intheworldzofai@gmail.com 🔥 Become a Patron (Private Discord): https://patreon.com/WorldofAi 🧠 Follow me on Twitter: https://twitter.com/intheworldofai 🚨 Subscribe To The SECOND Channel: https://www.youtube.com/@UCYwLV1gDwzGbg7jXQ52bVnQ 👩🏻‍🏫 Learn to code with Scrimba – from fu]]></description>
+      <author>WorldofAI</author>
+      <pubDate>Sun, 26 Jul 2026 06:39:15 GMT</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/watch?v=7gUV_Wil3Jo</guid>
+      <category>youtube</category>
+      <category>横向测评</category>
+    </item>
+    <item>
+      <title>RT @inferact: Inferact is proud to co-sign. We were founded to grow @vllm_project into the world’s leading open-source inference engine, ma…</title>
+      <link>https://x.com/vllm_project/status/2081235449855775175</link>
+      <description><![CDATA[RT @inferact: Inferact is proud to co-sign. We were founded to grow @vllm_project into the world’s leading open-source inference engine, ma…]]></description>
+      <author>vLLM</author>
+      <pubDate>Sun, 26 Jul 2026 04:29:33 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/vllm_project/status/2081235449855775175</guid>
+      <category>x</category>
+      <category>教程实践</category>
+    </item>
+    <item>
+      <title>On behalf of the vLLM community, @inferact just signed the open letter. Let&apos;s build an open ecosystem together!</title>
+      <link>https://x.com/vllm_project/status/2081217480845070370</link>
+      <description><![CDATA[On behalf of the vLLM community, @inferact just signed the open letter. Let&apos;s build an open ecosystem together!]]></description>
+      <author>vLLM</author>
+      <pubDate>Sun, 26 Jul 2026 03:18:09 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/vllm_project/status/2081217480845070370</guid>
+      <category>x</category>
+      <category>教程实践</category>
+    </item>
+    <item>
+      <title>Cohere has proudly signed on to this letter. The importance of open-source models to the AI ecosystem cannot be understated. 
+
+We believe everyone, in every country, should have co</title>
+      <link>https://x.com/cohere/status/2081114367492518388</link>
+      <description><![CDATA[Cohere has proudly signed on to this letter. The importance of open-source models to the AI ecosystem cannot be understated. 
+
+We believe everyone, in every country, should have control over the technology that will transform their lives. 
+
+Sovereign AI for all. https://t.co/p2XnIXh5jw]]></description>
+      <author>Cohere</author>
+      <pubDate>Sat, 25 Jul 2026 20:28:25 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/cohere/status/2081114367492518388</guid>
+      <category>x</category>
+      <category>官方来源</category>
+    </item>
+    <item>
+      <title>Elon Musk’s Boring Company reportedly raising funding at a $20 billion valuation https://t.co/bLLMazR5bP</title>
+      <link>https://x.com/TechCrunch/status/2081098237407318244</link>
+      <description><![CDATA[Elon Musk’s Boring Company reportedly raising funding at a $20 billion valuation https://t.co/bLLMazR5bP]]></description>
+      <author>TechCrunch</author>
+      <pubDate>Sat, 25 Jul 2026 19:24:19 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/TechCrunch/status/2081098237407318244</guid>
+      <category>x</category>
+      <category>即时资讯</category>
+    </item>
+    <item>
+      <title>How to Get the Most Out of Fable 5 and GPT 5.6 Sol</title>
+      <link>https://www.youtube.com/watch?v=69JMFDFuI3A</link>
+      <description><![CDATA[Fable 5 and GPT‑5.6 Sol require new prompting patterns: explicit boundaries, iterative steering, and matching compute and effort to the task. Best practices include deleting repeated instructions, giving concrete directives, using voice dictation for richer context, and setting measurable quality bars. Higher-impact use comes from onboarding models with deep context, treating unknowns as collaboration points, and running automated loops until success criteria are met. The AI Daily Brief helps you understand the most important news and discussions in AI. Subscribe to the podcast version of The ]]></description>
+      <author>The AI Daily Brief: Artificial Intelligence News</author>
+      <pubDate>Sat, 25 Jul 2026 19:00:06 GMT</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/watch?v=69JMFDFuI3A</guid>
+      <category>youtube</category>
+      <category>即时资讯</category>
+    </item>
+    <item>
+      <title>RT @ClementDelangue: In the spirit of transparency, here’s what I asked @OpenAI:
+
+• Radical transparency: let’s release the traces from the…</title>
+      <link>https://x.com/huggingface/status/2081078405370671358</link>
+      <description><![CDATA[RT @ClementDelangue: In the spirit of transparency, here’s what I asked @OpenAI:
+
+• Radical transparency: let’s release the traces from the…]]></description>
+      <author>Hugging Face</author>
+      <pubDate>Sat, 25 Jul 2026 18:05:31 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/huggingface/status/2081078405370671358</guid>
+      <category>x</category>
+      <category>官方来源</category>
+    </item>
+    <item>
+      <title>Kalshi demands Netflix take down trailer for ‘Prediction Games’ documentary https://t.co/8p9HpmzzNM</title>
+      <link>https://x.com/TechCrunch/status/2081059383023456506</link>
+      <description><![CDATA[Kalshi demands Netflix take down trailer for ‘Prediction Games’ documentary https://t.co/8p9HpmzzNM]]></description>
+      <author>TechCrunch</author>
+      <pubDate>Sat, 25 Jul 2026 16:49:55 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/TechCrunch/status/2081059383023456506</guid>
+      <category>x</category>
+      <category>即时资讯</category>
+    </item>
+    <item>
+      <title>How Nvidia Develops Partnership With Startups Like Yours</title>
+      <link>https://www.youtube.com/shorts/X1oBSwmygMs</link>
+      <description><![CDATA[Partnerships don&apos;t happen out of thin air. NVIDIA&apos;s global head of VC partnerships is on this week&apos;s episode of Build Mode to shed light on how a founder can get on NVIDIA&apos;s radar. http://spr.ly/6055BEtysT]]></description>
+      <author>TechCrunch</author>
+      <pubDate>Sat, 25 Jul 2026 16:15:26 GMT</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/shorts/X1oBSwmygMs</guid>
+      <category>youtube</category>
+      <category>即时资讯</category>
+    </item>
+    <item>
+      <title>Partnerships don&apos;t happen out of thin air. @nvidia s global head of VC partnerships is on this week&apos;s episode of Build Mode to shed light on how a founder can get on their radar. 
+</title>
+      <link>https://x.com/TechCrunch/status/2081050596577014198</link>
+      <description><![CDATA[Partnerships don&apos;t happen out of thin air. @nvidia s global head of VC partnerships is on this week&apos;s episode of Build Mode to shed light on how a founder can get on their radar. 
+
+Watch the full episode right here: https://t.co/FRzJp4FrvD https://t.co/0htonC3rKe]]></description>
+      <author>TechCrunch</author>
+      <pubDate>Sat, 25 Jul 2026 16:15:00 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/TechCrunch/status/2081050596577014198</guid>
+      <category>x</category>
+      <category>即时资讯</category>
+    </item>
+    <item>
+      <title>Librarians are hosting viral ‘Avoiding AI’ workshops for people who are fed up with Big Tech https://t.co/wz3nRi00er</title>
+      <link>https://x.com/TechCrunch/status/2081047235043946681</link>
+      <description><![CDATA[Librarians are hosting viral ‘Avoiding AI’ workshops for people who are fed up with Big Tech https://t.co/wz3nRi00er]]></description>
+      <author>TechCrunch</author>
+      <pubDate>Sat, 25 Jul 2026 16:01:39 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/TechCrunch/status/2081047235043946681</guid>
+      <category>x</category>
+      <category>即时资讯</category>
+    </item>
+    <item>
+      <title>Become an AI Data Engineer FREE Databricks Course - DataExpert.io Launch Video</title>
+      <link>https://www.youtube.com/watch?v=IxvLvToD8nk</link>
+      <description><![CDATA[Join the free boot camp here: https://learn.dataexpert.io/program/the-one-week-beginners-databricks-boot-camp-7129 Get your Databricks Free Edition account here: http://signup.databricks.com/?provider=DB_FREE_TIERutm_source=discord&amp;utm_medium=video&amp;utm_campaign=DataExpert I have a continuation of the free course in a 5-week paid boot camp you can join for 25% off on August 10th! Use code DATABRICKS25 for 25% off here: https://www.dataexpert.io/program/databricks-ai-data-engineer-boot-camp-2024?code=DATABRICKS25 Follow me on all socials Newsletter: https://blog.dataexpert.io IG: https://www.ins]]></description>
+      <author>Data with Zach</author>
+      <pubDate>Sat, 25 Jul 2026 16:00:15 GMT</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/watch?v=IxvLvToD8nk</guid>
+      <category>youtube</category>
+      <category>教程实践</category>
+    </item>
+    <item>
+      <title>A strong and secure open ecosystem is important for the world to benefit from AI. We’ve always supported and contributed heavily to open source and science from Jax to Transformers</title>
+      <link>https://x.com/demishassabis/status/2081039623422177765</link>
+      <description><![CDATA[A strong and secure open ecosystem is important for the world to benefit from AI. We’ve always supported and contributed heavily to open source and science from Jax to Transformers to AlphaFold to Gemma open models which have now been downloaded 300M+ times. And the standards framework we’ve proposed supports responsible deployment of both open and proprietary models.]]></description>
+      <author>Demis Hassabis</author>
+      <pubDate>Sat, 25 Jul 2026 15:31:24 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/demishassabis/status/2081039623422177765</guid>
+      <category>x</category>
+      <category>深度解读</category>
+    </item>
+    <item>
+      <title>Why AI Hasn&apos;t Increased Unemployment, According to Anthropic</title>
+      <link>https://www.youtube.com/watch?v=niPCJO0Cdss</link>
+      <description><![CDATA[Anthropic’s head of economics argues that AI is still augmenting workers rather than replacing them—and that expertise becomes more valuable as AI handles more tasks. NLW examines the evidence, the warning signs in junior hiring, and why the story executives tell themselves about AI could shape its impact on work. In the headlines: Stripe’s reported $10 billion pursuit of OpenRouter, the booming model-routing race, and Microsoft’s push toward cheaper in-house models. The AI Daily Brief helps you understand the most important news and discussions in AI. Subscribe to the podcast version of The A]]></description>
+      <author>The AI Daily Brief: Artificial Intelligence News</author>
+      <pubDate>Sat, 25 Jul 2026 15:04:06 GMT</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/watch?v=niPCJO0Cdss</guid>
+      <category>youtube</category>
+      <category>即时资讯</category>
+    </item>
+    <item>
+      <title>Literally everyone hated this feature</title>
+      <link>https://www.youtube.com/shorts/n0JhhZyGP_w</link>
+      <description><![CDATA[Did Meta actually think we wouldn’t notice this? 🫣 Recently, Meta rolled out a new image-generation feature called Muse Image. On paper, it was pitched as a creative new AI tool. In reality, it turned into a massive privacy and safety concern overnight. By default, the feature automatically opted in public accounts, allowing anyone to simply @ a handle and use Meta AI to generate entirely new images using that person&apos;s likeness with NO permission required. Unsurprisingly, after immense backlash from users, privacy advocates, and talent agencies, Meta pulled the feature just three days after l]]></description>
+      <author>Matt Wolfe</author>
+      <pubDate>Sat, 25 Jul 2026 13:38:23 GMT</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/shorts/n0JhhZyGP_w</guid>
+      <category>youtube</category>
+      <category>即时资讯</category>
+    </item>
+    <item>
+      <title>One fallen power line exposed a growing AI data center problem. Here’s how to fix it. https://t.co/Q29dc9wKs4</title>
+      <link>https://x.com/TechCrunch/status/2081003031131500727</link>
+      <description><![CDATA[One fallen power line exposed a growing AI data center problem. Here’s how to fix it. https://t.co/Q29dc9wKs4]]></description>
+      <author>TechCrunch</author>
+      <pubDate>Sat, 25 Jul 2026 13:06:00 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/TechCrunch/status/2081003031131500727</guid>
+      <category>x</category>
+      <category>即时资讯</category>
+    </item>
+    <item>
+      <title>AI won&apos;t necessarily displace skilled devs - it&apos;ll just move their value up the chain</title>
+      <link>https://www.youtube.com/shorts/O3foXkb1Zos</link>
+      <description><![CDATA[AI won&apos;t necessarily displace skilled devs - it&apos;ll just move their value up the chain. Zubin discusses this with Quincy on the freeCodeCamp podcast.]]></description>
+      <author>freeCodeCamp.org</author>
+      <pubDate>Sat, 25 Jul 2026 12:32:34 GMT</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/shorts/O3foXkb1Zos</guid>
+      <category>youtube</category>
+      <category>教程实践</category>
+    </item>
+    <item>
+      <title>The AI Portfolio That Gives You an Edge in Interviews</title>
+      <link>https://www.youtube.com/shorts/N3FDISelpOE</link>
+      <description><![CDATA[Want something to talk about in an AI engineering interview that edges out the competition? Build a real portfolio. Not tutorial clones, but real projects that solve real problems and prove you can ship end to end. That could be a RAG chatbot on a specific domain, deployed to a website and running on real data. An AI agent with real tools that can actually go do things. A semantic search system over a real dataset. The point is to build something that&apos;s a solid software engineering project first, with the AI layer on top. Keep a clean repo, deploy it, and monitor it. That&apos;s what gives you real]]></description>
+      <author>Tech With Tim</author>
+      <pubDate>Sat, 25 Jul 2026 12:00:19 GMT</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/shorts/N3FDISelpOE</guid>
+      <category>youtube</category>
+      <category>教程实践</category>
+    </item>
+    <item>
+      <title>Plus: Russian hackers are trying to steal US nuclear scientists’ emails, the State Department bans known scammers from entering the United States, and more. https://t.co/QSNe3pnl2M</title>
+      <link>https://x.com/WIRED/status/2080964234012238168</link>
+      <description><![CDATA[Plus: Russian hackers are trying to steal US nuclear scientists’ emails, the State Department bans known scammers from entering the United States, and more. https://t.co/QSNe3pnl2M]]></description>
+      <author>WIRED</author>
+      <pubDate>Sat, 25 Jul 2026 10:31:50 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/WIRED/status/2080964234012238168</guid>
+      <category>x</category>
+      <category>即时资讯</category>
+    </item>
+    <item>
+      <title>Anthropic Just Revealed Opus 5 The Worlds Most Powerful AI (Beats Fable 5 )</title>
+      <link>https://www.youtube.com/watch?v=4MJW3x9VbSI</link>
+      <description><![CDATA[🎓 Learn AI With Me For Free - https://www.skool.com/the-aigrid-community-1726 🌐Subscribe To My Newsletter - https://aigrid.beehiiv.com/subscribe Get your Free AGI Preparedness Guide - https://theaigrid.kit.com/agi 🐤 Follow Me on Twitter https://twitter.com/TheAiGrid Links From Todays Video: https://www.anthropic.com/news/claude-opus-5 Welcome to TheAIGRID — the place to learn AI for free. I create simple, practical videos that help beginners, creators, entrepreneurs, and business owners understand artificial intelligence, AI tools, automation, AI agents, robotics, ChatGPT, Claude, Gemini, a]]></description>
+      <author>TheAIGRID</author>
+      <pubDate>Sat, 25 Jul 2026 10:30:35 GMT</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/watch?v=4MJW3x9VbSI</guid>
+      <category>youtube</category>
+      <category>横向测评</category>
+      <category>即时资讯</category>
+    </item>
+    <item>
+      <title>ChatGPT Work for using websites which require login:</title>
+      <link>https://x.com/gdb/status/2080939030062178512</link>
+      <description><![CDATA[ChatGPT Work for using websites which require login:]]></description>
+      <author>Greg Brockman</author>
+      <pubDate>Sat, 25 Jul 2026 08:51:41 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/gdb/status/2080939030062178512</guid>
+      <category>x</category>
+      <category>行业观点</category>
+      <category>深度解读</category>
+    </item>
+    <item>
+      <title>RT @satyanadella: Open-weight models are essential to a healthy AI ecosystem. Together with others across our industry, we are outlining a…</title>
+      <link>https://x.com/ylecun/status/2080938537910714569</link>
+      <description><![CDATA[RT @satyanadella: Open-weight models are essential to a healthy AI ecosystem. Together with others across our industry, we are outlining a…]]></description>
+      <author>Yann LeCun</author>
+      <pubDate>Sat, 25 Jul 2026 08:49:44 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/ylecun/status/2080938537910714569</guid>
+      <category>x</category>
+      <category>深度解读</category>
+    </item>
+    <item>
+      <title>RT @HaiyuWu1: Learning causality from internet videos in latent space first, and then using RL to teach the foundation model how to act.
+
+T…</title>
+      <link>https://x.com/ylecun/status/2080935294258339994</link>
+      <description><![CDATA[RT @HaiyuWu1: Learning causality from internet videos in latent space first, and then using RL to teach the foundation model how to act.
+
+T…]]></description>
+      <author>Yann LeCun</author>
+      <pubDate>Sat, 25 Jul 2026 08:36:50 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/ylecun/status/2080935294258339994</guid>
+      <category>x</category>
+      <category>深度解读</category>
+    </item>
+  </channel>
+</rss>
