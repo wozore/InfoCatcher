@@ -579,6 +579,18 @@ main { max-width: 1200px; margin: 0 auto; padding: 20px; }
 .back-panel-button { border: 1px solid var(--border); background: var(--surface); border-radius: var(--radius-sm); padding: 7px 10px; color: var(--text-secondary); }
 .back-panel-button:hover { border-color: var(--primary); color: var(--primary); }
 
+/* OpenAI 独立节点页：仅 chatgpt 集合使用，避免改变其他厂商树。 */
+.openai-detail h2 { padding-right: 40px; }
+.openai-detail .model-breadcrumb { margin: 10px 0 18px; gap: 8px; font-size: 16px; line-height: 1.6; }
+.openai-detail .model-breadcrumb button { padding: 3px 2px; }
+.openai-detail .vendor-description { margin-top: 0; }
+.openai-detail .node-overview { margin-bottom: 6px; }
+.openai-detail .node-overview h2 { margin-bottom: 4px; }
+.openai-detail .node-description { margin: 14px 0 18px; color: var(--text-secondary); font-size: 16px; line-height: 1.7; }
+.openai-detail .model-tool-panel { margin-top: 20px; }
+.openai-detail .model-tree-actions { display: flex; justify-content: flex-end; margin: 0 0 12px; }
+.openai-detail .model-leaf-panel { margin-top: 6px; }
+
 /* ═══ Glossary ══════════════════════════════════════════════════
    概念词典：搜索框 + 动态分类 chip + 可展开术语卡片
    .glossary-card.expanded 展开显示释义/关联术语/实用意义 */
@@ -707,6 +719,8 @@ main { max-width: 1200px; margin: 0 auto; padding: 20px; }
   .model-panel-heading { flex-direction: column; }
   .model-bulk-compare { width: 100%; }
   .rate-grid { grid-template-columns: 1fr; }
+  .openai-detail .model-breadcrumb { font-size: 15px; }
+  .openai-detail .model-tree-actions { display: block; }
 }
 
 /* ═══ Empty State ═══════════════════════════════════════════════

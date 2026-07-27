@@ -224,6 +224,10 @@ function getCollectionNode(toolId, itemId) {
   return getToolIntelligence(toolId)?.items?.find(item => item.id === itemId) || null;
 }
 
+function isOpenAICollection(toolId) {
+  return toolId === 'chatgpt';
+}
+
 function compareKey(ref) {
   return ref.toolId + '::' + (ref.itemId || 'root');
 }
@@ -491,7 +495,7 @@ function getNodeStatusLabel(status) {
   return { active: '已核实', partial: '部分核实', unknown: '官方资料待核验', legacy_supported: '仍受支持', deprecated: '已弃用', retired: '已停用' }[status] || '资料状态未知';
 }
 
-function renderTreeChildren(toolId, collection, parentId) {
+function renderTreeChildren(toolId, collection, parentId, options = {}) {
   const children = getTreeChildren(collection, parentId);
   const parent = parentId ? getCollectionNode(toolId, parentId) : null;
   const leaves = parent ? getLeafDescendants(collection, parent.id) : [];
@@ -504,15 +508,59 @@ function renderTreeChildren(toolId, collection, parentId) {
     return '<div class="intelligence-unavailable"><b>' + escapeHtml(parent?.name || '当前分类') + '</b>：' +
       (parent?.status === 'unknown' ? '官方资料待核验，暂不展示未经证实的子项、价格或权益。' : '当前没有可展示的已核实子项。') + '</div>';
   }
-  return '<div class="model-panel-heading"><div><h4>' + escapeHtml(parent?.name || '模型与工具') + '</h4><p>' + escapeHtml(parent?.summary || '选择分类继续查看，只有最终叶节点可比较。') + '</p></div>' + groupCompare + '</div>' +
-    '<div class="model-tree-grid">' + children.map(item => {
-      const isLeaf = item.node_type === 'leaf';
-      return '<button class="model-tree-card' + (isLeaf ? ' leaf' : '') + '" type="button" onclick="navigateModelToolPanel(\'' + escapeHtml(toolId) + '\',\'' + escapeHtml(item.id) + '\')">' +
-        '<span class="node-kind-badge ' + (isLeaf ? 'leaf' : 'group') + '">' + (isLeaf ? '具体' : '分类') + '</span>' +
-        '<strong>' + escapeHtml(item.name) + '</strong><p>' + escapeHtml(item.summary || '') + '</p>' +
-        '<small class="intelligence-status status-' + escapeHtml(item.status === 'unknown' ? 'partial' : item.status) + '">' + escapeHtml(getNodeStatusLabel(item.status)) + '</small>' +
-        '<span class="model-tree-action">' + (isLeaf ? '查看数据面板' : '进入分类') + ' ›</span></button>';
-    }).join('') + '</div>';
+  const heading = options.showHeading === false ? '' :
+    '<div class="model-panel-heading"><div><h4>' + escapeHtml(parent?.name || '模型与工具') + '</h4><p>' + escapeHtml(parent?.summary || '选择分类继续查看，只有最终叶节点可比较。') + '</p></div>' + groupCompare + '</div>';
+  const compareOnly = options.showHeading === false && groupCompare
+    ? '<div class="model-tree-actions">' + groupCompare + '</div>'
+    : '';
+  return heading + compareOnly + '<div class="model-tree-grid">' + children.map(item => {
+    const isLeaf = item.node_type === 'leaf';
+    return '<button class="model-tree-card' + (isLeaf ? ' leaf' : '') + '" type="button" onclick="navigateModelToolPanel(\'' + escapeHtml(toolId) + '\',\'' + escapeHtml(item.id) + '\')">' +
+      '<span class="node-kind-badge ' + (isLeaf ? 'leaf' : 'group') + '">' + (isLeaf ? '具体' : '分类') + '</span>' +
+      '<strong>' + escapeHtml(item.name) + '</strong><p>' + escapeHtml(item.summary || '') + '</p>' +
+      '<small class="intelligence-status status-' + escapeHtml(item.status === 'unknown' ? 'partial' : item.status) + '">' + escapeHtml(getNodeStatusLabel(item.status)) + '</small>' +
+      '<span class="model-tree-action">' + (isLeaf ? '查看数据面板' : '进入分类') + ' ›</span></button>';
+  }).join('') + '</div>';
+}
+
+function renderNodeOverview(tool, node) {
+  return '<section class="node-overview">' +
+    '<h2>' + escapeHtml(tool.icon + ' ' + node.name) + '</h2>' +
+    '<div class="vendor">' + escapeHtml(tool.vendor) + ' · <a href="' + escapeHtml(safeExternalUrl(node.official_url)) + '" target="_blank" rel="noopener noreferrer">官网 ↗</a></div>' +
+    '<p class="node-description">' + escapeHtml(node.summary || '暂无简短说明。') + '</p>' +
+  '</section>';
+}
+
+function renderOpenAIDetailBody(toolId, nodeId = null) {
+  const tool = tools.find(item => item.id === toolId);
+  const collection = getToolIntelligence(toolId);
+  const node = nodeId ? getCollectionNode(toolId, nodeId) : null;
+  if (!tool || !collection || (nodeId && !node)) return '<div class="intelligence-unavailable">该模型或工具节点不存在。</div>';
+
+  if (!node) {
+    return '<section class="openai-root">' +
+      '<h2>' + escapeHtml(tool.icon + ' ' + tool.vendor + '（' + tool.name + '）') + '</h2>' +
+      '<div class="vendor">厂商总览 · <a href="' + escapeHtml(safeExternalUrl(tool.url)) + '" target="_blank" rel="noopener noreferrer">官网 ↗</a></div>' +
+      renderModelBreadcrumb(toolId, collection, null) +
+      '<p class="vendor-description">' + escapeHtml(tool.overview?.description || tool.strengths) + '</p>' +
+      renderVendorFeatures(tool) +
+      '<section class="model-tool-panel"><div class="intelligence-heading"><h3>模型与工具</h3><span class="intelligence-status status-' + escapeHtml(collection.status) + '">' + escapeHtml({ verified: '已核实', partial: '部分核实', conflict: '资料冲突', unavailable: '资料不可用' }[collection.status] || collection.status) + '</span></div>' +
+      renderTreeChildren(toolId, collection, null, { showHeading: false }) +
+      '</section></section>';
+  }
+
+  const breadcrumbs = renderModelBreadcrumb(toolId, collection, node);
+  if (node.node_type === 'leaf') {
+    const sourceMap = new Map((collection.sources || []).map(source => [source.id, source]));
+    return renderNodeOverview(tool, node) + breadcrumbs +
+      '<div class="model-leaf-panel"><div class="model-panel-heading"><div><span class="node-kind-badge leaf">具体' + escapeHtml(node.kind === 'api_model' ? '模型' : node.kind === 'subscription_plan' ? '套餐' : '工具') + '</span><h4>' + escapeHtml(node.name) + '</h4></div><button class="back-panel-button" type="button" onclick="goBackModelToolPanel(\'' + escapeHtml(toolId) + '\')">← 返回</button></div>' +
+      '<div class="intelligence-item-body">' + renderLeafDetails(node, sourceMap, { toolId }) + '</div></div>';
+  }
+
+  return renderNodeOverview(tool, node) + breadcrumbs +
+    '<section class="model-tool-panel"><div class="intelligence-heading"><h3>模型与工具</h3><span class="intelligence-status status-' + escapeHtml(node.status === 'unknown' ? 'partial' : node.status) + '">' + escapeHtml(getNodeStatusLabel(node.status)) + '</span></div>' +
+    renderTreeChildren(toolId, collection, node.id, { showHeading: false }) +
+    '</section>';
 }
 
 function renderLeafPanel(toolId, collection, leaf) {
@@ -535,6 +583,11 @@ function renderModelToolPanel(toolId, nodeId = null) {
 
 function navigateModelToolPanel(toolId, nodeId = null) {
   detailPanelState.set(toolId, nodeId);
+  if (isOpenAICollection(toolId)) {
+    const body = document.getElementById('openaiDetailBody');
+    if (body) body.innerHTML = renderOpenAIDetailBody(toolId, nodeId);
+    return;
+  }
   const panel = document.getElementById('modelToolPanel');
   if (panel) panel.innerHTML = renderModelToolPanel(toolId, nodeId);
 }
@@ -551,7 +604,8 @@ function openDetail(id, selectedItemId = null) {
   const overlay = document.getElementById('modalOverlay');
   const content = document.getElementById('modalContent');
   if (t.card_kind === 'collection' && collection?.tree_mode === 'tree') {
-    content.innerHTML = '<button class="modal-close" onclick="closeModal()">✕</button>' + renderVendorOverview(t) + '<div id="modelToolPanel"></div>';
+    content.innerHTML = '<button class="modal-close" onclick="closeModal()">✕</button>' +
+      (isOpenAICollection(id) ? '<div id="openaiDetailBody" class="openai-detail"></div>' : renderVendorOverview(t) + '<div id="modelToolPanel"></div>');
     overlay.style.display = 'flex';
     document.body.style.overflow = 'hidden';
     navigateModelToolPanel(id, selectedItemId);
