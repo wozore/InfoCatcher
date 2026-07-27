@@ -685,7 +685,7 @@ try {
 try {
   const claudePath = path.resolve(DIRS.project, '.claude', 'CLAUDE.md');
   if (!fs.existsSync(claudePath)) {
-    fail(`原则3: CLAUDE.md 不存在: ${claudePath}`);
+    console.warn('  ⚠️  原则3: CLAUDE.md 不存在（非工程仓库），跳过同步检查');
   } else {
     const claudeMd = fs.readFileSync(claudePath, 'utf8');
 
