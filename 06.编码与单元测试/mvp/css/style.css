@@ -540,6 +540,16 @@ main { max-width: 1200px; margin: 0 auto; padding: 20px; }
 .intelligence-sources { padding-top: 8px; border-top: 1px dashed var(--border); }
 .intelligence-sources a { color: var(--primary); margin-right: 5px; }
 .intelligence-sources span { display: block; color: var(--text-hint); margin-top: 3px; }
+
+/* B11 时效标注 */
+.timeliness-badge { display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: var(--radius-sm); font-size: 12px; vertical-align: middle; }
+.timeliness-badge.green { background: #dcfce7; color: #166534; }
+.timeliness-badge.yellow { background: #fef9c3; color: #854d0e; }
+.timeliness-badge.orange { background: #ffedd5; color: #9a3412; }
+.timeliness-badge.red { background: #fee2e2; color: #991b1b; font-weight: 600; }
+.intelligence-sources .timeliness-badge { margin-top: 3px; }
+.intelligence-item summary .timeliness-badge { font-size: 12px; padding: 1px 6px; }
+.model-tree-card .timeliness-badge { display: inline-block; margin: 4px 0 0; }
 .intelligence-unavailable { margin-bottom: 16px; padding: 10px; background: var(--warn-light); color: var(--warn); border-radius: var(--radius-sm); font-size: 13px; }
 
 /* ═══ 厂商总览与模型树 ══════════════════════════════════════════ */

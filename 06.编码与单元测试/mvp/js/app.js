@@ -104,6 +104,36 @@ function hasFree(t) {
   return t.free_tier && !t.free_tier.includes('无免费') && !t.free_tier.startsWith('无(');
 }
 
+/** B11 时效分级：根据 ISO 时间戳与当前时间差值返回新鲜度 */
+function getTimelinessInfo(queriedAt) {
+  if (!queriedAt) return null;
+  const diff = Date.now() - new Date(queriedAt).getTime();
+  if (!Number.isFinite(diff) || diff < 0) return null;
+  const days = diff / 86400000;
+  if (days < 7) return { level: 'green', emoji: '🟢', label: '一周内' };
+  if (days < 30) return { level: 'yellow', emoji: '🟡', label: '一个月内' };
+  if (days < 90) return { level: 'orange', emoji: '🟠', label: '三个月内' };
+  return { level: 'red', emoji: '🔴', label: '三个月以上', stale: true };
+}
+
+/** 渲染时效标签 */
+function renderTimelinessBadge(queriedAt) {
+  const info = getTimelinessInfo(queriedAt);
+  if (!info) return '';
+  return '<span class="timeliness-badge ' + info.level + '">' + info.emoji + ' ' + info.label + '</span>';
+}
+
+/** 获取 item 的最新 sources queried_at */
+function getItemLatestQueriedAt(collection, item) {
+  if (!collection?.sources || !item?.source_refs?.length) return null;
+  return item.source_refs
+    .map(ref => collection.sources.find(s => s.id === ref))
+    .filter(Boolean)
+    .map(s => s.queried_at)
+    .sort()
+    .reverse()[0] || null;
+}
+
 // ═══════════════════════════════════════════════════════════════
 // 第 2 部分：数据加载
 // ═══════════════════════════════════════════════════════════════
@@ -381,8 +411,10 @@ function renderScenarioExplanations(title, items) {
 }
 
 function renderIntelligenceItem(item, sourceMap, selectedItemId) {
+  const latestQ = (item.source_refs || []).map(ref => sourceMap.get(ref)).filter(Boolean).map(s => s.queried_at).filter(Boolean).sort().reverse()[0] || null;
+  const badge = renderTimelinessBadge(latestQ);
   return '<details class="intelligence-item"' + (item.id === selectedItemId ? ' open' : '') + '>' +
-    '<summary><span><b>' + escapeHtml(item.name) + '</b><small>' + escapeHtml(item.kind === 'api_model' ? 'API 模型' : item.kind === 'subscription_plan' ? '订阅套餐' : '产品变体') + '</small></span><span>查看详情</span></summary>' +
+    '<summary><span><b>' + escapeHtml(item.name) + '</b><small>' + escapeHtml(item.kind === 'api_model' ? 'API 模型' : item.kind === 'subscription_plan' ? '订阅套餐' : '产品变体') + '</small>' + badge + '</span><span>查看详情</span></summary>' +
     '<div class="intelligence-item-body">' + renderLeafDetails(item, sourceMap, false) + '</div></details>';
 }
 
@@ -416,9 +448,10 @@ function renderLeafDetails(item, sourceMap, showCompare) {
       (plan.included_models.length ? plan.included_models.map(escapeHtml).join('、') : '官方未明确列出全部模型') + '</p></div>'
     : '';
   const sources = (item.source_refs || []).map(ref => sourceMap.get(ref)).filter(Boolean);
+  const latestQueriedAt = sources.map(s => s.queried_at).filter(Boolean).sort().reverse()[0] || null;
   const sourcesHtml = '<div class="intelligence-sources"><b>资料来源：</b>' + sources.map(source =>
     '<a href="' + escapeHtml(safeExternalUrl(source.url)) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(source.title) + '</a>'
-  ).join(' · ') + (sources[0] ? '<span>查询于 ' + escapeHtml(sources[0].queried_at.slice(0, 10)) + '</span>' : '') + '</div>';
+  ).join(' · ') + (latestQueriedAt ? '<span>查询于 ' + escapeHtml(latestQueriedAt.slice(0, 10)) + '</span>' : '') + '</div>';
   const compareHtml = showCompare
     ? '<div class="leaf-actions"><button class="compare-toggle ' + (isCompareSelected(showCompare.toolId, item.id) ? 'selected' : '') + '" onclick="toggleCompareRef(\'' + escapeHtml(showCompare.toolId) + '\',\'' + escapeHtml(item.id) + '\',this)">' + (isCompareSelected(showCompare.toolId, item.id) ? '已选' : '+对比') + '</button></div>'
     : '';
@@ -513,9 +546,10 @@ function renderTreeChildren(toolId, collection, parentId, options = {}) {
     : '';
   return heading + compareOnly + '<div class="model-tree-grid">' + children.map(item => {
     const isLeaf = item.node_type === 'leaf';
+    const treeBadge = isLeaf ? renderTimelinessBadge(getItemLatestQueriedAt(collection, item)) : '';
     return '<button class="model-tree-card' + (isLeaf ? ' leaf' : '') + '" type="button" onclick="navigateModelToolPanel(\'' + escapeHtml(toolId) + '\',\'' + escapeHtml(item.id) + '\')">' +
       '<span class="node-kind-badge ' + (isLeaf ? 'leaf' : 'group') + '">' + (isLeaf ? '具体' : '分类') + '</span>' +
-      '<strong>' + escapeHtml(item.name) + '</strong><p>' + escapeHtml(item.summary || '') + '</p>' +
+      '<strong>' + escapeHtml(item.name) + '</strong>' + treeBadge + '<p>' + escapeHtml(item.summary || '') + '</p>' +
       '<small class="intelligence-status status-' + escapeHtml(item.status === 'unknown' ? 'partial' : item.status) + '">' + escapeHtml(getNodeStatusLabel(item.status)) + '</small>' +
       '<span class="model-tree-action">' + (isLeaf ? '查看数据面板' : '进入分类') + ' ›</span></button>';
   }).join('') + '</div>';
@@ -550,8 +584,9 @@ function renderOpenAIDetailBody(toolId, nodeId = null) {
   const breadcrumbs = renderModelBreadcrumb(toolId, collection, node);
   if (node.node_type === 'leaf') {
     const sourceMap = new Map((collection.sources || []).map(source => [source.id, source]));
+    const leafBadge = renderTimelinessBadge(getItemLatestQueriedAt(collection, node));
     return renderNodeOverview(tool, node) + breadcrumbs +
-      '<div class="model-leaf-panel"><div class="model-panel-heading"><div><span class="node-kind-badge leaf">具体' + escapeHtml(node.kind === 'api_model' ? '模型' : node.kind === 'subscription_plan' ? '套餐' : '工具') + '</span><h4>' + escapeHtml(node.name) + '</h4></div><button class="back-panel-button" type="button" onclick="goBackModelToolPanel(\'' + escapeHtml(toolId) + '\')">← 返回</button></div>' +
+      '<div class="model-leaf-panel"><div class="model-panel-heading"><div><span class="node-kind-badge leaf">具体' + escapeHtml(node.kind === 'api_model' ? '模型' : node.kind === 'subscription_plan' ? '套餐' : '工具') + '</span><h4>' + escapeHtml(node.name) + '</h4>' + leafBadge + '</div><button class="back-panel-button" type="button" onclick="goBackModelToolPanel(\'' + escapeHtml(toolId) + '\')">← 返回</button></div>' +
       '<div class="intelligence-item-body">' + renderLeafDetails(node, sourceMap, { toolId }) + '</div></div>';
   }
 
@@ -563,7 +598,8 @@ function renderOpenAIDetailBody(toolId, nodeId = null) {
 
 function renderLeafPanel(toolId, collection, leaf) {
   const sourceMap = new Map((collection.sources || []).map(source => [source.id, source]));
-  return '<div class="model-leaf-panel"><div class="model-panel-heading"><div><span class="node-kind-badge leaf">具体' + escapeHtml(leaf.kind === 'api_model' ? '模型' : leaf.kind === 'subscription_plan' ? '套餐' : '工具') + '</span><h4>' + escapeHtml(leaf.name) + '</h4></div><button class="back-panel-button" type="button" onclick="goBackModelToolPanel(\'' + escapeHtml(toolId) + '\')">← 返回</button></div>' +
+  const leafBadge = renderTimelinessBadge(getItemLatestQueriedAt(collection, leaf));
+  return '<div class="model-leaf-panel"><div class="model-panel-heading"><div><span class="node-kind-badge leaf">具体' + escapeHtml(leaf.kind === 'api_model' ? '模型' : leaf.kind === 'subscription_plan' ? '套餐' : '工具') + '</span><h4>' + escapeHtml(leaf.name) + '</h4>' + leafBadge + '</div><button class="back-panel-button" type="button" onclick="goBackModelToolPanel(\'' + escapeHtml(toolId) + '\')">← 返回</button></div>' +
     '<div class="intelligence-item-body">' + renderLeafDetails(leaf, sourceMap, { toolId }) + '</div></div>';
 }
 
@@ -756,7 +792,7 @@ function renderApiModelCompare(targets) {
     { label: '输出价', format: item => { const rate = getPrimaryRate(item); return rate ? formatPrice(rate.output, rate.currency) + ' / 百万 tokens' : '未提供'; } },
     { label: '1M 上下文', format: item => item.one_m_context?.status === 'native' ? '原生支持' : item.one_m_context?.status === 'conditional' ? '特定条件支持' : item.one_m_context?.status === 'not_supported' ? '不支持' : '未知' },
     { label: '适用说明', format: item => (item.applicable_scenarios || []).map(scene => scene.title + '：' + scene.description).join('；') || '未提供' },
-    { label: '查询时间', format: item => { const source = getToolIntelligence(targets.find(target => target.item === item).tool.id)?.sources?.find(source => item.source_refs?.includes(source.id)); return source?.queried_at?.slice(0, 10) || '未提供'; } }
+    { label: '查询时间', format: item => { const collection = getToolIntelligence(targets.find(target => target.item === item).tool.id); const q = getItemLatestQueriedAt(collection, item); const info = getTimelinessInfo(q); return (q?.slice(0, 10) || '未提供') + (info ? ' ' + info.emoji : ''); } }
   ];
   return '<table class="compare-table"><thead><tr><th>维度</th>' + targets.map(target => '<th>' + escapeHtml(compareTargetLabel(target)) + '</th>').join('') + '</tr></thead><tbody>' +
     rows.map(row => '<tr><td class="dim">' + row.label + '</td>' + targets.map(target => '<td>' + escapeHtml(row.format(target.item)) + '</td>').join('') + '</tr>').join('') +
@@ -769,7 +805,7 @@ function renderPlanCompare(targets) {
     { label: '周期', format: item => ({ month: '月', year: '年', usage: '按量', custom: '定制', unknown: '未知' }[item.plan?.billing_period] || '未知') },
     { label: '主要模型', format: item => item.plan?.included_models?.length ? item.plan.included_models.join('、') : '官方未明确列出全部模型' },
     { label: '条件/限制', format: item => item.plan?.conditions || '未提供' },
-    { label: '查询时间', format: item => { const source = getToolIntelligence(targets.find(target => target.item === item).tool.id)?.sources?.find(source => item.source_refs?.includes(source.id)); return source?.queried_at?.slice(0, 10) || '未提供'; } }
+    { label: '查询时间', format: item => { const collection = getToolIntelligence(targets.find(target => target.item === item).tool.id); const q = getItemLatestQueriedAt(collection, item); const info = getTimelinessInfo(q); return (q?.slice(0, 10) || '未提供') + (info ? ' ' + info.emoji : ''); } }
   ];
   return '<table class="compare-table"><thead><tr><th>维度</th>' + targets.map(target => '<th>' + escapeHtml(compareTargetLabel(target)) + '</th>').join('') + '</tr></thead><tbody>' +
     rows.map(row => '<tr><td class="dim">' + row.label + '</td>' + targets.map(target => '<td>' + escapeHtml(row.format(target.item)) + '</td>').join('') + '</tr>').join('') +
