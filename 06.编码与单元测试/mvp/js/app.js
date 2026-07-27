@@ -404,11 +404,9 @@ function renderLeafDetails(item, sourceMap, showCompare) {
       '<small>单位：每百万 tokens · ' + escapeHtml(rate.conditions) + '</small></div>'
     ).join('') + '</div>'
     : '';
-  const cacheHtml = item.kind === 'api_model'
+  const cacheHtml = item.kind === 'api_model' && item.cache_hit_rate?.status === 'provided'
     ? '<div class="cache-status"><b>平均缓存命中率区间：</b>' +
-      (item.cache_hit_rate?.status === 'provided'
-        ? escapeHtml(item.cache_hit_rate.min_percent + '%–' + item.cache_hit_rate.max_percent + '%')
-        : '官方未提供可靠区间，不作估算') + '</div>'
+      escapeHtml(item.cache_hit_rate.min_percent + '%–' + item.cache_hit_rate.max_percent + '%') + '</div>'
     : '';
   const plan = item.plan;
   const planHtml = plan
