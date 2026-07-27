@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "catalog_queried_at": "2026-07-26T10:35:25Z",
+  "catalog_queried_at": "2026-07-27T07:46:15.009Z",
   "collections": [
     {
       "tool_id": "chatgpt",
@@ -1351,6 +1351,310 @@
           "publisher": "DeepSeek",
           "source_type": "official",
           "queried_at": "2026-07-26T10:35:25Z"
+        }
+      ],
+      "tree_mode": "flat"
+    },
+    {
+      "tool_id": "mistral",
+      "status": "verified",
+      "items": [
+        {
+          "id": "mistral-models",
+          "node_type": "group",
+          "parent_id": null,
+          "group_id": "mistral-models",
+          "kind": "product_variant",
+          "name": "Mistral 模型",
+          "status": "active",
+          "summary": "当前核实的 Mistral API 模型，覆盖通用、编码和推理场景。",
+          "official_url": "https://mistral.ai/pricing/api/",
+          "source_refs": [
+            "mistral-api-pricing"
+          ],
+          "relation_source_refs": [
+            "mistral-api-pricing"
+          ]
+        },
+        {
+          "id": "mistral-medium-3.5",
+          "kind": "api_model",
+          "name": "Mistral Medium 3.5",
+          "status": "active",
+          "summary": "当前旗舰模型，兼顾逻辑推理、编码和 Agent 流程。",
+          "official_url": "https://mistral.ai/pricing/api/",
+          "api_pricing": {
+            "status": "provided",
+            "rate_cards": [
+              {
+                "label": "Standard",
+                "currency": "USD",
+                "unit": "per_1m_tokens",
+                "input_uncached": 1.5,
+                "output": 7.5,
+                "conditions": "开放许可；支持 text-to-text、推理、编码和 Agent。",
+                "source_refs": [
+                  "mistral-api-pricing"
+                ],
+                "input_cached": 0
+              }
+            ]
+          },
+          "cache_hit_rate": {
+            "status": "not_provided",
+            "note": "官方未提供缓存命中率区间。"
+          },
+          "applicable_scenarios": [
+            {
+              "title": "复杂推理与编码",
+              "description": "官方旗舰多模态，适合高要求工作。"
+            }
+          ],
+          "inapplicable_scenarios": [
+            {
+              "title": "成本敏感型",
+              "description": "可选 Mistral Small 4 降低费用。"
+            }
+          ],
+          "source_refs": [
+            "mistral-api-pricing"
+          ],
+          "node_type": "leaf",
+          "parent_id": "mistral-models",
+          "group_id": "mistral-models",
+          "relation_source_refs": [
+            "mistral-api-pricing"
+          ],
+          "one_m_context": {
+            "status": "unknown",
+            "note": "官方定价页未列出具体上下文窗口限制；请参见 https://docs.mistral.ai/models/overview"
+          }
+        },
+        {
+          "id": "mistral-large-3",
+          "kind": "api_model",
+          "name": "Mistral Large 3",
+          "status": "active",
+          "summary": "开放权重旗舰模型，通用多语言多模态。",
+          "official_url": "https://mistral.ai/pricing/api/",
+          "api_pricing": {
+            "status": "provided",
+            "rate_cards": [
+              {
+                "label": "Standard",
+                "currency": "USD",
+                "unit": "per_1m_tokens",
+                "input_uncached": 0.5,
+                "output": 1.5,
+                "conditions": "开放许可；面向通用文本和多模态任务。",
+                "source_refs": [
+                  "mistral-api-pricing"
+                ],
+                "input_cached": 0
+              }
+            ]
+          },
+          "cache_hit_rate": {
+            "status": "not_provided",
+            "note": "官方未提供缓存命中率区间。"
+          },
+          "applicable_scenarios": [
+            {
+              "title": "通用文本与多语言",
+              "description": "开放权重旗舰，适合自部署和微调。"
+            }
+          ],
+          "inapplicable_scenarios": [
+            {
+              "title": "要求最高最新能力",
+              "description": "应比较 Mistral Medium 3.5。"
+            }
+          ],
+          "source_refs": [
+            "mistral-api-pricing"
+          ],
+          "node_type": "leaf",
+          "parent_id": "mistral-models",
+          "group_id": "mistral-models",
+          "relation_source_refs": [
+            "mistral-api-pricing"
+          ],
+          "one_m_context": {
+            "status": "unknown",
+            "note": "官方定价页未列出具体上下文窗口限制；请参见 https://docs.mistral.ai/models/overview"
+          }
+        },
+        {
+          "id": "mistral-small-4",
+          "kind": "api_model",
+          "name": "Mistral Small 4",
+          "status": "active",
+          "summary": "轻量多语言多模态模型，Apache 2.0 许可。",
+          "official_url": "https://mistral.ai/pricing/api/",
+          "api_pricing": {
+            "status": "provided",
+            "rate_cards": [
+              {
+                "label": "Standard",
+                "currency": "USD",
+                "unit": "per_1m_tokens",
+                "input_uncached": 0.15,
+                "output": 0.6,
+                "conditions": "Apache 2.0 许可；面向低成本、轻量级任务。",
+                "source_refs": [
+                  "mistral-api-pricing"
+                ],
+                "input_cached": 0
+              }
+            ]
+          },
+          "cache_hit_rate": {
+            "status": "not_provided",
+            "note": "官方未提供缓存命中率区间。"
+          },
+          "applicable_scenarios": [
+            {
+              "title": "成本敏感的批量处理",
+              "description": "Apache 2.0 许可适合自由部署和商用。"
+            }
+          ],
+          "inapplicable_scenarios": [
+            {
+              "title": "高要求复杂工作",
+              "description": "可选 Mistral Medium 3.5。"
+            }
+          ],
+          "source_refs": [
+            "mistral-api-pricing"
+          ],
+          "node_type": "leaf",
+          "parent_id": "mistral-models",
+          "group_id": "mistral-models",
+          "relation_source_refs": [
+            "mistral-api-pricing"
+          ],
+          "one_m_context": {
+            "status": "unknown",
+            "note": "官方定价页未列出具体上下文窗口限制；请参见 https://docs.mistral.ai/models/overview"
+          }
+        },
+        {
+          "id": "devstral-2",
+          "kind": "api_model",
+          "name": "Devstral 2",
+          "status": "active",
+          "summary": "开源编码代理模型，面向自主软件工程。",
+          "official_url": "https://mistral.ai/pricing/api/",
+          "api_pricing": {
+            "status": "provided",
+            "rate_cards": [
+              {
+                "label": "Standard",
+                "currency": "USD",
+                "unit": "per_1m_tokens",
+                "input_uncached": 0.4,
+                "output": 2,
+                "conditions": "开放许可；面向编程和 Agent 工作流。",
+                "source_refs": [
+                  "mistral-api-pricing"
+                ],
+                "input_cached": 0
+              }
+            ]
+          },
+          "cache_hit_rate": {
+            "status": "not_provided",
+            "note": "官方未提供缓存命中率区间。"
+          },
+          "applicable_scenarios": [
+            {
+              "title": "AI 编程代理",
+              "description": "官方定位为自主软件工程编码模型。"
+            }
+          ],
+          "inapplicable_scenarios": [
+            {
+              "title": "非编码工作",
+              "description": "纯推理或写作可选 Medium 3.5。"
+            }
+          ],
+          "source_refs": [
+            "mistral-api-pricing"
+          ],
+          "node_type": "leaf",
+          "parent_id": "mistral-models",
+          "group_id": "mistral-models",
+          "relation_source_refs": [
+            "mistral-api-pricing"
+          ],
+          "one_m_context": {
+            "status": "unknown",
+            "note": "官方定价页未列出具体上下文窗口限制；请参见 https://docs.mistral.ai/models/overview"
+          }
+        },
+        {
+          "id": "codestral",
+          "kind": "api_model",
+          "name": "Codestral",
+          "status": "active",
+          "summary": "低延迟编码模型，优化高频补全和代码生成。",
+          "official_url": "https://mistral.ai/pricing/api/",
+          "api_pricing": {
+            "status": "provided",
+            "rate_cards": [
+              {
+                "label": "Standard",
+                "currency": "USD",
+                "unit": "per_1m_tokens",
+                "input_uncached": 0.3,
+                "output": 0.9,
+                "conditions": "Premier 许可；面向高频代码补全和中段填充。",
+                "source_refs": [
+                  "mistral-api-pricing"
+                ],
+                "input_cached": 0
+              }
+            ]
+          },
+          "cache_hit_rate": {
+            "status": "not_provided",
+            "note": "官方未提供缓存命中率区间。"
+          },
+          "applicable_scenarios": [
+            {
+              "title": "IDE 代码补全和 FIM",
+              "description": "低延迟优化，适合高频编码交互。"
+            }
+          ],
+          "inapplicable_scenarios": [
+            {
+              "title": "长文本、多模态",
+              "description": "Codestral 是纯编码模型。"
+            }
+          ],
+          "source_refs": [
+            "mistral-api-pricing"
+          ],
+          "node_type": "leaf",
+          "parent_id": "mistral-models",
+          "group_id": "mistral-models",
+          "relation_source_refs": [
+            "mistral-api-pricing"
+          ],
+          "one_m_context": {
+            "status": "unknown",
+            "note": "官方定价页未列出具体上下文窗口限制；请参见 https://docs.mistral.ai/models/overview"
+          }
+        }
+      ],
+      "sources": [
+        {
+          "id": "mistral-api-pricing",
+          "url": "https://mistral.ai/pricing/api/",
+          "title": "Mistral API Pricing",
+          "publisher": "Mistral AI",
+          "source_type": "official",
+          "queried_at": "2026-07-27T07:46:15.009Z"
         }
       ],
       "tree_mode": "flat"

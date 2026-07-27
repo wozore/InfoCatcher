@@ -10,7 +10,7 @@
 
 | 路径 | 说明 |
 |------|------|
-| `mvp/` | MVP v0.4 静态站 + GitHub Actions 构建时热点管线（HTML/CSS/JS + Node.js + JSON） |
+| `mvp/` | MVP v0.5 静态站 + GitHub Actions 构建时双管线（HTML/CSS/JS + Node.js + JSON） |
 | `mvp/index.html` | 6 视图入口（工具库/场景导航/对比/AI热点/概念词典/关于） |
 | `mvp/css/style.css` | 样式（CSS 变量 + 响应式 + 热点/概念词典卡片） |
 | `mvp/js/app.js` | 搜索/筛选/对比/场景/热点/概念词典前端逻辑 |
@@ -28,7 +28,8 @@
 | `mvp/scripts/cli/` | 来源、人工内容、授权、额度和构建锁管理实现 |
 | `mvp/scripts/maintenance/` | 数据校验和来源同步实现 |
 | `mvp/scripts/tests/` | 43项测试与本地fixture |
-| `mvp/scripts/*.js` | 稳定命令/测试兼容入口；根目录不存放业务实现 |
+| `mvp/data/acquisition/` | 工具情报来源配置（7 厂商/15 条源，三级降级链） |
+| `mvp/scripts/acquisition/` | 工具情报自动采集引擎 + 冲突检测 + CI 门禁校验 |
 | `mvp/README.md` | MVP 使用说明（面向用户） |
 | `mvp模块.md` | MVP 架构文档（模块划分 + 扩展点说明） |
 | `mvp架构图.drawio` | MVP 架构关系图 |
@@ -60,6 +61,6 @@ node --test scripts/news-tests.test.js scripts/news-foundation.test.js
 node scripts/build-news.js --fixture
 ```
 
-真实采集由 `.github/workflows/collect-news.yml` 每日一次执行。GitHub Secrets 注入 `YOUTUBE_API_KEY` / `X_API_KEY`，浏览器不接触凭据。X 当前按每日最多 15 个来源轮转以控制约 300 条/日；B站默认不访问网络，人工精选条目与其他内容统一处理；`bilibili-only` 仅用于一次Provider诊断和快速熔断。
+真实采集由 `.github/workflows/collect-news.yml` 每日一次执行；工具情报每周由 `.github/workflows/refresh-tool-intel.yml` 自动更新。GitHub Secrets 注入 `YOUTUBE_API_KEY` / `X_API_KEY`，浏览器不接触凭据。X 当前按每日最多 15 个来源轮转以控制约 300 条/日；B站默认不访问网络，人工精选条目与其他内容统一处理；`bilibili-only` 仅用于一次Provider诊断和快速熔断。
 
 > 静态站阶段继续使用浏览器冒烟测试；B14 的确定性数据规则使用 Node 内置单元测试，不引入 npm 依赖。

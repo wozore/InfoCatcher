@@ -12,6 +12,7 @@ const NEWS_SOURCES_DIR = path.join(NEWS_DIR, 'sources');
 const NEWS_MANUAL_DIR = path.join(NEWS_DIR, 'manual');
 const NEWS_RUNTIME_DIR = path.join(NEWS_DIR, 'runtime');
 const NEWS_OUTPUT_DIR = path.join(NEWS_DIR, 'output');
+const ACQUISITION_DIR = path.join(DATA_DIR, 'acquisition');
 const FIXTURE_DIR = path.join(SCRIPTS_DIR, 'tests', 'fixtures');
 const PROJECT_DIR = path.resolve(MVP_DIR, '..', '..');
 
@@ -26,6 +27,7 @@ const DIRS = Object.freeze({
   newsManual: NEWS_MANUAL_DIR,
   newsRuntime: NEWS_RUNTIME_DIR,
   newsOutput: NEWS_OUTPUT_DIR,
+  acquisition: ACQUISITION_DIR,
   fixtures: FIXTURE_DIR,
   project: PROJECT_DIR,
 });
@@ -52,4 +54,8 @@ const NEWS_FILES = Object.freeze({
 
 const SOURCE_LIST_PATH = path.join(PROJECT_DIR, '热点信息源清单.md');
 
-module.exports = { DIRS, CATALOG_FILES, NEWS_FILES, SOURCE_LIST_PATH };
+const ACQUISITION_FILES = Object.freeze({
+  intelSources: path.join(ACQUISITION_DIR, 'intel-sources.json'),
+});
+
+module.exports = { DIRS, CATALOG_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH };

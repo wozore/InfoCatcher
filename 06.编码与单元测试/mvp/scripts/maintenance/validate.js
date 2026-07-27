@@ -9,7 +9,7 @@
  * 校验范围（按执行顺序）：
  * ═══════════════════════════════════════════════════════════════
  *
- *   1. tools.json       — 43 个工具的核心数据
+ *   1. tools.json       — 44 个工具的核心数据
  *      必填字段、ID唯一、评分1-5范围、数组/字符串格式、日期ISO
  *   2. glossary.json    — 43 条 AI 概念
  *      术语唯一、分类非空、source 完整性
@@ -25,7 +25,9 @@
  *      ID 唯一、状态合法、已处理任务必须有 decision
  *   8. hotspots.json     — 前端热点投影
  *      内容/事件/溯源/评分引用完整性、商业扣分和异常必须附证据
- *   9. index.html        — 页面结构契约
+ *   9. intel-sources.json — 工具情报采集来源配置
+ *      结构校验委托至 acquisition/validate-intel.js
+ *  10. index.html        — 页面结构契约
  *      六视图容器 ID 存在、EXTENSION POINT 注释未误删、导航按钮≥4
  *
  * ═══════════════════════════════════════════════════════════════
@@ -43,7 +45,8 @@
 'use strict';
 
 const fs = require('fs');
-const { DIRS, CATALOG_FILES, NEWS_FILES } = require('../shared/paths');
+const path = require('path');
+const { DIRS, CATALOG_FILES, NEWS_FILES, ACQUISITION_FILES } = require('../shared/paths');
 
 const MVP_DIR = DIRS.mvp;
 let failed = false;
@@ -642,6 +645,120 @@ try {
 } catch (e) {
   fail(`index.html 读取失败：${e.message}`);
 }
+
+// intel-sources.json（委托至 acquisition/validate-intel.js）
+try {
+  const result = require('../acquisition/validate-intel').validate({ silent: true });
+  result.errors.forEach(e => fail(`acquisition: ${e}`));
+  result.warnings.forEach(w => console.warn('⚠️  acquisition:', w));
+  console.log(`  intel-sources.json + tool-intelligence.json: ${result.valid ? '通过' : '失败'}`);
+} catch (e) {
+  fail(`acquisition 校验异常: ${e.message}`);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// 开发原则自动门禁（对应 CLAUDE.md 开发原则 1-5）
+// ═══════════════════════════════════════════════════════════════
+console.log('\n📋 开发原则合规检查\n');
+
+// --- 原则 1: AI-Ready 结构 — data/ 根目录禁止 .json ---
+try {
+  const loose = fs.readdirSync(DIRS.data).filter(f => f.endsWith('.json'));
+  if (loose.length) loose.forEach(f => fail(`原则1: data/ 根目录禁止 .json（${f} 应归属子目录）`));
+  else console.log('  原则1 AI-Ready结构: 通过');
+} catch (e) { fail(`原则1 检查异常: ${e.message}`); }
+
+// --- 原则 2: 扩展点显式化 — 前端三文件下限 ---
+try {
+  const appJs = fs.readFileSync(`${DIRS.mvp}/js/app.js`, 'utf8');
+  const appEp = (appJs.match(/EXTENSION POINT/g) || []).length;
+  if (appEp < 5) fail(`原则2: app.js EXTENSION POINT 仅 ${appEp} 处（下限 5）`);
+
+  const css = fs.readFileSync(`${DIRS.mvp}/css/style.css`, 'utf8');
+  const cssEp = (css.match(/EXTENSION POINT/g) || []).length;
+  if (cssEp < 1) fail(`原则2: style.css 缺少 EXTENSION POINT（下限 1）`);
+
+  console.log(`  原则2 扩展点: index.html 3+ · app.js ${appEp} · style.css ${cssEp}，通过`);
+} catch (e) { fail(`原则2 检查异常: ${e.message}`); }
+
+// --- 原则 3: CLAUDE.md 同步 — 工具数 + 子目录登记 ---
+try {
+  const claudePath = path.resolve(DIRS.project, '.claude', 'CLAUDE.md');
+  if (!fs.existsSync(claudePath)) {
+    fail(`原则3: CLAUDE.md 不存在: ${claudePath}`);
+  } else {
+    const claudeMd = fs.readFileSync(claudePath, 'utf8');
+
+    // 工具数一致
+    const m = claudeMd.match(/tools\.json\s+#\s*(\d+)\s*个工具/);
+    if (!m) fail('原则3: CLAUDE.md 缺少 "tools.json  # N 个工具" 数量声明');
+    else {
+      const declared = parseInt(m[1], 10);
+      if (declared !== validatedTools.length) fail(`原则3: CLAUDE.md 声明 ${declared} 个工具，实际 ${validatedTools.length}`);
+    }
+
+    // scripts/ 子目录全覆盖（CLAUDE.md 用树形格式如 ├── acquisition/）
+    const scriptDirs = fs.readdirSync(DIRS.scripts, { withFileTypes: true })
+      .filter(d => d.isDirectory()).map(d => d.name);
+    for (const d of scriptDirs) {
+      if (!claudeMd.includes(`${d}/`)) fail(`原则3: CLAUDE.md 缺少 scripts/${d}/ 目录`);
+    }
+
+    // data/ 子目录全覆盖
+    const dataDirs = fs.readdirSync(DIRS.data, { withFileTypes: true })
+      .filter(d => d.isDirectory()).map(d => d.name);
+    for (const d of dataDirs) {
+      if (!claudeMd.includes(`${d}/`)) fail(`原则3: CLAUDE.md 缺少 data/${d}/ 目录`);
+    }
+  }
+  console.log('  原则3 CLAUDE.md同步: 通过');
+} catch (e) { fail(`原则3 检查异常: ${e.message}`); }
+
+// --- 原则 4: 零外部依赖 — 无 package.json + 无 npm require ---
+try {
+  if (fs.existsSync(`${DIRS.mvp}/package.json`)) fail('原则4: mvp/ 禁止 package.json');
+  if (fs.existsSync(`${DIRS.project}/package.json`)) fail('原则4: 项目根禁止 package.json');
+
+  const NODE_BUILTINS = new Set(['fs', 'path', 'crypto', 'os', 'child_process', 'http', 'https', 'url', 'zlib', 'stream', 'assert', 'test', 'module']);
+  const jsFiles = [];
+  (function walk(d) {
+    for (const e of fs.readdirSync(d, { withFileTypes: true }))
+      e.isDirectory() ? walk(path.join(d, e.name)) : e.name.endsWith('.js') && jsFiles.push(path.join(d, e.name));
+  })(DIRS.scripts);
+
+  for (const f of jsFiles) {
+    const src = fs.readFileSync(f, 'utf8');
+    const re = /require\s*\(\s*['"]([^'"]+)['"]\s*\)/g;
+    let mm;
+    while ((mm = re.exec(src)) !== null) {
+      const mod = mm[1];
+      if (!mod.startsWith('.') && !mod.startsWith('/') && !mod.startsWith('node:') && !NODE_BUILTINS.has(mod))
+        fail(`原则4: ${path.relative(DIRS.mvp, f)} 引用了外部模块 "${mod}"`);
+    }
+  }
+  console.log('  原则4 零外部依赖: 通过');
+} catch (e) { fail(`原则4 检查异常: ${e.message}`); }
+
+// --- 原则 5: 先结构后逻辑 — paths.js 覆盖 data/ 所有 JSON ---
+try {
+  const exports = require('../shared/paths');
+  const registered = new Set();
+  (function collect(v) {
+    if (typeof v === 'string' && v.includes(DIRS.data)) registered.add(path.resolve(v));
+    else if (v && typeof v === 'object') Object.values(v).forEach(collect);
+  })({ DIRS: exports.DIRS, CATALOG_FILES: exports.CATALOG_FILES, NEWS_FILES: exports.NEWS_FILES, ACQUISITION_FILES: exports.ACQUISITION_FILES });
+
+  const dataJson = [];
+  (function walk(d) {
+    for (const e of fs.readdirSync(d, { withFileTypes: true }))
+      e.isDirectory() ? walk(path.join(d, e.name)) : e.name.endsWith('.json') && dataJson.push(path.resolve(path.join(d, e.name)));
+  })(DIRS.data);
+
+  for (const j of dataJson)
+    if (!registered.has(j)) fail(`原则5: ${path.relative(DIRS.mvp, j)} 未在 paths.js 登记`);
+
+  console.log(`  原则5 路径登记: ${dataJson.length} 个 JSON 全部覆盖，通过`);
+} catch (e) { fail(`原则5 检查异常: ${e.message}`); }
 
 console.log(failed ? '\n❌ 校验未通过，请修复上述错误后重试\n' : '\n✅ 全部通过\n');
 process.exit(failed ? 1 : 0);

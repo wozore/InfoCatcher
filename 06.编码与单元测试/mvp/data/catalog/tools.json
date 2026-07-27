@@ -2287,5 +2287,73 @@
     "source": "julius.ai",
     "card_kind": "concrete",
     "entity_kind": "product"
+  },
+  {
+    "id": "mistral",
+    "name": "Mistral AI（产品入口）",
+    "vendor": "Mistral AI",
+    "category": [
+      "对话"
+    ],
+    "scenes": [
+      "写代码",
+      "写论文",
+      "翻译文档"
+    ],
+    "url": "https://mistral.ai/",
+    "icon": "🏔️",
+    "free_tier": "开放权重模型免费自部署",
+    "paid_tiers": [
+      {
+        "name": "API 按量",
+        "price": "从 /usr/bin/bash.15/MTok"
+      }
+    ],
+    "chinese_support": 2,
+    "chinese_note": "主要面向英语，中文不在官方优先支持列表",
+    "access_barrier": "境外（需科学上网）",
+    "access_level": "受限",
+    "strengths": "开放权重模型丰富、Apache 2.0 许可、多语言多模态",
+    "weaknesses": "中国市场访问受限、缓存定价未公开",
+    "best_for": [
+      "需要开源部署",
+      "欧洲合规场景"
+    ],
+    "not_for": [
+      "中文为主的工作",
+      "需要国内直接访问"
+    ],
+    "rating_overall": 4,
+    "rating_chinese": 2,
+    "rating_ease": 3.5,
+    "rating_price": 4,
+    "last_updated": "2026-07-27",
+    "source": "https://mistral.ai/pricing/api/",
+    "card_kind": "collection",
+    "entity_kind": "product",
+    "overview": {
+      "description": "法国 AI 公司，提供开放权重和商业许可的多种模型，覆盖文本、编码、推理和 OCR 场景。",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "Apache 2.0 许可的小模型适合自由部署和商用"
+        },
+        {
+          "tone": "positive",
+          "text": "旗舰模型 Medium 3.5 均衡性能和成本"
+        },
+        {
+          "tone": "negative",
+          "text": "中国市场网络访问受限"
+        },
+        {
+          "tone": "negative",
+          "text": "缓存定价信息未在官方价格页公开"
+        }
+      ],
+      "source_refs": [
+        "mistral-api-pricing"
+      ]
+    }
   }
 ]

@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "updated_at": null,
+  "tools": [
+    {
+      "tool_id": "chatgpt",
+      "name": "OpenAI",
+      "intel_sources": [
+        {
+          "id": "openai-llms",
+          "url": "https://developers.openai.com/llms.txt",
+          "type": "llms_index",
+          "method": "llms_txt",
+          "publisher": "OpenAI",
+          "interval_days": 7,
+          "usage": "discovery"
+        },
+        {
+          "id": "openai-api-pricing",
+          "url": "https://developers.openai.com/api/docs/pricing",
+          "type": "pricing",
+          "method": "llms_full_html",
+          "publisher": "OpenAI",
+          "selector": "table.pricing-table, [class*='pricing'] table",
+          "interval_days": 7,
+          "usage": "api_pricing"
+        }
+      ]
+    },
+    {
+      "tool_id": "claude",
+      "name": "Anthropic",
+      "intel_sources": [
+        {
+          "id": "anthropic-llms",
+          "url": "https://docs.anthropic.com/llms.txt",
+          "type": "llms_index",
+          "method": "llms_txt",
+          "publisher": "Anthropic",
+          "interval_days": 7,
+          "usage": "discovery"
+        },
+        {
+          "id": "anthropic-pricing",
+          "url": "https://platform.claude.com/docs/en/about-claude/pricing.md",
+          "type": "pricing",
+          "method": "pricing_markdown",
+          "publisher": "Anthropic",
+          "interval_days": 7,
+          "table_index": 0,
+          "usage": "api_pricing"
+        },
+        {
+          "id": "anthropic-plans",
+          "url": "https://support.anthropic.com/en/articles/11049762-choosing-a-claude-ai-plan",
+          "type": "plans",
+          "method": "html_table",
+          "publisher": "Anthropic",
+          "interval_days": 14,
+          "usage": "subscription_plans"
+        }
+      ]
+    },
+    {
+      "tool_id": "gemini",
+      "name": "Google Gemini",
+      "intel_sources": [
+        {
+          "id": "google-llms",
+          "url": "https://ai.google.dev/llms.txt",
+          "type": "llms_index",
+          "method": "llms_txt",
+          "publisher": "Google",
+          "interval_days": 7,
+          "usage": "discovery"
+        },
+        {
+          "id": "google-api-pricing",
+          "url": "https://ai.google.dev/gemini-api/docs/pricing",
+          "type": "pricing",
+          "method": "html_table",
+          "publisher": "Google",
+          "selector": "table, [class*='pricing'] table, [class*='price'] table",
+          "interval_days": 7,
+          "usage": "api_pricing"
+        },
+        {
+          "id": "google-consumer-plans",
+          "url": "https://gemini.google/about",
+          "type": "plans",
+          "method": "html_table",
+          "publisher": "Google",
+          "interval_days": 14,
+          "usage": "subscription_plans"
+        }
+      ]
+    },
+    {
+      "tool_id": "deepseek",
+      "name": "DeepSeek",
+      "intel_sources": [
+        {
+          "id": "deepseek-pricing-cn",
+          "url": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing",
+          "type": "pricing",
+          "method": "html_table",
+          "parser": "deepseek_pricing",
+          "publisher": "DeepSeek",
+          "locale": "zh-CN",
+          "interval_days": 7,
+          "usage": "api_pricing"
+        },
+        {
+          "id": "deepseek-pricing-en",
+          "url": "https://api-docs.deepseek.com/quick_start/pricing",
+          "type": "pricing",
+          "method": "html_table",
+          "publisher": "DeepSeek",
+          "locale": "en",
+          "interval_days": 7,
+          "usage": "api_pricing"
+        },
+        {
+          "id": "deepseek-cache",
+          "url": "https://api-docs.deepseek.com/guides/kv_cache",
+          "type": "documentation",
+          "method": "html_text",
+          "publisher": "DeepSeek",
+          "interval_days": 30,
+          "usage": "context_caching"
+        }
+      ]
+    },
+    {
+      "tool_id": "mistral",
+      "name": "Mistral AI",
+      "intel_sources": [
+        {
+          "id": "mistral-api-pricing",
+          "url": "https://mistral.ai/pricing/api/",
+          "type": "pricing",
+          "method": "html_table",
+          "publisher": "Mistral AI",
+          "interval_days": 7,
+          "usage": "api_pricing"
+        }
+      ]
+    },
+    {
+      "tool_id": "xai-grok",
+      "name": "xAI",
+      "intel_sources": [
+        {
+          "id": "xai-api-pricing",
+          "url": "https://x.ai/api/pricing",
+          "type": "pricing",
+          "method": "html_table",
+          "publisher": "xAI",
+          "interval_days": 7,
+          "usage": "api_pricing"
+        }
+      ]
+    },
+    {
+      "tool_id": "perplexity",
+      "name": "Perplexity AI",
+      "intel_sources": [
+        {
+          "id": "perplexity-pricing",
+          "url": "https://www.perplexity.ai/pricing",
+          "type": "plans",
+          "method": "html_table",
+          "publisher": "Perplexity AI",
+          "interval_days": 14,
+          "usage": "subscription_plans"
+        }
+      ]
+    }
+  ]
+}

@@ -1,10 +1,10 @@
 # InfoCatcher MVP 模块文档
 
-> **版本**：v0.4（S2 / B14）
+> **版本**：v0.5（S3 / N01）
 >
-> **最后更新**：2026-07-26
+> **最后更新**：2026-07-27
 >
-> **当前说明**：本文件描述当前实现。B站仍是支持的热点内容类型，但默认 `all` 构建采用人工精选，不访问B站网络；RSSHub仅保留为显式 `bilibili-only` 诊断入口。
+> **当前说明**：本文件描述当前实现。v0.5 新增工具情报自动采集通道（三级降级链：llms.txt → HTML 表格 → 人工录入），B站仍是支持的热点内容类型但默认 `all` 构建采用人工精选。信息获取通道已建立，支持按批次扩展更多厂商。
 >
 > **环归属**：环 B · ④够用设计 / ⑥编码与单元测试
 >
@@ -29,7 +29,7 @@ InfoCatcher MVP 仍是部署到 GitHub Pages 的**纯静态浏览器应用**。B
 
 | 视图 | 主要能力 | 数据来源 |
 |---|---|---|
-| 工具库 | 43 个 AI 工具、搜索、分类/访问/价格筛选、详情弹窗；集合卡片展示已核实的具体模型、变体和套餐 | `data/catalog/tools.json` + `data/catalog/tool-intelligence.json` |
+| 工具库 | 44 个 AI 工具、搜索、分类/访问/价格筛选、详情弹窗；集合卡片展示已核实的具体模型、变体和套餐 | `data/catalog/tools.json` + `data/catalog/tool-intelligence.json` |
 | 场景导航 | 12 个可搜索场景、子任务展开与工具映射 | `data/catalog/scenes.json` + 工具数据 |
 | 对比模式 | 选择 2–5 个工具进行 10 维度比较 | 前端 `compareList` |
 | AI 热点 | YouTube、X、Bilibili 内容，按平台筛选、按评分/时间排序，展示覆盖与降级状态 | `data/news/output/hotspots.json` |
@@ -46,6 +46,7 @@ InfoCatcher MVP 仍是部署到 GitHub Pages 的**纯静态浏览器应用**。B
 - B站默认网络采集暂停；显式 `bilibili-only` 诊断支持 Provider 单次探测和 Cloudflare 快速熔断；
 - 规则评分、商业证据、异常提示、转载溯源和主题聚合；
 - 五层 UTC 历史窗口、持久 Registry、平台额度账本、授权任务和管理 CLI；
+- 工具情报三级自动采集引擎（llms.txt → HTML 表格 → 人工录入），含价格冲突检测、校验门禁和每周 CI；
 - Node 20 零第三方依赖的单元测试与部署前校验。
 
 **仍不属于当前 MVP：**
@@ -54,7 +55,8 @@ InfoCatcher MVP 仍是部署到 GitHub Pages 的**纯静态浏览器应用**。B
 - 数据库、Serverless API、用户账户和实时推送；
 - AI 自动事实裁决、自动定性商单或作者动机；
 - B站内部 API、逆向 SDK或绕过平台风控；
-- 无限历史回溯。
+- 无限历史回溯；
+- 全自动化生成和审核新工具情报（采集引擎获取失败时仍需人工核验）。
 
 ---
 
@@ -98,7 +100,7 @@ mvp/
 ├── js/app.js                          # 数据加载、筛选、比较和六视图渲染
 ├── data/
 │   ├── catalog/                       # 前端主数据
-│   │   ├── tools.json                 # 43 个工具及集合/具体卡片分类
+│   │   ├── tools.json                 # 44 个工具及集合/具体卡片分类
 │   │   ├── tool-intelligence.json     # 模型、变体、套餐、价格与来源核验
 │   │   ├── glossary.json              # 43 条概念
 │   │   └── scenes.json                # 12 个场景及任务—工具映射
@@ -108,6 +110,8 @@ mvp/
 │       ├── manual/news-manual-items.json # B站人工精选暂存
 │       ├── runtime/                   # 状态、Registry、额度、授权、锁与审计
 │       └── output/hotspots.json       # 前端热点投影
+│   └── acquisition/
+│       └── intel-sources.json         # 工具情报来源配置（7个厂商15条来源）
 ├── scripts/
 │   ├── build-news.js / news-cli.js / validate.js / sync-news-sources.js # 稳定兼容入口
 │   ├── news-tests.test.js / news-foundation.test.js # 稳定测试入口
@@ -118,10 +122,12 @@ mvp/
 │   ├── pipeline/                      # 热点构建总编排
 │   ├── cli/                           # 管理 CLI 实现
 │   ├── maintenance/                   # 校验与来源同步实现
+│   ├── acquisition/                   # 工具情报采集引擎、校验与冲突检测
 │   └── tests/                         # 43项测试与 fixtures
 └── .github/workflows/
     ├── collect-news.yml               # 定时/手动采集并提交生成数据
-    └── deploy.yml                     # 校验、测试并部署 GitHub Pages
+    ├── deploy.yml                     # 校验、测试并部署 GitHub Pages
+    └── refresh-tool-intel.yml         # 每周自动采集工具情报
 ```
 
 ---
@@ -168,7 +174,7 @@ mvp/
 
 ### 4.4 模块化存储约定
 
-- `data/` 根目录不得新增 JSON；主数据、新闻配置、来源、人工暂存、运行状态和公开输出必须进入对应子模块；
+- `data/` 根目录不得新增 JSON；主数据、新闻配置、来源、人工暂存、运行状态、公开输出和采集来源配置必须进入对应子模块（`catalog`、`news/*`、`acquisition`）；
 - `scripts/` 根目录只允许稳定兼容入口，不得新增业务实现；
 - 新脚本必须归入 `shared/core/collectors/content/pipeline/cli/maintenance/tests` 之一；
 - 新 Node 数据路径必须先登记到 `scripts/shared/paths.js`，不得在多个脚本重复硬编码；
@@ -236,7 +242,9 @@ X 继续采用来源轮转控制成本；B站默认不做自动历史分页，�
 | 类别 | 文件 | 谁读写 | 用途 |
 |---|---|---|---|
 | 内容主数据 | `tools.json`, `glossary.json` | 人工维护；浏览器读 | 工具库与概念词典 |
+| 情报结构化数据 | `tool-intelligence.json` | 自动采集/人工维护；浏览器读 | 模型、变体、套餐、价格和来源核验 |
 | 来源/规则配置 | `news-sources.json`, `news-config.json` | CLI/同步脚本维护；构建读 | 采集来源、评分和安全上限 |
+| 采集来源配置 | `intel-sources.json` | 人工维护；采集引擎读 | 工具情报来源URL、方法、周期间隔和解析器 |
 | 前端投影 | `hotspots.json` | 构建写；浏览器读 | 内容、事件、溯源、评分和覆盖状态 |
 | 持久内部状态 | `news-state.json`, `news-registry.json` | 构建读写 | 游标恢复、发现/处理记录、防重 |
 | 运维审计 | `news-quota.json`, `pending-authorizations.json` | 构建/CLI 读写 | 成本、暂停、授权决策 |
@@ -275,12 +283,18 @@ API Key 不属于任何 JSON 文件，只能由 GitHub Repository Secrets 注入
 
 主分支 push 或手动触发：运行静态校验和43项测试 → 复制站点文件 → 上传 Pages artifact → 部署 GitHub Pages。
 
-### 8.3 常用命令
+### 8.3 `refresh-tool-intel.yml`
+
+每周日 UTC 6:37 自动运行，也可 `workflow_dispatch` 指定单工具触发：校验来源配置 → 运行三级降级采集引擎 → 校验输出 → 提交变更的 `tool-intelligence.json`。
+
+### 8.4 常用命令
 
 ```bash
 node scripts/validate.js
+node scripts/acquisition/validate-intel.js
 node --test scripts/news-tests.test.js scripts/news-foundation.test.js
 node scripts/build-news.js --fixture
+node scripts/acquisition/fetch-tool-intel.js --tool=deepseek --dry-run
 node scripts/news-cli.js authorization list
 node scripts/news-cli.js lock status
 node scripts/news-cli.js source import --file sources.json --dry-run
@@ -299,7 +313,8 @@ node scripts/news-cli.js source import --file sources.json --dry-run
 7. 商业推广、异常和来源关系必须保留证据与置信度；未知不能当作零或负面事实。
 8. 采集失败不得用空结果覆盖上一版有效 `hotspots.json`。
 9. 不直接删除构建锁；先检查状态，必要时通过 CLI 带理由强制解锁并保留审计。
-10. 环 B 只维护够用架构；正式数据库 schema、Serverless 接口和综合验收设计留到环 C。
+10. 新增工具情报来源时，只需更新 `intel-sources.json` 配置，无需修改采集引擎代码（DeepSeek 等特殊格式需要添加专用解析器）。
+11. 环 B 只维护够用架构；正式数据库 schema、Serverless 接口和综合验收设计留到环 C。
 
 ---
 
