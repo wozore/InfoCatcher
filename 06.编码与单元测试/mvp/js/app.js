@@ -69,7 +69,8 @@ let hotspots = {              // hotspots.json 的前端投影
   coverage: null,             //   采集覆盖状态
   generated_at: null          //   构建时间
 };
-let compareList = [];         // 用户选中用于对比的工具 ID 列表 (最多 5 个)
+let compareList = [];         // { toolId, itemId } 稳定比较引用；itemId 为 null 表示具体根工具
+let detailPanelState = new Map(); // collection toolId → 当前模型/工具节点路径
 let currentView = 'tools';    // 当前激活的视图
 let activeFilters = {         // 工具库的筛选状态
   category: 'all',            //   分类 (大语言模型/编程开发/图像生成/...)
@@ -210,10 +211,34 @@ function getToolSearchText(tool) {
     ...(item.applicable_scenarios || []).flatMap(scene => [scene.title, scene.description]),
     ...(item.inapplicable_scenarios || []).flatMap(scene => [scene.title, scene.description]),
   ]).filter(Boolean);
+  const overviewText = tool.overview
+    ? [tool.overview.description, ...(tool.overview.features || []).map(feature => feature.text)]
+    : [];
   return [
     tool.name, tool.vendor, ...(tool.category || []), ...(tool.scenes || []),
-    tool.strengths, tool.weaknesses, tool.free_tier, tool.access_barrier, ...itemText,
+    tool.strengths, tool.weaknesses, tool.free_tier, tool.access_barrier, ...overviewText, ...itemText,
   ].join(' ').toLowerCase();
+}
+
+function getCollectionNode(toolId, itemId) {
+  return getToolIntelligence(toolId)?.items?.find(item => item.id === itemId) || null;
+}
+
+function compareKey(ref) {
+  return ref.toolId + '::' + (ref.itemId || 'root');
+}
+
+function isComparableRootTool(tool) {
+  return Boolean(tool && tool.card_kind === 'concrete');
+}
+
+function isComparableLeaf(toolId, itemId) {
+  const item = getCollectionNode(toolId, itemId);
+  return Boolean(item && item.node_type === 'leaf' && item.display_in_tree !== false);
+}
+
+function isCompareSelected(toolId, itemId = null) {
+  return compareList.some(ref => compareKey(ref) === compareKey({ toolId, itemId }));
 }
 
 function getFilteredTools() {
@@ -282,40 +307,52 @@ function renderTools() {
   }
 
   grid.innerHTML = filtered.map(t => {
-    const isSelected = compareList.some(c => c.id === t.id);
     const intelligence = getToolIntelligence(t.id);
-    const collectionItems = intelligence?.items || [];
-    const collectionSummary = t.card_kind === 'collection'
-      ? '<div class="collection-summary"><span class="collection-label">模型 / 套餐集合</span><span>' + collectionItems.length + ' 个已核实项</span></div>' +
-        '<div class="collection-quick-list">' + collectionItems.slice(0, 5).map(item =>
-          '<button type="button" onclick="event.stopPropagation();openDetail(\'' + escapeHtml(t.id) + '\',\'' + escapeHtml(item.id) + '\')">' + escapeHtml(item.name) + '</button>'
-        ).join('') + (collectionItems.length > 5 ? '<span>+' + (collectionItems.length - 5) + '</span>' : '') + '</div>'
+    const collectionItems = (intelligence?.items || []).filter(item => item.node_type !== 'group' && item.display_in_tree !== false);
+    const isCollection = t.card_kind === 'collection';
+    const overview = t.overview;
+    const title = isCollection ? t.vendor + '（' + t.name + '）' : t.name;
+    const description = isCollection
+      ? (overview?.description || t.strengths)
+      : t.strengths;
+    const collectionSummary = isCollection
+      ? '<div class="collection-summary"><span class="collection-label">厂商模型与工具</span><span>' + collectionItems.length + ' 个可查看叶节点</span></div>' +
+        '<div class="collection-quick-list">' + (intelligence?.tree_mode === 'tree'
+          ? (intelligence.items || []).filter(item => item.node_type === 'group').slice(0, 3).map(item =>
+              '<button type="button" onclick="event.stopPropagation();openDetail(\'' + escapeHtml(t.id) + '\',\'' + escapeHtml(item.id) + '\')">' + escapeHtml(item.name) + '</button>'
+            ).join('')
+          : collectionItems.slice(0, 5).map(item =>
+              '<button type="button" onclick="event.stopPropagation();openDetail(\'' + escapeHtml(t.id) + '\',\'' + escapeHtml(item.id) + '\')">' + escapeHtml(item.name) + '</button>'
+            ).join('')) + '</div>'
       : '';
+    const featurePreview = isCollection && overview?.features?.length
+      ? '<div class="vendor-feature-preview">' + overview.features.map(feature =>
+          '<span class="vendor-feature ' + escapeHtml(feature.tone) + '">' + escapeHtml(feature.text) + '</span>'
+        ).join('') + '</div>'
+      : '';
+    const isSelected = isCompareSelected(t.id, null);
     return `
-    <div class="tool-card" onclick="openDetail('${t.id}')">
+    <div class="tool-card${isCollection ? ' collection-card' : ''}" onclick="openDetail('${t.id}')">
       <div class="tool-card-header">
         <div>
-          <div class="tool-card-name">${t.icon} ${t.name}</div>
-          <div class="tool-card-vendor">${t.vendor}</div>
+          <div class="tool-card-name">${t.icon} ${escapeHtml(title)}</div>
+          <div class="tool-card-vendor">${isCollection ? '厂商总览' : escapeHtml(t.vendor)}</div>
         </div>
-        
-        <div style="text-align:right">
-          <div class="rating-stars">${stars(t.rating_overall)}</div>
-          <div class="rating-num">${t.rating_overall.toFixed(1)}</div>
-        </div>
+        ${isCollection ? '' : '<div style="text-align:right"><div class="rating-stars">' + stars(t.rating_overall) + '</div><div class="rating-num">' + t.rating_overall.toFixed(1) + '</div></div>'}
       </div>
 
-      <div class="tool-card-desc">${escapeHtml(t.strengths)}</div>
+      <div class="tool-card-desc">${escapeHtml(description)}</div>
+      ${featurePreview}
       ${collectionSummary}
       <div class="tool-card-tags">
-        ${t.scenes.slice(0,3).map(s => '<span class="tag scene">' + s + '</span>').join('')}
-        ${hasFree(t) ? '<span class="tag free">免费可用</span>' : '<span class="tag paid">仅付费</span>'}
+        ${t.scenes.slice(0,3).map(s => '<span class="tag scene">' + escapeHtml(s) + '</span>').join('')}
+        ${isCollection ? '' : (hasFree(t) ? '<span class="tag free">免费可用</span>' : '<span class="tag paid">仅付费</span>')}
         <span class="tag ${t.access_level === '开放' ? 'open' : 'restricted'}">${t.access_level === '开放' ? '国内可用' : '需科学上网'}</span>
       </div>
 
       <div class="tool-card-footer" onclick="event.stopPropagation()">
-        <span style="font-size:12px;color:var(--text-hint)">更新: ${t.last_updated}</span>
-        <button class="compare-toggle ${isSelected ? 'selected' : ''}" onclick="toggleCompare('${t.id}', this)">${isSelected ? '已选' : '+对比'}</button>
+        <span style="font-size:12px;color:var(--text-hint)">更新: ${escapeHtml(t.last_updated)}</span>
+        ${isComparableRootTool(t) ? '<button class="compare-toggle ' + (isSelected ? 'selected' : '') + '" onclick="toggleCompareRef(\'' + escapeHtml(t.id) + '\',null,this)">' + (isSelected ? '已选' : '+对比') + '</button>' : ''}
       </div>
     </div>`;
   }).join('');
@@ -340,6 +377,12 @@ function renderScenarioExplanations(title, items) {
 }
 
 function renderIntelligenceItem(item, sourceMap, selectedItemId) {
+  return '<details class="intelligence-item"' + (item.id === selectedItemId ? ' open' : '') + '>' +
+    '<summary><span><b>' + escapeHtml(item.name) + '</b><small>' + escapeHtml(item.kind === 'api_model' ? 'API 模型' : item.kind === 'subscription_plan' ? '订阅套餐' : '产品变体') + '</small></span><span>查看详情</span></summary>' +
+    '<div class="intelligence-item-body">' + renderLeafDetails(item, sourceMap, false) + '</div></details>';
+}
+
+function renderLeafDetails(item, sourceMap, showCompare) {
   const contextLabels = { native: '原生支持 1M', conditional: '特定条件支持 1M', not_supported: '不支持 1M', unknown: '1M 支持情况未知' };
   const context = item.one_m_context;
   const contextHtml = context
@@ -347,7 +390,6 @@ function renderIntelligenceItem(item, sourceMap, selectedItemId) {
       (context.tokens ? '（' + Number(context.tokens).toLocaleString('zh-CN') + ' tokens）' : '') +
       (context.conditions ? '<p>' + escapeHtml(context.conditions) + '</p>' : '') + '</div>'
     : '';
-
   const rateCards = item.api_pricing?.rate_cards || [];
   const pricingHtml = rateCards.length
     ? '<div class="intelligence-pricing"><h5>API 价格</h5>' + rateCards.map(rate =>
@@ -358,14 +400,12 @@ function renderIntelligenceItem(item, sourceMap, selectedItemId) {
       '<small>单位：每百万 tokens · ' + escapeHtml(rate.conditions) + '</small></div>'
     ).join('') + '</div>'
     : '';
-
   const cacheHtml = item.kind === 'api_model'
     ? '<div class="cache-status"><b>平均缓存命中率区间：</b>' +
       (item.cache_hit_rate?.status === 'provided'
         ? escapeHtml(item.cache_hit_rate.min_percent + '%–' + item.cache_hit_rate.max_percent + '%')
         : '官方未提供可靠区间，不作估算') + '</div>'
     : '';
-
   const plan = item.plan;
   const planHtml = plan
     ? '<div class="plan-card"><h5>套餐信息</h5><p><b>' + formatPrice(plan.amount, plan.currency) +
@@ -373,17 +413,16 @@ function renderIntelligenceItem(item, sourceMap, selectedItemId) {
       '</b></p><p>' + escapeHtml(plan.conditions || '') + '</p><p><b>主要模型：</b>' +
       (plan.included_models.length ? plan.included_models.map(escapeHtml).join('、') : '官方未明确列出全部模型') + '</p></div>'
     : '';
-
   const sources = (item.source_refs || []).map(ref => sourceMap.get(ref)).filter(Boolean);
   const sourcesHtml = '<div class="intelligence-sources"><b>资料来源：</b>' + sources.map(source =>
     '<a href="' + escapeHtml(safeExternalUrl(source.url)) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(source.title) + '</a>'
   ).join(' · ') + (sources[0] ? '<span>查询于 ' + escapeHtml(sources[0].queried_at.slice(0, 10)) + '</span>' : '') + '</div>';
-
-  return '<details class="intelligence-item"' + (item.id === selectedItemId ? ' open' : '') + '>' +
-    '<summary><span><b>' + escapeHtml(item.name) + '</b><small>' + escapeHtml(item.kind === 'api_model' ? 'API 模型' : item.kind === 'subscription_plan' ? '订阅套餐' : '产品变体') + '</small></span><span>查看详情</span></summary>' +
-    '<div class="intelligence-item-body"><p>' + escapeHtml(item.summary || '') + '</p>' + contextHtml + pricingHtml + cacheHtml + planHtml +
+  const compareHtml = showCompare
+    ? '<div class="leaf-actions"><button class="compare-toggle ' + (isCompareSelected(showCompare.toolId, item.id) ? 'selected' : '') + '" onclick="toggleCompareRef(\'' + escapeHtml(showCompare.toolId) + '\',\'' + escapeHtml(item.id) + '\',this)">' + (isCompareSelected(showCompare.toolId, item.id) ? '已选' : '+对比') + '</button></div>'
+    : '';
+  return '<p>' + escapeHtml(item.summary || '') + '</p>' + contextHtml + pricingHtml + cacheHtml + planHtml +
     renderScenarioExplanations('适用场景及说明', item.applicable_scenarios) +
-    renderScenarioExplanations('不适用场景及说明', item.inapplicable_scenarios) + sourcesHtml + '</div></details>';
+    renderScenarioExplanations('不适用场景及说明', item.inapplicable_scenarios) + sourcesHtml + compareHtml;
 }
 
 function renderCollectionIntelligence(tool, selectedItemId) {
@@ -395,71 +434,149 @@ function renderCollectionIntelligence(tool, selectedItemId) {
   }
   const sourceMap = new Map((collection.sources || []).map(source => [source.id, source]));
   const statusText = { verified: '已核实', partial: '部分核实', conflict: '资料冲突', unavailable: '资料不可用' }[collection.status] || collection.status;
+  const displayItems = (collection.items || []).filter(item => item.node_type !== 'group');
   return '<div class="section intelligence-section"><div class="intelligence-heading"><h4>当前具体模型与套餐</h4><span class="intelligence-status status-' + escapeHtml(collection.status) + '">' + escapeHtml(statusText) + '</span></div>' +
-    (collection.items || []).map(item => renderIntelligenceItem(item, sourceMap, selectedItemId)).join('') + '</div>';
+    displayItems.map(item => renderIntelligenceItem(item, sourceMap, selectedItemId)).join('') + '</div>';
+}
+
+function renderVendorFeatures(tool) {
+  const features = tool.overview?.features?.length
+    ? tool.overview.features
+    : [
+      { tone: 'positive', text: '优点：' + tool.strengths },
+      { tone: 'negative', text: '限制：' + tool.weaknesses }
+    ];
+  return '<section class="vendor-features"><h4>特点</h4>' + features.map(feature =>
+    '<p class="vendor-feature ' + (feature.tone === 'negative' ? 'negative' : 'positive') + '">' + escapeHtml(feature.text) + '</p>'
+  ).join('') + '</section>';
+}
+
+function renderVendorOverview(tool) {
+  return '<section class="vendor-overview">' +
+    '<h2>' + escapeHtml(tool.icon + ' ' + tool.vendor + '（' + tool.name + '）') + '</h2>' +
+    '<div class="vendor">厂商总览 · <a href="' + escapeHtml(safeExternalUrl(tool.url)) + '" target="_blank" rel="noopener noreferrer">官网 ↗</a></div>' +
+    '<p class="vendor-description">' + escapeHtml(tool.overview?.description || tool.strengths) + '</p>' +
+    renderVendorFeatures(tool) +
+  '</section>';
+}
+
+function getTreeChildren(collection, parentId) {
+  return (collection.items || []).filter(item => item.parent_id === parentId && item.display_in_tree !== false);
+}
+
+function getLeafDescendants(collection, parentId) {
+  return getTreeChildren(collection, parentId).flatMap(node =>
+    node.node_type === 'leaf' ? [node] : getLeafDescendants(collection, node.id)
+  );
+}
+
+function getNodePath(collection, node) {
+  const path = [];
+  let current = node;
+  while (current) {
+    path.unshift(current);
+    current = current.parent_id ? getCollectionNode(collection.tool_id, current.parent_id) : null;
+  }
+  return path;
+}
+
+function renderModelBreadcrumb(toolId, collection, node) {
+  const nodes = node ? getNodePath(collection, node) : [];
+  return '<div class="model-breadcrumb"><button type="button" onclick="navigateModelToolPanel(\'' + escapeHtml(toolId) + '\',null)">模型与工具</button>' +
+    nodes.map((part, index) => '<span>›</span><button type="button"' + (index === nodes.length - 1 ? ' aria-current="page"' : '') + ' onclick="navigateModelToolPanel(\'' + escapeHtml(toolId) + '\',\'' + escapeHtml(part.id) + '\')">' + escapeHtml(part.name) + '</button>').join('') +
+  '</div>';
+}
+
+function getNodeStatusLabel(status) {
+  return { active: '已核实', partial: '部分核实', unknown: '官方资料待核验', legacy_supported: '仍受支持', deprecated: '已弃用', retired: '已停用' }[status] || '资料状态未知';
+}
+
+function renderTreeChildren(toolId, collection, parentId) {
+  const children = getTreeChildren(collection, parentId);
+  const parent = parentId ? getCollectionNode(toolId, parentId) : null;
+  const leaves = parent ? getLeafDescendants(collection, parent.id) : [];
+  const comparableLeaves = leaves.filter(item => item.node_type === 'leaf' && ['api_model', 'subscription_plan'].includes(item.kind));
+  const sameKind = comparableLeaves.length > 1 && comparableLeaves.every(item => item.kind === comparableLeaves[0].kind);
+  const groupCompare = sameKind
+    ? '<button class="model-bulk-compare" type="button" onclick="compareGroupLeaves(\'' + escapeHtml(toolId) + '\',\'' + escapeHtml(parent.id) + '\')">全部' + escapeHtml(comparableLeaves[0].kind === 'api_model' ? '模型' : '套餐') + '对比（' + comparableLeaves.length + '）</button>'
+    : '';
+  if (!children.length) {
+    return '<div class="intelligence-unavailable"><b>' + escapeHtml(parent?.name || '当前分类') + '</b>：' +
+      (parent?.status === 'unknown' ? '官方资料待核验，暂不展示未经证实的子项、价格或权益。' : '当前没有可展示的已核实子项。') + '</div>';
+  }
+  return '<div class="model-panel-heading"><div><h4>' + escapeHtml(parent?.name || '模型与工具') + '</h4><p>' + escapeHtml(parent?.summary || '选择分类继续查看，只有最终叶节点可比较。') + '</p></div>' + groupCompare + '</div>' +
+    '<div class="model-tree-grid">' + children.map(item => {
+      const isLeaf = item.node_type === 'leaf';
+      return '<button class="model-tree-card' + (isLeaf ? ' leaf' : '') + '" type="button" onclick="navigateModelToolPanel(\'' + escapeHtml(toolId) + '\',\'' + escapeHtml(item.id) + '\')">' +
+        '<span class="node-kind-badge ' + (isLeaf ? 'leaf' : 'group') + '">' + (isLeaf ? '具体' : '分类') + '</span>' +
+        '<strong>' + escapeHtml(item.name) + '</strong><p>' + escapeHtml(item.summary || '') + '</p>' +
+        '<small class="intelligence-status status-' + escapeHtml(item.status === 'unknown' ? 'partial' : item.status) + '">' + escapeHtml(getNodeStatusLabel(item.status)) + '</small>' +
+        '<span class="model-tree-action">' + (isLeaf ? '查看数据面板' : '进入分类') + ' ›</span></button>';
+    }).join('') + '</div>';
+}
+
+function renderLeafPanel(toolId, collection, leaf) {
+  const sourceMap = new Map((collection.sources || []).map(source => [source.id, source]));
+  return '<div class="model-leaf-panel"><div class="model-panel-heading"><div><span class="node-kind-badge leaf">具体' + escapeHtml(leaf.kind === 'api_model' ? '模型' : leaf.kind === 'subscription_plan' ? '套餐' : '工具') + '</span><h4>' + escapeHtml(leaf.name) + '</h4></div><button class="back-panel-button" type="button" onclick="goBackModelToolPanel(\'' + escapeHtml(toolId) + '\')">← 返回</button></div>' +
+    '<div class="intelligence-item-body">' + renderLeafDetails(leaf, sourceMap, { toolId }) + '</div></div>';
+}
+
+function renderModelToolPanel(toolId, nodeId = null) {
+  const collection = getToolIntelligence(toolId);
+  if (!collection) return '<div class="intelligence-unavailable">具体型号资料暂不可用。</div>';
+  const node = nodeId ? getCollectionNode(toolId, nodeId) : null;
+  if (nodeId && !node) return '<div class="intelligence-unavailable">该模型或工具节点不存在。</div>';
+  const body = node?.node_type === 'leaf'
+    ? renderLeafPanel(toolId, collection, node)
+    : renderTreeChildren(toolId, collection, node?.id || null);
+  return '<section class="model-tool-panel"><div class="intelligence-heading"><h3>模型与工具</h3><span class="intelligence-status status-' + escapeHtml(collection.status) + '">' + escapeHtml({ verified: '已核实', partial: '部分核实', conflict: '资料冲突', unavailable: '资料不可用' }[collection.status] || collection.status) + '</span></div>' +
+    renderModelBreadcrumb(toolId, collection, node) + body + '</section>';
+}
+
+function navigateModelToolPanel(toolId, nodeId = null) {
+  detailPanelState.set(toolId, nodeId);
+  const panel = document.getElementById('modelToolPanel');
+  if (panel) panel.innerHTML = renderModelToolPanel(toolId, nodeId);
+}
+
+function goBackModelToolPanel(toolId) {
+  const node = getCollectionNode(toolId, detailPanelState.get(toolId));
+  navigateModelToolPanel(toolId, node?.parent_id || null);
 }
 
 function openDetail(id, selectedItemId = null) {
-  const t = tools.find(x => x.id === id);
+  const t = tools.find(tool => tool.id === id);
   if (!t) return;
-
+  const collection = getToolIntelligence(id);
   const overlay = document.getElementById('modalOverlay');
   const content = document.getElementById('modalContent');
+  if (t.card_kind === 'collection' && collection?.tree_mode === 'tree') {
+    content.innerHTML = '<button class="modal-close" onclick="closeModal()">✕</button>' + renderVendorOverview(t) + '<div id="modelToolPanel"></div>';
+    overlay.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    navigateModelToolPanel(id, selectedItemId);
+    return;
+  }
+
   content.innerHTML = `
     <button class="modal-close" onclick="closeModal()">✕</button>
-    <h2>${t.icon} ${t.name}</h2>
+    <h2>${escapeHtml(t.icon + ' ' + t.name)}</h2>
     <div class="vendor">${escapeHtml(t.vendor)} · <a href="${escapeHtml(safeExternalUrl(t.url))}" target="_blank" rel="noopener noreferrer">官网 ↗</a></div>
-
     ${renderCollectionIntelligence(t, selectedItemId)}
-
     <div class="scores">
       <div class="score-item"><div class="score-val ${scoreClass(t.rating_overall)}">${t.rating_overall.toFixed(1)}</div><div class="score-label">综合</div></div>
       <div class="score-item"><div class="score-val ${scoreClass(t.rating_chinese)}">${t.rating_chinese.toFixed(1)}</div><div class="score-label">中文支持</div></div>
       <div class="score-item"><div class="score-val ${scoreClass(t.rating_ease)}">${t.rating_ease.toFixed(1)}</div><div class="score-label">易用性</div></div>
       <div class="score-item"><div class="score-val ${scoreClass(t.rating_price)}">${t.rating_price.toFixed(1)}</div><div class="score-label">性价比</div></div>
     </div>
-
-    <div class="section">
-      <h4>适用场景</h4>
-      <div class="tool-card-tags">${t.scenes.map(s => '<span class="tag scene">' + s + '</span>').join(' ')}</div>
-    </div>
-
-    <div class="section">
-      <h4>价格</h4>
-      <p><b>免费层：</b>${t.free_tier || '无'}</p>
-      ${t.paid_tiers.map((p,i) => '<p style="margin-top:4px"><b>' + p.name + '：</b>' + p.price + ' — ' + p.features + '</p>').join('')}
-    </div>
-
-    <div class="section">
-      <h4>优势</h4>
-      <p>${t.strengths}</p>
-    </div>
-
-    <div class="section">
-      <h4>不足</h4>
-      <p>${t.weaknesses}</p>
-    </div>
-
-    <div class="section">
-      <h4>适用场景及说明</h4>
-      <ul>${t.best_for.map(b => '<li>' + b + '</li>').join('')}</ul>
-    </div>
-
-    <div class="section">
-      <h4>不适用场景及说明</h4>
-      <ul>${t.not_for.map(n => '<li>' + n + '</li>').join('')}</ul>
-    </div>
-
-    <div class="section">
-      <h4>访问门槛</h4>
-      <p>${t.access_barrier}</p>
-      ${t.chinese_note ? '<p style="margin-top:4px"><b>中文支持：</b>' + t.chinese_note + '</p>' : ''}
-    </div>
-
+    <div class="section"><h4>适用场景</h4><div class="tool-card-tags">${t.scenes.map(s => '<span class="tag scene">' + escapeHtml(s) + '</span>').join(' ')}</div></div>
+    <div class="section"><h4>价格</h4><p><b>免费层：</b>${escapeHtml(t.free_tier || '无')}</p>${t.paid_tiers.map(p => '<p style="margin-top:4px"><b>' + escapeHtml(p.name) + '：</b>' + escapeHtml(p.price) + ' — ' + escapeHtml(p.features) + '</p>').join('')}</div>
+    <div class="section"><h4>优势</h4><p>${escapeHtml(t.strengths)}</p></div>
+    <div class="section"><h4>不足</h4><p>${escapeHtml(t.weaknesses)}</p></div>
+    <div class="section"><h4>适用场景及说明</h4><ul>${t.best_for.map(b => '<li>' + escapeHtml(b) + '</li>').join('')}</ul></div>
+    <div class="section"><h4>不适用场景及说明</h4><ul>${t.not_for.map(n => '<li>' + escapeHtml(n) + '</li>').join('')}</ul></div>
+    <div class="section"><h4>访问门槛</h4><p>${escapeHtml(t.access_barrier)}</p>${t.chinese_note ? '<p style="margin-top:4px"><b>中文支持：</b>' + escapeHtml(t.chinese_note) + '</p>' : ''}</div>
     <div class="meta">最后更新: ${escapeHtml(t.last_updated)} · 信息来源: <a href="${escapeHtml(safeExternalUrl(t.url))}" target="_blank" rel="noopener noreferrer">${escapeHtml(t.source)}</a> · 利益声明: 不接收厂商赞助</div>
-    <div class="meta" style="margin-top:8px">
-      <a href="https://github.com/wozore/infocatcher/issues/new?template=data-correction.yml&title=%5B%E6%95%B0%E6%8D%AE%E7%BA%A0%E9%94%99%5D+${encodeURIComponent(t.name)}" target="_blank" rel="noopener" style="color:var(--text-hint);font-size:12px">📢 信息有误？点此反馈</a>
-    </div>
   `;
   overlay.style.display = 'flex';
   document.body.style.overflow = 'hidden';
@@ -488,112 +605,174 @@ document.addEventListener('keydown', function(e) {
 //   quickCompare()   — 一键加载预设对比方案
 // EXTENSION POINT：方案一——>方案三时，将对比简略结果【renderCompare()】显示为柱状图
 // ═══════════════════════════════════════════════════════════════
-function toggleCompare(id, btn) {
-  const idx = compareList.findIndex(c => c.id === id);
-  // 如果工具已在清单
+function resolveCompareTarget(ref) {
+  const tool = tools.find(item => item.id === ref.toolId);
+  if (!tool) return null;
+  if (ref.itemId === null) {
+    return isComparableRootTool(tool) ? { type: 'root', kind: 'tool', tool, name: tool.name, icon: tool.icon } : null;
+  }
+  const item = getCollectionNode(ref.toolId, ref.itemId);
+  return isComparableLeaf(ref.toolId, ref.itemId)
+    ? { type: 'leaf', kind: item.kind, tool, item, name: item.name, icon: tool.icon }
+    : null;
+}
+
+function toggleCompareRef(toolId, itemId = null, btn) {
+  const ref = { toolId, itemId };
+  const target = resolveCompareTarget(ref);
+  if (!target) return;
+  const key = compareKey(ref);
+  const idx = compareList.findIndex(candidate => compareKey(candidate) === key);
   if (idx >= 0) {
     compareList.splice(idx, 1);
     if (btn) { btn.classList.remove('selected'); btn.textContent = '+对比'; }
   } else {
-    // 如果工具数量达到上限
     if (compareList.length >= 5) {
-      alert('最多对比 5 个工具');
+      alert('最多对比 5 项');
       return;
     }
-    const t = tools.find(x => x.id === id);
-    if (t) compareList.push(t);
+    const existingKinds = compareList.map(resolveCompareTarget).filter(Boolean).map(candidate => candidate.kind);
+    if (existingKinds.length && existingKinds.some(kind => kind !== target.kind)) {
+      alert('模型、套餐与具体工具不能混合对比，请先移除不同类型的项目。');
+      return;
+    }
+    compareList.push(ref);
     if (btn) { btn.classList.add('selected'); btn.textContent = '已选'; }
   }
   updateCompareCount();
   renderTools();
-  // 如果当前页面为compare页面，那么重渲染
   if (currentView === 'compare') renderCompare();
 }
 
-// 更新对比工具模型的数量
+function compareGroupLeaves(toolId, groupId) {
+  const collection = getToolIntelligence(toolId);
+  const leaves = getLeafDescendants(collection, groupId).filter(item => isComparableLeaf(toolId, item.id));
+  if (leaves.length < 2) return;
+  if (leaves.length > 5) {
+    alert('该分类超过 5 个可比较项目，请在下方逐项选择最多 5 个后再进入对比。');
+    return;
+  }
+  const kind = leaves[0].kind;
+  if (!leaves.every(item => item.kind === kind)) {
+    alert('该分类包含不同类型的项目，不能混合对比。');
+    return;
+  }
+  compareList = leaves.map(item => ({ toolId, itemId: item.id }));
+  updateCompareCount();
+  renderTools();
+  closeModal();
+  switchView('compare');
+}
+
 function updateCompareCount() {
   document.getElementById('compareCount').textContent = compareList.length;
+}
+
+function compareTargetLabel(target) {
+  return target.icon + ' ' + target.name;
+}
+
+function renderRootToolCompare(targets) {
+  const dims = [
+    { key: 'rating_overall', label: '综合评分', format: value => value.toFixed(1) },
+    { key: 'rating_chinese', label: '中文支持', format: value => value.toFixed(1) },
+    { key: 'rating_ease', label: '易用性', format: value => value.toFixed(1) },
+    { key: 'rating_price', label: '性价比', format: value => value.toFixed(1) },
+    { key: 'access_level', label: '国内访问', format: value => value === '开放' ? '可访问' : '需科学上网' },
+    { key: 'has_free', label: '免费层', format: value => value ? '有' : '无' }
+  ];
+  return '<table class="compare-table"><thead><tr><th>维度</th>' + targets.map(target => '<th>' + escapeHtml(compareTargetLabel(target)) + '</th>').join('') + '</tr></thead><tbody>' +
+    dims.map(dimension => '<tr><td class="dim">' + dimension.label + '</td>' + targets.map(target => {
+      const value = dimension.key === 'has_free' ? hasFree(target.tool) : target.tool[dimension.key];
+      return '<td class="' + (typeof value === 'number' ? scoreClass(value) : '') + '">' + escapeHtml(dimension.format(value)) + '</td>';
+    }).join('') + '</tr>').join('') +
+    '<tr><td class="dim">适用场景</td>' + targets.map(target => '<td>' + escapeHtml(target.tool.scenes.slice(0, 5).join('、')) + '</td>').join('') + '</tr>' +
+    '<tr><td class="dim">免费层说明</td>' + targets.map(target => '<td>' + escapeHtml(target.tool.free_tier || '无') + '</td>').join('') + '</tr>' +
+    '<tr><td class="dim">最适合</td>' + targets.map(target => '<td>' + escapeHtml(target.tool.best_for.join('；')) + '</td>').join('') + '</tr>' +
+    '<tr><td class="dim">不适合/限制</td>' + targets.map(target => '<td>' + escapeHtml((target.tool.not_for || []).join('；')) + '</td>').join('') + '</tr>' +
+  '</tbody></table>';
+}
+
+function getPrimaryRate(item) {
+  return item.api_pricing?.rate_cards?.[0] || null;
+}
+
+function renderApiModelCompare(targets) {
+  const rows = [
+    { label: '缓存命中输入价', format: item => { const rate = getPrimaryRate(item); return rate ? formatPrice(rate.input_cached, rate.currency) + ' / 百万 tokens' : '未提供'; } },
+    { label: '缓存未命中输入价', format: item => { const rate = getPrimaryRate(item); return rate ? formatPrice(rate.input_uncached, rate.currency) + ' / 百万 tokens' : '未提供'; } },
+    { label: '输出价', format: item => { const rate = getPrimaryRate(item); return rate ? formatPrice(rate.output, rate.currency) + ' / 百万 tokens' : '未提供'; } },
+    { label: '1M 上下文', format: item => item.one_m_context?.status === 'native' ? '原生支持' : item.one_m_context?.status === 'conditional' ? '特定条件支持' : item.one_m_context?.status === 'not_supported' ? '不支持' : '未知' },
+    { label: '适用说明', format: item => (item.applicable_scenarios || []).map(scene => scene.title + '：' + scene.description).join('；') || '未提供' },
+    { label: '查询时间', format: item => { const source = getToolIntelligence(targets.find(target => target.item === item).tool.id)?.sources?.find(source => item.source_refs?.includes(source.id)); return source?.queried_at?.slice(0, 10) || '未提供'; } }
+  ];
+  return '<table class="compare-table"><thead><tr><th>维度</th>' + targets.map(target => '<th>' + escapeHtml(compareTargetLabel(target)) + '</th>').join('') + '</tr></thead><tbody>' +
+    rows.map(row => '<tr><td class="dim">' + row.label + '</td>' + targets.map(target => '<td>' + escapeHtml(row.format(target.item)) + '</td>').join('') + '</tr>').join('') +
+  '</tbody></table>';
+}
+
+function renderPlanCompare(targets) {
+  const rows = [
+    { label: '价格', format: item => formatPrice(item.plan?.amount, item.plan?.currency) },
+    { label: '周期', format: item => ({ month: '月', year: '年', usage: '按量', custom: '定制', unknown: '未知' }[item.plan?.billing_period] || '未知') },
+    { label: '主要模型', format: item => item.plan?.included_models?.length ? item.plan.included_models.join('、') : '官方未明确列出全部模型' },
+    { label: '条件/限制', format: item => item.plan?.conditions || '未提供' },
+    { label: '查询时间', format: item => { const source = getToolIntelligence(targets.find(target => target.item === item).tool.id)?.sources?.find(source => item.source_refs?.includes(source.id)); return source?.queried_at?.slice(0, 10) || '未提供'; } }
+  ];
+  return '<table class="compare-table"><thead><tr><th>维度</th>' + targets.map(target => '<th>' + escapeHtml(compareTargetLabel(target)) + '</th>').join('') + '</tr></thead><tbody>' +
+    rows.map(row => '<tr><td class="dim">' + row.label + '</td>' + targets.map(target => '<td>' + escapeHtml(row.format(target.item)) + '</td>').join('') + '</tr>').join('') +
+  '</tbody></table>';
 }
 
 function renderCompare() {
   const wrap = document.getElementById('compareTable');
   const sel = document.getElementById('compareSelection');
+  const targets = compareList.map(resolveCompareTarget).filter(Boolean);
+  if (targets.length !== compareList.length) compareList = compareList.filter(ref => resolveCompareTarget(ref));
 
-  sel.innerHTML = compareList.length === 0
-    ? '<p class="hint">在<b>工具库</b>中点击 <b>+对比</b> 按钮添加，或点击下方快捷选择：</p>'
-    : '<div class="selected-tools">' + compareList.map(t =>
-        '<span class="selected-tool-chip">' + t.icon + ' ' + t.name +
-        ' <button class="remove-chip" onclick="removeCompare(\'' + t.id + '\')">✕</button></span>'
-      ).join('') + '</div>';
+  sel.innerHTML = targets.length === 0
+    ? '<p class="hint">在<b>工具库</b>中打开具体工具或模型后点击 <b>+对比</b>。</p>'
+    : '<div class="selected-tools">' + targets.map(target => '<span class="selected-tool-chip">' + escapeHtml(compareTargetLabel(target)) +
+        ' <button class="remove-chip" onclick="removeCompare(\'' + escapeHtml(target.tool.id) + '\',' + (target.item ? '\'' + escapeHtml(target.item.id) + '\'' : 'null') + ')">✕</button></span>').join('') + '</div>';
 
-  // 快捷推荐
-  if (compareList.length === 0) {
+  if (targets.length === 0) {
     const quickPicks = [
-      { ids: ['chatgpt', 'claude', 'gemini', 'deepseek'], label: '对话AI四强对比' },
       { ids: ['cursor', 'copilot', 'claude-code', 'trae'], label: 'AI编程工具对比' },
-      { ids: ['deepseek', 'tongyi', 'doubao', 'kimi'], label: '国产AI对比' },
+      { ids: ['midjourney', 'dalle', 'stable-diffusion'], label: '图像工具对比' },
+      { ids: ['tongyi', 'doubao', 'kimi'], label: '国产AI对比' }
     ];
     sel.innerHTML += '<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">' +
-      quickPicks.map(q => '<button class="compare-toggle" onclick=\'quickCompare(' + JSON.stringify(q.ids) + ')\'>' + q.label + '</button>').join('') +
-      '</div>';
+      quickPicks.map(pick => '<button class="compare-toggle" onclick=\'quickCompare(' + JSON.stringify(pick.ids) + ')\'>' + pick.label + '</button>').join('') + '</div>';
   }
 
-  if (compareList.length < 2) {
-    wrap.innerHTML = compareList.length === 0
-      ? '<p style="text-align:center;padding:40px;color:var(--text-hint)">选择 2-5 个工具开始对比</p>'
-      : '<p style="text-align:center;padding:40px;color:var(--text-hint)">再选至少 1 个工具</p>';
+  if (targets.length < 2) {
+    wrap.innerHTML = targets.length === 0
+      ? '<p style="text-align:center;padding:40px;color:var(--text-hint)">选择 2-5 个同类型的具体工具、模型或套餐开始对比</p>'
+      : '<p style="text-align:center;padding:40px;color:var(--text-hint)">再选至少 1 个相同类型的项目</p>';
     return;
   }
-
-  // 对比维度定义 —— 每个维度含 key（工具对象字段名或特殊值）、label、format
-  // has_free 为特殊 key：通过 hasFree() 函数判定而非直接取字段值
-  // EXTENSION POINT: 新增对比维度时在 dims[] 中追加 {key, label, format} 条目
-  const dims = [
-    { key: 'rating_overall', label: '综合评分', format: v => v.toFixed(1) },
-    { key: 'rating_chinese', label: '中文支持', format: v => v.toFixed(1) },
-    { key: 'rating_ease', label: '易用性', format: v => v.toFixed(1) },
-    { key: 'rating_price', label: '性价比', format: v => v.toFixed(1) },
-    { key: 'access_level', label: '国内访问', format: v => v === '开放' ? '✅ 可访问' : '⚠️ 需科学上网' },
-    { key: 'has_free', label: '免费层', format: v => v ? '✅ 有' : '❌ 无' },
-  ];
-
-  wrap.innerHTML = '<table class="compare-table"><thead><tr><th>维度</th>' +
-    compareList.map(t => '<th>' + t.icon + ' ' + t.name + '</th>').join('') +
-    '</tr></thead><tbody>' +
-    dims.map(d => '<tr><td class="dim">' + d.label + '</td>' +
-      compareList.map(t => {
-        let val;
-        if (d.key === 'has_free') val = hasFree(t);
-        else val = t[d.key];
-        const cls = typeof val === 'number' ? scoreClass(val) : '';
-        return '<td class="' + cls + '">' + d.format(val) + '</td>';
-      }).join('') +
-    '</tr>').join('') +
-    '<tr><td class="dim">适用场景</td>' +
-      compareList.map(t => '<td>' + t.scenes.slice(0,5).join('、') + '</td>').join('') +
-    '</tr>' +
-    '<tr><td class="dim">免费层说明</td>' +
-      compareList.map(t => '<td style="font-size:12px">' + (t.free_tier || '无') + '</td>').join('') +
-    '</tr>' +
-    '<tr><td class="dim">最适合</td>' +
-      compareList.map(t => '<td style="font-size:12px">' + t.best_for.join('；') + '</td>').join('') +
-    '</tr>' +
-    '<tr><td class="dim">不适合/限制</td>' +
-      compareList.map(t => '<td style="font-size:12px">' + (t.not_for || []).join('；') + '</td>').join('') +
-    '</tr>' +
-    '</tbody></table>';
+  if (!targets.every(target => target.kind === targets[0].kind)) {
+    wrap.innerHTML = '<p class="empty-state">模型、套餐与具体工具不能混合对比。</p>';
+    return;
+  }
+  const table = targets[0].kind === 'api_model'
+    ? renderApiModelCompare(targets)
+    : targets[0].kind === 'subscription_plan'
+      ? renderPlanCompare(targets)
+      : renderRootToolCompare(targets);
+  wrap.innerHTML = '<div class="compare-table-wrap">' + table + '</div>';
 }
 
-function removeCompare(id) {
-  compareList = compareList.filter(c => c.id !== id);
+function removeCompare(toolId, itemId = null) {
+  const key = compareKey({ toolId, itemId });
+  compareList = compareList.filter(ref => compareKey(ref) !== key);
   updateCompareCount();
   renderTools();
   renderCompare();
 }
 
-// 快捷组合比较
 function quickCompare(ids) {
-  compareList = ids.map(id => tools.find(t => t.id === id)).filter(Boolean).slice(0, 5);
+  compareList = ids.map(toolId => ({ toolId, itemId: null })).filter(ref => resolveCompareTarget(ref)).slice(0, 5);
   updateCompareCount();
   renderTools();
   renderCompare();
@@ -882,32 +1061,30 @@ function getSceneToolIds(scene) {
 }
 
 function renderSceneToolCard(tool, selectedItemId = null) {
-  const isSelected = compareList.some(item => item.id === tool.id);
-  const collection = getToolIntelligence(tool.id);
-  const specificLabel = selectedItemId
-    ? collection?.items?.find(item => item.id === selectedItemId)?.name
-    : null;
+  const selectedLeaf = selectedItemId ? getCollectionNode(tool.id, selectedItemId) : null;
+  const isComparable = selectedLeaf
+    ? isComparableLeaf(tool.id, selectedItemId)
+    : isComparableRootTool(tool);
+  const isSelected = isComparable && isCompareSelected(tool.id, selectedLeaf ? selectedItemId : null);
+  const specificLabel = selectedLeaf?.name || null;
+  const title = tool.card_kind === 'collection' && specificLabel ? specificLabel : tool.name;
+  const description = selectedLeaf?.summary || tool.strengths;
   return '<div class="tool-card scene-tool-card" onclick="openDetail(\'' + escapeHtml(tool.id) + '\',' + (selectedItemId ? '\'' + escapeHtml(selectedItemId) + '\'' : 'null') + ')">' +
     '<div class="tool-card-header">' +
-      '<div><div class="tool-card-name">' + escapeHtml(tool.icon + ' ' + tool.name) + '</div>' +
+      '<div><div class="tool-card-name">' + escapeHtml(tool.icon + ' ' + title) + '</div>' +
       (specificLabel ? '<div class="scene-specific-recommendation">具体推荐：' + escapeHtml(specificLabel) + '</div>' : '') +
       '<div class="tool-card-vendor">' + escapeHtml(tool.vendor) + '</div></div>' +
-      '<div class="scene-tool-rating"><div class="rating-stars">' + stars(tool.rating_overall) + '</div>' +
-      '<div class="rating-num">' + tool.rating_overall.toFixed(1) + '</div></div>' +
+      (tool.card_kind === 'collection' ? '' : '<div class="scene-tool-rating"><div class="rating-stars">' + stars(tool.rating_overall) + '</div><div class="rating-num">' + tool.rating_overall.toFixed(1) + '</div></div>') +
     '</div>' +
-    '<div class="tool-card-desc">' + escapeHtml(tool.strengths) + '</div>' +
+    '<div class="tool-card-desc">' + escapeHtml(description) + '</div>' +
     '<div class="tool-card-tags">' +
       tool.scenes.slice(0, 3).map(scene => '<span class="tag scene">' + escapeHtml(scene) + '</span>').join('') +
-      (hasFree(tool) ? '<span class="tag free">免费可用</span>' : '<span class="tag paid">仅付费</span>') +
-      '<span class="tag ' + (tool.access_level === '开放' ? 'open' : 'restricted') + '">' +
-        (tool.access_level === '开放' ? '国内可用' : '需科学上网') +
-      '</span>' +
+      (tool.card_kind === 'collection' ? '' : (hasFree(tool) ? '<span class="tag free">免费可用</span>' : '<span class="tag paid">仅付费</span>')) +
+      '<span class="tag ' + (tool.access_level === '开放' ? 'open' : 'restricted') + '">' + (tool.access_level === '开放' ? '国内可用' : '需科学上网') + '</span>' +
     '</div>' +
     '<div class="tool-card-footer" onclick="event.stopPropagation()">' +
       '<span class="scene-tool-updated">更新: ' + escapeHtml(tool.last_updated) + '</span>' +
-      '<button class="compare-toggle ' + (isSelected ? 'selected' : '') + '" onclick="toggleCompare(\'' + escapeHtml(tool.id) + '\', this)">' +
-        (isSelected ? '已选' : '+对比') +
-      '</button>' +
+      (isComparable ? '<button class="compare-toggle ' + (isSelected ? 'selected' : '') + '" onclick="toggleCompareRef(\'' + escapeHtml(tool.id) + '\',' + (selectedLeaf ? '\'' + escapeHtml(selectedItemId) + '\'' : 'null') + ',this)">' + (isSelected ? '已选' : '+对比') + '</button>' : '') +
     '</div>' +
   '</div>';
 }

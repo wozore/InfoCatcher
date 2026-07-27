@@ -542,6 +542,43 @@ main { max-width: 1200px; margin: 0 auto; padding: 20px; }
 .intelligence-sources span { display: block; color: var(--text-hint); margin-top: 3px; }
 .intelligence-unavailable { margin-bottom: 16px; padding: 10px; background: var(--warn-light); color: var(--warn); border-radius: var(--radius-sm); font-size: 13px; }
 
+/* ═══ 厂商总览与模型树 ══════════════════════════════════════════ */
+.collection-card .tool-card-desc { margin-bottom: 10px; }
+.vendor-feature-preview { display: grid; gap: 4px; margin: 0 0 12px; font-size: 12px; }
+.vendor-feature { margin: 0; padding-left: 10px; border-left: 3px solid; line-height: 1.55; }
+.vendor-feature.positive { color: var(--accent); border-color: var(--accent); }
+.vendor-feature.negative { color: var(--danger); border-color: var(--danger); }
+.vendor-overview { margin-bottom: 20px; }
+.vendor-overview h2 { padding-right: 36px; }
+.vendor-description { margin: 14px 0 16px; color: var(--text-secondary); line-height: 1.7; }
+.vendor-features { padding: 14px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); }
+.vendor-features h4 { margin-bottom: 10px; color: var(--text-secondary); font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+.vendor-features .vendor-feature + .vendor-feature { margin-top: 9px; }
+.model-tool-panel { border-top: 1px solid var(--border); padding-top: 20px; }
+.model-tool-panel .intelligence-heading h3 { margin: 0; font-size: 18px; }
+.model-breadcrumb { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; font-size: 12px; color: var(--text-hint); }
+.model-breadcrumb button, .back-panel-button { border: 0; background: transparent; color: var(--primary); cursor: pointer; font: inherit; padding: 2px 0; }
+.model-breadcrumb button[aria-current="page"] { color: var(--text-secondary); cursor: default; font-weight: 700; }
+.model-panel-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin: 0 0 12px; }
+.model-panel-heading h4 { margin: 0 0 4px; font-size: 17px; }
+.model-panel-heading p { margin: 0; font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+.model-tree-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.model-tree-card { text-align: left; appearance: none; border: 1px solid var(--border); background: var(--surface); border-radius: var(--radius-sm); padding: 14px; cursor: pointer; transition: var(--transition); display: flex; flex-direction: column; align-items: flex-start; gap: 7px; }
+.model-tree-card:hover { border-color: var(--primary); box-shadow: var(--shadow); transform: translateY(-1px); }
+.model-tree-card strong { color: var(--text); font-size: 15px; }
+.model-tree-card p { color: var(--text-secondary); font-size: 13px; line-height: 1.5; margin: 0; }
+.node-kind-badge { display: inline-block; border-radius: 999px; padding: 2px 7px; font-size: 11px; font-weight: 700; }
+.node-kind-badge.group { color: var(--primary); background: var(--primary-light); }
+.node-kind-badge.leaf { color: var(--accent); background: var(--accent-light); }
+.model-tree-action { color: var(--primary); font-size: 12px; font-weight: 700; margin-top: auto; }
+.model-bulk-compare { flex: none; border: 1px solid var(--primary); background: var(--primary-light); color: var(--primary); border-radius: var(--radius-sm); padding: 7px 10px; cursor: pointer; font-weight: 700; font-size: 12px; }
+.model-bulk-compare:hover { background: var(--primary); color: white; }
+.model-leaf-panel { border: 1px solid var(--primary); border-radius: var(--radius-sm); padding: 16px; background: var(--bg); }
+.model-leaf-panel .intelligence-item-body { padding: 0; }
+.leaf-actions { margin-top: 14px; display: flex; justify-content: flex-end; }
+.back-panel-button { border: 1px solid var(--border); background: var(--surface); border-radius: var(--radius-sm); padding: 7px 10px; color: var(--text-secondary); }
+.back-panel-button:hover { border-color: var(--primary); color: var(--primary); }
+
 /* ═══ Glossary ══════════════════════════════════════════════════
    概念词典：搜索框 + 动态分类 chip + 可展开术语卡片
    .glossary-card.expanded 展开显示释义/关联术语/实用意义 */
@@ -666,6 +703,10 @@ main { max-width: 1200px; margin: 0 auto; padding: 20px; }
   .modal .scores { grid-template-columns: repeat(2, 1fr); }
   .compare-table { font-size: 12px; }
   .compare-table th, .compare-table td { padding: 8px; }
+  .model-tree-grid { grid-template-columns: 1fr; }
+  .model-panel-heading { flex-direction: column; }
+  .model-bulk-compare { width: 100%; }
+  .rate-grid { grid-template-columns: 1fr; }
 }
 
 /* ═══ Empty State ═══════════════════════════════════════════════

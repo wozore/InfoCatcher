@@ -127,6 +127,19 @@ function validateTools(data) {
     if (t.entity_kind && !['product', 'model', 'service', 'open_source_project', 'other'].includes(t.entity_kind))
       fail(`${tag}.entity_kind = "${t.entity_kind}" 无效`);
     if (t.url && !isHttpUrl(t.url)) fail(`${tag}.url 仅允许 HTTP/HTTPS`);
+    if (t.overview !== undefined) {
+      if (t.card_kind !== 'collection') fail(`${tag}.overview 仅允许集合卡片使用`);
+      else {
+        checkRequired(t.overview, `${tag}.overview`, ['description', 'features', 'source_refs']);
+        if (!Array.isArray(t.overview.features) || t.overview.features.length === 0) fail(`${tag}.overview.features 应为非空数组`);
+        for (const [featureIndex, feature] of (t.overview.features || []).entries()) {
+          const featureTag = `${tag}.overview.features[${featureIndex}]`;
+          checkRequired(feature, featureTag, ['tone', 'text']);
+          if (!['positive', 'negative'].includes(feature.tone)) fail(`${featureTag}.tone 应为 positive 或 negative`);
+          if (typeof feature.text !== 'string' || !feature.text.trim()) fail(`${featureTag}.text 不能为空`);
+        }
+      }
+    }
 
     // 日期格式 YYYY-MM-DD
     if (t.last_updated && !/^\d{4}-\d{2}-\d{2}$/.test(t.last_updated))
@@ -137,22 +150,24 @@ function validateTools(data) {
 }
 
 function validateToolIntelligence(data, tools) {
-  if (!data || data.schema_version !== 1 || !Array.isArray(data.collections)) {
-    return fail('tool-intelligence.json 应包含 schema_version=1 和 collections 数组');
+  if (!data || data.schema_version !== 2 || !Array.isArray(data.collections)) {
+    return fail('tool-intelligence.json 应包含 schema_version=2 和 collections 数组');
   }
   if (Number.isNaN(new Date(data.catalog_queried_at).getTime())) fail('tool-intelligence.json.catalog_queried_at 不是有效日期');
 
-  const toolIds = new Set(tools.map(tool => tool.id));
+  const toolById = new Map(tools.map(tool => [tool.id, tool]));
+  const toolIds = new Set(toolById.keys());
   const collectionToolIds = new Set(tools.filter(tool => tool.card_kind === 'collection').map(tool => tool.id));
   const seenCollections = new Set();
 
   for (const [collectionIndex, collection] of data.collections.entries()) {
     const tag = `tool-intelligence.json.collections[${collectionIndex}] (${collection.tool_id || '未知'})`;
-    checkRequired(collection, tag, ['tool_id', 'status', 'items', 'sources']);
+    checkRequired(collection, tag, ['tool_id', 'status', 'items', 'sources', 'tree_mode']);
     if (!toolIds.has(collection.tool_id)) fail(`${tag}.tool_id 引用了不存在的工具`);
     if (seenCollections.has(collection.tool_id)) fail(`${tag}.tool_id 重复`);
     seenCollections.add(collection.tool_id);
     if (!['verified', 'partial', 'conflict', 'unavailable'].includes(collection.status)) fail(`${tag}.status 无效`);
+    if (!['tree', 'flat'].includes(collection.tree_mode)) fail(`${tag}.tree_mode 应为 tree 或 flat`);
     if (!Array.isArray(collection.items) || collection.items.length === 0) fail(`${tag}.items 应为非空数组`);
     if (!Array.isArray(collection.sources) || collection.sources.length === 0) fail(`${tag}.sources 应为非空数组`);
 
@@ -167,16 +182,43 @@ function validateToolIntelligence(data, tools) {
       if (Number.isNaN(new Date(source.queried_at).getTime())) fail(`${sourceTag}.queried_at 不是有效日期`);
     }
 
-    const itemIds = new Set();
+    if (collection.tree_mode === 'tree') {
+      const overview = toolById.get(collection.tool_id)?.overview;
+      if (!overview) fail(`${tag} 对应树形集合工具缺少 overview`);
+      else {
+        for (const ref of overview.source_refs || []) if (!sourceIds.has(ref)) fail(`${tag} 对应工具 overview.source_refs 引用了不存在的来源: ${ref}`);
+      }
+    }
+
+    const nodeById = new Map();
+    const childrenByParent = new Map();
     for (const [itemIndex, item] of (collection.items || []).entries()) {
       const itemTag = `${tag}.items[${itemIndex}] (${item.name || '未知'})`;
-      checkRequired(item, itemTag, ['id', 'kind', 'name', 'status', 'official_url', 'source_refs']);
-      if (itemIds.has(item.id)) fail(`${itemTag}.id 重复`);
-      itemIds.add(item.id);
+      checkRequired(item, itemTag, ['id', 'node_type', 'kind', 'name', 'status', 'official_url', 'source_refs', 'relation_source_refs']);
+      if (!Object.hasOwn(item, 'parent_id')) fail(`${itemTag}.parent_id 缺失`);
+      if (!Object.hasOwn(item, 'group_id')) fail(`${itemTag}.group_id 缺失`);
+      if (nodeById.has(item.id)) fail(`${itemTag}.id 重复`);
+      nodeById.set(item.id, item);
+      if (!['group', 'leaf'].includes(item.node_type)) fail(`${itemTag}.node_type 应为 group 或 leaf`);
       if (!['api_model', 'product_variant', 'subscription_plan'].includes(item.kind)) fail(`${itemTag}.kind 无效`);
-      if (!['active', 'legacy_supported', 'deprecated', 'retired', 'unknown'].includes(item.status)) fail(`${itemTag}.status 无效`);
+      if (!['active', 'legacy_supported', 'deprecated', 'retired', 'unknown', 'partial'].includes(item.status)) fail(`${itemTag}.status 无效`);
       if (!isHttpUrl(item.official_url)) fail(`${itemTag}.official_url 仅允许 HTTP/HTTPS`);
       for (const ref of item.source_refs || []) if (!sourceIds.has(ref)) fail(`${itemTag}.source_refs 引用了不存在的来源: ${ref}`);
+      for (const ref of item.relation_source_refs || []) if (!sourceIds.has(ref)) fail(`${itemTag}.relation_source_refs 引用了不存在的来源: ${ref}`);
+      if (item.parent_id === item.id) fail(`${itemTag}.parent_id 不可自指`);
+      if (item.parent_id) childrenByParent.set(item.parent_id, [...(childrenByParent.get(item.parent_id) || []), item]);
+
+      if (item.node_type === 'group') {
+        if (item.parent_id !== null) fail(`${itemTag} 分类节点必须位于根层`);
+        if (item.group_id !== item.id) fail(`${itemTag}.group_id 必须等于分类节点 id`);
+        for (const field of ['one_m_context', 'api_pricing', 'cache_hit_rate', 'plan']) {
+          if (item[field] !== undefined) fail(`${itemTag} 分类节点不得包含 ${field}`);
+        }
+        continue;
+      }
+
+      if (collection.tree_mode === 'tree' && item.display_in_tree !== false && !item.parent_id) fail(`${itemTag} 树形集合中的叶节点必须有 parent_id`);
+      if (item.parent_id && !item.group_id) fail(`${itemTag} 有 parent_id 时必须有 group_id`);
 
       if (item.kind === 'api_model') {
         const context = item.one_m_context;
@@ -207,6 +249,27 @@ function validateToolIntelligence(data, tools) {
           if (!Array.isArray(plan.included_models)) fail(`${itemTag}.plan.included_models 应为数组`);
           if (!['verified', 'partial', 'not_listed'].includes(plan.included_models_status)) fail(`${itemTag}.plan.included_models_status 无效`);
         }
+      }
+    }
+
+    for (const [nodeId, node] of nodeById) {
+      if (node.parent_id) {
+        const parent = nodeById.get(node.parent_id);
+        if (!parent) fail(`${tag}.items (${node.name}) 的 parent_id 不存在: ${node.parent_id}`);
+        else if (parent.node_type !== 'group') fail(`${tag}.items (${node.name}) 的 parent_id 必须指向分类节点`);
+      }
+      const visited = new Set([nodeId]);
+      let current = node;
+      while (current.parent_id) {
+        if (visited.has(current.parent_id)) {
+          fail(`${tag}.items (${node.name}) 存在父节点循环`);
+          break;
+        }
+        visited.add(current.parent_id);
+        current = nodeById.get(current.parent_id) || {};
+      }
+      if (node.node_type === 'group' && collection.tree_mode === 'tree' && !childrenByParent.has(nodeId)) {
+        if (node.status !== 'partial' && node.status !== 'unknown') fail(`${tag}.items (${node.name}) 分类节点没有可展示子项`);
       }
     }
   }
@@ -460,7 +523,11 @@ function validateScenes(data) {
         if (!task.tools.includes(recommendation.tool_id)) fail(`${recommendationTag}.tool_id 必须同时存在于 tools`);
         const collection = collectionMap.get(recommendation.tool_id);
         if (!collection) fail(`${recommendationTag}.tool_id 没有集合情报: ${recommendation.tool_id}`);
-        else if (!(collection.items || []).some(item => item.id === recommendation.item_id)) fail(`${recommendationTag}.item_id 不存在: ${recommendation.item_id}`);
+        else {
+          const item = (collection.items || []).find(candidate => candidate.id === recommendation.item_id);
+          if (!item) fail(`${recommendationTag}.item_id 不存在: ${recommendation.item_id}`);
+          else if (item.node_type !== 'leaf') fail(`${recommendationTag}.item_id 必须引用可推荐的叶节点: ${recommendation.item_id}`);
+        }
         if (typeof recommendation.reason !== 'string' || !recommendation.reason.trim()) fail(`${recommendationTag}.reason 不能为空`);
       }
     }

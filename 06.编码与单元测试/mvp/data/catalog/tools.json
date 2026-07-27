@@ -56,7 +56,24 @@
     "last_updated": "2026-07-18",
     "source": "openai.com",
     "card_kind": "collection",
-    "entity_kind": "product"
+    "entity_kind": "product",
+    "overview": {
+      "description": "OpenAI 提供 ChatGPT、Codex 和 API 等 AI 产品入口；具体模型与套餐在下方按可核实范围单独展示。",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "优点：GPT-5.6 已在 ChatGPT、Codex 与 OpenAI API 中提供，并按能力、速度和成本分层。"
+        },
+        {
+          "tone": "negative",
+          "text": "限制：模型可用性会随产品、订阅等级、地区及逐步开放状态变化，需以叶节点条件为准。"
+        }
+      ],
+      "source_refs": [
+        "openai-model-compare",
+        "openai-gpt-56-chatgpt"
+      ]
+    }
   },
   {
     "id": "claude",
@@ -118,7 +135,24 @@
     "last_updated": "2026-07-18",
     "source": "anthropic.com",
     "card_kind": "collection",
-    "entity_kind": "product"
+    "entity_kind": "product",
+    "overview": {
+      "description": "Anthropic 的 Claude 产品入口覆盖对话产品与 API；具体模型和订阅套餐在下方独立展示。",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "优点：模型层级、上下文和 API 计价可在具体叶节点中分别核对。"
+        },
+        {
+          "tone": "negative",
+          "text": "限制：订阅权益、地区可用性和使用限制需以各套餐官方条件为准。"
+        }
+      ],
+      "source_refs": [
+        "anthropic-models",
+        "anthropic-plans"
+      ]
+    }
   },
   {
     "id": "gemini",
@@ -170,7 +204,24 @@
     "last_updated": "2026-07-18",
     "source": "google.com",
     "card_kind": "collection",
-    "entity_kind": "product"
+    "entity_kind": "product",
+    "overview": {
+      "description": "Google 的 Gemini 产品入口覆盖 API 模型与 Google AI 订阅；具体资料在下方按已核实范围展示。",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "优点：已核实模型支持多档 API 价格与上下文条件的独立查看。"
+        },
+        {
+          "tone": "negative",
+          "text": "限制：官方套餐页面未稳定完整列出全部模型包含关系，相关项目明确标为部分核实。"
+        }
+      ],
+      "source_refs": [
+        "google-api-pricing",
+        "google-consumer-plans"
+      ]
+    }
   },
   {
     "id": "deepseek",
