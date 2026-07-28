@@ -175,6 +175,94 @@
           "usage": "subscription_plans"
         }
       ]
+    },
+    {
+      "tool_id": "zhipu",
+      "name": "智谱AI",
+      "intel_sources": [
+        {
+          "id": "zhipu-api-pricing",
+          "url": "https://bigmodel.cn/pricing",
+          "type": "pricing",
+          "method": "html_table",
+          "publisher": "智谱AI",
+          "locale": "zh-CN",
+          "interval_days": 7,
+          "usage": "api_pricing"
+        },
+        {
+          "id": "zhipu-model-overview",
+          "url": "https://docs.bigmodel.cn/cn/guide/start/model-overview",
+          "type": "documentation",
+          "method": "html_table",
+          "publisher": "智谱AI",
+          "locale": "zh-CN",
+          "interval_days": 14,
+          "usage": "discovery"
+        }
+      ]
+    },
+    {
+      "tool_id": "wenxin",
+      "name": "百度文心一言",
+      "intel_sources": [
+        {
+          "id": "wenxin-api-pricing",
+          "url": "https://cloud.baidu.com/doc/qianfan/s/wmh4sv6ya",
+          "type": "pricing",
+          "method": "html_table",
+          "publisher": "百度",
+          "locale": "zh-CN",
+          "interval_days": 7,
+          "usage": "api_pricing"
+        }
+      ]
+    },
+    {
+      "tool_id": "xinghuo",
+      "name": "科大讯飞星火",
+      "intel_sources": [
+        {
+          "id": "xinghuo-api-docs",
+          "url": "https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html",
+          "type": "pricing",
+          "method": "html_table",
+          "publisher": "科大讯飞",
+          "locale": "zh-CN",
+          "interval_days": 14,
+          "usage": "api_pricing"
+        }
+      ]
+    },
+    {
+      "tool_id": "hailuo",
+      "name": "MiniMax 海螺AI",
+      "intel_sources": [
+        {
+          "id": "hailuo-api-pricing",
+          "url": "https://minimax.io/pricing",
+          "type": "pricing",
+          "method": "html_table",
+          "publisher": "MiniMax",
+          "interval_days": 7,
+          "usage": "api_pricing"
+        }
+      ]
+    },
+    {
+      "tool_id": "cohere",
+      "name": "Cohere",
+      "intel_sources": [
+        {
+          "id": "cohere-api-pricing",
+          "url": "https://cohere.com/pricing",
+          "type": "pricing",
+          "method": "html_table",
+          "publisher": "Cohere",
+          "interval_days": 7,
+          "usage": "api_pricing"
+        }
+      ]
     }
   ]
 }

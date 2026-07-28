@@ -611,16 +611,28 @@ try {
 // featured.json
 try {
   const featured = JSON.parse(fs.readFileSync(CATALOG_FILES.featured, 'utf8'));
+  const intel = JSON.parse(fs.readFileSync(CATALOG_FILES.toolIntelligence, 'utf8'));
   if (!Array.isArray(featured)) fail('featured.json 应为数组');
   else {
+    const VALID_CATS = new Set(['llm', 'coding', 'image', 'video', 'audio']);
     const toolIds = new Set(validatedTools.map(t => t.id));
     featured.forEach((pick, i) => {
-      if (!pick.tool_id) fail(`featured.json[${i}] 缺少 tool_id`);
-      else if (!toolIds.has(pick.tool_id)) fail(`featured.json[${i}] tool_id "${pick.tool_id}" 不在 tools.json 中`);
-      if (!pick.reason) fail(`featured.json[${i}] 缺少 reason`);
-      if (pick.featured_until && isNaN(new Date(pick.featured_until).getTime())) fail(`featured.json[${i}] featured_until 格式无效`);
+      const tag = `featured.json[${i}]`;
+      if (!pick.category) fail(`${tag} 缺少 category`);
+      else if (!VALID_CATS.has(pick.category)) fail(`${tag} category "${pick.category}" 无效（应为 llm/coding/image/video/audio）`);
+      if (!pick.tool_id) fail(`${tag} 缺少 tool_id`);
+      else if (!toolIds.has(pick.tool_id)) fail(`${tag} tool_id "${pick.tool_id}" 不在 tools.json 中`);
+      if (pick.item_id && pick.tool_id) {
+        const col = intel.collections.find(c => c.tool_id === pick.tool_id);
+        if (!col) fail(`${tag} tool_id "${pick.tool_id}" 不在 tool-intelligence.json 中`);
+        else if (!col.items.find(item => item.id === pick.item_id)) fail(`${tag} item_id "${pick.item_id}" 不在 ${pick.tool_id} 集合中`);
+      }
+      if (!pick.reason) fail(`${tag} 缺少 reason`);
+      if (pick.featured_until && isNaN(new Date(pick.featured_until).getTime())) fail(`${tag} featured_until 格式无效`);
     });
-    console.log(`  featured.json: ${featured.length} 条精选，通过`);
+    const byCat = {};
+    featured.forEach(p => { byCat[p.category] = (byCat[p.category] || 0) + 1; });
+    console.log(`  featured.json: ${featured.length} 条精选（${Object.entries(byCat).map(([k,v]) => k+':'+v).join(', ')}），通过`);
   }
 } catch (e) {
   fail(`featured.json 解析失败：${e.message}`);

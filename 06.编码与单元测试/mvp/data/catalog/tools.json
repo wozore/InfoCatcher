@@ -2355,5 +2355,79 @@
         "mistral-api-pricing"
       ]
     }
+  },
+  {
+    "id": "cohere",
+    "name": "Cohere（产品入口）",
+    "vendor": "Cohere",
+    "category": [
+      "对话",
+      "写作",
+      "编程",
+      "企业应用"
+    ],
+    "scenes": [
+      "写代码",
+      "写论文",
+      "翻译文档",
+      "企业应用开发"
+    ],
+    "url": "https://cohere.com",
+    "icon": "🔗",
+    "free_tier": "免费试用 API Key，每月限额",
+    "paid_tiers": [
+      {
+        "name": "API 按量",
+        "price": "从 $0.0375/MTok",
+        "features": "Command 系列、Rerank、Embed，按量计费"
+      }
+    ],
+    "chinese_support": 2,
+    "chinese_note": "主要面向英语和企业市场，中文不在官方优先支持列表",
+    "access_barrier": "境外（需科学上网）",
+    "access_level": "受限",
+    "strengths": "企业级 RAG 和检索能力领先、Embed/Rerank 模型行业标杆、Command R7B 极具性价比",
+    "weaknesses": "中国市场访问受限、中文能力有限、消费者端知名度低",
+    "best_for": [
+      "企业 RAG 和搜索增强",
+      "多语言文本分类和嵌入",
+      "需要高质量 Rerank 的场景"
+    ],
+    "not_for": [
+      "中文为主的对话场景",
+      "需要国内直接访问"
+    ],
+    "rating_overall": 3.8,
+    "rating_chinese": 2,
+    "rating_ease": 3.5,
+    "rating_price": 4.5,
+    "last_updated": "2026-07-28",
+    "source": "https://cohere.com/pricing",
+    "card_kind": "collection",
+    "entity_kind": "product",
+    "overview": {
+      "description": "加拿大 AI 公司，以企业级检索增强生成（RAG）、文本嵌入和重排序模型见长，Command 系列覆盖通用对话和编码。",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "Embed 和 Rerank 模型是企业搜索和 RAG 的行业标杆"
+        },
+        {
+          "tone": "positive",
+          "text": "Command R7B 在 $0.0375/MTok 价位极具性价比"
+        },
+        {
+          "tone": "negative",
+          "text": "中国市场网络访问受限"
+        },
+        {
+          "tone": "negative",
+          "text": "Command A / R+ 缓存定价未在官方价格页公开"
+        }
+      ],
+      "source_refs": [
+        "cohere-api-pricing"
+      ]
+    }
   }
 ]

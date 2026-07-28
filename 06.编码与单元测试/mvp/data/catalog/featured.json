@@ -1,17 +1,107 @@
 [
   {
-    "tool_id": "claude-code",
-    "reason": "2026 年最受开发者认可的 AI 编程 CLI — 支持 Claude Sonnet 5/Fable 5/Opus 5 三模型切换，零前端依赖直接命令行交互",
+    "category": "llm",
+    "tool_id": "chatgpt",
+    "item_id": "gpt-5.6-sol",
+    "reason": "OpenAI 最强旗舰，原生 1M 上下文，API $5/$15（输入/输出）",
     "featured_until": "2026-08-27"
   },
   {
-    "tool_id": "gemini",
-    "reason": "Gemini 3 系列多模态能力领先 — 百万级上下文原生支持，适合深度文档分析和跨模态推理场景",
+    "category": "llm",
+    "tool_id": "claude",
+    "item_id": "claude-sonnet-5",
+    "reason": "编码与通用能力均衡，引导价 $2/$10 至 8月底，1M 上下文",
     "featured_until": "2026-08-27"
   },
   {
+    "category": "llm",
     "tool_id": "deepseek",
-    "reason": "国产 API 性价比之王 — DeepSeek-V4 Flash ¥1/百万tokens 入门级定价，中文理解能力扎实",
+    "item_id": "deepseek-v4-flash",
+    "reason": "国产性价比之王，¥1/百万tokens 输入，1M 上下文，中文扎实",
+    "featured_until": "2026-08-27"
+  },
+  {
+    "category": "coding",
+    "tool_id": "claude-code",
+    "item_id": null,
+    "reason": "2026 年最受开发者认可的 AI 编程 CLI，支持 Claude 全系列模型",
+    "featured_until": "2026-08-27"
+  },
+  {
+    "category": "coding",
+    "tool_id": "cursor",
+    "item_id": null,
+    "reason": "AI 原生 IDE，多模型切换 + 内联编辑，综合评分 4.7",
+    "featured_until": "2026-08-27"
+  },
+  {
+    "category": "coding",
+    "tool_id": "copilot",
+    "item_id": null,
+    "reason": "GitHub 官方 AI 编程助手，深度集成 VS Code 与 GitHub 工作流",
+    "featured_until": "2026-08-27"
+  },
+  {
+    "category": "image",
+    "tool_id": "midjourney",
+    "item_id": null,
+    "reason": "AI 图像生成标杆，艺术质感领先，V7 版本持续迭代",
+    "featured_until": "2026-08-27"
+  },
+  {
+    "category": "image",
+    "tool_id": "dalle",
+    "item_id": null,
+    "reason": "OpenAI 官方图像工具，与 ChatGPT 深度集成，中文提示词友好",
+    "featured_until": "2026-08-27"
+  },
+  {
+    "category": "image",
+    "tool_id": "nano-banana",
+    "item_id": null,
+    "reason": "Google AI Studio 免费使用，轻量高效，适合快速出图",
+    "featured_until": "2026-08-27"
+  },
+  {
+    "category": "video",
+    "tool_id": "hailuo",
+    "item_id": null,
+    "reason": "MiniMax 海螺AI，国产视频生成第一梯队，中文场景理解强",
+    "featured_until": "2026-08-27"
+  },
+  {
+    "category": "video",
+    "tool_id": "runway",
+    "item_id": null,
+    "reason": "专业视频创作平台，Gen-4 模型持续迭代，影视级效果",
+    "featured_until": "2026-08-27"
+  },
+  {
+    "category": "video",
+    "tool_id": "kling",
+    "item_id": null,
+    "reason": "快手可灵，国产视频生成第一梯队，中文场景理解强",
+    "featured_until": "2026-08-27"
+  },
+  {
+    "category": "audio",
+    "tool_id": "suno",
+    "item_id": null,
+    "reason": "AI 音乐生成标杆，V5 版本音质大幅提升，每日免费额度",
+    "featured_until": "2026-08-27"
+  },
+  {
+    "category": "audio",
+    "tool_id": "elevenlabs",
+    "item_id": null,
+    "reason": "AI 语音合成行业标准，支持 32 种语言，声音克隆精度高",
+    "featured_until": "2026-08-27"
+  },
+  {
+    "category": "audio",
+    "tool_id": "udio",
+    "item_id": null,
+    "reason": "与 Suno 齐名的 AI 音乐工具，音质细腻，社区活跃",
     "featured_until": "2026-08-27"
   }
 ]

@@ -407,35 +407,42 @@ main { max-width: 1200px; margin: 0 auto; padding: 20px; }
 .scene-specific-recommendation { margin-top: 2px; color: var(--scene-accent); font-size: 13px; font-weight: 700; }
 .scene-recommendation-reason { margin: 7px 0 0 210px; color: var(--text-hint); font-size: 12px; line-height: 1.55; }
 
-/* ═══ 推荐视图：编辑精选 + 热门排行 ══════════════════════════════════════════ */
+/* ═══ 推荐视图：编辑精选 + 热门模型 ══════════════════════════════════════════ */
 .featured-section { margin-bottom: 32px; }
 .featured-section h2 { margin: 0 0 4px; font-size: 22px; }
-.section-subtitle { margin: 0 0 16px; color: var(--text-hint); font-size: 14px; }
+.section-subtitle { margin: 0 0 14px; color: var(--text-hint); font-size: 14px; }
 .featured-grid { display: flex; flex-direction: column; gap: 14px; }
+
+/* 分类 tab */
+.featured-tabs { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+.featured-tab { padding: 6px 16px; border: 1px solid var(--border); border-radius: 20px; background: var(--bg); color: var(--text-secondary); font-size: 13px; cursor: pointer; transition: all .15s; }
+.featured-tab:hover { border-color: var(--primary); color: var(--primary); }
+.featured-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
 /* 编辑精选大卡 */
 .featured-card { position: relative; border-radius: var(--radius); overflow: hidden; cursor: pointer; transition: box-shadow .15s, transform .15s; }
 .featured-card:hover { box-shadow: var(--shadow); transform: translateY(-1px); }
-.featured-pick { padding: 24px; background: var(--bg); border: 1px solid var(--border); }
-.featured-pick-badge { position: absolute; top: 16px; right: 16px; padding: 3px 12px; background: var(--primary); color: #fff; font-size: 12px; font-weight: 700; border-radius: var(--radius-sm); }
-.featured-pick-header { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; padding-right: 100px; }
-.featured-pick-icon { font-size: 40px; line-height: 1; }
-.featured-pick-header h3 { margin: 0; font-size: 20px; }
-.featured-pick-vendor { color: var(--text-hint); font-size: 13px; }
-.featured-pick-rating { margin-left: auto; text-align: right; flex-shrink: 0; font-size: 14px; font-weight: 700; }
-.featured-pick-rating span { display: block; font-size: 18px; color: var(--primary); }
-.featured-pick-reason { margin: 0 0 12px; padding: 12px 14px; background: var(--accent-light, #eff6ff); border-left: 3px solid var(--primary); color: var(--text-secondary); font-size: 14px; line-height: 1.65; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+.featured-pick { padding: 22px; background: var(--bg); border: 1px solid var(--border); }
+.featured-pick-badge { position: absolute; top: 14px; right: 14px; padding: 3px 12px; background: var(--primary); color: #fff; font-size: 12px; font-weight: 700; border-radius: var(--radius-sm); }
+.featured-pick-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; padding-right: 90px; }
+.featured-pick-header h3 { margin: 0; font-size: 18px; }
+.featured-pick-vendor { display: block; color: var(--text-hint); font-size: 13px; margin-top: 2px; }
+.featured-pick-pricing { margin-left: auto; flex-shrink: 0; text-align: right; font-size: 15px; font-weight: 700; color: var(--primary); white-space: nowrap; }
+.featured-pick-reason { margin: 0 0 12px; padding: 10px 14px; background: var(--accent-light, #eff6ff); border-left: 3px solid var(--primary); color: var(--text-secondary); font-size: 14px; line-height: 1.65; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
 .featured-pick-tags { display: flex; flex-wrap: wrap; gap: 6px; }
 
-/* 热门排行小卡 */
-.featured-hot { display: flex; gap: 14px; padding: 18px; background: var(--bg); border: 1px solid var(--border); align-items: center; }
+/* 热门模型小卡 */
+.featured-hot { display: flex; gap: 14px; padding: 16px; background: var(--bg); border: 1px solid var(--border); align-items: center; }
 .featured-hot-rank { font-size: 28px; flex-shrink: 0; width: 44px; text-align: center; }
 .featured-hot-body { flex: 1; min-width: 0; }
-.featured-hot-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+.featured-hot-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
 .featured-hot-header h4 { margin: 0; font-size: 16px; }
 .featured-hot-vendor { color: var(--text-hint); font-size: 12px; }
 .featured-hot-desc { margin: 0 0 8px; font-size: 13px; color: var(--text-secondary); line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .featured-hot-meta { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+
+/* 时效标签在推荐卡中的微调 */
+.featured-pick-header .timeliness-badge, .featured-hot-header .timeliness-badge { vertical-align: middle; }
 
 @media (max-width: 640px) {
   .scene-search-box { max-width: none; }

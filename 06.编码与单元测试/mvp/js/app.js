@@ -875,71 +875,188 @@ function quickCompare(ids) {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// 第 6 部分：推荐视图 —— 编辑精选 + 热门排行
+// 第 6 部分：推荐视图 —— 编辑精选 + 热门模型
 //
-// 编辑精选来自 featured.json（手动维护），大卡片 + 推荐理由。
-// 热门排行从 tools.json 自动计算（评分 ≥ 3.5 + 免费层，取 top-5）。
+// 五个分类（无"全部"），编辑精选和热门模型各带独立分类 tab。
+// 编辑精选来自 featured.json（手动维护 tool_id + item_id）。
+// 热门模型从 tool-intelligence.json 自动取 leaf 模型，按 active + 有定价排序取 top-3。
 // ═══════════════════════════════════════════════════════════════
 
-function getHotTools() {
-  return tools
-    .filter(t => t.card_kind === 'concrete' && t.rating_overall >= 3.5 && hasFree(t))
-    .sort((a, b) => b.rating_overall - a.rating_overall)
-    .slice(0, 5);
+const FEATURED_CATEGORIES = [
+  { key: 'llm', label: 'LLM 模型', toolCats: ['对话', '推理', '写作', '翻译', '搜索', '研究', '长文档', '长文档分析', '多模态', 'AI搜索', 'AI研究'] },
+  { key: 'coding', label: 'AI 编程', toolCats: ['AI编程', '编程', 'IDE', 'IDE插件', '命令行'] },
+  { key: 'image', label: '图像生成', toolCats: ['AI图像', 'AI绘画', '图像'] },
+  { key: 'video', label: '视频生成', toolCats: ['AI视频'] },
+  { key: 'audio', label: '音频与音乐', toolCats: ['AI音频', 'AI音乐', 'AI语音', '语音'] },
+];
+
+let activeEditorCat = 'llm';
+let activeHotCat = 'llm';
+
+function isToolInCat(tool, toolCats) {
+  return (tool.category || []).some(c => toolCats.includes(c));
+}
+
+function getCategoryToolIds(catKey) {
+  const cat = FEATURED_CATEGORIES.find(c => c.key === catKey);
+  if (!cat) return [];
+  let matched = tools.filter(t => isToolInCat(t, cat.toolCats)).map(t => t.id);
+  // 非 LLM 分类排除已在 LLM 分类中的工具，避免模型列表重复
+  if (catKey !== 'llm') {
+    const llmCat = FEATURED_CATEGORIES.find(c => c.key === 'llm');
+    const llmIds = new Set(tools.filter(t => isToolInCat(t, llmCat.toolCats)).map(t => t.id));
+    matched = matched.filter(id => !llmIds.has(id));
+  }
+  return matched;
+}
+
+function getCategoryLeaves(catKey) {
+  const toolIds = new Set(getCategoryToolIds(catKey));
+  const leaves = [];
+  const cols = Array.isArray(toolIntelligence.collections) ? toolIntelligence.collections : [];
+  cols.forEach(col => {
+    if (!col || !col.tool_id) return;
+    if (!toolIds.has(col.tool_id)) return;
+    (col.items || []).forEach(item => {
+      if (item.node_type !== 'leaf' || item.display_in_tree === false) return;
+      if (item.kind !== 'api_model') return;
+      leaves.push({ ...item, _tool_id: col.tool_id, _tool: tools.find(t => t.id === col.tool_id) });
+    });
+  });
+  // Sort: active first, then by pricing completeness
+  leaves.sort((a, b) => {
+    const scoreA = (a.status === 'active' ? 2 : a.status === 'partial' ? 1 : 0) + (a.api_pricing?.rate_cards?.length ? 1 : 0);
+    const scoreB = (b.status === 'active' ? 2 : b.status === 'partial' ? 1 : 0) + (b.api_pricing?.rate_cards?.length ? 1 : 0);
+    return scoreB - scoreA;
+  });
+  return leaves;
+}
+
+function getFeaturedDisplayName(toolId, itemId) {
+  if (!itemId) {
+    const tool = tools.find(t => t.id === toolId);
+    return tool ? (tool.icon + ' ' + tool.name) : toolId;
+  }
+  const col = getToolIntelligence(toolId);
+  const item = col?.items?.find(i => i.id === itemId);
+  const tool = tools.find(t => t.id === toolId);
+  if (item && tool) return tool.icon + ' ' + item.name;
+  return toolId + '/' + itemId;
+}
+
+function getFeaturedVendor(toolId) {
+  const tool = tools.find(t => t.id === toolId);
+  return tool ? tool.vendor : '';
+}
+
+function getFeaturedSummary(toolId, itemId) {
+  if (!itemId) {
+    const tool = tools.find(t => t.id === toolId);
+    return tool ? tool.strengths : '';
+  }
+  const col = getToolIntelligence(toolId);
+  const item = col?.items?.find(i => i.id === itemId);
+  return item?.summary || '';
+}
+
+function getFeaturedPricing(toolId, itemId) {
+  if (!itemId) return '';
+  const col = getToolIntelligence(toolId);
+  const item = col?.items?.find(i => i.id === itemId);
+  const rate = item?.api_pricing?.rate_cards?.[0];
+  if (!rate) return '';
+  const symbol = rate.currency === 'USD' ? '$' : rate.currency === 'CNY' ? '¥' : '';
+  return symbol + rate.input_uncached + '/' + symbol + rate.output;
+}
+
+function getFeaturedDetailUrl(toolId, itemId) {
+  if (itemId) return "openDetail('" + toolId + "','" + itemId + "')";
+  return "openDetail('" + toolId + "')";
 }
 
 function renderFeatured() {
-  const picks = featuredPicks
-    .map(pick => ({ ...pick, tool: tools.find(t => t.id === pick.tool_id) }))
-    .filter(pick => pick.tool);
-  renderEditorPicks(picks);
-  renderHotRanking();
+  renderFeaturedTabs('editorPicksTabs', activeEditorCat, 'editor');
+  renderEditorPicksForCat();
+  renderFeaturedTabs('hotRankingTabs', activeHotCat, 'hot');
+  renderHotRankingForCat();
 }
 
-function renderEditorPicks(picks) {
+function renderFeaturedTabs(containerId, activeCat, section) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = FEATURED_CATEGORIES.map(cat =>
+    '<button class="featured-tab' + (cat.key === activeCat ? ' active' : '') + '" data-cat="' + cat.key + '">' + cat.label + '</button>'
+  ).join('');
+  container.querySelectorAll('.featured-tab').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const cat = this.dataset.cat;
+      if (cat === activeCat) return;
+      if (section === 'editor') { activeEditorCat = cat; }
+      else { activeHotCat = cat; }
+      renderFeatured();
+    });
+  });
+}
+
+function renderEditorPicksForCat() {
   const grid = document.getElementById('featuredPicksGrid');
   if (!grid) return;
+  const cat = FEATURED_CATEGORIES.find(c => c.key === activeEditorCat);
+  const picks = featuredPicks
+    .filter(p => p.category === activeEditorCat)
+    .map(p => ({ ...p, tool: tools.find(t => t.id === p.tool_id) }))
+    .filter(p => p.tool);
   if (!picks.length) {
-    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">📌</div><h3>暂无精选推荐</h3><p>编辑团队正在为您挑选最值得关注的 AI 工具。</p></div>';
+    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">📌</div><h3>暂无精选推荐</h3><p>' + cat.label + '分类的精选正在筹备中。</p></div>';
     return;
   }
   grid.innerHTML = picks.map(pick => {
-    const t = pick.tool;
-    return '<div class="featured-card featured-pick" onclick="openDetail(\'' + escapeHtml(t.id) + '\')">' +
+    const name = getFeaturedDisplayName(pick.tool_id, pick.item_id);
+    const vendor = getFeaturedVendor(pick.tool_id);
+    const pricing = getFeaturedPricing(pick.tool_id, pick.item_id);
+    const summary = getFeaturedSummary(pick.tool_id, pick.item_id);
+    const onclick = getFeaturedDetailUrl(pick.tool_id, pick.item_id);
+    const latestQ = pick.item_id ? getItemLatestQueriedAt(getToolIntelligence(pick.tool_id), getCollectionNode(pick.tool_id, pick.item_id)) : null;
+    const badge = renderTimelinessBadge(latestQ);
+    return '<div class="featured-card featured-pick" onclick="' + onclick + '">' +
       '<div class="featured-pick-badge">编辑精选</div>' +
       '<div class="featured-pick-header">' +
-        '<span class="featured-pick-icon">' + escapeHtml(t.icon) + '</span>' +
-        '<div><h3>' + escapeHtml(t.name) + '</h3><span class="featured-pick-vendor">' + escapeHtml(t.vendor) + '</span></div>' +
-        '<div class="featured-pick-rating">' + stars(t.rating_overall) + '<span>' + t.rating_overall.toFixed(1) + '</span></div>' +
+        '<div><h3>' + escapeHtml(name) + '</h3><span class="featured-pick-vendor">' + escapeHtml(vendor) + '</span>' + badge + '</div>' +
+        (pricing ? '<div class="featured-pick-pricing">API ' + escapeHtml(pricing) + '</div>' : '') +
       '</div>' +
       '<p class="featured-pick-reason">' + escapeHtml(pick.reason) + '</p>' +
       '<div class="featured-pick-tags">' +
-        t.scenes.slice(0, 3).map(s => '<span class="tag scene">' + escapeHtml(s) + '</span>').join('') +
-        '<span class="tag ' + (t.access_level === '开放' ? 'open' : 'restricted') + '">' + (t.access_level === '开放' ? '国内可用' : '需科学上网') + '</span>' +
+        (pick.tool.scenes || []).slice(0, 3).map(s => '<span class="tag scene">' + escapeHtml(s) + '</span>').join('') +
+        '<span class="tag ' + (pick.tool.access_level === '开放' ? 'open' : 'restricted') + '">' + (pick.tool.access_level === '开放' ? '国内可用' : '需科学上网') + '</span>' +
       '</div>' +
     '</div>';
   }).join('');
 }
 
-function renderHotRanking() {
+function renderHotRankingForCat() {
   const grid = document.getElementById('featuredHotGrid');
   if (!grid) return;
-  const hot = getHotTools();
-  if (!hot.length) {
-    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">🔥</div><h3>暂无排行数据</h3><p>工具数据加载中，请稍后刷新。</p></div>';
+  const cat = FEATURED_CATEGORIES.find(c => c.key === activeHotCat);
+  const leaves = getCategoryLeaves(activeHotCat).slice(0, 3);
+  if (!leaves.length) {
+    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">🔥</div><h3>暂无排行数据</h3><p>' + cat.label + '分类暂无已核实的模型数据。</p></div>';
     return;
   }
-  grid.innerHTML = hot.map((t, i) => {
-    const rankEmoji = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'][i] || '';
-    return '<div class="featured-card featured-hot" onclick="openDetail(\'' + escapeHtml(t.id) + '\')">' +
-      '<div class="featured-hot-rank">' + rankEmoji + '</div>' +
+  const rankEmoji = ['🥇', '🥈', '🥉'];
+  grid.innerHTML = leaves.map((leaf, i) => {
+    const tool = leaf._tool;
+    const pricing = getFeaturedPricing(leaf._tool_id, leaf.id);
+    const latestQ = getItemLatestQueriedAt(getToolIntelligence(leaf._tool_id), leaf);
+    const badge = renderTimelinessBadge(latestQ);
+    const onclick = getFeaturedDetailUrl(leaf._tool_id, leaf.id);
+    return '<div class="featured-card featured-hot" onclick="' + onclick + '">' +
+      '<div class="featured-hot-rank">' + rankEmoji[i] + '</div>' +
       '<div class="featured-hot-body">' +
-        '<div class="featured-hot-header"><h4>' + escapeHtml(t.icon + ' ' + t.name) + '</h4><span class="featured-hot-vendor">' + escapeHtml(t.vendor) + '</span></div>' +
-        '<p class="featured-hot-desc">' + escapeHtml(t.strengths) + '</p>' +
+        '<div class="featured-hot-header"><h4>' + escapeHtml(tool.icon + ' ' + leaf.name) + '</h4>' + badge + '<span class="featured-hot-vendor">' + escapeHtml(tool.vendor) + '</span></div>' +
+        '<p class="featured-hot-desc">' + escapeHtml(leaf.summary || '') + '</p>' +
         '<div class="featured-hot-meta">' +
-          '<span>' + stars(t.rating_overall) + ' ' + t.rating_overall.toFixed(1) + '</span>' +
-          '<span class="tag free">免费可用</span>' +
-          (hasFree(t) ? '' : '<span class="tag paid">仅付费</span>') +
+          (pricing ? '<span>API ' + escapeHtml(pricing) + '</span>' : '') +
+          '<span class="tag ' + (leaf.status === 'active' ? 'open' : 'restricted') + '">' + (leaf.status === 'active' ? '已核实' : '部分核实') + '</span>' +
         '</div>' +
       '</div>' +
     '</div>';

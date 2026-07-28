@@ -13,16 +13,17 @@
 
 ```
 mvp/
-├── index.html                  # 六视图 SPA 入口
-├── css/style.css               # 全局样式（CSS 变量体系）
-├── js/app.js                   # 前端全部逻辑（~1430行）
+├── index.html                  # 七视图 SPA 入口
+├── feed.xml                    # AI 热点 RSS 订阅源（每日构建输出）
+├── css/style.css               # 全局样式（CSS 变量体系，~826行）
+├── js/app.js                   # 前端全部逻辑（~1660行）
 ├── data/
 │   ├── catalog/                # 工具/术语/场景主数据（浏览器读）
-│   │   ├── tools.json          # 44 个工具
+│   │   ├── tools.json          # 45 个工具
 │   │   ├── tool-intelligence.json  # 模型/套餐/价格核验数据
 │   │   ├── glossary.json       # 43 条概念
 │   │   ├── scenes.json         # 12 个场景
-│   │   └── featured.json       # 3 条编辑精选
+│   │   └── featured.json       # 15 条编辑精选（5分类x3）
 │   ├── news/                   # 热点采集系统数据
 │   │   ├── config/             # 评分/时间层配置
 │   │   ├── sources/            # 96 个热点来源
@@ -33,10 +34,12 @@ mvp/
 │       └── intel-sources.json  # 7 厂商 15 条来源
 ├── scripts/
 │   ├── shared/paths.js         # 所有路径常量（新增路径先在此登记）
-│   ├── pipeline/build-news.js  # 热点构建总编排
+│   ├── pipeline/build-news.js  # 热点构建总编排（含 RSS 生成）
 │   ├── core/                   # 存储/Registry/额度/调度/授权
 │   ├── collectors/             # YouTube/B站采集适配器
-│   ├── content/                # B站人工内容标准化
+│   ├── content/                # B站人工内容标准化 + RSS 生成器
+│   │   ├── news-manual.js
+│   │   └── generate-rss.js
 │   ├── cli/                    # 管理 CLI
 │   ├── maintenance/            # 数据校验 + 来源同步
 │   ├── acquisition/            # 工具情报采集引擎 + 冲突检测

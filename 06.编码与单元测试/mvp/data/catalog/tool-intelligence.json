@@ -1658,6 +1658,1172 @@
         }
       ],
       "tree_mode": "flat"
+    },
+    {
+      "tool_id": "grok",
+      "status": "partial",
+      "items": [
+        {
+          "id": "grok-4.3",
+          "kind": "api_model",
+          "name": "Grok 4.3",
+          "status": "active",
+          "summary": "xAI 当前旗舰模型（2026-04），面向最大智能和生产级质量。",
+          "official_url": "https://x.ai/api/pricing",
+          "one_m_context": {
+            "status": "native",
+            "tokens": 1000000,
+            "conditions": "官方文档列为 1M 上下文窗口。",
+            "source_refs": [
+              "xai-api-pricing"
+            ]
+          },
+          "api_pricing": {
+            "status": "provided",
+            "rate_cards": [
+              {
+                "label": "Standard",
+                "currency": "USD",
+                "unit": "per_1m_tokens",
+                "input_uncached": 1.25,
+                "output": 2.5,
+                "input_cached": 0.2,
+                "conditions": "缓存命中价格对应 5 分钟缓存。",
+                "source_refs": [
+                  "xai-api-pricing"
+                ]
+              }
+            ]
+          },
+          "cache_hit_rate": {
+            "status": "not_provided",
+            "note": "官方提供缓存价格但未提供平均命中率区间。"
+          },
+          "applicable_scenarios": [
+            {
+              "title": "高要求推理与生产任务",
+              "description": "官方定位为最高智能旗舰，适合复杂推理和生产级应用。"
+            }
+          ],
+          "inapplicable_scenarios": [
+            {
+              "title": "成本敏感型批量调用",
+              "description": "可选择 Grok 4.1 Fast 以降低费用。"
+            }
+          ],
+          "source_refs": [
+            "xai-api-pricing"
+          ],
+          "node_type": "leaf",
+          "parent_id": null,
+          "group_id": null,
+          "relation_source_refs": [
+            "xai-api-pricing"
+          ]
+        },
+        {
+          "id": "grok-4.1-fast",
+          "kind": "api_model",
+          "name": "Grok 4.1 Fast",
+          "status": "active",
+          "summary": "预算级模型，$0.20/$0.50 每百万 token，具备推理能力，2M 上下文。",
+          "official_url": "https://x.ai/api/pricing",
+          "one_m_context": {
+            "status": "native",
+            "tokens": 2000000,
+            "conditions": "官方文档列为 2M 上下文窗口。",
+            "source_refs": [
+              "xai-api-pricing"
+            ]
+          },
+          "api_pricing": {
+            "status": "provided",
+            "rate_cards": [
+              {
+                "label": "Standard",
+                "currency": "USD",
+                "unit": "per_1m_tokens",
+                "input_uncached": 0.2,
+                "output": 0.5,
+                "input_cached": 0.02,
+                "conditions": "缓存命中价格约 10%。",
+                "source_refs": [
+                  "xai-api-pricing"
+                ]
+              }
+            ]
+          },
+          "cache_hit_rate": {
+            "status": "not_provided",
+            "note": "官方提供缓存价格但未提供平均命中率区间。"
+          },
+          "applicable_scenarios": [
+            {
+              "title": "成本敏感的高频调用",
+              "description": "目前最具性价比的具备推理能力的前沿模型之一。"
+            }
+          ],
+          "inapplicable_scenarios": [
+            {
+              "title": "要求最高智能水平",
+              "description": "应比较 Grok 4.3。"
+            }
+          ],
+          "source_refs": [
+            "xai-api-pricing"
+          ],
+          "node_type": "leaf",
+          "parent_id": null,
+          "group_id": null,
+          "relation_source_refs": [
+            "xai-api-pricing"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "xai-api-pricing",
+          "url": "https://x.ai/api/pricing",
+          "title": "xAI API Pricing",
+          "publisher": "xAI",
+          "source_type": "official",
+          "queried_at": "2026-07-28T00:00:00Z"
+        }
+      ],
+      "tree_mode": "flat"
+    },
+    {
+      "tool_id": "zhipu",
+      "status": "partial",
+      "items": [
+        {
+          "id": "glm-5.2",
+          "kind": "api_model",
+          "name": "GLM-5.2",
+          "status": "active",
+          "summary": "智谱最新旗舰，1M 无损上下文，Coding 能力开源 SOTA。",
+          "official_url": "https://bigmodel.cn/pricing",
+          "one_m_context": {
+            "status": "native",
+            "tokens": 1000000,
+            "conditions": "官方产品页标注 1M 上下文。",
+            "source_refs": [
+              "zhipu-api-pricing"
+            ]
+          },
+          "api_pricing": {
+            "status": "provided",
+            "rate_cards": [
+              {
+                "label": "中国区人民币价格",
+                "currency": "CNY",
+                "unit": "per_1m_tokens",
+                "input_uncached": 8,
+                "output": 28,
+                "input_cached": 2,
+                "conditions": "缓存存储限时免费；以官方价格页及实际账户结算为准。",
+                "source_refs": [
+                  "zhipu-api-pricing"
+                ]
+              }
+            ]
+          },
+          "cache_hit_rate": {
+            "status": "not_provided",
+            "note": "官方提供缓存命中价格但未提供平均命中率区间。"
+          },
+          "applicable_scenarios": [
+            {
+              "title": "复杂长程任务与编码工程",
+              "description": "1M 上下文适合长文档分析、大型代码库理解和多轮 Agent 任务。"
+            }
+          ],
+          "inapplicable_scenarios": [
+            {
+              "title": "成本敏感型简单调用",
+              "description": "可选择 GLM-4.7 Flash（免费）或 GLM-5 Turbo。"
+            }
+          ],
+          "source_refs": [
+            "zhipu-api-pricing",
+            "zhipu-model-overview"
+          ],
+          "node_type": "leaf",
+          "parent_id": null,
+          "group_id": null,
+          "relation_source_refs": [
+            "zhipu-api-pricing",
+            "zhipu-model-overview"
+          ]
+        },
+        {
+          "id": "glm-5.1",
+          "kind": "api_model",
+          "name": "GLM-5.1",
+          "status": "active",
+          "summary": "Coding 能力对齐 Claude Opus 4.6，支持自主工作长达 8 小时。",
+          "official_url": "https://bigmodel.cn/pricing",
+          "api_pricing": {
+            "status": "provided",
+            "rate_cards": [
+              {
+                "label": "短输入（<32K）",
+                "currency": "CNY",
+                "unit": "per_1m_tokens",
+                "input_uncached": 6,
+                "output": 24,
+                "input_cached": 1.3,
+                "conditions": "输入长度 <32K tokens；缓存存储限时免费。",
+                "source_refs": [
+                  "zhipu-api-pricing"
+                ]
+              },
+              {
+                "label": "长输入（≥32K）",
+                "currency": "CNY",
+                "unit": "per_1m_tokens",
+                "input_uncached": 8,
+                "output": 28,
+                "input_cached": 2,
+                "conditions": "输入长度 ≥32K tokens；缓存存储限时免费。",
+                "source_refs": [
+                  "zhipu-api-pricing"
+                ]
+              }
+            ]
+          },
+          "cache_hit_rate": {
+            "status": "not_provided",
+            "note": "官方提供缓存命中价格但未提供平均命中率区间。"
+          },
+          "applicable_scenarios": [
+            {
+              "title": "长程自主编码任务",
+              "description": "官方定位为长程任务显著提升，可自主工作长达 8 小时。"
+            }
+          ],
+          "inapplicable_scenarios": [
+            {
+              "title": "追求最新最强模型",
+              "description": "应比较 GLM-5.2。"
+            }
+          ],
+          "source_refs": [
+            "zhipu-api-pricing",
+            "zhipu-model-overview"
+          ],
+          "node_type": "leaf",
+          "parent_id": null,
+          "group_id": null,
+          "relation_source_refs": [
+            "zhipu-api-pricing",
+            "zhipu-model-overview"
+          ],
+          "one_m_context": {
+            "status": "not_supported",
+            "conditions": "200K 上下文",
+            "source_refs": [
+              "zhipu-api-pricing"
+            ],
+            "tokens": 200000
+          }
+        },
+        {
+          "id": "glm-5",
+          "kind": "api_model",
+          "name": "GLM-5",
+          "status": "active",
+          "summary": "编程能力对齐 Claude Opus 4.5，擅长 Agentic 长程规划与执行。",
+          "official_url": "https://bigmodel.cn/pricing",
+          "api_pricing": {
+            "status": "provided",
+            "rate_cards": [
+              {
+                "label": "短输入（<32K）",
+                "currency": "CNY",
+                "unit": "per_1m_tokens",
+                "input_uncached": 4,
+                "output": 18,
+                "input_cached": 1,
+                "conditions": "输入长度 <32K tokens；缓存存储限时免费。",
+                "source_refs": [
+                  "zhipu-api-pricing"
+                ]
+              },
+              {
+                "label": "长输入（≥32K）",
+                "currency": "CNY",
+                "unit": "per_1m_tokens",
+                "input_uncached": 6,
+                "output": 22,
+                "input_cached": 1.5,
+                "conditions": "输入长度 ≥32K tokens；缓存存储限时免费。",
+                "source_refs": [
+                  "zhipu-api-pricing"
+                ]
+              }
+            ]
+          },
+          "cache_hit_rate": {
+            "status": "not_provided",
+            "note": "官方提供缓存命中价格但未提供平均命中率区间。"
+          },
+          "applicable_scenarios": [
+            {
+              "title": "结构化思维链推理",
+              "description": "在中文复杂推理场景表现最强，适合 Agentic 长程规划。"
+            }
+          ],
+          "inapplicable_scenarios": [
+            {
+              "title": "需要 1M 上下文",
+              "description": "GLM-5 上下文为 200K，长文档需求应选 GLM-5.2。"
+            }
+          ],
+          "source_refs": [
+            "zhipu-api-pricing",
+            "zhipu-model-overview"
+          ],
+          "node_type": "leaf",
+          "parent_id": null,
+          "group_id": null,
+          "relation_source_refs": [
+            "zhipu-api-pricing",
+            "zhipu-model-overview"
+          ],
+          "one_m_context": {
+            "status": "not_supported",
+            "conditions": "200K 上下文",
+            "source_refs": [
+              "zhipu-api-pricing"
+            ],
+            "tokens": 200000
+          }
+        },
+        {
+          "id": "glm-4.7",
+          "kind": "api_model",
+          "name": "GLM-4.7",
+          "status": "active",
+          "summary": "通用对话与推理升级版，编程更强更稳，审美更好。",
+          "official_url": "https://bigmodel.cn/pricing",
+          "api_pricing": {
+            "status": "provided",
+            "rate_cards": [
+              {
+                "label": "短输入 + 短输出（<32K in, <0.2K out）",
+                "currency": "CNY",
+                "unit": "per_1m_tokens",
+                "input_uncached": 2,
+                "output": 8,
+                "input_cached": 0.4,
+                "conditions": "输出长度 <0.2K tokens；缓存存储限时免费。",
+                "source_refs": [
+                  "zhipu-api-pricing"
+                ]
+              },
+              {
+                "label": "短输入 + 长输出",
+                "currency": "CNY",
+                "unit": "per_1m_tokens",
+                "input_uncached": 3,
+                "output": 14,
+                "input_cached": 0.6,
+                "conditions": "输出长度 ≥0.2K tokens；缓存存储限时免费。",
+                "source_refs": [
+                  "zhipu-api-pricing"
+                ]
+              }
+            ]
+          },
+          "cache_hit_rate": {
+            "status": "not_provided",
+            "note": "官方提供缓存命中价格但未提供平均命中率区间。"
+          },
+          "applicable_scenarios": [
+            {
+              "title": "通用中文对话与写作",
+              "description": "高性价比，适合中文内容生成和通用智能体任务。"
+            }
+          ],
+          "inapplicable_scenarios": [
+            {
+              "title": "需要最高编码能力",
+              "description": "应比较 GLM-5.1 或 GLM-5.2。"
+            }
+          ],
+          "source_refs": [
+            "zhipu-api-pricing",
+            "zhipu-model-overview"
+          ],
+          "node_type": "leaf",
+          "parent_id": null,
+          "group_id": null,
+          "relation_source_refs": [
+            "zhipu-api-pricing",
+            "zhipu-model-overview"
+          ],
+          "one_m_context": {
+            "status": "not_supported",
+            "conditions": "200K 上下文",
+            "source_refs": [
+              "zhipu-api-pricing"
+            ],
+            "tokens": 200000
+          }
+        }
+      ],
+      "sources": [
+        {
+          "id": "zhipu-api-pricing",
+          "url": "https://bigmodel.cn/pricing",
+          "title": "智谱AI开放平台 - 产品定价",
+          "publisher": "智谱AI",
+          "source_type": "official",
+          "queried_at": "2026-07-28T00:00:00Z"
+        },
+        {
+          "id": "zhipu-model-overview",
+          "url": "https://docs.bigmodel.cn/cn/guide/start/model-overview",
+          "title": "模型概览",
+          "publisher": "智谱AI",
+          "source_type": "official",
+          "queried_at": "2026-07-28T00:00:00Z"
+        }
+      ],
+      "tree_mode": "flat"
+    },
+    {
+      "tool_id": "wenxin",
+      "status": "partial",
+      "items": [
+        {
+          "id": "ernie-5.1",
+          "kind": "api_model",
+          "name": "ERNIE 5.1",
+          "status": "active",
+          "summary": "百度最新旗舰模型，输入 ¥4/MTok（≤32K），千帆平台部署。",
+          "official_url": "https://cloud.baidu.com/doc/qianfan/s/wmh4sv6ya",
+          "api_pricing": {
+            "status": "provided",
+            "rate_cards": [
+              {
+                "label": "短输入（≤32K）",
+                "currency": "CNY",
+                "unit": "per_1m_tokens",
+                "input_uncached": 4,
+                "conditions": "输入长度 ≤32K tokens；输出定价待补全，以千帆官方计费页为准。",
+                "source_refs": [
+                  "wenxin-api-pricing"
+                ],
+                "input_cached": 0,
+                "output": 16
+              }
+            ]
+          },
+          "cache_hit_rate": {
+            "status": "not_provided",
+            "note": "官方计费页未列出缓存价格，缓存能力待核实。"
+          },
+          "applicable_scenarios": [
+            {
+              "title": "百度生态内企业级应用",
+              "description": "千帆平台深度集成，适合百度云生态用户。"
+            }
+          ],
+          "inapplicable_scenarios": [
+            {
+              "title": "需要详细输出定价和完整缓存信息",
+              "description": "当前仅为部分核实，输出和长输入定价待补全。"
+            }
+          ],
+          "source_refs": [
+            "wenxin-api-pricing"
+          ],
+          "node_type": "leaf",
+          "parent_id": null,
+          "group_id": null,
+          "relation_source_refs": [
+            "wenxin-api-pricing"
+          ],
+          "one_m_context": {
+            "status": "unknown",
+            "conditions": "上下文窗口待核实",
+            "source_refs": [
+              "wenxin-api-pricing"
+            ]
+          }
+        },
+        {
+          "id": "ernie-5.0",
+          "kind": "api_model",
+          "name": "ERNIE 5.0",
+          "status": "active",
+          "summary": "百度旗舰模型，输入 ¥6/MTok（≤32K），128K 上下文，支持 Thinking 模式。",
+          "official_url": "https://cloud.baidu.com/doc/qianfan/s/wmh4sv6ya",
+          "api_pricing": {
+            "status": "provided",
+            "rate_cards": [
+              {
+                "label": "短输入（≤32K）",
+                "currency": "CNY",
+                "unit": "per_1m_tokens",
+                "input_uncached": 6,
+                "conditions": "输入长度 ≤32K tokens；国际版约 $1.4/MTok 输入、$5.6/MTok 输出。",
+                "source_refs": [
+                  "wenxin-api-pricing"
+                ],
+                "input_cached": 0,
+                "output": 24
+              }
+            ]
+          },
+          "cache_hit_rate": {
+            "status": "not_provided",
+            "note": "官方计费页未列出缓存价格。"
+          },
+          "applicable_scenarios": [
+            {
+              "title": "复杂推理与知识工作",
+              "description": "ERNIE 5.0 支持 Thinking 模式，适合深度推理任务。"
+            }
+          ],
+          "inapplicable_scenarios": [
+            {
+              "title": "追求最新模型能力",
+              "description": "应比较 ERNIE 5.1。"
+            }
+          ],
+          "source_refs": [
+            "wenxin-api-pricing"
+          ],
+          "node_type": "leaf",
+          "parent_id": null,
+          "group_id": null,
+          "relation_source_refs": [
+            "wenxin-api-pricing"
+          ],
+          "one_m_context": {
+            "status": "unknown",
+            "tokens": null,
+            "note": "模型列表标注 128K 上下文，但未确认是否支持 1M；请以官方最新文档为准。"
+          }
+        },
+        {
+          "id": "ernie-4.5-turbo",
+          "kind": "api_model",
+          "name": "ERNIE 4.5 Turbo",
+          "status": "active",
+          "summary": "高性价比模型，¥0.8/MTok 输入、¥3.2/MTok 输出，128K 上下文。",
+          "official_url": "https://cloud.baidu.com/doc/qianfan/s/wmh4sv6ya",
+          "api_pricing": {
+            "status": "provided",
+            "rate_cards": [
+              {
+                "label": "Standard",
+                "currency": "CNY",
+                "unit": "per_1m_tokens",
+                "input_uncached": 0.8,
+                "output": 3.2,
+                "input_cached": 0.32,
+                "conditions": "缓存命中价格 ¥0.32/MTok（输入缓存命中时）。",
+                "source_refs": [
+                  "wenxin-api-pricing"
+                ]
+              }
+            ]
+          },
+          "cache_hit_rate": {
+            "status": "not_provided",
+            "note": "官方提供缓存价格但未提供平均命中率区间。"
+          },
+          "applicable_scenarios": [
+            {
+              "title": "成本敏感的通用任务",
+              "description": "追求更低入门成本的中文文本生成和理解场景。"
+            }
+          ],
+          "inapplicable_scenarios": [
+            {
+              "title": "要求最高模型能力",
+              "description": "应比较 ERNIE 5.0 或 ERNIE 5.1。"
+            }
+          ],
+          "source_refs": [
+            "wenxin-api-pricing"
+          ],
+          "node_type": "leaf",
+          "parent_id": null,
+          "group_id": null,
+          "relation_source_refs": [
+            "wenxin-api-pricing"
+          ],
+          "one_m_context": {
+            "status": "not_supported",
+            "conditions": "128K 上下文",
+            "source_refs": [
+              "wenxin-api-pricing"
+            ],
+            "tokens": 128000
+          }
+        }
+      ],
+      "sources": [
+        {
+          "id": "wenxin-api-pricing",
+          "url": "https://cloud.baidu.com/doc/qianfan/s/wmh4sv6ya",
+          "title": "百度千帆 — 模型服务计费",
+          "publisher": "百度",
+          "source_type": "official",
+          "queried_at": "2026-07-28T00:00:00Z"
+        }
+      ],
+      "tree_mode": "flat"
+    },
+    {
+      "tool_id": "xinghuo",
+      "status": "partial",
+      "items": [
+        {
+          "id": "spark-ultra",
+          "kind": "api_model",
+          "name": "Spark 4.0 Ultra",
+          "status": "active",
+          "summary": "讯飞最强大的星火非思考大模型，已升级至 X1.5 快思考模式，32K 上下文。",
+          "official_url": "https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html",
+          "api_pricing": {
+            "status": "provided",
+            "rate_cards": [
+              {
+                "label": "中国区价格（约）",
+                "currency": "CNY",
+                "unit": "per_1m_tokens",
+                "input_uncached": 2.1,
+                "conditions": "约 ¥2.1/MTok（按 0.021元/万tokens 换算）；以官方控制台实际价格为准。",
+                "source_refs": [
+                  "xinghuo-api-docs"
+                ],
+                "input_cached": 0,
+                "output": 2.1
+              }
+            ]
+          },
+          "cache_hit_rate": {
+            "status": "not_provided",
+            "note": "官方文档未列出缓存价格。"
+          },
+          "applicable_scenarios": [
+            {
+              "title": "中文结构化抽取与逻辑推理",
+              "description": "旗舰级大语言模型，适合企业级应用和复杂推理。"
+            }
+          ],
+          "inapplicable_scenarios": [
+            {
+              "title": "成本敏感的高频调用",
+              "description": "可选择 Spark Lite（免费）或 Spark Pro。"
+            }
+          ],
+          "source_refs": [
+            "xinghuo-api-docs"
+          ],
+          "node_type": "leaf",
+          "parent_id": null,
+          "group_id": null,
+          "relation_source_refs": [
+            "xinghuo-api-docs"
+          ],
+          "one_m_context": {
+            "status": "not_supported",
+            "conditions": "32K 上下文",
+            "source_refs": [
+              "xinghuo-api-docs"
+            ],
+            "tokens": 32000
+          }
+        },
+        {
+          "id": "spark-pro",
+          "kind": "api_model",
+          "name": "Spark Pro",
+          "status": "active",
+          "summary": "专业级大语言模型，128K 上下文可选，适合文本和智能问答。",
+          "official_url": "https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html",
+          "api_pricing": {
+            "status": "provided",
+            "rate_cards": [
+              {
+                "label": "中国区价格（约）",
+                "currency": "CNY",
+                "unit": "per_1m_tokens",
+                "input_uncached": 2.1,
+                "conditions": "约 ¥2.1/MTok；已支持搜索、天气等内置插件；以官方控制台实际价格为准。",
+                "source_refs": [
+                  "xinghuo-api-docs"
+                ],
+                "input_cached": 0,
+                "output": 2.1
+              }
+            ]
+          },
+          "cache_hit_rate": {
+            "status": "not_provided",
+            "note": "官方文档未列出缓存价格。"
+          },
+          "applicable_scenarios": [
+            {
+              "title": "文本处理与智能问答",
+              "description": "性能和响应速度均衡，适合对时效性有要求的业务场景。"
+            }
+          ],
+          "inapplicable_scenarios": [
+            {
+              "title": "需要最高精度和复杂推理",
+              "description": "应选择 Spark Ultra。"
+            }
+          ],
+          "source_refs": [
+            "xinghuo-api-docs"
+          ],
+          "node_type": "leaf",
+          "parent_id": null,
+          "group_id": null,
+          "relation_source_refs": [
+            "xinghuo-api-docs"
+          ],
+          "one_m_context": {
+            "status": "not_supported",
+            "conditions": "128K 上下文",
+            "source_refs": [
+              "xinghuo-api-docs"
+            ],
+            "tokens": 128000
+          }
+        },
+        {
+          "id": "spark-lite",
+          "kind": "api_model",
+          "name": "Spark Lite",
+          "status": "active",
+          "summary": "轻量级大模型，免费使用，响应速度最高。",
+          "official_url": "https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html",
+          "api_pricing": {
+            "status": "not_provided",
+            "note": "Lite 版本 API 永久免费，官方未提供标准 token 计价；以官方控制台实际额度为准。"
+          },
+          "cache_hit_rate": {
+            "status": "not_provided",
+            "note": "免费模型不涉及缓存计费。"
+          },
+          "applicable_scenarios": [
+            {
+              "title": "高并发低延迟场景",
+              "description": "适合对成本敏感、对响应速度要求高的简单任务。"
+            }
+          ],
+          "inapplicable_scenarios": [
+            {
+              "title": "复杂推理或专业任务",
+              "description": "免费模型能力有限，高要求场景应选择 Pro 或 Ultra。"
+            }
+          ],
+          "source_refs": [
+            "xinghuo-api-docs"
+          ],
+          "node_type": "leaf",
+          "parent_id": null,
+          "group_id": null,
+          "relation_source_refs": [
+            "xinghuo-api-docs"
+          ],
+          "one_m_context": {
+            "status": "not_supported",
+            "conditions": "8K 上下文",
+            "source_refs": [
+              "xinghuo-api-docs"
+            ],
+            "tokens": 8000
+          }
+        }
+      ],
+      "sources": [
+        {
+          "id": "xinghuo-api-docs",
+          "url": "https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html",
+          "title": "星火认知大模型 HTTP 接口文档",
+          "publisher": "科大讯飞",
+          "source_type": "official",
+          "queried_at": "2026-07-28T00:00:00Z"
+        }
+      ],
+      "tree_mode": "flat"
+    },
+    {
+      "tool_id": "hailuo",
+      "status": "partial",
+      "items": [
+        {
+          "id": "minimax-text-01",
+          "kind": "api_model",
+          "name": "MiniMax-Text-01",
+          "status": "active",
+          "summary": "MiniMax 旗舰文本模型，$0.30/MTok，极具性价比。",
+          "official_url": "https://minimax.io/pricing",
+          "api_pricing": {
+            "status": "provided",
+            "rate_cards": [
+              {
+                "label": "Standard",
+                "currency": "USD",
+                "unit": "per_1m_tokens",
+                "input_uncached": 0.3,
+                "output": 0.3,
+                "conditions": "以官方定价页为准；支持文本生成和 Agent 任务。",
+                "source_refs": [
+                  "hailuo-api-pricing"
+                ],
+                "input_cached": 0
+              }
+            ]
+          },
+          "cache_hit_rate": {
+            "status": "not_provided",
+            "note": "官方未提供缓存命中率区间。"
+          },
+          "applicable_scenarios": [
+            {
+              "title": "成本敏感的企业级文本处理",
+              "description": "极低 API 价格适合大规模文本生成和批量调用。"
+            }
+          ],
+          "inapplicable_scenarios": [
+            {
+              "title": "需要 1M 上下文窗口",
+              "description": "请核实官方最新上下文窗口规格。"
+            }
+          ],
+          "source_refs": [
+            "hailuo-api-pricing"
+          ],
+          "node_type": "leaf",
+          "parent_id": null,
+          "group_id": null,
+          "relation_source_refs": [
+            "hailuo-api-pricing"
+          ],
+          "one_m_context": {
+            "status": "unknown",
+            "conditions": "上下文窗口待核实",
+            "source_refs": [
+              "hailuo-api-pricing"
+            ]
+          }
+        },
+        {
+          "id": "minimax-vl-01",
+          "kind": "api_model",
+          "name": "MiniMax-VL-01",
+          "status": "active",
+          "summary": "多模态视觉语言模型，按调用次数计费，$0.01/次。",
+          "official_url": "https://minimax.io/pricing",
+          "api_pricing": {
+            "status": "not_provided",
+            "note": "官方按调用次数计费（/usr/bin/bash.01/次），无标准 token 计价；以官方定价页为准。"
+          },
+          "cache_hit_rate": {
+            "status": "not_provided",
+            "note": "按调用次数计费，不涉及 token 缓存。"
+          },
+          "applicable_scenarios": [
+            {
+              "title": "图像理解与视频生成",
+              "description": "Hailuo 02 支持 1080p 10 秒视频生成。"
+            }
+          ],
+          "inapplicable_scenarios": [
+            {
+              "title": "纯文本处理",
+              "description": "纯文本任务应使用 MiniMax-Text-01。"
+            }
+          ],
+          "source_refs": [
+            "hailuo-api-pricing"
+          ],
+          "node_type": "leaf",
+          "parent_id": null,
+          "group_id": null,
+          "relation_source_refs": [
+            "hailuo-api-pricing"
+          ],
+          "one_m_context": {
+            "status": "unknown",
+            "conditions": "上下文窗口待核实",
+            "source_refs": [
+              "hailuo-api-pricing"
+            ]
+          }
+        }
+      ],
+      "sources": [
+        {
+          "id": "hailuo-api-pricing",
+          "url": "https://minimax.io/pricing",
+          "title": "MiniMax Pricing",
+          "publisher": "MiniMax",
+          "source_type": "official",
+          "queried_at": "2026-07-28T00:00:00Z"
+        }
+      ],
+      "tree_mode": "flat"
+    },
+    {
+      "tool_id": "cohere",
+      "status": "partial",
+      "items": [
+        {
+          "id": "command-a",
+          "kind": "api_model",
+          "name": "Command A",
+          "status": "active",
+          "summary": "Cohere 最大最强模型，$2.50/$10.00 每百万 token，128K 上下文。",
+          "official_url": "https://cohere.com/pricing",
+          "api_pricing": {
+            "status": "provided",
+            "rate_cards": [
+              {
+                "label": "Standard",
+                "currency": "USD",
+                "unit": "per_1m_tokens",
+                "input_uncached": 2.5,
+                "output": 10,
+                "conditions": "以 Cohere Dashboard 实际费率为准。",
+                "source_refs": [
+                  "cohere-api-pricing"
+                ],
+                "input_cached": 0
+              }
+            ]
+          },
+          "cache_hit_rate": {
+            "status": "not_provided",
+            "note": "官方定价页未公开缓存价格。"
+          },
+          "applicable_scenarios": [
+            {
+              "title": "企业级复杂推理与 RAG",
+              "description": "最大最强大的 Command 模型，适合高要求企业级应用。"
+            }
+          ],
+          "inapplicable_scenarios": [
+            {
+              "title": "成本敏感型简单任务",
+              "description": "可选择 Command R 或 Command R7B。"
+            }
+          ],
+          "source_refs": [
+            "cohere-api-pricing"
+          ],
+          "node_type": "leaf",
+          "parent_id": null,
+          "group_id": null,
+          "relation_source_refs": [
+            "cohere-api-pricing"
+          ],
+          "one_m_context": {
+            "status": "not_supported",
+            "conditions": "128K 上下文",
+            "source_refs": [
+              "cohere-api-pricing"
+            ],
+            "tokens": 128000
+          }
+        },
+        {
+          "id": "command-r-plus",
+          "kind": "api_model",
+          "name": "Command R+",
+          "status": "active",
+          "summary": "面向高级企业任务，$2.50/$10.00 每百万 token，128K 上下文。",
+          "official_url": "https://cohere.com/pricing",
+          "api_pricing": {
+            "status": "provided",
+            "rate_cards": [
+              {
+                "label": "Standard",
+                "currency": "USD",
+                "unit": "per_1m_tokens",
+                "input_uncached": 2.5,
+                "output": 10,
+                "conditions": "以 Cohere Dashboard 实际费率为准。",
+                "source_refs": [
+                  "cohere-api-pricing"
+                ],
+                "input_cached": 0
+              }
+            ]
+          },
+          "cache_hit_rate": {
+            "status": "not_provided",
+            "note": "官方定价页未公开缓存价格。"
+          },
+          "applicable_scenarios": [
+            {
+              "title": "高级检索增强与多步工具使用",
+              "description": "面向需要复杂推理和工具调用的企业级场景。"
+            }
+          ],
+          "inapplicable_scenarios": [
+            {
+              "title": "需要最新最强模型",
+              "description": "应比较 Command A。"
+            }
+          ],
+          "source_refs": [
+            "cohere-api-pricing"
+          ],
+          "node_type": "leaf",
+          "parent_id": null,
+          "group_id": null,
+          "relation_source_refs": [
+            "cohere-api-pricing"
+          ],
+          "one_m_context": {
+            "status": "not_supported",
+            "conditions": "128K 上下文",
+            "source_refs": [
+              "cohere-api-pricing"
+            ],
+            "tokens": 128000
+          }
+        },
+        {
+          "id": "command-r",
+          "kind": "api_model",
+          "name": "Command R",
+          "status": "active",
+          "summary": "平衡性能与成本，$0.15/$0.60 每百万 token，128K 上下文。",
+          "official_url": "https://cohere.com/pricing",
+          "api_pricing": {
+            "status": "provided",
+            "rate_cards": [
+              {
+                "label": "Standard",
+                "currency": "USD",
+                "unit": "per_1m_tokens",
+                "input_uncached": 0.15,
+                "output": 0.6,
+                "conditions": "以 Cohere Dashboard 实际费率为准。",
+                "source_refs": [
+                  "cohere-api-pricing"
+                ],
+                "input_cached": 0
+              }
+            ]
+          },
+          "cache_hit_rate": {
+            "status": "not_provided",
+            "note": "官方定价页未公开缓存价格。"
+          },
+          "applicable_scenarios": [
+            {
+              "title": "中等复杂度文本处理",
+              "description": "在性能和成本之间取得良好平衡，与 GPT-4o Mini 同价。"
+            }
+          ],
+          "inapplicable_scenarios": [
+            {
+              "title": "要求最低成本",
+              "description": "可选择 Command R7B。"
+            }
+          ],
+          "source_refs": [
+            "cohere-api-pricing"
+          ],
+          "node_type": "leaf",
+          "parent_id": null,
+          "group_id": null,
+          "relation_source_refs": [
+            "cohere-api-pricing"
+          ],
+          "one_m_context": {
+            "status": "not_supported",
+            "conditions": "128K 上下文",
+            "source_refs": [
+              "cohere-api-pricing"
+            ],
+            "tokens": 128000
+          }
+        },
+        {
+          "id": "command-r7b",
+          "kind": "api_model",
+          "name": "Command R7B",
+          "status": "active",
+          "summary": "最具性价比，$0.0375/$0.15 每百万 token，适合大容量简单任务。",
+          "official_url": "https://cohere.com/pricing",
+          "api_pricing": {
+            "status": "provided",
+            "rate_cards": [
+              {
+                "label": "Standard",
+                "currency": "USD",
+                "unit": "per_1m_tokens",
+                "input_uncached": 0.0375,
+                "output": 0.15,
+                "conditions": "以 Cohere Dashboard 实际费率为准。",
+                "source_refs": [
+                  "cohere-api-pricing"
+                ],
+                "input_cached": 0
+              }
+            ]
+          },
+          "cache_hit_rate": {
+            "status": "not_provided",
+            "note": "官方定价页未公开缓存价格。"
+          },
+          "applicable_scenarios": [
+            {
+              "title": "大容量简单任务与分类",
+              "description": "追求极致性价比的场景，如批量文本分类、摘要和情感分析。"
+            }
+          ],
+          "inapplicable_scenarios": [
+            {
+              "title": "复杂推理或多步工具使用",
+              "description": "应选择 Command R 或 Command R+。"
+            }
+          ],
+          "source_refs": [
+            "cohere-api-pricing"
+          ],
+          "node_type": "leaf",
+          "parent_id": null,
+          "group_id": null,
+          "relation_source_refs": [
+            "cohere-api-pricing"
+          ],
+          "one_m_context": {
+            "status": "not_supported",
+            "conditions": "128K 上下文",
+            "source_refs": [
+              "cohere-api-pricing"
+            ],
+            "tokens": 128000
+          }
+        }
+      ],
+      "sources": [
+        {
+          "id": "cohere-api-pricing",
+          "url": "https://cohere.com/pricing",
+          "title": "Cohere Pricing",
+          "publisher": "Cohere",
+          "source_type": "official",
+          "queried_at": "2026-07-28T00:00:00Z"
+        }
+      ],
+      "tree_mode": "flat"
     }
   ]
 }
