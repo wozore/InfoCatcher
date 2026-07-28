@@ -21,7 +21,8 @@ mvp/
 │   │   ├── tools.json          # 44 个工具
 │   │   ├── tool-intelligence.json  # 模型/套餐/价格核验数据
 │   │   ├── glossary.json       # 43 条概念
-│   │   └── scenes.json         # 12 个场景
+│   │   ├── scenes.json         # 12 个场景
+│   │   └── featured.json       # 3 条编辑精选
 │   ├── news/                   # 热点采集系统数据
 │   │   ├── config/             # 评分/时间层配置
 │   │   ├── sources/            # 96 个热点来源

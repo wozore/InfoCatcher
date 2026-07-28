@@ -48,6 +48,7 @@ jobs:
         run: |
           mkdir _site
           cp index.html _site/
+          cp feed.xml _site/
           cp -r css js data scripts _site/
 
       - name: Upload artifact

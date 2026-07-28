@@ -1,0 +1,17 @@
+[
+  {
+    "tool_id": "claude-code",
+    "reason": "2026 年最受开发者认可的 AI 编程 CLI — 支持 Claude Sonnet 5/Fable 5/Opus 5 三模型切换，零前端依赖直接命令行交互",
+    "featured_until": "2026-08-27"
+  },
+  {
+    "tool_id": "gemini",
+    "reason": "Gemini 3 系列多模态能力领先 — 百万级上下文原生支持，适合深度文档分析和跨模态推理场景",
+    "featured_until": "2026-08-27"
+  },
+  {
+    "tool_id": "deepseek",
+    "reason": "国产 API 性价比之王 — DeepSeek-V4 Flash ¥1/百万tokens 入门级定价，中文理解能力扎实",
+    "featured_until": "2026-08-27"
+  }
+]

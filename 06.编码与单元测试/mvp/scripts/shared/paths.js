@@ -37,6 +37,7 @@ const CATALOG_FILES = Object.freeze({
   glossary: path.join(CATALOG_DIR, 'glossary.json'),
   scenes: path.join(CATALOG_DIR, 'scenes.json'),
   toolIntelligence: path.join(CATALOG_DIR, 'tool-intelligence.json'),
+  featured: path.join(CATALOG_DIR, 'featured.json'),
 });
 
 const NEWS_FILES = Object.freeze({

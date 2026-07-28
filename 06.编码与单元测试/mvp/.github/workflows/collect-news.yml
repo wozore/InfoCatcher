@@ -52,12 +52,12 @@ jobs:
 
       - name: Commit generated data
         run: |
-          if git diff --quiet -- data/news/output/hotspots.json data/news/runtime/news-state.json data/news/runtime/news-registry.json data/news/runtime/news-quota.json data/news/runtime/pending-authorizations.json; then
+          if git diff --quiet -- data/news/output/hotspots.json data/news/runtime/news-state.json data/news/runtime/news-registry.json data/news/runtime/news-quota.json data/news/runtime/pending-authorizations.json feed.xml; then
             echo "No generated data changes"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/news/output/hotspots.json data/news/runtime/news-state.json data/news/runtime/news-registry.json data/news/runtime/news-quota.json data/news/runtime/pending-authorizations.json
+          git add data/news/output/hotspots.json data/news/runtime/news-state.json data/news/runtime/news-registry.json data/news/runtime/news-quota.json data/news/runtime/pending-authorizations.json feed.xml
           git commit -m "chore(data): update AI hotspots"
           git push

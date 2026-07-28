@@ -541,7 +541,7 @@ function validateScenes(data) {
 function validateHtml(html) {
   // 检查关键 ID 是否存在（至少检查视图容器）
   const expected = [
-    'view-tools', 'view-scenes', 'view-compare', 'view-glossary', 'view-trending', 'view-about',
+    'view-tools', 'view-scenes', 'view-compare', 'view-glossary', 'view-trending', 'view-featured', 'view-about',
     'searchInput', 'toolGrid', 'sceneSearch', 'sceneList', 'trendingGrid', 'modalOverlay'
   ];
   for (const id of expected) {
@@ -606,6 +606,24 @@ try {
   validateScenes(JSON.parse(fs.readFileSync(CATALOG_FILES.scenes, 'utf8')));
 } catch (e) {
   fail(`scenes.json 解析失败：${e.message}`);
+}
+
+// featured.json
+try {
+  const featured = JSON.parse(fs.readFileSync(CATALOG_FILES.featured, 'utf8'));
+  if (!Array.isArray(featured)) fail('featured.json 应为数组');
+  else {
+    const toolIds = new Set(validatedTools.map(t => t.id));
+    featured.forEach((pick, i) => {
+      if (!pick.tool_id) fail(`featured.json[${i}] 缺少 tool_id`);
+      else if (!toolIds.has(pick.tool_id)) fail(`featured.json[${i}] tool_id "${pick.tool_id}" 不在 tools.json 中`);
+      if (!pick.reason) fail(`featured.json[${i}] 缺少 reason`);
+      if (pick.featured_until && isNaN(new Date(pick.featured_until).getTime())) fail(`featured.json[${i}] featured_until 格式无效`);
+    });
+    console.log(`  featured.json: ${featured.length} 条精选，通过`);
+  }
+} catch (e) {
+  fail(`featured.json 解析失败：${e.message}`);
 }
 
 // news-sources.json

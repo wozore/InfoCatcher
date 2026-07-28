@@ -70,6 +70,7 @@ let hotspots = {              // hotspots.json 的前端投影
   generated_at: null          //   构建时间
 };
 let compareList = [];         // { toolId, itemId } 稳定比较引用；itemId 为 null 表示具体根工具
+let featuredPicks = [];        // featured.json 编辑精选
 let detailPanelState = new Map(); // collection toolId → 当前模型/工具节点路径
 let currentView = 'tools';    // 当前激活的视图
 let activeFilters = {         // 工具库的筛选状态
@@ -185,6 +186,12 @@ async function loadData() {
   } catch (e) {
     hotspots = { items: [], events: [], provenance: [], assessments: [], coverage: null, generated_at: null };
   }
+  try {
+    const fResp = await fetch('data/catalog/featured.json');
+    featuredPicks = await fResp.json();
+  } catch (e) {
+    featuredPicks = [];
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -215,6 +222,7 @@ function switchView(view) {
   if (view === 'tools') renderTools();
   if (view === 'glossary') renderGlossary();
   if (view === 'trending') renderTrending();
+  if (view === 'featured') renderFeatured();
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -867,7 +875,79 @@ function quickCompare(ids) {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// 第 6 部分：概念词典 —— 术语搜索、分类筛选和可展开卡片
+// 第 6 部分：推荐视图 —— 编辑精选 + 热门排行
+//
+// 编辑精选来自 featured.json（手动维护），大卡片 + 推荐理由。
+// 热门排行从 tools.json 自动计算（评分 ≥ 3.5 + 免费层，取 top-5）。
+// ═══════════════════════════════════════════════════════════════
+
+function getHotTools() {
+  return tools
+    .filter(t => t.card_kind === 'concrete' && t.rating_overall >= 3.5 && hasFree(t))
+    .sort((a, b) => b.rating_overall - a.rating_overall)
+    .slice(0, 5);
+}
+
+function renderFeatured() {
+  const picks = featuredPicks
+    .map(pick => ({ ...pick, tool: tools.find(t => t.id === pick.tool_id) }))
+    .filter(pick => pick.tool);
+  renderEditorPicks(picks);
+  renderHotRanking();
+}
+
+function renderEditorPicks(picks) {
+  const grid = document.getElementById('featuredPicksGrid');
+  if (!grid) return;
+  if (!picks.length) {
+    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">📌</div><h3>暂无精选推荐</h3><p>编辑团队正在为您挑选最值得关注的 AI 工具。</p></div>';
+    return;
+  }
+  grid.innerHTML = picks.map(pick => {
+    const t = pick.tool;
+    return '<div class="featured-card featured-pick" onclick="openDetail(\'' + escapeHtml(t.id) + '\')">' +
+      '<div class="featured-pick-badge">编辑精选</div>' +
+      '<div class="featured-pick-header">' +
+        '<span class="featured-pick-icon">' + escapeHtml(t.icon) + '</span>' +
+        '<div><h3>' + escapeHtml(t.name) + '</h3><span class="featured-pick-vendor">' + escapeHtml(t.vendor) + '</span></div>' +
+        '<div class="featured-pick-rating">' + stars(t.rating_overall) + '<span>' + t.rating_overall.toFixed(1) + '</span></div>' +
+      '</div>' +
+      '<p class="featured-pick-reason">' + escapeHtml(pick.reason) + '</p>' +
+      '<div class="featured-pick-tags">' +
+        t.scenes.slice(0, 3).map(s => '<span class="tag scene">' + escapeHtml(s) + '</span>').join('') +
+        '<span class="tag ' + (t.access_level === '开放' ? 'open' : 'restricted') + '">' + (t.access_level === '开放' ? '国内可用' : '需科学上网') + '</span>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function renderHotRanking() {
+  const grid = document.getElementById('featuredHotGrid');
+  if (!grid) return;
+  const hot = getHotTools();
+  if (!hot.length) {
+    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">🔥</div><h3>暂无排行数据</h3><p>工具数据加载中，请稍后刷新。</p></div>';
+    return;
+  }
+  grid.innerHTML = hot.map((t, i) => {
+    const rankEmoji = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'][i] || '';
+    return '<div class="featured-card featured-hot" onclick="openDetail(\'' + escapeHtml(t.id) + '\')">' +
+      '<div class="featured-hot-rank">' + rankEmoji + '</div>' +
+      '<div class="featured-hot-body">' +
+        '<div class="featured-hot-header"><h4>' + escapeHtml(t.icon + ' ' + t.name) + '</h4><span class="featured-hot-vendor">' + escapeHtml(t.vendor) + '</span></div>' +
+        '<p class="featured-hot-desc">' + escapeHtml(t.strengths) + '</p>' +
+        '<div class="featured-hot-meta">' +
+          '<span>' + stars(t.rating_overall) + ' ' + t.rating_overall.toFixed(1) + '</span>' +
+          '<span class="tag free">免费可用</span>' +
+          (hasFree(t) ? '' : '<span class="tag paid">仅付费</span>') +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// 第 7 部分：概念词典 —— 术语搜索、分类筛选和可展开卡片
 //
 // 数据驱动：分类 chip 从 glossary.json 的 category 字段动态提取，
 // 新增术语分类无需修改前端代码。
@@ -941,7 +1021,7 @@ function renderGlossary() {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// 第 7 部分：AI 热点视图 —— 安全输出 + 筛选 + 排序 + 状态 + 评分
+// 第 8 部分：AI 热点视图 —— 安全输出 + 筛选 + 排序 + 状态 + 评分
 //
 // 安全设计：
 //   所有来自外部平台（YouTube/X/Bilibili）的文本字段（标题、描述、
@@ -1115,7 +1195,7 @@ function renderTrending() {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// 第 8 部分：场景导航 —— 可搜索场景列表 + 子任务/工具映射
+// 第 9 部分：场景导航 —— 可搜索场景列表 + 子任务/工具映射
 //
 // 场景数据来自 scenes.json；搜索匹配名称、简介、关联词和子任务名。
 // 每行展示场景图标、名称、去重后的工具数量和简介；点击后展开任务—工具映射。
@@ -1283,7 +1363,7 @@ function toggleSceneTasks(sceneId) {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// 第 9 部分：搜索别名映射
+// 第 10 部分：搜索别名映射
 //
 // 将用户输入的自然语言关键词映射为过滤函数。
 // 在 getFilteredTools() 的文本搜索基础上叠加使用（AND 关系）。
@@ -1327,7 +1407,7 @@ const searchAliases = {
 };
 
 // ═══════════════════════════════════════════════════════════════
-// 第 10 部分：页面初始化与事件绑定
+// 第 11 部分：页面初始化与事件绑定
 // 注册事件，在DOM树被建立完时触发运行
 //
 // 执行顺序：
