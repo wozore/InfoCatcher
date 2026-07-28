@@ -262,10 +262,6 @@ function getCollectionNode(toolId, itemId) {
   return getToolIntelligence(toolId)?.items?.find(item => item.id === itemId) || null;
 }
 
-function isOpenAICollection(toolId) {
-  return toolId === 'chatgpt';
-}
-
 function compareKey(ref) {
   return ref.toolId + '::' + (ref.itemId || 'root');
 }
@@ -625,13 +621,8 @@ function renderModelToolPanel(toolId, nodeId = null) {
 
 function navigateModelToolPanel(toolId, nodeId = null) {
   detailPanelState.set(toolId, nodeId);
-  if (isOpenAICollection(toolId)) {
-    const body = document.getElementById('openaiDetailBody');
-    if (body) body.innerHTML = renderOpenAIDetailBody(toolId, nodeId);
-    return;
-  }
-  const panel = document.getElementById('modelToolPanel');
-  if (panel) panel.innerHTML = renderModelToolPanel(toolId, nodeId);
+  const body = document.getElementById('openaiDetailBody');
+  if (body) body.innerHTML = renderOpenAIDetailBody(toolId, nodeId);
 }
 
 function goBackModelToolPanel(toolId) {
@@ -647,7 +638,7 @@ function openDetail(id, selectedItemId = null) {
   const content = document.getElementById('modalContent');
   if (t.card_kind === 'collection' && collection?.tree_mode === 'tree') {
     content.innerHTML = '<button class="modal-close" onclick="closeModal()">✕</button>' +
-      (isOpenAICollection(id) ? '<div id="openaiDetailBody" class="openai-detail"></div>' : renderVendorOverview(t) + '<div id="modelToolPanel"></div>');
+      '<div id="openaiDetailBody" class="openai-detail"></div>';
     overlay.style.display = 'flex';
     document.body.style.overflow = 'hidden';
     navigateModelToolPanel(id, selectedItemId);

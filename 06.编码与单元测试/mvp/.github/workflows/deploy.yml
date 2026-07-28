@@ -49,6 +49,10 @@ jobs:
           mkdir _site
           cp index.html _site/
           cp feed.xml _site/
+          cp og-image.png _site/
+          cp og-image.html _site/
+          cp sitemap.xml _site/
+          cp robots.txt _site/
           cp -r css js data scripts _site/
 
       - name: Upload artifact

@@ -272,7 +272,31 @@
     "last_updated": "2026-07-18",
     "source": "deepseek.com",
     "card_kind": "collection",
-    "entity_kind": "product"
+    "entity_kind": "product",
+    "overview": {
+      "description": "中国深度求索公司推出的开源大模型，以极致性价比和透明定价著称，V4 系列支持 1M 上下文。",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "V4-Flash 缓存命中仅 ¥0.02/MTok，长系统提示词场景成本极低"
+        },
+        {
+          "tone": "positive",
+          "text": "1M 原生上下文，中英文双语定价透明"
+        },
+        {
+          "tone": "negative",
+          "text": "缓存为 best-effort，无 SLA 保证命中率"
+        },
+        {
+          "tone": "negative",
+          "text": "高峰时段 API 并发限制可能触发排队"
+        }
+      ],
+      "source_refs": [
+        "deepseek-pricing-cn"
+      ]
+    }
   },
   {
     "id": "tongyi",
@@ -468,8 +492,32 @@
     "rating_price": 4,
     "last_updated": "2026-07-18",
     "source": "chatglm.cn",
-    "card_kind": "concrete",
-    "entity_kind": "product"
+    "card_kind": "collection",
+    "entity_kind": "product",
+    "overview": {
+      "description": "清华大学孵化、港股上市的国产 AI 公司，提供 GLM 系列模型及全模态 API 服务，中文能力扎实。",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "GLM-5.2 支持 1M 无损上下文，Coding 能力开源 SOTA"
+        },
+        {
+          "tone": "positive",
+          "text": "缓存存储限时免费，长系统提示词场景成本极低"
+        },
+        {
+          "tone": "negative",
+          "text": "定价体系复杂（按输入/输出长度分档），账单预估难度较高"
+        },
+        {
+          "tone": "negative",
+          "text": "多模态视觉模型（GLM-5V）定价高于纯文本模型"
+        }
+      ],
+      "source_refs": [
+        "zhipu-api-pricing"
+      ]
+    }
   },
   {
     "id": "cursor",
@@ -1411,8 +1459,32 @@
     "rating_price": 5,
     "last_updated": "2026-07-21",
     "source": "yiyan.baidu.com",
-    "card_kind": "concrete",
-    "entity_kind": "product"
+    "card_kind": "collection",
+    "entity_kind": "product",
+    "overview": {
+      "description": "百度推出的文心大模型，通过千帆平台提供 ERNIE 系列 API，深度集成百度云生态。",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "ERNIE 4.5 Turbo 在 ¥0.8/MTok 价位提供 128K 上下文"
+        },
+        {
+          "tone": "positive",
+          "text": "千帆平台支持 DeepSeek、GLM、Kimi 等第三方模型统一接入"
+        },
+        {
+          "tone": "negative",
+          "text": "官方计费页输出定价不够透明，需在控制台确认实际扣费"
+        },
+        {
+          "tone": "negative",
+          "text": "AI 编程和 Agent 生态相对 OpenAI/Claude 不够成熟"
+        }
+      ],
+      "source_refs": [
+        "wenxin-api-pricing"
+      ]
+    }
   },
   {
     "id": "xinghuo",
@@ -1462,8 +1534,32 @@
     "rating_price": 4.5,
     "last_updated": "2026-07-21",
     "source": "xinghuo.xfyun.cn",
-    "card_kind": "concrete",
-    "entity_kind": "product"
+    "card_kind": "collection",
+    "entity_kind": "product",
+    "overview": {
+      "description": "科大讯飞推出的星火认知大模型，深耕语音与教育场景，Lite 版本 API 永久免费。",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "Spark Lite API 永久免费，适合高并发低成本的简单任务"
+        },
+        {
+          "tone": "positive",
+          "text": "内置搜索、天气、日期等插件，开箱即用"
+        },
+        {
+          "tone": "negative",
+          "text": "官方未公开详细 token 计价，缓存和输出定价不透明"
+        },
+        {
+          "tone": "negative",
+          "text": "Max 版本已下线合并，API 版本稳定性有不确定性"
+        }
+      ],
+      "source_refs": [
+        "xinghuo-api-docs"
+      ]
+    }
   },
   {
     "id": "hunyuan",
@@ -1655,8 +1751,32 @@
     "rating_price": 4.5,
     "last_updated": "2026-07-21",
     "source": "hailuoai.com",
-    "card_kind": "concrete",
-    "entity_kind": "product"
+    "card_kind": "collection",
+    "entity_kind": "product",
+    "overview": {
+      "description": "MiniMax 推出的多模态 AI 平台，以海螺AI 视频生成和超低 API 文本价格著称。",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "MiniMax-Text-01 在 /usr/bin/bash.30/MTok 价位极具性价比"
+        },
+        {
+          "tone": "positive",
+          "text": "Hailuo 02 视频生成支持 1080p 10 秒，质量对齐国内第一梯队"
+        },
+        {
+          "tone": "negative",
+          "text": "国际市场品牌知名度较低，社区和第三方工具生态有限"
+        },
+        {
+          "tone": "negative",
+          "text": "上下文窗口规格未在定价页公开，需查阅模型文档"
+        }
+      ],
+      "source_refs": [
+        "hailuo-api-pricing"
+      ]
+    }
   },
   {
     "id": "grok",
@@ -1711,8 +1831,32 @@
     "rating_price": 3.5,
     "last_updated": "2026-07-21",
     "source": "grok.com",
-    "card_kind": "concrete",
-    "entity_kind": "product"
+    "card_kind": "collection",
+    "entity_kind": "product",
+    "overview": {
+      "description": "Elon Musk 创办的 xAI 公司推出的 AI 模型，以实时 X 平台数据接入和推理能力见长，API 定价极具竞争力。",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "Grok 4.1 Fast 在 /usr/bin/bash.20//usr/bin/bash.50 价位具备推理能力，同价位性价比领先"
+        },
+        {
+          "tone": "positive",
+          "text": "2M 上下文窗口（4.1 Fast），支持长文档和深度分析"
+        },
+        {
+          "tone": "negative",
+          "text": "中国市场网络访问受限"
+        },
+        {
+          "tone": "negative",
+          "text": "模型淘汰速度较快（2026-05 退役 8 个旧模型），需关注迁移通知"
+        }
+      ],
+      "source_refs": [
+        "xai-api-pricing"
+      ]
+    }
   },
   {
     "id": "poe",
@@ -2340,7 +2484,7 @@
         },
         {
           "tone": "positive",
-          "text": "旗舰模型 Medium 3.5 均衡性能和成本"
+          "text": "旗舰模型 Mistral Medium 3.5 均衡性能和成本"
         },
         {
           "tone": "negative",

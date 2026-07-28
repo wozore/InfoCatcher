@@ -1179,6 +1179,27 @@
       "status": "verified",
       "items": [
         {
+          "id": "deepseek-models",
+          "node_type": "group",
+          "parent_id": null,
+          "group_id": "deepseek-models",
+          "kind": "product_variant",
+          "name": "DeepSeek 模型",
+          "status": "active",
+          "summary": "当前已核实的 DeepSeek API 模型。",
+          "official_url": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing",
+          "source_refs": [
+            "deepseek-pricing-cn",
+            "deepseek-pricing-en",
+            "deepseek-cache"
+          ],
+          "relation_source_refs": [
+            "deepseek-pricing-cn",
+            "deepseek-pricing-en",
+            "deepseek-cache"
+          ]
+        },
+        {
           "id": "deepseek-v4-flash",
           "kind": "api_model",
           "name": "DeepSeek-V4-Flash",
@@ -1244,8 +1265,8 @@
             "deepseek-cache"
           ],
           "node_type": "leaf",
-          "parent_id": null,
-          "group_id": null,
+          "parent_id": "deepseek-models",
+          "group_id": "deepseek-models",
           "relation_source_refs": [
             "deepseek-pricing-cn",
             "deepseek-pricing-en",
@@ -1318,8 +1339,8 @@
             "deepseek-cache"
           ],
           "node_type": "leaf",
-          "parent_id": null,
-          "group_id": null,
+          "parent_id": "deepseek-models",
+          "group_id": "deepseek-models",
           "relation_source_refs": [
             "deepseek-pricing-cn",
             "deepseek-pricing-en",
@@ -1353,7 +1374,7 @@
           "queried_at": "2026-07-26T10:35:25Z"
         }
       ],
-      "tree_mode": "flat"
+      "tree_mode": "tree"
     },
     {
       "tool_id": "mistral",
@@ -1657,12 +1678,29 @@
           "queried_at": "2026-07-27T07:46:15.009Z"
         }
       ],
-      "tree_mode": "flat"
+      "tree_mode": "tree"
     },
     {
       "tool_id": "grok",
       "status": "partial",
       "items": [
+        {
+          "id": "grok-models",
+          "node_type": "group",
+          "parent_id": null,
+          "group_id": "grok-models",
+          "kind": "product_variant",
+          "name": "Grok 模型",
+          "status": "active",
+          "summary": "当前已核实的 Grok API 模型。",
+          "official_url": "https://x.ai/api/pricing",
+          "source_refs": [
+            "xai-api-pricing"
+          ],
+          "relation_source_refs": [
+            "xai-api-pricing"
+          ]
+        },
         {
           "id": "grok-4.3",
           "kind": "api_model",
@@ -1715,8 +1753,8 @@
             "xai-api-pricing"
           ],
           "node_type": "leaf",
-          "parent_id": null,
-          "group_id": null,
+          "parent_id": "grok-models",
+          "group_id": "grok-models",
           "relation_source_refs": [
             "xai-api-pricing"
           ]
@@ -1773,8 +1811,8 @@
             "xai-api-pricing"
           ],
           "node_type": "leaf",
-          "parent_id": null,
-          "group_id": null,
+          "parent_id": "grok-models",
+          "group_id": "grok-models",
           "relation_source_refs": [
             "xai-api-pricing"
           ]
@@ -1790,12 +1828,31 @@
           "queried_at": "2026-07-28T00:00:00Z"
         }
       ],
-      "tree_mode": "flat"
+      "tree_mode": "tree"
     },
     {
       "tool_id": "zhipu",
       "status": "partial",
       "items": [
+        {
+          "id": "glm-models",
+          "node_type": "group",
+          "parent_id": null,
+          "group_id": "glm-models",
+          "kind": "product_variant",
+          "name": "GLM 模型",
+          "status": "active",
+          "summary": "当前已核实的智谱 GLM API 模型。",
+          "official_url": "https://bigmodel.cn/pricing",
+          "source_refs": [
+            "zhipu-api-pricing",
+            "zhipu-model-overview"
+          ],
+          "relation_source_refs": [
+            "zhipu-api-pricing",
+            "zhipu-model-overview"
+          ]
+        },
         {
           "id": "glm-5.2",
           "kind": "api_model",
@@ -1849,8 +1906,8 @@
             "zhipu-model-overview"
           ],
           "node_type": "leaf",
-          "parent_id": null,
-          "group_id": null,
+          "parent_id": "glm-models",
+          "group_id": "glm-models",
           "relation_source_refs": [
             "zhipu-api-pricing",
             "zhipu-model-overview"
@@ -1913,8 +1970,8 @@
             "zhipu-model-overview"
           ],
           "node_type": "leaf",
-          "parent_id": null,
-          "group_id": null,
+          "parent_id": "glm-models",
+          "group_id": "glm-models",
           "relation_source_refs": [
             "zhipu-api-pricing",
             "zhipu-model-overview"
@@ -1985,8 +2042,8 @@
             "zhipu-model-overview"
           ],
           "node_type": "leaf",
-          "parent_id": null,
-          "group_id": null,
+          "parent_id": "glm-models",
+          "group_id": "glm-models",
           "relation_source_refs": [
             "zhipu-api-pricing",
             "zhipu-model-overview"
@@ -2057,8 +2114,8 @@
             "zhipu-model-overview"
           ],
           "node_type": "leaf",
-          "parent_id": null,
-          "group_id": null,
+          "parent_id": "glm-models",
+          "group_id": "glm-models",
           "relation_source_refs": [
             "zhipu-api-pricing",
             "zhipu-model-overview"
@@ -2091,12 +2148,29 @@
           "queried_at": "2026-07-28T00:00:00Z"
         }
       ],
-      "tree_mode": "flat"
+      "tree_mode": "tree"
     },
     {
       "tool_id": "wenxin",
       "status": "partial",
       "items": [
+        {
+          "id": "ernie-models",
+          "node_type": "group",
+          "parent_id": null,
+          "group_id": "ernie-models",
+          "kind": "product_variant",
+          "name": "ERNIE 模型",
+          "status": "active",
+          "summary": "当前已核实的百度 ERNIE API 模型。",
+          "official_url": "https://cloud.baidu.com/doc/qianfan/s/wmh4sv6ya",
+          "source_refs": [
+            "wenxin-api-pricing"
+          ],
+          "relation_source_refs": [
+            "wenxin-api-pricing"
+          ]
+        },
         {
           "id": "ernie-5.1",
           "kind": "api_model",
@@ -2141,8 +2215,8 @@
             "wenxin-api-pricing"
           ],
           "node_type": "leaf",
-          "parent_id": null,
-          "group_id": null,
+          "parent_id": "ernie-models",
+          "group_id": "ernie-models",
           "relation_source_refs": [
             "wenxin-api-pricing"
           ],
@@ -2198,8 +2272,8 @@
             "wenxin-api-pricing"
           ],
           "node_type": "leaf",
-          "parent_id": null,
-          "group_id": null,
+          "parent_id": "ernie-models",
+          "group_id": "ernie-models",
           "relation_source_refs": [
             "wenxin-api-pricing"
           ],
@@ -2253,8 +2327,8 @@
             "wenxin-api-pricing"
           ],
           "node_type": "leaf",
-          "parent_id": null,
-          "group_id": null,
+          "parent_id": "ernie-models",
+          "group_id": "ernie-models",
           "relation_source_refs": [
             "wenxin-api-pricing"
           ],
@@ -2278,12 +2352,29 @@
           "queried_at": "2026-07-28T00:00:00Z"
         }
       ],
-      "tree_mode": "flat"
+      "tree_mode": "tree"
     },
     {
       "tool_id": "xinghuo",
       "status": "partial",
       "items": [
+        {
+          "id": "spark-models",
+          "node_type": "group",
+          "parent_id": null,
+          "group_id": "spark-models",
+          "kind": "product_variant",
+          "name": "星火模型",
+          "status": "active",
+          "summary": "当前已核实的讯飞星火 API 模型。",
+          "official_url": "https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html",
+          "source_refs": [
+            "xinghuo-api-docs"
+          ],
+          "relation_source_refs": [
+            "xinghuo-api-docs"
+          ]
+        },
         {
           "id": "spark-ultra",
           "kind": "api_model",
@@ -2328,8 +2419,8 @@
             "xinghuo-api-docs"
           ],
           "node_type": "leaf",
-          "parent_id": null,
-          "group_id": null,
+          "parent_id": "spark-models",
+          "group_id": "spark-models",
           "relation_source_refs": [
             "xinghuo-api-docs"
           ],
@@ -2386,8 +2477,8 @@
             "xinghuo-api-docs"
           ],
           "node_type": "leaf",
-          "parent_id": null,
-          "group_id": null,
+          "parent_id": "spark-models",
+          "group_id": "spark-models",
           "relation_source_refs": [
             "xinghuo-api-docs"
           ],
@@ -2431,8 +2522,8 @@
             "xinghuo-api-docs"
           ],
           "node_type": "leaf",
-          "parent_id": null,
-          "group_id": null,
+          "parent_id": "spark-models",
+          "group_id": "spark-models",
           "relation_source_refs": [
             "xinghuo-api-docs"
           ],
@@ -2456,12 +2547,29 @@
           "queried_at": "2026-07-28T00:00:00Z"
         }
       ],
-      "tree_mode": "flat"
+      "tree_mode": "tree"
     },
     {
       "tool_id": "hailuo",
       "status": "partial",
       "items": [
+        {
+          "id": "minimax-models",
+          "node_type": "group",
+          "parent_id": null,
+          "group_id": "minimax-models",
+          "kind": "product_variant",
+          "name": "MiniMax 模型",
+          "status": "active",
+          "summary": "当前已核实的 MiniMax API 模型。",
+          "official_url": "https://minimax.io/pricing",
+          "source_refs": [
+            "hailuo-api-pricing"
+          ],
+          "relation_source_refs": [
+            "hailuo-api-pricing"
+          ]
+        },
         {
           "id": "minimax-text-01",
           "kind": "api_model",
@@ -2506,8 +2614,8 @@
             "hailuo-api-pricing"
           ],
           "node_type": "leaf",
-          "parent_id": null,
-          "group_id": null,
+          "parent_id": "minimax-models",
+          "group_id": "minimax-models",
           "relation_source_refs": [
             "hailuo-api-pricing"
           ],
@@ -2550,8 +2658,8 @@
             "hailuo-api-pricing"
           ],
           "node_type": "leaf",
-          "parent_id": null,
-          "group_id": null,
+          "parent_id": "minimax-models",
+          "group_id": "minimax-models",
           "relation_source_refs": [
             "hailuo-api-pricing"
           ],
@@ -2574,12 +2682,29 @@
           "queried_at": "2026-07-28T00:00:00Z"
         }
       ],
-      "tree_mode": "flat"
+      "tree_mode": "tree"
     },
     {
       "tool_id": "cohere",
       "status": "partial",
       "items": [
+        {
+          "id": "command-models",
+          "node_type": "group",
+          "parent_id": null,
+          "group_id": "command-models",
+          "kind": "product_variant",
+          "name": "Command 模型",
+          "status": "active",
+          "summary": "当前已核实的 Cohere Command API 模型。",
+          "official_url": "https://cohere.com/pricing",
+          "source_refs": [
+            "cohere-api-pricing"
+          ],
+          "relation_source_refs": [
+            "cohere-api-pricing"
+          ]
+        },
         {
           "id": "command-a",
           "kind": "api_model",
@@ -2624,8 +2749,8 @@
             "cohere-api-pricing"
           ],
           "node_type": "leaf",
-          "parent_id": null,
-          "group_id": null,
+          "parent_id": "command-models",
+          "group_id": "command-models",
           "relation_source_refs": [
             "cohere-api-pricing"
           ],
@@ -2682,8 +2807,8 @@
             "cohere-api-pricing"
           ],
           "node_type": "leaf",
-          "parent_id": null,
-          "group_id": null,
+          "parent_id": "command-models",
+          "group_id": "command-models",
           "relation_source_refs": [
             "cohere-api-pricing"
           ],
@@ -2740,8 +2865,8 @@
             "cohere-api-pricing"
           ],
           "node_type": "leaf",
-          "parent_id": null,
-          "group_id": null,
+          "parent_id": "command-models",
+          "group_id": "command-models",
           "relation_source_refs": [
             "cohere-api-pricing"
           ],
@@ -2798,8 +2923,8 @@
             "cohere-api-pricing"
           ],
           "node_type": "leaf",
-          "parent_id": null,
-          "group_id": null,
+          "parent_id": "command-models",
+          "group_id": "command-models",
           "relation_source_refs": [
             "cohere-api-pricing"
           ],
@@ -2823,7 +2948,7 @@
           "queried_at": "2026-07-28T00:00:00Z"
         }
       ],
-      "tree_mode": "flat"
+      "tree_mode": "tree"
     }
   ]
 }

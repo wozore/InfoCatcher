@@ -1,0 +1,7 @@
+Sitemap: https://wozore.github.io/InfoCatcher/sitemap.xml
+User-agent: *
+Allow: /
+
+Disallow: /scripts/
+Disallow: /data/news/sources/
+Disallow: /data/news/runtime/
