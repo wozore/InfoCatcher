@@ -43,6 +43,10 @@ $RECYCLE.BIN/
 *.swo
 *~
 
+# ===== 第三方 Skills 插件缓存 =====
+# mattpocock-skills 等第三方 skill 含配置文件，不入库
+.claude/skills/
+
 # ===== Claude Code / AI 工具会话数据 =====
 # 会话元数据频繁变化，不入库
 .claudian/sessions/
@@ -68,6 +72,10 @@ outputs/
 credentials.json
 service-account.json
 *.log
+
+# ===== 调查原始数据（含受访者个人信息） =====
+# 含微信/QQ ID、IP、地理位置、设备指纹等，不入库
+docs/research/survey-materials/
 # ===== MVP 独立仓库（避免嵌套 .git 冲突） =====
 # mvp/ 源码仍由工程仓库追踪（属于 06.编码与单元测试 的交付物），
 # 仅排除内层 .git 目录，防止两个 git 仓库交叉管理
