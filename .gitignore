@@ -61,8 +61,8 @@ $RECYCLE.BIN/
 # 分析脚本运行产生的中间/输出文件（若生成到这些位置）
 *.tmp
 *.bak
-output/
-outputs/
+/output/
+/outputs/
 
 # ===== 敏感信息（API Key / 环境变量） =====
 .env
