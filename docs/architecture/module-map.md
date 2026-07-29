@@ -12,7 +12,9 @@
 >
 > **前序需求**：[软件需求规格说明书.md](../lifecycle/03-requirements/软件需求规格说明书.md) FR-NEWS、[AI热点质量评估标准.md](../lifecycle/03-requirements/AI热点质量评估标准.md)
 >
-> **架构图**：[mvp架构图.drawio](mvp架构图.drawio)
+> **生命周期设计**：[总体设计说明书.md](../lifecycle/04-architecture/总体设计说明书.md) 描述方案选型与演进骨架；本文件记录当前实现事实和接口约束。
+>
+> **架构图**：[mvp-architecture.drawio](diagrams/mvp-architecture.drawio)
 
 ---
 

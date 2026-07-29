@@ -69,10 +69,21 @@ AI 工具信息聚合平台 —— 一个开源免费的中文 AI 工具信息�
 ## 部署
 
 - GitHub Pages：<https://wozore.github.io/InfoCatcher/>
-- 仓库：[github.com/wozore/InfoCatcher](https://github.com/wozore/InfoCatcher)（公开）
 - 静态站由 `.github/workflows/deploy.yml` 自动构建并部署到 GitHub Pages
 - 热点采集由 `.github/workflows/collect-news.yml` 每日执行
 - 工具情报由 `.github/workflows/refresh-tool-intel.yml` 每周自动更新
+
+## 本地运行与内容维护
+
+静态站无需构建工具或后端服务；可在仓库根目录选择以下任一方式启动本地服务器：
+
+```bash
+python -m http.server 8000
+# 或
+npx serve .
+```
+
+浏览器打开 `http://localhost:8000`。热点来源管理与人工 Bilibili 条目录入使用 `scripts/news-cli.js`；当前边界、命令和数据流见 [MVP 模块文档](docs/architecture/module-map.md)。真实采集所需 `YOUTUBE_API_KEY` 和 `X_API_KEY` 只能配置为 GitHub Repository Secrets，不得写入命令、JSON 或前端代码。
 
 ## 验证命令
 
