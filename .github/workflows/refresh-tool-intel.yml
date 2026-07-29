@@ -1,0 +1,59 @@
+name: Refresh Tool Intelligence
+
+on:
+  schedule:
+    - cron: '37 6 * * 0'      # 每周日 UTC 6:37
+  workflow_dispatch:
+    inputs:
+      tool_id:
+        description: '指定工具（留空=全部），输入 tool_id 如 claude/deepseek'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-tool-intel
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate source configuration
+        run: node src/acquisition/validate-intel.js
+
+      - name: Fetch tool intelligence
+        run: |
+          if [ -n "$TOOL_ID" ]; then
+            node scripts/acquisition/fetch-tool-intel.js --tool "$TOOL_ID"
+          else
+            node scripts/acquisition/fetch-tool-intel.js
+          fi
+        env:
+          TOOL_ID: ${{ github.event.inputs.tool_id }}
+
+      - name: Validate output data
+        run: node src/acquisition/validate-intel.js
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'refresh: 工具情报数据自动更新'
+          commit_options: '--no-verify'
+          file_pattern: 'data/catalog/tool-intelligence.json data/acquisition/*.json'
+          commit_user_name: 'github-actions[bot]'
+          commit_user_email: 'github-actions[bot]@users.noreply.github.com'
+          skip_dirty_check: false
+          skip_fetch: true

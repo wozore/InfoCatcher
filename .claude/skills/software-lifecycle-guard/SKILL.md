@@ -1,7 +1,7 @@
 ---
 name: software-lifecycle-guard
 description: >
-  本项目（InfoCatcher）按经典软件生命周期 8 阶段组织目录，本技能约束 Claude Code 的工作落在正确的阶段目录内，防止越界写入。
+  已过时，暂时强制不触发。本项目（InfoCatcher）按经典软件生命周期 8 阶段组织目录，本技能约束 Claude Code 的工作落在正确的阶段目录内，防止越界写入。
   采用"三环混合模式"——目录是组织框架，执行以冲刺迭代推进。环 A 线性完成，环 B 可并发推进 ③④⑥⑧，环 C 回归顺序演进。
   当用户要求推进开发时，先判定当前环和目标阶段，再确认归属。
 ---
@@ -124,17 +124,16 @@ InfoCatcher 曾把需求分析、总体设计、编码、维护的内容全部�
 ## 9. 速查：当前项目产物地图
 
 ```
-问题定义/         AI信息获取软件开发.md, 调查结果总结.md              ← 环 A ✅
-可行性研究/       可行性研究报告.md, poc/(verification_report,        ← 环 A ✅
-                 competitive_analysis)
-需求分析/         软件需求规格说明书.md(SRS), 需求分析流程.md          ← 环 B ▶️
-总体设计/         总体设计说明书.md                                    ← 环 B▶️/C⏳
-详细设计/         详细设计说明书.md(占位)                              ← 环 C ⏳
-编码与单元测试/   mvp/(index.html, css/, js/, data/tools.json)       ← 环 B ▶️
-综合测试/         README.md(占位)                                     ← 环 C ⏳
-软件维护/         CONTRIBUTING.md, README.md                          ← 环 B ▶️
-                  (+ 根 .github/ISSUE_TEMPLATE/*.yml)
-sandbox/          README.md(实验空间)                                 ← 随时使用
+src/               业务实现（web/ acquisition/ content/ news/ shared/）
+scripts/           可执行命令入口
+tests/             自动化测试及 fixtures
+data/              数据与配置（catalog/ acquisition/ news/）
+public/            静态部署资源（feed.xml sitemap.xml robots.txt og-image.*）
+docs/architecture/ 当前架构事实（overview module-map data-flows runtime-contracts decisions/）
+docs/lifecycle/    八阶段过程资料（01-08）
+docs/research/     原始调研材料
+resources/         人工参考材料（source-lists/）
+sandbox/           技术实验空间
 ```
 
 > `.github/ISSUE_TEMPLATE/` 物理上必须在仓库根目录（GitHub 限制），但逻辑归属 ⑧ 软件维护。

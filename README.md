@@ -8,22 +8,31 @@ AI 工具信息聚合平台 —— 一个开源免费的中文 AI 工具信息�
 
 ## 目录结构
 
-本仓库目录镜像经典软件生命周期 8 阶段，作为**组织框架**而非严格执行流程。每个阶段文件夹回答对应的核心问题：
+|    阶段     | 目录 | 核心问题 | 主要工件 |
+| :-------: | --- | --- | --- |
+|  ① 问题定义 | [docs/lifecycle/01-problem-definition/](docs/lifecycle/01-problem-definition/) | 要解决的问题是什么？ | `AI信息获取软件开发.md`、`调查结果总结.md`（N=112） |
+|  ② 可行性研究 | [docs/lifecycle/02-feasibility/](docs/lifecycle/02-feasibility/) | 有行得通的解决办法吗？ | `可行性研究报告.md`、`poc/` |
+|  ③ 需求分析 | [docs/lifecycle/03-requirements/](docs/lifecycle/03-requirements/) | 目标系统必须做什么？ | `软件需求规格说明书.md` |
+|  ④ 总体设计 | [docs/lifecycle/04-architecture/](docs/lifecycle/04-architecture/) | 概括地说，怎样实现？ | `总体设计说明书.md` |
+|  ⑤ 详细设计 | [docs/lifecycle/05-detailed-design/](docs/lifecycle/05-detailed-design/) | 具体怎样实现？ | `详细设计说明书.md` |
+| ⑥ 编码和单元测试 | [src/](src/) | 写出程序 | `src/`、`scripts/`、`tests/` |
+|  ⑦ 综合测试 | [docs/lifecycle/07-integration-testing/](docs/lifecycle/07-integration-testing/) | 集成 + 验收测试 | README |
+|  ⑧ 软件维护 | [docs/lifecycle/08-maintenance/](docs/lifecycle/08-maintenance/) | 改正 + 适应 + 完善 + 预防 | `CONTRIBUTING.md`、根 `.github/ISSUE_TEMPLATE/` |
 
-| 阶段 | 目录 | 核心问题 | 主要工件 |
-|:---:|------|----------|----------|
-| ① 问题定义 | [问题定义/](问题定义/) | 要解决的问题是什么？ | `AI信息获取软件开发.md`、`调查结果总结.md`（N=112） |
-| ② 可行性研究 | [可行性研究/](可行性研究/) | 有行得通的解决办法吗？ | `可行性研究报告.md`、`poc/` |
-| ③ 需求分析 | [需求分析/](需求分析/) | 目标系统必须做什么？ | `软件需求规格说明书.md`、`需求分析流程.md` |
-| ④ 总体设计 | [总体设计/](总体设计/) | 概括地说，怎样实现？ | `总体设计说明书.md` |
-| ⑤ 详细设计 | [详细设计/](详细设计/) | 具体怎样实现？ | `详细设计说明书.md` |
-| ⑥ 编码和单元测试 | [编码与单元测试/](编码与单元测试/) | 写出程序 | `mvp/` |
-| ⑦ 综合测试 | [综合测试/](综合测试/) | 集成 + 验收测试 | README |
-| ⑧ 软件维护 | [软件维护/](软件维护/) | 改正 + 适应 + 完善 + 预防 | `CONTRIBUTING.md`、根 `.github/ISSUE_TEMPLATE/` |
+### 四层项目结构
+
+| 层 | 目录 | 只放什么 |
+|---|---|---|
+| 源码 | `src/` | 唯一业务实现入口 |
+| 命令 | `scripts/` | 可执行入口，薄封装 |
+| 测试 | `tests/` | 自动化测试及 fixtures |
+| 数据 | `data/` | 数据和配置，禁止与代码混放 |
+| 静态 | `public/` | 部署根资源 |
+| 架构 | `docs/architecture/` | 当前架构事实 |
+| 过程 | `docs/lifecycle/` | 八阶段过程资料 |
+| AI | `.claude/` | 技能、入口与约束 |
 
 ## 开发路径（三环模型）
-
-经典软件生命周期 8 阶段在这里不是线性顺序执行，而是按三个环组织：
 
 ```
                     ┌───────────────────┐
@@ -52,21 +61,27 @@ AI 工具信息聚合平台 —— 一个开源免费的中文 AI 工具信息�
         └───────────────────────────────────────────┘
 ```
 
-> **为什么这样组织？** 现代软件开发不同于 10 年前教科书中的瀑布模型。不可等的完整需求基线、不需提前做全部设计、不应把测试留到最后。环 B 以"可工作的软件"为中心，环 C 再正式化架构与验收。详见 [开发日志.md §2.12](开发日志.md#212-现代软件开发范式与传统软件工程的碰撞)。
-
-### 各阶段追溯关系
-
-阶段产物之间存在轻量追溯关系，不强制逐层传递，但保持核心链路可追溯：
-- SRS 需求条目 → 可追溯到调查数据 / PoC 证据
-- 总体设计架构 → 可追溯到可行性研究的方案选型
-- 编码实现 → 可追溯到 SRS 对应需求条目
-
 ## 进度与计划
 
 - [开发日志.md](开发日志.md) —— **已完成工作记录**（面向过去，跨阶段持续追加）
 - [开发计划.md](开发计划.md) —— **三环任务清单**（面向未来，冲刺导向）
-- [项目级开发记录与可用性 Skill](.claude/skills/development-records-and-usability/SKILL.md) —— 约束日志/计划边界，并要求实现优先服务用户查看、理解和使用
 
-## 维护机制（应对 AI 信息时效性）
+## 部署
 
-采用三层更新流水线：**用户提交 → AI 初审（v1.0+）→ 人工审核 → 入库**。详见 [软件维护/CONTRIBUTING.md](软件维护/CONTRIBUTING.md)。
+- GitHub Pages：<https://wozore.github.io/InfoCatcher/>
+- 仓库：[github.com/wozore/InfoCatcher](https://github.com/wozore/InfoCatcher)（公开）
+- 静态站由 `.github/workflows/deploy.yml` 自动构建并部署到 GitHub Pages
+- 热点采集由 `.github/workflows/collect-news.yml` 每日执行
+- 工具情报由 `.github/workflows/refresh-tool-intel.yml` 每周自动更新
+
+## 验证命令
+
+```bash
+node scripts/validate.js
+node --test tests/news/news-tests.test.js tests/news/news-foundation.test.js
+node scripts/build-news.js --fixture
+```
+
+## 维护机制
+
+采用三层更新流水线：**用户提交 → AI 初审（v1.0+）→ 人工审核 → 入库**。详见 [CONTRIBUTING.md](docs/lifecycle/08-maintenance/CONTRIBUTING.md)。
