@@ -490,15 +490,6 @@ function renderVendorFeatures(tool) {
   ).join('') + '</section>';
 }
 
-function renderVendorOverview(tool) {
-  return '<section class="vendor-overview">' +
-    '<h2>' + escapeHtml(tool.icon + ' ' + tool.vendor + '（' + tool.name + '）') + '</h2>' +
-    '<div class="vendor">厂商总览 · <a href="' + escapeHtml(safeExternalUrl(tool.url)) + '" target="_blank" rel="noopener noreferrer">官网 ↗</a></div>' +
-    '<p class="vendor-description">' + escapeHtml(tool.overview?.description || tool.strengths) + '</p>' +
-    renderVendorFeatures(tool) +
-  '</section>';
-}
-
 function getTreeChildren(collection, parentId) {
   return (collection.items || []).filter(item => item.parent_id === parentId && item.display_in_tree !== false);
 }
@@ -605,18 +596,6 @@ function renderLeafPanel(toolId, collection, leaf) {
   const leafBadge = renderTimelinessBadge(getItemLatestQueriedAt(collection, leaf));
   return '<div class="model-leaf-panel"><div class="model-panel-heading"><div><span class="node-kind-badge leaf">具体' + escapeHtml(leaf.kind === 'api_model' ? '模型' : leaf.kind === 'subscription_plan' ? '套餐' : '工具') + '</span><h4>' + escapeHtml(leaf.name) + '</h4>' + leafBadge + '</div><button class="back-panel-button" type="button" onclick="goBackModelToolPanel(\'' + escapeHtml(toolId) + '\')">← 返回</button></div>' +
     '<div class="intelligence-item-body">' + renderLeafDetails(leaf, sourceMap, { toolId }) + '</div></div>';
-}
-
-function renderModelToolPanel(toolId, nodeId = null) {
-  const collection = getToolIntelligence(toolId);
-  if (!collection) return '<div class="intelligence-unavailable">具体型号资料暂不可用。</div>';
-  const node = nodeId ? getCollectionNode(toolId, nodeId) : null;
-  if (nodeId && !node) return '<div class="intelligence-unavailable">该模型或工具节点不存在。</div>';
-  const body = node?.node_type === 'leaf'
-    ? renderLeafPanel(toolId, collection, node)
-    : renderTreeChildren(toolId, collection, node?.id || null);
-  return '<section class="model-tool-panel"><div class="intelligence-heading"><h3>模型与工具</h3><span class="intelligence-status status-' + escapeHtml(collection.status) + '">' + escapeHtml({ verified: '已核实', partial: '部分核实', conflict: '资料冲突', unavailable: '资料不可用' }[collection.status] || collection.status) + '</span></div>' +
-    renderModelBreadcrumb(toolId, collection, node) + body + '</section>';
 }
 
 function navigateModelToolPanel(toolId, nodeId = null) {

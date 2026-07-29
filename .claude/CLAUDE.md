@@ -37,9 +37,10 @@ mvp/
 │   ├── pipeline/build-news.js  # 热点构建总编排（含 RSS 生成）
 │   ├── core/                   # 存储/Registry/额度/调度/授权
 │   ├── collectors/             # YouTube/B站采集适配器
-│   ├── content/                # B站人工内容标准化 + RSS 生成器
+│   ├── content/                # B站人工内容标准化 + RSS / OG 图生成器
 │   │   ├── news-manual.js
-│   │   └── generate-rss.js
+│   │   ├── generate-rss.js
+│   │   └── generate-og-image.js
 │   ├── cli/                    # 管理 CLI
 │   ├── maintenance/            # 数据校验 + 来源同步
 │   ├── acquisition/            # 工具情报采集引擎 + 冲突检测
