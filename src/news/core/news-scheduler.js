@@ -34,6 +34,13 @@ const TERMINAL_STATUSES = new Set(['complete', 'observed_empty', 'partial', 'his
 /** 会阻止推进的非终态 */
 const BLOCKING_STATUSES = new Set(['quota_paused', 'running', 'temporarily_failed', 'waiting_authorization']);
 
+const TRANSIENT_RESULT_FIELDS = ['details', 'items', 'routes'];
+
+function removeTransientResultFields(entry) {
+  for (const field of TRANSIENT_RESULT_FIELDS) delete entry[field];
+  return entry;
+}
+
 /**
  * 校验时间层数组的连续性。
  * 每一层的 min_age_days 必须等于上一层的 max_age_days，
@@ -83,6 +90,7 @@ function createSchedulerState(existing = null) {
   const state = existing || { schema_version: 1, active_layer: null, layer_coverage: {}, sources: {} };
   state.layer_coverage ||= {};
   state.sources ||= {};
+  for (const entry of Object.values(state.sources)) removeTransientResultFields(entry);
   return state;
 }
 
@@ -126,7 +134,10 @@ function initializeLayer(state, layer, sources, now = new Date().toISOString()) 
 function updateSourceProgress(state, layerId, sourceId, changes, now = new Date().toISOString()) {
   const key = sourceLayerKey(layerId, sourceId);
   if (!state.sources[key]) throw new Error(`来源层状态不存在: ${key}`);
-  Object.assign(state.sources[key], changes, { checked_at: now });
+  const persistedChanges = { ...changes };
+  removeTransientResultFields(persistedChanges);
+  removeTransientResultFields(state.sources[key]);
+  Object.assign(state.sources[key], persistedChanges, { checked_at: now });
   return state.sources[key];
 }
 

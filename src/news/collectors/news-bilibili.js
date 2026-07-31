@@ -104,6 +104,7 @@ async function collectBilibiliLayerStep(options) {
 
   // 3. Registry 防重
   const discoveries = bulkDiscover(options.registry, visible, { now: options.nowIso });
+  const inLayerKeys = new Set(inLayer.map(item => `${item.platform}:${item.native_id}`));
 
   // 4. 状态判定
   const quotaPaused = routeResults.some(result => result.status === 'quota_paused');
@@ -134,7 +135,7 @@ async function collectBilibiliLayerStep(options) {
     oldest_observed_at: visible.length
       ? visible.map(item => item.published_at).filter(Boolean).sort()[0] || null
       : null,
-    new_video_count: discoveries.filter(result => result.isNew && inLayer.some(item => `${item.platform}:${item.native_id}` === result.key)).length,
+    new_video_count: discoveries.filter(result => result.isNew && inLayerKeys.has(result.key)).length,
     duplicate_count: discoveries.filter(result => !result.isNew).length,
     stop_reason: stopReason,
     coverage_limitation: historical ? 'rsshub_visible_feed_only_no_date_pagination' : null,

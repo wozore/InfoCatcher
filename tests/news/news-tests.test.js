@@ -145,6 +145,24 @@ test('重复观察保留溯源关系，同主题观点均保留', () => {
   assert.equal(events[0].viewpoints.length, 2);
 });
 
+test('事件聚合按内容索引写入评分并保留时间边界', () => {
+  const items = [
+    { id: 'first', title: 'Claude update', description: '', published_at: '2026-07-20T00:00:00Z', source_tags: [] },
+    { id: 'second', title: 'Claude update', description: '', published_at: '2026-07-22T00:00:00Z', source_tags: ['官方来源'] },
+    { id: 'third', title: 'Gemini update', description: '', published_at: '2026-07-21T00:00:00Z', source_tags: [] },
+  ];
+  const assessments = items.map(item => ({ content_id: item.id, event_id: null }));
+  const events = buildEvents(items, assessments, config);
+  const claudeEvent = events.find(event => event.content_ids.includes('first'));
+  const geminiEvent = events.find(event => event.content_ids.includes('third'));
+  assert.deepEqual(claudeEvent.content_ids, ['first', 'second']);
+  assert.equal(claudeEvent.first_seen_at, '2026-07-20T00:00:00Z');
+  assert.equal(claudeEvent.updated_at, '2026-07-22T00:00:00Z');
+  assert.equal(claudeEvent.official_verification.status, 'official_source_present');
+  assert.equal(geminiEvent.content_ids.length, 1);
+  assert.deepEqual(assessments.map(assessment => assessment.event_id), [claudeEvent.id, claudeEvent.id, geminiEvent.id]);
+});
+
 test('样本达到阈值后使用 MAD 标记异常但不删除内容', () => {
   const anomalyConfig = JSON.parse(JSON.stringify(config));
   anomalyConfig.anomaly.min_samples = 5;
@@ -187,6 +205,40 @@ test('X 来源轮转时整体覆盖状态不会误报 complete', async () => {
   assert.equal(result.output.coverage.status, 'rotating');
   assert.equal(result.output.coverage.platforms.x.attempted, 1);
   assert.equal(result.state.x_rotation_offset, 1);
+});
+
+test('并发采集限制网络任务，并按来源顺序归并结果', async () => {
+  const xSources = ['first', 'second', 'failed'].map(id => source({
+    id, platform: 'x', handle: id, external_id: id, content_tags: ['即时资讯'],
+  }));
+  const concurrentConfig = JSON.parse(JSON.stringify(config));
+  concurrentConfig.collection.x_max_sources_per_run = 3;
+  concurrentConfig.collection.concurrency = 2;
+  let active = 0;
+  let peak = 0;
+  const result = await runCollection({
+    config: concurrentConfig,
+    sourcePayload: { schema_version: 1, sources: xSources },
+    state: { schema_version: 1, sources: {}, x_rotation_offset: 0 },
+    oldOutput: emptyOutput(), now, noWrite: true, skipHistory: true,
+    collector: async current => {
+      active++;
+      peak = Math.max(peak, active);
+      await new Promise(resolve => setTimeout(resolve, current.id === 'first' ? 20 : 1));
+      active--;
+      if (current.id === 'failed') throw new Error('fixture failure');
+      return {
+        items: [normalizeTweet({ id: 'shared', text: `AI update from ${current.id}`, createdAt: '2026-07-23T04:00:00Z' }, current, new Date(now).toISOString())],
+        routeCoverage: null,
+      };
+    },
+  });
+  assert.equal(peak, 2);
+  assert.equal(result.output.items.length, 1);
+  assert.equal(result.output.items[0].source_id, 'first');
+  assert.equal(result.registry.videos['x:shared'].times_seen, 3);
+  assert.equal(result.state.sources.failed.status, 'degraded');
+  assert.equal(result.output.coverage.sources_terminal, 3);
 });
 
 test('明确 affiliate URL 形成有证据的商业标识', () => {

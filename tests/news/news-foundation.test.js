@@ -194,6 +194,41 @@ test('Scheduler 仅在同层所有来源终态后推进', () => {
   assert.equal(advanceLayer(state, layers, ['a', 'b']).next_layer, 'recent-7d');
 });
 
+test('Scheduler 只持久化进度，不保留采集临时载荷', () => {
+  const state = createSchedulerState();
+  initializeLayer(state, layers[0], [{ id: 'youtube' }]);
+  const changes = {
+    status: 'partial', uploads_playlist_id: 'UU-test', page_token: 'next-page',
+    resume_page_token: 'resume-page', new_video_count: 2, duplicate_count: 3,
+    filtered_count: 4, details: [{ id: 'video-1' }], items: [{ id: 'item-1' }],
+    routes: [{ type: 'video', status: 'success' }],
+  };
+  const original = structuredClone(changes);
+  const progress = updateSourceProgress(state, layers[0].id, 'youtube', changes, '2026-07-23T00:00:00Z');
+  assert.deepEqual(changes, original);
+  assert.deepEqual(progress, {
+    layer_id: 'recent-1d', source_id: 'youtube', status: 'partial',
+    page_token: 'next-page', resume_page_token: 'resume-page', pages_fetched: 0,
+    items_observed: 0, oldest_observed_at: null, new_video_count: 2,
+    duplicate_count: 3, filtered_count: 4, stop_reason: null,
+    checked_at: '2026-07-23T00:00:00Z', uploads_playlist_id: 'UU-test',
+  });
+});
+
+test('Scheduler 恢复旧状态时清理所有层的临时采集载荷', () => {
+  const existing = {
+    schema_version: 1, active_layer: 'recent-30d', layer_coverage: {},
+    sources: {
+      'recent-1d:youtube': { status: 'complete', details: [{ id: 'video-1' }], future_field: 'keep' },
+      'recent-30d:bilibili': { status: 'partial', items: [{ id: 'item-1' }], routes: [{ type: 'video' }], page_token: 'next' },
+    },
+  };
+  const state = createSchedulerState(existing);
+  assert.equal(state, existing);
+  assert.deepEqual(state.sources['recent-1d:youtube'], { status: 'complete', future_field: 'keep' });
+  assert.deepEqual(state.sources['recent-30d:bilibili'], { status: 'partial', page_token: 'next' });
+});
+
 test('低频高质量来源仅在近期新内容不足时受控回溯', () => {
   const config = { low_frequency_backfill: {
     enabled: true, cadence_classes: ['low_frequency'], min_quality_prior: 70,
@@ -267,6 +302,24 @@ test('B站历史 feed 无对应层内容时标记 history_unsupported', async ()
   assert.equal(result.status, 'history_unsupported');
   assert.equal(result.stop_reason, 'rsshub_feed_has_no_historical_pagination');
   assert.match(result.coverage_limitation, /visible_feed/);
+});
+
+test('B站历史新内容计数仅检查当前时间层', async () => {
+  const nowUtcMs = Date.parse('2026-07-23T00:00:00Z');
+  const result = await collectBilibiliLayerStep({
+    source: { id: 'bili' }, layer: layers[3], timeLayers: layers, nowUtcMs,
+    nowIso: new Date(nowUtcMs).toISOString(), registry: createRegistry(),
+    quota: createQuotaLedger({ bilibili_rsshub_requests_per_run: 3 }, 'run'),
+    routes: [{ type: 'bilibili_dynamic', url: 'https://rsshub.test/dynamic' }],
+    fetch: async () => ({ ok: true, status: 200, text: async () => '<xml />' }),
+    parseFeed: () => [
+      { native_id: 'in-layer', published_at: '2026-06-01T00:00:00Z', title: 'historical' },
+      { native_id: 'out-of-layer', published_at: '2026-07-22T00:00:00Z', title: 'recent' },
+    ],
+  });
+  assert.equal(result.status, 'complete');
+  assert.equal(result.new_video_count, 1);
+  assert.equal(result.duplicate_count, 0);
 });
 
 // ── 第 6 组：授权与 CLI 安全（5 项）─────────────────────────

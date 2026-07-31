@@ -293,7 +293,7 @@ async function requestText(url, options, config, beforeAttempt = null) {
  * 需要 YOUTUBE_API_KEY，每次调用消耗 1 quota unit（含重试）。
  * 无 API Key 时降级为 rss_only，不影响 RSS 内容的采集。
  */
-async function enrichYouTubeStatistics(items, context) {
+async function enrichYouTubeStatistics(items, context, sourceId) {
   if (!context.youtubeApiKey || !items.length) return { items, status: 'rss_only' };
   try {
     const url = new URL('https://www.googleapis.com/youtube/v3/videos');
@@ -302,7 +302,7 @@ async function enrichYouTubeStatistics(items, context) {
     url.searchParams.set('key', context.youtubeApiKey);
     const text = await requestText(url, {}, context.config, attempt => {
       const reservation = reserveQuota(context.quota, 'youtube', {
-        source_id: context.currentSourceId,
+        source_id: sourceId,
         layer_id: 'recent-feed',
         operation: 'videos.list:latest-feed',
         cost: 1,
@@ -328,13 +328,12 @@ async function enrichYouTubeStatistics(items, context) {
 }
 
 async function collectYouTube(source, context) {
-  context.currentSourceId = source.id;
   const url = `https://www.youtube.com/feeds/videos.xml?channel_id=${encodeURIComponent(source.external_id)}`;
   const xml = await requestText(url, {}, context.config);
   const items = parseFeed(xml)
     .slice(0, context.config.collection.youtube_max_per_source)
     .map(item => normalizeRssItem(item, source, 'youtube_video', context.fetchedAt));
-  const enriched = await enrichYouTubeStatistics(items, context);
+  const enriched = await enrichYouTubeStatistics(items, context, source.id);
   return { items: enriched.items, enrichment: enriched };
 }
 
@@ -651,6 +650,11 @@ function buildProvenance(items) {
 
 function buildEvents(items, assessments, config) {
   const groups = new Map();
+  const assessmentsByContentId = new Map();
+  for (const assessment of assessments) {
+    if (!assessmentsByContentId.has(assessment.content_id)) assessmentsByContentId.set(assessment.content_id, []);
+    assessmentsByContentId.get(assessment.content_id).push(assessment);
+  }
   for (const item of items) {
     const key = topicKey(item, config);
     if (!groups.has(key)) groups.set(key, []);
@@ -658,15 +662,19 @@ function buildEvents(items, assessments, config) {
   }
   return [...groups.entries()].map(([key, group]) => {
     const id = `event-${hash(key)}`;
-    for (const assessment of assessments) {
-      if (group.some(item => item.id === assessment.content_id)) assessment.event_id = id;
+    let firstSeenAt = group[0].published_at;
+    let updatedAt = group[0].published_at;
+    for (const item of group) {
+      for (const assessment of assessmentsByContentId.get(item.id) || []) assessment.event_id = id;
+      if (item.published_at < firstSeenAt) firstSeenAt = item.published_at;
+      if (item.published_at > updatedAt) updatedAt = item.published_at;
     }
     return {
       id,
       topic_key: key,
       title: group[0].title,
-      first_seen_at: group.map(item => item.published_at).sort()[0],
-      updated_at: group.map(item => item.published_at).sort().at(-1),
+      first_seen_at: firstSeenAt,
+      updated_at: updatedAt,
       content_ids: group.map(item => item.id),
       viewpoints: group.map(item => ({
         content_id: item.id,
@@ -751,6 +759,33 @@ async function collectSource(source, context) {
   if (source.platform === 'x') return { items: await collectX(source, context), routeCoverage: null };
   if (source.platform === 'bilibili') return collectBilibili(source, context);
   throw Object.assign(new Error(`不支持的平台：${source.platform}`), { code: 'unsupported_platform' });
+}
+
+async function mapWithConcurrency(values, limit, iteratee) {
+  const configuredLimit = Number(limit);
+  const workerCount = Math.min(values.length, Number.isFinite(configuredLimit) ? Math.max(1, Math.floor(configuredLimit)) : 1);
+  const results = new Array(values.length);
+  let nextIndex = 0;
+  async function worker() {
+    while (nextIndex < values.length) {
+      const index = nextIndex++;
+      results[index] = await iteratee(values[index]);
+    }
+  }
+  await Promise.all(Array.from({ length: workerCount }, worker));
+  return results;
+}
+
+async function collectLatestSource(source, context, collector, config) {
+  try {
+    const result = collector
+      ? await collector(source, context)
+      : await collectSource(source, context);
+    const filtered = result.items.filter(item => matchesAi(item, config));
+    return { source, result, filtered, filteredIds: new Set(filtered.map(item => `${item.platform}:${item.native_id}`)) };
+  } catch (error) {
+    return { source, error };
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -911,6 +946,7 @@ async function runCollection(options = {}) {
   const sourcePayload = options.sourcePayload || readJson(SOURCES_PATH);
   const oldOutput = options.oldOutput ?? readJson(OUTPUT_PATH, EMPTY_OUTPUT);
   const state = options.state || readJson(STATE_PATH, initialState());
+  if (state.history_scheduler) createSchedulerState(state.history_scheduler);
   const platformScope = resolvePlatformScope(options.platformScope ?? 'all');
   const now = options.now || Date.now();
   const fetchedAt = new Date(now).toISOString();
@@ -988,13 +1024,13 @@ async function runCollection(options = {}) {
     }
   }
 
-  for (const source of providerBlocked ? [] : selected) {
-    try {
-      const result = options.collector
-        ? await options.collector(source, context)
-        : await collectSource(source, context);
-      const filtered = result.items.filter(item => matchesAi(item, config));
-      const filteredIds = new Set(filtered.map(item => `${item.platform}:${item.native_id}`));
+  const latestResults = providerBlocked
+    ? []
+    : await mapWithConcurrency(selected, config.collection.concurrency, source => collectLatestSource(source, context, options.collector, config));
+  for (const outcome of latestResults) {
+    const { source } = outcome;
+    if (!outcome.error) {
+      const { result, filtered, filteredIds } = outcome;
       observedRegistryResults.push(...bulkDiscover(registryIndex, result.items.map(item => ({
         platform: item.platform,
         native_id: item.native_id,
@@ -1026,7 +1062,8 @@ async function runCollection(options = {}) {
           coverage.platforms.bilibili[key] = mergeRouteCoverage(coverage.platforms.bilibili[key], value);
         }
       }
-    } catch (error) {
+    } else {
+      const { error } = outcome;
       state.sources[source.id] = {
         status: 'degraded', attempts: config.collection.max_retries + 1,
         last_native_id: state.sources[source.id]?.last_native_id || null,
