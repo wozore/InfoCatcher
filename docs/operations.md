@@ -1,122 +1,88 @@
 # 运维操作
 
-> 环境变量、CLI、测试、构建、CI、部署和维护流程。
+> 环境变量、验证、CLI、CI、部署和恢复操作。平台来源策略见 [采集文档](acquisition.md)。
 
-## 环境变量
+## 凭据与环境变量
 
 | 变量 | 使用方 | 说明 |
 |---|---|---|
 | `YOUTUBE_API_KEY` | `src/news/collectors/news-youtube.js` | YouTube Data API v3 |
 | `X_API_KEY` | `src/news/pipeline/build-news.js` | TwitterAPI.io |
-| `NEWS_PLATFORM_SCOPE` | `scripts/build-news.js` | 采集范围：`all`（默认）或 `bilibili-only`（诊断） |
+| `NEWS_PLATFORM_SCOPE` | `scripts/build-news.js` | `all`（默认）或 `bilibili-only`（诊断） |
 
-所有密钥通过 GitHub Repository Secrets 注入，不出现在代码、JSON 或浏览器中。
+密钥仅通过 GitHub Repository Secrets 注入，不进入代码、JSON、浏览器或 CLI 参数。
 
-## 验证命令
+## 验证与本地运行
 
 ```bash
-node scripts/validate.js                                         # 静态数据校验
-node --test tests/news/news-tests.test.js tests/news/news-foundation.test.js  # 43 项单元测试
-node scripts/build-news.js --fixture                              # 本地样本构建（不请求 API）
-node src/acquisition/validate-intel.js                            # 工具情报校验
+node scripts/validate.js
+node --test tests/news/news-tests.test.js tests/news/news-foundation.test.js
+node scripts/build-news.js --fixture
+node src/acquisition/validate-intel.js
 ```
 
-## 本地运行
-
-静态站无需构建工具或后端服务：
+Fixture 构建不请求 API，也不写持久状态。启动静态站：
 
 ```bash
 python -m http.server 8000
-# 或
-npx serve .
+# 浏览器打开 http://localhost:8000
 ```
 
-浏览器打开 `http://localhost:8000`。
+## CLI 速查
 
-## 热点管理 CLI
+### 热点和人工内容
 
 ```bash
-node scripts/news-cli.js source add ...                          # 添加单条来源
-node scripts/news-cli.js source import --file sources.json --dry-run  # 批量预检
-node scripts/news-cli.js authorization list                      # 查看待授权任务
-node scripts/news-cli.js lock status                             # 查看构建锁状态
-node scripts/news-cli.js lock force-unlock --reason "..."        # 强制解锁（需理由）
+node scripts/news-cli.js source add ...
+node scripts/news-cli.js source import --file sources.json --dry-run
+node scripts/news-cli.js content add ...
+node scripts/news-cli.js content import --file ...
+node scripts/news-cli.js content list
+node scripts/news-cli.js authorization list
+node scripts/news-cli.js lock status
+node scripts/news-cli.js lock force-unlock --reason "..."
 ```
 
-不接受通过 CLI 参数传入 API Key。
+批量来源先使用 `--dry-run`。不得直接编辑或删除 `.news-build.lock`；仅在确认原任务已终止后，才能通过 CLI 带理由强制解锁，操作会写入审计。
 
-### B站人工内容管理
+### 工具情报
 
 ```bash
-node scripts/news-cli.js content add ...                         # 添加单条人工内容
-node scripts/news-cli.js content import --file ...               # 批量导入
-node scripts/news-cli.js content list                            # 列出人工内容
+node src/acquisition/fetch-tool-intel.js --tool deepseek --dry-run
+node src/acquisition/fetch-tool-intel.js
+node src/acquisition/validate-intel.js
 ```
 
-## 工具情报采集
+`--tool` 使用空格分隔（`--tool deepseek`），不支持 `--tool=deepseek`。
 
-```bash
-node src/acquisition/fetch-tool-intel.js --tool deepseek --dry-run  # 单工具试运行
-node src/acquisition/fetch-tool-intel.js                            # 采集全部来源
-node src/acquisition/validate-intel.js                              # 校验输出
-```
+## CI、构建与部署
 
-注意：`--tool` 参数后跟空格分隔的工具名（`--tool deepseek`），不是 `--tool=deepseek`。
-
-## CI 工作流
-
-| 工作流 | 触发 | 写入 | 并发 |
-|---|---|---|---|
-| `collect-news.yml` | 每 3 天 UTC 2:00 / 手动 (`workflow_dispatch`) | `data/news/output/`、`data/news/runtime/`、`public/feed.xml` | concurrency 防止同类并行 |
-| `deploy.yml` | push main / 手动 | 只读；构建 `dist/` 后部署 GitHub Pages | — |
-| `refresh-tool-intel.yml` | 每周日 UTC 6:37 / 手动（可指定单工具） | `data/catalog/tool-intelligence.json` | — |
-
-### 构建产物
-
-`deploy.yml` 运行 `node scripts/build-dist.js`，将 `src/web`、`public` 和浏览器所需 `data` 复制到 `dist/`，上传为 Pages artifact。
-
-## 采集能力与边界
-
-### 当前自动采集
-
-- YouTube：通过 Data API v3 获取 uploads playlist，按时间层分页回溯
-- X：通过 TwitterAPI.io 按来源轮转采集
-
-### 当前人工处理
-
-- Bilibili：默认采用人工精选（`data/news/manual/news-manual-items.json`），再进入统一处理管线。显式 `bilibili-only` 诊断可探测 RSSHub，但遇到 Cloudflare 后快速熔断
-- 工具情报 L3：采集引擎无法提取数据时记录日志、跳过合并、保留旧数据；由维护者后续处理
-
-### 当前不支持的
-
-- B站内部 API、逆向 SDK 或绕过平台风控
-- 运行时数据库、Serverless 采集、实时推送
-- AI 自动事实裁决或商单定性
-- 浏览器自动化测试、Pages 线上冒烟测试、可访问性/性能自动验证
-
-## 维护流程
-
-### 三层更新流水线
-
-```
-用户提交（GitHub Issue 模板）→ 人工审核 → 合并入库
-```
-
-当前使用 GitHub Issue 模板（`.github/ISSUE_TEMPLATE/data-correction.yml`、`new-tool.yml`）接收纠错和新工具推荐，由维护者人工审核后合并。Issue 模板中的仓库链接含 `wozore` 占位符，首次部署前需替换为实际用户名。
-
-AI 初审和自动合并为 v1.0+ 计划能力，当前仓库 workflow 中不存在对应实现。
-
-### 四类维护活动
-
-| 类型 | 说明 | 对应工作 |
+| 工作流 | 触发 | 写入/产物 |
 |---|---|---|
-| 改正性 | 修正错误信息 | 数据纠错（CONTRIBUTING + Issue 模板） |
-| 适应性 | 适配环境变化 | 网站改版适配、API 变更适配 |
-| 完善性 | 新增/增强功能 | 见 `开发计划.md` |
-| 预防性 | 防患于未然 | ToS 监控、时效提示 |
+| `collect-news.yml` | 每 3 天 UTC 02:00 / 手动；同类任务受 concurrency 限制 | `data/news/output/`、`data/news/runtime/`、`public/feed.xml` |
+| `refresh-tool-intel.yml` | 每周日 UTC 06:37 / 手动，可指定工具 | `data/catalog/tool-intelligence.json` |
+| `deploy.yml` | push `main` / 手动 | 构建并部署 `dist/` |
 
-## 已知测试缺口
+`deploy.yml` 运行 `node scripts/build-dist.js`，将 `src/web`、`public` 和浏览器所需 `data` 复制到 `dist/`，再上传 Pages artifact。
 
-- 43 项单元测试均属于新闻管线；工具情报采集（`fetch-tool-intel.js`）缺少独立自动化测试
-- 无浏览器自动化测试、Pages 线上冒烟测试、可访问性或性能自动验证
-- 真实平台连续采集、跨日 Actions 运行和 Registry 恢复尚未验证
+## 失败与禁止操作
+
+- 工具情报解析失败时记录日志、跳过合并并保留旧数据，当前不会写入 `acquisition_failed` 或自动通知维护者。
+- 热点构建失败不得以空结果覆盖上一版有效投影。
+- B站默认读取人工精选；`bilibili-only` 仅用于诊断，遇到 Cloudflare 后快速熔断。
+- 禁止使用 B站内部 API、逆向 SDK 或绕过平台风控。
+- 当前无运行时数据库/Serverless 采集、实时推送或 AI 自动事实裁决。
+
+## 数据维护
+
+```text
+用户提交（GitHub Issue）→ 人工审核 → 合并或驳回并说明理由
+```
+
+纠错和新工具推荐通过 `.github/ISSUE_TEMPLATE/data-correction.yml` 与 `new-tool.yml` 接收。当前没有 AI 初审或自动合并工作流。详细提交规则见 [贡献指南](../CONTRIBUTING.md)，未来完善项见 [开发计划](../开发计划.md)。
+
+## 已知验证缺口
+
+- 工具情报采集缺少独立自动化测试；现有 43 项单元测试均属于热点管线。
+- 没有浏览器自动化、Pages 线上冒烟、可访问性或性能自动验证。
+- 真实平台连续采集、跨日 Actions 和 Registry 恢复尚未验证。

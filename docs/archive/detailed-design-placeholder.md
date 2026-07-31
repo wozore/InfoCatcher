@@ -18,5 +18,5 @@
 
 ## 与其他阶段的关系
 
-- 前序：《总体设计说明书.md》
-- 后序：编码与单元测试工件位于 [`src/`](../../../src/)、[`scripts/`](../../../scripts/) 和 [`tests/`](../../../tests/)
+- 前序：[架构演进历史稿](architecture-evolution.md)
+- 后序：编码与单元测试工件位于 [`src/`](../../src/)、[`scripts/`](../../scripts/) 和 [`tests/`](../../tests/)
