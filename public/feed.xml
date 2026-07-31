@@ -5,366 +5,428 @@
     <link>https://wozore.github.io/InfoCatcher</link>
     <description>AI 工具情报与行业热点，每日自动采集 + 人工精选</description>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 28 Jul 2026 05:17:37 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 31 Jul 2026 05:36:15 GMT</lastBuildDate>
     <generator>InfoCatcher RSS Engine</generator>
     <atom:link href="https://wozore.github.io/InfoCatcher/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
-      <title>Anthropic’s Dario Amodei responds: doesn’t oppose open-weight models, but fears Chinese AI https://t.co/gJMlc2GRvS</title>
-      <link>https://x.com/TechCrunch/status/2081897048228725131</link>
-      <description><![CDATA[Anthropic’s Dario Amodei responds: doesn’t oppose open-weight models, but fears Chinese AI https://t.co/gJMlc2GRvS]]></description>
-      <author>TechCrunch</author>
-      <pubDate>Tue, 28 Jul 2026 00:18:30 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/TechCrunch/status/2081897048228725131</guid>
+      <title>In a review of our cybersecurity evaluations, we found three incidents in which a Claude model reached the internet from within or while interacting with a third-party evaluation e</title>
+      <link>https://x.com/AnthropicAI/status/2082965101083320543</link>
+      <description><![CDATA[In a review of our cybersecurity evaluations, we found three incidents in which a Claude model reached the internet from within or while interacting with a third-party evaluation environment, and then gained unauthorized access to the real systems of three different organizations.
+
+Our post describes what happened, how it happened, and what we’re changing. We encourage other AI developers to perform similar reviews.
+
+We conducted this review together with @Irregular, one of our evaluation partners, and thank them for the joint investigation and their collaboration on this post. This type of co]]></description>
+      <author>Anthropic</author>
+      <pubDate>Thu, 30 Jul 2026 23:02:34 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/AnthropicAI/status/2082965101083320543</guid>
       <category>x</category>
-      <category>即时资讯</category>
+      <category>官方来源</category>
     </item>
     <item>
-      <title>Last week, we made ChatGPT Work available to enterprises. It&apos;s an awesome product.
+      <title>Lecture 11 is a tool-use/function calling/agentic 101! I almost skipped this one, as this chapter started as the only skill-specific topic in the book, but since writing it tool-us</title>
+      <link>https://x.com/natolambert/status/2082939787904950325</link>
+      <description><![CDATA[Lecture 11 is a tool-use/function calling/agentic 101! I almost skipped this one, as this chapter started as the only skill-specific topic in the book, but since writing it tool-use has only become more foundational to modern models. 
 
-So for ChatGPT Enterprise customers, enroll by August 21, and each teammate who tries Work for t</title>
-      <link>https://x.com/gdb/status/2081877298538746165</link>
-      <description><![CDATA[Last week, we made ChatGPT Work available to enterprises. It&apos;s an awesome product.
+This is a tour from the basics -- why LLMs need tools -- to some of the cutting edge challenges scaling agentic RL. Of course, there&apos;s plenty of history and fundamentals along the way. 
 
-So for ChatGPT Enterprise customers, enroll by August 21, and each teammate who tries Work for the first time within two weeks gets up to $200 in credits, valid for 14 days.
-
-Already a customer? Ask your account team. New to Enterprise? Get in touch. https://t.co/orCL6koUtj]]></description>
-      <author>Greg Brockman</author>
-      <pubDate>Mon, 27 Jul 2026 23:00:02 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/gdb/status/2081877298538746165</guid>
+Personally, I&apos;m excited to get much more deeply into this area as a researcher again soon. Just a few more lectures left, but I&apos;ll likely keep making a few more videos now that ]]></description>
+      <author>Nathan Lambert</author>
+      <pubDate>Thu, 30 Jul 2026 21:21:59 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/natolambert/status/2082939787904950325</guid>
       <category>x</category>
       <category>行业观点</category>
       <category>深度解读</category>
     </item>
     <item>
-      <title>Shoutout to @skypilot_org: awesome work shipping a full day-0 serving stack for Kimi K3 with vLLM 🙌</title>
-      <link>https://x.com/vllm_project/status/2081852204903010443</link>
-      <description><![CDATA[Shoutout to @skypilot_org: awesome work shipping a full day-0 serving stack for Kimi K3 with vLLM 🙌]]></description>
-      <author>vLLM</author>
-      <pubDate>Mon, 27 Jul 2026 21:20:19 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/vllm_project/status/2081852204903010443</guid>
-      <category>x</category>
-      <category>教程实践</category>
-    </item>
-    <item>
-      <title>Satya Nadella says companies that trust one AI for everything may not survive https://t.co/csKyXOCC8b</title>
-      <link>https://x.com/TechCrunch/status/2081851684435923374</link>
-      <description><![CDATA[Satya Nadella says companies that trust one AI for everything may not survive https://t.co/csKyXOCC8b]]></description>
-      <author>TechCrunch</author>
-      <pubDate>Mon, 27 Jul 2026 21:18:15 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/TechCrunch/status/2081851684435923374</guid>
-      <category>x</category>
-      <category>即时资讯</category>
-    </item>
-    <item>
-      <title>RT @Dan_Jeffries1: Catalog of incorrect AI predictions.
+      <title>Cohere has joined @NVIDIA alongside industry leaders in founding the Open Secure AI Alliance.
 
-Doomers from the rationalist cosplay community are left out, presumably because th…</title>
-      <link>https://x.com/ylecun/status/2081847285932269717</link>
-      <description><![CDATA[RT @Dan_Jeffries1: Catalog of incorrect AI predictions.
+Everybody should have the capability to keep their infrastructure secure. Everybody d</title>
+      <link>https://x.com/cohere/status/2082932590567100510</link>
+      <description><![CDATA[Cohere has joined @NVIDIA alongside industry leaders in founding the Open Secure AI Alliance.
 
-Doomers from the rationalist cosplay community are left out, presumably because th…]]></description>
-      <author>Yann LeCun</author>
-      <pubDate>Mon, 27 Jul 2026 21:00:46 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/ylecun/status/2081847285932269717</guid>
-      <category>x</category>
-      <category>深度解读</category>
-    </item>
-    <item>
-      <title>The outgoing executive director of the Office of Homeland Security Statistics is one of very few federal officials to speak out against the Trump administration’s immigration crack</title>
-      <link>https://x.com/WIRED/status/2081842010961449103</link>
-      <description><![CDATA[The outgoing executive director of the Office of Homeland Security Statistics is one of very few federal officials to speak out against the Trump administration’s immigration crackdown. https://t.co/IedcXtEhVz]]></description>
-      <author>WIRED</author>
-      <pubDate>Mon, 27 Jul 2026 20:39:48 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/WIRED/status/2081842010961449103</guid>
-      <category>x</category>
-      <category>即时资讯</category>
-    </item>
-    <item>
-      <title>PSA: Your Claude shared chats and Artifacts may have ended up on Google https://t.co/Y9vaL91UK9</title>
-      <link>https://x.com/TechCrunch/status/2081837385839734858</link>
-      <description><![CDATA[PSA: Your Claude shared chats and Artifacts may have ended up on Google https://t.co/Y9vaL91UK9]]></description>
-      <author>TechCrunch</author>
-      <pubDate>Mon, 27 Jul 2026 20:21:26 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/TechCrunch/status/2081837385839734858</guid>
-      <category>x</category>
-      <category>即时资讯</category>
-    </item>
-    <item>
-      <title>In science, you have to report the experiments that didn&apos;t work, not just the ones that did. Same with AI. (I wish.)</title>
-      <link>https://x.com/fchollet/status/2081836094044168339</link>
-      <description><![CDATA[In science, you have to report the experiments that didn&apos;t work, not just the ones that did. Same with AI. (I wish.)]]></description>
-      <author>François Chollet</author>
-      <pubDate>Mon, 27 Jul 2026 20:16:18 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/fchollet/status/2081836094044168339</guid>
-      <category>x</category>
-      <category>深度解读</category>
-    </item>
-    <item>
-      <title>The screwup shows how tricky it can be to stop web crawlers from making ostensibly private conversations with AI chatbots entirely too public. https://t.co/JUMKxtQV3D</title>
-      <link>https://x.com/WIRED/status/2081835277174128788</link>
-      <description><![CDATA[The screwup shows how tricky it can be to stop web crawlers from making ostensibly private conversations with AI chatbots entirely too public. https://t.co/JUMKxtQV3D]]></description>
-      <author>WIRED</author>
-      <pubDate>Mon, 27 Jul 2026 20:13:03 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/WIRED/status/2081835277174128788</guid>
-      <category>x</category>
-      <category>即时资讯</category>
-    </item>
-    <item>
-      <title>Microsoft launches its first cybersecurity model, plus a new agentic cybersecurity system https://t.co/2uEZGuj3b5</title>
-      <link>https://x.com/TechCrunch/status/2081810891243446375</link>
-      <description><![CDATA[Microsoft launches its first cybersecurity model, plus a new agentic cybersecurity system https://t.co/2uEZGuj3b5]]></description>
-      <author>TechCrunch</author>
-      <pubDate>Mon, 27 Jul 2026 18:36:09 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/TechCrunch/status/2081810891243446375</guid>
-      <category>x</category>
-      <category>即时资讯</category>
-    </item>
-    <item>
-      <title>A great read below: we&apos;re excited to collaborate with the @baseten team supporting Kimi K3 on vLLM! 🚀</title>
-      <link>https://x.com/vllm_project/status/2081806166246793657</link>
-      <description><![CDATA[A great read below: we&apos;re excited to collaborate with the @baseten team supporting Kimi K3 on vLLM! 🚀]]></description>
-      <author>vLLM</author>
-      <pubDate>Mon, 27 Jul 2026 18:17:22 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/vllm_project/status/2081806166246793657</guid>
-      <category>x</category>
-      <category>教程实践</category>
-    </item>
-    <item>
-      <title>Antares raises $470M to build nuclear reactors for the U.S. military https://t.co/G9rms3NgTW</title>
-      <link>https://x.com/TechCrunch/status/2081799916893229503</link>
-      <description><![CDATA[Antares raises $470M to build nuclear reactors for the U.S. military https://t.co/G9rms3NgTW]]></description>
-      <author>TechCrunch</author>
-      <pubDate>Mon, 27 Jul 2026 17:52:32 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/TechCrunch/status/2081799916893229503</guid>
-      <category>x</category>
-      <category>即时资讯</category>
-    </item>
-    <item>
-      <title>OpenAI’s Hugging Face breach has reignited the debate over alignment and control https://t.co/BIldEhHXV3</title>
-      <link>https://x.com/TechCrunch/status/2081794315857338867</link>
-      <description><![CDATA[OpenAI’s Hugging Face breach has reignited the debate over alignment and control https://t.co/BIldEhHXV3]]></description>
-      <author>TechCrunch</author>
-      <pubDate>Mon, 27 Jul 2026 17:30:17 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/TechCrunch/status/2081794315857338867</guid>
-      <category>x</category>
-      <category>即时资讯</category>
-    </item>
-    <item>
-      <title>Tech workers, we want to hear from you! 📣What do you think of your job, your workplace, your boss, and your field in general? How satisfied are you? Are you embracing or dreading </title>
-      <link>https://x.com/WIRED/status/2081790976863965195</link>
-      <description><![CDATA[Tech workers, we want to hear from you! 📣What do you think of your job, your workplace, your boss, and your field in general? How satisfied are you? Are you embracing or dreading the AI revolution?
+Everybody should have the capability to keep their infrastructure secure. Everybody deserves access to models they can trust.
 
-Take our short survey at the link below. 👇
-https://t.co/xWOBUScOXC]]></description>
-      <author>WIRED</author>
-      <pubDate>Mon, 27 Jul 2026 17:17:01 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/WIRED/status/2081790976863965195</guid>
+AI for some means safety for none. https://t.co/tI0DGefgDZ https://t.co/1IUjVZGIzs]]></description>
+      <author>Cohere</author>
+      <pubDate>Thu, 30 Jul 2026 20:53:23 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/cohere/status/2082932590567100510</guid>
       <category>x</category>
-      <category>即时资讯</category>
-    </item>
-    <item>
-      <title>Kimi K3 is here: a 2.8T-parameter MoE with a 1M-token context and native vision, running on vLLM from day 0. 
-
-Here is our canonical deployment guide: architecture, kernels, recipe</title>
-      <link>https://x.com/vllm_project/status/2081788542079123939</link>
-      <description><![CDATA[Kimi K3 is here: a 2.8T-parameter MoE with a 1M-token context and native vision, running on vLLM from day 0. 
-
-Here is our canonical deployment guide: architecture, kernels, recipes, and the flags to run it in production. https://t.co/SATHaHHYef]]></description>
-      <author>vLLM</author>
-      <pubDate>Mon, 27 Jul 2026 17:07:20 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/vllm_project/status/2081788542079123939</guid>
-      <category>x</category>
-      <category>教程实践</category>
-    </item>
-    <item>
-      <title>Good move by @JensenHuang. The Nvidia letter is well written and worth reading. As we saw with the OpenAI-Hugging Face hack, we need open models and harnesses for defense. 
-
-Lets s</title>
-      <link>https://x.com/AndrewYNg/status/2081787106062746002</link>
-      <description><![CDATA[Good move by @JensenHuang. The Nvidia letter is well written and worth reading. As we saw with the OpenAI-Hugging Face hack, we need open models and harnesses for defense. 
-
-Lets stop believing the PR that closed models are safer. - that&apos;s just regulatory capture.]]></description>
-      <author>Andrew Ng</author>
-      <pubDate>Mon, 27 Jul 2026 17:01:38 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/AndrewYNg/status/2081787106062746002</guid>
-      <category>x</category>
-      <category>深度解读</category>
-    </item>
-    <item>
-      <title>Threads users can now chat with Meta AI in their DMs https://t.co/3e7KpgwE7w</title>
-      <link>https://x.com/TechCrunch/status/2081783238901829972</link>
-      <description><![CDATA[Threads users can now chat with Meta AI in their DMs https://t.co/3e7KpgwE7w]]></description>
-      <author>TechCrunch</author>
-      <pubDate>Mon, 27 Jul 2026 16:46:16 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/TechCrunch/status/2081783238901829972</guid>
-      <category>x</category>
-      <category>即时资讯</category>
-    </item>
-    <item>
-      <title>Happy to collaborate with  @digitalocean to run Kimi K3 on vLLM! Great to see it live. 🚀</title>
-      <link>https://x.com/vllm_project/status/2081781868996006124</link>
-      <description><![CDATA[Happy to collaborate with  @digitalocean to run Kimi K3 on vLLM! Great to see it live. 🚀]]></description>
-      <author>vLLM</author>
-      <pubDate>Mon, 27 Jul 2026 16:40:49 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/vllm_project/status/2081781868996006124</guid>
-      <category>x</category>
-      <category>教程实践</category>
-    </item>
-    <item>
-      <title>Google’s AI search is rapidly becoming the default, new data shows https://t.co/JwSmMvgefw</title>
-      <link>https://x.com/TechCrunch/status/2081771169833967926</link>
-      <description><![CDATA[Google’s AI search is rapidly becoming the default, new data shows https://t.co/JwSmMvgefw]]></description>
-      <author>TechCrunch</author>
-      <pubDate>Mon, 27 Jul 2026 15:58:18 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/TechCrunch/status/2081771169833967926</guid>
-      <category>x</category>
-      <category>即时资讯</category>
-    </item>
-    <item>
-      <title>Kimi K3 is now available on Ollama’s cloud.
-
-To use it with Claude Code, run:
-
-ollama launch claude --model kimi-k3:cloud
-
-Currently Kimi K3 requires a Pro or Max subscription, and</title>
-      <link>https://x.com/ollama/status/2081771120173408767</link>
-      <description><![CDATA[Kimi K3 is now available on Ollama’s cloud.
-
-To use it with Claude Code, run:
-
-ollama launch claude --model kimi-k3:cloud
-
-Currently Kimi K3 requires a Pro or Max subscription, and consumes extra usage credits. We’re quickly working on adding capacity to expand access.]]></description>
-      <author>ollama</author>
-      <pubDate>Mon, 27 Jul 2026 15:58:07 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/ollama/status/2081771120173408767</guid>
-      <category>x</category>
-      <category>教程实践</category>
-    </item>
-    <item>
-      <title>With Kimi K3 Day-0 on vLLM: Open Frontier Intelligence for Everyone 🚀
-
-At 2.8 trillion parameters, Moonshot AI&apos;s Kimi K3 is one of the most powerful open-weight models ever releas</title>
-      <link>https://x.com/vllm_project/status/2081767404598919213</link>
-      <description><![CDATA[With Kimi K3 Day-0 on vLLM: Open Frontier Intelligence for Everyone 🚀
-
-At 2.8 trillion parameters, Moonshot AI&apos;s Kimi K3 is one of the most powerful open-weight models ever released. Starting today, you can serve it on vLLM the moment the weights are public.
-
-What K3 brings:
-🧠 2.8T-parameter Mixture-of-Experts (16 of 896 experts active per token)
-📚 1M-token context window
-🛠️ Native multimodal understanding, including vision
-⚡ Kimi Delta Attention: a hybrid of linear and full attention that makes million-token context affordable
-
-Huge thank you to @Kimi_Moonshot AI for the model release and]]></description>
-      <author>vLLM</author>
-      <pubDate>Mon, 27 Jul 2026 15:43:21 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/vllm_project/status/2081767404598919213</guid>
-      <category>x</category>
-      <category>教程实践</category>
-    </item>
-    <item>
-      <title>Power up your AI infrastructure! A first look at the Smart Systems Stage agenda at TechCrunch Disrupt 2026  https://t.co/NnSnbZXdJk</title>
-      <link>https://x.com/TechCrunch/status/2081764466803490852</link>
-      <description><![CDATA[Power up your AI infrastructure! A first look at the Smart Systems Stage agenda at TechCrunch Disrupt 2026  https://t.co/NnSnbZXdJk]]></description>
-      <author>TechCrunch</author>
-      <pubDate>Mon, 27 Jul 2026 15:31:40 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/TechCrunch/status/2081764466803490852</guid>
-      <category>x</category>
-      <category>即时资讯</category>
-    </item>
-    <item>
-      <title>Ilya Sutskever’s Safe Superintelligence partners with Nvidia to scale its AI research https://t.co/fZBb1ZgsWO</title>
-      <link>https://x.com/TechCrunch/status/2081757815367201096</link>
-      <description><![CDATA[Ilya Sutskever’s Safe Superintelligence partners with Nvidia to scale its AI research https://t.co/fZBb1ZgsWO]]></description>
-      <author>TechCrunch</author>
-      <pubDate>Mon, 27 Jul 2026 15:05:15 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/TechCrunch/status/2081757815367201096</guid>
-      <category>x</category>
-      <category>即时资讯</category>
-    </item>
-    <item>
-      <title>RT @JensenHuang: Attackers have frontier AI. Defenders need a frontier AI ecosystem—the best open and closed models, force-multiplied by a…</title>
-      <link>https://x.com/ylecun/status/2081757132752384339</link>
-      <description><![CDATA[RT @JensenHuang: Attackers have frontier AI. Defenders need a frontier AI ecosystem—the best open and closed models, force-multiplied by a…]]></description>
-      <author>Yann LeCun</author>
-      <pubDate>Mon, 27 Jul 2026 15:02:32 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/ylecun/status/2081757132752384339</guid>
-      <category>x</category>
-      <category>深度解读</category>
-    </item>
-    <item>
-      <title>Enigma raises $70M to make controlling a robot as easy as adjusting the volume https://t.co/MY9GVClW8A</title>
-      <link>https://x.com/TechCrunch/status/2081727205626019977</link>
-      <description><![CDATA[Enigma raises $70M to make controlling a robot as easy as adjusting the volume https://t.co/MY9GVClW8A]]></description>
-      <author>TechCrunch</author>
-      <pubDate>Mon, 27 Jul 2026 13:03:37 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/TechCrunch/status/2081727205626019977</guid>
-      <category>x</category>
-      <category>即时资讯</category>
-    </item>
-    <item>
-      <title>RT @lmstudio: Running your own AI is LM Studio’s ultimate mission. 
-
-Open weight models are the path to getting there. 
-
-LM Studio proudly…</title>
-      <link>https://x.com/lmstudio/status/2081723631135060395</link>
-      <description><![CDATA[RT @lmstudio: Running your own AI is LM Studio’s ultimate mission. 
-
-Open weight models are the path to getting there. 
-
-LM Studio proudly…]]></description>
-      <author>LM Studio</author>
-      <pubDate>Mon, 27 Jul 2026 12:49:24 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/lmstudio/status/2081723631135060395</guid>
-      <category>x</category>
-      <category>教程实践</category>
-    </item>
-    <item>
-      <title>Ads on Instagram, TikTok, and YouTube are painting prescription stimulants in a negative light while promoting supplements for ADHD that lack evidence. https://t.co/mZlPQ7Oome</title>
-      <link>https://x.com/WIRED/status/2081696908200796548</link>
-      <description><![CDATA[Ads on Instagram, TikTok, and YouTube are painting prescription stimulants in a negative light while promoting supplements for ADHD that lack evidence. https://t.co/mZlPQ7Oome]]></description>
-      <author>WIRED</author>
-      <pubDate>Mon, 27 Jul 2026 11:03:13 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/WIRED/status/2081696908200796548</guid>
-      <category>x</category>
-      <category>即时资讯</category>
-    </item>
-    <item>
-      <title>What Is an AI IDE? How AI Is Changing Developer &amp; Coding Tools</title>
-      <link>https://www.youtube.com/watch?v=fWZylhIHF9w</link>
-      <description><![CDATA[Learn more about Integrated Development Environment (IDE) here → https://ibm.biz/~J9S6W8pvo Software development is becoming increasingly AI-powered. Katie McDonald explains what an AI IDE is, how integrated development environments work, and how AI coding tools fit into modern workflows. Learn how AI assists with coding, debugging, refactoring, and developer productivity. AI news moves fast. Sign up for a monthly newsletter for AI updates from IBM → https://ibm.biz/~tKygrP9N8 #ai #aicoding #softwaredevelopment #developertools]]></description>
-      <author>IBM Technology</author>
-      <pubDate>Mon, 27 Jul 2026 11:00:04 GMT</pubDate>
-      <guid isPermaLink="true">https://www.youtube.com/watch?v=fWZylhIHF9w</guid>
-      <category>youtube</category>
       <category>官方来源</category>
     </item>
     <item>
-      <title>“It’s not an argument with two sides, it’s an argument with 10 sides,” one senior administration official tells WIRED about how US AI policy is being shaped. https://t.co/iLUoSArvN</title>
-      <link>https://x.com/WIRED/status/2081681559887740957</link>
-      <description><![CDATA[“It’s not an argument with two sides, it’s an argument with 10 sides,” one senior administration official tells WIRED about how US AI policy is being shaped. https://t.co/iLUoSArvNw]]></description>
-      <author>WIRED</author>
-      <pubDate>Mon, 27 Jul 2026 10:02:14 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/WIRED/status/2081681559887740957</guid>
+      <title>RT @nvidia: Give a big welcome to the newest members of the Open Secure AI Alliance. 💚 
+
+https://t.co/tFQYKAqDc3 https://t.co/J2ak7vTYno</title>
+      <link>https://x.com/NVIDIAAI/status/2082912419677090286</link>
+      <description><![CDATA[RT @nvidia: Give a big welcome to the newest members of the Open Secure AI Alliance. 💚 
+
+https://t.co/tFQYKAqDc3 https://t.co/J2ak7vTYno]]></description>
+      <author>NVIDIA AI</author>
+      <pubDate>Thu, 30 Jul 2026 19:33:14 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/NVIDIAAI/status/2082912419677090286</guid>
       <category>x</category>
-      <category>即时资讯</category>
+      <category>官方来源</category>
     </item>
     <item>
-      <title>We tested Nemotron 3 Ultra on agentic chip design. 
+      <title>This is how Gemini Robotics 2 helps @Apptronik’s Apollo 2 use whole body intelligence to pack for a sports game ↓ https://t.co/rPYsclzJHR</title>
+      <link>https://x.com/GoogleDeepMind/status/2082904276293062994</link>
+      <description><![CDATA[This is how Gemini Robotics 2 helps @Apptronik’s Apollo 2 use whole body intelligence to pack for a sports game ↓ https://t.co/rPYsclzJHR]]></description>
+      <author>Google DeepMind</author>
+      <pubDate>Thu, 30 Jul 2026 19:00:52 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/GoogleDeepMind/status/2082904276293062994</guid>
+      <category>x</category>
+      <category>官方来源</category>
+    </item>
+    <item>
+      <title>RT @vllm_project: 🎉 Congrats to @thinkymachines on Inkling-Small-- live with Day 0 vLLM support!
 
-The task is RTL coding: a model iteratively writes the code that defines a chip&apos;s logic, runs it through a simulator, reads the</title>
-      <link>https://x.com/NVIDIAAI/status/2081541801031110903</link>
-      <description><![CDATA[We tested Nemotron 3 Ultra on agentic chip design. 
+276B total parameters with 12B active, na…</title>
+      <link>https://x.com/NVIDIAAI/status/2082895575914348582</link>
+      <description><![CDATA[RT @vllm_project: 🎉 Congrats to @thinkymachines on Inkling-Small-- live with Day 0 vLLM support!
 
-The task is RTL coding: a model iteratively writes the code that defines a chip&apos;s logic, runs it through a simulator, reads the failures, and rewrites. 
-
-Across nine categories of real design work, Nemotron 3 Ultra averaged a 97.1% pass rate at 6,629 tokens per iteration, best of the open models tested on both.]]></description>
+276B total parameters with 12B active, na…]]></description>
       <author>NVIDIA AI</author>
-      <pubDate>Mon, 27 Jul 2026 00:46:53 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/NVIDIAAI/status/2081541801031110903</guid>
+      <pubDate>Thu, 30 Jul 2026 18:26:18 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/NVIDIAAI/status/2082895575914348582</guid>
+      <category>x</category>
+      <category>官方来源</category>
+    </item>
+    <item>
+      <title>We are committed to pushing the model frontier across cost efficiency, capability, and speed.
+
+Starting today, we are reducing prices for GPT-5.6 Luna by 80% and GPT-5.6 Terra by 2</title>
+      <link>https://x.com/OpenAI/status/2082878156483219672</link>
+      <description><![CDATA[We are committed to pushing the model frontier across cost efficiency, capability, and speed.
+
+Starting today, we are reducing prices for GPT-5.6 Luna by 80% and GPT-5.6 Terra by 20% , and offering a faster option for GPT-5.6 Sol in the API.
+
+Luna and Terra’s lower prices are reflected in how usage is counted in Codex and ChatGPT Work, so your usage goes further.]]></description>
+      <author>OpenAI</author>
+      <pubDate>Thu, 30 Jul 2026 17:17:05 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/OpenAI/status/2082878156483219672</guid>
+      <category>x</category>
+      <category>官方来源</category>
+    </item>
+    <item>
+      <title>RT @jxnlco: one of the most beautiful things about OpenAI is that every employee really has a voice.
+
+i wanted to capture what it feels lik…</title>
+      <link>https://x.com/OpenAI/status/2082866778774921261</link>
+      <description><![CDATA[RT @jxnlco: one of the most beautiful things about OpenAI is that every employee really has a voice.
+
+i wanted to capture what it feels lik…]]></description>
+      <author>OpenAI</author>
+      <pubDate>Thu, 30 Jul 2026 16:31:52 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/OpenAI/status/2082866778774921261</guid>
+      <category>x</category>
+      <category>官方来源</category>
+    </item>
+    <item>
+      <title>Consistent with what I found with Qwen3.6 a while back: Claude Code uses 2-3x as many tokens than (many) other harnesses at similar success rate.
+
+- Unoptimized?
+- Buggy?
+- Deliber</title>
+      <link>https://x.com/rasbt/status/2082855363154497880</link>
+      <description><![CDATA[Consistent with what I found with Qwen3.6 a while back: Claude Code uses 2-3x as many tokens than (many) other harnesses at similar success rate.
+
+- Unoptimized?
+- Buggy?
+- Deliberate (coz that helps it in more challenging cases)?
+
+Need to find some time to investigate more...]]></description>
+      <author>Sebastian Raschka</author>
+      <pubDate>Thu, 30 Jul 2026 15:46:30 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/rasbt/status/2082855363154497880</guid>
+      <category>x</category>
+      <category>行业观点</category>
+      <category>深度解读</category>
+    </item>
+    <item>
+      <title>One brain. For any robot. 🤖
+
+We’re launching Gemini Robotics 2: our next-generation physical AI bringing full body intelligence to humanoids, advanced dexterity, multi-robot teamw</title>
+      <link>https://x.com/GoogleDeepMind/status/2082844162928381956</link>
+      <description><![CDATA[One brain. For any robot. 🤖
+
+We’re launching Gemini Robotics 2: our next-generation physical AI bringing full body intelligence to humanoids, advanced dexterity, multi-robot teamwork and more.]]></description>
+      <author>Google DeepMind</author>
+      <pubDate>Thu, 30 Jul 2026 15:02:00 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/GoogleDeepMind/status/2082844162928381956</guid>
+      <category>x</category>
+      <category>官方来源</category>
+    </item>
+    <item>
+      <title>How to Build Claude Powered Agent Teams That Automate Your Life For FREE!</title>
+      <link>https://www.youtube.com/watch?v=hMb1ivZyFLU</link>
+      <description><![CDATA[🚀 Build your own team of AI coworkers with Hyperagent and get $500 in free credits: https://www.hyperagent.com/worldofai Most people are building AI agents completely wrong. Instead of creating one giant Claude agent that tries to do everything, I&apos;ll show you how to build a team of specialized AI teammates that work together—researching, creating content, designing thumbnails, and managing workflows just like a real company. 🔗 My Links: Sponsor a Video or Do a Demo of Your Product, Contact me: intheworldzofai@gmail.com 🔥 Become a Patron (Private Discord): https://patreon.com/WorldofAi 🧠 Fo]]></description>
+      <author>WorldofAI</author>
+      <pubDate>Thu, 30 Jul 2026 06:24:05 GMT</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/watch?v=hMb1ivZyFLU</guid>
+      <category>youtube</category>
+      <category>横向测评</category>
+    </item>
+    <item>
+      <title>The low hanging fruit on harness engineering is insane. 
+
+Ontop of that, there&apos;s an interesting area of science/engineering on how to best study the effect of harnesses, from post </title>
+      <link>https://x.com/natolambert/status/2082667019045081511</link>
+      <description><![CDATA[The low hanging fruit on harness engineering is insane. 
+
+Ontop of that, there&apos;s an interesting area of science/engineering on how to best study the effect of harnesses, from post training through eval/inference. Will be a fairly impactful area (in cost savings per performance)]]></description>
+      <author>Nathan Lambert</author>
+      <pubDate>Thu, 30 Jul 2026 03:18:06 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/natolambert/status/2082667019045081511</guid>
+      <category>x</category>
+      <category>行业观点</category>
+      <category>深度解读</category>
+    </item>
+    <item>
+      <title>GPT-5.6 Sol has been used to solve open problems in mathematics. So why was it struggling with ARC-AGI-3, a benchmark of 2D puzzle games?
+
+We investigated. The harness was not lett</title>
+      <link>https://x.com/OpenAI/status/2082616636989952217</link>
+      <description><![CDATA[GPT-5.6 Sol has been used to solve open problems in mathematics. So why was it struggling with ARC-AGI-3, a benchmark of 2D puzzle games?
+
+We investigated. The harness was not letting it remember what it had learned. 
+
+We found that enabling two API settings tripled our scores with 6x fewer output tokens.]]></description>
+      <author>OpenAI</author>
+      <pubDate>Wed, 29 Jul 2026 23:57:54 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/OpenAI/status/2082616636989952217</guid>
+      <category>x</category>
+      <category>官方来源</category>
+    </item>
+    <item>
+      <title>RT @abidlabs: We are super excited to release Trackio Logbooks: the perfect way to capture all of your AI experiments as an optimized stati…</title>
+      <link>https://x.com/huggingface/status/2082602407884996663</link>
+      <description><![CDATA[RT @abidlabs: We are super excited to release Trackio Logbooks: the perfect way to capture all of your AI experiments as an optimized stati…]]></description>
+      <author>Hugging Face</author>
+      <pubDate>Wed, 29 Jul 2026 23:01:21 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/huggingface/status/2082602407884996663</guid>
+      <category>x</category>
+      <category>官方来源</category>
+    </item>
+    <item>
+      <title>RT @nebiusai: Openness keeps AI competitive, adaptable, and available to everyone. That&apos;s why Nebius has joined @NVIDIA and 70+ companies i…</title>
+      <link>https://x.com/NVIDIAAI/status/2082580048046162182</link>
+      <description><![CDATA[RT @nebiusai: Openness keeps AI competitive, adaptable, and available to everyone. That&apos;s why Nebius has joined @NVIDIA and 70+ companies i…]]></description>
+      <author>NVIDIA AI</author>
+      <pubDate>Wed, 29 Jul 2026 21:32:30 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/NVIDIAAI/status/2082580048046162182</guid>
+      <category>x</category>
+      <category>官方来源</category>
+    </item>
+    <item>
+      <title>After deployment, we applied GPT-5.6 Sol to advance the frontier of efficiency by making itself more efficient to run. 
+
+The results:
+- 20% lower serving costs from production GPU </title>
+      <link>https://x.com/OpenAI/status/2082577277246972300</link>
+      <description><![CDATA[After deployment, we applied GPT-5.6 Sol to advance the frontier of efficiency by making itself more efficient to run. 
+
+The results:
+- 20% lower serving costs from production GPU kernel improvements.
+- 15%+ better token-generation efficiency from improved speculative decoding.]]></description>
+      <author>OpenAI</author>
+      <pubDate>Wed, 29 Jul 2026 21:21:29 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/OpenAI/status/2082577277246972300</guid>
+      <category>x</category>
+      <category>官方来源</category>
+    </item>
+    <item>
+      <title>RT @ArashVahdat: ⚡ Video diffusion is slow. PDD changes that.
+
+🚀 Introducing Parallel Decoding Distillation, our latest work on acceleratin…</title>
+      <link>https://x.com/NVIDIAAI/status/2082564070780313636</link>
+      <description><![CDATA[RT @ArashVahdat: ⚡ Video diffusion is slow. PDD changes that.
+
+🚀 Introducing Parallel Decoding Distillation, our latest work on acceleratin…]]></description>
+      <author>NVIDIA AI</author>
+      <pubDate>Wed, 29 Jul 2026 20:29:01 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/NVIDIAAI/status/2082564070780313636</guid>
+      <category>x</category>
+      <category>官方来源</category>
+    </item>
+    <item>
+      <title>Massive thanks to the @perplexity_ai team for contributing Numbat to the Open Secure AI Alliance 💚</title>
+      <link>https://x.com/NVIDIAAI/status/2082542223628050907</link>
+      <description><![CDATA[Massive thanks to the @perplexity_ai team for contributing Numbat to the Open Secure AI Alliance 💚]]></description>
+      <author>NVIDIA AI</author>
+      <pubDate>Wed, 29 Jul 2026 19:02:12 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/NVIDIAAI/status/2082542223628050907</guid>
+      <category>x</category>
+      <category>官方来源</category>
+    </item>
+    <item>
+      <title>&quot;Data stops being something you collect. It becomes something you compute.&quot;
+
+At #SIGGRAPH2026, @liu_mingyu, VP of NVIDIA&apos;s Cosmos Lab, laid out why world models are the data engine</title>
+      <link>https://x.com/NVIDIAAI/status/2082522552358879424</link>
+      <description><![CDATA[&quot;Data stops being something you collect. It becomes something you compute.&quot;
+
+At #SIGGRAPH2026, @liu_mingyu, VP of NVIDIA&apos;s Cosmos Lab, laid out why world models are the data engine of physical AI. Plus, he announced Cosmos-Dreams, a neural closed-loop simulator, and showed off a full demo of it in action.
+
+You can watch the full keynote here: https://t.co/gyPDOcOZDK]]></description>
+      <author>NVIDIA AI</author>
+      <pubDate>Wed, 29 Jul 2026 17:44:02 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/NVIDIAAI/status/2082522552358879424</guid>
+      <category>x</category>
+      <category>官方来源</category>
+    </item>
+    <item>
+      <title>We’re giving scientists, mathematicians, and engineers free access to our frontier models—starting with 10,000 researchers and expanding to 100,000 through 2027.
+
+ChatGPT for Acade</title>
+      <link>https://x.com/OpenAI/status/2082516370949062989</link>
+      <description><![CDATA[We’re giving scientists, mathematicians, and engineers free access to our frontier models—starting with 10,000 researchers and expanding to 100,000 through 2027.
+
+ChatGPT for Academic Researchers is built to accelerate discovery across disciplines. https://t.co/nrHn1no0wQ]]></description>
+      <author>OpenAI</author>
+      <pubDate>Wed, 29 Jul 2026 17:19:28 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/OpenAI/status/2082516370949062989</guid>
+      <category>x</category>
+      <category>官方来源</category>
+    </item>
+    <item>
+      <title>Pro tip: add in a &quot;Sign-In with Hugging Face&quot; OAuth button to your website/app so that community members can easily share their email, create model/dataset repos, store data in Buc</title>
+      <link>https://x.com/huggingface/status/2082502249784451163</link>
+      <description><![CDATA[Pro tip: add in a &quot;Sign-In with Hugging Face&quot; OAuth button to your website/app so that community members can easily share their email, create model/dataset repos, store data in Buckets, or even kick off GPU-backed Jobs!
+
+https://t.co/JyWISzScRJ https://t.co/XbQnYiB6wp]]></description>
+      <author>Hugging Face</author>
+      <pubDate>Wed, 29 Jul 2026 16:23:22 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/huggingface/status/2082502249784451163</guid>
+      <category>x</category>
+      <category>官方来源</category>
+    </item>
+    <item>
+      <title>Cohere Transcribe is now available on @superwhisper 💬
+
+Push to talk and get your transcription back almost instantly. With Superwhisper, you can use Transcribe offline, integrate </title>
+      <link>https://x.com/cohere/status/2082499845659484655</link>
+      <description><![CDATA[Cohere Transcribe is now available on @superwhisper 💬
+
+Push to talk and get your transcription back almost instantly. With Superwhisper, you can use Transcribe offline, integrate it into your favorite apps, and recall specialist vocabulary.
+
+https://t.co/cCXxNODcRf]]></description>
+      <author>Cohere</author>
+      <pubDate>Wed, 29 Jul 2026 16:13:48 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/cohere/status/2082499845659484655</guid>
+      <category>x</category>
+      <category>官方来源</category>
+    </item>
+    <item>
+      <title>New podcast/lecture combo -- a case study in the messy details of Olmo 3 post training &amp; DPO with @scottgeng00. It&apos;s rare to make time for these discussions, but we cover:
+
+What it</title>
+      <link>https://x.com/natolambert/status/2082485850257207307</link>
+      <description><![CDATA[New podcast/lecture combo -- a case study in the messy details of Olmo 3 post training &amp; DPO with @scottgeng00. It&apos;s rare to make time for these discussions, but we cover:
+
+What it takes for a research idea to make it into a (near) frontier model.
+The messy side of DPO (usually data).
+Organizational challenges in multi-stage post-training recipes.
+Reflections on where research is heading today, and how people should think of DPO.
+DPO fundamentals (once more)
+Other topics.
+
+Scott is one of the great student&apos;s I&apos;ve had the pleasure of working with for a few years!
+
+Chapters:
+
+00:00 Introduction
+]]></description>
+      <author>Nathan Lambert</author>
+      <pubDate>Wed, 29 Jul 2026 15:18:12 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/natolambert/status/2082485850257207307</guid>
+      <category>x</category>
+      <category>行业观点</category>
+      <category>深度解读</category>
+    </item>
+    <item>
+      <title>Gemini 4 LEAKS! Google&apos;s Most Powerful AI Model EVER!</title>
+      <link>https://www.youtube.com/watch?v=g192Vf0OjOk</link>
+      <description><![CDATA[If you&apos;re building AI agents or AI-powered apps that need web data, check out Context.dev. One API replaces multiple web intelligence tools, so you can spend less time building infrastructure and more time shipping. https://www.context.dev/ Gemini 4 may be much closer than anyone expected. New Gemini checkpoints are reportedly appearing across Google’s systems, with some users potentially seeing hidden A/B tests inside the Gemini app. The results are seriously impressive—from advanced Three.js physics simulations and realistic rope bridges to fully animated mechanical typewriters generated fro]]></description>
+      <author>WorldofAI</author>
+      <pubDate>Wed, 29 Jul 2026 07:25:13 GMT</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/watch?v=g192Vf0OjOk</guid>
+      <category>youtube</category>
+      <category>横向测评</category>
+    </item>
+    <item>
+      <title>RT @AnthropicAI: We support this petition, signed by our CEO, several co-founders, and senior staff. 
+
+Our own research on recursive self-i…</title>
+      <link>https://x.com/jackclarkSF/status/2082253489309421979</link>
+      <description><![CDATA[RT @AnthropicAI: We support this petition, signed by our CEO, several co-founders, and senior staff. 
+
+Our own research on recursive self-i…]]></description>
+      <author>Jack Clark</author>
+      <pubDate>Tue, 28 Jul 2026 23:54:52 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/jackclarkSF/status/2082253489309421979</guid>
+      <category>x</category>
+      <category>行业观点</category>
+      <category>深度解读</category>
+    </item>
+    <item>
+      <title>RT @Mayhem4Markets: One of my favorite themes of how HuggingFace fended off the OpenAI rogue agent attack was the value of open weight mode…</title>
+      <link>https://x.com/NVIDIAAI/status/2082243161469116912</link>
+      <description><![CDATA[RT @Mayhem4Markets: One of my favorite themes of how HuggingFace fended off the OpenAI rogue agent attack was the value of open weight mode…]]></description>
+      <author>NVIDIA AI</author>
+      <pubDate>Tue, 28 Jul 2026 23:13:50 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/NVIDIAAI/status/2082243161469116912</guid>
+      <category>x</category>
+      <category>官方来源</category>
+    </item>
+    <item>
+      <title>RT @kimmonismus: The biggest surprise in Hugging Face’s full forensic report isn’t that OpenAI’s agent escaped its sandbox. We already knew…</title>
+      <link>https://x.com/huggingface/status/2082239992701592031</link>
+      <description><![CDATA[RT @kimmonismus: The biggest surprise in Hugging Face’s full forensic report isn’t that OpenAI’s agent escaped its sandbox. We already knew…]]></description>
+      <author>Hugging Face</author>
+      <pubDate>Tue, 28 Jul 2026 23:01:15 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/huggingface/status/2082239992701592031</guid>
+      <category>x</category>
+      <category>官方来源</category>
+    </item>
+    <item>
+      <title>RT @RachelTobac: Super impressed with @huggingface&apos;s breakdown of the AI agent autonomous cyber attack from OpenAI, including technical tim…</title>
+      <link>https://x.com/huggingface/status/2082239598252487067</link>
+      <description><![CDATA[RT @RachelTobac: Super impressed with @huggingface&apos;s breakdown of the AI agent autonomous cyber attack from OpenAI, including technical tim…]]></description>
+      <author>Hugging Face</author>
+      <pubDate>Tue, 28 Jul 2026 22:59:41 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/huggingface/status/2082239598252487067</guid>
+      <category>x</category>
+      <category>官方来源</category>
+    </item>
+    <item>
+      <title>We support this petition, signed by our CEO, several co-founders, and senior staff. 
+
+Our own research on recursive self-improvement, published last month, points to the need for t</title>
+      <link>https://x.com/AnthropicAI/status/2082228994653696371</link>
+      <description><![CDATA[We support this petition, signed by our CEO, several co-founders, and senior staff. 
+
+Our own research on recursive self-improvement, published last month, points to the need for tools to deliberately pace the frontier of AI development so society can prepare. We’re glad to see broad agreement across the field. https://t.co/DqwuQfa9xH]]></description>
+      <author>Anthropic</author>
+      <pubDate>Tue, 28 Jul 2026 22:17:32 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/AnthropicAI/status/2082228994653696371</guid>
+      <category>x</category>
+      <category>官方来源</category>
+    </item>
+    <item>
+      <title>At the core of our mission is working through how to ensure increasingly powerful AI benefits everyone. 
+
+We believe that, at some point in the future, AI acceleration for frontier</title>
+      <link>https://x.com/OpenAI/status/2082208694142730340</link>
+      <description><![CDATA[At the core of our mission is working through how to ensure increasingly powerful AI benefits everyone. 
+
+We believe that, at some point in the future, AI acceleration for frontier model development may be so high that the world will need to pace the rate of AI advancement. 
+
+We hope to contribute to work led by the U.S. government, alongside other labs and the open-source community, to develop the tools and mechanisms that could make that possible.
+
+https://t.co/pMCtiQjMoo]]></description>
+      <author>OpenAI</author>
+      <pubDate>Tue, 28 Jul 2026 20:56:52 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/OpenAI/status/2082208694142730340</guid>
       <category>x</category>
       <category>官方来源</category>
     </item>

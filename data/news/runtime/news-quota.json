@@ -1,37 +1,37 @@
 {
   "schema_version": 1,
-  "run_id": "run-20260728051533765",
-  "started_at": "2026-07-28T05:15:33.765Z",
-  "finished_at": "2026-07-28T05:15:33.765Z",
+  "run_id": "run-20260731053412898",
+  "started_at": "2026-07-31T05:34:12.898Z",
+  "finished_at": "2026-07-31T05:34:12.898Z",
   "platforms": {
     "youtube": {
       "limit": 1000,
       "unit": "quota_units",
       "reserved": 0,
-      "consumed": 8,
-      "remaining": 992,
+      "consumed": 5,
+      "remaining": 995,
       "status": "complete",
       "operations": [
         {
           "id": "youtube-1",
-          "source_id": "youtube-uckwaez-vweaex1j62do-vq",
+          "source_id": "youtube-uccb9-kn8f-opb3ucgm-lilq",
           "layer_id": "recent-feed",
           "operation": "videos.list:latest-feed",
           "cost": 1,
           "attempt": 1,
-          "reserved_at": "2026-07-28T05:15:55.460Z",
-          "consumed_at": "2026-07-28T05:15:55.460Z",
+          "reserved_at": "2026-07-31T05:34:25.369Z",
+          "consumed_at": "2026-07-31T05:34:25.370Z",
           "result": "sent"
         },
         {
           "id": "youtube-2",
-          "source_id": "youtube-uco87fcxozpdr3k7qt1qtlda",
+          "source_id": "youtube-uc2wmubufq6gl08qyg-jjxkw",
           "layer_id": "recent-feed",
           "operation": "videos.list:latest-feed",
           "cost": 1,
           "attempt": 1,
-          "reserved_at": "2026-07-28T05:16:00.573Z",
-          "consumed_at": "2026-07-28T05:16:00.573Z",
+          "reserved_at": "2026-07-31T05:35:25.504Z",
+          "consumed_at": "2026-07-31T05:35:25.504Z",
           "result": "sent"
         },
         {
@@ -41,63 +41,30 @@
           "operation": "videos.list:latest-feed",
           "cost": 1,
           "attempt": 1,
-          "reserved_at": "2026-07-28T05:17:05.283Z",
-          "consumed_at": "2026-07-28T05:17:05.283Z",
+          "reserved_at": "2026-07-31T05:35:47.723Z",
+          "consumed_at": "2026-07-31T05:35:47.723Z",
           "result": "sent"
         },
         {
           "id": "youtube-4",
-          "source_id": "youtube-ucxzcjldbc09xxgz6gcdrc6a",
-          "layer_id": "recent-90d",
-          "operation": "playlistItems.list",
-          "cost": 1,
-          "attempt": 1,
-          "reserved_at": "2026-07-28T05:17:33.279Z",
-          "consumed_at": "2026-07-28T05:17:33.454Z",
-          "result": "success"
-        },
-        {
-          "id": "youtube-5",
-          "source_id": "youtube-ucxzcjldbc09xxgz6gcdrc6a",
-          "layer_id": "recent-90d",
-          "operation": "videos.list",
-          "cost": 1,
-          "attempt": 1,
-          "reserved_at": "2026-07-28T05:17:33.455Z",
-          "consumed_at": "2026-07-28T05:17:33.580Z",
-          "result": "success"
-        },
-        {
-          "id": "youtube-6",
           "source_id": "youtube-ucrm7b7sl-g1edfonmj-sdkg",
           "layer_id": "recent-90d",
           "operation": "playlistItems.list",
           "cost": 1,
           "attempt": 1,
-          "reserved_at": "2026-07-28T05:17:33.581Z",
-          "consumed_at": "2026-07-28T05:17:35.600Z",
+          "reserved_at": "2026-07-31T05:36:15.214Z",
+          "consumed_at": "2026-07-31T05:36:15.403Z",
           "result": "success"
         },
         {
-          "id": "youtube-7",
-          "source_id": "youtube-ucebb1b-l6zds3xturialzow",
-          "layer_id": "recent-90d",
-          "operation": "playlistItems.list",
-          "cost": 1,
-          "attempt": 1,
-          "reserved_at": "2026-07-28T05:17:35.600Z",
-          "consumed_at": "2026-07-28T05:17:36.860Z",
-          "result": "success"
-        },
-        {
-          "id": "youtube-8",
-          "source_id": "youtube-ucebb1b-l6zds3xturialzow",
+          "id": "youtube-5",
+          "source_id": "youtube-ucrm7b7sl-g1edfonmj-sdkg",
           "layer_id": "recent-90d",
           "operation": "videos.list",
           "cost": 1,
           "attempt": 1,
-          "reserved_at": "2026-07-28T05:17:36.861Z",
-          "consumed_at": "2026-07-28T05:17:36.953Z",
+          "reserved_at": "2026-07-31T05:36:15.404Z",
+          "consumed_at": "2026-07-31T05:36:15.526Z",
           "result": "success"
         }
       ]

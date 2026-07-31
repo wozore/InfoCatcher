@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "last_run": {
-    "run_id": "run-20260728051533765",
-    "started_at": "2026-07-28T05:15:33.765Z",
-    "completed_at": "2026-07-28T05:17:36.967Z",
+    "run_id": "run-20260731053412898",
+    "started_at": "2026-07-31T05:34:12.898Z",
+    "completed_at": "2026-07-31T05:36:15.538Z",
     "status": "rotating"
   },
   "active_layer": null,
@@ -13,7 +13,7 @@
       "attempts": 3,
       "last_native_id": "jyuyY86GJnA",
       "last_published_at": "2026-07-24T19:47:16.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -22,7 +22,7 @@
       "attempts": 3,
       "last_native_id": "1DtMiRKg-cs",
       "last_published_at": "2026-07-10T15:50:55.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -31,43 +31,44 @@
       "attempts": 3,
       "last_native_id": "ztdTed5egrM",
       "last_published_at": "2026-07-22T13:04:13.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
-      "error_code": "http_404",
-      "error_message": "HTTP 404"
+      "fetched_at": "2026-07-31T05:34:12.898Z",
+      "error_code": "http_500",
+      "error_message": "HTTP 500"
     },
     "youtube-ucbhcmcgaijhv-estcwgjpcw": {
       "status": "degraded",
       "attempts": 3,
       "last_native_id": "TLjcOMxqmF4",
       "last_published_at": "2026-07-23T19:16:26.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
     "youtube-uccb9-kn8f-opb3ucgm-lilq": {
-      "status": "degraded",
-      "attempts": 3,
+      "status": "success",
+      "attempts": 1,
       "last_native_id": "KbZ2ekmZO90",
       "last_published_at": "2026-07-22T14:48:45.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
-      "error_code": "http_404",
-      "error_message": "HTTP 404"
+      "fetched_at": "2026-07-31T05:34:12.898Z",
+      "error_code": null,
+      "error_message": null,
+      "route_coverage": null
     },
     "youtube-ucfo0k3xjpqmcvy6ush3yrra": {
       "status": "degraded",
       "attempts": 3,
       "last_native_id": "LlvuEK1yTPs",
       "last_published_at": "2026-01-17T00:34:47.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
-      "error_code": "http_500",
-      "error_message": "HTTP 500"
+      "fetched_at": "2026-07-31T05:34:12.898Z",
+      "error_code": "http_404",
+      "error_message": "HTTP 404"
     },
     "youtube-ucd6mob9nc6uyn2grvunt-zg": {
       "status": "degraded",
       "attempts": 3,
       "last_native_id": "IbdAfOKt7i8",
       "last_published_at": "2026-07-23T18:16:06.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -76,7 +77,7 @@
       "attempts": 3,
       "last_native_id": "xr4VUV-7rN0",
       "last_published_at": "2026-07-21T15:12:30.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -85,26 +86,25 @@
       "attempts": 3,
       "last_native_id": "u_Z0lq93KBk",
       "last_published_at": "2026-07-24T21:42:56.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
     "youtube-uckwaez-vweaex1j62do-vq": {
-      "status": "success",
-      "attempts": 1,
+      "status": "degraded",
+      "attempts": 3,
       "last_native_id": "fWZylhIHF9w",
       "last_published_at": "2026-07-27T11:00:04.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
-      "error_code": null,
-      "error_message": null,
-      "route_coverage": null
+      "fetched_at": "2026-07-31T05:34:12.898Z",
+      "error_code": "http_500",
+      "error_message": "HTTP 500"
     },
     "youtube-ucwx7y3w30n8as-ticy2x-2g": {
       "status": "degraded",
       "attempts": 3,
       "last_native_id": "KuaO2mbtUB8",
       "last_published_at": "2026-07-07T11:00:39.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -113,35 +113,34 @@
       "attempts": 3,
       "last_native_id": "69JMFDFuI3A",
       "last_published_at": "2026-07-25T19:00:06.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
-      "error_code": "http_500",
-      "error_message": "HTTP 500"
+      "fetched_at": "2026-07-31T05:34:12.898Z",
+      "error_code": "http_404",
+      "error_message": "HTTP 404"
     },
     "youtube-uco87fcxozpdr3k7qt1qtlda": {
-      "status": "success",
-      "attempts": 1,
+      "status": "degraded",
+      "attempts": 3,
       "last_native_id": "UDeQEIpKzfo",
       "last_published_at": "2026-07-17T08:48:58.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
-      "error_code": null,
-      "error_message": null,
-      "route_coverage": null
+      "fetched_at": "2026-07-31T05:34:12.898Z",
+      "error_code": "http_404",
+      "error_message": "HTTP 404"
     },
     "youtube-uchplebmo18p08akcigti38g": {
       "status": "degraded",
       "attempts": 3,
       "last_native_id": "n0JhhZyGP_w",
       "last_published_at": "2026-07-25T13:38:23.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
-      "error_code": "http_500",
-      "error_message": "HTTP 500"
+      "fetched_at": "2026-07-31T05:34:12.898Z",
+      "error_code": "http_404",
+      "error_message": "HTTP 404"
     },
     "youtube-ucqcbqf6yw5kzroddcz-wbsw": {
       "status": "degraded",
       "attempts": 3,
       "last_native_id": "rPFnjDTlYuY",
       "last_published_at": "2026-07-24T23:50:58.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -150,7 +149,7 @@
       "attempts": 3,
       "last_native_id": "wzY2fV4Mp3U",
       "last_published_at": "2026-07-22T16:36:53.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -159,7 +158,7 @@
       "attempts": 3,
       "last_native_id": "X1oBSwmygMs",
       "last_published_at": "2026-07-25T16:15:26.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -168,7 +167,7 @@
       "attempts": 3,
       "last_native_id": "fniOkNQT2pM",
       "last_published_at": "2026-07-26T22:25:34.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -177,7 +176,7 @@
       "attempts": 3,
       "last_native_id": "axOcn--n_lM",
       "last_published_at": "2026-07-16T15:39:17.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -186,7 +185,7 @@
       "attempts": 3,
       "last_native_id": "xHi8PUIVyoo",
       "last_published_at": "2026-03-06T22:07:33.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -195,16 +194,16 @@
       "attempts": 3,
       "last_native_id": "JTHmrELSfvk",
       "last_published_at": "2026-07-13T22:23:38.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
-      "error_code": "http_500",
-      "error_message": "HTTP 500"
+      "fetched_at": "2026-07-31T05:34:12.898Z",
+      "error_code": "http_404",
+      "error_message": "HTTP 404"
     },
     "youtube-uccixc5mjshvytzr1mal5l9w": {
       "status": "degraded",
       "attempts": 3,
       "last_native_id": "a9V1XgFOa5I",
       "last_published_at": "2026-07-15T15:30:35.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -213,16 +212,16 @@
       "attempts": 3,
       "last_native_id": "lgD9lNB9Ums",
       "last_published_at": "2026-07-13T04:00:15.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
-      "error_code": "http_500",
-      "error_message": "HTTP 500"
+      "fetched_at": "2026-07-31T05:34:12.898Z",
+      "error_code": "http_404",
+      "error_message": "HTTP 404"
     },
     "youtube-ucyo-jab-esufrv4b17ajtaw": {
       "status": "degraded",
       "attempts": 3,
       "last_native_id": "GlYgs6v2YfU",
       "last_published_at": "2026-07-16T11:56:04.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -231,7 +230,7 @@
       "attempts": 3,
       "last_native_id": "BBl8bNJP6ds",
       "last_published_at": "2026-07-23T17:06:59.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -240,7 +239,7 @@
       "attempts": 3,
       "last_native_id": "okgOtuRUCBs",
       "last_published_at": "2026-07-21T16:32:46.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -249,7 +248,7 @@
       "attempts": 3,
       "last_native_id": "hHadHiKAOuM",
       "last_published_at": "2026-07-24T13:31:18.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -258,7 +257,7 @@
       "attempts": 3,
       "last_native_id": "KOpTWx1Eou4",
       "last_published_at": "2026-07-23T16:53:37.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -267,7 +266,7 @@
       "attempts": 3,
       "last_native_id": "cBdFhHyEW4Y",
       "last_published_at": "2026-07-24T14:29:20.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -276,25 +275,26 @@
       "attempts": 3,
       "last_native_id": "bquInpp-aFA",
       "last_published_at": "2025-11-09T12:56:43.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
     "youtube-uc2wmubufq6gl08qyg-jjxkw": {
-      "status": "degraded",
-      "attempts": 3,
-      "last_native_id": "7gUV_Wil3Jo",
-      "last_published_at": "2026-07-26T06:39:15.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
-      "error_code": "http_404",
-      "error_message": "HTTP 404"
+      "status": "success",
+      "attempts": 1,
+      "last_native_id": "hMb1ivZyFLU",
+      "last_published_at": "2026-07-30T06:24:05.000Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
+      "error_code": null,
+      "error_message": null,
+      "route_coverage": null
     },
     "youtube-ucrxsvx9a1mj8l0cmlwkgmvw": {
       "status": "degraded",
       "attempts": 3,
       "last_native_id": "wCSPgHpcxdc",
       "last_published_at": "2026-07-20T11:19:33.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -303,7 +303,7 @@
       "attempts": 3,
       "last_native_id": "4MJW3x9VbSI",
       "last_published_at": "2026-07-25T10:30:35.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -312,7 +312,7 @@
       "attempts": 3,
       "last_native_id": "bk8RL4_V1Yc",
       "last_published_at": "2026-07-24T17:06:25.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -321,7 +321,7 @@
       "attempts": 3,
       "last_native_id": "D4yCCUzqERE",
       "last_published_at": "2026-07-23T12:09:16.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -330,7 +330,7 @@
       "attempts": 3,
       "last_native_id": "O3foXkb1Zos",
       "last_published_at": "2026-07-25T12:32:34.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -339,7 +339,7 @@
       "attempts": 3,
       "last_native_id": "Js05B8Z1ivE",
       "last_published_at": "2026-07-26T13:00:10.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -348,7 +348,7 @@
       "attempts": 3,
       "last_native_id": "jEEAcQH7Ks8",
       "last_published_at": "2026-07-24T17:45:31.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -357,7 +357,7 @@
       "attempts": 3,
       "last_native_id": "O7XOUK4B5pg",
       "last_published_at": "2026-07-23T22:47:01.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -366,7 +366,7 @@
       "attempts": 3,
       "last_native_id": "IxvLvToD8nk",
       "last_published_at": "2026-07-25T16:00:15.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -375,7 +375,7 @@
       "attempts": 1,
       "last_native_id": "iKx3gAODybU",
       "last_published_at": "2026-04-09T17:35:20.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": null
@@ -385,7 +385,7 @@
       "attempts": 3,
       "last_native_id": "qEXHbJzGrY8",
       "last_published_at": "2026-07-24T22:24:19.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -394,7 +394,7 @@
       "attempts": 3,
       "last_native_id": "11vWK5cbxmI",
       "last_published_at": "2026-07-25T03:02:57.000Z",
-      "fetched_at": "2026-07-28T05:15:33.765Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": "http_404",
       "error_message": "HTTP 404"
     },
@@ -921,9 +921,9 @@
     "x-openai": {
       "status": "success",
       "attempts": 1,
-      "last_native_id": "2080378182469857576",
-      "last_published_at": "2026-07-23T19:43:04.000Z",
-      "fetched_at": "2026-07-27T05:50:00.605Z",
+      "last_native_id": "2082878156483219672",
+      "last_published_at": "2026-07-30T17:17:05.000Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": null
@@ -931,9 +931,9 @@
     "x-anthropicai": {
       "status": "success",
       "attempts": 1,
-      "last_native_id": "2080699608917750032",
-      "last_published_at": "2026-07-24T17:00:18.000Z",
-      "fetched_at": "2026-07-27T05:50:00.605Z",
+      "last_native_id": "2082965101083320543",
+      "last_published_at": "2026-07-30T23:02:34.000Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": null
@@ -941,9 +941,9 @@
     "x-googledeepmind": {
       "status": "success",
       "attempts": 1,
-      "last_native_id": "2080321516814647630",
-      "last_published_at": "2026-07-23T15:57:54.000Z",
-      "fetched_at": "2026-07-27T05:50:00.605Z",
+      "last_native_id": "2082904276293062994",
+      "last_published_at": "2026-07-30T19:00:52.000Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": null
@@ -953,7 +953,7 @@
       "attempts": 1,
       "last_native_id": "2079614176725442912",
       "last_published_at": "2026-07-21T17:07:11.000Z",
-      "fetched_at": "2026-07-27T05:50:00.605Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": null
@@ -963,7 +963,7 @@
       "attempts": 1,
       "last_native_id": "2064771445260230840",
       "last_published_at": "2026-06-10T18:07:28.000Z",
-      "fetched_at": "2026-07-27T05:50:00.605Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": null
@@ -973,7 +973,7 @@
       "attempts": 1,
       "last_native_id": "2079598447234064801",
       "last_published_at": "2026-07-21T16:04:41.000Z",
-      "fetched_at": "2026-07-27T05:50:00.605Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": null
@@ -981,9 +981,9 @@
     "x-cohere": {
       "status": "success",
       "attempts": 1,
-      "last_native_id": "2081470432415260682",
-      "last_published_at": "2026-07-26T20:03:17.000Z",
-      "fetched_at": "2026-07-27T05:50:00.605Z",
+      "last_native_id": "2082932590567100510",
+      "last_published_at": "2026-07-30T20:53:23.000Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": null
@@ -991,9 +991,9 @@
     "x-huggingface": {
       "status": "success",
       "attempts": 1,
-      "last_native_id": "2081078405370671358",
-      "last_published_at": "2026-07-25T18:05:31.000Z",
-      "fetched_at": "2026-07-27T05:50:00.605Z",
+      "last_native_id": "2082602407884996663",
+      "last_published_at": "2026-07-29T23:01:21.000Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": null
@@ -1001,9 +1001,9 @@
     "x-microsoftai": {
       "status": "success",
       "attempts": 1,
-      "last_native_id": "2080340979714785472",
-      "last_published_at": "2026-07-23T17:15:15.000Z",
-      "fetched_at": "2026-07-27T05:50:00.605Z",
+      "last_native_id": "2081796647135166547",
+      "last_published_at": "2026-07-27T17:39:33.000Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": null
@@ -1011,9 +1011,9 @@
     "x-nvidiaai": {
       "status": "success",
       "attempts": 1,
-      "last_native_id": "2081541801031110903",
-      "last_published_at": "2026-07-27T00:46:53.000Z",
-      "fetched_at": "2026-07-27T05:50:00.605Z",
+      "last_native_id": "2082912419677090286",
+      "last_published_at": "2026-07-30T19:33:14.000Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": null
@@ -1023,7 +1023,7 @@
       "attempts": 1,
       "last_native_id": "2072423193927668193",
       "last_published_at": "2026-07-01T20:52:47.000Z",
-      "fetched_at": "2026-07-27T05:50:00.605Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": null
@@ -1033,7 +1033,7 @@
       "attempts": 1,
       "last_native_id": "2057854261699195173",
       "last_published_at": "2026-05-22T16:01:03.000Z",
-      "fetched_at": "2026-07-27T05:50:00.605Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": null
@@ -1201,9 +1201,9 @@
     "x-jackclarksf": {
       "status": "success",
       "attempts": 1,
-      "last_native_id": "2080334107972972583",
-      "last_published_at": "2026-07-23T16:47:56.000Z",
-      "fetched_at": "2026-07-26T06:40:51.706Z",
+      "last_native_id": "2082253489309421979",
+      "last_published_at": "2026-07-28T23:54:52.000Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": null
@@ -1211,9 +1211,9 @@
     "x-natolambert": {
       "status": "success",
       "attempts": 1,
-      "last_native_id": "2080836538414571960",
-      "last_published_at": "2026-07-25T02:04:25.000Z",
-      "fetched_at": "2026-07-27T05:50:00.605Z",
+      "last_native_id": "2082939787904950325",
+      "last_published_at": "2026-07-30T21:21:59.000Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": null
@@ -1221,9 +1221,9 @@
     "x-rasbt": {
       "status": "success",
       "attempts": 1,
-      "last_native_id": "2081374704753950742",
-      "last_published_at": "2026-07-26T13:42:54.000Z",
-      "fetched_at": "2026-07-27T05:50:00.605Z",
+      "last_native_id": "2082855363154497880",
+      "last_published_at": "2026-07-30T15:46:30.000Z",
+      "fetched_at": "2026-07-31T05:34:12.898Z",
       "error_code": null,
       "error_message": null,
       "route_coverage": null
@@ -1234,259 +1234,259 @@
       "youtube-ucxzcjldbc09xxgz6gcdrc6a": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucp7jmxsy2xbc3kcae0mhq-a": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uchlnu7kizhrgsbhhvfoy72w": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_404"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_500"
       },
       "youtube-ucbhcmcgaijhv-estcwgjpcw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uccb9-kn8f-opb3ucgm-lilq": {
-        "status": "degraded",
+        "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_404"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": null
       },
       "youtube-ucfo0k3xjpqmcvy6ush3yrra": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_500"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-ucd6mob9nc6uyn2grvunt-zg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uc5-pbdfda3kuo-vq72l-uma": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucaktuy0tz47zy02dfpxmqoq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uckwaez-vweaex1j62do-vq": {
-        "status": "success",
-        "items": 1,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": null
+        "status": "degraded",
+        "items": 0,
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_500"
       },
       "youtube-ucwx7y3w30n8as-ticy2x-2g": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uckelck4zao6heei1kqjqzwa": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_500"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-uco87fcxozpdr3k7qt1qtlda": {
-        "status": "observed_empty",
+        "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": null
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-uchplebmo18p08akcigti38g": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_500"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-ucqcbqf6yw5kzroddcz-wbsw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucnj1ymd5yfuuptn21xtrbbw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uccjyq-k1xwfg8lndy7lkmpa": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucrm7b7sl-g1edfonmj-sdkg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucbfypyitq-7l4upox8nvctg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uczhmqk67msjgfcctn7xbfew": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucmltbahi5dmrt0npvdsoirq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_500"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-uccixc5mjshvytzr1mal5l9w": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uctyluttgs3k1fg4y5tahlbw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_500"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-ucyo-jab-esufrv4b17ajtaw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucba5g-escn8yd4vw5u-gicg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucebb1b-l6zds3xturialzow": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uctatfzmf-8ekiwasxm4ts0a": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucsbjurrpoezykls9eqgamoa": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uchhyxslbevvnbvsq57n1mtq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucobqgqe4i5kf7wrxrxhtoqa": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uc2wmubufq6gl08qyg-jjxkw": {
-        "status": "degraded",
-        "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_404"
+        "status": "success",
+        "items": 1,
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": null
       },
       "youtube-ucrxsvx9a1mj8l0cmlwkgmvw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucby9xx3-jw5c2fjlzvbi4cg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucr9j1jqqb5rse69wjunbywa": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uch9nvjowxmfb7slapwgclpq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uc8butisfwt-wl7ev0huk0bq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uc4jx40jdee-tinbkjycv4sg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucc-lyotfsrcjza1ab3apagw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uc9x0an7bwhpcdhsm9nijfjq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucaq9f7jfea7mtl3qozy2h1a": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucshzkyawb77ixddsgog4iwa": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "youtube-ucxl4i9dybrfoabk0xgmbkra": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uclb7aztwc6vfzrbso2ucbmg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "bilibili-3031494": {
@@ -1610,75 +1610,75 @@
         "error_code": null
       },
       "x-openai": {
-        "status": "observed_empty",
-        "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "status": "success",
+        "items": 2,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-anthropicai": {
-        "status": "observed_empty",
-        "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "status": "success",
+        "items": 1,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-googledeepmind": {
-        "status": "observed_empty",
-        "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "status": "success",
+        "items": 2,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-aiatmeta": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-xai": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-mistralai": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-cohere": {
         "status": "success",
         "items": 1,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-huggingface": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-microsoftai": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-nvidiaai": {
         "status": "success",
-        "items": 1,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "items": 2,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-stabilityai": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-deepseek-ai": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-karpathy": {
@@ -1780,19 +1780,19 @@
       "x-jackclarksf": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-26T06:40:51.706Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-natolambert": {
-        "status": "observed_empty",
-        "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "status": "success",
+        "items": 1,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-rasbt": {
         "status": "success",
         "items": 1,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       }
     },
@@ -1800,259 +1800,259 @@
       "youtube-ucxzcjldbc09xxgz6gcdrc6a": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucp7jmxsy2xbc3kcae0mhq-a": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uchlnu7kizhrgsbhhvfoy72w": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_404"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_500"
       },
       "youtube-ucbhcmcgaijhv-estcwgjpcw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uccb9-kn8f-opb3ucgm-lilq": {
-        "status": "degraded",
+        "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_404"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": null
       },
       "youtube-ucfo0k3xjpqmcvy6ush3yrra": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_500"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-ucd6mob9nc6uyn2grvunt-zg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uc5-pbdfda3kuo-vq72l-uma": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucaktuy0tz47zy02dfpxmqoq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uckwaez-vweaex1j62do-vq": {
-        "status": "success",
-        "items": 5,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": null
+        "status": "degraded",
+        "items": 0,
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_500"
       },
       "youtube-ucwx7y3w30n8as-ticy2x-2g": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uckelck4zao6heei1kqjqzwa": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_500"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-uco87fcxozpdr3k7qt1qtlda": {
-        "status": "observed_empty",
+        "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": null
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-uchplebmo18p08akcigti38g": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_500"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-ucqcbqf6yw5kzroddcz-wbsw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucnj1ymd5yfuuptn21xtrbbw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uccjyq-k1xwfg8lndy7lkmpa": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucrm7b7sl-g1edfonmj-sdkg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucbfypyitq-7l4upox8nvctg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uczhmqk67msjgfcctn7xbfew": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucmltbahi5dmrt0npvdsoirq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_500"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-uccixc5mjshvytzr1mal5l9w": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uctyluttgs3k1fg4y5tahlbw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_500"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-ucyo-jab-esufrv4b17ajtaw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucba5g-escn8yd4vw5u-gicg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucebb1b-l6zds3xturialzow": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uctatfzmf-8ekiwasxm4ts0a": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucsbjurrpoezykls9eqgamoa": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uchhyxslbevvnbvsq57n1mtq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucobqgqe4i5kf7wrxrxhtoqa": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uc2wmubufq6gl08qyg-jjxkw": {
-        "status": "degraded",
-        "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_404"
+        "status": "success",
+        "items": 5,
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": null
       },
       "youtube-ucrxsvx9a1mj8l0cmlwkgmvw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucby9xx3-jw5c2fjlzvbi4cg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucr9j1jqqb5rse69wjunbywa": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uch9nvjowxmfb7slapwgclpq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uc8butisfwt-wl7ev0huk0bq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uc4jx40jdee-tinbkjycv4sg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucc-lyotfsrcjza1ab3apagw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uc9x0an7bwhpcdhsm9nijfjq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucaq9f7jfea7mtl3qozy2h1a": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucshzkyawb77ixddsgog4iwa": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "youtube-ucxl4i9dybrfoabk0xgmbkra": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uclb7aztwc6vfzrbso2ucbmg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "bilibili-3031494": {
@@ -2177,74 +2177,74 @@
       },
       "x-openai": {
         "status": "success",
-        "items": 5,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "items": 9,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-anthropicai": {
         "status": "success",
         "items": 3,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-googledeepmind": {
-        "status": "success",
-        "items": 5,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "status": "observed_empty",
+        "items": 0,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-aiatmeta": {
-        "status": "success",
-        "items": 1,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "status": "observed_empty",
+        "items": 0,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-xai": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-mistralai": {
-        "status": "success",
-        "items": 1,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "status": "observed_empty",
+        "items": 0,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-cohere": {
         "status": "success",
-        "items": 3,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "items": 4,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-huggingface": {
         "status": "success",
         "items": 10,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-microsoftai": {
         "status": "success",
         "items": 3,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-nvidiaai": {
         "status": "success",
-        "items": 13,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "items": 12,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-stabilityai": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-deepseek-ai": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-karpathy": {
@@ -2345,20 +2345,20 @@
       },
       "x-jackclarksf": {
         "status": "success",
-        "items": 4,
-        "checked_at": "2026-07-26T06:40:51.706Z",
+        "items": 1,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-natolambert": {
         "status": "success",
-        "items": 11,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "items": 7,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-rasbt": {
-        "status": "observed_empty",
-        "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "status": "success",
+        "items": 4,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       }
     },
@@ -2366,259 +2366,259 @@
       "youtube-ucxzcjldbc09xxgz6gcdrc6a": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucp7jmxsy2xbc3kcae0mhq-a": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uchlnu7kizhrgsbhhvfoy72w": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_404"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_500"
       },
       "youtube-ucbhcmcgaijhv-estcwgjpcw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uccb9-kn8f-opb3ucgm-lilq": {
-        "status": "degraded",
-        "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_404"
+        "status": "success",
+        "items": 7,
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": null
       },
       "youtube-ucfo0k3xjpqmcvy6ush3yrra": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_500"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-ucd6mob9nc6uyn2grvunt-zg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uc5-pbdfda3kuo-vq72l-uma": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucaktuy0tz47zy02dfpxmqoq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uckwaez-vweaex1j62do-vq": {
-        "status": "success",
-        "items": 9,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": null
+        "status": "degraded",
+        "items": 0,
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_500"
       },
       "youtube-ucwx7y3w30n8as-ticy2x-2g": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uckelck4zao6heei1kqjqzwa": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_500"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-uco87fcxozpdr3k7qt1qtlda": {
-        "status": "success",
-        "items": 3,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": null
+        "status": "degraded",
+        "items": 0,
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-uchplebmo18p08akcigti38g": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_500"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-ucqcbqf6yw5kzroddcz-wbsw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucnj1ymd5yfuuptn21xtrbbw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uccjyq-k1xwfg8lndy7lkmpa": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucrm7b7sl-g1edfonmj-sdkg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucbfypyitq-7l4upox8nvctg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uczhmqk67msjgfcctn7xbfew": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucmltbahi5dmrt0npvdsoirq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_500"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-uccixc5mjshvytzr1mal5l9w": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uctyluttgs3k1fg4y5tahlbw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_500"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-ucyo-jab-esufrv4b17ajtaw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucba5g-escn8yd4vw5u-gicg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucebb1b-l6zds3xturialzow": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uctatfzmf-8ekiwasxm4ts0a": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucsbjurrpoezykls9eqgamoa": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uchhyxslbevvnbvsq57n1mtq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucobqgqe4i5kf7wrxrxhtoqa": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uc2wmubufq6gl08qyg-jjxkw": {
-        "status": "degraded",
-        "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_404"
+        "status": "success",
+        "items": 9,
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": null
       },
       "youtube-ucrxsvx9a1mj8l0cmlwkgmvw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucby9xx3-jw5c2fjlzvbi4cg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucr9j1jqqb5rse69wjunbywa": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uch9nvjowxmfb7slapwgclpq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uc8butisfwt-wl7ev0huk0bq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uc4jx40jdee-tinbkjycv4sg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucc-lyotfsrcjza1ab3apagw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uc9x0an7bwhpcdhsm9nijfjq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucaq9f7jfea7mtl3qozy2h1a": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucshzkyawb77ixddsgog4iwa": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "youtube-ucxl4i9dybrfoabk0xgmbkra": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uclb7aztwc6vfzrbso2ucbmg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "bilibili-3031494": {
@@ -2743,74 +2743,74 @@
       },
       "x-openai": {
         "status": "success",
-        "items": 11,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "items": 7,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-anthropicai": {
         "status": "success",
-        "items": 5,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "items": 4,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-googledeepmind": {
         "status": "success",
-        "items": 6,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "items": 10,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-aiatmeta": {
         "status": "success",
         "items": 7,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-xai": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-mistralai": {
         "status": "success",
-        "items": 1,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "items": 2,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-cohere": {
         "status": "success",
-        "items": 8,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "items": 9,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-huggingface": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-microsoftai": {
         "status": "success",
-        "items": 2,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "items": 1,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-nvidiaai": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-stabilityai": {
         "status": "success",
         "items": 1,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-deepseek-ai": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-karpathy": {
@@ -2911,20 +2911,20 @@
       },
       "x-jackclarksf": {
         "status": "success",
-        "items": 2,
-        "checked_at": "2026-07-26T06:40:51.706Z",
+        "items": 5,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-natolambert": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-rasbt": {
         "status": "success",
-        "items": 5,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "items": 4,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       }
     },
@@ -2932,259 +2932,259 @@
       "youtube-ucxzcjldbc09xxgz6gcdrc6a": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucp7jmxsy2xbc3kcae0mhq-a": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uchlnu7kizhrgsbhhvfoy72w": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_404"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_500"
       },
       "youtube-ucbhcmcgaijhv-estcwgjpcw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uccb9-kn8f-opb3ucgm-lilq": {
-        "status": "degraded",
-        "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_404"
+        "status": "success",
+        "items": 4,
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": null
       },
       "youtube-ucfo0k3xjpqmcvy6ush3yrra": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_500"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-ucd6mob9nc6uyn2grvunt-zg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uc5-pbdfda3kuo-vq72l-uma": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucaktuy0tz47zy02dfpxmqoq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uckwaez-vweaex1j62do-vq": {
-        "status": "observed_empty",
+        "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": null
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_500"
       },
       "youtube-ucwx7y3w30n8as-ticy2x-2g": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uckelck4zao6heei1kqjqzwa": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_500"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-uco87fcxozpdr3k7qt1qtlda": {
-        "status": "success",
-        "items": 10,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": null
+        "status": "degraded",
+        "items": 0,
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-uchplebmo18p08akcigti38g": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_500"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-ucqcbqf6yw5kzroddcz-wbsw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucnj1ymd5yfuuptn21xtrbbw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uccjyq-k1xwfg8lndy7lkmpa": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucrm7b7sl-g1edfonmj-sdkg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucbfypyitq-7l4upox8nvctg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uczhmqk67msjgfcctn7xbfew": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucmltbahi5dmrt0npvdsoirq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_500"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-uccixc5mjshvytzr1mal5l9w": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uctyluttgs3k1fg4y5tahlbw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_500"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-ucyo-jab-esufrv4b17ajtaw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucba5g-escn8yd4vw5u-gicg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucebb1b-l6zds3xturialzow": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uctatfzmf-8ekiwasxm4ts0a": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucsbjurrpoezykls9eqgamoa": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uchhyxslbevvnbvsq57n1mtq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucobqgqe4i5kf7wrxrxhtoqa": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uc2wmubufq6gl08qyg-jjxkw": {
-        "status": "degraded",
+        "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_404"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": null
       },
       "youtube-ucrxsvx9a1mj8l0cmlwkgmvw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucby9xx3-jw5c2fjlzvbi4cg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucr9j1jqqb5rse69wjunbywa": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uch9nvjowxmfb7slapwgclpq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uc8butisfwt-wl7ev0huk0bq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uc4jx40jdee-tinbkjycv4sg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucc-lyotfsrcjza1ab3apagw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uc9x0an7bwhpcdhsm9nijfjq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucaq9f7jfea7mtl3qozy2h1a": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucshzkyawb77ixddsgog4iwa": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "youtube-ucxl4i9dybrfoabk0xgmbkra": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uclb7aztwc6vfzrbso2ucbmg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "bilibili-3031494": {
@@ -3310,73 +3310,73 @@
       "x-openai": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-anthropicai": {
         "status": "success",
-        "items": 10,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "items": 9,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-googledeepmind": {
         "status": "success",
-        "items": 7,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "items": 5,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-aiatmeta": {
-        "status": "observed_empty",
-        "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "status": "success",
+        "items": 1,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-xai": {
         "status": "success",
         "items": 16,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-mistralai": {
         "status": "success",
-        "items": 3,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "items": 1,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-cohere": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-huggingface": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-microsoftai": {
         "status": "success",
-        "items": 12,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "items": 13,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-nvidiaai": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-stabilityai": {
         "status": "success",
         "items": 1,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-deepseek-ai": {
         "status": "success",
-        "items": 2,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "items": 1,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-karpathy": {
@@ -3477,20 +3477,20 @@
       },
       "x-jackclarksf": {
         "status": "success",
-        "items": 6,
-        "checked_at": "2026-07-26T06:40:51.706Z",
+        "items": 7,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-natolambert": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-rasbt": {
         "status": "success",
-        "items": 9,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "items": 6,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       }
     },
@@ -3498,259 +3498,259 @@
       "youtube-ucxzcjldbc09xxgz6gcdrc6a": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucp7jmxsy2xbc3kcae0mhq-a": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uchlnu7kizhrgsbhhvfoy72w": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_404"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_500"
       },
       "youtube-ucbhcmcgaijhv-estcwgjpcw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uccb9-kn8f-opb3ucgm-lilq": {
-        "status": "degraded",
+        "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_404"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": null
       },
       "youtube-ucfo0k3xjpqmcvy6ush3yrra": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_500"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-ucd6mob9nc6uyn2grvunt-zg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uc5-pbdfda3kuo-vq72l-uma": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucaktuy0tz47zy02dfpxmqoq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uckwaez-vweaex1j62do-vq": {
-        "status": "observed_empty",
+        "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": null
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_500"
       },
       "youtube-ucwx7y3w30n8as-ticy2x-2g": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uckelck4zao6heei1kqjqzwa": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_500"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-uco87fcxozpdr3k7qt1qtlda": {
-        "status": "success",
-        "items": 2,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": null
+        "status": "degraded",
+        "items": 0,
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-uchplebmo18p08akcigti38g": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_500"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-ucqcbqf6yw5kzroddcz-wbsw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucnj1ymd5yfuuptn21xtrbbw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uccjyq-k1xwfg8lndy7lkmpa": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucrm7b7sl-g1edfonmj-sdkg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucbfypyitq-7l4upox8nvctg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uczhmqk67msjgfcctn7xbfew": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucmltbahi5dmrt0npvdsoirq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_500"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-uccixc5mjshvytzr1mal5l9w": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uctyluttgs3k1fg4y5tahlbw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_500"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": "http_404"
       },
       "youtube-ucyo-jab-esufrv4b17ajtaw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucba5g-escn8yd4vw5u-gicg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucebb1b-l6zds3xturialzow": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uctatfzmf-8ekiwasxm4ts0a": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucsbjurrpoezykls9eqgamoa": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uchhyxslbevvnbvsq57n1mtq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucobqgqe4i5kf7wrxrxhtoqa": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uc2wmubufq6gl08qyg-jjxkw": {
-        "status": "degraded",
+        "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
-        "error_code": "http_404"
+        "checked_at": "2026-07-31T05:34:12.898Z",
+        "error_code": null
       },
       "youtube-ucrxsvx9a1mj8l0cmlwkgmvw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucby9xx3-jw5c2fjlzvbi4cg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucr9j1jqqb5rse69wjunbywa": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uch9nvjowxmfb7slapwgclpq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uc8butisfwt-wl7ev0huk0bq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uc4jx40jdee-tinbkjycv4sg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucc-lyotfsrcjza1ab3apagw": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uc9x0an7bwhpcdhsm9nijfjq": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucaq9f7jfea7mtl3qozy2h1a": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-ucshzkyawb77ixddsgog4iwa": {
         "status": "success",
         "items": 9,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "youtube-ucxl4i9dybrfoabk0xgmbkra": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "youtube-uclb7aztwc6vfzrbso2ucbmg": {
         "status": "degraded",
         "items": 0,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": "http_404"
       },
       "bilibili-3031494": {
@@ -3876,73 +3876,73 @@
       "x-openai": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-anthropicai": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-googledeepmind": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-aiatmeta": {
         "status": "success",
         "items": 6,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-xai": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-mistralai": {
         "status": "success",
-        "items": 7,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "items": 9,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-cohere": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-huggingface": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-microsoftai": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-nvidiaai": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-stabilityai": {
         "status": "success",
-        "items": 5,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "items": 4,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-deepseek-ai": {
         "status": "success",
-        "items": 5,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "items": 6,
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-karpathy": {
@@ -4044,26 +4044,26 @@
       "x-jackclarksf": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-26T06:40:51.706Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-natolambert": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       },
       "x-rasbt": {
         "status": "observed_empty",
         "items": 0,
-        "checked_at": "2026-07-27T05:50:00.605Z",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "error_code": null
       }
     }
   },
   "history_scheduler": {
     "schema_version": 1,
-    "active_layer": "recent-90d",
+    "active_layer": "recent-270d",
     "layer_coverage": {
       "recent-1d": {
         "status": "complete",
@@ -4081,8 +4081,13 @@
         "completed_at": "2026-07-26T06:40:51.706Z"
       },
       "recent-90d": {
-        "status": "blocked",
+        "status": "complete",
         "started_at": "2026-07-26T06:40:51.706Z",
+        "completed_at": "2026-07-31T05:34:12.898Z"
+      },
+      "recent-270d": {
+        "status": "running",
+        "started_at": "2026-07-31T05:34:12.898Z",
         "completed_at": null
       }
     },
@@ -6746,17 +6751,17 @@
       "recent-90d:youtube-ucrm7b7sl-g1edfonmj-sdkg": {
         "layer_id": "recent-90d",
         "source_id": "youtube-ucrm7b7sl-g1edfonmj-sdkg",
-        "status": "running",
-        "page_token": "EAAaHlBUOkNHUWlFRU00T0RZMlJUVkdPVVl4UmpCRlF6aw",
+        "status": "partial",
+        "page_token": null,
         "resume_page_token": null,
         "pages_fetched": 1,
         "items_observed": 50,
-        "oldest_observed_at": "2026-07-01T17:02:14.000Z",
-        "new_video_count": 0,
-        "duplicate_count": 15,
+        "oldest_observed_at": "2026-06-23T16:34:44.000Z",
+        "new_video_count": 33,
+        "duplicate_count": 13,
         "filtered_count": 0,
-        "stop_reason": null,
-        "checked_at": "2026-07-28T05:15:33.765Z",
+        "stop_reason": "new_video_target_reached",
+        "checked_at": "2026-07-31T05:34:12.898Z",
         "uploads_playlist_id": "UUrM7B7SL_g1edFOnmj-SDKg"
       },
       "recent-90d:youtube-ucbfypyitq-7l4upox8nvctg": {
@@ -7158,8 +7163,653 @@
         "stop_reason": "new_video_target_reached",
         "checked_at": "2026-07-27T05:50:00.605Z",
         "uploads_playlist_id": "UULB7AzTwc6VFZrBsO2ucBMg"
+      },
+      "recent-270d:youtube-ucxzcjldbc09xxgz6gcdrc6a": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-ucxzcjldbc09xxgz6gcdrc6a",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-ucp7jmxsy2xbc3kcae0mhq-a": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-ucp7jmxsy2xbc3kcae0mhq-a",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-uchlnu7kizhrgsbhhvfoy72w": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-uchlnu7kizhrgsbhhvfoy72w",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-ucbhcmcgaijhv-estcwgjpcw": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-ucbhcmcgaijhv-estcwgjpcw",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-uccb9-kn8f-opb3ucgm-lilq": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-uccb9-kn8f-opb3ucgm-lilq",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-ucfo0k3xjpqmcvy6ush3yrra": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-ucfo0k3xjpqmcvy6ush3yrra",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-ucd6mob9nc6uyn2grvunt-zg": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-ucd6mob9nc6uyn2grvunt-zg",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-uc5-pbdfda3kuo-vq72l-uma": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-uc5-pbdfda3kuo-vq72l-uma",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-ucaktuy0tz47zy02dfpxmqoq": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-ucaktuy0tz47zy02dfpxmqoq",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-uckwaez-vweaex1j62do-vq": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-uckwaez-vweaex1j62do-vq",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-ucwx7y3w30n8as-ticy2x-2g": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-ucwx7y3w30n8as-ticy2x-2g",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-uckelck4zao6heei1kqjqzwa": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-uckelck4zao6heei1kqjqzwa",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-uco87fcxozpdr3k7qt1qtlda": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-uco87fcxozpdr3k7qt1qtlda",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-uchplebmo18p08akcigti38g": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-uchplebmo18p08akcigti38g",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-ucqcbqf6yw5kzroddcz-wbsw": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-ucqcbqf6yw5kzroddcz-wbsw",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-ucnj1ymd5yfuuptn21xtrbbw": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-ucnj1ymd5yfuuptn21xtrbbw",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-uccjyq-k1xwfg8lndy7lkmpa": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-uccjyq-k1xwfg8lndy7lkmpa",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-ucrm7b7sl-g1edfonmj-sdkg": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-ucrm7b7sl-g1edfonmj-sdkg",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-ucbfypyitq-7l4upox8nvctg": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-ucbfypyitq-7l4upox8nvctg",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-uczhmqk67msjgfcctn7xbfew": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-uczhmqk67msjgfcctn7xbfew",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-ucmltbahi5dmrt0npvdsoirq": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-ucmltbahi5dmrt0npvdsoirq",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-uccixc5mjshvytzr1mal5l9w": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-uccixc5mjshvytzr1mal5l9w",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-uctyluttgs3k1fg4y5tahlbw": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-uctyluttgs3k1fg4y5tahlbw",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-ucyo-jab-esufrv4b17ajtaw": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-ucyo-jab-esufrv4b17ajtaw",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-ucba5g-escn8yd4vw5u-gicg": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-ucba5g-escn8yd4vw5u-gicg",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-ucebb1b-l6zds3xturialzow": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-ucebb1b-l6zds3xturialzow",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-uctatfzmf-8ekiwasxm4ts0a": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-uctatfzmf-8ekiwasxm4ts0a",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-ucsbjurrpoezykls9eqgamoa": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-ucsbjurrpoezykls9eqgamoa",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-uchhyxslbevvnbvsq57n1mtq": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-uchhyxslbevvnbvsq57n1mtq",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-ucobqgqe4i5kf7wrxrxhtoqa": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-ucobqgqe4i5kf7wrxrxhtoqa",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-uc2wmubufq6gl08qyg-jjxkw": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-uc2wmubufq6gl08qyg-jjxkw",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-ucrxsvx9a1mj8l0cmlwkgmvw": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-ucrxsvx9a1mj8l0cmlwkgmvw",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-ucby9xx3-jw5c2fjlzvbi4cg": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-ucby9xx3-jw5c2fjlzvbi4cg",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-ucr9j1jqqb5rse69wjunbywa": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-ucr9j1jqqb5rse69wjunbywa",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-uch9nvjowxmfb7slapwgclpq": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-uch9nvjowxmfb7slapwgclpq",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-uc8butisfwt-wl7ev0huk0bq": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-uc8butisfwt-wl7ev0huk0bq",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-uc4jx40jdee-tinbkjycv4sg": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-uc4jx40jdee-tinbkjycv4sg",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-ucc-lyotfsrcjza1ab3apagw": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-ucc-lyotfsrcjza1ab3apagw",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-uc9x0an7bwhpcdhsm9nijfjq": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-uc9x0an7bwhpcdhsm9nijfjq",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-ucaq9f7jfea7mtl3qozy2h1a": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-ucaq9f7jfea7mtl3qozy2h1a",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-ucshzkyawb77ixddsgog4iwa": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-ucshzkyawb77ixddsgog4iwa",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-ucxl4i9dybrfoabk0xgmbkra": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-ucxl4i9dybrfoabk0xgmbkra",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
+      },
+      "recent-270d:youtube-uclb7aztwc6vfzrbso2ucbmg": {
+        "layer_id": "recent-270d",
+        "source_id": "youtube-uclb7aztwc6vfzrbso2ucbmg",
+        "status": "running",
+        "page_token": null,
+        "resume_page_token": null,
+        "pages_fetched": 0,
+        "items_observed": 0,
+        "oldest_observed_at": null,
+        "new_video_count": 0,
+        "duplicate_count": 0,
+        "filtered_count": 0,
+        "stop_reason": null,
+        "checked_at": null
       }
     }
   },
-  "x_rotation_offset": 28
+  "x_rotation_offset": 12
 }
