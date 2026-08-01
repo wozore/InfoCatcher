@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>热点与 AI 概念 · B16 原型</title>
+    <link rel="stylesheet" href="b16-prototype-shell.css">
+  </head>
+  <body>
+    <div class="demo-note">
+      <strong>静态演示</strong>
+      <span>热点和概念均来自固定公开示例，不代表实时审核、实时生成或内部处理状态</span>
+    </div>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="b16-index.html">InfoCatcher</a>
+        <nav class="main-nav" aria-label="主导航">
+          <a class="nav-link" href="b16-search-home.html">AI 搜索</a>
+          <a class="nav-link" href="b16-discovery.html">发现工具</a>
+          <a class="nav-link" aria-current="page" href="b16-knowledge.html">了解 AI</a>
+          <a class="nav-link" href="b16-about.html">关于</a>
+        </nav>
+        <button class="menu-toggle" aria-expanded="false">菜单</button>
+      </div>
+      <nav class="mobile-nav">
+        <strong>了解 AI</strong>
+        <a href="#hotspots">AI 热点</a>
+        <a href="#concepts">AI 概念</a>
+      </nav>
+    </header>
+    <main class="page">
+      <div class="kicker">了解 AI</div>
+      <h1 class="page-title">把变化和概念，放回资料里看。</h1>
+      <p class="lead">热点帮助你了解近期内容，概念索引帮助你理解它们之间的关系。</p>
+      <section class="section-rule" id="hotspots">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:15px">
+          <h2 class="section-title">AI 热点</h2>
+          <span class="faint">公开内容流 · 编辑部式整理</span>
+        </div>
+        <div class="filters">
+          <select id="hotspotType" aria-label="内容类型">
+          <option value="">全部类型</option>
+          <option>模型</option>
+          <option>工作流</option>
+        </select>
+        <select id="hotspotSort" aria-label="排序">
+        <option value="recent">最近</option>
+        <option value="heat">热度（示例）</option>
+      </select>
+    </div>
+    <div class="grid-2" id="hotspotList">
+    </div>
+    <div class="state info" id="hotspotEmpty" hidden>
+      <strong>当前没有匹配的公开热点</strong>
+      <p>可以清除筛选，或稍后查看新的公开内容。</p>
+    </div>
+  </section>
+  <section class="section-rule" id="concepts">
+    <h2 class="section-title">AI 概念</h2>
+    <p class="muted">定义来自固定 glossary 示例，不调用实时 AI 生成解释。</p>
+    <div class="query-bar">
+      <input id="conceptInput" placeholder="搜索概念，例如 RAG" aria-label="搜索概念">
+      <button class="btn btn-primary" id="conceptSearch">搜索概念</button>
+    </div>
+    <div class="grid-2" style="margin-top:22px;grid-template-columns:220px minmax(0,1fr)">
+      <nav class="panel" aria-label="概念索引" id="conceptIndex">
+      </nav>
+      <article class="panel" id="conceptDetail">
+      </article>
+    </div>
+    <div class="section-rule">
+      <h2 class="section-title">正文中的概念解释</h2>
+      <p style="font:16px/1.9 var(--serif)">当资料中出现 <a class="concept-link" href="#concept-rag" data-concept="rag">检索增强生成</a> 或 <a class="concept-link" href="#concept-embedding" data-concept="Embedding">Embedding</a> 时，可以先预览一句解释，再决定是否进入概念页。</p>
+      <div id="conceptPopover" class="concept-popover" hidden>
+      </div>
+    </div>
+  </section>
+</main>
+<div class="modal-wrap" id="hotspotModal" hidden role="dialog" aria-modal="true" aria-labelledby="hotspotModalTitle">
+  <article class="modal">
+    <div class="modal-head">
+      <h2 id="hotspotModalTitle">
+      </h2>
+      <button class="close" data-close-modal aria-label="关闭热点详情">×</button>
+    </div>
+    <div id="hotspotModalBody">
+    </div>
+  </article>
+</div>
+<footer class="footer">热点详情使用对话框；概念解释使用静态 glossary 数据。</footer>
+<script src="b16-prototype-data.js"></script>
+<script src="b16-prototype-shell.js"></script>
+<script>(function(){function renderHotspots(){const type=hotspotType.value;const hs=B16.hotspots.filter(h=>!type||h.type===type);hotspotEmpty.hidden=hs.length>0;hotspotList.innerHTML=hs.map(h=>`<article class="panel" tabindex="0"><span class="tag">${h.type} · ${h.date}</span><h3>${h.title}</h3><p>${h.summary}</p><p class="faint" style="filter:blur(2px);margin-top:10px">来源核验与关联资料预览</p><button class="btn btn-small" data-hotspot="${h.id}">查看详情</button></article>`).join('');hotspotList.querySelectorAll('[data-hotspot]').forEach(b=>b.onclick=()=>{const h=B16.hotspots.find(x=>x.id===b.dataset.hotspot);hotspotModalTitle.textContent=h.title;hotspotModalBody.innerHTML=`<p style="font:17px/1.8 var(--serif)">${h.summary}</p><div class="accordion"><button aria-expanded="false">来源核验　⌄</button><div class="accordion-body" hidden><p>公开来源：${h.source}。此处只展示有限核验说明。</p><a class="btn-link" href="#">阅读来源 ↗</a></div></div><div class="accordion"><button aria-expanded="false">关联资料　⌄</button><div class="accordion-body" hidden><p>相关工具或概念：${h.related.join('、')}。</p></div></div>`;B16.showModal('hotspotModal',b.id);hotspotModalBody.querySelectorAll('.accordion button').forEach(btn=>btn.onclick=()=>{const body=btn.nextElementSibling;body.hidden=!body.hidden;btn.setAttribute('aria-expanded',String(!body.hidden))})})}hotspotType.onchange=renderHotspots;renderHotspots();function renderConcept(id){const c=B16.concept(id)||B16.concepts[0];conceptIndex.innerHTML=B16.concepts.map(x=>`<a class="btn-link" style="display:block;padding:8px 0" href="#concept-${x.id}" data-concept-select="${x.id}">${x.name}</a>`).join('');conceptDetail.innerHTML=`<span class="tag">概念解释</span><h3 style="font:26px var(--serif);margin:0 0 8px">${c.name}</h3><p style="font:17px/1.8 var(--serif)">${c.definition}</p><div class="section-rule"><strong>解决什么问题</strong><p class="muted">${c.problem}</p><strong>常见场景</strong><p class="muted">${c.scene}</p><strong>相关概念</strong><p class="muted">${c.related.join(' · ')}</p></div>`;conceptIndex.querySelectorAll('[data-concept-select]').forEach(a=>a.onclick=e=>{e.preventDefault();renderConcept(a.dataset.conceptSelect)})}renderConcept('rag');conceptSearch.onclick=()=>{const q=conceptInput.value.trim().toLowerCase(),c=B16.concepts.find(x=>(x.name+x.aliases.join('')).toLowerCase().includes(q));if(c)renderConcept(c.id);else conceptDetail.innerHTML='<div class="state warn"><strong>没有找到这个概念</strong><p>可以清除搜索，或使用 RAG、Embedding 等示例。</p></div>'};document.querySelectorAll('[data-concept]').forEach(a=>{let closeTimer;const clearClose=()=>clearTimeout(closeTimer);const close=()=>{conceptPopover.hidden=true};const scheduleClose=()=>{clearClose();closeTimer=setTimeout(close,120)};const show=()=>{const c=B16.concept(a.dataset.concept);conceptPopover.hidden=false;conceptPopover.innerHTML=`<h3>${c.name}</h3><p>${c.definition}</p><a class="btn-link" href="#concepts" data-jump="${c.id}">查看 AI 概念 →</a>`;const r=a.getBoundingClientRect();conceptPopover.style.left=Math.min(r.left,innerWidth-310)+'px';conceptPopover.style.top=(r.bottom+10)+'px';conceptPopover.querySelector('[data-jump]').onclick=()=>{conceptPopover.hidden=true;renderConcept(c.id);document.getElementById('concepts').scrollIntoView({behavior:'smooth'})}};a.addEventListener('click',e=>{e.preventDefault();show()});a.addEventListener('focus',show);a.addEventListener('keydown',e=>{if(e.key==='Escape')close()});if(matchMedia('(hover: hover) and (pointer: fine)').matches){a.addEventListener('pointerenter',()=>{clearClose();show()});a.addEventListener('pointerleave',scheduleClose);conceptPopover.addEventListener('pointerenter',clearClose);conceptPopover.addEventListener('pointerleave',scheduleClose)}});document.addEventListener('click',e=>{if(!e.target.closest('.concept-link,.concept-popover'))conceptPopover.hidden=true});document.addEventListener('keydown',e=>{if(e.key==='Escape')conceptPopover.hidden=true})})();</script>
+</body>
+</html>
