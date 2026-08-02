@@ -55,180 +55,538 @@
 </head>
 <body>
 
+<div class="capability-note" role="note">
+  <strong>静态演示说明：</strong>
+  <span>AI 搜索与信息整理正在进行界面验证；当前页面仍使用已收录的静态资料，不代表已接入真实 AI 搜索。</span>
+</div>
+
 <!-- 导航栏 -->
 <header class="header">
   <div class="header-inner">
     <a href="#" class="logo" id="homeBtn">🔍 InfoCatcher</a>
-    <!-- EXTENSION POINT: 新增视图时在此 nav 中添加 <button class="nav-btn" data-view="xxx"> -->
-    <nav class="nav">
-      <button class="nav-btn active" data-view="tools">工具库</button>
-      <button class="nav-btn" data-view="scenes">场景模式</button>
-      <button class="nav-btn" data-view="compare">对比模式 <span class="badge" id="compareCount">0</span></button>
-      <button class="nav-btn" data-view="trending">AI热点</button>
-      <button class="nav-btn" data-view="featured">推荐</button>
-      <button class="nav-btn" data-view="glossary">AI概念</button>
-      <button class="nav-btn" data-view="about">关于</button>
+    <!-- EXTENSION POINT: 新增视图时在此 nav 中添加对应分组与导航按钮 -->
+    <nav class="nav nav-groups" aria-label="主导航">
+      <div class="nav-group nav-group-search">
+        <span class="nav-group-label">AI 搜索</span>
+        <button class="nav-btn active" data-view="search">搜索入口</button>
+      </div>
+      <div class="nav-group">
+        <span class="nav-group-label">发现工具</span>
+        <div class="nav-group-items">
+          <button class="nav-btn" data-view="tools">工具库</button>
+          <button class="nav-btn" data-view="scenes">场景</button>
+          <button class="nav-btn" data-view="compare">对比 <span class="badge" id="compareCount">0</span></button>
+          <button class="nav-btn" data-view="featured">推荐</button>
+        </div>
+      </div>
+      <div class="nav-group">
+        <span class="nav-group-label">了解 AI</span>
+        <div class="nav-group-items">
+          <button class="nav-btn" data-view="trending">AI 热点</button>
+          <button class="nav-btn" data-view="glossary">AI 概念</button>
+        </div>
+      </div>
+      <div class="nav-group nav-group-about">
+        <span class="nav-group-label">项目</span>
+        <button class="nav-btn" data-view="about">关于</button>
+      </div>
     </nav>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileNav" aria-label="打开导航菜单">
+      <span aria-hidden="true">菜单</span>
+    </button>
   </div>
+  <nav class="mobile-nav" id="mobileNav" aria-label="移动端主导航" hidden>
+    <section class="mobile-nav-group" aria-labelledby="mobileSearchLabel">
+      <strong id="mobileSearchLabel">AI 搜索</strong>
+      <div class="mobile-nav-items">
+        <button type="button" data-view="search">搜索入口</button>
+      </div>
+    </section>
+    <section class="mobile-nav-group" aria-labelledby="mobileDiscoveryLabel">
+      <strong id="mobileDiscoveryLabel">发现工具</strong>
+      <div class="mobile-nav-items">
+        <button type="button" data-view="tools">工具库</button>
+        <button type="button" data-view="scenes">场景</button>
+        <button type="button" data-view="compare">对比</button>
+        <button type="button" data-view="featured">推荐</button>
+      </div>
+    </section>
+    <section class="mobile-nav-group" aria-labelledby="mobileKnowledgeLabel">
+      <strong id="mobileKnowledgeLabel">了解 AI</strong>
+      <div class="mobile-nav-items">
+        <button type="button" data-view="trending">AI 热点</button>
+        <button type="button" data-view="glossary">AI 概念</button>
+      </div>
+    </section>
+    <section class="mobile-nav-group" aria-labelledby="mobileProjectLabel">
+      <strong id="mobileProjectLabel">项目</strong>
+      <div class="mobile-nav-items">
+        <button type="button" data-view="about">关于</button>
+      </div>
+    </section>
+  </nav>
 </header>
 
-<main id="app">
+<main id="app" aria-busy="true">
+  <div class="sr-only" id="appStatus" role="status" aria-live="polite" aria-atomic="true">正在加载静态资料</div>
 
   <!-- EXTENSION POINT: 新增视图在此添加 <section id="view-xxx" class="view"> -->
 
+  <!-- AI 搜索首页：仅提交固定静态示例，不联网或动态生成 -->
+  <section id="view-search" class="view active" aria-labelledby="searchViewTitle">
+    <div class="search-shell" id="searchHomePanel">
+      <header class="page-header search-home-header">
+        <span class="eyebrow">AI 信息搜索 · 静态演示</span>
+        <h1 class="page-title" id="searchViewTitle">把你想了解的事，说清楚一点</h1>
+        <p class="page-lead">从一个具体任务开始，在已收录的工具、场景、热点与概念资料中进行固定示例匹配。</p>
+      </header>
+
+      <form class="query-bar search-shell-query" id="aiSearchShellForm" aria-label="AI 静态搜索示例" novalidate>
+        <label class="sr-only" for="aiSearchInput">输入 AI 问题</label>
+        <input id="aiSearchInput" type="text" placeholder="例如：写论文" autocomplete="off" aria-describedby="searchBoundary searchFormStatus" aria-invalid="false">
+        <button class="btn btn-primary" id="aiSearchSubmit" type="submit">开始整理</button>
+      </form>
+      <p class="status-line search-form-status" id="searchFormStatus" role="status" aria-live="polite" aria-atomic="true"></p>
+      <div class="state error search-home-state" id="searchEmptyState" role="alert" hidden>
+        <strong>还没有输入问题</strong>
+        <p>先写下你想完成的任务，或从下面选择一个固定示例。</p>
+      </div>
+      <div class="state info search-home-state" id="searchUnsupportedState" role="status" hidden>
+        <strong>暂无对应静态示例</strong>
+        <p>当前不会为任意问题生成回答。请改写为下方任一固定示例后重试。</p>
+      </div>
+      <div class="state info search-shell-note" id="searchBoundary" role="note">
+        <strong>只整理已收录的静态资料</strong>
+        <p>不会联网检索或生成实时回答；页面状态与示例历史仅保留在当前内存中。</p>
+      </div>
+
+      <section class="search-processing panel" id="searchProcessing" aria-labelledby="searchProcessingTitle" aria-busy="false" hidden>
+        <div class="search-processing-heading">
+          <div>
+            <span class="eyebrow">固定演示流程</span>
+            <h2 class="section-title" id="searchProcessingTitle">整理已收录的静态资料</h2>
+          </div>
+          <button class="btn btn-small" id="searchCancelProcessing" type="button">中止整理</button>
+        </div>
+        <p class="muted">这些步骤只描述本地资料整理，不代表联网检索或 AI 实时生成。</p>
+        <ol class="search-stage-list" id="searchStageList"></ol>
+      </section>
+
+      <section class="search-home-section section-rule" aria-labelledby="searchExamplesTitle">
+        <h2 class="section-title" id="searchExamplesTitle">你可以试试</h2>
+        <div class="chip-row search-example-list" id="searchExampleList"></div>
+        <p class="search-rewrite-hint">问题越具体越容易匹配。可以先写任务，例如“写论文”“写代码”或“深度研究”。</p>
+      </section>
+
+      <section class="search-home-section section-rule" id="searchRecentSection" aria-labelledby="searchRecentTitle" hidden>
+        <div class="search-section-heading">
+          <h2 class="section-title" id="searchRecentTitle">最近探索</h2>
+          <span class="faint">当前页面示例 · 不会持久保存</span>
+        </div>
+        <div class="list search-recent-list" id="searchRecentList"></div>
+      </section>
+    </div>
+
+    <div class="search-results-shell" id="searchResultsPanel" hidden>
+      <button class="btn-link search-back-button" id="searchBackButton" type="button">← 返回 AI 搜索</button>
+      <section class="search-query-panel section-rule" aria-labelledby="searchResultQuery">
+        <span class="eyebrow">当前问题 · 静态演示</span>
+        <div class="search-query-readonly" id="searchQueryReadonly">
+          <h1 class="page-title" id="searchResultQuery" tabindex="-1"></h1>
+          <button class="btn btn-small" id="searchEditButton" type="button">修改问题</button>
+        </div>
+        <form class="query-bar search-query-edit" id="searchEditForm" hidden novalidate>
+          <label class="sr-only" for="searchEditInput">修改当前问题</label>
+          <input id="searchEditInput" type="text" autocomplete="off" aria-describedby="searchEditStatus" aria-invalid="false">
+          <button class="btn btn-primary" type="submit">重新整理</button>
+          <button class="btn" id="searchEditCancel" type="button">取消</button>
+        </form>
+        <p class="status-line search-form-status" id="searchEditStatus" role="status" aria-live="polite" aria-atomic="true"></p>
+      </section>
+
+      <div class="state info search-result-state" id="searchResultState" role="status" hidden></div>
+      <section class="search-result-layout" id="searchResultContent" aria-label="静态搜索整理结果" hidden>
+        <article class="search-summary" aria-labelledby="searchSummaryTitle">
+          <span class="eyebrow">搜索摘要 · 静态资料摘录</span>
+          <h2 class="section-title" id="searchSummaryTitle">已收录资料中的相关信息</h2>
+          <div class="search-summary-content" id="searchSummaryContent"></div>
+        </article>
+        <aside class="search-sources" aria-labelledby="searchSourcesTitle">
+          <div class="search-sources-sticky">
+            <span class="eyebrow">关键来源</span>
+            <h2 class="section-title" id="searchSourcesTitle">本页引用的静态资料</h2>
+            <div class="search-source-list" id="searchSourceList"></div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="search-matches section-rule" id="searchMatchesSection" aria-labelledby="searchMatchesTitle" hidden>
+        <div class="search-section-heading">
+          <div>
+            <span class="eyebrow">继续探索</span>
+            <h2 class="section-title" id="searchMatchesTitle">按资料类型查看匹配项</h2>
+          </div>
+          <span class="faint">各类型独立展示，不代表统一排名</span>
+        </div>
+        <div class="search-match-groups" id="searchMatchGroups"></div>
+      </section>
+
+      <section class="search-feedback section-rule" id="searchFeedbackSection" aria-labelledby="searchFeedbackTitle" hidden>
+        <div>
+          <h2 class="section-title" id="searchFeedbackTitle">这次静态整理有帮助吗？</h2>
+          <p class="muted">反馈只改变当前页面状态，不会保存或上传。</p>
+        </div>
+        <div class="search-feedback-actions" aria-label="结果反馈">
+          <button class="btn btn-small" type="button" data-search-feedback="helpful" aria-pressed="false">有帮助</button>
+          <button class="btn btn-small" type="button" data-search-feedback="not-helpful" aria-pressed="false">没帮助</button>
+        </div>
+        <p class="status-line" id="searchFeedbackStatus" role="status" aria-live="polite"></p>
+      </section>
+    </div>
+  </section>
+
+  <aside class="concept-popover" id="searchConceptPopover" role="dialog" aria-modal="false" aria-labelledby="searchConceptTitle" hidden>
+    <div class="concept-popover-head">
+      <div>
+        <span class="eyebrow">AI 概念</span>
+        <h2 id="searchConceptTitle"></h2>
+      </div>
+      <button class="concept-popover-close" id="searchConceptClose" type="button" aria-label="关闭概念解释">×</button>
+    </div>
+    <p id="searchConceptSummary"></p>
+    <button class="btn btn-small" id="searchConceptOpen" type="button">前往 AI 概念查看详情</button>
+  </aside>
+
   <!-- 工具库视图 -->
-  <section id="view-tools" class="view active">
-    <div class="hero">
-      <h1>找到最适合你的 AI 工具</h1>
-      <p>不再是泛泛的罗列。按<b>真实使用场景</b>对比，公开<b>评测方法论</b>，标注<b>每项信息的更新日期</b>。</p>
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="搜索工具名、场景、功能… 例如: 写论文、免费、编程" autocomplete="off">
-        <button id="searchClear" class="clear-btn" style="display:none">✕</button>
-      </div>
-    </div>
+  <section id="view-tools" class="view tools-view" aria-labelledby="toolsViewTitle">
+    <header class="page-header tools-header">
+      <span class="eyebrow">发现工具</span>
+      <h1 class="page-title" id="toolsViewTitle">按任务与条件筛选 AI 工具</h1>
+      <p class="page-lead">从真实使用场景出发，结合访问方式、价格和具体产品层级缩小范围；每项资料保留更新时间和来源入口。</p>
+    </header>
 
-    <div class="filters">
-      <!-- EXTENSION POINT: 新增筛选维度时在此添加 <div class="filter-group"> + filter-chip -->
-      <div class="filter-group">
-        <span class="filter-label">分类:</span>
-        <button class="filter-chip active" data-category="all">全部</button>
-        <button class="filter-chip" data-category="对话">💬 对话</button>
-        <button class="filter-chip" data-category="AI编程">💻 AI编程</button>
-        <button class="filter-chip" data-category="AI图像">🎨 AI图像</button>
-        <button class="filter-chip" data-category="AI视频">🎬 AI视频</button>
-        <button class="filter-chip" data-category="AI搜索">🔎 AI搜索</button>
-        <button class="filter-chip" data-category="AI办公">📊 AI办公</button>
-        <button class="filter-chip" data-category="AI音频">🎵 AI音频</button>
-        <button class="filter-chip" data-category="AI音乐">🎵 AI音乐</button>
-        <button class="filter-chip" data-category="开源">🔓 开源</button>
+    <section class="tools-controls panel" aria-labelledby="toolsSearchTitle">
+      <div class="tools-search-heading">
+        <div>
+          <h2 class="section-title" id="toolsSearchTitle">查找已收录工具</h2>
+          <p class="muted">输入工具名、任务或功能，再按条件继续筛选。</p>
+        </div>
+        <div class="stats-bar" aria-live="polite">
+          <span id="toolCount">45</span> 个工具
+          <span id="filteredInfo" style="display:none">（已筛选）</span>
+        </div>
       </div>
-      <div class="filter-group">
-        <span class="filter-label">访问:</span>
-        <button class="filter-chip" data-access="all">全部</button>
-        <button class="filter-chip" data-access="开放">✅ 国内可访问</button>
-        <button class="filter-chip" data-access="受限">⚠️ 需科学上网</button>
-      </div>
-      <div class="filter-group">
-        <span class="filter-label">价格:</span>
-        <button class="filter-chip" data-price="all">全部</button>
-        <button class="filter-chip" data-price="free">🆓 有免费层</button>
-        <button class="filter-chip" data-price="paid">💰 仅付费</button>
-      </div>
-    </div>
 
-    <div class="stats-bar">
-      <span id="toolCount">44</span> 个工具
-      <span id="filteredInfo" style="display:none">（已筛选）</span>
-    </div>
+      <div class="search-box tools-search-box">
+        <label class="sr-only" for="searchInput">搜索工具名、场景或功能</label>
+        <input type="text" id="searchInput" placeholder="例如：写论文、免费、编程" autocomplete="off">
+        <button id="searchClear" class="clear-btn" type="button" style="display:none" aria-label="清除工具搜索">✕</button>
+      </div>
 
-    <div class="tool-grid" id="toolGrid"></div>
+      <div class="filters tools-filters" aria-label="工具筛选条件">
+        <!-- EXTENSION POINT: 新增筛选维度时在此添加 <div class="filter-group"> + filter-chip -->
+        <div class="filter-group">
+          <span class="filter-label">分类</span>
+          <button class="filter-chip active" type="button" data-category="all" aria-pressed="true">全部</button>
+          <button class="filter-chip" type="button" data-category="对话" aria-pressed="false">💬 对话</button>
+          <button class="filter-chip" type="button" data-category="AI编程" aria-pressed="false">💻 AI编程</button>
+          <button class="filter-chip" type="button" data-category="AI图像" aria-pressed="false">🎨 AI图像</button>
+          <button class="filter-chip" type="button" data-category="AI视频" aria-pressed="false">🎬 AI视频</button>
+          <button class="filter-chip" type="button" data-category="AI搜索" aria-pressed="false">🔎 AI搜索</button>
+          <button class="filter-chip" type="button" data-category="AI办公" aria-pressed="false">📊 AI办公</button>
+          <button class="filter-chip" type="button" data-category="AI音频" aria-pressed="false">🎵 AI音频</button>
+          <button class="filter-chip" type="button" data-category="AI音乐" aria-pressed="false">🎵 AI音乐</button>
+          <button class="filter-chip" type="button" data-category="开源" aria-pressed="false">🔓 开源</button>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">访问</span>
+          <button class="filter-chip active" type="button" data-access="all" aria-pressed="true">全部</button>
+          <button class="filter-chip" type="button" data-access="开放" aria-pressed="false">✅ 国内可访问</button>
+          <button class="filter-chip" type="button" data-access="受限" aria-pressed="false">⚠️ 需科学上网</button>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">价格</span>
+          <button class="filter-chip active" type="button" data-price="all" aria-pressed="true">全部</button>
+          <button class="filter-chip" type="button" data-price="free" aria-pressed="false">🆓 有免费层</button>
+          <button class="filter-chip" type="button" data-price="paid" aria-pressed="false">💰 仅付费</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="tools-directory section-rule" aria-labelledby="toolsDirectoryTitle">
+      <div class="directory-heading">
+        <div>
+          <span class="eyebrow">工具目录</span>
+          <h2 class="section-title" id="toolsDirectoryTitle">当前匹配</h2>
+        </div>
+        <p class="faint">点击条目查看详情；具体工具、模型或套餐可加入对比。</p>
+      </div>
+      <div class="tool-grid" id="toolGrid"></div>
+    </section>
   </section>
 
   <!-- 场景导航视图 -->
-  <section id="view-scenes" class="view">
-    <h2>按场景找工具</h2>
-    <p>不同场景对 AI 的要求不同——搜索你的需求，找到最合适的工具。</p>
-    <div class="scene-search-box">
-      <input type="text" id="sceneSearch" placeholder="搜索场景或需求关键词…" autocomplete="off">
-      <button id="sceneSearchClear" class="clear-btn" style="display:none" aria-label="清除场景搜索">✕</button>
-    </div>
-    <div class="scene-list" id="sceneList"></div>
+  <section id="view-scenes" class="view scenes-view" aria-labelledby="scenesViewTitle">
+    <header class="page-header scenes-header">
+      <span class="eyebrow">按任务发现</span>
+      <h1 class="page-title" id="scenesViewTitle">先选择你要完成的场景</h1>
+      <p class="page-lead">不同任务对工具能力、使用门槛和成本的要求不同。搜索具体需求，展开场景后查看子任务、匹配工具和推荐依据。</p>
+    </header>
+
+    <section class="scenes-search panel" aria-labelledby="scenesSearchTitle">
+      <div class="scenes-search-copy">
+        <h2 class="section-title" id="scenesSearchTitle">搜索任务或需求</h2>
+        <p class="muted">例如：写论文、翻译文档、生成视频、数据分析。</p>
+      </div>
+      <div class="scene-search-box">
+        <label class="sr-only" for="sceneSearch">搜索场景或需求关键词</label>
+        <input type="text" id="sceneSearch" placeholder="输入场景或需求关键词" autocomplete="off">
+        <button id="sceneSearchClear" class="clear-btn" type="button" style="display:none" aria-label="清除场景搜索">✕</button>
+      </div>
+    </section>
+
+    <section class="scenes-directory section-rule" aria-labelledby="scenesDirectoryTitle">
+      <div class="directory-heading">
+        <div>
+          <span class="eyebrow">场景目录</span>
+          <h2 class="section-title" id="scenesDirectoryTitle">从任务开始探索</h2>
+        </div>
+        <p class="faint">展开一个场景查看子任务；同一时间只保留一个场景展开。</p>
+      </div>
+      <div class="scene-list" id="sceneList"></div>
+    </section>
   </section>
 
   <!-- 对比模式视图 -->
-  <section id="view-compare" class="view">
-    <h2>工具对比</h2>
-    <p>选择 2-5 个工具进行多维度对比。</p>
-    <div id="compareSelection" class="compare-selection">
-      <p class="hint">在工具库中点击 <b>+对比</b> 按钮添加工具，或点击下方快捷选择：</p>
-    </div>
-    <div class="compare-table-wrap" id="compareTable"></div>
+  <section id="view-compare" class="view compare-view" aria-labelledby="compareViewTitle">
+    <header class="page-header compare-header">
+      <span class="eyebrow">并排核对</span>
+      <h1 class="page-title" id="compareViewTitle">比较同一层级的工具与方案</h1>
+      <p class="page-lead">选择 2–5 个同类型项目并排阅读。具体工具、API 模型和订阅套餐分别比较，不把不同口径混成一个结论。</p>
+    </header>
+
+    <section class="compare-workspace panel" aria-labelledby="compareSelectionTitle">
+      <div class="compare-workspace-heading">
+        <div>
+          <h2 class="section-title" id="compareSelectionTitle">已选项目</h2>
+          <p class="muted">可从工具库、场景或详情中加入对比，也可使用下方快捷组合。</p>
+        </div>
+        <span class="compare-limit">2–5 项 · 仅限同类型</span>
+      </div>
+      <div id="compareSelection" class="compare-selection" aria-live="polite">
+        <p class="hint">在工具库中点击 <b>+对比</b> 按钮添加工具，或点击下方快捷选择。</p>
+      </div>
+    </section>
+
+    <section class="compare-results section-rule" aria-labelledby="compareResultsTitle">
+      <div class="directory-heading">
+        <div>
+          <span class="eyebrow">对比结果</span>
+          <h2 class="section-title" id="compareResultsTitle">按维度阅读</h2>
+        </div>
+        <p class="faint">暂无、未知、不适用与过期资料保持原义，不按数值 0 处理。</p>
+      </div>
+      <div class="compare-table-wrap" id="compareTable" aria-live="polite"></div>
+    </section>
   </section>
 
   <!-- AI 热点视图 -->
-  <section id="view-trending" class="view">
-    <div class="trending-hero">
-      <h1>AI 热点</h1>
-      <p>广泛采集 YouTube、X、Bilibili 的视频、动态、专栏和短消息，再以可追溯规则筛选与分组。</p>
-    </div>
-    <div class="trending-status" id="trendingStatus"></div>
-    <div class="trending-controls">
-      <div class="trending-tabs" id="trendingTabs">
-        <button class="filter-chip active" data-platform="all">全部</button>
-        <button class="filter-chip" data-platform="youtube">YouTube</button>
-        <button class="filter-chip" data-platform="x">X</button>
-        <button class="filter-chip" data-platform="bilibili">B站</button>
-        <button class="filter-chip" data-platform="bilibili_dynamic">B站动态</button>
+  <section id="view-trending" class="view trending-view" aria-labelledby="trendingViewTitle">
+    <header class="page-header trending-header">
+      <span class="eyebrow">公开内容流</span>
+      <h1 class="page-title" id="trendingViewTitle">浏览已收录的 AI 热点</h1>
+      <p class="page-lead">按公开内容类型、来源平台和发布时间阅读 YouTube、X、Bilibili 的来源内容；描述与互动字段缺失时会明确标注。</p>
+    </header>
+
+    <section class="trending-overview panel" aria-labelledby="trendingOverviewTitle">
+      <div class="trending-overview-heading">
+        <div>
+          <h2 class="section-title" id="trendingOverviewTitle">公开数据状态</h2>
+          <p class="muted">这里只显示浏览器可读取的公开热点投影；采集覆盖或更新时间不足时会明确提示。</p>
+        </div>
+        <div class="trending-summary" aria-live="polite"><span id="trendingCount">0</span> 条内容 · <span id="trendingGenerated">尚未采集</span></div>
       </div>
-      <label class="trending-sort">排序
-        <select id="trendingSort">
-          <option value="score">综合价值</option>
-          <option value="recent">最新发布</option>
-        </select>
-      </label>
-    </div>
-    <div class="trending-summary"><span id="trendingCount">0</span> 条内容 · <span id="trendingGenerated">尚未采集</span></div>
-    <div class="trending-grid" id="trendingGrid"></div>
+      <div class="trending-status" id="trendingStatus"></div>
+    </section>
+
+    <section class="trending-directory section-rule" aria-labelledby="trendingDirectoryTitle">
+      <div class="directory-heading">
+        <div>
+          <span class="eyebrow">热点目录</span>
+          <h2 class="section-title" id="trendingDirectoryTitle">按内容类型、平台与顺序阅读</h2>
+        </div>
+        <p class="faint">类型来自公开 <code>content_type</code>；本步不展示内部评分明细、候选溯源或审核状态。</p>
+      </div>
+      <div class="trending-controls" aria-label="热点筛选与排序">
+        <div class="trending-filter-sets">
+          <div class="trending-filter-set">
+            <span class="filter-label">内容类型</span>
+            <div class="trending-tabs" id="trendingTypeTabs" aria-label="公开内容类型">
+              <button class="filter-chip active" type="button" data-content-type="all" aria-pressed="true">全部类型</button>
+            </div>
+          </div>
+          <div class="trending-filter-set">
+            <span class="filter-label">来源平台</span>
+            <div class="trending-tabs" id="trendingTabs" aria-label="来源平台">
+              <button class="filter-chip active" type="button" data-platform="all" aria-pressed="true">全部平台</button>
+              <button class="filter-chip" type="button" data-platform="youtube" aria-pressed="false">YouTube</button>
+              <button class="filter-chip" type="button" data-platform="x" aria-pressed="false">X</button>
+              <button class="filter-chip" type="button" data-platform="bilibili" aria-pressed="false">B站</button>
+              <button class="filter-chip" type="button" data-platform="bilibili_dynamic" aria-pressed="false">B站动态</button>
+            </div>
+          </div>
+        </div>
+        <label class="trending-sort" for="trendingSort">排序
+          <select id="trendingSort">
+            <option value="recent" selected>最新发布</option>
+            <option value="score">综合价值</option>
+          </select>
+        </label>
+      </div>
+      <div class="trending-grid" id="trendingGrid"></div>
+    </section>
   </section>
 
   <!-- AI 概念视图 -->
-  <section id="view-glossary" class="view">
-    <h2>AI 概念词典</h2>
-    <p>了解 AI 领域常见术语，降低技术门槛。点击条目查看详细释义。</p>
-    <div class="glossary-search-box">
-      <input type="text" id="glossarySearch" placeholder="搜索术语名称或关键词…" autocomplete="off">
-      <button id="glossarySearchClear" class="clear-btn" style="display:none">✕</button>
-    </div>
-    <div class="glossary-categories" id="glossaryCategories"></div>
-    <div class="glossary-list" id="glossaryList"></div>
+  <section id="view-glossary" class="view glossary-view" aria-labelledby="glossaryViewTitle">
+    <header class="page-header glossary-header">
+      <span class="eyebrow">概念索引</span>
+      <h1 class="page-title" id="glossaryViewTitle">查阅 AI 术语与实用解释</h1>
+      <p class="page-lead">按名称、分类或相关词查找已收录概念，展开条目阅读定义、关联术语、实用意义和来源。</p>
+    </header>
+
+    <section class="glossary-controls panel" aria-labelledby="glossarySearchTitle">
+      <div class="glossary-controls-heading">
+        <div>
+          <h2 class="section-title" id="glossarySearchTitle">搜索概念索引</h2>
+          <p class="muted">当前只读取既有术语字段，不推断或新增别名。</p>
+        </div>
+        <p class="faint">P1-A 将在数据适配门禁后接入全站概念联动。</p>
+      </div>
+      <div class="glossary-search-box">
+        <label class="sr-only" for="glossarySearch">搜索术语名称或关键词</label>
+        <input type="text" id="glossarySearch" placeholder="输入术语名称或关键词" autocomplete="off">
+        <button id="glossarySearchClear" class="clear-btn" type="button" style="display:none" aria-label="清除概念搜索">✕</button>
+      </div>
+      <div class="glossary-categories" id="glossaryCategories" aria-label="概念分类"></div>
+    </section>
+
+    <section class="glossary-directory section-rule" aria-labelledby="glossaryDirectoryTitle">
+      <div class="directory-heading">
+        <div>
+          <span class="eyebrow">术语目录</span>
+          <h2 class="section-title" id="glossaryDirectoryTitle">展开条目阅读解释</h2>
+        </div>
+        <p class="faint">桌面端按索引扫描，展开后阅读文章式详情；移动端按自然顺序上下排列。</p>
+      </div>
+      <div class="glossary-list" id="glossaryList"></div>
+    </section>
   </section>
 
   <!-- 推荐视图 -->
-  <section id="view-featured" class="view">
-    <div class="view-container">
-      <section class="featured-section" id="editorPicksSection">
-        <h2>编辑精选</h2>
-        <p class="section-subtitle">编辑团队按分类精选推荐的具体 AI 模型与工具</p>
-        <div class="featured-tabs" id="editorPicksTabs"></div>
+  <section id="view-featured" class="view featured-view" aria-labelledby="featuredViewTitle">
+    <header class="page-header featured-header">
+      <span class="eyebrow">独立推荐视图</span>
+      <h1 class="page-title" id="featuredViewTitle">阅读编辑精选与资料热门项</h1>
+      <p class="page-lead">编辑精选来自人工维护的既有清单；热门模型按当前资料状态与定价完整度自动排序。两者口径不同，分别展示。</p>
+    </header>
+
+    <div class="view-container featured-sections">
+      <section class="featured-section panel" id="editorPicksSection" aria-labelledby="editorPicksTitle">
+        <div class="featured-section-heading">
+          <div>
+            <span class="eyebrow">人工清单</span>
+            <h2 class="section-title" id="editorPicksTitle">编辑精选</h2>
+            <p class="section-subtitle">按分类展示已维护的具体 AI 模型与工具，并保留推荐理由。</p>
+          </div>
+          <p class="faint">分类状态仅作用于编辑精选。</p>
+        </div>
+        <div class="featured-tabs" id="editorPicksTabs" aria-label="编辑精选分类"></div>
         <div class="featured-grid" id="featuredPicksGrid"></div>
       </section>
-      <section class="featured-section" id="hotRankingSection">
-        <h2>热门模型</h2>
-        <p class="section-subtitle">按资料完整度与状态自动排序的分类热门模型</p>
-        <div class="featured-tabs" id="hotRankingTabs"></div>
+      <section class="featured-section panel" id="hotRankingSection" aria-labelledby="hotRankingTitle">
+        <div class="featured-section-heading">
+          <div>
+            <span class="eyebrow">资料排序</span>
+            <h2 class="section-title" id="hotRankingTitle">热门模型</h2>
+            <p class="section-subtitle">根据已收录资料的状态与定价完整度排序，不表示市场份额或综合能力排名。</p>
+          </div>
+          <p class="faint">分类状态与编辑精选相互独立。</p>
+        </div>
+        <div class="featured-tabs" id="hotRankingTabs" aria-label="热门模型分类"></div>
         <div class="featured-grid" id="featuredHotGrid"></div>
       </section>
     </div>
   </section>
 
   <!-- 关于视图 -->
-  <section id="view-about" class="view">
-    <h2>关于 InfoCatcher</h2>
-    <div class="about-content">
-      <h3>为什么做这个？</h3>
-      <p>在对 112 名 AI 用户的调查中，<b>60.7%</b> 的人觉得 AI 信息太分散，<b>63.4%</b> 曾因不了解而选错工具，仅 <b>10.7%</b> 信任网上现有的 AI 评测。</p>
-      <p>InfoCatcher 的目标：通过<b>场景化深度对比</b>、<b>公开评测方法论</b>和<b>开源透明</b>，帮你做出更明智的 AI 工具选择。</p>
+  <section id="view-about" class="view about-view" aria-labelledby="aboutViewTitle">
+    <article class="about-article">
+      <header class="page-header about-header">
+        <span class="eyebrow">关于项目</span>
+        <h1 class="page-title" id="aboutViewTitle">为什么做 InfoCatcher</h1>
+        <p class="page-lead">通过场景化对比、公开评测方法和开源透明，帮助用户理解 AI 工具资料并作出更明智的选择。</p>
+      </header>
 
-      <h3>评测方法论</h3>
-      <ul>
-        <li>每个工具的评分基于四个维度：综合能力、中文支持、易用性、性价比</li>
-        <li>"适用场景"标签基于真实用例测试，非厂商宣传材料</li>
-        <li>"不适合场景"如实标注——没有万能工具</li>
-        <li>每条信息标注"最后更新日期"和"信息来源"</li>
-        <li>利益声明：<b>本项目不接收任何 AI 工具厂商赞助</b></li>
-      </ul>
+      <section class="about-section" aria-labelledby="aboutProblemTitle">
+        <span class="about-section-number" aria-hidden="true">01</span>
+        <div>
+          <h2 class="section-title" id="aboutProblemTitle">我们看到的问题</h2>
+          <p>在对 112 名 AI 用户的调查中，<b>60.7%</b> 的人觉得 AI 信息太分散，<b>63.4%</b> 曾因不了解而选错工具，仅 <b>10.7%</b> 信任网上现有的 AI 评测。</p>
+          <p>InfoCatcher 的目标：通过<b>场景化深度对比</b>、<b>公开评测方法论</b>和<b>开源透明</b>，帮你做出更明智的 AI 工具选择。</p>
+        </div>
+      </section>
 
-      <h3>开源</h3>
-      <p>InfoCatcher 是一个开源免费项目，代码和数据托管在 GitHub。欢迎贡献、纠错、提出需求。</p>
-      <p>数据采集策略：官方 API + 网页公开信息 + 手动整理。所有数据标注来源。</p>
-    </div>
+      <section class="about-section" aria-labelledby="aboutMethodTitle">
+        <span class="about-section-number" aria-hidden="true">02</span>
+        <div>
+          <h2 class="section-title" id="aboutMethodTitle">评测方法论</h2>
+          <ul class="about-principles">
+            <li><strong>明确维度</strong><span>每个工具的评分基于四个维度：综合能力、中文支持、易用性、性价比。</span></li>
+            <li><strong>场景核对</strong><span>“适用场景”标签基于真实用例测试，非厂商宣传材料。</span></li>
+            <li><strong>如实限制</strong><span>“不适合场景”如实标注——没有万能工具。</span></li>
+            <li><strong>可追溯资料</strong><span>每条信息标注“最后更新日期”和“信息来源”。</span></li>
+          </ul>
+          <div class="state warn about-disclosure" role="note">
+            <strong>利益声明</strong>
+            <p>本项目不接收任何 AI 工具厂商赞助。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="about-section" aria-labelledby="aboutBoundaryTitle">
+        <span class="about-section-number" aria-hidden="true">03</span>
+        <div>
+          <h2 class="section-title" id="aboutBoundaryTitle">当前能力与资料边界</h2>
+          <p>当前站点使用原生 HTML、CSS、JavaScript 和静态 JSON，页面内搜索、筛选、对比与热点浏览均基于已收录资料。</p>
+          <div class="state info" role="note">
+            <strong>AI 搜索仍是静态界面验证</strong>
+            <p>当前不会联网检索、调用模型、流式生成回答，也不提供账户、持久会话或真实搜索历史。</p>
+          </div>
+          <p>数据采集策略：官方 API + 网页公开信息 + 手动整理。所有数据标注来源。</p>
+        </div>
+      </section>
+
+      <section class="about-section" aria-labelledby="aboutOpenTitle">
+        <span class="about-section-number" aria-hidden="true">04</span>
+        <div>
+          <h2 class="section-title" id="aboutOpenTitle">开源与参与</h2>
+          <p>InfoCatcher 是一个开源免费项目，代码和数据托管在 GitHub。欢迎贡献、纠错、提出需求。</p>
+          <div class="about-actions">
+            <a class="btn" href="https://github.com/wozore/infocatcher/blob/main/CONTRIBUTING.md">如何贡献</a>
+            <a class="btn" href="https://github.com/wozore/infocatcher/issues/new?template=data-correction.yml">纠错数据</a>
+            <a class="btn" href="https://github.com/wozore/infocatcher/issues/new?template=new-tool.yml">推荐工具</a>
+          </div>
+        </div>
+      </section>
+    </article>
   </section>
 </main>
 
 <!-- EXTENSION POINT: 如需新增弹窗/模态层，参考此 modal-overlay 结构 -->
 <!-- 工具卡片详情弹窗 -->
-<div class="modal-overlay" id="modalOverlay" style="display:none">
-  <div class="modal" id="modalContent"></div>
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDescription" hidden>
+  <div class="modal" id="modalContent" tabindex="-1"></div>
 </div>
 
 <footer class="footer">

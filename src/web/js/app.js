@@ -12,14 +12,16 @@
  *           → 事件绑定(DOMContentLoaded)
  *
  * ═══════════════════════════════════════════════════════════════
- * 六个视图：
+ * 八个视图：
  * ═══════════════════════════════════════════════════════════════
- *   工具库 (tools)     — 搜索 + 分类/访问/价格筛选 + 卡片网格 + 详情弹窗
- *   场景模式 (scenes)  — 12 个场景入口，可展开子任务并查看匹配工具卡片
+ *   AI搜索 (search)     — B16 静态搜索入口与结果主线（P1-A 接入）
+ *   工具库 (tools)      — 搜索 + 分类/访问/价格筛选 + 卡片网格 + 详情弹窗
+ *   场景模式 (scenes)   — 12 个场景入口，可展开子任务并查看匹配工具卡片
  *   对比模式 (compare)  — 2-5 个工具并排比较 10+ 维度
- *   AI热点 (trending)  — 三平台内容 feed, 平台筛选, 按评分/时间排序
- *   AI概念 (glossary)  — 43 条术语, 分类筛选 + 搜索 + 可展开详情
- *   关于 (about)       — 评测方法论和项目介绍 (纯 HTML, 无专属渲染函数)
+ *   AI热点 (trending)   — 三平台内容 feed, 平台筛选, 按评分/时间排序
+ *   推荐 (featured)     — 编辑精选与热门模型分类视图
+ *   AI概念 (glossary)   — 43 条术语, 分类筛选 + 搜索 + 可展开详情
+ *   关于 (about)        — 评测方法论和项目介绍 (纯 HTML, 无专属渲染函数)
  *
  * ═══════════════════════════════════════════════════════════════
  * 安全约束：
@@ -72,7 +74,7 @@ let hotspots = {              // hotspots.json 的前端投影
 let compareList = [];         // { toolId, itemId } 稳定比较引用；itemId 为 null 表示具体根工具
 let featuredPicks = [];        // featured.json 编辑精选
 let detailPanelState = new Map(); // collection toolId → 当前模型/工具节点路径
-let currentView = 'tools';    // 当前激活的视图
+let currentView = 'search';   // 当前激活的视图
 let activeFilters = {         // 工具库的筛选状态
   category: 'all',            //   分类 (大语言模型/编程开发/图像生成/...)
   access: 'all',              //   访问方式 (开放/受限)
@@ -80,7 +82,794 @@ let activeFilters = {         // 工具库的筛选状态
 };
 let activeGlossaryCategory = 'all'; // 概念词典的分类筛选
 let activeTrendingPlatform = 'all'; // 热点平台筛选 (youtube/x/bilibili/bilibili_dynamic)
-let trendingSort = 'score';         // 热点排序方式 (score=评分/recent=最新)
+let activeTrendingType = 'all';     // 公开 content_type 筛选
+let trendingSort = 'recent';        // 热点排序方式 (recent=最新/score=现有综合价值)
+let modalTrigger = null;           // 详情弹窗打开前的焦点，用于关闭后回焦
+let modalScrollPosition = null;    // 热点等列表详情关闭时保持原列表滚动位置
+const dataLoadFailures = new Set();
+
+// P1-A：固定静态搜索状态。只在当前页面内存中存在，不写入 URL、localStorage 或后端。
+const SEARCH_DEMOS = Object.freeze([
+  Object.freeze({ key: 'writing', query: '写论文', hint: '适合查找论文写作、资料整理和研究辅助工具。' }),
+  Object.freeze({ key: 'coding', query: '写代码', hint: '适合查找编程开发、代码补全和命令行工具。' }),
+  Object.freeze({ key: 'research', query: '深度研究', hint: '适合查找深度研究、搜索和长文档分析工具。' })
+]);
+const SEARCH_PROCESSING_STAGES = Object.freeze([
+  '整理问题',
+  '匹配已收录资料',
+  '准备静态摘要'
+]);
+let searchProcessingRun = 0;
+let searchProcessingTimer = null;
+const searchCitationOrigins = new Map();
+let searchConceptTrigger = null;
+let searchConceptHoverTimer = null;
+let searchConceptCloseTimer = null;
+let searchState = {
+  mode: 'home',
+  query: '',
+  demoKey: null,
+  processing: false,
+  processingStage: null,
+  recent: [],
+  feedback: null,
+  editing: false
+};
+
+function renderState({ icon, title, message, type = 'empty' }) {
+  const role = type === 'error' ? 'alert' : 'status';
+  return '<div class="empty-state state-' + type + '" role="' + role + '" data-state="' + type + '">' +
+    '<div class="empty-icon" aria-hidden="true">' + icon + '</div>' +
+    '<h3>' + title + '</h3><p>' + message + '</p></div>';
+}
+
+function announceStatus(message) {
+  const status = document.getElementById('appStatus');
+  if (!status) return;
+  status.textContent = '';
+  window.requestAnimationFrame(() => { status.textContent = message; });
+}
+
+function setRegionBusy(element, busy) {
+  if (!element) return;
+  element.setAttribute('aria-busy', String(busy));
+}
+
+function setPressedState(controls, activeControl) {
+  controls.forEach(control => {
+    const selected = control === activeControl;
+    control.classList.toggle('active', selected);
+    control.setAttribute('aria-pressed', String(selected));
+  });
+}
+
+// ═══ P1-A：静态搜索只读适配器 ═══════════════════════════════════
+function searchConceptKey(term) {
+  const normalizedTerm = String(term || '')
+    .trim()
+    .toLocaleLowerCase('zh-CN')
+    .normalize('NFKC')
+    .replace(/[^\p{Letter}\p{Number}]+/gu, '-')
+    .replace(/^-+|-+$/g, '');
+  return normalizedTerm ? 'concept-' + normalizedTerm : 'concept-unknown';
+}
+
+function getSearchConcepts() {
+  return glossary
+    .filter(concept => concept && typeof concept.term === 'string')
+    .map(concept => ({
+      id: searchConceptKey(concept.term),
+      term: concept.term,
+      fullName: concept.full_name || '',
+      category: concept.category || '',
+      summary: concept.summary || '',
+      relatedTerms: Array.isArray(concept.related_terms) ? [...concept.related_terms] : [],
+      source: concept.source || null,
+      relevance: concept.relevance || ''
+    }));
+}
+
+function getSearchToolMatches(query) {
+  const text = String(query || '').trim().toLocaleLowerCase('zh-CN');
+  if (!text) return [];
+  return tools.filter(tool => getToolSearchText(tool).toLocaleLowerCase('zh-CN').includes(text));
+}
+
+function getSearchSceneMatches(query) {
+  const text = String(query || '').trim().toLocaleLowerCase('zh-CN');
+  if (!text) return [];
+  return scenes.filter(scene => [
+    scene.name,
+    scene.description,
+    ...(scene.search_terms || []),
+    ...(scene.tasks || []).map(task => task.task)
+  ].filter(Boolean).join(' ').toLocaleLowerCase('zh-CN').includes(text));
+}
+
+function getSearchHotspotMatches(query) {
+  const text = String(query || '').trim().toLocaleLowerCase('zh-CN');
+  if (!text) return [];
+  return (hotspots.items || []).filter(item => [
+    item.title,
+    item.description,
+    item.author_name,
+    ...(item.source_tags || [])
+  ].filter(Boolean).join(' ').toLocaleLowerCase('zh-CN').includes(text));
+}
+
+function getSearchGlossaryMatches(query) {
+  const text = String(query || '').trim().toLocaleLowerCase('zh-CN');
+  if (!text) return [];
+  return getSearchConcepts().filter(concept => [
+    concept.term,
+    concept.fullName,
+    concept.summary,
+    ...concept.relatedTerms
+  ].filter(Boolean).join(' ').toLocaleLowerCase('zh-CN').includes(text));
+}
+
+function getSearchMatches(query) {
+  const normalizedQuery = String(query || '').trim();
+  const demo = SEARCH_DEMOS.find(item => item.query === normalizedQuery) || null;
+  return {
+    query: normalizedQuery,
+    demoKey: demo?.key || null,
+    demoHint: demo?.hint || '',
+    tools: demo ? getSearchToolMatches(normalizedQuery) : [],
+    scenes: demo ? getSearchSceneMatches(normalizedQuery) : [],
+    hotspots: demo ? getSearchHotspotMatches(normalizedQuery) : [],
+    concepts: demo ? getSearchGlossaryMatches(normalizedQuery) : [],
+    unavailable: [...dataLoadFailures].filter(key => ['tools', 'scenes', 'hotspots', 'glossary'].includes(key))
+  };
+}
+
+function resetSearchState() {
+  searchState = {
+    mode: 'home',
+    query: '',
+    demoKey: null,
+    processing: false,
+    processingStage: null,
+    recent: [],
+    feedback: null,
+    editing: false
+  };
+}
+
+function renderSearchHome() {
+  const examples = document.getElementById('searchExampleList');
+  const recentSection = document.getElementById('searchRecentSection');
+  const recentList = document.getElementById('searchRecentList');
+  if (!examples || !recentSection || !recentList) return;
+
+  examples.innerHTML = SEARCH_DEMOS.map(demo =>
+    '<button class="chip" type="button" data-search-example="' + escapeHtml(demo.query) + '">' +
+      escapeHtml(demo.query) +
+    '</button>'
+  ).join('');
+
+  recentSection.hidden = searchState.recent.length === 0;
+  recentList.innerHTML = searchState.recent.map(query =>
+    '<article class="list-item">' +
+      '<div><h3>' + escapeHtml(query) + '</h3><p>恢复这个固定静态示例</p></div>' +
+      '<button class="btn btn-small" type="button" data-search-example="' + escapeHtml(query) + '">恢复示例</button>' +
+    '</article>'
+  ).join('');
+}
+
+function clearSearchHomeStates() {
+  const input = document.getElementById('aiSearchInput');
+  const status = document.getElementById('searchFormStatus');
+  const emptyState = document.getElementById('searchEmptyState');
+  const unsupportedState = document.getElementById('searchUnsupportedState');
+  if (input) input.setAttribute('aria-invalid', 'false');
+  if (status) status.textContent = '';
+  if (emptyState) emptyState.hidden = true;
+  if (unsupportedState) unsupportedState.hidden = true;
+}
+
+function selectSearchExample(query) {
+  const input = document.getElementById('aiSearchInput');
+  if (!input) return;
+  input.value = query;
+  clearSearchHomeStates();
+  input.focus();
+}
+
+function getSearchResultAvailability(matches) {
+  if (!matches.demoKey) return { type: 'no-match', message: '当前问题没有对应的固定静态示例。' };
+  const availableGroups = [matches.tools, matches.scenes, matches.hotspots, matches.concepts].filter(group => group.length > 0).length;
+  if (matches.unavailable.length && availableGroups === 0) {
+    return { type: 'error', message: '匹配所需的静态资料当前不可用，请刷新页面后重试。' };
+  }
+  if (availableGroups === 0) return { type: 'no-match', message: '当前固定示例没有匹配到可展示的静态资料。' };
+  if (matches.unavailable.length) {
+    const labels = { tools: '工具', scenes: '场景', hotspots: '热点', glossary: '概念' };
+    return { type: 'partial', message: '部分静态资料当前不可用：' + matches.unavailable.map(key => labels[key] || key).join('、') + '。以下结果只包含已成功加载的资料。' };
+  }
+  return { type: 'success', message: '' };
+}
+
+function getSearchResultProjection(query) {
+  const matches = getSearchMatches(query);
+  if (!matches.demoKey) return { matches, sources: [], paragraphs: [] };
+
+  const scene = matches.scenes[0] || null;
+  const selectedTools = matches.tools.slice(0, 3);
+  const sources = [];
+  if (scene) {
+    sources.push({
+      id: 'scene-' + scene.id,
+      type: '场景资料',
+      title: scene.name,
+      description: scene.description || '描述暂不可用',
+      updatedAt: null,
+      url: null
+    });
+  }
+  selectedTools.forEach(tool => {
+    sources.push({
+      id: 'tool-' + tool.id,
+      type: '工具资料',
+      title: tool.name,
+      description: tool.overview?.description || tool.strengths || '描述暂不可用',
+      updatedAt: tool.last_updated || null,
+      url: tool.url || null
+    });
+  });
+
+  const paragraphs = [];
+  if (scene) {
+    paragraphs.push({
+      text: scene.description || '该场景的描述暂不可用。',
+      sourceIds: ['scene-' + scene.id]
+    });
+    const tasks = (scene.tasks || []).map(task => task.task).filter(Boolean);
+    if (tasks.length) {
+      paragraphs.push({
+        text: '已收录任务包括：' + tasks.join('、') + '。',
+        sourceIds: ['scene-' + scene.id]
+      });
+    }
+  }
+  if (selectedTools.length) {
+    paragraphs.push({
+      text: '当前资料中，与该问题直接匹配的工具包括：' + selectedTools.map(tool => tool.name).join('、') + '。',
+      sourceIds: selectedTools.map(tool => 'tool-' + tool.id)
+    });
+  }
+  return { matches, sources, paragraphs };
+}
+
+function renderSearchResults() {
+  closeSearchConcept();
+  const state = document.getElementById('searchResultState');
+  const content = document.getElementById('searchResultContent');
+  const summary = document.getElementById('searchSummaryContent');
+  const sourceList = document.getElementById('searchSourceList');
+  if (!state || !content || !summary || !sourceList) return;
+
+  const projection = getSearchResultProjection(searchState.query);
+  const availability = getSearchResultAvailability(projection.matches);
+  if (availability.type === 'error' || availability.type === 'no-match' || !projection.sources.length || !projection.paragraphs.length) {
+    state.hidden = false;
+    state.className = 'state ' + (availability.type === 'error' ? 'error' : 'info') + ' search-result-state';
+    state.innerHTML = '<strong>' + (availability.type === 'error' ? '静态资料处理失败' : '暂无可展示的静态整理结果') + '</strong><p>' + escapeHtml(availability.message || '当前问题没有足够的已收录资料，因此不会生成无依据摘要。') + '</p>';
+    content.hidden = true;
+    summary.innerHTML = '';
+    sourceList.innerHTML = '';
+    renderSearchMatches(projection.matches, false);
+    renderSearchFeedback(false);
+    return;
+  }
+
+  if (availability.type === 'partial') {
+    state.hidden = false;
+    state.className = 'state warn search-result-state';
+    state.innerHTML = '<strong>部分资料暂不可用</strong><p>' + escapeHtml(availability.message) + '</p>';
+  } else {
+    state.hidden = true;
+  }
+  content.hidden = false;
+  searchCitationOrigins.clear();
+  const sourceNumber = new Map(projection.sources.map((source, index) => [source.id, index + 1]));
+  summary.innerHTML = projection.paragraphs.map((paragraph, index) =>
+    '<p id="search-summary-' + (index + 1) + '" tabindex="-1" data-search-summary>' +
+      escapeHtml(paragraph.text) +
+      paragraph.sourceIds.map(sourceId => {
+        const number = sourceNumber.get(sourceId);
+        return '<button class="citation" type="button" data-search-citation="' + escapeHtml(sourceId) + '" aria-label="定位到来源 ' + number + '">[' + number + ']</button>';
+      }).join('') +
+    '</p>'
+  ).join('');
+
+  sourceList.innerHTML = projection.sources.map((source, index) => {
+    const sourceUrl = source.url ? safeExternalUrl(source.url) : '#';
+    const validUrl = sourceUrl !== '#';
+    return '<article class="search-source-item" id="search-source-' + escapeHtml(source.id) + '" tabindex="-1" data-search-source="' + escapeHtml(source.id) + '">' +
+      '<div class="search-source-heading"><span class="search-source-number">[' + (index + 1) + ']</span><span class="tag">' + escapeHtml(source.type) + '</span></div>' +
+      '<h3>' + escapeHtml(source.title) + '</h3>' +
+      '<p>' + escapeHtml(source.description) + '</p>' +
+      '<dl><div><dt>更新时间</dt><dd>' + escapeHtml(source.updatedAt || '待补充') + '</dd></div>' +
+      '<div><dt>原始链接</dt><dd>' + (validUrl
+        ? '<a href="' + escapeHtml(sourceUrl) + '" target="_blank" rel="noopener noreferrer">打开来源</a>'
+        : '暂不可用') + '</dd></div></dl>' +
+      '<button class="btn-link search-source-back" type="button" data-search-source-back="' + escapeHtml(source.id) + '">返回引用位置</button>' +
+    '</article>';
+  }).join('');
+  markSearchConcepts();
+  renderSearchMatches(projection.matches, true);
+  renderSearchFeedback(true);
+}
+
+function searchMatchDescription(item, type) {
+  if (type === 'tools') return item.overview?.description || item.strengths || '描述暂不可用';
+  if (type === 'scenes') return item.description || '描述暂不可用';
+  if (type === 'hotspots') return item.description || '描述暂不可用';
+  return item.summary || '描述暂不可用';
+}
+
+function renderSearchMatches(matches, visible) {
+  const section = document.getElementById('searchMatchesSection');
+  const container = document.getElementById('searchMatchGroups');
+  if (!section || !container) return;
+  if (!visible) {
+    section.hidden = true;
+    container.innerHTML = '';
+    return;
+  }
+
+  const groups = [
+    { key: 'tools', label: '工具', items: matches.tools.slice(0, 3), id: item => item.id, title: item => item.name },
+    { key: 'scenes', label: '场景', items: matches.scenes.slice(0, 2), id: item => item.id, title: item => item.name },
+    { key: 'hotspots', label: '热点', items: matches.hotspots.slice(0, 2), id: item => item.id, title: item => item.title },
+    { key: 'concepts', label: '概念', items: matches.concepts.slice(0, 2), id: item => item.term, title: item => item.term }
+  ];
+  section.hidden = false;
+  container.innerHTML = groups.map(group => {
+    const unavailable = matches.unavailable.includes(group.key === 'concepts' ? 'glossary' : group.key);
+    const body = unavailable
+      ? '<p class="search-match-empty">该类静态资料暂不可用。</p>'
+      : group.items.length
+        ? group.items.map(item => '<article class="search-match-item" data-search-match="' + group.key + '">' +
+            '<div><h4>' + escapeHtml(group.title(item)) + '</h4><p>' + escapeHtml(searchMatchDescription(item, group.key)) + '</p></div>' +
+            '<button class="btn btn-small" type="button" data-search-open="' + group.key + '" data-search-id="' + escapeHtml(group.id(item)) + '">查看资料</button>' +
+          '</article>').join('')
+        : '<p class="search-match-empty">当前示例没有匹配项。</p>';
+    return '<section class="search-match-group" aria-labelledby="search-match-' + group.key + '"><h3 id="search-match-' + group.key + '">' + group.label + '</h3>' + body + '</section>';
+  }).join('');
+}
+
+function renderSearchFeedback(visible) {
+  const section = document.getElementById('searchFeedbackSection');
+  const status = document.getElementById('searchFeedbackStatus');
+  if (!section || !status) return;
+  section.hidden = !visible;
+  section.querySelectorAll('[data-search-feedback]').forEach(button => {
+    button.setAttribute('aria-pressed', String(button.dataset.searchFeedback === searchState.feedback));
+  });
+  status.textContent = searchState.feedback ? '反馈已记录在当前页面内存中。' : '';
+}
+
+function openSearchMatch(type, id, trigger) {
+  if (type === 'tools') {
+    switchView('tools');
+    const visibleTrigger = [...document.querySelectorAll('#toolGrid .detail-button')].find(button =>
+      button.getAttribute('onclick')?.includes("openDetail('" + id + "'")
+    ) || document.querySelector('#toolGrid .detail-button');
+    openDetail(id, null, visibleTrigger || null);
+    return;
+  }
+  if (type === 'scenes') {
+    const scene = scenes.find(item => item.id === id);
+    const input = document.getElementById('sceneSearch');
+    if (input) input.value = scene?.name || '';
+    switchView('scenes');
+    window.requestAnimationFrame(() => {
+      const row = document.querySelector('.scene-row[data-scene-id="' + CSS.escape(id) + '"]');
+      if (row) {
+        toggleSceneTasks(id);
+        row.focus();
+      }
+    });
+    return;
+  }
+  if (type === 'hotspots') {
+    activeTrendingPlatform = 'all';
+    trendingSort = 'recent';
+    switchView('trending');
+    document.getElementById('view-trending')?.querySelector('h1')?.focus?.();
+    return;
+  }
+  if (type === 'concepts') {
+    const input = document.getElementById('glossarySearch');
+    if (input) input.value = id;
+    activeGlossaryCategory = 'all';
+    switchView('glossary');
+    window.requestAnimationFrame(() => document.querySelector('.glossary-card-toggle')?.focus());
+  }
+}
+
+function setSearchFeedback(value) {
+  searchState.feedback = value;
+  renderSearchFeedback(true);
+}
+
+function isSearchConceptTextNode(node) {
+  const parent = node.parentElement;
+  if (!parent || !node.nodeValue?.trim()) return false;
+  if (parent.closest('a, button, input, textarea, select, code, pre, time, [data-search-concept], #searchConceptPopover')) return false;
+  return Boolean(parent.closest('#searchSummaryContent, .search-source-item > p, .search-match-item p'));
+}
+
+function getSearchConceptPatterns() {
+  return glossary.flatMap(concept => [
+    { text: concept.term, concept },
+    ...(concept.full_name && concept.full_name !== concept.term ? [{ text: concept.full_name, concept }] : [])
+  ]).filter(item => item.text?.trim()).sort((a, b) => b.text.length - a.text.length);
+}
+
+function findSearchConcept(text, patterns) {
+  const lower = text.toLocaleLowerCase('zh-CN');
+  let best = null;
+  patterns.forEach(pattern => {
+    const index = lower.indexOf(pattern.text.toLocaleLowerCase('zh-CN'));
+    if (index < 0) return;
+    if (!best || index < best.index || (index === best.index && pattern.text.length > best.pattern.text.length)) {
+      best = { index, pattern };
+    }
+  });
+  return best;
+}
+
+function markSearchConcepts() {
+  const root = document.getElementById('searchResultsPanel');
+  if (!root || !glossary.length) return;
+  const patterns = getSearchConceptPatterns();
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode: node => isSearchConceptTextNode(node) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT
+  });
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+
+  nodes.forEach(node => {
+    let remaining = node.nodeValue;
+    const fragment = document.createDocumentFragment();
+    let matched = false;
+    while (remaining) {
+      const found = findSearchConcept(remaining, patterns);
+      if (!found) {
+        fragment.append(document.createTextNode(remaining));
+        break;
+      }
+      if (found.index) fragment.append(document.createTextNode(remaining.slice(0, found.index)));
+      const value = remaining.slice(found.index, found.index + found.pattern.text.length);
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'concept-link';
+      button.dataset.searchConcept = found.pattern.concept.term;
+      button.setAttribute('aria-haspopup', 'dialog');
+      button.setAttribute('aria-expanded', 'false');
+      button.setAttribute('aria-label', value + '，查看概念解释');
+      button.textContent = value;
+      button.addEventListener('focus', () => openSearchConcept(button));
+      fragment.append(button);
+      remaining = remaining.slice(found.index + found.pattern.text.length);
+      matched = true;
+    }
+    if (matched) node.replaceWith(fragment);
+  });
+}
+
+function positionSearchConceptPopover(trigger) {
+  const popover = document.getElementById('searchConceptPopover');
+  if (!popover || !trigger) return;
+  const rect = trigger.getBoundingClientRect();
+  const margin = 14;
+  const width = Math.min(320, window.innerWidth - margin * 2);
+  popover.style.width = width + 'px';
+  popover.style.maxHeight = Math.max(160, window.innerHeight - margin * 2) + 'px';
+  popover.style.left = Math.max(margin, Math.min(rect.left, window.innerWidth - width - margin)) + 'px';
+  const height = Math.min(popover.offsetHeight, window.innerHeight - margin * 2);
+  const below = rect.bottom + 10;
+  const preferredTop = below + height <= window.innerHeight - margin ? below : rect.top - height - 10;
+  popover.style.top = Math.max(margin, Math.min(preferredTop, window.innerHeight - height - margin)) + 'px';
+}
+
+function openSearchConcept(trigger) {
+  const concept = glossary.find(item => item.term === trigger?.dataset.searchConcept);
+  const popover = document.getElementById('searchConceptPopover');
+  if (!concept || !popover) return;
+  clearTimeout(searchConceptCloseTimer);
+  if (searchConceptTrigger && searchConceptTrigger !== trigger) searchConceptTrigger.setAttribute('aria-expanded', 'false');
+  searchConceptTrigger = trigger;
+  trigger.setAttribute('aria-expanded', 'true');
+  document.getElementById('searchConceptTitle').textContent = concept.term;
+  document.getElementById('searchConceptSummary').textContent = concept.summary;
+  document.getElementById('searchConceptOpen').dataset.term = concept.term;
+  popover.hidden = false;
+  window.requestAnimationFrame(() => positionSearchConceptPopover(trigger));
+}
+
+function closeSearchConcept({ restoreFocus = false } = {}) {
+  clearTimeout(searchConceptHoverTimer);
+  clearTimeout(searchConceptCloseTimer);
+  const popover = document.getElementById('searchConceptPopover');
+  const trigger = searchConceptTrigger;
+  if (trigger) trigger.setAttribute('aria-expanded', 'false');
+  if (popover) popover.hidden = true;
+  searchConceptTrigger = null;
+  if (restoreFocus && trigger?.isConnected) trigger.focus();
+}
+
+function scheduleSearchConceptOpen(trigger) {
+  clearTimeout(searchConceptCloseTimer);
+  clearTimeout(searchConceptHoverTimer);
+  searchConceptHoverTimer = window.setTimeout(() => openSearchConcept(trigger), 280);
+}
+
+function scheduleSearchConceptClose() {
+  clearTimeout(searchConceptHoverTimer);
+  clearTimeout(searchConceptCloseTimer);
+  searchConceptCloseTimer = window.setTimeout(() => closeSearchConcept(), 180);
+}
+
+function openGlossaryConcept(term) {
+  closeSearchConcept();
+  const input = document.getElementById('glossarySearch');
+  if (input) input.value = term;
+  activeGlossaryCategory = 'all';
+  switchView('glossary');
+  window.requestAnimationFrame(() => {
+    const card = [...document.querySelectorAll('.glossary-card')].find(item => item.querySelector('.glossary-term')?.textContent === term);
+    const toggle = card?.querySelector('.glossary-card-toggle');
+    if (toggle && toggle.getAttribute('aria-expanded') !== 'true') toggleGlossaryCard(toggle);
+    toggle?.focus();
+    card?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+  });
+}
+
+function highlightSearchReference(element) {
+  if (!element) return;
+  element.classList.remove('reference-highlight');
+  window.requestAnimationFrame(() => element.classList.add('reference-highlight'));
+  window.setTimeout(() => element.classList.remove('reference-highlight'), 1400);
+}
+
+function focusSearchSource(sourceId, citation = null) {
+  const source = document.querySelector('[data-search-source="' + CSS.escape(sourceId) + '"]');
+  if (!source) return;
+  if (citation) searchCitationOrigins.set(sourceId, citation);
+  source.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+  source.focus({ preventScroll: true });
+  highlightSearchReference(source);
+}
+
+function focusSearchCitation(sourceId) {
+  const citation = searchCitationOrigins.get(sourceId) || document.querySelector('[data-search-citation="' + CSS.escape(sourceId) + '"]');
+  if (!citation) return;
+  citation.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+  citation.focus({ preventScroll: true });
+  highlightSearchReference(citation.closest('[data-search-summary]'));
+}
+
+function renderSearchView() {
+  const home = document.getElementById('searchHomePanel');
+  const results = document.getElementById('searchResultsPanel');
+  const queryTitle = document.getElementById('searchResultQuery');
+  const readonly = document.getElementById('searchQueryReadonly');
+  const editForm = document.getElementById('searchEditForm');
+  const editInput = document.getElementById('searchEditInput');
+  if (!home || !results || !queryTitle || !readonly || !editForm || !editInput) return;
+
+  const showingResults = searchState.mode === 'results';
+  home.hidden = showingResults;
+  results.hidden = !showingResults;
+  queryTitle.textContent = searchState.query;
+  readonly.hidden = searchState.editing;
+  editForm.hidden = !searchState.editing;
+  if (searchState.editing) editInput.value = searchState.query;
+  if (showingResults) renderSearchResults();
+}
+
+function showSearchResults() {
+  searchState.mode = 'results';
+  searchState.editing = false;
+  renderSearchView();
+  document.getElementById('searchResultQuery')?.focus?.();
+  announceStatus('静态资料整理完成，正在查看当前问题。');
+}
+
+function returnToSearchHome() {
+  resetSearchProcessing();
+  searchState.mode = 'home';
+  searchState.editing = false;
+  const input = document.getElementById('aiSearchInput');
+  if (input) input.value = searchState.query;
+  renderSearchView();
+  clearSearchEditState();
+  input?.focus();
+}
+
+function clearSearchEditState() {
+  const input = document.getElementById('searchEditInput');
+  const status = document.getElementById('searchEditStatus');
+  if (input) input.setAttribute('aria-invalid', 'false');
+  if (status) status.textContent = '';
+}
+
+function startSearchEditing() {
+  searchState.editing = true;
+  clearSearchEditState();
+  renderSearchView();
+  const input = document.getElementById('searchEditInput');
+  input?.focus();
+  input?.select();
+}
+
+function cancelSearchEditing() {
+  searchState.editing = false;
+  clearSearchEditState();
+  renderSearchView();
+  document.getElementById('searchEditButton')?.focus();
+}
+
+function submitSearchEdit(query) {
+  const normalizedQuery = String(query || '').trim();
+  const input = document.getElementById('searchEditInput');
+  const status = document.getElementById('searchEditStatus');
+  clearSearchEditState();
+
+  if (!normalizedQuery) {
+    input?.setAttribute('aria-invalid', 'true');
+    if (status) status.textContent = '请输入问题后再重新整理。';
+    input?.focus();
+    return false;
+  }
+
+  const matches = getSearchMatches(normalizedQuery);
+  if (!matches.demoKey) {
+    input?.setAttribute('aria-invalid', 'true');
+    if (status) status.textContent = '暂无对应静态示例，请改为“写论文”“写代码”或“深度研究”。';
+    input?.focus();
+    return false;
+  }
+
+  searchState.query = normalizedQuery;
+  searchState.demoKey = matches.demoKey;
+  searchState.mode = 'home';
+  searchState.editing = false;
+  searchState.feedback = null;
+  searchState.recent = [normalizedQuery, ...searchState.recent.filter(item => item !== normalizedQuery)].slice(0, 3);
+  const homeInput = document.getElementById('aiSearchInput');
+  if (homeInput) homeInput.value = normalizedQuery;
+  renderSearchHome();
+  renderSearchView();
+  startSearchProcessing();
+  return true;
+}
+
+function renderSearchProcessing() {
+  const region = document.getElementById('searchProcessing');
+  const list = document.getElementById('searchStageList');
+  const cancel = document.getElementById('searchCancelProcessing');
+  const input = document.getElementById('aiSearchInput');
+  const submit = document.getElementById('aiSearchSubmit');
+  if (!region || !list || !cancel) return;
+
+  const visible = searchState.processing || searchState.processingStage !== null;
+  region.hidden = !visible;
+  region.setAttribute('aria-busy', String(searchState.processing));
+  cancel.hidden = !searchState.processing;
+  if (input) input.disabled = searchState.processing;
+  if (submit) submit.disabled = searchState.processing;
+  document.querySelectorAll('[data-search-example]').forEach(button => {
+    button.disabled = searchState.processing;
+  });
+  list.innerHTML = SEARCH_PROCESSING_STAGES.map((label, index) => {
+    let status = 'pending';
+    if (typeof searchState.processingStage === 'number') {
+      if (index < searchState.processingStage) status = 'complete';
+      else if (index === searchState.processingStage) status = searchState.processing ? 'current' : 'complete';
+    }
+    return '<li class="search-stage" data-status="' + status + '"><span>' + escapeHtml(label) + '</span></li>';
+  }).join('');
+}
+
+function finishSearchProcessing(runId) {
+  if (runId !== searchProcessingRun || !searchState.processing) return;
+  searchState.processing = false;
+  searchState.processingStage = SEARCH_PROCESSING_STAGES.length - 1;
+  renderSearchProcessing();
+  const status = document.getElementById('searchFormStatus');
+  if (status) status.textContent = '静态资料已整理完成，正在打开当前问题。';
+  window.setTimeout(() => {
+    if (runId === searchProcessingRun && !searchState.processing) showSearchResults();
+  }, 0);
+}
+
+function startSearchProcessing() {
+  const runId = ++searchProcessingRun;
+  clearTimeout(searchProcessingTimer);
+  searchState.processing = true;
+  searchState.processingStage = 0;
+  renderSearchProcessing();
+
+  const status = document.getElementById('searchFormStatus');
+  if (status) status.textContent = '正在整理固定静态示例。';
+
+  const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) {
+    searchState.processingStage = SEARCH_PROCESSING_STAGES.length - 1;
+    finishSearchProcessing(runId);
+    return;
+  }
+
+  const advance = () => {
+    if (runId !== searchProcessingRun || !searchState.processing) return;
+    if (searchState.processingStage >= SEARCH_PROCESSING_STAGES.length - 1) {
+      finishSearchProcessing(runId);
+      return;
+    }
+    searchState.processingStage += 1;
+    renderSearchProcessing();
+    searchProcessingTimer = window.setTimeout(advance, 450);
+  };
+  searchProcessingTimer = window.setTimeout(advance, 450);
+}
+
+function resetSearchProcessing() {
+  searchProcessingRun += 1;
+  clearTimeout(searchProcessingTimer);
+  searchProcessingTimer = null;
+  searchState.processing = false;
+  searchState.processingStage = null;
+  renderSearchProcessing();
+}
+
+function cancelSearchProcessing() {
+  if (!searchState.processing) return;
+  resetSearchProcessing();
+  const status = document.getElementById('searchFormStatus');
+  if (status) status.textContent = '已中止静态资料整理，可以修改问题或重新开始。';
+  document.getElementById('aiSearchInput')?.focus();
+}
+
+function submitSearchHome(query) {
+  const normalizedQuery = String(query || '').trim();
+  const input = document.getElementById('aiSearchInput');
+  const status = document.getElementById('searchFormStatus');
+  const emptyState = document.getElementById('searchEmptyState');
+  const unsupportedState = document.getElementById('searchUnsupportedState');
+  clearSearchHomeStates();
+
+  if (!normalizedQuery) {
+    resetSearchProcessing();
+    input?.setAttribute('aria-invalid', 'true');
+    if (emptyState) emptyState.hidden = false;
+    if (status) status.textContent = '请输入问题后再开始整理。';
+    input?.focus();
+    return false;
+  }
+
+  const matches = getSearchMatches(normalizedQuery);
+  searchState.query = normalizedQuery;
+  searchState.demoKey = matches.demoKey;
+  searchState.mode = 'home';
+
+  if (!matches.demoKey) {
+    resetSearchProcessing();
+    if (unsupportedState) unsupportedState.hidden = false;
+    if (status) status.textContent = '暂无对应静态示例，请改写问题。';
+    return false;
+  }
+
+  searchState.feedback = null;
+  searchState.recent = [normalizedQuery, ...searchState.recent.filter(item => item !== normalizedQuery)].slice(0, 3);
+  renderSearchHome();
+  startSearchProcessing();
+  return true;
+}
 
 // ═══════════════════════════════════════════════════════════════
 // 第 1 部分：通用工具函数
@@ -155,8 +944,7 @@ async function loadData() {
       '数据更新: ' + new Date().toISOString().slice(0, 10);
   } catch (e) {
     tools = [];
-    document.getElementById('toolGrid').innerHTML =
-      '<div class="empty-state"><div class="empty-icon">⚠️</div><h3>数据加载失败</h3><p>请检查 data/catalog/tools.json 是否存在</p></div>';
+    dataLoadFailures.add('tools');
   }
   try {
     const iResp = await fetch('data/catalog/tool-intelligence.json');
@@ -172,6 +960,7 @@ async function loadData() {
     glossary = await gResp.json();
   } catch (e) {
     glossary = [];
+    dataLoadFailures.add('glossary');
   }
   try {
     const sResp = await fetch('data/catalog/scenes.json');
@@ -179,18 +968,21 @@ async function loadData() {
     scenes = Array.isArray(sceneData.scenes) ? sceneData.scenes : [];
   } catch (e) {
     scenes = [];
+    dataLoadFailures.add('scenes');
   }
   try {
     const nResp = await fetch('data/news/output/hotspots.json');
     hotspots = await nResp.json();
   } catch (e) {
     hotspots = { items: [], events: [], provenance: [], assessments: [], coverage: null, generated_at: null };
+    dataLoadFailures.add('hotspots');
   }
   try {
     const fResp = await fetch('data/catalog/featured.json');
     featuredPicks = await fResp.json();
   } catch (e) {
     featuredPicks = [];
+    dataLoadFailures.add('featured');
   }
 }
 
@@ -208,14 +1000,44 @@ async function loadData() {
  *
  * EXTENSION POINT: 新增视图时在末尾加 if (view === 'xxx') renderXxx();
  */
+function closeMobileNav({ restoreFocus = false } = {}) {
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileNav = document.getElementById('mobileNav');
+  if (!menuToggle || !mobileNav) return;
+  mobileNav.hidden = true;
+  menuToggle.setAttribute('aria-expanded', 'false');
+  menuToggle.setAttribute('aria-label', '打开导航菜单');
+  if (restoreFocus) menuToggle.focus();
+}
+
+function openMobileNav() {
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileNav = document.getElementById('mobileNav');
+  if (!menuToggle || !mobileNav) return;
+  mobileNav.hidden = false;
+  menuToggle.setAttribute('aria-expanded', 'true');
+  menuToggle.setAttribute('aria-label', '关闭导航菜单');
+}
+
+function syncNavigationState(view) {
+  document.querySelectorAll('[data-view]').forEach(control => {
+    const isActive = control.dataset.view === view;
+    control.classList.toggle('active', isActive);
+    if (isActive) control.setAttribute('aria-current', 'page');
+    else control.removeAttribute('aria-current');
+  });
+}
+
 function switchView(view) {
+  const target = document.getElementById('view-' + view);
+  if (!target) return;
+
   currentView = view;
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  const target = document.getElementById('view-' + view);
-  if (target) target.classList.add('active');
-  const btn = document.querySelector('[data-view="' + view + '"]');
-  if (btn) btn.classList.add('active');
+  target.classList.add('active');
+  syncNavigationState(view);
+  closeMobileNav();
+  announceStatus((target.querySelector('h1')?.textContent || '页面') + '已显示');
 
   if (view === 'scenes') renderScenes();
   if (view === 'compare') renderCompare();
@@ -334,13 +1156,19 @@ function getFilteredTools() {
 function renderTools() {
   const filtered = getFilteredTools();
   const grid = document.getElementById('toolGrid');
+  setRegionBusy(grid, false);
   document.getElementById('toolCount').textContent = filtered.length;
   document.getElementById('filteredInfo').style.display =
     (activeFilters.category !== 'all' || activeFilters.access !== 'all' || activeFilters.price !== 'all' || document.getElementById('searchInput').value)
     ? 'inline' : 'none';
 
+  if (dataLoadFailures.has('tools')) {
+    grid.innerHTML = renderState({ icon: '⚠️', title: '工具数据加载失败', message: '请刷新页面重试；若问题持续，请检查公开工具数据文件是否可访问。', type: 'error' });
+    return;
+  }
+
   if (filtered.length === 0) {
-    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">🔍</div><h3>没有匹配的工具</h3><p>试试调整筛选条件或搜索关键词</p></div>';
+    grid.innerHTML = renderState({ icon: '⌕', title: '没有匹配的工具', message: '请调整筛选条件或更换搜索关键词。', type: 'no-match' });
     return;
   }
 
@@ -370,7 +1198,7 @@ function renderTools() {
       : '';
     const isSelected = isCompareSelected(t.id, null);
     return `
-    <div class="tool-card${isCollection ? ' collection-card' : ''}" onclick="openDetail('${t.id}')">
+    <div class="tool-card${isCollection ? ' collection-card' : ''}" onclick="openDetail('${t.id}',null,this)">
       <div class="tool-card-header">
         <div>
           <div class="tool-card-name">${t.icon} ${escapeHtml(title)}</div>
@@ -390,7 +1218,10 @@ function renderTools() {
 
       <div class="tool-card-footer" onclick="event.stopPropagation()">
         <span style="font-size:12px;color:var(--text-hint)">更新: ${escapeHtml(t.last_updated)}</span>
-        ${isComparableRootTool(t) ? '<button class="compare-toggle ' + (isSelected ? 'selected' : '') + '" onclick="toggleCompareRef(\'' + escapeHtml(t.id) + '\',null,this)">' + (isSelected ? '已选' : '+对比') + '</button>' : ''}
+        <div class="tool-card-actions">
+          <button class="detail-button" type="button" onclick="openDetail('${escapeHtml(t.id)}',null,this)">查看详情</button>
+          ${isComparableRootTool(t) ? '<button class="compare-toggle ' + (isSelected ? 'selected' : '') + '" aria-pressed="' + isSelected + '" onclick="toggleCompareRef(\'' + escapeHtml(t.id) + '\',null,this)">' + (isSelected ? '已选' : '+对比') + '</button>' : ''}
+        </div>
       </div>
     </div>`;
   }).join('');
@@ -601,7 +1432,10 @@ function renderLeafPanel(toolId, collection, leaf) {
 function navigateModelToolPanel(toolId, nodeId = null) {
   detailPanelState.set(toolId, nodeId);
   const body = document.getElementById('openaiDetailBody');
-  if (body) body.innerHTML = renderOpenAIDetailBody(toolId, nodeId);
+  if (body) {
+    body.innerHTML = renderOpenAIDetailBody(toolId, nodeId);
+    configureModalAccessibility();
+  }
 }
 
 function goBackModelToolPanel(toolId) {
@@ -609,23 +1443,58 @@ function goBackModelToolPanel(toolId) {
   navigateModelToolPanel(toolId, node?.parent_id || null);
 }
 
-function openDetail(id, selectedItemId = null) {
+function getModalFocusableElements() {
+  const content = document.getElementById('modalContent');
+  if (!content) return [];
+  return [...content.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')]
+    .filter(element => !element.hidden && element.getClientRects().length > 0);
+}
+
+function configureModalAccessibility() {
+  const overlay = document.getElementById('modalOverlay');
+  const content = document.getElementById('modalContent');
+  const title = content?.querySelector('h2');
+  const description = content?.querySelector('.vendor-description, .node-description, .vendor, .section p');
+  if (!overlay || !content) return;
+  if (title) title.id = 'modalTitle';
+  if (description) {
+    description.id = 'modalDescription';
+    overlay.setAttribute('aria-describedby', 'modalDescription');
+  } else {
+    overlay.removeAttribute('aria-describedby');
+  }
+}
+
+function showModal(trigger = null) {
+  const overlay = document.getElementById('modalOverlay');
+  const content = document.getElementById('modalContent');
+  if (!overlay || !content) return;
+  const explicitTrigger = trigger instanceof HTMLElement
+    ? (trigger.matches('a[href], button, [tabindex]:not([tabindex="-1"])') ? trigger : trigger.querySelector('button, a[href], [tabindex]:not([tabindex="-1"])'))
+    : null;
+  modalTrigger = explicitTrigger || (document.activeElement instanceof HTMLElement ? document.activeElement : null);
+  configureModalAccessibility();
+  overlay.hidden = false;
+  document.body.classList.add('modal-open');
+  const focusTarget = content.querySelector('.modal-close') || content;
+  focusTarget.focus();
+}
+
+function openDetail(id, selectedItemId = null, trigger = null) {
   const t = tools.find(tool => tool.id === id);
   if (!t) return;
   const collection = getToolIntelligence(id);
-  const overlay = document.getElementById('modalOverlay');
   const content = document.getElementById('modalContent');
   if (t.card_kind === 'collection' && collection?.tree_mode === 'tree') {
-    content.innerHTML = '<button class="modal-close" onclick="closeModal()">✕</button>' +
+    content.innerHTML = '<button class="modal-close" type="button" aria-label="关闭详情" onclick="closeModal()">✕</button>' +
       '<div id="openaiDetailBody" class="openai-detail"></div>';
-    overlay.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
     navigateModelToolPanel(id, selectedItemId);
+    showModal(trigger);
     return;
   }
 
   content.innerHTML = `
-    <button class="modal-close" onclick="closeModal()">✕</button>
+    <button class="modal-close" type="button" aria-label="关闭详情" onclick="closeModal()">✕</button>
     <h2>${escapeHtml(t.icon + ' ' + t.name)}</h2>
     <div class="vendor">${escapeHtml(t.vendor)} · <a href="${escapeHtml(safeExternalUrl(t.url))}" target="_blank" rel="noopener noreferrer">官网 ↗</a></div>
     ${renderCollectionIntelligence(t, selectedItemId)}
@@ -644,13 +1513,20 @@ function openDetail(id, selectedItemId = null) {
     <div class="section"><h4>访问门槛</h4><p>${escapeHtml(t.access_barrier)}</p>${t.chinese_note ? '<p style="margin-top:4px"><b>中文支持：</b>' + escapeHtml(t.chinese_note) + '</p>' : ''}</div>
     <div class="meta">最后更新: ${escapeHtml(t.last_updated)} · 信息来源: <a href="${escapeHtml(safeExternalUrl(t.url))}" target="_blank" rel="noopener noreferrer">${escapeHtml(t.source)}</a> · 利益声明: 不接收厂商赞助</div>
   `;
-  overlay.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
+  showModal(trigger);
 }
 
 function closeModal() {
-  document.getElementById('modalOverlay').style.display = 'none';
-  document.body.style.overflow = '';
+  const overlay = document.getElementById('modalOverlay');
+  if (!overlay || overlay.hidden) return;
+  overlay.hidden = true;
+  document.body.classList.remove('modal-open');
+  const returnTarget = modalTrigger;
+  const scrollPosition = modalScrollPosition;
+  modalTrigger = null;
+  modalScrollPosition = null;
+  if (scrollPosition !== null) window.scrollTo({ top: scrollPosition, behavior: 'auto' });
+  if (returnTarget?.isConnected) returnTarget.focus({ preventScroll: true });
 }
 
 document.getElementById('modalOverlay').addEventListener('click', function(e) {
@@ -658,7 +1534,29 @@ document.getElementById('modalOverlay').addEventListener('click', function(e) {
 });
 
 document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') closeModal();
+  const overlay = document.getElementById('modalOverlay');
+  if (!overlay || overlay.hidden) return;
+  if (e.key === 'Escape') {
+    e.preventDefault();
+    closeModal();
+    return;
+  }
+  if (e.key !== 'Tab') return;
+  const focusable = getModalFocusableElements();
+  if (!focusable.length) {
+    e.preventDefault();
+    document.getElementById('modalContent').focus();
+    return;
+  }
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault();
+    last.focus();
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault();
+    first.focus();
+  }
 });
 
 // ═══════════════════════════════════════════════════════════════
@@ -691,7 +1589,7 @@ function toggleCompareRef(toolId, itemId = null, btn) {
   const idx = compareList.findIndex(candidate => compareKey(candidate) === key);
   if (idx >= 0) {
     compareList.splice(idx, 1);
-    if (btn) { btn.classList.remove('selected'); btn.textContent = '+对比'; }
+    if (btn) { btn.classList.remove('selected'); btn.setAttribute('aria-pressed', 'false'); btn.textContent = '+对比'; }
   } else {
     if (compareList.length >= 5) {
       alert('最多对比 5 项');
@@ -703,7 +1601,7 @@ function toggleCompareRef(toolId, itemId = null, btn) {
       return;
     }
     compareList.push(ref);
-    if (btn) { btn.classList.add('selected'); btn.textContent = '已选'; }
+    if (btn) { btn.classList.add('selected'); btn.setAttribute('aria-pressed', 'true'); btn.textContent = '已选'; }
   }
   updateCompareCount();
   renderTools();
@@ -797,9 +1695,9 @@ function renderCompare() {
   if (targets.length !== compareList.length) compareList = compareList.filter(ref => resolveCompareTarget(ref));
 
   sel.innerHTML = targets.length === 0
-    ? '<p class="hint">在<b>工具库</b>中打开具体工具或模型后点击 <b>+对比</b>。</p>'
+    ? '<div class="compare-empty-copy"><strong>尚未选择对比项目</strong><p class="hint">在工具库中打开具体工具或模型后点击 <b>+对比</b>。</p></div>'
     : '<div class="selected-tools">' + targets.map(target => '<span class="selected-tool-chip">' + escapeHtml(compareTargetLabel(target)) +
-        ' <button class="remove-chip" onclick="removeCompare(\'' + escapeHtml(target.tool.id) + '\',' + (target.item ? '\'' + escapeHtml(target.item.id) + '\'' : 'null') + ')">✕</button></span>').join('') + '</div>';
+        ' <button class="remove-chip" aria-label="移除 ' + escapeHtml(target.name) + '" onclick="removeCompare(\'' + escapeHtml(target.tool.id) + '\',' + (target.item ? '\'' + escapeHtml(target.item.id) + '\'' : 'null') + ')">✕</button></span>').join('') + '</div>';
 
   if (targets.length === 0) {
     const quickPicks = [
@@ -807,18 +1705,18 @@ function renderCompare() {
       { ids: ['midjourney', 'dalle', 'stable-diffusion'], label: '图像工具对比' },
       { ids: ['tongyi', 'doubao', 'kimi'], label: '国产AI对比' }
     ];
-    sel.innerHTML += '<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">' +
+    sel.innerHTML += '<div class="compare-quick-picks" aria-label="快捷对比组合">' +
       quickPicks.map(pick => '<button class="compare-toggle" onclick=\'quickCompare(' + JSON.stringify(pick.ids) + ')\'>' + pick.label + '</button>').join('') + '</div>';
   }
 
   if (targets.length < 2) {
     wrap.innerHTML = targets.length === 0
-      ? '<p style="text-align:center;padding:40px;color:var(--text-hint)">选择 2-5 个同类型的具体工具、模型或套餐开始对比</p>'
-      : '<p style="text-align:center;padding:40px;color:var(--text-hint)">再选至少 1 个相同类型的项目</p>';
+      ? '<div class="compare-state empty-state"><div class="empty-icon">↔</div><h3>选择 2–5 个项目开始对比</h3><p>具体工具、API 模型和订阅套餐只能在同一类型内比较。</p></div>'
+      : '<div class="compare-state empty-state"><div class="empty-icon">＋</div><h3>还需要 1 个同类型项目</h3><p>返回相同层级的工具、模型或套餐继续添加。</p></div>';
     return;
   }
   if (!targets.every(target => target.kind === targets[0].kind)) {
-    wrap.innerHTML = '<p class="empty-state">模型、套餐与具体工具不能混合对比。</p>';
+    wrap.innerHTML = '<div class="compare-state empty-state"><div class="empty-icon">⚠️</div><h3>这些项目不可混合比较</h3><p>模型、套餐与具体工具使用不同口径，请移除不同类型的项目。</p></div>';
     return;
   }
   const table = targets[0].kind === 'api_model'
@@ -955,7 +1853,7 @@ function renderFeaturedTabs(containerId, activeCat, section) {
   const container = document.getElementById(containerId);
   if (!container) return;
   container.innerHTML = FEATURED_CATEGORIES.map(cat =>
-    '<button class="featured-tab' + (cat.key === activeCat ? ' active' : '') + '" data-cat="' + cat.key + '">' + cat.label + '</button>'
+    '<button class="featured-tab' + (cat.key === activeCat ? ' active' : '') + '" type="button" data-cat="' + cat.key + '" aria-pressed="' + (cat.key === activeCat ? 'true' : 'false') + '">' + cat.label + '</button>'
   ).join('');
   container.querySelectorAll('.featured-tab').forEach(btn => {
     btn.addEventListener('click', function() {
@@ -976,8 +1874,12 @@ function renderEditorPicksForCat() {
     .filter(p => p.category === activeEditorCat)
     .map(p => ({ ...p, tool: tools.find(t => t.id === p.tool_id) }))
     .filter(p => p.tool);
+  if (dataLoadFailures.has('featured')) {
+    grid.innerHTML = renderState({ icon: '⚠️', title: '精选数据加载失败', message: '请刷新页面重试；热门模型仍按已收录工具资料独立显示。', type: 'error' });
+    return;
+  }
   if (!picks.length) {
-    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">📌</div><h3>暂无精选推荐</h3><p>' + cat.label + '分类的精选正在筹备中。</p></div>';
+    grid.innerHTML = renderState({ icon: '○', title: '暂无精选推荐', message: escapeHtml(cat.label) + '分类的人工精选正在筹备中。', type: 'unavailable' });
     return;
   }
   grid.innerHTML = picks.map(pick => {
@@ -988,7 +1890,7 @@ function renderEditorPicksForCat() {
     const onclick = getFeaturedDetailUrl(pick.tool_id, pick.item_id);
     const latestQ = pick.item_id ? getItemLatestQueriedAt(getToolIntelligence(pick.tool_id), getCollectionNode(pick.tool_id, pick.item_id)) : null;
     const badge = renderTimelinessBadge(latestQ);
-    return '<div class="featured-card featured-pick" onclick="' + onclick + '">' +
+    return '<article class="featured-card featured-pick" tabindex="0" role="button" aria-label="查看 ' + escapeHtml(name) + ' 详情" onclick="' + onclick + '" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();' + onclick + '}">' +
       '<div class="featured-pick-badge">编辑精选</div>' +
       '<div class="featured-pick-header">' +
         '<div><h3>' + escapeHtml(name) + '</h3><span class="featured-pick-vendor">' + escapeHtml(vendor) + '</span>' + badge + '</div>' +
@@ -999,7 +1901,7 @@ function renderEditorPicksForCat() {
         (pick.tool.scenes || []).slice(0, 3).map(s => '<span class="tag scene">' + escapeHtml(s) + '</span>').join('') +
         '<span class="tag ' + (pick.tool.access_level === '开放' ? 'open' : 'restricted') + '">' + (pick.tool.access_level === '开放' ? '国内可用' : '需科学上网') + '</span>' +
       '</div>' +
-    '</div>';
+    '</article>';
   }).join('');
 }
 
@@ -1009,7 +1911,7 @@ function renderHotRankingForCat() {
   const cat = FEATURED_CATEGORIES.find(c => c.key === activeHotCat);
   const leaves = getCategoryLeaves(activeHotCat).slice(0, 3);
   if (!leaves.length) {
-    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">🔥</div><h3>暂无排行数据</h3><p>' + cat.label + '分类暂无已核实的模型数据。</p></div>';
+    grid.innerHTML = renderState({ icon: '○', title: '暂无排行数据', message: escapeHtml(cat.label) + '分类暂无已核实的模型资料。', type: 'unavailable' });
     return;
   }
   const rankEmoji = ['🥇', '🥈', '🥉'];
@@ -1019,7 +1921,7 @@ function renderHotRankingForCat() {
     const latestQ = getItemLatestQueriedAt(getToolIntelligence(leaf._tool_id), leaf);
     const badge = renderTimelinessBadge(latestQ);
     const onclick = getFeaturedDetailUrl(leaf._tool_id, leaf.id);
-    return '<div class="featured-card featured-hot" onclick="' + onclick + '">' +
+    return '<article class="featured-card featured-hot" tabindex="0" role="button" aria-label="查看 ' + escapeHtml(leaf.name) + ' 详情" onclick="' + onclick + '" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();' + onclick + '}">' +
       '<div class="featured-hot-rank">' + rankEmoji[i] + '</div>' +
       '<div class="featured-hot-body">' +
         '<div class="featured-hot-header"><h4>' + escapeHtml(tool.icon + ' ' + leaf.name) + '</h4>' + badge + '<span class="featured-hot-vendor">' + escapeHtml(tool.vendor) + '</span></div>' +
@@ -1029,7 +1931,7 @@ function renderHotRankingForCat() {
           '<span class="tag ' + (leaf.status === 'active' ? 'open' : 'restricted') + '">' + (leaf.status === 'active' ? '已核实' : '部分核实') + '</span>' +
         '</div>' +
       '</div>' +
-    '</div>';
+    '</article>';
   }).join('');
 }
 
@@ -1064,13 +1966,23 @@ function getFilteredGlossary() {
   return filtered;
 }
 
+function toggleGlossaryCard(button) {
+  const card = button.closest('.glossary-card');
+  if (!card) return;
+  const expanded = !card.classList.contains('expanded');
+  card.classList.toggle('expanded', expanded);
+  button.setAttribute('aria-expanded', String(expanded));
+  const body = card.querySelector('.glossary-card-body');
+  if (body) body.hidden = !expanded;
+}
+
 function renderGlossary() {
   const categories = [...new Set(glossary.map(g => g.category))];
   const catEl = document.getElementById('glossaryCategories');
   catEl.innerHTML =
-    '<button class="filter-chip' + (activeGlossaryCategory === 'all' ? ' active' : '') + '" data-cat="all">全部</button>' +
+    '<button class="filter-chip' + (activeGlossaryCategory === 'all' ? ' active' : '') + '" type="button" data-cat="all" aria-pressed="' + (activeGlossaryCategory === 'all' ? 'true' : 'false') + '">全部</button>' +
     categories.map(c =>
-      '<button class="filter-chip' + (activeGlossaryCategory === c ? ' active' : '') + '" data-cat="' + c + '">' + c + '</button>'
+      '<button class="filter-chip' + (activeGlossaryCategory === c ? ' active' : '') + '" type="button" data-cat="' + escapeHtml(c) + '" aria-pressed="' + (activeGlossaryCategory === c ? 'true' : 'false') + '">' + escapeHtml(c) + '</button>'
     ).join('');
 
   catEl.querySelectorAll('.filter-chip').forEach(chip => {
@@ -1082,29 +1994,42 @@ function renderGlossary() {
 
   const filtered = getFilteredGlossary();
   const list = document.getElementById('glossaryList');
+  setRegionBusy(list, false);
 
-  if (filtered.length === 0) {
-    list.innerHTML = '<div class="empty-state"><div class="empty-icon">📖</div><h3>没有匹配的概念</h3><p>试试调整筛选条件或搜索关键词</p></div>';
+  if (dataLoadFailures.has('glossary')) {
+    list.innerHTML = renderState({ icon: '⚠️', title: '概念数据加载失败', message: '请刷新页面重试；其他视图仍可继续使用。', type: 'error' });
     return;
   }
 
-  list.innerHTML = filtered.map(g => `
-    <div class="glossary-card" onclick="this.classList.toggle('expanded')">
-      <div class="glossary-card-head">
-        <span class="glossary-term">${g.term}</span>
-        ${g.full_name ? '<span class="glossary-fullname">' + g.full_name + '</span>' : ''}
-        <span class="glossary-cat">${g.category}</span>
-      </div>
-      <div class="glossary-card-body">
-        <p class="glossary-summary">${g.summary}</p>
-        ${g.related_terms && g.related_terms.length ? '<div class="glossary-related"><b>关联术语：</b>' + g.related_terms.join('、') + '</div>' : ''}
-        ${g.relevance ? '<div class="glossary-relevance"><b>实用意义：</b>' + g.relevance + '</div>' : ''}
-        <div class="glossary-source">
-          来源：${g.source.url ? '<a href="' + g.source.url + '" target="_blank" rel="noopener">' + g.source.name + '</a>' : g.source.name}
+  if (filtered.length === 0) {
+    list.innerHTML = renderState({ icon: '⌕', title: '没有匹配的概念', message: '请调整分类或更换搜索关键词。', type: 'no-match' });
+    return;
+  }
+
+  list.innerHTML = filtered.map((g, index) => {
+    const bodyId = 'glossary-detail-' + index;
+    const sourceName = escapeHtml(g.source?.name || '来源待补充');
+    const source = g.source?.url
+      ? '<a href="' + escapeHtml(safeExternalUrl(g.source.url)) + '" target="_blank" rel="noopener noreferrer">' + sourceName + '</a>'
+      : sourceName;
+    return `
+      <article class="glossary-card">
+        <button class="glossary-card-toggle" type="button" aria-expanded="false" aria-controls="${bodyId}" onclick="toggleGlossaryCard(this)">
+          <span class="glossary-card-head">
+            <span class="glossary-term">${escapeHtml(g.term)}</span>
+            ${g.full_name ? '<span class="glossary-fullname">' + escapeHtml(g.full_name) + '</span>' : ''}
+            <span class="glossary-cat">${escapeHtml(g.category)}</span>
+            <span class="glossary-chevron" aria-hidden="true">⌄</span>
+          </span>
+        </button>
+        <div class="glossary-card-body" id="${bodyId}" hidden>
+          <p class="glossary-summary">${escapeHtml(g.summary)}</p>
+          ${g.related_terms && g.related_terms.length ? '<div class="glossary-related"><b>关联术语：</b>' + g.related_terms.map(escapeHtml).join('、') + '</div>' : ''}
+          ${g.relevance ? '<div class="glossary-relevance"><b>实用意义：</b>' + escapeHtml(g.relevance) + '</div>' : ''}
+          <div class="glossary-source">来源：${source}</div>
         </div>
-      </div>
-    </div>
-  `).join('');
+      </article>`;
+  }).join('');
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -1133,6 +2058,14 @@ const platformMeta = {
   youtube: { label: 'YouTube', icon: '▶️', cls: 'platform-youtube' },
   x: { label: 'X', icon: '𝕏', cls: 'platform-x' },
   bilibili: { label: 'B站', icon: '📺', cls: 'platform-bilibili' },
+};
+const contentTypeLabels = {
+  youtube_video: 'YouTube 视频',
+  x_post: 'X 帖子',
+  bilibili_video: 'B站视频',
+  bilibili_dynamic: 'B站动态',
+  bilibili_dynamic_repost: 'B站转发动态',
+  bilibili_article: 'B站专栏'
 };
 
 /**
@@ -1194,30 +2127,62 @@ function getEvent(contentId) {
 
 function getFilteredTrending() {
   let items = [...(hotspots.items || [])];
+  if (activeTrendingType !== 'all') {
+    items = items.filter(item => item.content_type === activeTrendingType);
+  }
   if (activeTrendingPlatform === 'bilibili_dynamic') {
     items = items.filter(item => item.platform === 'bilibili' && item.content_type.startsWith('bilibili_dynamic'));
   } else if (activeTrendingPlatform !== 'all') {
     items = items.filter(item => item.platform === activeTrendingPlatform);
   }
+  const timestamp = item => {
+    const value = new Date(item.published_at).getTime();
+    return Number.isFinite(value) ? value : Number.NEGATIVE_INFINITY;
+  };
   return items.sort((a, b) => {
-    if (trendingSort === 'recent') return new Date(b.published_at) - new Date(a.published_at);
-    return (getAssessment(b.id)?.final_score || 0) - (getAssessment(a.id)?.final_score || 0) || new Date(b.published_at) - new Date(a.published_at);
+    if (trendingSort === 'recent') return timestamp(b) - timestamp(a);
+    const aScore = getAssessment(a.id)?.final_score;
+    const bScore = getAssessment(b.id)?.final_score;
+    if (Number.isFinite(aScore) && Number.isFinite(bScore) && bScore !== aScore) return bScore - aScore;
+    if (Number.isFinite(bScore) !== Number.isFinite(aScore)) return Number.isFinite(bScore) ? 1 : -1;
+    return timestamp(b) - timestamp(a);
   });
+}
+
+function renderTrendingTypeFilters() {
+  const container = document.getElementById('trendingTypeTabs');
+  if (!container) return;
+  const types = [...new Set((hotspots.items || []).map(item => item.content_type).filter(Boolean))];
+  if (activeTrendingType !== 'all' && !types.includes(activeTrendingType)) activeTrendingType = 'all';
+  container.innerHTML = '<button class="filter-chip' + (activeTrendingType === 'all' ? ' active' : '') + '" type="button" data-content-type="all" aria-pressed="' + (activeTrendingType === 'all') + '">全部类型</button>' +
+    types.map(type => '<button class="filter-chip' + (activeTrendingType === type ? ' active' : '') + '" type="button" data-content-type="' + escapeHtml(type) + '" aria-pressed="' + (activeTrendingType === type) + '">' + escapeHtml(contentTypeLabels[type] || type) + '</button>').join('');
 }
 
 function renderTrendingStatus() {
   const status = document.getElementById('trendingStatus');
   const coverage = hotspots.coverage;
+  if (dataLoadFailures.has('hotspots')) {
+    status.innerHTML = '<div class="status-note status-error" role="alert"><strong>加载失败：</strong>公开热点数据暂时无法读取。请刷新页面重试；其他资料视图仍可使用。</div>';
+    return;
+  }
+  if (!(hotspots.items || []).length && !hotspots.generated_at && (!coverage || coverage.status === 'not_run')) {
+    status.innerHTML = '<div class="status-note status-neutral" role="status"><strong>公开投影建设中：</strong>尚未生成可供浏览器读取的热点内容，请等待公开构建完成。</div>';
+    return;
+  }
+  if (!(hotspots.items || []).length) {
+    status.innerHTML = '<div class="status-note status-neutral" role="status"><strong>暂无公开热点：</strong>公开投影已生成，但当前没有可展示内容。</div>';
+    return;
+  }
   if (!coverage || coverage.status === 'not_run') {
-    status.innerHTML = '<div class="status-note status-neutral">数据流水线尚未运行。当前页面只展示已生成的静态内容。</div>';
+    status.innerHTML = '<div class="status-note status-neutral" role="status"><strong>覆盖信息暂不可用：</strong>继续展示已生成的公开内容，不能据此推断全部来源的近期状态。</div>';
     return;
   }
   const notes = [];
   const bilibili = coverage.platforms?.bilibili;
   if (bilibili?.status === 'manual_curated') {
-    notes.push('<div class="status-note status-neutral">B站当前采用人工精选收录，自动订阅已暂停；已有内容仍保留原始链接，未收录不代表来源近期没有更新。</div>');
+    notes.push('<div class="status-note status-neutral" role="status"><strong>人工收录：</strong>B站当前采用人工精选收录，自动订阅已暂停；已有内容仍保留原始链接，未收录不代表来源近期没有更新。</div>');
   } else if (bilibili?.reason === 'rsshub_provider_blocked') {
-    notes.push('<div class="status-note status-warn">B站自动订阅入口被服务提供方拦截，本轮已快速停止后续请求；页面继续展示上一版及人工精选内容。</div>');
+    notes.push('<div class="status-note status-warn" role="status"><strong>部分不可用：</strong>B站自动订阅入口被服务提供方拦截，本轮已快速停止后续请求；页面继续展示上一版及人工精选内容。</div>');
   }
   const degraded = [];
   for (const [platform, info] of Object.entries(coverage.platforms || {})) {
@@ -1225,59 +2190,99 @@ function renderTrendingStatus() {
   }
   if (coverage.platforms?.bilibili?.dynamic?.status === 'degraded') degraded.push('B站动态');
   if (degraded.length) {
-    notes.push('<div class="status-note status-warn">部分数据降级：' + escapeHtml([...new Set(degraded)].join('、')) + '。缺失会降低判断置信度，不代表来源质量下降。</div>');
+    notes.push('<div class="status-note status-warn" role="status"><strong>部分数据降级：</strong>' + escapeHtml([...new Set(degraded)].join('、')) + '。缺失会降低判断置信度，不代表来源质量下降。</div>');
   }
   status.innerHTML = notes.length
     ? notes.join('')
-    : '<div class="status-note status-ok">本轮自动来源采集已完成。</div>';
+    : '<div class="status-note status-ok" role="status"><strong>采集完成：</strong>本轮自动来源采集已完成。</div>';
+}
+
+function renderHotspotMetrics(item) {
+  if (!item.metrics) return [];
+  return [['views', '浏览'], ['likes', '点赞'], ['comments', '评论'], ['reposts', '转发'], ['replies', '回复']]
+    .map(([key, label]) => {
+      const value = formatMetric(item.metrics[key]);
+      return value === null ? null : { label, value };
+    })
+    .filter(Boolean);
+}
+
+function openHotspotDetail(id, trigger = null) {
+  const item = (hotspots.items || []).find(entry => entry.id === id);
+  const content = document.getElementById('modalContent');
+  if (!item || !content) return;
+  const meta = platformMeta[item.platform] || { label: item.platform || '平台未知', icon: '📰' };
+  const typeLabel = contentTypeLabels[item.content_type] || item.content_type || '类型未知';
+  const published = Number.isFinite(new Date(item.published_at).getTime()) ? item.published_at : '发布时间未知';
+  const metrics = renderHotspotMetrics(item);
+  const url = safeExternalUrl(item.url);
+  const hasUrl = url !== '#';
+  modalScrollPosition = window.scrollY;
+  content.innerHTML = '<button class="modal-close" type="button" aria-label="关闭热点详情" onclick="closeModal()">✕</button>' +
+    '<article class="hotspot-detail" data-hotspot-detail="' + escapeHtml(item.id) + '">' +
+      '<span class="eyebrow">公开来源内容</span>' +
+      '<h2>' + escapeHtml(item.title || '标题暂不可用') + '</h2>' +
+      '<p class="vendor">' + meta.icon + ' ' + escapeHtml(meta.label) + ' · ' + escapeHtml(typeLabel) + '</p>' +
+      '<dl class="hotspot-detail-meta">' +
+        '<div><dt>作者</dt><dd>' + escapeHtml(item.author_name || '暂不可用') + '</dd></div>' +
+        '<div><dt>发布时间</dt><dd>' + escapeHtml(published) + '</dd></div>' +
+      '</dl>' +
+      '<section class="section"><h3>来源描述</h3><p class="hotspot-detail-description">' + escapeHtml(item.description || '来源描述暂不可用') + '</p></section>' +
+      '<section class="section"><h3>公开互动数据</h3>' + (metrics.length
+        ? '<dl class="hotspot-detail-metrics">' + metrics.map(metric => '<div><dt>' + metric.label + '</dt><dd>' + escapeHtml(metric.value) + '</dd></div>').join('') + '</dl>'
+        : '<p>互动数据暂不可用。</p>') + '</section>' +
+      '<section class="section hotspot-detail-gate"><h3>来源核验</h3><p><strong>来源核验暂不可用。</strong>当前公开投影没有可确认的依据片段与来源关系，因此这里只展示来源自身的公开描述。<strong>依据片段暂不可用。</strong></p></section>' +
+      '<section class="section hotspot-detail-gate"><h3>关联资料</h3><p><strong>关联资料暂不可用。</strong>当前公开投影没有稳定的工具、场景或概念关联 ID。</p></section>' +
+      (hasUrl ? '<a class="btn btn-primary" href="' + escapeHtml(url) + '" target="_blank" rel="noopener noreferrer">打开原始内容</a>' : '<p class="muted">原始链接暂不可用。</p>') +
+    '</article>';
+  showModal(trigger);
 }
 
 function renderTrending() {
+  renderTrendingTypeFilters();
   renderTrendingStatus();
   const items = getFilteredTrending();
   const grid = document.getElementById('trendingGrid');
+  setRegionBusy(grid, false);
   document.getElementById('trendingCount').textContent = items.length;
   document.getElementById('trendingGenerated').textContent = hotspots.generated_at
     ? '生成于 ' + timeAgo(hotspots.generated_at)
     : '尚未采集';
 
   if (!items.length) {
-    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">🔥</div><h3>暂无热点数据</h3><p>等待每日构建任务生成内容；采集失败不会用空结果覆盖上一版数据。</p></div>';
+    const hasPublicItems = (hotspots.items || []).length > 0;
+    const state = dataLoadFailures.has('hotspots')
+      ? renderState({ icon: '⚠️', title: '热点数据加载失败', message: '请刷新页面重试；采集失败不会用空结果覆盖上一版数据。', type: 'error' })
+      : hasPublicItems
+        ? renderState({ icon: '⌕', title: '当前筛选没有匹配内容', message: '请调整内容类型、来源平台或排序方式后继续浏览。', type: 'no-match' })
+        : hotspots.generated_at
+          ? renderState({ icon: '○', title: '暂无公开热点', message: '公开投影已生成，但当前没有可展示内容。', type: 'unavailable' })
+          : renderState({ icon: '○', title: '公开投影建设中', message: '等待公开构建任务生成可供浏览器读取的内容。', type: 'unavailable' });
+    grid.innerHTML = state;
     return;
   }
 
   grid.innerHTML = items.map(item => {
-    const meta = platformMeta[item.platform] || { label: item.platform, icon: '📰', cls: '' };
-    const assessment = getAssessment(item.id);
-    const provenance = getProvenance(item.id);
-    const event = getEvent(item.id);
+    const meta = platformMeta[item.platform] || { label: item.platform || '平台未知', icon: '📰', cls: '' };
     const metrics = [];
     if (item.metrics) {
-      [['views', '👁'], ['likes', '👍'], ['comments', '💬'], ['reposts', '🔄'], ['replies', '↩']].forEach(([key, icon]) => {
+      [['views', '浏览'], ['likes', '点赞'], ['comments', '评论'], ['reposts', '转发'], ['replies', '回复']].forEach(([key, label]) => {
         const value = formatMetric(item.metrics[key]);
-        if (value) metrics.push(icon + ' ' + value);
+        if (value !== null) metrics.push(label + ' ' + value);
       });
     }
-    const commercial = assessment?.commercial_assessment;
-    const evidenceBadges = [];
-    if (provenance?.origin_status === 'confirmed') evidenceBadges.push('来源已确认');
-    else if (provenance?.origin_status === 'candidate') evidenceBadges.push('候选溯源');
-    if (event?.content_ids?.length > 1) evidenceBadges.push(event.content_ids.length + ' 个相关观点');
-    if (commercial && commercial.label !== 'none_confirmed') evidenceBadges.push('已披露商业关系');
-    if (item.content_type.startsWith('bilibili_dynamic')) evidenceBadges.push('B站动态');
-
-    const scoreDetails = assessment ? Object.entries(assessment.score_breakdown).map(([key, value]) =>
-      '<span>' + escapeHtml({ long_term_quality: '长期', recent_timeliness: '时效', light_user_experience: '真实体验', source_reliability: '来源', interaction_quality: '互动' }[key] || key) + ' ' + Math.round(value) + '</span>'
-    ).join('') : '';
-
-    return '<article class="trending-card ' + meta.cls + '">' +
-      '<div class="trending-card-head"><span>' + meta.icon + ' ' + meta.label + '</span><span>' + timeAgo(item.published_at) + '</span></div>' +
-      '<h3><a href="' + escapeHtml(safeExternalUrl(item.url)) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(item.title) + '</a></h3>' +
-      (item.description ? '<p class="trending-description">' + escapeHtml(item.description) + '</p>' : '') +
-      '<div class="trending-tags">' + (item.source_tags || []).map(tag => '<span class="tag scene">' + escapeHtml(tag) + '</span>').join('') + evidenceBadges.map(tag => '<span class="tag evidence">' + escapeHtml(tag) + '</span>').join('') + '</div>' +
-      '<div class="trending-meta"><span>👤 ' + escapeHtml(item.author_name) + '</span>' + (metrics.length ? '<span>' + metrics.join(' · ') + '</span>' : '<span>互动数据不可用</span>') + '</div>' +
-      (assessment ? '<details class="score-explain"><summary>价值分 ' + assessment.final_score.toFixed(1) + ' · 置信度 ' + Math.round(assessment.confidence * 100) + '%</summary><div class="score-breakdown">' + scoreDetails + '</div><p>异常：' + escapeHtml(assessment.anomaly_assessment.status) + '；商业标识：' + escapeHtml(commercial.label) + '（仅有证据时扣分）</p></details>' : '') +
-      '</article>';
+    const published = Number.isFinite(new Date(item.published_at).getTime()) ? timeAgo(item.published_at) : '发布时间未知';
+    const typeLabel = contentTypeLabels[item.content_type] || item.content_type || '类型未知';
+    const preview = item.description || '来源描述暂不可用';
+    return '<article class="trending-card ' + meta.cls + '" tabindex="0" role="button" data-hotspot-id="' + escapeHtml(item.id) + '" aria-label="查看热点详情：' + escapeHtml(item.title || '标题暂不可用') + '">' +
+      '<div class="trending-card-head"><span>' + meta.icon + ' ' + escapeHtml(meta.label) + ' · ' + escapeHtml(typeLabel) + '</span><span>' + escapeHtml(published) + '</span></div>' +
+      '<h3><span class="trending-title">' + escapeHtml(item.title || '标题暂不可用') + '</span></h3>' +
+      '<p class="trending-description' + (item.description ? '' : ' is-missing') + '">' + escapeHtml(preview) + '</p>' +
+      '<div class="trending-secondary-preview" aria-hidden="true"><span>作者：' + escapeHtml(item.author_name || '暂不可用') + '</span><span>' + (metrics.length ? metrics.join(' · ') : '互动数据暂不可用') + '</span></div>' +
+      '<div class="trending-tags">' + (item.source_tags || []).map(tag => '<span class="tag scene">' + escapeHtml(tag) + '</span>').join('') + '</div>' +
+      '<div class="trending-meta"><span>作者：' + escapeHtml(item.author_name || '暂不可用') + '</span><span>' + (metrics.length ? metrics.join(' · ') : '互动数据暂不可用') + '</span></div>' +
+      '<span class="trending-open-hint">打开基础详情</span>' +
+    '</article>';
   }).join('');
 }
 
@@ -1339,7 +2344,10 @@ function renderSceneToolCard(tool, selectedItemId = null) {
     '</div>' +
     '<div class="tool-card-footer" onclick="event.stopPropagation()">' +
       '<span class="scene-tool-updated">更新: ' + escapeHtml(tool.last_updated) + '</span>' +
-      (isComparable ? '<button class="compare-toggle ' + (isSelected ? 'selected' : '') + '" onclick="toggleCompareRef(\'' + escapeHtml(tool.id) + '\',' + (selectedLeaf ? '\'' + escapeHtml(selectedItemId) + '\'' : 'null') + ',this)">' + (isSelected ? '已选' : '+对比') + '</button>' : '') +
+      '<div class="tool-card-actions">' +
+        '<button class="detail-button" type="button" onclick="openDetail(\'' + escapeHtml(tool.id) + '\',' + (selectedItemId ? '\'' + escapeHtml(selectedItemId) + '\'' : 'null') + ',this)">查看详情</button>' +
+        (isComparable ? '<button class="compare-toggle ' + (isSelected ? 'selected' : '') + '" aria-pressed="' + isSelected + '" onclick="toggleCompareRef(\'' + escapeHtml(tool.id) + '\',' + (selectedLeaf ? '\'' + escapeHtml(selectedItemId) + '\'' : 'null') + ',this)">' + (isSelected ? '已选' : '+对比') + '</button>' : '') +
+      '</div>' +
     '</div>' +
   '</div>';
 }
@@ -1348,14 +2356,18 @@ function renderScenes() {
   const filtered = getFilteredScenes();
   const list = document.getElementById('sceneList');
   if (!list) return;
+  setRegionBusy(list, false);
 
   if (!scenes.length) {
-    list.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><h3>场景数据加载失败</h3><p>请稍后刷新页面，或检查 data/catalog/scenes.json 是否存在。</p></div>';
+    const sceneState = dataLoadFailures.has('scenes')
+      ? renderState({ icon: '⚠️', title: '场景数据加载失败', message: '请刷新页面重试；其他资料视图仍可继续使用。', type: 'error' })
+      : renderState({ icon: '○', title: '暂无场景数据', message: '当前公开资料中还没有可展示的场景。', type: 'unavailable' });
+    list.innerHTML = sceneState;
     return;
   }
 
   if (!filtered.length) {
-    list.innerHTML = '<div class="empty-state"><div class="empty-icon">🧭</div><h3>没有匹配的场景</h3><p>试试“论文”“代码”“配图”“视频”或其他需求关键词。</p></div>';
+    list.innerHTML = renderState({ icon: '⌕', title: '没有匹配的场景', message: '请尝试“论文”“代码”“配图”“视频”或其他需求关键词。', type: 'no-match' });
     return;
   }
 
@@ -1370,7 +2382,7 @@ function renderScenes() {
         const label = recommendation
           ? getToolIntelligence(tool.id)?.items?.find(item => item.id === recommendation.item_id)?.name
           : null;
-        return '<button class="scene-tool-button" type="button" onclick="toggleSceneToolCard(\'' + escapeHtml(scene.id) + '\',' + taskIndex + ',\'' + escapeHtml(tool.id) + '\',' + (recommendation ? '\'' + escapeHtml(recommendation.item_id) + '\'' : 'null') + ',this)">' +
+        return '<button class="scene-tool-button" type="button" aria-pressed="false" aria-controls="scene-tool-preview-' + escapeHtml(scene.id) + '-' + taskIndex + '" onclick="toggleSceneToolCard(\'' + escapeHtml(scene.id) + '\',' + taskIndex + ',\'' + escapeHtml(tool.id) + '\',' + (recommendation ? '\'' + escapeHtml(recommendation.item_id) + '\'' : 'null') + ',this)">' +
           '<span class="scene-tool-button-icon" aria-hidden="true">' + escapeHtml(tool.icon) + '</span>' +
           '<span>' + escapeHtml(label || tool.name) + '</span>' +
         '</button>';
@@ -1387,7 +2399,7 @@ function renderScenes() {
     }).join('');
 
     return '<div class="scene-group" style="--scene-accent:' + palette.accent + ';--scene-border:' + palette.border + '">' +
-      '<button class="scene-row" type="button" data-scene-id="' + escapeHtml(scene.id) + '" aria-expanded="false" onclick="toggleSceneTasks(\'' + escapeHtml(scene.id) + '\')">' +
+      '<button class="scene-row" type="button" data-scene-id="' + escapeHtml(scene.id) + '" aria-expanded="false" aria-controls="scene-tasks-' + escapeHtml(scene.id) + '" onclick="toggleSceneTasks(\'' + escapeHtml(scene.id) + '\')">' +
         '<span class="scene-row-left">' +
           '<span class="scene-row-icon" aria-hidden="true">' + escapeHtml(scene.icon) + '</span>' +
           '<span class="scene-row-info">' +
@@ -1410,7 +2422,10 @@ function toggleSceneToolCard(sceneId, taskIndex, toolId, selectedItemId, button)
   if (!tasks || !preview || !tool) return;
 
   const isCurrent = button.classList.contains('active') && !preview.hidden;
-  tasks.querySelectorAll('.scene-tool-button.active').forEach(item => item.classList.remove('active'));
+  tasks.querySelectorAll('.scene-tool-button.active').forEach(item => {
+    item.classList.remove('active');
+    item.setAttribute('aria-pressed', 'false');
+  });
   tasks.querySelectorAll('.scene-tool-preview').forEach(item => {
     item.hidden = true;
     item.innerHTML = '';
@@ -1418,6 +2433,7 @@ function toggleSceneToolCard(sceneId, taskIndex, toolId, selectedItemId, button)
 
   if (!isCurrent) {
     button.classList.add('active');
+    button.setAttribute('aria-pressed', 'true');
     preview.innerHTML = renderSceneToolCard(tool, selectedItemId);
     preview.hidden = false;
   }
@@ -1510,6 +2526,82 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderScenes();
   updateCompareCount();
   renderTrending();
+  renderSearchHome();
+  renderSearchProcessing();
+  renderSearchView();
+  document.getElementById('app').setAttribute('aria-busy', 'false');
+  announceStatus('静态资料加载完成');
+
+  // AI 静态搜索首页
+  const aiSearchForm = document.getElementById('aiSearchShellForm');
+  const aiSearchInput = document.getElementById('aiSearchInput');
+  if (aiSearchForm && aiSearchInput) {
+    aiSearchForm.addEventListener('submit', event => {
+      event.preventDefault();
+      submitSearchHome(aiSearchInput.value);
+    });
+    aiSearchInput.addEventListener('input', clearSearchHomeStates);
+    document.getElementById('searchCancelProcessing')?.addEventListener('click', cancelSearchProcessing);
+    document.getElementById('searchBackButton')?.addEventListener('click', returnToSearchHome);
+    document.getElementById('searchEditButton')?.addEventListener('click', startSearchEditing);
+    document.getElementById('searchEditCancel')?.addEventListener('click', cancelSearchEditing);
+    const searchEditForm = document.getElementById('searchEditForm');
+    const searchEditInput = document.getElementById('searchEditInput');
+    searchEditForm?.addEventListener('submit', event => {
+      event.preventDefault();
+      submitSearchEdit(searchEditInput?.value);
+    });
+    searchEditInput?.addEventListener('input', clearSearchEditState);
+    searchEditInput?.addEventListener('keydown', event => {
+      if (event.key !== 'Escape') return;
+      event.preventDefault();
+      cancelSearchEditing();
+    });
+    document.getElementById('searchResultContent')?.addEventListener('click', event => {
+      const citation = event.target.closest('[data-search-citation]');
+      if (citation) {
+        focusSearchSource(citation.dataset.searchCitation, citation);
+        return;
+      }
+      const back = event.target.closest('[data-search-source-back]');
+      if (back) focusSearchCitation(back.dataset.searchSourceBack);
+    });
+    document.getElementById('searchMatchesSection')?.addEventListener('click', event => {
+      const open = event.target.closest('[data-search-open]');
+      if (open) openSearchMatch(open.dataset.searchOpen, open.dataset.searchId, open);
+    });
+    document.getElementById('searchFeedbackSection')?.addEventListener('click', event => {
+      const feedback = event.target.closest('[data-search-feedback]');
+      if (feedback) setSearchFeedback(feedback.dataset.searchFeedback);
+    });
+    const searchResultsPanel = document.getElementById('searchResultsPanel');
+    searchResultsPanel?.addEventListener('pointerover', event => {
+      if (event.pointerType === 'touch') return;
+      const trigger = event.target.closest('[data-search-concept]');
+      if (trigger) scheduleSearchConceptOpen(trigger);
+    });
+    searchResultsPanel?.addEventListener('pointerout', event => {
+      const trigger = event.target.closest('[data-search-concept]');
+      if (trigger && !trigger.contains(event.relatedTarget)) scheduleSearchConceptClose();
+    });
+    searchResultsPanel?.addEventListener('click', event => {
+      const trigger = event.target.closest('[data-search-concept]');
+      if (!trigger) return;
+      event.preventDefault();
+      openSearchConcept(trigger);
+    });
+    const conceptPopover = document.getElementById('searchConceptPopover');
+    conceptPopover?.addEventListener('pointerenter', () => clearTimeout(searchConceptCloseTimer));
+    conceptPopover?.addEventListener('pointerleave', scheduleSearchConceptClose);
+    document.getElementById('searchConceptClose')?.addEventListener('click', () => closeSearchConcept({ restoreFocus: true }));
+    document.getElementById('searchConceptOpen')?.addEventListener('click', event => openGlossaryConcept(event.currentTarget.dataset.term));
+    document.getElementById('view-search')?.addEventListener('click', event => {
+      const example = event.target.closest('[data-search-example]');
+      if (!example) return;
+      selectSearchExample(example.dataset.searchExample);
+      submitSearchHome(example.dataset.searchExample);
+    });
+  }
 
   // 搜索
   const searchInput = document.getElementById('searchInput');
@@ -1517,6 +2609,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   let searchTimer;
   searchInput.addEventListener('input', () => {
     clearTimeout(searchTimer);
+    setRegionBusy(document.getElementById('toolGrid'), true);
     searchTimer = setTimeout(renderTools, 150);
     searchClear.style.display = searchInput.value ? 'block' : 'none';
   });
@@ -1534,6 +2627,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (sceneSearch) {
     sceneSearch.addEventListener('input', () => {
       clearTimeout(sceneTimer);
+      setRegionBusy(document.getElementById('sceneList'), true);
       sceneTimer = setTimeout(renderScenes, 150);
       sceneSearchClear.style.display = sceneSearch.value ? 'flex' : 'none';
     });
@@ -1546,19 +2640,33 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // 导航按钮
-  document.querySelectorAll('.nav-btn').forEach(btn => {
+  document.querySelectorAll('.nav-btn, .mobile-nav [data-view]').forEach(btn => {
     btn.addEventListener('click', () => switchView(btn.dataset.view));
   });
   document.getElementById('homeBtn').addEventListener('click', (e) => {
     e.preventDefault();
-    switchView('tools');
+    switchView('search');
   });
+
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileNav = document.getElementById('mobileNav');
+  if (menuToggle && mobileNav) {
+    menuToggle.addEventListener('click', () => {
+      if (mobileNav.hidden) openMobileNav();
+      else closeMobileNav();
+    });
+    document.addEventListener('click', event => {
+      if (mobileNav.hidden || mobileNav.contains(event.target) || menuToggle.contains(event.target)) return;
+      closeMobileNav();
+    });
+  }
+  syncNavigationState(currentView);
 
   // 分类筛选
   document.querySelectorAll('.filter-chip[data-category]').forEach(chip => {
     chip.addEventListener('click', function() {
-      document.querySelectorAll('.filter-chip[data-category]').forEach(c => c.classList.remove('active'));
-      this.classList.add('active');
+      const controls = [...document.querySelectorAll('.filter-chip[data-category]')];
+      setPressedState(controls, this);
       activeFilters.category = this.dataset.category;
       if (currentView !== 'tools') switchView('tools');
       else renderTools();
@@ -1568,8 +2676,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 访问筛选
   document.querySelectorAll('.filter-chip[data-access]').forEach(chip => {
     chip.addEventListener('click', function() {
-      document.querySelectorAll('.filter-chip[data-access]').forEach(c => c.classList.remove('active'));
-      this.classList.add('active');
+      const controls = [...document.querySelectorAll('.filter-chip[data-access]')];
+      setPressedState(controls, this);
       activeFilters.access = this.dataset.access;
       if (currentView !== 'tools') switchView('tools');
       else renderTools();
@@ -1579,19 +2687,30 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 价格筛选
   document.querySelectorAll('.filter-chip[data-price]').forEach(chip => {
     chip.addEventListener('click', function() {
-      document.querySelectorAll('.filter-chip[data-price]').forEach(c => c.classList.remove('active'));
-      this.classList.add('active');
+      const controls = [...document.querySelectorAll('.filter-chip[data-price]')];
+      setPressedState(controls, this);
       activeFilters.price = this.dataset.price;
       if (currentView !== 'tools') switchView('tools');
       else renderTools();
     });
   });
 
-  // 热点平台筛选与排序
+  // 热点公开内容类型、平台筛选与排序
+  const trendingTypeTabs = document.getElementById('trendingTypeTabs');
+  trendingTypeTabs?.addEventListener('click', event => {
+    const chip = event.target.closest('[data-content-type]');
+    if (!chip) return;
+    const controls = [...trendingTypeTabs.querySelectorAll('[data-content-type]')];
+    setPressedState(controls, chip);
+    setRegionBusy(document.getElementById('trendingGrid'), true);
+    activeTrendingType = chip.dataset.contentType;
+    renderTrending();
+  });
   document.querySelectorAll('#trendingTabs [data-platform]').forEach(chip => {
     chip.addEventListener('click', function() {
-      document.querySelectorAll('#trendingTabs [data-platform]').forEach(item => item.classList.remove('active'));
-      this.classList.add('active');
+      const controls = [...document.querySelectorAll('#trendingTabs [data-platform]')];
+      setPressedState(controls, this);
+      setRegionBusy(document.getElementById('trendingGrid'), true);
       activeTrendingPlatform = this.dataset.platform;
       renderTrending();
     });
@@ -1600,15 +2719,47 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (trendingSortEl) {
     trendingSortEl.addEventListener('change', function() {
       trendingSort = this.value;
+      setRegionBusy(document.getElementById('trendingGrid'), true);
       renderTrending();
     });
   }
+  const trendingGrid = document.getElementById('trendingGrid');
+  trendingGrid?.addEventListener('click', event => {
+    const card = event.target.closest('[data-hotspot-id]');
+    if (card) openHotspotDetail(card.dataset.hotspotId, card);
+  });
+  trendingGrid?.addEventListener('keydown', event => {
+    const card = event.target.closest('[data-hotspot-id]');
+    if (!card || !['Enter', ' '].includes(event.key)) return;
+    event.preventDefault();
+    openHotspotDetail(card.dataset.hotspotId, card);
+  });
 
   // 键盘快捷键
   document.addEventListener('keydown', function(e) {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    if (e.key === 'Escape' && !document.getElementById('searchConceptPopover')?.hidden) {
       e.preventDefault();
-      document.getElementById('searchInput').focus();
+      closeSearchConcept({ restoreFocus: true });
+      return;
+    }
+    if (e.key === 'Escape' && mobileNav && !mobileNav.hidden) {
+      e.preventDefault();
+      closeMobileNav({ restoreFocus: true });
+      return;
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      const targetInput = currentView === 'tools'
+        ? document.getElementById('searchInput')
+        : currentView === 'search'
+          ? searchState.mode === 'results'
+            ? searchState.editing
+              ? document.getElementById('searchEditInput')
+              : null
+            : document.getElementById('aiSearchInput')
+          : null;
+      if (!targetInput || targetInput.disabled) return;
+      e.preventDefault();
+      targetInput.focus();
     }
   });
 
@@ -1619,6 +2770,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (glossarySearch) {
     glossarySearch.addEventListener('input', () => {
       clearTimeout(glossaryTimer);
+      setRegionBusy(document.getElementById('glossaryList'), true);
       glossaryTimer = setTimeout(renderGlossary, 150);
       glossarySearchClear.style.display = glossarySearch.value ? 'block' : 'none';
     });
