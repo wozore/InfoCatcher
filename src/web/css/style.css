@@ -171,27 +171,8 @@ a { color: var(--link); }
   cursor: pointer;
 }
 .logo:hover { color: var(--primary); }
-.nav-groups { display: flex; align-items: center; gap: 14px; margin-left: auto; }
-.nav-group { display: flex; align-items: center; gap: 4px; }
-.nav-group + .nav-group { padding-left: 14px; border-left: 1px solid var(--border); }
-.nav-group-label {
-  color: var(--text-hint);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-.nav-group-items { display: flex; align-items: center; gap: 2px; }
-.nav-preview {
-  padding: 6px 9px;
-  border: 1px dashed var(--border);
-  border-radius: var(--radius-sm);
-  color: var(--text-hint);
-  cursor: default;
-  font-size: 12px;
-  white-space: nowrap;
-}
+.mobile-current-page { display: none; }
+.nav-groups { display: flex; align-items: center; gap: 10px; margin-left: auto; }
 .nav-btn {
   border: none;
   background: none;
@@ -206,6 +187,30 @@ a { color: var(--link); }
 }
 .nav-btn:hover { background: var(--surface); color: var(--text); }
 .nav-btn.active { background: var(--primary-light); color: var(--text); font-weight: 650; }
+/* B16 决策 83：AI 搜索为唯一高优先级导航项，突出显示 */
+.nav-primary { color: var(--text); font-weight: 650; }
+/* B16 决策 83：分组下拉菜单（disclosure 模式，点击展开、不悬停即开） */
+.nav-dropdown { position: relative; }
+.nav-trigger { display: inline-flex; align-items: center; gap: 5px; }
+.nav-trigger .icon { width: 12px; height: 12px; transition: transform var(--transition); }
+.nav-trigger[aria-expanded="true"] .icon { transform: rotate(180deg); }
+.nav-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 168px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+  display: grid;
+  gap: 2px;
+  z-index: 120;
+}
+.nav-dropdown-menu[hidden] { display: none; }
+.nav-dropdown-menu .nav-btn { width: 100%; text-align: left; }
+.nav-dropdown-menu .nav-btn.active { background: var(--primary-light); }
 .badge {
   display: inline-flex;
   align-items: center;
@@ -325,6 +330,20 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 .search-source-item dl div { display: grid; grid-template-columns: 66px minmax(0, 1fr); gap: 7px; }
 .search-source-item dt { color: var(--text-hint); }
 .search-source-item dd { margin: 0; overflow-wrap: anywhere; }
+/* B16 决策 8.6：来源说明内联展开 */
+.search-source-expand { margin-top: 2px; }
+.search-source-detail { margin-top: 8px; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); }
+.search-source-detail[hidden] { display: none; }
+.search-source-detail dl { display: grid; gap: 6px; margin: 0; font-size: 12px; }
+.search-source-detail dl div { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 8px; }
+.search-source-detail dt { color: var(--text-hint); }
+.search-source-detail dd { margin: 0; overflow-wrap: anywhere; color: var(--text-secondary); }
+/* B16 决策 8.2/8.4：查看全部来源折叠 */
+.search-more-sources { border-top: 1px solid var(--border); }
+.search-more-sources[hidden] { display: none; }
+.search-sources-toggle { margin-top: 10px; }
+/* B16 决策 8.3：移动端“查看关键来源 / 返回摘要”锚点（默认隐藏，窄屏显示） */
+.search-mobile-anchors { display: none; }
 .reference-highlight { animation: search-reference-highlight 1.4s ease; outline: 2px solid var(--link); outline-offset: 5px; }
 @keyframes search-reference-highlight {
   0%, 65% { background: var(--primary-light); }
@@ -339,6 +358,7 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 .search-match-item p { display: -webkit-box; margin: 0; overflow: hidden; color: var(--text-secondary); font-size: 12px; line-height: 1.55; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .search-match-item .btn { flex-shrink: 0; }
 .search-match-empty { margin: 0; padding: 13px 0; color: var(--text-hint); font-size: 12px; }
+.search-match-expand { padding-top: 10px; border-top: 1px solid var(--border-soft); }
 .search-feedback { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px 24px; align-items: center; }
 .search-feedback .section-title { margin-bottom: 4px; }
 .search-feedback-actions { display: flex; gap: 8px; }
@@ -454,6 +474,33 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 .btn-link { min-height: auto; padding: 0; border: 0; background: transparent; color: var(--link); text-decoration: underline; text-underline-offset: 3px; }
 .btn-small { min-height: 32px; padding: 5px 9px; font-size: 12px; }
 .btn:disabled { cursor: not-allowed; opacity: .55; }
+
+/* ═══ B16 决策 4.5：内联 SVG 系统控件图标 ═══════════════════════
+   雪碧图定义在 index.html <body> 开头；图标仅作装饰，配合可见文字或 aria-label。 */
+.svg-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+.icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+  vertical-align: -0.125em;
+}
+.logo .icon { width: 20px; height: 20px; vertical-align: -0.18em; }
+.menu-toggle .icon { width: 20px; height: 20px; }
+.modal-close .icon { width: 18px; height: 18px; }
+.concept-popover-close .icon { width: 18px; height: 18px; }
+.clear-btn .icon { width: 14px; height: 14px; }
+.search-back-button .icon { width: 14px; height: 14px; }
+.scene-row-arrow .icon { width: 16px; height: 16px; }
+.glossary-chevron .icon { width: 14px; height: 14px; }
+.remove-chip .icon { width: 14px; height: 14px; }
+.back-panel-button .icon { width: 14px; height: 14px; }
+.vendor a .icon { width: 12px; height: 12px; vertical-align: -0.08em; }
 
 .chip-row { display: flex; flex-wrap: wrap; gap: 7px; }
 .chip {
@@ -637,6 +684,13 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
   color: var(--text);
   font-weight: 650;
 }
+/* ═══ B16 决策 94：筛选折叠、已选标签与移动轻量面板 ═════════════ */
+.tools-toolbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+.tools-filter-toggle { display: none; }
+.tools-selected { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; color: var(--text-hint); font-size: 12px; }
+.tools-selected[hidden] { display: none; }
+.tools-selected-tags { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+.tools-filter-actions { display: none; gap: 8px; }
 .tools-directory { margin-top: 34px; }
 .directory-heading { margin-bottom: 16px; }
 .directory-heading .faint { max-width: 380px; text-align: right; }
@@ -848,6 +902,47 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 .scene-specific-recommendation { margin-top: 2px; color: var(--primary); font-size: 13px; font-weight: 700; }
 .scene-recommendation-reason { margin: 8px 0 0 calc(45% + 12px); color: var(--text-hint); font-size: 12px; line-height: 1.55; }
 
+/* ═══ B16 决策 9.4：场景选择器 + 当前场景详情 ══════════════════
+   选择器为横向可滚动标签；详情显示当前场景说明、子任务与匹配工具。 */
+.scene-picker {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 2px 14px;
+  margin-bottom: 6px;
+  -webkit-overflow-scrolling: touch;
+}
+.scene-pick-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+  padding: 8px 13px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition);
+}
+.scene-pick-chip:hover { border-color: var(--primary); color: var(--text); }
+.scene-pick-chip.active,
+.scene-pick-chip[aria-pressed="true"] { background: var(--primary-light); border-color: var(--primary); color: var(--text); font-weight: 650; }
+.scene-pick-icon { font-size: 1.05em; line-height: 1; }
+.scene-detail-card { padding: 24px; border: 1px solid var(--border); border-left-width: 3px; border-left-color: var(--scene-accent); background: var(--surface); }
+.scene-detail-head { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 18px; }
+.scene-detail-icon { font-size: 34px; line-height: 1; }
+.scene-detail-head .section-title { margin: 0 0 6px; }
+.scene-detail-desc { margin: 0; color: var(--text-secondary); font-family: var(--font-serif); font-size: 15px; line-height: 1.75; }
+.scene-task-list { border-top: 1px solid var(--border); }
+.scene-detail-empty { color: var(--text-hint); font-size: 13px; }
+.scene-detail-actions { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border); }
+.scene-detail-card .scene-tool-preview,
+.scene-detail-card .scene-recommendation-reason { margin-left: 0; }
+
 /* ═══ Featured：编辑精选 + 热门模型 ══════════════════════════════
    P0.4-D：分离人工清单与资料排序，使用低装饰目录层级。 */
 .featured-view { padding-top: 28px; }
@@ -934,6 +1029,11 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
   .scene-tool-button { font-size: 13px; }
   .scene-tool-preview { margin: 12px 0 2px; }
   .scene-recommendation-reason { margin-left: 0; }
+  .scene-pick-chip { min-height: 44px; }
+  .scene-detail-card { padding: 16px; }
+  .scene-detail-head { flex-direction: column; gap: 8px; }
+  .scene-task-line { flex-direction: column; gap: 8px; }
+  .scene-task-name { min-width: 0; }
   .rate-grid { grid-template-columns: 1fr; }
 }
 
@@ -946,6 +1046,15 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 .compare-workspace-heading .section-title { margin-bottom: 3px; }
 .compare-workspace-heading .muted { font-size: 13px; }
 .compare-limit { flex: none; padding: 4px 8px; border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-hint); font-size: 12px; }
+.compare-heading-actions { display: flex; align-items: center; gap: 10px; flex: none; }
+.add-compare-hint { color: var(--text-hint); font-size: 12px; margin: 0 0 12px; }
+.add-compare-panel .search-box { max-width: none; margin: 0 0 12px; }
+.add-compare-search input { border-width: 1px; border-radius: var(--radius-sm); }
+.add-compare-cats { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.add-compare-list { display: grid; border-top: 1px solid var(--border); max-height: 60vh; overflow-y: auto; }
+.add-compare-item { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.add-compare-name { font-weight: 650; font-size: 14px; }
+.add-compare-meta { color: var(--text-hint); font-size: 12px; }
 .compare-selection { margin: 18px 0 0; padding-top: 16px; border-top: 1px solid var(--border); }
 .compare-selection .hint { color: var(--text-hint); font-size: 13px; }
 .compare-empty-copy strong { display: block; margin-bottom: 3px; font-family: var(--font-serif); font-size: 17px; }
@@ -1007,6 +1116,24 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 .compare-table .score-mid { color: var(--warn); font-weight: 700; }
 .compare-table .score-low { color: var(--danger); font-weight: 700; }
 
+/* ═══ B16 决策 9.5/93：关键量化指标横向柱状图 ══════════════════
+   只对真实同口径数值绘制；缺失不画 0 柱；颜色不作为唯一区分，保留表格替代。 */
+.compare-bars { margin-bottom: 28px; padding: 18px; border: 1px solid var(--border); background: var(--surface); }
+.compare-bars-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+.compare-bars-heading h3 { margin: 0; font-family: var(--font-serif); font-size: 18px; }
+.compare-bars-note { color: var(--text-hint); font-size: 12px; max-width: 440px; text-align: right; }
+.compare-bar-row { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 12px; align-items: center; }
+.compare-bar-row + .compare-bar-row { margin-top: 14px; }
+.compare-bar-label { color: var(--text-secondary); font-size: 13px; font-weight: 650; }
+.compare-bar-group { display: grid; gap: 8px; }
+.compare-bar-item { display: grid; grid-template-columns: 108px minmax(0, 1fr) 96px; gap: 10px; align-items: center; }
+.compare-bar-name { color: var(--text-hint); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.compare-bar-track { height: 14px; border: 1px solid var(--border); background: var(--bg); border-radius: var(--radius-sm); overflow: hidden; }
+.compare-bar-fill { display: block; height: 100%; background: var(--primary); }
+.compare-bar-empty { display: block; padding: 1px 8px; color: var(--text-hint); font-size: 11px; line-height: 14px; }
+.compare-bar-value { color: var(--text); font-size: 12px; font-weight: 650; text-align: right; white-space: nowrap; }
+.compare-bars-gate { padding: 14px; border-left: 3px solid var(--warn); background: var(--warn-light); color: var(--text-secondary); font-size: 13px; }
+
 /* ═══ Modal ═════════════════════════════════════════════════════
    工具详情弹窗：全屏遮罩 + 居中面板。
    评分四维网格、价格层级列表、优劣势/最适不适合场景 */
@@ -1060,6 +1187,7 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 .modal .section h4 { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
 .modal .section p, .modal .section ul { font-size: 14px; color: var(--text); }
 .modal .section ul { padding-left: 20px; }
+.modal-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0; padding-top: 16px; border-top: 1px solid var(--border); }
 .modal .meta { font-size: 12px; color: var(--text-hint); margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
 .modal .meta a { color: var(--primary); }
 .intelligence-section { padding: 16px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg); }
@@ -1239,6 +1367,51 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 .glossary-source a { color: var(--link); text-decoration: none; }
 .glossary-source a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
+/* ═══ B16 决策 9.7：桌面轻量索引 + 文章式详情双区 ══════════════
+   左侧为轻量目录，不做高密度固定侧栏；右侧为文章式详情。 */
+.glossary-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, .7fr) minmax(0, 1.3fr);
+  gap: 28px;
+  align-items: start;
+  margin-top: 8px;
+}
+.glossary-index { min-width: 0; border: 1px solid var(--border); background: var(--surface); max-height: 560px; overflow-y: auto; }
+.glossary-index-list { display: grid; }
+.glossary-index-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+}
+.glossary-index-item:hover { background: var(--primary-light); color: var(--text); }
+.glossary-index-item.active,
+.glossary-index-item[aria-pressed="true"] { background: var(--primary-light); color: var(--text); font-weight: 650; box-shadow: inset 3px 0 var(--primary); }
+.glossary-index-term { min-width: 0; }
+.glossary-index-cat { flex: none; color: var(--text-hint); font-size: 11px; }
+.glossary-detail { min-width: 0; }
+.glossary-article { border-top: 3px solid var(--primary); padding-top: 18px; }
+.glossary-article-title { margin: 6px 0 4px; font-family: var(--font-serif); font-size: 28px; font-weight: 600; }
+.glossary-article-fullname { color: var(--text-hint); font-size: 13px; }
+.glossary-article-summary { margin: 14px 0 18px; font-family: var(--font-serif); font-size: 16px; line-height: 1.85; }
+.glossary-article-section { margin: 18px 0; }
+.glossary-article-section h3 { margin: 0 0 8px; font-family: var(--font-serif); font-size: 17px; }
+.glossary-article-section p,
+.glossary-article-section li { color: var(--text-secondary); font-size: 14px; line-height: 1.7; }
+.glossary-article-section ul { padding-left: 20px; }
+.glossary-article-source { color: var(--text-hint); font-size: 12px; }
+.glossary-article-updated { margin-top: 4px; color: var(--text-hint); font-size: 12px; }
+
 /* ═══ About ═════════════════════════════════════════════════════
    P0.4-G：窄列叙事、方法原则、能力边界与参与入口。 */
 .about-view { padding-top: 28px; }
@@ -1278,17 +1451,29 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
    移动端适配（max-width: 768px）：
    导航竖排、卡片单列、筛选叠放、模态全屏、对比表横向滚动 */
 @media (max-width: 1040px) {
-  .header-inner { min-height: 62px; flex-wrap: wrap; padding-block: 10px; }
-  .nav-groups { width: 100%; order: 2; overflow-x: auto; padding-bottom: 2px; }
-  .nav-group { flex: 0 0 auto; }
-  .menu-toggle { display: none; }
+  .header-inner { flex-wrap: nowrap; height: auto; padding: 10px 16px; }
+  .nav-groups { display: none; }
+  .menu-toggle { display: inline-flex; align-items: center; justify-content: center; }
+  .mobile-current-page {
+    flex: 1;
+    min-width: 0;
+    display: block;
+    margin-left: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: var(--font-serif);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+  }
   .mobile-nav:not([hidden]) {
     max-width: var(--content-wide);
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 18px;
     margin: 0 auto;
-    padding: 0 var(--space-page) 20px;
+    padding: 2px 16px 18px;
   }
   .mobile-nav-group { min-width: 0; }
   .mobile-nav-group strong {
@@ -1319,11 +1504,12 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 }
 
 @media (max-width: 768px) {
-  .header-inner { flex-wrap: nowrap; height: auto; padding: 10px 16px; }
-  .nav-groups { display: none; }
-  .menu-toggle { display: inline-flex; align-items: center; justify-content: center; }
-  .mobile-nav:not([hidden]) { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 2px 16px 18px; }
   .hero h1 { font-size: 27px; }
+  .search-mobile-anchors { display: block; margin-top: 14px; text-align: left; }
+  .tools-filter-toggle { display: inline-flex; }
+  .tools-filters { display: none; }
+  .tools-filters.open { display: grid; }
+  .tools-filter-actions { display: flex; }
   .hero p { font-size: 14px; }
   .grid-2 { grid-template-columns: 1fr; gap: 18px; }
   .search-result-layout { grid-template-columns: 1fr; gap: 28px; }
@@ -1343,6 +1529,8 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
   .glossary-list { grid-template-columns: 1fr; }
   .glossary-card:nth-child(odd) { border-right: 0; }
   .glossary-card.expanded { grid-column: 1; }
+  .glossary-layout { grid-template-columns: 1fr; gap: 18px; }
+  .glossary-index { max-height: 300px; }
   .tool-grid { grid-template-columns: 1fr; }
   .filters { flex-direction: column; gap: 12px; }
   .modal-overlay { padding: 16px; }
@@ -1405,6 +1593,11 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
   .featured-hot-rank { width: 36px; font-size: 20px; }
   .compare-workspace { padding: 16px; }
   .compare-limit { width: 100%; text-align: center; }
+  .compare-bars { padding: 14px; }
+  .compare-bars-heading { align-items: flex-start; flex-direction: column; gap: 6px; }
+  .compare-bars-note { text-align: left; }
+  .compare-bar-row { grid-template-columns: 1fr; gap: 8px; }
+  .compare-bar-item { grid-template-columns: 84px minmax(0, 1fr) 76px; }
   .tools-controls { padding: 16px; }
   .tools-filters .filter-group { align-items: flex-start; padding: 10px; }
   .tools-filters .filter-label { width: 100%; flex-basis: 100%; margin-bottom: 3px; }
@@ -1548,9 +1741,6 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 .trending-card:hover,
 .trending-card:focus-visible { padding-inline: 22px 12px; background: var(--surface); box-shadow: none; transform: none; }
 .trending-card:focus-visible { outline-offset: 2px; }
-.trending-card.platform-youtube { border-left-color: #a84d47; }
-.trending-card.platform-x { border-left-color: var(--ink); }
-.trending-card.platform-bilibili { border-left-color: #a55b72; }
 .trending-card-head { display: flex; justify-content: space-between; gap: 12px; color: var(--text-hint); font-size: 12px; margin-bottom: 7px; }
 .trending-card h3 { max-width: 900px; margin-bottom: 7px; font-family: var(--font-serif); font-size: 17px; line-height: 1.45; }
 .trending-title { color: var(--text); }
@@ -1572,14 +1762,6 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 .trending-card:focus-visible .trending-secondary-preview { max-height: 48px; margin-bottom: 9px; opacity: 1; }
 .trending-open-hint { display: block; margin-top: 8px; color: var(--link); font-size: 12px; font-weight: 600; }
 .trending-description.is-missing { color: var(--text-hint); font-style: italic; }
-.trending-tags:empty { display: none; }
-.trending-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 9px; }
-.tag.evidence { background: var(--warn-light); color: var(--warn); }
-.trending-meta { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-top: 8px; border-top: 1px solid var(--border); color: var(--text-hint); font-size: 12px; }
-.score-explain { margin-top: 9px; padding-top: 8px; border-top: 1px dashed var(--border); color: var(--text-secondary); font-size: 12px; }
-.score-explain summary { cursor: pointer; color: var(--link); font-weight: 600; }
-.score-breakdown { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
-.score-breakdown span { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 2px 7px; }
 .hotspot-detail h2 { margin-right: 38px; overflow-wrap: anywhere; }
 .hotspot-detail-meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 20px 0; }
 .hotspot-detail-meta div,
@@ -1593,6 +1775,21 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 .hotspot-detail-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 8px; margin: 0; }
 .hotspot-detail-gate { padding: 14px; border-left: 3px solid var(--warn); background: var(--warn-light); }
 .hotspot-detail-gate p { color: var(--text-secondary); }
+.hotspot-detail-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; }
+
+/* ═══ B16 决策 78：热点时间分组 ═════════════════════════════════ */
+.trending-group { border-bottom: 1px solid var(--border); }
+.trending-group-title { margin: 0; padding: 18px 0 6px; font-family: var(--font-serif); font-size: 15px; color: var(--text-hint); }
+.trending-group .trending-card:first-child { border-top: 0; }
+
+/* ═══ B16 决策 10.3：首次加载结构占位骨架（静态、无闪烁动画） ═══ */
+.skeleton-list { display: grid; gap: 10px; }
+.skeleton { display: grid; gap: 8px; padding: 16px; border: 1px solid var(--border); background: var(--surface); }
+.skeleton span { display: block; height: 12px; background: var(--wash); border-radius: var(--radius-sm); }
+.skeleton span:nth-child(1) { width: 40%; }
+.skeleton span:nth-child(2) { width: 90%; }
+.skeleton span:nth-child(3) { width: 70%; }
+.skeleton-detail { height: 120px; }
 
 @media (max-width: 768px) {
   .trending-view { padding-top: 18px; }

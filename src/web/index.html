@@ -55,6 +55,16 @@
 </head>
 <body>
 
+<!-- B16 决策 4.5：系统控件内联 SVG 雪碧图（统一线性风格，仅作装饰图标，含 aria-hidden） -->
+<svg class="svg-sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></symbol>
+  <symbol id="icon-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="icon-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="icon-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5m7-7-7 7 7 7"/></symbol>
+  <symbol id="icon-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+  <symbol id="icon-external" viewBox="0 0 24 24"><path d="M14 5h5v5"/><path d="m19 5-9 9"/><path d="M19 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+
 <div class="capability-note" role="note">
   <strong>静态演示说明：</strong>
   <span>AI 搜索与信息整理正在进行界面验证；当前页面仍使用已收录的静态资料，不代表已接入真实 AI 搜索。</span>
@@ -63,36 +73,35 @@
 <!-- 导航栏 -->
 <header class="header">
   <div class="header-inner">
-    <a href="#" class="logo" id="homeBtn">🔍 InfoCatcher</a>
+    <a href="#" class="logo" id="homeBtn"><svg class="icon" aria-hidden="true"><use href="#icon-search"/></svg> InfoCatcher</a>
+    <span class="mobile-current-page" id="mobileCurrentPage" aria-hidden="true">AI 搜索</span>
     <!-- EXTENSION POINT: 新增视图时在此 nav 中添加对应分组与导航按钮 -->
     <nav class="nav nav-groups" aria-label="主导航">
-      <div class="nav-group nav-group-search">
-        <span class="nav-group-label">AI 搜索</span>
-        <button class="nav-btn active" data-view="search">搜索入口</button>
-      </div>
-      <div class="nav-group">
-        <span class="nav-group-label">发现工具</span>
-        <div class="nav-group-items">
-          <button class="nav-btn" data-view="tools">工具库</button>
-          <button class="nav-btn" data-view="scenes">场景</button>
-          <button class="nav-btn" data-view="compare">对比 <span class="badge" id="compareCount">0</span></button>
-          <button class="nav-btn" data-view="featured">推荐</button>
+      <button class="nav-btn nav-primary active" data-view="search">AI 搜索</button>
+      <div class="nav-dropdown" data-group="discover">
+        <button class="nav-btn nav-trigger" type="button" aria-expanded="false" aria-controls="navDiscoverMenu">
+          发现工具 <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"/></svg>
+        </button>
+        <div class="nav-dropdown-menu" id="navDiscoverMenu" hidden>
+          <button class="nav-btn" type="button" data-view="tools">工具库</button>
+          <button class="nav-btn" type="button" data-view="scenes">场景</button>
+          <button class="nav-btn" type="button" data-view="compare">对比 <span class="badge" id="compareCount">0</span></button>
+          <button class="nav-btn" type="button" data-view="featured">推荐</button>
         </div>
       </div>
-      <div class="nav-group">
-        <span class="nav-group-label">了解 AI</span>
-        <div class="nav-group-items">
-          <button class="nav-btn" data-view="trending">AI 热点</button>
-          <button class="nav-btn" data-view="glossary">AI 概念</button>
+      <div class="nav-dropdown" data-group="knowledge">
+        <button class="nav-btn nav-trigger" type="button" aria-expanded="false" aria-controls="navKnowledgeMenu">
+          了解 AI <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"/></svg>
+        </button>
+        <div class="nav-dropdown-menu" id="navKnowledgeMenu" hidden>
+          <button class="nav-btn" type="button" data-view="trending">AI 热点</button>
+          <button class="nav-btn" type="button" data-view="glossary">AI 概念</button>
         </div>
       </div>
-      <div class="nav-group nav-group-about">
-        <span class="nav-group-label">项目</span>
-        <button class="nav-btn" data-view="about">关于</button>
-      </div>
+      <button class="nav-btn nav-about" data-view="about">关于</button>
     </nav>
     <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileNav" aria-label="打开导航菜单">
-      <span aria-hidden="true">菜单</span>
+      <svg class="icon" aria-hidden="true"><use href="#icon-menu"/></svg>
     </button>
   </div>
   <nav class="mobile-nav" id="mobileNav" aria-label="移动端主导航" hidden>
@@ -143,7 +152,7 @@
 
       <form class="query-bar search-shell-query" id="aiSearchShellForm" aria-label="AI 静态搜索示例" novalidate>
         <label class="sr-only" for="aiSearchInput">输入 AI 问题</label>
-        <input id="aiSearchInput" type="text" placeholder="例如：写论文" autocomplete="off" aria-describedby="searchBoundary searchFormStatus" aria-invalid="false">
+        <input id="aiSearchInput" type="text" placeholder="输入工具、场景或你要解决的问题" autocomplete="off" aria-describedby="searchBoundary searchFormStatus" aria-invalid="false">
         <button class="btn btn-primary" id="aiSearchSubmit" type="submit">开始整理</button>
       </form>
       <p class="status-line search-form-status" id="searchFormStatus" role="status" aria-live="polite" aria-atomic="true"></p>
@@ -154,6 +163,11 @@
       <div class="state info search-home-state" id="searchUnsupportedState" role="status" hidden>
         <strong>暂无对应静态示例</strong>
         <p>当前不会为任意问题生成回答。请改写为下方任一固定示例后重试。</p>
+        <div class="chip-row search-rewrite-suggestions" aria-label="改写建议">
+          <button class="chip" type="button" data-search-example="写论文">写论文</button>
+          <button class="chip" type="button" data-search-example="写代码">写代码</button>
+          <button class="chip" type="button" data-search-example="深度研究">深度研究</button>
+        </div>
       </div>
       <div class="state info search-shell-note" id="searchBoundary" role="note">
         <strong>只整理已收录的静态资料</strong>
@@ -188,7 +202,7 @@
     </div>
 
     <div class="search-results-shell" id="searchResultsPanel" hidden>
-      <button class="btn-link search-back-button" id="searchBackButton" type="button">← 返回 AI 搜索</button>
+      <button class="btn-link search-back-button" id="searchBackButton" type="button"><svg class="icon" aria-hidden="true"><use href="#icon-arrow-left"/></svg> 返回 AI 搜索</button>
       <section class="search-query-panel section-rule" aria-labelledby="searchResultQuery">
         <span class="eyebrow">当前问题 · 静态演示</span>
         <div class="search-query-readonly" id="searchQueryReadonly">
@@ -231,6 +245,17 @@
         <div class="search-match-groups" id="searchMatchGroups"></div>
       </section>
 
+      <section class="search-continue section-rule" id="searchContinueSection" aria-labelledby="searchContinueTitle" hidden>
+        <div class="search-section-heading">
+          <div>
+            <span class="eyebrow">继续探索</span>
+            <h2 class="section-title" id="searchContinueTitle">示例历史</h2>
+          </div>
+          <span class="faint">当前页面示例 · 不会持久保存</span>
+        </div>
+        <div class="list search-recent-list" id="searchContinueList"></div>
+      </section>
+
       <section class="search-feedback section-rule" id="searchFeedbackSection" aria-labelledby="searchFeedbackTitle" hidden>
         <div>
           <h2 class="section-title" id="searchFeedbackTitle">这次静态整理有帮助吗？</h2>
@@ -251,7 +276,7 @@
         <span class="eyebrow">AI 概念</span>
         <h2 id="searchConceptTitle"></h2>
       </div>
-      <button class="concept-popover-close" id="searchConceptClose" type="button" aria-label="关闭概念解释">×</button>
+      <button class="concept-popover-close" id="searchConceptClose" type="button" aria-label="关闭概念解释"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg></button>
     </div>
     <p id="searchConceptSummary"></p>
     <button class="btn btn-small" id="searchConceptOpen" type="button">前往 AI 概念查看详情</button>
@@ -280,10 +305,19 @@
       <div class="search-box tools-search-box">
         <label class="sr-only" for="searchInput">搜索工具名、场景或功能</label>
         <input type="text" id="searchInput" placeholder="例如：写论文、免费、编程" autocomplete="off">
-        <button id="searchClear" class="clear-btn" type="button" style="display:none" aria-label="清除工具搜索">✕</button>
+        <button id="searchClear" class="clear-btn" type="button" style="display:none" aria-label="清除工具搜索"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg></button>
       </div>
 
-      <div class="filters tools-filters" aria-label="工具筛选条件">
+      <div class="tools-toolbar">
+        <button class="btn btn-small tools-filter-toggle" type="button" id="toolsFilterToggle" aria-expanded="false" aria-controls="toolsFiltersPanel">筛选</button>
+        <div class="tools-selected" id="toolsSelected" hidden>
+          <span class="faint">已选条件</span>
+          <span class="tools-selected-tags" id="toolsSelectedTags"></span>
+          <button class="btn-link" type="button" id="toolsClearFilters">清除全部</button>
+        </div>
+      </div>
+
+      <div class="filters tools-filters" id="toolsFiltersPanel" aria-label="工具筛选条件">
         <!-- EXTENSION POINT: 新增筛选维度时在此添加 <div class="filter-group"> + filter-chip -->
         <div class="filter-group">
           <span class="filter-label">分类</span>
@@ -310,6 +344,10 @@
           <button class="filter-chip" type="button" data-price="free" aria-pressed="false">🆓 有免费层</button>
           <button class="filter-chip" type="button" data-price="paid" aria-pressed="false">💰 仅付费</button>
         </div>
+      </div>
+      <div class="tools-filter-actions">
+        <button class="btn btn-small" type="button" id="toolsFilterDone">完成</button>
+        <button class="btn btn-small" type="button" id="toolsFilterClear">清除全部</button>
       </div>
     </section>
 
@@ -341,7 +379,7 @@
       <div class="scene-search-box">
         <label class="sr-only" for="sceneSearch">搜索场景或需求关键词</label>
         <input type="text" id="sceneSearch" placeholder="输入场景或需求关键词" autocomplete="off">
-        <button id="sceneSearchClear" class="clear-btn" type="button" style="display:none" aria-label="清除场景搜索">✕</button>
+        <button id="sceneSearchClear" class="clear-btn" type="button" style="display:none" aria-label="清除场景搜索"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg></button>
       </div>
     </section>
 
@@ -349,11 +387,12 @@
       <div class="directory-heading">
         <div>
           <span class="eyebrow">场景目录</span>
-          <h2 class="section-title" id="scenesDirectoryTitle">从任务开始探索</h2>
+          <h2 class="section-title" id="scenesDirectoryTitle">选择场景查看工具与任务</h2>
         </div>
-        <p class="faint">展开一个场景查看子任务；同一时间只保留一个场景展开。</p>
+        <p class="faint">当前场景突出显示；同一时间查看一个场景。</p>
       </div>
-      <div class="scene-list" id="sceneList"></div>
+      <div class="scene-picker" id="scenePicker" aria-label="场景选择"></div>
+      <div class="scene-detail" id="sceneDetail" aria-live="polite"></div>
     </section>
   </section>
 
@@ -371,7 +410,10 @@
           <h2 class="section-title" id="compareSelectionTitle">已选项目</h2>
           <p class="muted">可从工具库、场景或详情中加入对比，也可使用下方快捷组合。</p>
         </div>
-        <span class="compare-limit">2–5 项 · 仅限同类型</span>
+        <div class="compare-heading-actions">
+          <span class="compare-limit">2–5 项 · 仅限同类型</span>
+          <button class="btn btn-small" type="button" id="addCompareBtn">添加工具</button>
+        </div>
       </div>
       <div id="compareSelection" class="compare-selection" aria-live="polite">
         <p class="hint">在工具库中点击 <b>+对比</b> 按钮添加工具，或点击下方快捷选择。</p>
@@ -386,6 +428,7 @@
         </div>
         <p class="faint">暂无、未知、不适用与过期资料保持原义，不按数值 0 处理。</p>
       </div>
+      <p class="status-line" id="compareStatus" role="status" aria-live="polite"></p>
       <div class="compare-table-wrap" id="compareTable" aria-live="polite"></div>
     </section>
   </section>
@@ -436,12 +479,7 @@
             </div>
           </div>
         </div>
-        <label class="trending-sort" for="trendingSort">排序
-          <select id="trendingSort">
-            <option value="recent" selected>最新发布</option>
-            <option value="score">综合价值</option>
-          </select>
-        </label>
+        <span class="trending-sort">按发布时间倒序</span>
       </div>
       <div class="trending-grid" id="trendingGrid"></div>
     </section>
@@ -461,12 +499,12 @@
           <h2 class="section-title" id="glossarySearchTitle">搜索概念索引</h2>
           <p class="muted">当前只读取既有术语字段，不推断或新增别名。</p>
         </div>
-        <p class="faint">P1-A 将在数据适配门禁后接入全站概念联动。</p>
+        <p class="faint">搜索结果正文已接入概念联动；点击概念词可预览并跳转。</p>
       </div>
       <div class="glossary-search-box">
         <label class="sr-only" for="glossarySearch">搜索术语名称或关键词</label>
         <input type="text" id="glossarySearch" placeholder="输入术语名称或关键词" autocomplete="off">
-        <button id="glossarySearchClear" class="clear-btn" type="button" style="display:none" aria-label="清除概念搜索">✕</button>
+        <button id="glossarySearchClear" class="clear-btn" type="button" style="display:none" aria-label="清除概念搜索"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg></button>
       </div>
       <div class="glossary-categories" id="glossaryCategories" aria-label="概念分类"></div>
     </section>
@@ -475,11 +513,16 @@
       <div class="directory-heading">
         <div>
           <span class="eyebrow">术语目录</span>
-          <h2 class="section-title" id="glossaryDirectoryTitle">展开条目阅读解释</h2>
+          <h2 class="section-title" id="glossaryDirectoryTitle">选择概念查看解释</h2>
         </div>
-        <p class="faint">桌面端按索引扫描，展开后阅读文章式详情；移动端按自然顺序上下排列。</p>
+        <p class="faint">桌面端左侧轻量索引 + 右侧文章式详情；移动端上下布局。</p>
       </div>
-      <div class="glossary-list" id="glossaryList"></div>
+      <div class="glossary-layout" id="glossaryLayout">
+        <aside class="glossary-index" id="glossaryIndex" aria-label="概念索引">
+          <div class="glossary-index-list" id="glossaryIndexList"></div>
+        </aside>
+        <article class="glossary-detail" id="glossaryDetail" aria-live="polite"></article>
+      </div>
     </section>
   </section>
 
@@ -591,7 +634,7 @@
 
 <footer class="footer">
   <p>InfoCatcher v0.1 MVP — 开源免费 · <span id="dataDate"></span> · 数据标注来源，评测方法公开 · 不接收厂商赞助</p>
-  <p style="margin-top:6px"><a href="https://github.com/wozore/infocatcher/blob/main/CONTRIBUTING.md">如何贡献</a> · <a href="https://github.com/wozore/infocatcher/issues/new?template=data-correction.yml">纠错数据</a> · <a href="https://github.com/wozore/infocatcher/issues/new?template=new-tool.yml">推荐工具</a></p>
+  <p style="margin-top:6px"><button class="btn-link" type="button" data-view="about">关于</button> · <a href="https://github.com/wozore/infocatcher/blob/main/CONTRIBUTING.md">如何贡献</a> · <a href="https://github.com/wozore/infocatcher/issues/new?template=data-correction.yml">纠错数据</a> · <a href="https://github.com/wozore/infocatcher/issues/new?template=new-tool.yml">推荐工具</a></p>
 </footer>
 
 <script src="js/app.js"></script>

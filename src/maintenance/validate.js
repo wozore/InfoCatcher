@@ -542,7 +542,7 @@ function validateHtml(html) {
   // 检查关键 ID 是否存在（至少检查视图容器）
   const expected = [
     'view-tools', 'view-scenes', 'view-compare', 'view-glossary', 'view-trending', 'view-featured', 'view-about',
-    'searchInput', 'toolGrid', 'sceneSearch', 'sceneList', 'trendingGrid', 'modalOverlay'
+    'searchInput', 'toolGrid', 'sceneSearch', 'scenePicker', 'sceneDetail', 'trendingGrid', 'modalOverlay'
   ];
   for (const id of expected) {
     const regex = new RegExp(`id=["']${id}["']`);
