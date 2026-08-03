@@ -327,9 +327,15 @@ function validateGlossary(data) {
 // ═══════════════════════════════════════════════════════════════
 
 const NEWS_PLATFORMS = ['youtube', 'x', 'bilibili'];
-const CONTENT_TYPES = [
+// B16 决策 65：来源媒体类型（采集时的平台内容形态，仅作溯源元信息，不进前端筛选）。
+const SOURCE_TYPES = [
   'youtube_video', 'x_post', 'bilibili_video', 'bilibili_dynamic_video',
   'bilibili_dynamic_repost', 'bilibili_dynamic_text', 'bilibili_article', 'unknown'
+];
+// B16 决策 65/66/79：内容类型（热点视图主分类维度）。unclassified 表示
+// AI 分类 + 人工确认未上线前的诚实占位（路径 B）；路径 A 上线后由审核确认填充。
+const CONTENT_TYPES = [
+  'ai_tool', 'ai_product', 'ai_concept', 'ai_technology', 'ai_industry', 'other', 'unclassified'
 ];
 
 function validateNewsSources(data) {
@@ -499,11 +505,12 @@ function validateHotspots(data) {
   for (let i = 0; i < data.items.length; i++) {
     const item = data.items[i];
     const tag = `hotspots.json.items[${i}] (${item.title || '未知'})`;
-    checkRequired(item, tag, ['id', 'platform', 'native_id', 'content_type', 'url', 'title', 'published_at', 'source_id', 'metrics']);
+    checkRequired(item, tag, ['id', 'platform', 'native_id', 'source_type', 'url', 'title', 'published_at', 'source_id', 'metrics']);
     if (contentIds.has(item.id)) fail(`${tag}.id 重复: ${item.id}`);
     contentIds.add(item.id);
     if (!NEWS_PLATFORMS.includes(item.platform)) fail(`${tag}.platform 不支持: ${item.platform}`);
-    if (!CONTENT_TYPES.includes(item.content_type)) fail(`${tag}.content_type 不支持: ${item.content_type}`);
+    if (!SOURCE_TYPES.includes(item.source_type)) fail(`${tag}.source_type 不支持: ${item.source_type}`);
+    if (item.content_type !== undefined && !CONTENT_TYPES.includes(item.content_type)) fail(`${tag}.content_type 不支持: ${item.content_type}`);
     if (Number.isNaN(new Date(item.published_at).getTime())) fail(`${tag}.published_at 不是有效日期`);
     if (item.metrics && typeof item.metrics !== 'object') fail(`${tag}.metrics 应为对象`);
     // B16 决策 74/77/85/88/89：公开热点数据契约补充字段（可选字段，存在才校验）

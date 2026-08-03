@@ -33,7 +33,7 @@ const { classifyTimeLayer } = require('../core/news-scheduler');
 
 /**
  * 将 RSSHub 返回的条目标准化为 candidate 列表。
- * 每条 candidate 携带 layer_id（时间层归属）、content_type 和 discovery_status。
+ * 每条 candidate 携带 layer_id（时间层归属）、source_type（来源媒体类型）和 discovery_status。
  */
 function classifyVisibleEntries(entries, source, contentType, layers, nowUtcMs, layerId) {
   return entries.map(entry => ({
@@ -45,7 +45,7 @@ function classifyVisibleEntries(entries, source, contentType, layers, nowUtcMs, 
     description: entry.description || '',
     published_at: entry.published_at || entry.published || null,
     layer_id: classifyTimeLayer(entry.published_at || entry.published, layers, nowUtcMs),
-    content_type: contentType,
+    source_type: contentType,
     discovery_status: layers.find(layer => layer.id === layerId)?.min_age_days >= 30 ? 'backfill_candidate' : 'discovered',
   })).filter(candidate => candidate.native_id || candidate.canonical_url);
 }

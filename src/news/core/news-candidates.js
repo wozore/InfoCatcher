@@ -173,7 +173,7 @@ function buildPublicProjection({
   const eligible = selectPublicEligible(candidates);
   const ids = new Set(eligible.map(candidate => candidate.id));
   return {
-    schema_version: 2,
+    schema_version: 3,
     generated_at: generatedAt,
     heat_definition: heatDefinition,
     items: eligible.map(toPublicItem),
@@ -355,7 +355,7 @@ function buildProjectionFromStore(store, { generatedAt } = {}) {
   const eligible = selectPublicEligible(store?.candidates || []);
   const ids = new Set(eligible.map(candidate => candidate.id));
   return {
-    schema_version: 2,
+    schema_version: 3,
     generated_at: generatedAt || store?.updated_at || null,
     heat_definition: store?.heat_definition || null,
     items: eligible.map(toPublicItem),

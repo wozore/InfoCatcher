@@ -312,7 +312,7 @@ function contentCommand(action, flags) {
   if (action === 'add') {
     const item = normalizeManualItem({
       source_id: flags.source_id,
-      content_type: flags.type,
+      source_type: flags.type,
       url: flags.url,
       title: flags.title,
       description: flags.summary,
@@ -421,6 +421,7 @@ function reviewCommand(action, flags) {
       candidates: candidates.map(candidate => ({
         id: candidate.id,
         platform: candidate.platform,
+        source_type: candidate.source_type,
         content_type: candidate.content_type,
         title: candidate.title,
         published_at: candidate.published_at,

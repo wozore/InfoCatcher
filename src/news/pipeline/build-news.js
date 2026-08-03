@@ -201,7 +201,7 @@ function normalizeRssItem(item, source, contentType, fetchedAt) {
     id: `${source.platform}-${hash(nativeId)}`,
     platform: source.platform,
     native_id: nativeId,
-    content_type: contentType === 'bilibili_dynamic' ? inferBilibiliType(item) : contentType,
+    source_type: contentType === 'bilibili_dynamic' ? inferBilibiliType(item) : contentType,
     url: normalizeUrl(item.url),
     title: item.title,
     description: item.description?.slice(0, 600) || '',
@@ -235,7 +235,7 @@ function normalizeTweet(tweet, source, fetchedAt) {
     id: `x-${hash(nativeId)}`,
     platform: 'x',
     native_id: nativeId,
-    content_type: 'x_post',
+    source_type: 'x_post',
     url: normalizeUrl(tweet.url || `https://x.com/${source.handle}/status/${nativeId}`),
     title: text.slice(0, 180),
     description: text.slice(0, 600),
@@ -499,11 +499,11 @@ function assessItem(item, source, config, now) {
   const light = detectLightExperience(item, config);
   const commercial = detectCommercial(item, config);
   const interaction = interactionScore(item, config.scoring.neutral_score);
-  const contentTypeFactor = item.content_type === 'bilibili_dynamic_repost' ? 0.6 : 1;
+  const contentTypeFactor = item.source_type === 'bilibili_dynamic_repost' ? 0.6 : 1;
   const scores = {
     long_term_quality: (source.quality_prior ?? config.scoring.neutral_score) * contentTypeFactor,
     recent_timeliness: scoreTimeliness(item, config, now),
-    light_user_experience: item.content_type === 'bilibili_dynamic_repost'
+    light_user_experience: item.source_type === 'bilibili_dynamic_repost'
       ? config.scoring.neutral_score
       : light.score,
     source_reliability: source.reliability_prior ?? config.scoring.neutral_score,
@@ -715,6 +715,39 @@ function upgradeHotspotsProjection() {
   console.log(`✅ hotspots.json 公开投影已升级：${data.items.length} 条内容（schema_version=${data.schema_version}，新增 hot_score/evidence_excerpt/related_resources）`);
 }
 
+// B16 决策 65：内容类型枚举（决策 65 六类 + unclassified 占位）。
+const CONTENT_TYPE_VALUES = new Set([
+  'ai_tool', 'ai_product', 'ai_concept', 'ai_technology', 'ai_industry', 'other', 'unclassified'
+]);
+
+/**
+ * 就地迁移现有 hotspots.json（B16 决策 65/66，路径 B）：
+ *   - 旧 content_type（来源媒体类型，如 x_post/youtube_video）→ 移到 source_type；
+ *   - content_type 统一置 unclassified + content_type_status=unclassified（AI 分类+审核确认未上线前的诚实占位）；
+ *   - schema_version 2 → 3（content_type 语义变化）。
+ * 幂等：source_type 已存在或 content_type 已是内容类型时不做重复迁移。
+ */
+function migrateContentTypeProjection() {
+  const data = readJson(OUTPUT_PATH, null);
+  if (!data || !Array.isArray(data.items)) throw new Error('--migrate-content-type：无法读取现有 hotspots.json');
+  let changed = 0;
+  for (const item of data.items) {
+    if (!item.source_type && item.content_type && !CONTENT_TYPE_VALUES.has(item.content_type)) {
+      item.source_type = item.content_type;
+      item.content_type = 'unclassified';
+      item.content_type_status = 'unclassified';
+      changed += 1;
+    } else if (!item.source_type) {
+      // content_type 缺失或已是内容类型但无来源媒体类型 → source_type 置 unknown
+      item.source_type = 'unknown';
+      changed += 1;
+    }
+  }
+  data.schema_version = 3;
+  writeJsonAtomic(OUTPUT_PATH, data, `migrate-content-type-${Date.now()}`);
+  console.log(`✅ hotspots.json 内容类型字段已迁移：${changed} 条调整，content_type 统一置 unclassified（schema_version=${data.schema_version}）`);
+}
+
 // ═══════════════════════════════════════════════════════════════
 // 第 4 部分：溯源关系、事件聚合与去重
 //
@@ -769,7 +802,7 @@ function buildProvenance(items) {
       content_id: item.id,
       canonical_content_id: linkedOriginal?.id || (external ? null : item.id),
       origin_status: linkedOriginal ? 'candidate' : external ? 'candidate' : 'unknown',
-      relation: item.content_type === 'bilibili_dynamic_repost' ? 'repost' : external ? 'citation' : 'original',
+      relation: item.source_type === 'bilibili_dynamic_repost' ? 'repost' : external ? 'citation' : 'original',
       detected_by: linkedOriginal ? 'explicit_link_to_collected_content' : external ? 'explicit_link' : 'self_observation',
       confidence: linkedOriginal ? 0.85 : external ? 0.65 : 0.35,
       evidence: external ? [{ type: 'explicit_link', source_url: external }] : [],
@@ -938,7 +971,7 @@ function normalizeHistoricalYouTube(detail, source, fetchedAt) {
     id: `youtube:${detail.id}`,
     platform: 'youtube',
     native_id: detail.id,
-    content_type: 'youtube_video',
+    source_type: 'youtube_video',
     url: `https://www.youtube.com/watch?v=${detail.id}`,
     title: snippet.title || '',
     description: snippet.description || '',
@@ -966,7 +999,7 @@ function normalizeHistoricalBilibili(candidate, source, fetchedAt) {
     id: `bilibili:${candidate.native_id}`,
     platform: 'bilibili',
     native_id: candidate.native_id,
-    content_type: candidate.content_type || 'unknown',
+    source_type: candidate.source_type || candidate.content_type || 'unknown',
     url: candidate.canonical_url,
     title: candidate.title,
     description: candidate.description || '',
@@ -1263,6 +1296,12 @@ async function runCollection(options = {}) {
     readCandidateStore(),
     items.map(item => stampCandidateStatuses({
       ...item,
+      // B16 决策 65/66：content_type 为内容类型（AI 工具/产品/概念/技术动态/行业事件/其他）。
+      // 路径 B：AI 分类+审核确认未上线前统一置 unclassified，content_type_status 记录诚实状态；
+      // 路径 A 上线后由分类器写 ai_suggested，审核确认后改 reviewed。
+      source_type: item.source_type || item.content_type || 'unknown',
+      content_type: item.content_type || 'unclassified',
+      content_type_status: item.content_type_status || 'unclassified',
       batch_id: batchId,
       candidate_version: item.candidate_version || 1,
     })),
@@ -1455,6 +1494,10 @@ async function main() {
     upgradeHotspotsProjection();
     return;
   }
+  if (process.argv.includes('--migrate-content-type')) {
+    migrateContentTypeProjection();
+    return;
+  }
   if (process.argv.includes('--fixture')) {
     const fixture = await runFixtureBuild();
     console.log(`✅ Fixture 构建完成：${fixture.output.items.length} 条内容，${fixture.output.events.length} 个主题`);
@@ -1509,6 +1552,7 @@ module.exports = {
   computeHotScores,
   enrichHotspotProjection,
   upgradeHotspotsProjection,
+  migrateContentTypeProjection,
   runCollection,
   runFixtureBuild,
   historicalPageToken,

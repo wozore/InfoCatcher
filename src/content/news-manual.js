@@ -1,6 +1,7 @@
 'use strict';
 
-const ALLOWED_TYPES = new Set([
+// B16 决策 65：ALLOWED_SOURCE_TYPES 是来源媒体类型（B 站），内容类型由 content_type 字段单独表达。
+const ALLOWED_SOURCE_TYPES = new Set([
   'bilibili_video',
   'bilibili_dynamic_text',
   'bilibili_dynamic_repost',
@@ -30,16 +31,16 @@ function parseBilibiliUrl(value) {
 
 function normalizeManualItem(input, sources, fetchedAt = new Date().toISOString()) {
   if (!input || typeof input !== 'object') throw new Error('人工内容必须是对象');
-  if (!ALLOWED_TYPES.has(input.content_type)) throw new Error(`无效 content_type: ${input.content_type || ''}`);
+  if (!ALLOWED_SOURCE_TYPES.has(input.source_type)) throw new Error(`无效 source_type: ${input.source_type || ''}`);
   const source = sources.find(item => item.id === input.source_id && item.platform === 'bilibili');
   if (!source) throw new Error(`B站来源不存在: ${input.source_id || ''}`);
   if (!String(input.title || '').trim()) throw new Error('缺少 title');
   if (!String(input.description ?? input.summary ?? '').trim()) throw new Error('缺少 description/summary');
 
   const parsed = parseBilibiliUrl(input.url);
-  const isDynamic = input.content_type.startsWith('bilibili_dynamic_');
-  if (parsed.inferredType === 'bilibili_dynamic' ? !isDynamic : parsed.inferredType !== input.content_type) {
-    throw new Error(`链接类型与 content_type 不匹配: ${input.content_type}`);
+  const isDynamic = input.source_type.startsWith('bilibili_dynamic_');
+  if (parsed.inferredType === 'bilibili_dynamic' ? !isDynamic : parsed.inferredType !== input.source_type) {
+    throw new Error(`链接类型与 source_type 不匹配: ${input.source_type}`);
   }
   const published = new Date(input.published_at);
   if (!input.published_at || Number.isNaN(published.getTime())) throw new Error('published_at 不是有效日期');
@@ -48,7 +49,9 @@ function normalizeManualItem(input, sources, fetchedAt = new Date().toISOString(
     id: `bilibili-${parsed.nativeId}`,
     platform: 'bilibili',
     native_id: parsed.nativeId,
-    content_type: input.content_type,
+    source_type: input.source_type,
+    content_type: input.content_type || 'unclassified',
+    content_type_status: input.content_type_status || 'unclassified',
     url: parsed.url,
     title: String(input.title).trim().slice(0, 300),
     description: String(input.description ?? input.summary).trim().slice(0, 600),
@@ -86,4 +89,4 @@ function importManualItems(payload, inputs, sources, allowPartial = false, fetch
   return { added: staged, errors, committed: staged.length > 0 };
 }
 
-module.exports = { ALLOWED_TYPES, parseBilibiliUrl, normalizeManualItem, importManualItems };
+module.exports = { ALLOWED_SOURCE_TYPES, parseBilibiliUrl, normalizeManualItem, importManualItems };

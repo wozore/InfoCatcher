@@ -63,13 +63,15 @@
 **适配层实现（`src/web/js/app.js`，只读引用）**：
 
 - 稳定 ID：`searchConceptKey(term)` 对 `term` 做 NFKC 归一化、中文小写、非字母数字段替换为连字符并去首尾，确定性生成 `concept-<slug>`（`src/web/js/app.js:183`）。同一词条在任何页面得到同一 ID。
-- 选中/跳转主键：概念视图以 `term` 为主键（`activeGlossaryId`、`data-glossary-pick`、`data-search-concept`），同时 `src/web/js/app.js:2707` 在解析概念引用时同时接受 `term` 与 `concept-<slug>` 两种写法。
-- 匹配字段：`getSearchConceptPatterns()` 从 `term` 与 `full_name` 构建匹配模式，长词优先；配合排除词表（`CONCEPT_EXCLUSION`）与拉丁/数字缩写词边界控制误匹配（`src/web/js/app.js:579-606`）。
+- 选中/跳转主键：概念视图以 `term` 为主键（`activeGlossaryId`、`data-glossary-pick`、`data-search-concept`），同时 `src/web/js/app.js:2743` 在解析概念引用时同时接受 `term` 与 `concept-<slug>` 两种写法。
+- 匹配字段：`getSearchConceptPatterns()` 从 `term` 与 `full_name` 构建匹配模式，长词优先；配合排除词表（`CONCEPT_EXCLUSION`）与拉丁/数字缩写词边界控制误匹配（`src/web/js/app.js:602-607`）。
 - 别名扩展缝：若需补充别名（如 "RAG" → "检索增强生成"），在适配层以本地别名映射或读取可选 `aliases` 字段的方式加入，不修改既有 43 条数据。
 
 **理由**：B16 P1-A 依赖说明明确“必要时使用原型适配层，不直接改写既有数据契约”；43 条词条多数没有现成别名，直接写入会引入未经核验内容并扩大校验范围；适配层方案无数据迁移成本，且 `term` 与派生 ID 均随词条名稳定。
 
 **后续（v1.0 再评估）**：如需权威别名与显式 ID，在 `glossary.json` 增加 `concept_id` 与 `aliases[]` 字段，并在校验脚本中复核唯一性后，再让适配层读取新字段。
+
+**状态（2026-08-03）**：正式确认作为 B16 决策 9.8.2 概念联动的落地方式（开发计划 B16-R1 解决）：不改写 `glossary.json` 数据契约，稳定概念 ID 与匹配字段由前端适配层生成与维护；如需权威别名与显式 ID 仍按上方「后续」评估。
 
 ## ADR-008：B16 热点浏览与详情体验（P1-B 阻塞级）实现与数据依赖
 

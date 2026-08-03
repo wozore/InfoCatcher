@@ -18,7 +18,7 @@
  *   工具库 (tools)      — 搜索 + 分类/访问/价格筛选 + 卡片网格 + 详情弹窗
  *   场景模式 (scenes)   — 12 个场景入口，可展开子任务并查看匹配工具卡片
  *   对比模式 (compare)  — 2-5 个工具并排比较 10+ 维度
- *   AI热点 (trending)   — 内容类型/平台筛选, 按唯一内容发布时间分组
+ *   AI热点 (trending)   — 内容类型筛选 + 最近/热度排序, 按唯一内容发布时间分组
  *   推荐 (featured)     — 编辑精选与热门模型分类视图
  *   AI概念 (glossary)   — 43 条术语, 分类筛选 + 搜索 + 可展开详情
  *   关于 (about)        — 评测方法论和项目介绍 (纯 HTML, 无专属渲染函数)
@@ -107,9 +107,9 @@ const SEARCH_DEMOS = Object.freeze([
   Object.freeze({ key: 'research', query: '深度研究', hint: '适合查找深度研究、搜索和长文档分析工具。' })
 ]);
 const SEARCH_PROCESSING_STAGES = Object.freeze([
-  '整理问题',
+  '正在整理你的问题',
   '匹配已收录资料',
-  '准备静态摘要'
+  '准备示例摘要'
 ]);
 let searchProcessingRun = 0;
 let searchProcessingTimer = null;
@@ -177,6 +177,45 @@ function setPressedState(controls, activeControl) {
     control.classList.toggle('active', selected);
     control.setAttribute('aria-pressed', String(selected));
   });
+}
+
+// B16 决策 10.2/100：复制查询 / 复制摘要（仅原型验证位置，不接入云端）。
+// 优先 navigator.clipboard（localhost/https 安全上下文），失败时降级 execCommand；成功后按钮短暂显示“已复制”并 announceStatus。
+function copyTextToClipboard(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    return navigator.clipboard.writeText(text);
+  }
+  return new Promise((resolve, reject) => {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      if (document.execCommand('copy')) resolve();
+      else reject(new Error('copy failed'));
+    } catch (error) {
+      reject(error);
+    } finally {
+      document.body.removeChild(textarea);
+    }
+  });
+}
+
+function copyTextWithFeedback(button, text, label) {
+  copyTextToClipboard(text)
+    .then(() => {
+      const original = button.textContent;
+      button.textContent = '已复制';
+      button.setAttribute('aria-label', label + '已复制');
+      window.setTimeout(() => { button.textContent = original; }, 1600);
+      announceStatus(label + '已复制');
+    })
+    .catch(() => {
+      announceStatus(label + '复制失败，请手动选择复制');
+    });
 }
 
 // ═══ P1-A：静态搜索只读适配器 ═══════════════════════════════════
@@ -569,8 +608,13 @@ function openSearchMatch(type, id, trigger) {
     return;
   }
   if (type === 'hotspots') {
+    // 决策 9.1/81：热点匹配项"查看资料"应打开对应热点详情对话框，不新增独立详情路由。
+    // switchView('trending') 已同步渲染热点列表；若能定位到对应卡片则以卡片为回焦锚点，否则以 null 回焦到模态内容。
     switchView('trending');
-    document.getElementById('view-trending')?.querySelector('h1')?.focus?.();
+    window.requestAnimationFrame(() => {
+      const card = document.querySelector('#trendingGrid [data-hotspot-id="' + CSS.escape(id) + '"]');
+      openHotspotDetail(id, card || null);
+    });
     return;
   }
   if (type === 'concepts') {
@@ -985,7 +1029,7 @@ function submitSearchHome(query) {
     resetSearchProcessing();
     input?.setAttribute('aria-invalid', 'true');
     if (emptyState) emptyState.hidden = false;
-    if (status) status.textContent = '请输入问题后再开始整理。';
+    if (status) status.textContent = '请输入问题后再搜索。';
     input?.focus();
     return false;
   }
@@ -2543,7 +2587,7 @@ function renderGlossaryDetail() {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// 第 8 部分：AI 热点视图 —— 安全输出 + 内容类型/平台筛选 + 时间分组 + 状态
+// 第 8 部分：AI 热点视图 —— 安全输出 + 内容类型筛选 + 最近/热度排序 + 时间分组 + 状态
 //
 // 安全设计：
 //   所有来自外部平台（YouTube/X/Bilibili）的文本字段（标题、描述、
@@ -2565,13 +2609,26 @@ const platformMeta = {
   x: { label: 'X', icon: '𝕏' },
   bilibili: { label: 'B站', icon: '📺' },
 };
+// B16 决策 65/79：内容类型（热点视图主分类维度）。来源媒体类型由 source_type 表达，
+// 只出现在来源核验层，不作为列表级筛选。unclassified 为 AI 分类+审核确认上线前的占位。
 const contentTypeLabels = {
+  ai_tool: 'AI 工具',
+  ai_product: 'AI 产品',
+  ai_concept: 'AI 概念',
+  ai_technology: 'AI 技术动态',
+  ai_industry: 'AI 行业事件',
+  other: '其他',
+  unclassified: '类型待确认'
+};
+const SOURCE_TYPE_LABELS = {
   youtube_video: 'YouTube 视频',
   x_post: 'X 帖子',
   bilibili_video: 'B站视频',
-  bilibili_dynamic: 'B站动态',
+  bilibili_dynamic_video: 'B站视频',
   bilibili_dynamic_repost: 'B站转发动态',
-  bilibili_article: 'B站专栏'
+  bilibili_dynamic_text: 'B站动态',
+  bilibili_article: 'B站专栏',
+  unknown: '来源类型未知'
 };
 
 /**
@@ -2659,7 +2716,11 @@ function getFilteredTrending() {
 function renderTrendingTypeFilters() {
   const container = document.getElementById('trendingTypeTabs');
   if (!container) return;
-  const types = [...new Set((hotspots.items || []).map(item => item.content_type).filter(Boolean))];
+  // B16 决策 65/79：只把真实内容类型作为筛选维度；unclassified（AI 分类+审核未上线）
+  // 与未知值不作为筛选标签。无真实类型时隐藏整个“内容类型”筛选区（决策 80 空状态）。
+  const types = [...new Set((hotspots.items || []).map(item => item.content_type).filter(type => type && type !== 'unclassified'))];
+  const filterSet = container.closest('.trending-filter-set');
+  if (filterSet) filterSet.hidden = types.length === 0;
   if (activeTrendingType !== 'all' && !types.includes(activeTrendingType)) activeTrendingType = 'all';
   container.innerHTML = '<button class="filter-chip' + (activeTrendingType === 'all' ? ' active' : '') + '" type="button" data-content-type="all" aria-pressed="' + (activeTrendingType === 'all') + '">全部类型</button>' +
     types.map(type => '<button class="filter-chip' + (activeTrendingType === type ? ' active' : '') + '" type="button" data-content-type="' + escapeHtml(type) + '" aria-pressed="' + (activeTrendingType === type) + '">' + escapeHtml(contentTypeLabels[type] || type) + '</button>').join('');
@@ -2781,6 +2842,7 @@ function openHotspotDetail(id, trigger = null) {
   if (!item || !content) return;
   const meta = platformMeta[item.platform] || { label: item.platform || '平台未知', icon: '📰' };
   const typeLabel = contentTypeLabels[item.content_type] || item.content_type || '类型未知';
+  const sourceTypeLabel = SOURCE_TYPE_LABELS[item.source_type] || item.source_type || '来源类型未知';
   const url = safeExternalUrl(item.url);
   const hasUrl = url !== '#';
   const sourceDetailId = 'hotspot-source-detail-' + String(item.id).replace(/[^a-zA-Z0-9_-]/g, '-');
@@ -2804,6 +2866,7 @@ function openHotspotDetail(id, trigger = null) {
         '<div class="hotspot-source-detail" id="' + escapeHtml(sourceDetailId) + '" hidden>' +
           '<dl class="hotspot-source-meta">' +
             '<div><dt>来源平台</dt><dd>' + escapeHtml(meta.label) + '</dd></div>' +
+            '<div><dt>来源类型</dt><dd>' + escapeHtml(sourceTypeLabel) + '</dd></div>' +
             '<div><dt>内容时间</dt><dd>' + escapeHtml(formatHotspotDate(item.published_at)) + '</dd></div>' +
             '<div><dt>数据更新于</dt><dd>' + escapeHtml(formatHotspotDate(item.fetched_at)) + '</dd></div>' +
             '<div><dt>来源名称</dt><dd>' + escapeHtml(item.author_name || item.source_id || '来源信息待补充') + '</dd></div>' +
@@ -2844,6 +2907,7 @@ function renderTrendingCard(item) {
   const meta = platformMeta[item.platform] || { label: item.platform || '平台未知' };
   const sourceUrl = item.url ? safeExternalUrl(item.url) : '#';
   const sourceName = item.author_name || item.source_id || '来源信息待补充';
+  const sourceTypeLabel = SOURCE_TYPE_LABELS[item.source_type] || item.source_type || '来源类型未知';
   const sourceEvidence = item.evidence_excerpt || item.source_excerpt || '暂无可展示的直接依据。当前公开投影未提供可定位的审核依据片段。';
   return '<article class="trending-card" data-hotspot-id="' + escapeHtml(item.id) + '" aria-labelledby="trending-title-' + escapeHtml(item.id) + '">' +
     '<div class="trending-card-head"><span class="tag scene">' + escapeHtml(typeLabel) + '</span><span>' + escapeHtml(published) + '</span></div>' +
@@ -2861,6 +2925,7 @@ function renderTrendingCard(item) {
     '<div class="trending-card-source-detail" id="' + escapeHtml(sourceDetailId) + '" data-hotspot-card-source hidden>' +
       '<dl class="trending-source-meta">' +
         '<div><dt>来源平台</dt><dd>' + escapeHtml(meta.label) + '</dd></div>' +
+        '<div><dt>来源类型</dt><dd>' + escapeHtml(sourceTypeLabel) + '</dd></div>' +
         '<div><dt>来源名称</dt><dd>' + escapeHtml(sourceName) + '</dd></div>' +
         '<div><dt>内容时间</dt><dd>' + escapeHtml(formatHotspotDate(item.published_at)) + '</dd></div>' +
         '<div><dt>数据更新于</dt><dd>' + escapeHtml(formatHotspotDate(item.fetched_at)) + '</dd></div>' +
@@ -3235,6 +3300,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('searchBackButton')?.addEventListener('click', returnToSearchHome);
     document.getElementById('searchEditButton')?.addEventListener('click', startSearchEditing);
     document.getElementById('searchEditCancel')?.addEventListener('click', cancelSearchEditing);
+    // B16 决策 10.2/100：复制查询 / 复制摘要（仅原型验证位置，不接入云端）
+    document.getElementById('searchCopyQuery')?.addEventListener('click', () => {
+      const text = searchState.query || '';
+      if (!text) { announceStatus('暂无可复制的查询'); return; }
+      copyTextWithFeedback(document.getElementById('searchCopyQuery'), text, '查询');
+    });
+    document.getElementById('searchCopySummary')?.addEventListener('click', () => {
+      const text = document.getElementById('searchSummaryContent')?.innerText?.trim() || '';
+      if (!text) { announceStatus('暂无可复制的摘要'); return; }
+      copyTextWithFeedback(document.getElementById('searchCopySummary'), text, '摘要');
+    });
     const searchEditForm = document.getElementById('searchEditForm');
     const searchEditInput = document.getElementById('searchEditInput');
     searchEditForm?.addEventListener('submit', event => {
@@ -3505,7 +3581,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     closeToolsFilters({ restoreFocus: true });
   });
 
-  // 热点公开内容类型、平台筛选与排序
+  // 热点公开内容类型筛选与最近/热度排序（决策 74/79：平台属来源核验信息，非列表级筛选）
   const trendingTypeTabs = document.getElementById('trendingTypeTabs');
   trendingTypeTabs?.addEventListener('click', event => {
     const chip = event.target.closest('[data-content-type]');
