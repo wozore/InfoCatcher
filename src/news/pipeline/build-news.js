@@ -24,6 +24,9 @@
  *                  评分 / 溯源 / 主题聚合
  *                            │
  *                            ▼
+ *              内部候选层（hotspot-candidates.json，含双状态轴，不发布）
+ *                            │ 公开资格门禁（决策 49/69）
+ *                            ▼
  *                     hotspots.json（前端投影，最后写入）
  *
  * ═══════════════════════════════════════════════════════════════
@@ -52,8 +55,8 @@
  *     - 评分、异常检测、溯源和主题聚合
  *
  *   Phase 5: 持久化（严格顺序）
- *     - Registry → State → Quota → Authorizations → hotspots.json
- *     - 前端投影最后写入，失败不破坏内部状态
+ *     - Registry → State → Quota → Authorizations → 候选层 → hotspots.json
+ *     - 候选层（内部，不发布）先写；前端投影最后写入，失败不破坏内部状态
  *
  * ═══════════════════════════════════════════════════════════════
  * 扩展点：
@@ -97,6 +100,10 @@ const { collectYouTubeLayerStep } = require('../collectors/news-youtube');
 const { collectBilibiliLayerStep } = require('../collectors/news-bilibili');
 const { normalizeManualItem } = require('../../content/news-manual');
 const { createAuthorizationStore, createAuthorizationTask } = require('../core/news-authorization');
+const {
+  readCandidateStore, writeCandidateStore, mergeCandidates, stampCandidateStatuses, buildPublicProjection,
+  attachProjectionSnapshot,
+} = require('../core/news-candidates');
 const { NEWS_FILES, CATALOG_FILES, DIRS } = require('../../shared/paths');
 const { generateRss } = require('../../content/generate-rss');
 
@@ -1242,16 +1249,25 @@ async function runCollection(options = {}) {
   coverage.active_layer = state.active_layer;
   coverage.time_layer_scope = 'latest-feed-observation';
 
-  const output = {
-    schema_version: 2,
-    generated_at: fetchedAt,
-    heat_definition: HEAT_DEFINITION,
-    items,
+  // B16 决策 49/69：先构建内部候选层（每条候选带双状态轴），公开 hotspots.json
+  // 由候选层经公开资格门禁派生，不再直接写原始 items。
+  const candidateStore = mergeCandidates(
+    readCandidateStore(),
+    items.map(item => stampCandidateStatuses(item)),
+    fetchedAt
+  );
+  const statusById = new Map(candidateStore.candidates.map(candidate => [candidate.id, candidate]));
+  // 仅取本轮 items 对应的候选：公开窗口/排序/上限仍由上方 items 逻辑决定，
+  // 门禁只剔除未通过人工审核的候选，历史积累不会回流公开。
+  const output = buildPublicProjection({
+    candidates: items.map(item => statusById.get(item.id)).filter(Boolean),
     events,
     provenance,
     assessments,
     coverage,
-  };
+    generatedAt: fetchedAt,
+    heatDefinition: HEAT_DEFINITION,
+  });
 
   const registryResults = bulkDiscover(registryIndex, items.map(item => ({
     platform: item.platform,
@@ -1300,13 +1316,24 @@ async function runCollection(options = {}) {
   };
 
   // 写入顺序有严格依赖：Registry/State/Quota/Authorizations 是内部状态，
-  // hotspots.json 是面向浏览器的投影。先写内部状态，最后替换热点文件。
-  // 如果中间任何一步失败，旧 hotspots.json 保持不变，前端不会看到半成品。
+  // 候选层也是内部状态（不发布），hotspots.json 是面向浏览器的公开投影。
+  // 候选层先写、公开投影最后写：如果中间任何一步失败，旧 hotspots.json 保持
+  // 不变，前端不会看到半成品。
+  // 候选层写入前附带投影快照（events/provenance/assessments/coverage/热度定义），
+  // 使 PR 合并后可由 Actions 独立重建最终公开投影（决策 49/59）。
   if (!options.noWrite) {
     writeJsonAtomic(REGISTRY_PATH, registry, runId);
     writeJsonAtomic(STATE_PATH, state, runId);
     writeJsonAtomic(QUOTA_PATH, finalizedQuota, runId);
     writeJsonAtomic(AUTHORIZATIONS_PATH, authorizations, runId);
+    attachProjectionSnapshot(candidateStore, {
+      events,
+      provenance,
+      assessments,
+      coverage,
+      heatDefinition: HEAT_DEFINITION,
+    });
+    writeCandidateStore(candidateStore, runId);
     writeJsonAtomic(OUTPUT_PATH, output, runId);
   }
   return { output, state, registry, quota: finalizedQuota, authorizations };

@@ -389,6 +389,23 @@ function validateAuthorizations(data) {
   console.log(`  pending-authorizations.json: ${data.tasks.length} 个任务，通过`);
 }
 
+function validateNewsCandidates(data) {
+  if (!data || !Array.isArray(data.candidates)) return fail('hotspot-candidates.json.candidates 应为数组');
+  const ids = new Set();
+  const aiStatuses = new Set(['not_requested', 'queued', 'processing', 'completed', 'error']);
+  const reviewStatuses = new Set(['pending', 'approved', 'held', 'discarded']);
+  for (let i = 0; i < data.candidates.length; i++) {
+    const candidate = data.candidates[i];
+    const tag = `hotspot-candidates.json.candidates[${i}] (${candidate.title || '未知'})`;
+    if (!candidate.id || ids.has(candidate.id)) fail(`${tag}.id 缺失或重复: ${candidate.id}`);
+    ids.add(candidate.id);
+    // B16 决策 16/69：每条候选必须带双状态轴，且取值为合法枚举
+    if (!aiStatuses.has(candidate.ai_processing_status)) fail(`${tag}.ai_processing_status 无效`);
+    if (!reviewStatuses.has(candidate.review_status)) fail(`${tag}.review_status 无效`);
+  }
+  console.log(`  hotspot-candidates.json: ${data.candidates.length} 条候选，通过`);
+}
+
 function validateManualItems(data) {
   if (!data || !Array.isArray(data.items)) return fail('news-manual-items.json.items 应为数组');
   const sources = JSON.parse(fs.readFileSync(NEWS_FILES.sources, 'utf8')).sources;
@@ -671,6 +688,7 @@ for (const [name, file, validator] of [
   ['news-registry.json', NEWS_FILES.registry, validateNewsRegistry],
   ['news-quota.json', NEWS_FILES.quota, validateNewsQuota],
   ['pending-authorizations.json', NEWS_FILES.authorizations, validateAuthorizations],
+  ['hotspot-candidates.json', NEWS_FILES.candidates, validateNewsCandidates],
 ]) {
   try {
     validator(JSON.parse(fs.readFileSync(file, 'utf8')));

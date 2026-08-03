@@ -32,6 +32,14 @@
  *     lock force-unlock --reason ...
  *     （status 只读；force-unlock 删除锁并写入审计，必须提供 reason）
  *
+ *   review —— 热点审核状态管理（B16 决策 46/48/50/55/56/57/69）
+ *     review list    [--status pending|approved|held|discarded] [--platform ...] [--limit N]
+ *     review summary
+ *     review set     --id <id> --status pending|approved|held|discarded [--reason ...]
+ *     review batch   --ids <id1,id2,...> --status approved [--reason ...]
+ *     （set 单条设置审核状态；batch 只处理显式列出的 ids，不支持隐式「全部」；
+ *       ai_processing_status 未 completed 时禁止设为 approved）
+ *
  * 安全约束：
  *   - 不接受 --api-key 等凭据参数；API Key 只能由 GitHub Secrets 注入。
  *   - 校验 external_id 格式：YouTube → UC 开头、B站 → 纯数字 UID、X → 有效用户名。
@@ -50,6 +58,14 @@ const path = require('path');
 const { readJson, writeJsonAtomic, inspectLock, forceUnlock, acquireLock, releaseLock } = require('../core/news-storage');
 const { createAuthorizationStore, decideAuthorization } = require('../core/news-authorization');
 const { normalizeManualItem, importManualItems } = require('../../content/news-manual');
+const {
+  REVIEW_STATUSES,
+  readCandidateStore,
+  writeCandidateStore,
+  setReviewStatus,
+  setBatchReviewStatus,
+  reviewSummary,
+} = require('../core/news-candidates');
 const { NEWS_FILES } = require('../../shared/paths');
 
 /** CLI 操作的目标数据文件（均为绝对路径） */
@@ -61,6 +77,7 @@ const FILES = {
   manualItems: NEWS_FILES.manualItems,
   lock: NEWS_FILES.lock,
   audit: NEWS_FILES.adminAudit,
+  candidates: NEWS_FILES.candidates,
 };
 
 const PLATFORMS = new Set(['youtube', 'bilibili', 'x']);
@@ -341,6 +358,66 @@ function lockCommand(action, flags) {
 
 // ── 入口 ──────────────────────────────────────────────────
 
+// ── review 命令组：热点审核状态管理（B16 决策 46/48/50/55/56/57/69）─────
+
+function reviewCommand(action, flags) {
+  const store = readCandidateStore();
+
+  if (action === 'summary') return reviewSummary(store);
+
+  if (action === 'list') {
+    let candidates = store.candidates;
+    if (flags.status) {
+      if (!REVIEW_STATUSES.includes(flags.status)) throw new Error(`非法审核状态：${flags.status}`);
+      candidates = candidates.filter(candidate => candidate.review_status === flags.status);
+    }
+    if (flags.platform) candidates = candidates.filter(candidate => candidate.platform === flags.platform);
+    const limit = optionalNumber(flags, 'limit');
+    if (limit !== undefined && limit > 0) candidates = candidates.slice(0, limit);
+    return {
+      total: store.candidates.length,
+      shown: candidates.length,
+      candidates: candidates.map(candidate => ({
+        id: candidate.id,
+        platform: candidate.platform,
+        content_type: candidate.content_type,
+        title: candidate.title,
+        published_at: candidate.published_at,
+        ai_processing_status: candidate.ai_processing_status,
+        review_status: candidate.review_status,
+        hold_reason: candidate.hold_reason || null,
+        error_type: candidate.error_type || null,
+      })),
+    };
+  }
+
+  if (action === 'set') {
+    if (!flags.id) throw new Error('review set 缺少 --id');
+    if (!flags.status) throw new Error('review set 缺少 --status');
+    const next = setReviewStatus(store, flags.id, flags.status, { reason: flags.reason });
+    writeCandidateStore(next, `review-set-${flags.id}-${Date.now()}`);
+    const candidate = next.candidates.find(item => item.id === flags.id);
+    return {
+      id: candidate.id,
+      review_status: candidate.review_status,
+      review_reason: candidate.review_reason || null,
+      updated_at: next.updated_at,
+    };
+  }
+
+  if (action === 'batch') {
+    if (!flags.ids) throw new Error('review batch 缺少 --ids（逗号分隔的明确 id 列表，决策 56）');
+    if (!flags.status) throw new Error('review batch 缺少 --status');
+    const ids = String(flags.ids).split(',').map(id => id.trim()).filter(Boolean);
+    if (!ids.length) throw new Error('review batch 的 --ids 为空');
+    const result = setBatchReviewStatus(store, ids, flags.status, { reason: flags.reason });
+    if (result.updated > 0) writeCandidateStore(result.store, `review-batch-${Date.now()}`);
+    return { status: flags.status, ...result, updated_at: result.store.updated_at };
+  }
+
+  throw new Error(`未知 review 命令: ${action}`);
+}
+
 function main(argv = process.argv.slice(2)) {
   const { positional, flags } = parseArgs(argv);
   const [group, action] = positional;
@@ -350,7 +427,8 @@ function main(argv = process.argv.slice(2)) {
   else if (group === 'authorization') result = authorizationCommand(action, flags);
   else if (group === 'quota') result = quotaCommand(action, flags);
   else if (group === 'lock') result = lockCommand(action, flags);
-  else throw new Error('用法: news-cli.js source|content|authorization|quota|lock <action> [options]');
+  else if (group === 'review') result = reviewCommand(action, flags);
+  else throw new Error('用法: news-cli.js source|content|authorization|quota|lock|review <action> [options]');
   console.log(JSON.stringify(result, null, 2));
   return result;
 }
@@ -360,4 +438,4 @@ if (require.main === module) {
   catch (error) { console.error(`❌ ${error.message}`); process.exitCode = 1; }
 }
 
-module.exports = { parseArgs, normalizeTags, validateSource, importSources, optionalNumber, contentCommand, main, FILES };
+module.exports = { parseArgs, normalizeTags, validateSource, importSources, optionalNumber, contentCommand, reviewCommand, main, FILES };

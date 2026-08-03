@@ -16,6 +16,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: collect-ai-news
@@ -50,14 +51,71 @@ jobs:
           node --test tests/news/news-tests.test.js tests/news/news-foundation.test.js
           node scripts/validate.js
 
-      - name: Commit generated data
+      - name: Create review branch with internal candidate data
+        id: review
         run: |
-          if git diff --quiet -- data/news/output/hotspots.json data/news/runtime/news-state.json data/news/runtime/news-registry.json data/news/runtime/news-quota.json data/news/runtime/pending-authorizations.json public/feed.xml; then
-            echo "No generated data changes"
+          # B16 决策 46/58/59：采集只产生内部候选层与运行状态（不发布）；
+          # 公开投影在审核 PR 合并后由 publish-news.yml 重建，不在此直接提交 main。
+          if git diff --quiet -- \
+            data/news/runtime/hotspot-candidates.json \
+            data/news/runtime/news-state.json \
+            data/news/runtime/news-registry.json \
+            data/news/runtime/news-quota.json \
+            data/news/runtime/pending-authorizations.json; then
+            echo "No candidate changes"
             exit 0
           fi
+          batch="batch-$(date +%Y%m%d-%H%M%S)"
+          branch="news/review/${batch}"
+          echo "batch=${batch}" >> "$GITHUB_OUTPUT"
+          echo "branch=${branch}" >> "$GITHUB_OUTPUT"
+          echo "pushed=${branch}" >> "$GITHUB_OUTPUT"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/news/output/hotspots.json data/news/runtime/news-state.json data/news/runtime/news-registry.json data/news/runtime/news-quota.json data/news/runtime/pending-authorizations.json public/feed.xml
-          git commit -m "chore(data): update AI hotspots"
-          git push
+          git checkout -b "${branch}"
+          git add data/news/runtime/hotspot-candidates.json \
+                  data/news/runtime/news-state.json \
+                  data/news/runtime/news-registry.json \
+                  data/news/runtime/news-quota.json \
+                  data/news/runtime/pending-authorizations.json
+          git commit -m "chore(data): update hotspot candidates (${batch})"
+          git push origin "${branch}"
+
+      - name: Open review PR
+        if: steps.review.outputs.pushed != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BATCH: ${{ steps.review.outputs.batch }}
+          BRANCH: ${{ steps.review.outputs.branch }}
+        run: |
+          node scripts/news-cli.js review summary > /tmp/review-summary.json
+          node -e '
+            const fs = require("fs");
+            const summary = JSON.parse(fs.readFileSync("/tmp/review-summary.json", "utf8"));
+            const review = Object.entries(summary.by_review_status || {})
+              .map(([k, v]) => `- ${k}: ${v}`).join("\n") || "（无）";
+            const ai = Object.entries(summary.by_ai_processing_status || {})
+              .map(([k, v]) => `- ${k}: ${v}`).join("\n") || "（无）";
+            const body = [
+              `## 批次：${process.env.BATCH}`,
+              "",
+              `候选总数：${summary.total}`,
+              "",
+              "### 审核状态分布（review_status）",
+              review,
+              "",
+              "### AI 处理状态分布（ai_processing_status）",
+              ai,
+              "",
+              "## 如何审核",
+              "1. 查看本 PR 中 `data/news/runtime/hotspot-candidates.json` 的候选记录。",
+              "2. 逐条设置 `review_status`：`pending` 待审核 / `approved` 通过 / `held` 暂缓复审 / `discarded` 丢弃。",
+              "3. 也可在本地用 `node scripts/news-cli.js review set --id <id> --status <status>`，或 `review batch --ids <id1,id2> --status approved` 批量通过明确选中的候选，再推送本分支。",
+              "4. `ai_processing_status != completed` 的候选不能设为 `approved`。",
+              "5. **合并本 PR 后**，GitHub Actions 会从候选层自动重建公开 hotspots.json 与 RSS，部署到热点视图。",
+            ].join("\n");
+            fs.writeFileSync("/tmp/pr-body.md", body);
+          '
+          gh pr create --base main --head "${BRANCH}" \
+            --title "热点审核：批次 ${BATCH}" \
+            --body-file /tmp/pr-body.md

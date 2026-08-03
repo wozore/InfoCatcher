@@ -1,0 +1,48 @@
+name: Publish News Projection
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/news/runtime/hotspot-candidates.json'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-ai-news
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Rebuild public projection from candidate layer
+        run: node scripts/publish-news.js
+
+      - name: Validate generated data
+        run: |
+          node scripts/validate.js
+          node --test tests/news/news-tests.test.js tests/news/news-foundation.test.js
+
+      - name: Commit public projection
+        run: |
+          # 只提交公开投影（hotspots.json + feed.xml），不含内部候选层，
+          # 因此不会再次触发本 workflow（paths 仅监听候选层）。
+          if git diff --quiet -- data/news/output/hotspots.json public/feed.xml; then
+            echo "No public projection changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/news/output/hotspots.json public/feed.xml
+          git commit -m "chore(data): publish approved hotspot projection"
+          git push

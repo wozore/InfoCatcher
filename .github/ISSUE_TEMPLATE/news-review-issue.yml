@@ -1,0 +1,42 @@
+name: 热点审核异常
+description: 记录热点候选的来源争议、处理失败、需补充信息或规则误判（B16 决策 47）
+title: "[热点审核] "
+labels: ["news-review"]
+body:
+  - type: input
+    id: candidate_id
+    attributes:
+      label: 候选 ID
+      description: 候选记录在 hotspot-candidates.json 中的 id（platform:native_id）
+      placeholder: "例如：youtube:xxxxxxxxxxx"
+  - type: input
+    id: review_pr
+    attributes:
+      label: 关联审核 PR
+      description: 该候选所属的批次审核 PR 编号（选填）
+      placeholder: "#123"
+  - type: dropdown
+    id: issue_type
+    attributes:
+      label: 异常类型
+      options:
+        - 来源争议
+        - AI 处理失败
+        - 需要补充信息
+        - 审核规则误判
+        - 其他
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: 问题描述
+      description: 发生了什么、影响范围、以及需要如何处理
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 原始依据
+      description: 相关原始链接、字幕/文字稿片段或其他可核验证据（选填）
+      placeholder: "https://...\n字幕 02:14–02:42：……"
