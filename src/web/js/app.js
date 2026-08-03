@@ -92,8 +92,10 @@ let activeFilters = {         // 工具库的筛选状态
   price: 'all'                //   价格 (免费/付费/均有)
 };
 let activeGlossaryCategory = 'all'; // 概念词典的分类筛选
-let activeTrendingPlatform = 'all'; // 热点平台筛选 (youtube/x/bilibili/bilibili_dynamic)
+// B16 决策 74/79：平台不属于列表级筛选维度，只保留在来源核验信息中，故不再维护 activeTrendingPlatform。
 let activeTrendingType = 'all';     // 公开 content_type 筛选
+// B16 决策 78/85：热度作为主动选择的可选排序；默认“最近”，按唯一内容发布时间倒序。
+let activeTrendingSort = 'recent';  // 'recent' | 'hot'
 let modalTrigger = null;           // 详情弹窗打开前的焦点，用于关闭后回焦
 let modalScrollPosition = null;    // 热点等列表详情关闭时保持原列表滚动位置
 const dataLoadFailures = new Set();
@@ -546,7 +548,6 @@ function openSearchMatch(type, id, trigger) {
     return;
   }
   if (type === 'hotspots') {
-    activeTrendingPlatform = 'all';
     switchView('trending');
     document.getElementById('view-trending')?.querySelector('h1')?.focus?.();
     return;
@@ -1734,6 +1735,37 @@ document.getElementById('modalOverlay').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
 
+document.getElementById('modalOverlay').addEventListener('click', function(event) {
+  const related = event.target.closest('[data-hotspot-related-type]');
+  if (related) {
+    const type = related.dataset.hotspotRelatedType;
+    const id = related.dataset.hotspotRelatedId;
+    const itemId = related.dataset.hotspotRelatedItem || null;
+    closeModal();
+    if (type === 'tools') {
+      switchView('tools');
+      window.requestAnimationFrame(() => openDetail(id, itemId));
+    } else if (type === 'concepts') {
+      openGlossaryConcept(id);
+    } else if (type === 'scenes') {
+      const input = document.getElementById('sceneSearch');
+      if (input) input.value = '';
+      activeSceneId = id;
+      switchView('scenes');
+      window.requestAnimationFrame(() => document.querySelector('.scene-pick-chip[data-scene-pick="' + CSS.escape(id) + '"]')?.focus());
+    }
+    return;
+  }
+  const toggle = event.target.closest('[data-hotspot-source-toggle]');
+  if (!toggle) return;
+  const detail = document.getElementById(toggle.getAttribute('aria-controls'));
+  if (!detail) return;
+  const expanded = detail.hidden;
+  detail.hidden = !expanded;
+  toggle.setAttribute('aria-expanded', String(expanded));
+  toggle.textContent = expanded ? '收起来源' : '查看来源';
+});
+
 // 决策 92：对比页“添加工具”选择器（委托绑定在模块加载时，与模态监听并列）
 document.getElementById('addCompareBtn')?.addEventListener('click', () => openAddComparePanel());
 document.getElementById('modalOverlay').addEventListener('click', event => {
@@ -2434,10 +2466,10 @@ function renderGlossaryDetail() {
 //   javascript: 链接。
 //
 // 筛选与展示：
-//   getFilteredTrending() — 按内容类型/来源平台筛选，按唯一内容发布时间倒序
+//   getFilteredTrending() — 按内容类型筛选，按唯一内容发布时间倒序
 //   renderTrendingStatus() — 渲染采集覆盖状态（降级/未运行/人工收录）
 //   renderTrending() — 渲染热点卡片（公开字段，按“今天/昨天/近7天/更早”分组）
-//   openHotspotDetail() — 基础详情（仅公开字段；来源核验/关联资料按公开字段门禁降级）
+//   openHotspotDetail() — 热点详情对话框（摘要 + 来源核验 + 关联资料三段式；平台只在来源层展示）
 // ═══════════════════════════════════════════════════════════════
 
 /** 平台元数据：标签名、图标、CSS class */
@@ -2500,22 +2532,41 @@ function formatMetric(value) {
   return String(value);
 }
 
-// 决策 85：公开热点只保留唯一内容发布时间倒序；无统一公开热度字段，不提供无定义的“综合价值”排序。
+// B16 决策 78/85：默认按唯一内容发布时间倒序；“热度”作为主动选择的可选排序。
+// 热度值只读取公开投影中的明确热度字段（hot_score / popularity / heat，由数据契约按统一语义写入），
+// 前端不跨平台合成 metrics；缺失热度排末尾并保持稳定，不伪装为 0 或高热度。
+function getHotspotHeat(item) {
+  const value = item?.hot_score ?? item?.popularity ?? item?.heat;
+  const num = Number(value);
+  return Number.isFinite(num) ? num : null;
+}
+
+// B16 决策 74/79：内容类型是热点视图的一级筛选，平台属于来源核验信息，不做列表级过滤。
 function getFilteredTrending() {
   let items = [...(hotspots.items || [])];
   if (activeTrendingType !== 'all') {
     items = items.filter(item => item.content_type === activeTrendingType);
   }
-  if (activeTrendingPlatform === 'bilibili_dynamic') {
-    items = items.filter(item => item.platform === 'bilibili' && item.content_type.startsWith('bilibili_dynamic'));
-  } else if (activeTrendingPlatform !== 'all') {
-    items = items.filter(item => item.platform === activeTrendingPlatform);
-  }
   const timestamp = item => {
     const value = new Date(item.published_at).getTime();
     return Number.isFinite(value) ? value : Number.NEGATIVE_INFINITY;
   };
-  return items.sort((a, b) => timestamp(b) - timestamp(a));
+  const byTimeDesc = (a, b) => timestamp(b) - timestamp(a);
+  if (activeTrendingSort === 'hot' && items.some(item => getHotspotHeat(item) !== null)) {
+    // 热度排序：明确热度值倒序；缺失值排末尾（稳定），不伪装为 0；同热度按时间倒序。
+    items.sort((a, b) => {
+      const heatA = getHotspotHeat(a);
+      const heatB = getHotspotHeat(b);
+      if (heatA === null && heatB === null) return byTimeDesc(a, b);
+      if (heatA === null) return 1;
+      if (heatB === null) return -1;
+      if (heatB !== heatA) return heatB - heatA;
+      return byTimeDesc(a, b);
+    });
+  } else {
+    items.sort(byTimeDesc);
+  }
+  return items;
 }
 
 function renderTrendingTypeFilters() {
@@ -2576,34 +2627,110 @@ function renderHotspotMetrics(item) {
     .filter(Boolean);
 }
 
+function formatHotspotDate(value, fallback = '时间未知') {
+  const date = new Date(value);
+  return Number.isFinite(date.getTime())
+    ? date.toLocaleString('zh-CN', { dateStyle: 'medium', timeStyle: 'short' })
+    : fallback;
+}
+
+function getHotspotRelatedResources(item) {
+  const resources = Array.isArray(item.related_resources) ? item.related_resources : [];
+  return resources.map(resource => {
+    if (!resource || typeof resource !== 'object') return null;
+    const rawType = resource.type;
+    const type = { tool: 'tools', concept: 'concepts', scene: 'scenes' }[rawType] || rawType;
+    const id = resource.id || resource.tool_id || resource.concept_id || resource.scene_id;
+    if (!id || !['tools', 'concepts', 'scenes'].includes(type)) return null;
+
+    if (type === 'tools') {
+      const tool = tools.find(entry => entry.id === id);
+      const itemId = resource.item_id || null;
+      const item = itemId ? getCollectionNode(id, itemId) : null;
+      const available = Boolean(tool && (!itemId || item));
+      return available
+        ? { type, id: tool.id, itemId, label: resource.label || item?.name || tool.name, available: true }
+        : { type, id, itemId, label: resource.label || id, available: false };
+    }
+    if (type === 'concepts') {
+      const concept = glossary.find(entry => entry.term === id || searchConceptKey(entry.term) === id);
+      return concept
+        ? { type, id: concept.term, label: resource.label || concept.term, available: true }
+        : { type, id, label: resource.label || id, available: false };
+    }
+    const scene = scenes.find(entry => entry.id === id);
+    return scene
+      ? { type, id: scene.id, label: resource.label || scene.name, available: true }
+      : { type, id, label: resource.label || id, available: false };
+  }).filter(Boolean);
+}
+
+function renderHotspotRelatedResources(item) {
+  const resources = getHotspotRelatedResources(item);
+  if (!resources.length) {
+    return '<p class="hotspot-detail-unavailable"><strong>关联资料暂不可用。</strong>当前公开投影没有稳定的工具、概念或场景关联 ID。</p>';
+  }
+
+  const groups = [
+    { key: 'tools', label: '工具' },
+    { key: 'concepts', label: '概念' },
+    { key: 'scenes', label: '场景' },
+  ];
+  const grouped = groups.map(group => ({
+    ...group,
+    items: resources.filter(resource => resource.type === group.key),
+  })).filter(group => group.items.length);
+
+  return grouped.map(group => '<div class="hotspot-related-group"><h4>' + escapeHtml(group.label) + '</h4>' +
+    group.items.slice(0, 3).map(resource => resource.available
+      ? '<button class="hotspot-related-item" type="button" data-hotspot-related-type="' + escapeHtml(resource.type) + '" data-hotspot-related-id="' + escapeHtml(resource.id) + '"' + (resource.itemId ? ' data-hotspot-related-item="' + escapeHtml(resource.itemId) + '"' : '') + '>' + escapeHtml(resource.label) + ' →</button>'
+      : '<span class="hotspot-related-item hotspot-related-unavailable">' + escapeHtml(resource.label) + '：资料暂不可用</span>'
+    ).join('') + '</div>').join('');
+}
+
 function openHotspotDetail(id, trigger = null) {
   const item = (hotspots.items || []).find(entry => entry.id === id);
   const content = document.getElementById('modalContent');
   if (!item || !content) return;
   const meta = platformMeta[item.platform] || { label: item.platform || '平台未知', icon: '📰' };
   const typeLabel = contentTypeLabels[item.content_type] || item.content_type || '类型未知';
-  const published = Number.isFinite(new Date(item.published_at).getTime()) ? item.published_at : '发布时间未知';
-  const metrics = renderHotspotMetrics(item);
   const url = safeExternalUrl(item.url);
   const hasUrl = url !== '#';
+  const sourceDetailId = 'hotspot-source-detail-' + String(item.id).replace(/[^a-zA-Z0-9_-]/g, '-');
   modalScrollPosition = window.scrollY;
   content.innerHTML = '<button class="modal-close" type="button" aria-label="关闭热点详情" onclick="closeModal()">' + ICON_CLOSE + '</button>' +
     '<article class="hotspot-detail" data-hotspot-detail="' + escapeHtml(item.id) + '">' +
-      '<span class="eyebrow">公开来源内容</span>' +
+      '<span class="eyebrow">' + escapeHtml(typeLabel) + '</span>' +
       '<h2>' + escapeHtml(item.title || '标题暂不可用') + '</h2>' +
-      '<p class="vendor">' + meta.icon + ' ' + escapeHtml(meta.label) + ' · ' + escapeHtml(typeLabel) + '</p>' +
-      '<dl class="hotspot-detail-meta">' +
-        '<div><dt>作者</dt><dd>' + escapeHtml(item.author_name || '暂不可用') + '</dd></div>' +
-        '<div><dt>发布时间</dt><dd>' + escapeHtml(published) + '</dd></div>' +
-      '</dl>' +
-      (item.source_tags && item.source_tags.length ? '<div class="hotspot-detail-tags">' + item.source_tags.map(tag => '<span class="tag scene">' + escapeHtml(tag) + '</span>').join('') + '</div>' : '') +
-      '<section class="section"><h3>来源描述</h3><p class="hotspot-detail-description">' + escapeHtml(item.description || '来源描述暂不可用') + '</p></section>' +
-      '<section class="section"><h3>公开互动数据</h3>' + (metrics.length
-        ? '<dl class="hotspot-detail-metrics">' + metrics.map(metric => '<div><dt>' + metric.label + '</dt><dd>' + escapeHtml(metric.value) + '</dd></div>').join('') + '</dl>'
-        : '<p>互动数据暂不可用。</p>') + '</section>' +
-      '<section class="section hotspot-detail-gate"><h3>来源核验</h3><p><strong>来源核验暂不可用。</strong>当前公开投影没有可确认的依据片段与来源关系，因此这里只展示来源自身的公开描述。<strong>依据片段暂不可用。</strong></p></section>' +
-      '<section class="section hotspot-detail-gate"><h3>关联资料</h3><p><strong>关联资料暂不可用。</strong>当前公开投影没有稳定的工具、场景或概念关联 ID。</p></section>' +
-      (hasUrl ? '<a class="btn btn-primary" href="' + escapeHtml(url) + '" target="_blank" rel="noopener noreferrer">打开原始内容</a>' : '<p class="muted">原始链接暂不可用。</p>') +
+      '<section class="hotspot-detail-section hotspot-detail-summary" aria-labelledby="hotspotSummaryTitle">' +
+        '<h3 id="hotspotSummaryTitle">内容摘要</h3>' +
+        '<p class="hotspot-detail-description">' + escapeHtml(item.description || '内容摘要暂不可用。') + '</p>' +
+        '<dl class="hotspot-detail-meta">' +
+          '<div><dt>内容时间</dt><dd>' + escapeHtml(formatHotspotDate(item.published_at)) + '</dd></div>' +
+          '<div><dt>来源作者</dt><dd>' + escapeHtml(item.author_name || '来源信息待补充') + '</dd></div>' +
+        '</dl>' +
+      '</section>' +
+      '<section class="hotspot-detail-section hotspot-detail-sources" aria-labelledby="hotspotSourcesTitle">' +
+        '<div class="hotspot-detail-section-heading"><h3 id="hotspotSourcesTitle">来源核验</h3>' +
+          '<button class="btn-link hotspot-source-toggle" type="button" data-hotspot-source-toggle aria-expanded="false" aria-controls="' + escapeHtml(sourceDetailId) + '">查看来源</button>' +
+        '</div>' +
+        '<div class="hotspot-source-detail" id="' + escapeHtml(sourceDetailId) + '" hidden>' +
+          '<dl class="hotspot-source-meta">' +
+            '<div><dt>来源平台</dt><dd>' + escapeHtml(meta.label) + '</dd></div>' +
+            '<div><dt>内容时间</dt><dd>' + escapeHtml(formatHotspotDate(item.published_at)) + '</dd></div>' +
+            '<div><dt>数据更新于</dt><dd>' + escapeHtml(formatHotspotDate(item.fetched_at)) + '</dd></div>' +
+            '<div><dt>来源名称</dt><dd>' + escapeHtml(item.author_name || item.source_id || '来源信息待补充') + '</dd></div>' +
+          '</dl>' +
+          '<p class="hotspot-source-evidence"><strong>依据片段：</strong>暂无可展示的直接依据。当前公开投影未提供可定位的审核依据片段。</p>' +
+          (hasUrl
+            ? '<a class="btn-link hotspot-source-link" href="' + escapeHtml(url) + '" target="_blank" rel="noopener noreferrer">打开原始来源（将离开当前页面） ' + ICON_EXTERNAL + '</a>'
+            : '<p class="hotspot-detail-unavailable">原始来源链接暂不可用。</p>') +
+        '</div>' +
+      '</section>' +
+      '<section class="hotspot-detail-section hotspot-detail-related" aria-labelledby="hotspotRelatedTitle">' +
+        '<h3 id="hotspotRelatedTitle">关联资料</h3>' +
+        renderHotspotRelatedResources(item) +
+      '</section>' +
     '</article>';
   showModal(trigger);
 }
@@ -2626,17 +2753,50 @@ function renderTrendingCard(item) {
   const typeLabel = contentTypeLabels[item.content_type] || item.content_type || '类型未知';
   const published = Number.isFinite(new Date(item.published_at).getTime()) ? timeAgo(item.published_at) : '发布时间未知';
   const preview = item.description || '来源描述暂不可用';
-  return '<article class="trending-card" tabindex="0" role="button" data-hotspot-id="' + escapeHtml(item.id) + '" aria-label="查看热点详情：' + escapeHtml(item.title || '标题暂不可用') + '">' +
+  const sourceDetailId = 'trending-source-detail-' + String(item.id).replace(/[^a-zA-Z0-9_-]/g, '-');
+  const meta = platformMeta[item.platform] || { label: item.platform || '平台未知' };
+  const sourceUrl = item.url ? safeExternalUrl(item.url) : '#';
+  const sourceName = item.author_name || item.source_id || '来源信息待补充';
+  const sourceEvidence = item.evidence_excerpt || item.source_excerpt || '暂无可展示的直接依据。当前公开投影未提供可定位的审核依据片段。';
+  return '<article class="trending-card" data-hotspot-id="' + escapeHtml(item.id) + '" aria-labelledby="trending-title-' + escapeHtml(item.id) + '">' +
     '<div class="trending-card-head"><span class="tag scene">' + escapeHtml(typeLabel) + '</span><span>' + escapeHtml(published) + '</span></div>' +
-    '<h3><span class="trending-title">' + escapeHtml(item.title || '标题暂不可用') + '</span></h3>' +
-    '<p class="trending-description' + (item.description ? '' : ' is-missing') + '">' + escapeHtml(preview) + '</p>' +
-    '<div class="trending-secondary-preview" aria-hidden="true"><span>打开详情查看来源与依据</span></div>' +
-    '<span class="trending-open-hint">打开详情</span>' +
+    '<h3 id="trending-title-' + escapeHtml(item.id) + '"><span class="trending-title">' + escapeHtml(item.title || '标题暂不可用') + '</span></h3>' +
+    '<div class="trending-preview-wrap">' +
+      '<p class="trending-description' + (item.description ? '' : ' is-missing') + '">' + escapeHtml(preview) + '</p>' +
+      (item.description
+        ? '<div class="trending-secondary-preview" aria-hidden="true"><span>' + escapeHtml(item.description) + '</span></div>'
+        : '') +
+    '</div>' +
+    '<div class="trending-card-actions">' +
+      '<button class="btn-link trending-source-toggle" type="button" data-hotspot-card-source-toggle aria-expanded="false" aria-controls="' + escapeHtml(sourceDetailId) + '">查看来源</button>' +
+      '<button class="btn-link trending-open-hint" type="button" data-hotspot-open>打开详情</button>' +
+    '</div>' +
+    '<div class="trending-card-source-detail" id="' + escapeHtml(sourceDetailId) + '" data-hotspot-card-source hidden>' +
+      '<dl class="trending-source-meta">' +
+        '<div><dt>来源平台</dt><dd>' + escapeHtml(meta.label) + '</dd></div>' +
+        '<div><dt>来源名称</dt><dd>' + escapeHtml(sourceName) + '</dd></div>' +
+        '<div><dt>内容时间</dt><dd>' + escapeHtml(formatHotspotDate(item.published_at)) + '</dd></div>' +
+        '<div><dt>数据更新于</dt><dd>' + escapeHtml(formatHotspotDate(item.fetched_at)) + '</dd></div>' +
+      '</dl>' +
+      '<p class="trending-source-evidence"><strong>依据片段：</strong>' + escapeHtml(sourceEvidence) + '</p>' +
+      (sourceUrl !== '#' ? '<a class="btn-link trending-source-link" href="' + escapeHtml(sourceUrl) + '" target="_blank" rel="noopener noreferrer">打开原始来源（将离开当前页面） ' + ICON_EXTERNAL + '</a>' : '<p class="trending-source-unavailable">原始来源链接暂不可用。</p>') +
+    '</div>' +
   '</article>';
+}
+
+// B16 决策 85：热度说明通过低权重信息提示查看；默认不展示热度数值或排名。
+function renderTrendingSortHelp() {
+  const help = document.getElementById('trendingSortHelp');
+  if (!help) return;
+  const hasHeat = (hotspots.items || []).some(item => getHotspotHeat(item) !== null);
+  help.textContent = hasHeat
+    ? '热度排序按公开投影中的热度字段倒序，只改变阅读顺序，不改变内容类型、来源与审核状态；热度数值默认不展示。'
+    : '当前公开投影暂未提供可比较的热度字段，选择“热度”时仍按最近时间倒序；该字段由数据契约补充后自动生效，不会伪造排序。';
 }
 
 function renderTrending() {
   renderTrendingTypeFilters();
+  renderTrendingSortHelp();
   renderTrendingStatus();
   const items = getFilteredTrending();
   const grid = document.getElementById('trendingGrid');
@@ -2651,7 +2811,7 @@ function renderTrending() {
     const state = dataLoadFailures.has('hotspots')
       ? renderState({ icon: '⚠️', title: '热点数据加载失败', message: '请刷新页面重试；采集失败不会用空结果覆盖上一版数据。', type: 'error' })
       : hasPublicItems
-        ? renderState({ icon: '⌕', title: '当前筛选没有匹配内容', message: '请调整内容类型或来源平台后继续浏览。', type: 'no-match' })
+        ? renderState({ icon: '⌕', title: '当前筛选没有匹配内容', message: '请调整内容类型后继续浏览。', type: 'no-match' })
         : hotspots.generated_at
           ? renderState({ icon: '○', title: '暂无公开热点', message: '公开投影已生成，但当前没有可展示内容。', type: 'unavailable' })
           : renderState({ icon: '○', title: '公开投影建设中', message: '等待公开构建任务生成可供浏览器读取的内容。', type: 'unavailable' });
@@ -3202,23 +3362,59 @@ document.addEventListener('DOMContentLoaded', async () => {
     activeTrendingType = chip.dataset.contentType;
     renderTrending();
   });
-  document.querySelectorAll('#trendingTabs [data-platform]').forEach(chip => {
-    chip.addEventListener('click', function() {
-      const controls = [...document.querySelectorAll('#trendingTabs [data-platform]')];
-      setPressedState(controls, this);
-      setRegionBusy(document.getElementById('trendingGrid'), true);
-      activeTrendingPlatform = this.dataset.platform;
-      renderTrending();
-    });
+  // B16 决策 78/85：热点排序（最近/热度）。热度仅在公开投影提供明确热度字段时生效。
+  const trendingSortTabs = document.getElementById('trendingSortTabs');
+  trendingSortTabs?.addEventListener('click', event => {
+    const chip = event.target.closest('[data-trending-sort]');
+    if (!chip) return;
+    const controls = [...trendingSortTabs.querySelectorAll('[data-trending-sort]')];
+    setPressedState(controls, chip);
+    setRegionBusy(document.getElementById('trendingGrid'), true);
+    activeTrendingSort = chip.dataset.trendingSort;
+    renderTrending();
+  });
+  // B16 决策 85：热度定义的低权重信息提示（内联展开，aria-expanded + aria-controls）。
+  document.getElementById('trendingSortHelpToggle')?.addEventListener('click', function() {
+    const panel = document.getElementById('trendingSortHelp');
+    if (!panel) return;
+    renderTrendingSortHelp();
+    const open = panel.hidden;
+    panel.hidden = !open;
+    this.setAttribute('aria-expanded', String(!open));
+    this.textContent = open ? '收起热度说明' : '热度说明';
   });
   const trendingGrid = document.getElementById('trendingGrid');
   trendingGrid?.addEventListener('click', event => {
+    const sourceToggle = event.target.closest('[data-hotspot-card-source-toggle]');
+    if (sourceToggle) {
+      const card = sourceToggle.closest('[data-hotspot-id]');
+      const detail = card?.querySelector('[data-hotspot-card-source]');
+      if (!card || !detail) return;
+      const shouldOpen = detail.hidden;
+      document.querySelectorAll('#trendingGrid [data-hotspot-card-source]').forEach(item => { item.hidden = true; });
+      document.querySelectorAll('#trendingGrid [data-hotspot-card-source-toggle]').forEach(item => {
+        item.setAttribute('aria-expanded', 'false');
+        item.textContent = '查看来源';
+      });
+      detail.hidden = !shouldOpen;
+      sourceToggle.setAttribute('aria-expanded', String(shouldOpen));
+      sourceToggle.textContent = shouldOpen ? '收起来源' : '查看来源';
+      return;
+    }
+    const openDetailButton = event.target.closest('[data-hotspot-open]');
+    if (openDetailButton) {
+      const card = openDetailButton.closest('[data-hotspot-id]');
+      if (card) openHotspotDetail(card.dataset.hotspotId, card);
+      return;
+    }
+    if (event.target.closest('a')) return;
     const card = event.target.closest('[data-hotspot-id]');
     if (card) openHotspotDetail(card.dataset.hotspotId, card);
   });
   trendingGrid?.addEventListener('keydown', event => {
     const card = event.target.closest('[data-hotspot-id]');
-    if (!card || !['Enter', ' '].includes(event.key)) return;
+    if (!card || event.target.closest('button, a')) return;
+    if (!['Enter', ' '].includes(event.key)) return;
     event.preventDefault();
     openHotspotDetail(card.dataset.hotspotId, card);
   });

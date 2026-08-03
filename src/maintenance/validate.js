@@ -448,6 +448,25 @@ function validateHotspots(data) {
     if (!CONTENT_TYPES.includes(item.content_type)) fail(`${tag}.content_type 不支持: ${item.content_type}`);
     if (Number.isNaN(new Date(item.published_at).getTime())) fail(`${tag}.published_at 不是有效日期`);
     if (item.metrics && typeof item.metrics !== 'object') fail(`${tag}.metrics 应为对象`);
+    // B16 决策 74/77/85/88/89：公开热点数据契约补充字段（可选字段，存在才校验）
+    if (item.hot_score !== undefined && item.hot_score !== null && !(typeof item.hot_score === 'number' && item.hot_score >= 0 && item.hot_score <= 100)) {
+      fail(`${tag}.hot_score 应为 0–100 数值或 null`);
+    }
+    if (item.evidence_excerpt !== undefined && item.evidence_excerpt !== null && typeof item.evidence_excerpt !== 'string') {
+      fail(`${tag}.evidence_excerpt 应为字符串或 null`);
+    }
+    if (item.related_resources !== undefined) {
+      if (!Array.isArray(item.related_resources)) fail(`${tag}.related_resources 应为数组`);
+      else for (const [resourceIndex, resource] of item.related_resources.entries()) {
+        const resourceTag = `${tag}.related_resources[${resourceIndex}]`;
+        if (!resource || typeof resource !== 'object') { fail(`${resourceTag} 应为对象`); continue; }
+        if (!['tool', 'concept', 'scene'].includes(resource.type)) fail(`${resourceTag}.type 应为 tool/concept/scene`);
+        if (!resource.id || typeof resource.id !== 'string') fail(`${resourceTag}.id 应为非空字符串`);
+      }
+    }
+  }
+  if (data.heat_definition !== undefined && typeof data.heat_definition !== 'string') {
+    fail('hotspots.json.heat_definition 应为字符串');
   }
 
   for (const event of data.events || []) {

@@ -97,7 +97,7 @@ const { collectYouTubeLayerStep } = require('../collectors/news-youtube');
 const { collectBilibiliLayerStep } = require('../collectors/news-bilibili');
 const { normalizeManualItem } = require('../../content/news-manual');
 const { createAuthorizationStore, createAuthorizationTask } = require('../core/news-authorization');
-const { NEWS_FILES, DIRS } = require('../../shared/paths');
+const { NEWS_FILES, CATALOG_FILES, DIRS } = require('../../shared/paths');
 const { generateRss } = require('../../content/generate-rss');
 
 // ── 数据文件路径（按读写频率排列） ──────────────────────────
@@ -582,6 +582,124 @@ function applyAnomalyDetection(items, assessments, config) {
       }
     }
   }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// 第 3.5 部分：公开热点数据契约补充（B16 决策 74/77/78/85/88/89）
+//
+// 在写出 hotspots.json 前，对每条内容补充公开投影字段：
+//   - hot_score          热度语义（0–100 平台内相对互动量级；无互动数据为 null）
+//   - evidence_excerpt   依据片段（来源原文的受控节选；纯链接或缺失为 null）
+//   - related_resources  稳定关联 ID（仅精确规范 URL 身份匹配工具目录；不模糊匹配）
+//
+// 语义边界（决策 85）：hot_score 只在来源平台内计算相对量级，不构成跨平台
+// 权威综合热度；缺失互动数据的条目为 null，前端按“最近”时间回退，不伪装为 0 或高热度。
+// 关联关系只来自精确 URL 身份（已有数据关系），不根据标题普通词做模糊匹配（决策 89）。
+// ═══════════════════════════════════════════════════════════════
+
+const HEAT_DEFINITION = 'hot_score 表示条目在其来源平台内的相对互动量级（0–100），由公开互动数据（浏览/点赞/评论/转发）的加权对数指数按平台归一化得到；仅在平台内可比，跨平台不构成权威综合热度。无互动数据时为 null，前端按“最近”时间回退排序。';
+
+/** 依据片段：取来源原文（描述优先，标题兜底）的受控节选；纯链接或空文本返回 null，不伪造原文。 */
+function buildEvidenceExcerpt(item) {
+  const raw = String(item.description || item.title || '').trim();
+  if (!raw) return null;
+  if (/^(?:https?:\/\/\S+\s*)+$/.test(raw)) return null; // 纯链接不能当作可定位依据片段
+  const text = raw.replace(/\s+/g, ' ').trim();
+  if (!text) return null;
+  const max = 160;
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max);
+  const boundary = Math.max(cut.lastIndexOf('。'), cut.lastIndexOf('，'), cut.lastIndexOf('.'), cut.lastIndexOf(' '), cut.lastIndexOf('?'), cut.lastIndexOf('!'));
+  return (boundary > 60 ? cut.slice(0, boundary + 1) : cut).trim() + '…';
+}
+
+/** 工具目录规范 URL → 工具 的索引（用于精确身份匹配）。 */
+function buildToolUrlIndex(toolData) {
+  const index = new Map();
+  for (const tool of toolData || []) {
+    if (!tool || !tool.url) continue;
+    const normalized = normalizeUrl(tool.url);
+    if (normalized) index.set(normalized, tool);
+  }
+  return index;
+}
+
+/** 稳定关联 ID：仅当条目 URL 或显式链接与工具目录的规范 URL 完全一致时匹配，避免模糊匹配误关联。 */
+function resolveRelatedResources(item, toolUrlIndex) {
+  const resources = [];
+  const seen = new Set();
+  for (const raw of [item.url, ...(item.explicit_links || [])]) {
+    const normalized = normalizeUrl(raw);
+    if (!normalized) continue;
+    const tool = toolUrlIndex.get(normalized);
+    if (tool && !seen.has(tool.id)) {
+      seen.add(tool.id);
+      resources.push({ type: 'tool', id: tool.id, label: tool.name });
+    }
+  }
+  return resources;
+}
+
+/** 热度：对同一平台内的条目按互动量级归一化到 0–100；无互动数据为 null。 */
+function computeHotScores(items) {
+  const byPlatform = new Map();
+  for (const item of items) {
+    if (!byPlatform.has(item.platform)) byPlatform.set(item.platform, []);
+    byPlatform.get(item.platform).push(item);
+  }
+  for (const platformItems of byPlatform.values()) {
+    const indexed = platformItems.map(item => ({ item, value: interactionValue(item) }));
+    const present = indexed.filter(entry => entry.value !== null).map(entry => entry.value);
+    if (!present.length) {
+      indexed.forEach(entry => { entry.item.hot_score = null; });
+      continue;
+    }
+    const min = Math.min(...present);
+    const max = Math.max(...present);
+    const range = max - min;
+    indexed.forEach(entry => {
+      entry.item.hot_score = entry.value === null
+        ? null
+        : range > 0 ? Math.round(((entry.value - min) / range) * 100) : 50;
+    });
+  }
+}
+
+let cachedToolUrlIndex = null;
+/** 惰性加载工具目录 URL 索引（一次构建只读一次；读取失败时降级为空索引）。 */
+function getToolUrlIndex() {
+  if (cachedToolUrlIndex === null) {
+    let tools = [];
+    try { tools = JSON.parse(fs.readFileSync(CATALOG_FILES.tools, 'utf8')); } catch { tools = []; }
+    cachedToolUrlIndex = buildToolUrlIndex(tools);
+  }
+  return cachedToolUrlIndex;
+}
+
+/**
+ * 对一条热点投影的整体 items 应用公开契约补充（热度/依据片段/稳定关联）。
+ * toolUrlIndex 可注入（测试用）；缺省时使用工具目录的规范 URL 索引。
+ * 对同一批 items 重复调用保持幂等（各字段由现有公开字段确定性推导）。
+ */
+function enrichHotspotProjection(items, toolUrlIndex = null) {
+  computeHotScores(items);
+  const index = toolUrlIndex || getToolUrlIndex();
+  for (const item of items) {
+    item.evidence_excerpt = buildEvidenceExcerpt(item);
+    item.related_resources = resolveRelatedResources(item, index);
+  }
+  return items;
+}
+
+/** 就地升级现有 hotspots.json 的公开投影（无需 API secrets，供开发/数据契约补齐使用）。 */
+function upgradeHotspotsProjection() {
+  const data = readJson(OUTPUT_PATH, null);
+  if (!data || !Array.isArray(data.items)) throw new Error('--upgrade-hotspots：无法读取现有 hotspots.json');
+  enrichHotspotProjection(data.items, getToolUrlIndex());
+  data.schema_version = 2;
+  data.heat_definition = HEAT_DEFINITION;
+  writeJsonAtomic(OUTPUT_PATH, data, `upgrade-${Date.now()}`);
+  console.log(`✅ hotspots.json 公开投影已升级：${data.items.length} 条内容（schema_version=${data.schema_version}，新增 hot_score/evidence_excerpt/related_resources）`);
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -1094,6 +1212,9 @@ async function runCollection(options = {}) {
     .sort((a, b) => new Date(b.published_at) - new Date(a.published_at))
     .slice(0, config.collection.max_output_items);
 
+  // B16 决策 74/77/78/85/88/89：写出前补充公开热点数据契约字段（热度/依据片段/稳定关联）
+  enrichHotspotProjection(items, getToolUrlIndex());
+
   if (!items.length && !options.allowEmpty) throw new Error('本轮未获得任何有效内容，保留上一版输出');
 
   const sourceMap = new Map(sourcePayload.sources.map(source => [source.id, source]));
@@ -1122,8 +1243,9 @@ async function runCollection(options = {}) {
   coverage.time_layer_scope = 'latest-feed-observation';
 
   const output = {
-    schema_version: 1,
+    schema_version: 2,
     generated_at: fetchedAt,
+    heat_definition: HEAT_DEFINITION,
     items,
     events,
     provenance,
@@ -1244,6 +1366,10 @@ async function runFixtureBuild() {
 }
 
 async function main() {
+  if (process.argv.includes('--upgrade-hotspots')) {
+    upgradeHotspotsProjection();
+    return;
+  }
   if (process.argv.includes('--fixture')) {
     const fixture = await runFixtureBuild();
     console.log(`✅ Fixture 构建完成：${fixture.output.items.length} 条内容，${fixture.output.events.length} 个主题`);
@@ -1291,6 +1417,13 @@ module.exports = {
   buildEvents,
   applyAnomalyDetection,
   classifyTimeLayer,
+  HEAT_DEFINITION,
+  buildEvidenceExcerpt,
+  buildToolUrlIndex,
+  resolveRelatedResources,
+  computeHotScores,
+  enrichHotspotProjection,
+  upgradeHotspotsProjection,
   runCollection,
   runFixtureBuild,
   historicalPageToken,

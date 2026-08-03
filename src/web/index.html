@@ -438,7 +438,7 @@
     <header class="page-header trending-header">
       <span class="eyebrow">公开内容流</span>
       <h1 class="page-title" id="trendingViewTitle">浏览已收录的 AI 热点</h1>
-      <p class="page-lead">按公开内容类型、来源平台和发布时间阅读 YouTube、X、Bilibili 的来源内容；描述与互动字段缺失时会明确标注。</p>
+      <p class="page-lead">按公开内容类型与发布时间阅读已收录的热点内容；平台、时间与依据在来源中核验，描述与互动字段缺失时会明确标注。</p>
     </header>
 
     <section class="trending-overview panel" aria-labelledby="trendingOverviewTitle">
@@ -456,9 +456,9 @@
       <div class="directory-heading">
         <div>
           <span class="eyebrow">热点目录</span>
-          <h2 class="section-title" id="trendingDirectoryTitle">按内容类型、平台与顺序阅读</h2>
+          <h2 class="section-title" id="trendingDirectoryTitle">按内容类型与时间阅读</h2>
         </div>
-        <p class="faint">类型来自公开 <code>content_type</code>；本步不展示内部评分明细、候选溯源或审核状态。</p>
+        <p class="faint">类型来自公开 <code>content_type</code>；平台、时间与依据在来源中核验，不展示内部评分明细、候选溯源或审核状态。</p>
       </div>
       <div class="trending-controls" aria-label="热点筛选与排序">
         <div class="trending-filter-sets">
@@ -468,19 +468,17 @@
               <button class="filter-chip active" type="button" data-content-type="all" aria-pressed="true">全部类型</button>
             </div>
           </div>
-          <div class="trending-filter-set">
-            <span class="filter-label">来源平台</span>
-            <div class="trending-tabs" id="trendingTabs" aria-label="来源平台">
-              <button class="filter-chip active" type="button" data-platform="all" aria-pressed="true">全部平台</button>
-              <button class="filter-chip" type="button" data-platform="youtube" aria-pressed="false">YouTube</button>
-              <button class="filter-chip" type="button" data-platform="x" aria-pressed="false">X</button>
-              <button class="filter-chip" type="button" data-platform="bilibili" aria-pressed="false">B站</button>
-              <button class="filter-chip" type="button" data-platform="bilibili_dynamic" aria-pressed="false">B站动态</button>
-            </div>
-          </div>
         </div>
-        <span class="trending-sort">按发布时间倒序</span>
+        <div class="trending-sort-controls" role="group" aria-label="热点排序方式">
+          <span class="filter-label">排序</span>
+          <div class="trending-sort-tabs" id="trendingSortTabs" aria-label="热点排序方式">
+            <button class="filter-chip active" type="button" data-trending-sort="recent" aria-pressed="true">最近</button>
+            <button class="filter-chip" type="button" data-trending-sort="hot" aria-pressed="false">热度</button>
+          </div>
+          <button class="trending-sort-help" id="trendingSortHelpToggle" type="button" aria-expanded="false" aria-controls="trendingSortHelp">热度说明</button>
+        </div>
       </div>
+      <p class="trending-sort-help-text" id="trendingSortHelp" role="note" hidden></p>
       <div class="trending-grid" id="trendingGrid"></div>
     </section>
   </section>

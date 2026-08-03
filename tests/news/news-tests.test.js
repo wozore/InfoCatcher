@@ -45,6 +45,12 @@ const {
   buildEvents,
   applyAnomalyDetection,
   resolvePlatformScope,
+  HEAT_DEFINITION,
+  buildEvidenceExcerpt,
+  buildToolUrlIndex,
+  resolveRelatedResources,
+  computeHotScores,
+  enrichHotspotProjection,
   runCollection,
 } = require('../../src/news/pipeline/build-news');
 const { parseBilibiliUrl, normalizeManualItem, importManualItems } = require('../../src/content/news-manual');
@@ -419,4 +425,65 @@ test('采集批次保留 B站动态且显式记录动态降级', async () => {
   });
   assert.ok(result.output.items.some(item => item.content_type === 'bilibili_dynamic_text'));
   assert.equal(result.output.coverage.platforms.bilibili.dynamic.status, 'degraded');
+});
+
+// ── 第 5 组：公开热点数据契约（B16 决策 74/77/78/85/88/89）──
+// 热度按平台内相对互动量级归一化、依据片段取自来源原文、关联仅精确 URL 身份
+
+test('依据片段：来源原文受控节选，纯链接或缺失为 null', () => {
+  assert.equal(buildEvidenceExcerpt({ description: '   ' }), null);
+  assert.equal(buildEvidenceExcerpt({ description: '' }), null);
+  assert.equal(buildEvidenceExcerpt({ description: 'https://example.com/a https://example.com/b' }), null);
+  assert.equal(buildEvidenceExcerpt({ description: '来自来源的一段公开描述' }), '来自来源的一段公开描述');
+  assert.equal(buildEvidenceExcerpt({ description: '', title: '仅标题' }), '仅标题');
+  const longText = '很长的依据内容。'.repeat(60);
+  const excerpt = buildEvidenceExcerpt({ description: longText });
+  assert.ok(excerpt.length <= 161, `受控节选不应超过上限：${excerpt.length}`);
+  assert.match(excerpt, /…$/);
+});
+
+test('热度：按平台内相对互动量级归一化，缺失互动为 null', () => {
+  const items = [
+    { id: 'a', platform: 'youtube', metrics: { views: 1000, likes: 10, comments: 0 } },
+    { id: 'b', platform: 'youtube', metrics: { views: 100000, likes: 500, comments: 50 } },
+    { id: 'c', platform: 'x', metrics: { views: 100, likes: 1 } },
+    { id: 'd', platform: 'x', metrics: { views: null, likes: null, comments: null, reposts: null, replies: null } },
+  ];
+  computeHotScores(items);
+  const byId = id => items.find(item => item.id === id);
+  assert.equal(byId('d').hot_score, null);
+  for (const id of ['a', 'b', 'c']) {
+    assert.ok(typeof byId(id).hot_score === 'number');
+    assert.ok(byId(id).hot_score >= 0 && byId(id).hot_score <= 100);
+  }
+  assert.ok(byId('b').hot_score > byId('a').hot_score, '同平台互动量更高的条目热度应更高');
+  assert.ok(typeof HEAT_DEFINITION === 'string' && HEAT_DEFINITION.length > 0);
+});
+
+test('关联资料：仅精确规范 URL 身份匹配工具，不模糊匹配', () => {
+  const index = buildToolUrlIndex([
+    { id: 'tool-a', name: 'Tool A', url: 'https://example.com/tool' },
+    { id: 'tool-b', name: 'Tool B', url: 'https://example.net/other' },
+  ]);
+  const matched = resolveRelatedResources(
+    { id: 'x', url: 'https://x.com/some/status', explicit_links: ['https://example.com/tool?utm_source=news'] },
+    index,
+  );
+  assert.deepEqual(matched, [{ type: 'tool', id: 'tool-a', label: 'Tool A' }]);
+  const none = resolveRelatedResources(
+    { id: 'y', url: 'https://x.com/other', explicit_links: ['https://example.org/other'] },
+    index,
+  );
+  assert.deepEqual(none, []);
+});
+
+test('公开投影补充热度/依据/关联字段，无互动数据热度为 null', () => {
+  const items = [
+    { id: 'a', platform: 'youtube', url: 'https://example.com/tool', explicit_links: [], description: '测试依据片段内容', published_at: new Date(now).toISOString(), title: 'T' },
+  ];
+  const index = buildToolUrlIndex([{ id: 'tool-a', name: 'Tool A', url: 'https://example.com/tool' }]);
+  enrichHotspotProjection(items, index);
+  assert.equal(items[0].hot_score, null);
+  assert.equal(items[0].evidence_excerpt, '测试依据片段内容');
+  assert.deepEqual(items[0].related_resources, [{ type: 'tool', id: 'tool-a', label: 'Tool A' }]);
 });

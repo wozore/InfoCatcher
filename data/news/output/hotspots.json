@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "generated_at": "2026-08-01T05:25:18.942Z",
   "items": [
     {
@@ -27,7 +27,10 @@
         "reposts": 14,
         "replies": 21
       },
-      "explicit_links": []
+      "explicit_links": [],
+      "hot_score": 33,
+      "evidence_excerpt": "DeepSeek-V4-Flash-0731 is now available on Ollama's cloud. This update substantially enhances the model's agentic capabilities: ollama run…",
+      "related_resources": []
     },
     {
       "id": "x-6b09d31ba2f947f71def",
@@ -54,7 +57,10 @@
         "reposts": 1,
         "replies": 1
       },
-      "explicit_links": []
+      "explicit_links": [],
+      "hot_score": 3,
+      "evidence_excerpt": "🦙 is coming coming to Las Vegas for @Ai4Conferences next week (Aug 4–6). Three ways to find us: 📍 Booth 1561 on the Expo floor 🎤 @jerryjliu0 will be…",
+      "related_resources": []
     },
     {
       "id": "x-68ce6a79891d296c884c",
@@ -81,7 +87,10 @@
         "reposts": 10,
         "replies": 2
       },
-      "explicit_links": []
+      "explicit_links": [],
+      "hot_score": 34,
+      "evidence_excerpt": "RT @RedHat_AI: Kimi K3 now in NVFP4, the Blackwell counterpart to our FP8-Block checkpoint. MoE layers quantized to 4-bit for accelerated…",
+      "related_resources": []
     },
     {
       "id": "youtube-383d76b2c53f78776283",
@@ -114,7 +123,10 @@
         "https://www.youtube.com/v/40pRi5wMBwA?version=3",
         "https://i1.ytimg.com/vi/40pRi5wMBwA/hqdefault.jpg",
         "https://palisaderesearch.org/blog/self-replication"
-      ]
+      ],
+      "hot_score": 81,
+      "evidence_excerpt": null,
+      "related_resources": []
     },
     {
       "id": "youtube-4fe53ccdd3ccd9554a29",
@@ -152,7 +164,10 @@
         "https://chatgpt.com/features/voice/",
         "https://x.com/OpenAI/status/2080378182469857576?s=20",
         "https://www.anthropic.com/news/anthropic-economic-index-connector"
-      ]
+      ],
+      "hot_score": 57,
+      "evidence_excerpt": "In this week's AI News You Can Use, Igor showcases the new ChatGPT Voice mode across web, mobile, and desktop. The update makes it extremely easy to get work…",
+      "related_resources": []
     },
     {
       "id": "x-1b2c08e3e484d5c737e5",
@@ -179,7 +194,10 @@
         "reposts": 1,
         "replies": 1
       },
-      "explicit_links": []
+      "explicit_links": [],
+      "hot_score": 0,
+      "evidence_excerpt": "really cool use of our open source infini-gram engine to study llm regurgitation",
+      "related_resources": []
     },
     {
       "id": "x-403cdc04f0357a141ab0",
@@ -208,7 +226,10 @@
       },
       "explicit_links": [
         "https://t.co/7sklcROznQ"
-      ]
+      ],
+      "hot_score": 40,
+      "evidence_excerpt": "OpenAI reportedly finds evidence that more of its agents ran amok https://t.co/7sklcROznQ",
+      "related_resources": []
     },
     {
       "id": "youtube-ab7c07d86b8d0b1d520f",
@@ -242,7 +263,10 @@
         "https://i3.ytimg.com/vi/J7CossjMvEg/hqdefault.jpg",
         "https://stanford.io/ai",
         "https://cs229.stanford.edu/index.html-spr26"
-      ]
+      ],
+      "hot_score": 18,
+      "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
+      "related_resources": []
     },
     {
       "id": "youtube-6c3fb14cd54992355ef6",
@@ -276,7 +300,10 @@
         "https://i1.ytimg.com/vi/xveNBYVTrqw/hqdefault.jpg",
         "https://stanford.io/ai",
         "https://cs229.stanford.edu/index.html-spr26"
-      ]
+      ],
+      "hot_score": 9,
+      "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
+      "related_resources": []
     },
     {
       "id": "youtube-83b5ee9fe01a000f9d12",
@@ -310,7 +337,10 @@
         "https://i1.ytimg.com/vi/hHC-SF3utxg/hqdefault.jpg",
         "https://stanford.io/ai",
         "https://cs229.stanford.edu/index.html-spr26"
-      ]
+      ],
+      "hot_score": 8,
+      "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
+      "related_resources": []
     },
     {
       "id": "youtube-35a138fa375dedd21f35",
@@ -344,7 +374,10 @@
         "https://i1.ytimg.com/vi/pwQ0l4hFCVI/hqdefault.jpg",
         "https://stanford.io/ai",
         "https://cs229.stanford.edu/index.html-spr26"
-      ]
+      ],
+      "hot_score": 22,
+      "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
+      "related_resources": []
     },
     {
       "id": "youtube-0016aa1a2e7f67027f12",
@@ -378,7 +411,10 @@
         "https://i1.ytimg.com/vi/lNTajqxxOn4/hqdefault.jpg",
         "https://stanford.io/ai",
         "https://cs229.stanford.edu/index.html-spr26"
-      ]
+      ],
+      "hot_score": 14,
+      "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
+      "related_resources": []
     },
     {
       "id": "x-4a3c82e745ecac3784a0",
@@ -405,7 +441,10 @@
         "reposts": 69,
         "replies": 28
       },
-      "explicit_links": []
+      "explicit_links": [],
+      "hot_score": 59,
+      "evidence_excerpt": "RT @DKThomp: New newsletter: THE FOUR HORSEMEN OF THE AI BUBBLE APOCALYPSE I am neither anti-AI nor certain that AI is a bubble. But the l…",
+      "related_resources": []
     },
     {
       "id": "x-9d519f176808cd83fc0a",
@@ -432,7 +471,10 @@
         "reposts": 101,
         "replies": 42
       },
-      "explicit_links": []
+      "explicit_links": [],
+      "hot_score": 56,
+      "evidence_excerpt": "RT @sayashk: Can AI agents conduct open-ended AI research? Most evaluations of agents conducting AI research focus on narrow, verifiable t…",
+      "related_resources": []
     },
     {
       "id": "youtube-6aaab4feaef90b88ad3b",
@@ -464,7 +506,10 @@
         "https://www.youtube.com/channel/UCBHcMCGaiJhv-ESTcWGJPcw",
         "https://www.youtube.com/v/fu5FVhBtcB4?version=3",
         "https://i3.ytimg.com/vi/fu5FVhBtcB4/hqdefault.jpg"
-      ]
+      ],
+      "hot_score": 0,
+      "evidence_excerpt": "Join Michelle Ash, CEO of SIMULIA at Dassault Systèmes, and Neil Ashton, Distinguished Engineer at NVIDIA, for a discussion on how Dassault Systèmes and NVIDIA…",
+      "related_resources": []
     },
     {
       "id": "x-d7340f1c4b631431dab3",
@@ -491,7 +536,10 @@
         "reposts": 310,
         "replies": 104
       },
-      "explicit_links": []
+      "explicit_links": [],
+      "hot_score": 63,
+      "evidence_excerpt": "RT @johnennis: It really annoys me how they report this stuff like they’ve gone on safari to do scientific observation Claude is a compute…",
+      "related_resources": []
     },
     {
       "id": "x-2c2cbc6fa29369394b93",
@@ -518,7 +566,10 @@
         "reposts": 5,
         "replies": 5
       },
-      "explicit_links": []
+      "explicit_links": [],
+      "hot_score": 34,
+      "evidence_excerpt": "RT @kchonyc: since they all love biosecurity and use it to scare people of AI, i hope they know if it happened in a BSL, the lab would be s…",
+      "related_resources": []
     },
     {
       "id": "youtube-0ee28ed39f27fe7d74ad",
@@ -552,7 +603,10 @@
         "https://i4.ytimg.com/vi/_kREM2UAiJ8/hqdefault.jpg",
         "https://stanford.io/ai",
         "https://cs229.stanford.edu/index.html-spr26"
-      ]
+      ],
+      "hot_score": 26,
+      "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
+      "related_resources": []
     },
     {
       "id": "youtube-86e16e1bf78ff3d343ba",
@@ -586,7 +640,10 @@
         "https://i1.ytimg.com/vi/dqUMCzWjZSI/hqdefault.jpg",
         "https://stanford.io/ai",
         "https://cs229.stanford.edu/index.html-spr26"
-      ]
+      ],
+      "hot_score": 17,
+      "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
+      "related_resources": []
     },
     {
       "id": "youtube-24870d2dc4be55e50172",
@@ -624,7 +681,10 @@
         "https://deepmind.google/science/alphafold/",
         "https://arxiv.org/abs/2607.18966",
         "https://transformer-circuits.pub/2026/nla/"
-      ]
+      ],
+      "hot_score": 42,
+      "evidence_excerpt": "Can an AI do the right thing for the wrong reason? Tim Scarfe speaks with Apollo Research’s Alexander Meinke, Axel Højmark and Jérémy Scheurer about Measuring…",
+      "related_resources": []
     },
     {
       "id": "x-5c7a7610bc2dd2c371a6",
@@ -653,7 +713,10 @@
       },
       "explicit_links": [
         "https://t.co/aKnsKjRhir"
-      ]
+      ],
+      "hot_score": 37,
+      "evidence_excerpt": "Google nixes its Earth AI feature one day after launch, amid criticism it would spread misinformation https://t.co/aKnsKjRhir",
+      "related_resources": []
     },
     {
       "id": "x-7db0fd98ae28bd2142c4",
@@ -682,7 +745,10 @@
       },
       "explicit_links": [
         "https://t.co/vzziV7s77m"
-      ]
+      ],
+      "hot_score": 46,
+      "evidence_excerpt": "Fresh off its Wiz payout, Index Ventures raises $2B across three funds https://t.co/vzziV7s77m",
+      "related_resources": []
     },
     {
       "id": "youtube-9303ec00f251da164cb1",
@@ -714,7 +780,10 @@
         "https://www.youtube.com/channel/UCAq9f7jFEA7Mtl3qOZy2h1A",
         "https://www.youtube.com/v/R3CASW6AeJk?version=3",
         "https://i3.ytimg.com/vi/R3CASW6AeJk/hqdefault.jpg"
-      ]
+      ],
+      "hot_score": 50,
+      "evidence_excerpt": "AI is definitely not killing SQL!! Databricks Genie",
+      "related_resources": []
     },
     {
       "id": "x-c2a9148eeb818b42c90b",
@@ -741,7 +810,10 @@
         "reposts": 7,
         "replies": 4
       },
-      "explicit_links": []
+      "explicit_links": [],
+      "hot_score": 24,
+      "evidence_excerpt": "It's been a pleasure collaborating with the team to co-maintain standalone components, like the multimodal processors powering vLLM's Rust frontend, that can…",
+      "related_resources": []
     },
     {
       "id": "x-ee6d1d254a006ffedd9c",
@@ -770,7 +842,10 @@
       },
       "explicit_links": [
         ""
-      ]
+      ],
+      "hot_score": 48,
+      "evidence_excerpt": "RT @stevesi: Again the rhetoric is trying to convince us that what happened was some new thing and worse that models are people. https://t.…",
+      "related_resources": []
     },
     {
       "id": "x-8c2610910581e7c155f2",
@@ -797,7 +872,10 @@
         "reposts": 34,
         "replies": 4
       },
-      "explicit_links": []
+      "explicit_links": [],
+      "hot_score": 43,
+      "evidence_excerpt": "RT @che_shr_cat: 1/ SSL models like DINOv2 are engineering marvels, but they rely on fragile hacks like EMA, stop-gradients, and custom cen…",
+      "related_resources": []
     },
     {
       "id": "youtube-8a5752b58f7fdc357b9c",
@@ -835,7 +913,10 @@
         "https://twitter.com/technology&",
         "https://www.facebook.com/BloombergTechnology&",
         "https://www.instagram.com/bloombergbusiness/&"
-      ]
+      ],
+      "hot_score": 63,
+      "evidence_excerpt": "Bloomberg’s Ed Ludlow breaks down Tim Cook's final Apple earnings call as CEO - a story of supply crunches, demand misreads and a tough outlook. Plus, Amazon's…",
+      "related_resources": []
     },
     {
       "id": "youtube-be255fc5c46f95aa397b",
@@ -870,7 +951,10 @@
         "https://pod.link/1680633614",
         "http://patreon.com/aidailybrief",
         "https://aidailybrief.ai/"
-      ]
+      ],
+      "hot_score": 41,
+      "evidence_excerpt": "Six questions shaping enterprise AI focus on strategy, architecture, cost allocation, upskilling, monitoring, and external business models. Sam Altman's…",
+      "related_resources": []
     },
     {
       "id": "youtube-8b656e05fbbd85ba4b9a",
@@ -902,7 +986,10 @@
         "https://www.youtube.com/channel/UCAKTUy0tz47ZY02DFpxMqoQ",
         "https://www.youtube.com/v/u3oD4SCx_l8?version=3",
         "https://i2.ytimg.com/vi/u3oD4SCx_l8/hqdefault.jpg"
-      ]
+      ],
+      "hot_score": 3,
+      "evidence_excerpt": "What does building a career in ML actually looks like in 2026, beyond the LinkedIn highlights and the standard advice? This panel brings together people who…",
+      "related_resources": []
     },
     {
       "id": "youtube-3e374f7beaf3acacd55d",
@@ -940,7 +1027,10 @@
         "https://twitter.com/technology&",
         "https://www.facebook.com/BloombergTechnology&",
         "https://www.instagram.com/bloombergbusiness/&"
-      ]
+      ],
+      "hot_score": 53,
+      "evidence_excerpt": "Chinese AI startup Moonshot's Kimi models are powered in part by around 20,000 Nvidia Hopper chips supplied through a computing agreement with Alibaba,…",
+      "related_resources": []
     },
     {
       "id": "youtube-11875a4daae447e7a2c1",
@@ -978,7 +1068,10 @@
         "https://twitter.com/technology&",
         "https://www.facebook.com/BloombergTechnology&",
         "https://www.instagram.com/bloombergbusiness/&"
-      ]
+      ],
+      "hot_score": 51,
+      "evidence_excerpt": "Recent disclosures from Anthropic and OpenAI have shifted the AI conversation from model capabilities to real-world deployment and security. Lux Capital…",
+      "related_resources": []
     },
     {
       "id": "youtube-ee4f753761e8ef6f298a",
@@ -1016,7 +1109,10 @@
         "https://twitter.com/technology&",
         "https://www.facebook.com/BloombergTechnology&",
         "https://www.instagram.com/bloombergbusiness/&"
-      ]
+      ],
+      "hot_score": 57,
+      "evidence_excerpt": "Amazon's latest earnings may have changed the AI narrative around the company. Mizuho's Jordan Klein joins Bloomberg to explain why accelerating AWS growth,…",
+      "related_resources": []
     },
     {
       "id": "x-0cb6194d3a276296d20e",
@@ -1045,7 +1141,10 @@
       },
       "explicit_links": [
         "https://t.co/nPr2Qx13AN"
-      ]
+      ],
+      "hot_score": 31,
+      "evidence_excerpt": "As OpenAI and Anthropic employees grow quieter online, researchers at Chinese AI labs are flocking to X to explain their work, recruit talent, and shape the…",
+      "related_resources": []
     },
     {
       "id": "youtube-ef025f52525025ff85a1",
@@ -1077,7 +1176,10 @@
         "https://www.youtube.com/channel/UCAKTUy0tz47ZY02DFpxMqoQ",
         "https://www.youtube.com/v/hbqSsYM5nbA?version=3",
         "https://i1.ytimg.com/vi/hbqSsYM5nbA/hqdefault.jpg"
-      ]
+      ],
+      "hot_score": 3,
+      "evidence_excerpt": "​Many AI tutors leverage large language models (LLMs) today. Given that LLMs are opaque black boxes, robust evaluation and live experimentation to measure the…",
+      "related_resources": []
     },
     {
       "id": "x-245d869e5ed0bf6d0746",
@@ -1106,7 +1208,10 @@
       },
       "explicit_links": [
         "https://t.co/FQEtPlaKOf"
-      ]
+      ],
+      "hot_score": 44,
+      "evidence_excerpt": "Sam Altman isn’t the only one who wants to pump the brakes on AI https://t.co/FQEtPlaKOf",
+      "related_resources": []
     },
     {
       "id": "youtube-31f5d67150db3a0a691d",
@@ -1138,7 +1243,10 @@
         "https://www.youtube.com/channel/UCCjyq_K1Xwfg8Lndy7lKMpA",
         "https://www.youtube.com/v/Gmmzj6COGtk?version=3",
         "https://i4.ytimg.com/vi/Gmmzj6COGtk/hqdefault.jpg"
-      ]
+      ],
+      "hot_score": 8,
+      "evidence_excerpt": "After years of pushing full speed ahead on AI, OpenAI CEO Sam Altman says maybe it’s time for the AI industry to “pace” itself. The comments came just days…",
+      "related_resources": []
     },
     {
       "id": "x-95c0dff29d3dfa42e116",
@@ -1167,7 +1275,10 @@
       },
       "explicit_links": [
         "https://t.co/NgVupdnqaS"
-      ]
+      ],
+      "hot_score": 39,
+      "evidence_excerpt": "Snapchat no longer rewards fully AI-generated Spotlight content https://t.co/NgVupdnqaS",
+      "related_resources": []
     },
     {
       "id": "x-b014ee061ff03e31a8f7",
@@ -1196,7 +1307,10 @@
       },
       "explicit_links": [
         "https://t.co/dIaVb7dK0R"
-      ]
+      ],
+      "hot_score": 35,
+      "evidence_excerpt": "In the immediate aftermath of Anthony Fauci’s tense congressional hearing on Wednesday, where he refused to answer any questions and invoked the Fifth…",
+      "related_resources": []
     },
     {
       "id": "x-b8a6552b37e9084c668e",
@@ -1223,7 +1337,10 @@
         "reposts": 3,
         "replies": 4
       },
-      "explicit_links": []
+      "explicit_links": [],
+      "hot_score": 23,
+      "evidence_excerpt": "RT @daithaigilbert: This week MAGA figures were baying for blood, demanding that Fauci be arrested and jailed. Steve Bannon even said: \"He…",
+      "related_resources": []
     },
     {
       "id": "x-26bd2605ec62d3e082a1",
@@ -1252,7 +1369,10 @@
       },
       "explicit_links": [
         "https://t.co/nH83pfMdfw"
-      ]
+      ],
+      "hot_score": 43,
+      "evidence_excerpt": "🎉 Congrats to @deepseek_ai on open-sourcing the official DeepSeek-V4-Flash-0731 release! A sparse MoE with 256 routed experts and six active per token, a…",
+      "related_resources": []
     },
     {
       "id": "youtube-a9db729a11001d76e0b2",
@@ -1284,7 +1404,10 @@
         "https://www.youtube.com/channel/UCP7jMXSY2xbc3KCAE0MHQ-A",
         "https://www.youtube.com/v/OEmEfobzodE?version=3",
         "https://i4.ytimg.com/vi/OEmEfobzodE/hqdefault.jpg"
-      ]
+      ],
+      "hot_score": 67,
+      "evidence_excerpt": "This is Gemini Robotics 2 🤖",
+      "related_resources": []
     },
     {
       "id": "x-4dac3dfd383a06020778",
@@ -1313,7 +1436,10 @@
       },
       "explicit_links": [
         "https://t.co/ouXiVefo6l"
-      ]
+      ],
+      "hot_score": 38,
+      "evidence_excerpt": "Siri AI could come with a paywall for power users https://t.co/ouXiVefo6l",
+      "related_resources": []
     },
     {
       "id": "youtube-2b14dc3c6ab80bf5caa8",
@@ -1345,7 +1471,10 @@
         "https://www.youtube.com/channel/UCKWaEZ-_VweaEx1j62do_vQ",
         "https://www.youtube.com/v/148_PxIQjZI?version=3",
         "https://i2.ytimg.com/vi/148_PxIQjZI/hqdefault.jpg"
-      ]
+      ],
+      "hot_score": 47,
+      "evidence_excerpt": "Phishing causes most data breaches—but there's a proven fix. Learn how AI and passkeys are saving companies millions and cutting recovery time. #phishing…",
+      "related_resources": []
     },
     {
       "id": "youtube-ea0b4dd8637390b2296e",
@@ -1380,7 +1509,10 @@
         "https://scrimba.com/freecodecamp",
         "https://www.freecodecamp.org/",
         "https://freecodecamp.org/news"
-      ]
+      ],
+      "hot_score": 81,
+      "evidence_excerpt": "Learn the best practices for building robust and scalable Kubernetes operators using Kubebuilder. This course covers critical techniques, including managing…",
+      "related_resources": []
     },
     {
       "id": "x-023718e9eeaa4631baf3",
@@ -1409,7 +1541,10 @@
       },
       "explicit_links": [
         "https://t.co/k0986eQlYr"
-      ]
+      ],
+      "hot_score": 44,
+      "evidence_excerpt": "SpaceX won’t remove all of xAI’s unpermitted turbines for another year https://t.co/k0986eQlYr",
+      "related_resources": []
     },
     {
       "id": "x-44ea5fbab03d4f760dcf",
@@ -1438,7 +1573,10 @@
       },
       "explicit_links": [
         "https://t.co/uotRoeUVZP"
-      ]
+      ],
+      "hot_score": 32,
+      "evidence_excerpt": "Viral tales of good triumphing over evil are racking up millions of views. They’re almost entirely AI-generated clickbait. https://t.co/uotRoeUVZP",
+      "related_resources": []
     },
     {
       "id": "youtube-78403818fdbfae0a1586",
@@ -1470,7 +1608,10 @@
         "https://www.youtube.com/channel/UChpleBmo18P08aKCIgti38g",
         "https://www.youtube.com/v/qXp5NHz0KSo?version=3",
         "https://i2.ytimg.com/vi/qXp5NHz0KSo/hqdefault.jpg"
-      ]
+      ],
+      "hot_score": 34,
+      "evidence_excerpt": "Here's how to access the secret AI model everyone is trying to get their hands on 👀 Kimi K3 is apparently so powerful that they had to pause new subscriptions…",
+      "related_resources": []
     },
     {
       "id": "x-487da2f44f915102fb42",
@@ -1499,7 +1640,10 @@
       },
       "explicit_links": [
         "https://t.co/MHSNmPJ0go"
-      ]
+      ],
+      "hot_score": 34,
+      "evidence_excerpt": "An ad for Orchid suggests the AI agent can fix relationship problems by simply doing everything for inconsiderate partners. https://t.co/MHSNmPJ0go",
+      "related_resources": []
     },
     {
       "id": "x-b528d77e407438a0e2ff",
@@ -1529,7 +1673,10 @@
       "explicit_links": [
         "https://t.co/YswVVp5Mwn",
         "https://t.co/ymqGh1CFAP"
-      ]
+      ],
+      "hot_score": 41,
+      "evidence_excerpt": "https://t.co/YswVVp5Mwn raises $13M to build ultra-fast voice AI that sounds genuinely human https://t.co/ymqGh1CFAP",
+      "related_resources": []
     },
     {
       "id": "youtube-0d3402343de16acd5f9b",
@@ -1567,7 +1714,10 @@
         "https://x.com/mreflow",
         "https://instagram.com/mr.eflow",
         "https://www.threads.net/@mr.eflow"
-      ]
+      ],
+      "hot_score": 100,
+      "evidence_excerpt": "Here's The AI News From The Past Week! Build with Retool here: https://fandf.co/3RjilvK Discover More: 🛠️ Explore AI Tools & News: https://futuretools.io/ 📰…",
+      "related_resources": []
     },
     {
       "id": "youtube-0eb6ac3ce7dd379ce096",
@@ -1605,7 +1755,10 @@
         "https://www.youtube.com/channel/UCTmFBhuhMibVoSfYom1uXEg",
         "https://discord.gg/r42Kbuk",
         "https://resources.codebasics.io/6J8mXg"
-      ]
+      ],
+      "hot_score": 39,
+      "evidence_excerpt": "Our LIVE Software Engineering Bootcamp is back with its 3rd cohort after the successful completion of the first two batches. Check it out here:…",
+      "related_resources": []
     },
     {
       "id": "youtube-7907fc19d629cec3d509",
@@ -1643,7 +1796,10 @@
         "https://textual.textualize.io/",
         "https://huggingface.co/docs/inference-providers/",
         "https://github.com/rian-dolphin/tau-subagents"
-      ]
+      ],
+      "hot_score": 47,
+      "evidence_excerpt": "Tau is a minimalist coding-agent harness inspired by Pi and implemented in Python. This crash course tours its Textual TUI, provider login and model selection,…",
+      "related_resources": []
     },
     {
       "id": "x-a81faa2f49b5bff37dd6",
@@ -1672,7 +1828,10 @@
       },
       "explicit_links": [
         "https://t.co/1y6W8WIFEg"
-      ]
+      ],
+      "hot_score": 49,
+      "evidence_excerpt": "Repeat founder Ryan Williams raises $10M seed for an AI startup for private credit managers https://t.co/1y6W8WIFEg",
+      "related_resources": []
     },
     {
       "id": "youtube-2e81e124d7c709eb71c8",
@@ -1704,7 +1863,10 @@
         "https://www.youtube.com/channel/UCh9nVJoWXmFb7sLApWGcLPQ",
         "https://www.youtube.com/v/JNGi-x4-SQw?version=3",
         "https://i3.ytimg.com/vi/JNGi-x4-SQw/hqdefault.jpg"
-      ]
+      ],
+      "hot_score": 42,
+      "evidence_excerpt": "120 learners showed up at the Codebasics Learner Meetup in Bengaluru. Every single one had a story. A pediatric surgeon drove 4 hours one way just to attend…",
+      "related_resources": []
     },
     {
       "id": "youtube-de5e1c05f582e9f10494",
@@ -1736,7 +1898,10 @@
         "https://www.youtube.com/channel/UC4JX40jDee_tINbkjycV4Sg",
         "https://www.youtube.com/v/wAXfSXewYHg?version=3",
         "https://i4.ytimg.com/vi/wAXfSXewYHg/hqdefault.jpg"
-      ]
+      ],
+      "hot_score": 54,
+      "evidence_excerpt": "How do AI agents actually use tools like web search? The model can't magically go online, it can only predict text. So when it wants to search, it outputs a…",
+      "related_resources": []
     },
     {
       "id": "x-c0ccbe66d517054771b7",
@@ -1765,7 +1930,10 @@
       },
       "explicit_links": [
         "https://t.co/FFpvDgxo2q"
-      ]
+      ],
+      "hot_score": 35,
+      "evidence_excerpt": "Created by legendary hardware hacker Andrew “bunnie” Huang, the badges for this year’s famed security conference aim to push the boundaries of security and…",
+      "related_resources": []
     },
     {
       "id": "youtube-8b3fd5f26da92ae7c623",
@@ -1799,7 +1967,10 @@
         "https://i2.ytimg.com/vi/yb8Chvj--3c/hqdefault.jpg",
         "https://ibm.biz/~rQKxmFpBi",
         "https://ibm.biz/~8Jp3fHfBx"
-      ]
+      ],
+      "hot_score": 56,
+      "evidence_excerpt": "Read the 2026 Cost of a Data Breach Report → https://ibm.biz/~rQKxmFpBi Are AI-powered cyberattacks getting cheaper while defenses get more expensive? This…",
+      "related_resources": []
     },
     {
       "id": "x-7f3c28f3cdd99690291b",
@@ -1826,7 +1997,10 @@
         "reposts": 1,
         "replies": 5
       },
-      "explicit_links": []
+      "explicit_links": [],
+      "hot_score": 32,
+      "evidence_excerpt": "RT @pentagoniac: @ShawnFumo @METR_Evals The narrative: Blame the Agent, instead of the Agency that told him to “apply all your powers and t…",
+      "related_resources": []
     },
     {
       "id": "youtube-fc97d77935cb6f0b171e",
@@ -1864,7 +2038,10 @@
         "https://twitter.com/technology&",
         "https://www.facebook.com/BloombergTechnology&",
         "https://www.instagram.com/bloombergbusiness/&"
-      ]
+      ],
+      "hot_score": 25,
+      "evidence_excerpt": "Chipmakers are delivering record earnings, yet investor skepticism is dragging stocks lower. Sky‑high expectations, crowded trades, and looming uncertainty…",
+      "related_resources": []
     },
     {
       "id": "x-fd954bdf9277c319682c",
@@ -1893,7 +2070,10 @@
       },
       "explicit_links": [
         "https://t.co/rTOyFMiPyl"
-      ]
+      ],
+      "hot_score": 37,
+      "evidence_excerpt": "In a review triggered by OpenAI's Hugging Face incident, Anthropic discovered three of its AI models had breached real organizations during third-party…",
+      "related_resources": []
     },
     {
       "id": "x-81b31688f1c0d5be0d12",
@@ -1922,7 +2102,10 @@
       },
       "explicit_links": [
         "https://t.co/m0ASEjEgvv"
-      ]
+      ],
+      "hot_score": 48,
+      "evidence_excerpt": "Anthropic says its own AI models breached three companies during security tests https://t.co/m0ASEjEgvv",
+      "related_resources": []
     },
     {
       "id": "x-893b8ac9b632cde732d8",
@@ -1949,7 +2132,10 @@
         "reposts": 11,
         "replies": 7
       },
-      "explicit_links": []
+      "explicit_links": [],
+      "hot_score": 56,
+      "evidence_excerpt": "RT @dawnsongtweets: 1/15 If you could ask the people building the future of Agentic AI one question, what would it be? This Aug 1–2, ~5,000…",
+      "related_resources": []
     },
     {
       "id": "youtube-77640299143d05863728",
@@ -1983,7 +2169,10 @@
         "https://i4.ytimg.com/vi/sUS-eTa0l6s/hqdefault.jpg",
         "https://stanford.io/ai",
         "https://cs229.stanford.edu/index.html-spr26"
-      ]
+      ],
+      "hot_score": 27,
+      "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
+      "related_resources": []
     },
     {
       "id": "youtube-083d838bc974df0160ee",
@@ -2017,7 +2206,10 @@
         "https://i3.ytimg.com/vi/bSmIGBCoffA/hqdefault.jpg",
         "https://stanford.io/ai",
         "https://cs229.stanford.edu/index.html-spr26"
-      ]
+      ],
+      "hot_score": 13,
+      "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
+      "related_resources": []
     },
     {
       "id": "x-c96228d10a9982360104",
@@ -2046,7 +2238,10 @@
       },
       "explicit_links": [
         "https://t.co/p3OFU5bL81"
-      ]
+      ],
+      "hot_score": 35,
+      "evidence_excerpt": "Razer has finally caved and made its first Hall Effect gaming keyboard. I dug into its switches, features, and gaming performance to see if it was worth the…",
+      "related_resources": []
     },
     {
       "id": "youtube-6072b4e49c326a65680e",
@@ -2080,7 +2275,10 @@
         "https://i3.ytimg.com/vi/ne2ngVAoMG8/hqdefault.jpg",
         "https://stanford.io/ai",
         "https://cs229.stanford.edu/index.html-spr26"
-      ]
+      ],
+      "hot_score": 17,
+      "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
+      "related_resources": []
     },
     {
       "id": "youtube-3a6beae71bc91671bebb",
@@ -2114,7 +2312,10 @@
         "https://i3.ytimg.com/vi/fRM41w9jzQo/hqdefault.jpg",
         "https://stanford.io/ai",
         "https://cs229.stanford.edu/index.html-spr26"
-      ]
+      ],
+      "hot_score": 54,
+      "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
+      "related_resources": []
     },
     {
       "id": "youtube-d90a2cb9086309d98b3e",
@@ -2148,7 +2349,10 @@
         "https://i1.ytimg.com/vi/llnEgyyuYkQ/hqdefault.jpg",
         "https://stanford.io/ai",
         "https://cs229.stanford.edu/index.html-spr26"
-      ]
+      ],
+      "hot_score": 30,
+      "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
+      "related_resources": []
     },
     {
       "id": "youtube-fef5ff5b43e037db255c",
@@ -2182,7 +2386,10 @@
         "https://i3.ytimg.com/vi/zRdE8A4UZes/hqdefault.jpg",
         "https://stanford.io/ai",
         "https://cs229.stanford.edu/index.html-spr26"
-      ]
+      ],
+      "hot_score": 41,
+      "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
+      "related_resources": []
     },
     {
       "id": "x-cd0a5ffd6471f2aa0b32",
@@ -2211,7 +2418,10 @@
       },
       "explicit_links": [
         "https://t.co/lNCBjmKliq"
-      ]
+      ],
+      "hot_score": 43,
+      "evidence_excerpt": "Apple stockpiles inventory as it braces for ‘significant supply constraints’ https://t.co/lNCBjmKliq",
+      "related_resources": []
     },
     {
       "id": "x-ba70df181c9ad052534a",
@@ -2240,7 +2450,10 @@
       },
       "explicit_links": [
         "https://t.co/MtaPfJ1Yub"
-      ]
+      ],
+      "hot_score": 40,
+      "evidence_excerpt": "AI hedge fund Situational Awareness may have sold its public portfolio, but it still has its Anthropic shares https://t.co/MtaPfJ1Yub",
+      "related_resources": []
     },
     {
       "id": "x-fa7c2b590b403726b309",
@@ -2269,7 +2482,10 @@
       },
       "explicit_links": [
         "https://t.co/dKFCdpKd9v"
-      ]
+      ],
+      "hot_score": 96,
+      "evidence_excerpt": "In a review of our cybersecurity evaluations, we found three incidents in which a Claude model reached the internet from within or while interacting with a…",
+      "related_resources": []
     },
     {
       "id": "x-20799c075002cc42576d",
@@ -2298,7 +2514,10 @@
       },
       "explicit_links": [
         "https://t.co/dEZyudYlbk"
-      ]
+      ],
+      "hot_score": 41,
+      "evidence_excerpt": "A memo obtained by WIRED, issued by the water utilities information sharing group WaterISAC, links dozens of cyberattacks against Minnesota water utilities to…",
+      "related_resources": []
     },
     {
       "id": "x-b749bc57f10ba21f7c2d",
@@ -2326,7 +2545,10 @@
         "reposts": 22,
         "replies": 10
       },
-      "explicit_links": []
+      "explicit_links": [],
+      "hot_score": 36,
+      "evidence_excerpt": "Lecture 11 is a tool-use/function calling/agentic 101! I almost skipped this one, as this chapter started as the only skill-specific topic in the book, but…",
+      "related_resources": []
     },
     {
       "id": "x-98cf2745023564d69e8d",
@@ -2356,7 +2578,10 @@
       "explicit_links": [
         "https://t.co/tI0DGefgDZ",
         "https://t.co/1IUjVZGIzs"
-      ]
+      ],
+      "hot_score": 32,
+      "evidence_excerpt": "Cohere has joined @NVIDIA alongside industry leaders in founding the Open Secure AI Alliance. Everybody should have the capability to keep their infrastructure…",
+      "related_resources": []
     },
     {
       "id": "youtube-2d83f5e53b30fbe739fd",
@@ -2394,7 +2619,10 @@
         "https://twitter.com/technology&",
         "https://www.facebook.com/BloombergTechnology&",
         "https://www.instagram.com/bloombergbusiness/&"
-      ]
+      ],
+      "hot_score": 61,
+      "evidence_excerpt": "Rivian CFO Claire McDonough joins Bloomberg's Ed Ludlow as the EV maker begins delivering its highly anticipated R2 SUV. She discusses early customer demand,…",
+      "related_resources": []
     },
     {
       "id": "youtube-0298717264e64382e1c8",
@@ -2432,7 +2660,10 @@
         "https://wessocial.abacusai.cloud/",
         "https://westv.abacusai.cloud/",
         "https://westrader.abacusai.cloud/"
-      ]
+      ],
+      "hot_score": 83,
+      "evidence_excerpt": "🖥️ Try Abacus AI SuperComputer: https://supercomputer.abacus.ai/wrt A real always-on Linux box in the cloud, that an AI agent builds on for you. First month…",
+      "related_resources": []
     },
     {
       "id": "x-0ae5f73e1f96c0b2fc04",
@@ -2462,7 +2693,10 @@
       "explicit_links": [
         "https://t.co/tFQYKAqDc3",
         "https://t.co/J2ak7vTYno"
-      ]
+      ],
+      "hot_score": 38,
+      "evidence_excerpt": "RT @nvidia: Give a big welcome to the newest members of the Open Secure AI Alliance. 💚 https://t.co/tFQYKAqDc3 https://t.co/J2ak7vTYno",
+      "related_resources": []
     },
     {
       "id": "x-c8298e2e7df4c5a76f87",
@@ -2491,7 +2725,10 @@
       },
       "explicit_links": [
         "https://t.co/rPYsclzJHR"
-      ]
+      ],
+      "hot_score": 54,
+      "evidence_excerpt": "This is how Gemini Robotics 2 helps @Apptronik’s Apollo 2 use whole body intelligence to pack for a sports game ↓ https://t.co/rPYsclzJHR",
+      "related_resources": []
     },
     {
       "id": "youtube-758b240ca0246ef67520",
@@ -2529,7 +2766,10 @@
         "https://twitter.com/technology&",
         "https://www.facebook.com/BloombergTechnology&",
         "https://www.instagram.com/bloombergbusiness/&"
-      ]
+      ],
+      "hot_score": 67,
+      "evidence_excerpt": "Bloomberg’s Ed Ludlow breaks down big tech's earnings, with Microsoft soaring on cloud growth as its AI gets traction, while Meta plummets as Zuckerberg's AI…",
+      "related_resources": []
     },
     {
       "id": "x-03166bff6034e0514172",
@@ -2556,7 +2796,10 @@
         "reposts": 17,
         "replies": 9
       },
-      "explicit_links": []
+      "explicit_links": [],
+      "hot_score": 32,
+      "evidence_excerpt": "RT @vllm_project: 🎉 Congrats to @thinkymachines on Inkling-Small-- live with Day 0 vLLM support! 276B total parameters with 12B active, na…",
+      "related_resources": []
     },
     {
       "id": "youtube-df17200a83f3f4c3b1ca",
@@ -2589,7 +2832,10 @@
         "https://www.youtube.com/v/uaMbKQIOtwk?version=3",
         "https://i2.ytimg.com/vi/uaMbKQIOtwk/hqdefault.jpg",
         "https://learn.aiadvantage.com/free-pdf"
-      ]
+      ],
+      "hot_score": 63,
+      "evidence_excerpt": "In this video, Igor shows you how to access Gemini's new Study Notebooks feature and get the most out of them. Enjoy! Discover 10 practical ways to use ChatGPT…",
+      "related_resources": []
     },
     {
       "id": "youtube-7c83f58e45dc21f2ef0a",
@@ -2621,7 +2867,10 @@
         "https://www.youtube.com/channel/UCAKTUy0tz47ZY02DFpxMqoQ",
         "https://www.youtube.com/v/1XBTAgjdoRE?version=3",
         "https://i2.ytimg.com/vi/1XBTAgjdoRE/hqdefault.jpg"
-      ]
+      ],
+      "hot_score": 34,
+      "evidence_excerpt": "How did computer vision evolve from recognizing objects in images to today's powerful AI systems? In this session, PhD researcher Vivian White and Senior…",
+      "related_resources": []
     },
     {
       "id": "youtube-a09c3d8f0df28b6ac978",
@@ -2653,7 +2902,10 @@
         "https://www.youtube.com/channel/UCAq9f7jFEA7Mtl3qOZy2h1A",
         "https://www.youtube.com/v/IuaOltfSPP4?version=3",
         "https://i2.ytimg.com/vi/IuaOltfSPP4/hqdefault.jpg"
-      ]
+      ],
+      "hot_score": 63,
+      "evidence_excerpt": "Join this session to ask any questions you might have about the Databricks AI boot camp that starts on August 3rd",
+      "related_resources": []
     },
     {
       "id": "youtube-ec3f28094e2fa14847b3",
@@ -2691,7 +2943,10 @@
         "https://twitter.com/technology&",
         "https://www.facebook.com/BloombergTechnology&",
         "https://www.instagram.com/bloombergbusiness/&"
-      ]
+      ],
+      "hot_score": 39,
+      "evidence_excerpt": "Qualcomm CEO Cristiano Amon joins Bloomberg after the chipmaker warned that soaring memory prices and supply shortages are weighing on the smartphone market.…",
+      "related_resources": []
     },
     {
       "id": "x-1ad2ad85a6f8ba7d597a",
@@ -2718,7 +2973,10 @@
         "reposts": 18,
         "replies": 9
       },
-      "explicit_links": []
+      "explicit_links": [],
+      "hot_score": 36,
+      "evidence_excerpt": "🎉 Congrats to @thinkymachines on Inkling-Small-- live with Day 0 vLLM support! 276B total parameters with 12B active, native text, image, and audio input, and…",
+      "related_resources": []
     },
     {
       "id": "youtube-f51d8eb95b5d8c83453b",
@@ -2756,7 +3014,10 @@
         "https://twitter.com/technology&",
         "https://www.facebook.com/BloombergTechnology&",
         "https://www.instagram.com/bloombergbusiness/&"
-      ]
+      ],
+      "hot_score": 28,
+      "evidence_excerpt": "K2 Space has raised $500 million at a $6.8 billion valuation as investors continue pouring money into the fast-growing space industry. The startup, founded by…",
+      "related_resources": []
     },
     {
       "id": "youtube-7e7dee81037f3614aba9",
@@ -2794,7 +3055,10 @@
         "https://twitter.com/technology&",
         "https://www.facebook.com/BloombergTechnology&",
         "https://www.instagram.com/bloombergbusiness/&"
-      ]
+      ],
+      "hot_score": 66,
+      "evidence_excerpt": "Gabriela Borges, Goldman Sachs managing director and senior software equity research analyst, joins Bloomberg after raising her price target on Microsoft,…",
+      "related_resources": []
     },
     {
       "id": "youtube-423cf85c2e1ea1b6b544",
@@ -2826,7 +3090,10 @@
         "https://www.youtube.com/channel/UCCjyq_K1Xwfg8Lndy7lKMpA",
         "https://www.youtube.com/v/AiZWd5cxmik?version=3",
         "https://i2.ytimg.com/vi/AiZWd5cxmik/hqdefault.jpg"
-      ]
+      ],
+      "hot_score": 16,
+      "evidence_excerpt": "SeatGeek didn't become one of the biggest names in ticketing by following the playbook. It started as a simple ticket search engine on the TechCrunch 50 stage…",
+      "related_resources": []
     },
     {
       "id": "x-308fdfe17f250e4dfb71",
@@ -2853,7 +3120,10 @@
         "reposts": 464,
         "replies": 196
       },
-      "explicit_links": []
+      "explicit_links": [],
+      "hot_score": 74,
+      "evidence_excerpt": "Gemini Robotics 2 is here, with our new suite of models, robots can now reason through every movement to manage tasks that weren’t possible before, like tying…",
+      "related_resources": []
     },
     {
       "id": "x-d6b27fdb6f576dd766bd",
@@ -2880,7 +3150,10 @@
         "reposts": 1503,
         "replies": 913
       },
-      "explicit_links": []
+      "explicit_links": [],
+      "hot_score": 100,
+      "evidence_excerpt": "We are committed to pushing the model frontier across cost efficiency, capability, and speed. Starting today, we are reducing prices for GPT-5.6 Luna by 80%…",
+      "related_resources": []
     },
     {
       "id": "youtube-18ec914ab88500b3549e",
@@ -2912,7 +3185,10 @@
         "https://www.youtube.com/channel/UCBHcMCGaiJhv-ESTcWGJPcw",
         "https://www.youtube.com/v/AAm5E3ZhXnE?version=3",
         "https://i2.ytimg.com/vi/AAm5E3ZhXnE/hqdefault.jpg"
-      ]
+      ],
+      "hot_score": 59,
+      "evidence_excerpt": "What’s in Sarah Guo’s bag? The ultimate robotics brain. 🧠 NVIDIA Jetson AGX Thor, packing up to 2,070 FP4 TFLOPS of AI compute and 128 GB of memory. Power…",
+      "related_resources": []
     },
     {
       "id": "x-951e7066d692a91f71f4",
@@ -2939,7 +3215,10 @@
         "reposts": 148,
         "replies": 175
       },
-      "explicit_links": []
+      "explicit_links": [],
+      "hot_score": 74,
+      "evidence_excerpt": "RT @jxnlco: one of the most beautiful things about OpenAI is that every employee really has a voice. i wanted to capture what it feels lik…",
+      "related_resources": []
     },
     {
       "id": "youtube-9e087f273b7a178cd4df",
@@ -2971,7 +3250,10 @@
         "https://www.youtube.com/channel/UChpleBmo18P08aKCIgti38g",
         "https://www.youtube.com/v/Q60VNdtyiAA?version=3",
         "https://i2.ytimg.com/vi/Q60VNdtyiAA/hqdefault.jpg"
-      ]
+      ],
+      "hot_score": 77,
+      "evidence_excerpt": "Google just released Gemini Robotics 2 today, and it's a much bigger leap than you may think. Unlike previous models, it coordinates everything from feet to…",
+      "related_resources": []
     },
     {
       "id": "x-a1906da9f74603744779",
@@ -2999,7 +3281,10 @@
         "reposts": 42,
         "replies": 46
       },
-      "explicit_links": []
+      "explicit_links": [],
+      "hot_score": 49,
+      "evidence_excerpt": "Consistent with what I found with Qwen3.6 a while back: Claude Code uses 2-3x as many tokens than (many) other harnesses at similar success rate. - Unoptimized?…",
+      "related_resources": []
     },
     {
       "id": "youtube-5f87a6344beb205e8c53",
@@ -3037,7 +3322,10 @@
         "https://go.aws/free",
         "https://go.aws/contact",
         "https://go.aws/more"
-      ]
+      ],
+      "hot_score": 8,
+      "evidence_excerpt": "After migrating 850 applications to AWS in just 15 months—up to six times faster than industry benchmarks—the organization is now building agentic AI solutions…",
+      "related_resources": []
     },
     {
       "id": "x-82e59c917b3002d7399a",
@@ -3064,7 +3352,10 @@
         "reposts": 635,
         "replies": 209
       },
-      "explicit_links": []
+      "explicit_links": [],
+      "hot_score": 81,
+      "evidence_excerpt": "One brain. For any robot. 🤖 We’re launching Gemini Robotics 2: our next-generation physical AI bringing full body intelligence to humanoids, advanced…",
+      "related_resources": []
     },
     {
       "id": "youtube-f3da14a21da982d4c895",
@@ -3101,7 +3392,10 @@
         "https://twitter.com/GoogleDeepMind",
         "https://instagram.com/googledeepmind",
         "https://www.linkedin.com/company/deepmind/"
-      ]
+      ],
+      "hot_score": 72,
+      "evidence_excerpt": "Introducing multi-robot collaboration. This enables different types of robots to communicate and work together to solve complex workflows a single robot could…",
+      "related_resources": []
     },
     {
       "id": "youtube-8b210c24c7a8aee343f6",
@@ -3138,7 +3432,10 @@
         "https://twitter.com/GoogleDeepMind",
         "https://instagram.com/googledeepmind",
         "https://www.linkedin.com/company/deepmind/"
-      ]
+      ],
+      "hot_score": 72,
+      "evidence_excerpt": "The world is built for human movements; it requires us to reach, bend, and balance in tight, cluttered spaces. While our previous models controlled the…",
+      "related_resources": []
     },
     {
       "id": "youtube-fecc7c62cafdd584556a",
@@ -3175,7 +3472,10 @@
         "https://twitter.com/GoogleDeepMind",
         "https://instagram.com/googledeepmind",
         "https://www.linkedin.com/company/deepmind/"
-      ]
+      ],
+      "hot_score": 70,
+      "evidence_excerpt": "To be genuinely useful in our homes and workplaces, robots need finesse. Gemini Robotics 2 unlocks a new level of physical dexterity across different end…",
+      "related_resources": []
     }
   ],
   "events": [
@@ -9538,5 +9838,6 @@
       "new_in_projection": 0,
       "analysis_version": "rules-v1"
     }
-  }
+  },
+  "heat_definition": "hot_score 表示条目在其来源平台内的相对互动量级（0–100），由公开互动数据（浏览/点赞/评论/转发）的加权对数指数按平台归一化得到；仅在平台内可比，跨平台不构成权威综合热度。无互动数据时为 null，前端按“最近”时间回退排序。"
 }
