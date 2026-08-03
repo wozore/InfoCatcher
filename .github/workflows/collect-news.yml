@@ -48,7 +48,7 @@ jobs:
 
       - name: Test generated data
         run: |
-          node --test tests/news/news-tests.test.js tests/news/news-foundation.test.js
+          node --test tests/news/news-tests.test.js tests/news/news-foundation.test.js tests/news/news-candidates.test.js tests/news/news-review-events.test.js tests/news/news-public-gate.test.js tests/news/news-transcripts.test.js tests/news/news-audit.test.js tests/news/news-rss.test.js
           node scripts/validate.js
 
       - name: Create review branch with internal candidate data

@@ -1272,7 +1272,9 @@ async function runCollection(options = {}) {
 
   // B16 决策 63：发布时间缺失或未来超容错的候选标记为 held（异常待复审），
   // 不会通过审核门禁进入公开数据；变更记录到只追加审核事件日志（决策 70）。
-  const timeAnomalies = markAnomalousTimeCandidates(candidateStore, { now: fetchedAt, config });
+  // 注意：news-public-gate 的 classifyPublicTime 用 now - time 做算术，必须传数字时间戳 now，
+  // 不能传 ISO 字符串 fetchedAt（字符串参与减法会得到 NaN，导致未来/超窗判定静默失效）。
+  const timeAnomalies = markAnomalousTimeCandidates(candidateStore, { now, config });
   if (!options.noWrite && timeAnomalies.length) {
     for (const { id } of timeAnomalies) {
       const candidate = statusById.get(id);
@@ -1322,7 +1324,8 @@ async function runCollection(options = {}) {
   });
   // B16 决策 63/72：公开投影生成时再次按统一近期窗口一致过滤（第二道防线），
   // 覆盖历史回溯混入的超窗条目，与 publish-news.js / RSS 共用同一规则。
-  output = filterProjectionByWindow(output, { config, now: fetchedAt });
+  // now 必须为数字时间戳（同上方 markAnomalousTimeCandidates 的类型要求）。
+  output = filterProjectionByWindow(output, { config, now });
 
   const registryResults = bulkDiscover(registryIndex, items.map(item => ({
     platform: item.platform,

@@ -35,14 +35,20 @@ const DEFAULT_FUTURE_TOLERANCE_MS = 6 * 3600 * 1000; // 未来时间容错（默
 /**
  * 解析公开时间窗口配置（决策 63：窗口天数作为配置，不硬编码）。
  * - windowDays：内容发布时间的近期窗口天数（默认 30）；
- * - futureToleranceMs：未来时间容错毫秒数（超出视为异常）。
+ * - futureToleranceMs：未来时间容错毫秒数（超出视为异常）；
+ * - now：必须归一化为数字时间戳（classifyPublicTime 用 now - time 做算术）。
+ *   兼容调用方传入 ISO 字符串（如 fetchedAt）：统一解析为毫秒；
+ *   非法或缺失时回退当前时间，避免字符串参与减法得到 NaN 导致时间门禁静默失效。
  */
 function resolvePublicWindow(config, now) {
   const collection = config?.collection || {};
+  let nowMs = now;
+  if (typeof nowMs === 'string') nowMs = new Date(nowMs).getTime();
+  if (!Number.isFinite(nowMs)) nowMs = Date.now();
   return {
     windowDays: Number(collection.output_retention_days ?? DEFAULT_PUBLIC_WINDOW_DAYS),
     futureToleranceMs: Number(collection.future_tolerance_ms ?? DEFAULT_FUTURE_TOLERANCE_MS),
-    now: now || Date.now(),
+    now: nowMs,
   };
 }
 
