@@ -67,7 +67,13 @@
     "stop_after_new_videos_per_source_layer": 1,
     "lock_stale_after_ms": 900000,
     "rsshub_base_url": "https://rsshub.app",
-    "twitter_api_base_url": "https://api.twitterapi.io"
+    "twitter_api_base_url": "https://api.twitterapi.io",
+    "transcript_enabled": false,
+    "transcript_base_url": "https://www.youtube.com/api/timedtext",
+    "transcript_languages": ["zh-Hans", "zh-Hant", "zh", "en"],
+    "transcript_min_chars": 80,
+    "transcript_timeout_ms": 10000,
+    "transcript_max_items_per_run": 30
   },
   "low_frequency_backfill": {
     "enabled": true,

@@ -24,6 +24,9 @@
  *                  评分 / 溯源 / 主题聚合
  *                            │
  *                            ▼
+ *             字幕/文字稿 enrichment（YouTube，决策 51/52，配置开关）
+ *                            │
+ *                            ▼
  *              内部候选层（hotspot-candidates.json，含双状态轴，不发布）
  *                            │ 公开资格门禁（决策 49/69）
  *                            ▼
@@ -98,12 +101,15 @@ const {
 } = require('../core/news-scheduler');
 const { collectYouTubeLayerStep } = require('../collectors/news-youtube');
 const { collectBilibiliLayerStep } = require('../collectors/news-bilibili');
+const { enrichYouTubeTranscripts } = require('../collectors/news-transcripts');
 const { normalizeManualItem } = require('../../content/news-manual');
 const { createAuthorizationStore, createAuthorizationTask } = require('../core/news-authorization');
 const {
   readCandidateStore, writeCandidateStore, mergeCandidates, stampCandidateStatuses, buildPublicProjection,
   attachProjectionSnapshot,
 } = require('../core/news-candidates');
+const { isWithinPublicWindow, markAnomalousTimeCandidates, filterProjectionByWindow } = require('../core/news-public-gate');
+const { recordReviewTransition } = require('../core/news-review-events');
 const { NEWS_FILES, CATALOG_FILES, DIRS } = require('../../shared/paths');
 const { generateRss } = require('../../content/generate-rss');
 
@@ -1212,9 +1218,9 @@ async function runCollection(options = {}) {
     });
   freshItems.push(...(history.items || []).filter(item => matchesAi(item, config)));
 
-  const retentionDays = config.collection.output_retention_days ?? config.collection.retention_days ?? 30;
-  const cutoff = now - retentionDays * 86400000;
-  const retainedOld = (oldOutput.items || []).filter(item => new Date(item.published_at).getTime() >= cutoff);
+  // B16 决策 63/72：旧内容保留与公开资格统一使用同一近期窗口过滤（单一来源规则，
+  // 规则集中在 news-public-gate.js，RSS 与热点视图共用，避免口径漂移）。
+  const retainedOld = (oldOutput.items || []).filter(item => isWithinPublicWindow(item, { now, config }));
   const items = dedupeItems([...freshItems, ...retainedOld])
     .sort((a, b) => new Date(b.published_at) - new Date(a.published_at))
     .slice(0, config.collection.max_output_items);
@@ -1251,15 +1257,61 @@ async function runCollection(options = {}) {
 
   // B16 决策 49/69：先构建内部候选层（每条候选带双状态轴），公开 hotspots.json
   // 由候选层经公开资格门禁派生，不再直接写原始 items。
+  // 决策 70：采集时给候选打上所属抓取批次 batch_id 与初版 candidate_version。
+  const batchId = `batch_${fetchedAt.slice(0, 10).replace(/-/g, '')}`;
   const candidateStore = mergeCandidates(
     readCandidateStore(),
-    items.map(item => stampCandidateStatuses(item)),
+    items.map(item => stampCandidateStatuses({
+      ...item,
+      batch_id: batchId,
+      candidate_version: item.candidate_version || 1,
+    })),
     fetchedAt
   );
   const statusById = new Map(candidateStore.candidates.map(candidate => [candidate.id, candidate]));
+
+  // B16 决策 63：发布时间缺失或未来超容错的候选标记为 held（异常待复审），
+  // 不会通过审核门禁进入公开数据；变更记录到只追加审核事件日志（决策 70）。
+  const timeAnomalies = markAnomalousTimeCandidates(candidateStore, { now: fetchedAt, config });
+  if (!options.noWrite && timeAnomalies.length) {
+    for (const { id } of timeAnomalies) {
+      const candidate = statusById.get(id);
+      if (candidate) {
+        recordReviewTransition(candidate, { action: 'time_anomaly_hold', reason: candidate.hold_reason, reviewer: 'system', now: fetchedAt });
+      }
+    }
+  }
+
+  // B16 决策 51/52：对本轮 YouTube 候选做字幕/文字稿 enrichment（配置开关控制，
+  // 默认关闭）。成功获取且此前因字幕原因 held 的候选重置为 pending；字幕缺失/过短
+  // 置为 held，技术失败置为 error。状态对象被就地修改，statusById 与后续投影同步。
+  const reviewStatusBefore = new Map(items.map(item => [item.id, statusById.get(item.id)?.review_status]));
+  await enrichYouTubeTranscripts(candidateStore, items.map(item => item.id), {
+    enabled: config.collection.transcript_enabled === true && options.transcriptEnabled !== false,
+    fetchImpl: context.fetchImpl,
+    baseUrl: config.collection.transcript_base_url,
+    languages: config.collection.transcript_languages,
+    minChars: config.collection.transcript_min_chars,
+    timeoutMs: config.collection.transcript_timeout_ms,
+    maxItems: config.collection.transcript_max_items_per_run,
+    now: fetchedAt,
+    runId,
+  });
+  // B16 决策 70：字幕 enrichment 导致的审核状态变化（自动 held / 恢复 pending）也
+  // 追加到只追加审核事件日志，保证历史状态可追溯。
+  if (!options.noWrite) {
+    for (const item of items) {
+      const candidate = statusById.get(item.id);
+      const before = reviewStatusBefore.get(item.id);
+      if (candidate && candidate.review_status !== before) {
+        const action = candidate.review_status === 'held' ? 'transcript_auto_hold' : 'transcript_recovery';
+        recordReviewTransition(candidate, { action, reason: candidate.hold_reason || null, reviewer: 'system', now: fetchedAt });
+      }
+    }
+  }
   // 仅取本轮 items 对应的候选：公开窗口/排序/上限仍由上方 items 逻辑决定，
   // 门禁只剔除未通过人工审核的候选，历史积累不会回流公开。
-  const output = buildPublicProjection({
+  let output = buildPublicProjection({
     candidates: items.map(item => statusById.get(item.id)).filter(Boolean),
     events,
     provenance,
@@ -1268,6 +1320,9 @@ async function runCollection(options = {}) {
     generatedAt: fetchedAt,
     heatDefinition: HEAT_DEFINITION,
   });
+  // B16 决策 63/72：公开投影生成时再次按统一近期窗口一致过滤（第二道防线），
+  // 覆盖历史回溯混入的超窗条目，与 publish-news.js / RSS 共用同一规则。
+  output = filterProjectionByWindow(output, { config, now: fetchedAt });
 
   const registryResults = bulkDiscover(registryIndex, items.map(item => ({
     platform: item.platform,

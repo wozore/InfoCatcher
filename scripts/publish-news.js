@@ -14,7 +14,8 @@
 'use strict';
 
 const { readCandidateStore, buildProjectionFromStore } = require('../src/news/core/news-candidates');
-const { writeJsonAtomic } = require('../src/news/core/news-storage');
+const { filterProjectionByWindow } = require('../src/news/core/news-public-gate');
+const { readJson, writeJsonAtomic } = require('../src/news/core/news-storage');
 const { NEWS_FILES } = require('../src/shared/paths');
 const { generateRss } = require('../src/content/generate-rss');
 
@@ -24,20 +25,24 @@ function main() {
   const dryRun = process.argv.includes('--dry-run');
   const store = readCandidateStore();
   const output = buildProjectionFromStore(store, { generatedAt: new Date().toISOString() });
+  // B16 决策 63/72：公开投影生成时再次按统一近期窗口一致过滤（第二道防线），
+  // 与 build-news.js / RSS 共用同一规则，防止审核通过但已过期的候选回流公开。
+  const config = readJson(NEWS_FILES.config, null);
+  const filtered = filterProjectionByWindow(output, { config, now: Date.now() });
 
   console.log(`ℹ️ 候选层：${store.candidates.length} 条候选`);
-  console.log(`✅ 公开投影：${output.items.length} 条通过公开资格门禁（completed + approved）`);
+  console.log(`✅ 公开投影：${filtered.items.length} 条通过公开资格门禁（completed + approved + 近期窗口）`);
 
   if (dryRun) {
     console.log('   --dry-run：不写文件');
-    return { dry_run: true, items: output.items.length };
+    return { dry_run: true, items: filtered.items.length };
   }
 
-  writeJsonAtomic(OUTPUT_PATH, output, `publish-${Date.now()}`);
+  writeJsonAtomic(OUTPUT_PATH, filtered, `publish-${Date.now()}`);
   console.log('📄 已写 hotspots.json');
   generateRss();
   console.log('📡 RSS 已同步');
-  return { dry_run: false, items: output.items.length };
+  return { dry_run: false, items: filtered.items.length };
 }
 
 if (require.main === module) {

@@ -37,6 +37,10 @@ const {
   reviewSummary,
   attachProjectionSnapshot,
   buildProjectionFromStore,
+  LEGACY_ORIGINAL_SOURCE,
+  convertLegacyHotspotToCandidate,
+  importLegacyHotspots,
+  legacySummary,
 } = require('../../src/news/core/news-candidates');
 
 function baseItem(overrides = {}) {
@@ -318,4 +322,74 @@ test('buildProjectionFromStore 从快照重建，只含 completed + approved', (
   assert.deepEqual(output.events.map(event => event.id), ['e1']);
   assert.deepEqual(output.assessments.map(assessment => assessment.content_id), ['pass']);
   assert.deepEqual(output.coverage, { status: 'complete' });
+});
+
+// ── 第 7 组：legacy 旧热点迁移（决策 64）──────────────────────
+
+test('convertLegacyHotspotToCandidate 标记 legacy 并以 pending 进入待审核流程', () => {
+  const candidate = convertLegacyHotspotToCandidate(baseItem({ id: 'legacy-1' }));
+  assert.equal(candidate.legacy, true);
+  assert.equal(candidate.original_source, LEGACY_ORIGINAL_SOURCE);
+  assert.equal(candidate.review_status, 'pending');          // 不自动公开，等待人工审核
+  assert.equal(candidate.ai_processing_status, 'completed'); // 旧数据是既有处理产物
+  assert.equal(candidate.id, 'legacy-1');
+  assert.equal(candidate.title, '测试候选');                  // 内容字段保留
+});
+
+test('convertLegacyHotspotToCandidate 支持显式覆盖（测试/审核流注入）', () => {
+  const candidate = convertLegacyHotspotToCandidate(baseItem({ id: 'legacy-2' }), {
+    review_status: 'held', original_source: '自定义来源',
+  });
+  assert.equal(candidate.review_status, 'held');
+  assert.equal(candidate.original_source, '自定义来源');
+});
+
+test('convertLegacyHotspotToCandidate 缺 id 返回 null', () => {
+  assert.equal(convertLegacyHotspotToCandidate(null), null);
+  assert.equal(convertLegacyHotspotToCandidate({ title: '无 id' }), null);
+});
+
+test('importLegacyHotspots 把旧数据导入候选层，不自动公开', () => {
+  const result = importLegacyHotspots(null, [
+    baseItem({ id: 'legacy-a' }),
+    baseItem({ id: 'legacy-b' }),
+  ], { now: '2026-08-01T00:00:00Z' });
+  assert.deepEqual(result.imported.sort(), ['legacy-a', 'legacy-b']);
+  assert.deepEqual(result.skipped, []);
+  assert.equal(result.store.candidates.length, 2);
+  assert.equal(result.store.candidates[0].review_status, 'pending'); // 全部待审核
+  assert.equal(result.store.updated_at, '2026-08-01T00:00:00Z');
+});
+
+test('importLegacyHotspots 跳过候选层中已存在的 id，保持其既有审核结论', () => {
+  const existing = createCandidateStore(null);
+  existing.candidates = [stampCandidateStatuses(baseItem({ id: 'already' }))]; // 已由新管线写入 approved
+  const result = importLegacyHotspots(existing, [
+    baseItem({ id: 'already' }),
+    baseItem({ id: 'fresh-legacy' }),
+  ], { now: '2026-08-01T00:00:00Z' });
+  assert.deepEqual(result.imported, ['fresh-legacy']);
+  assert.deepEqual(result.skipped, ['already']);
+  // 已存在候选保持原状（approved），不被迁移覆盖为 pending
+  assert.equal(result.store.candidates.find(item => item.id === 'already').review_status, 'approved');
+  assert.equal(result.store.candidates.find(item => item.id === 'fresh-legacy').review_status, 'pending');
+});
+
+test('legacy 迁移后的候选不通过公开资格门禁（pending 不公开）', () => {
+  const store = importLegacyHotspots(null, [baseItem({ id: 'legacy-x' })]).store;
+  assert.equal(isPublicEligible(store.candidates[0]), false);
+  assert.deepEqual(buildProjectionFromStore(store, { generatedAt: '2026-08-01T00:00:00Z' }).items, []);
+});
+
+test('legacySummary 统计 legacy 旧记录的迁移状态分布', () => {
+  const store = importLegacyHotspots(null, [
+    baseItem({ id: 'legacy-a' }),
+    baseItem({ id: 'legacy-b' }),
+  ]).store;
+  const approved = store.candidates.find(item => item.id === 'legacy-a');
+  approved.review_status = 'approved';
+  const summary = legacySummary(store);
+  assert.equal(summary.total, 2);
+  assert.equal(summary.by_review_status.pending, 1);
+  assert.equal(summary.by_review_status.approved, 1);
 });

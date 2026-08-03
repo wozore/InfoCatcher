@@ -32,13 +32,34 @@
  *     lock force-unlock --reason ...
  *     （status 只读；force-unlock 删除锁并写入审计，必须提供 reason）
  *
- *   review —— 热点审核状态管理（B16 决策 46/48/50/55/56/57/69）
+ *   review —— 热点审核状态管理（B16 决策 46/48/50/55/56/57/69/70）
  *     review list    [--status pending|approved|held|discarded] [--platform ...] [--limit N]
  *     review summary
- *     review set     --id <id> --status pending|approved|held|discarded [--reason ...]
- *     review batch   --ids <id1,id2,...> --status approved [--reason ...]
+ *     review set     --id <id> --status pending|approved|held|discarded [--reason ...] [--reviewer ...]
+ *     review batch   --ids <id1,id2,...> --status approved [--reason ...] [--reviewer ...]
+ *     review log     [--candidate-id <id>] [--action ...] [--limit N]
  *     （set 单条设置审核状态；batch 只处理显式列出的 ids，不支持隐式「全部」；
- *       ai_processing_status 未 completed 时禁止设为 approved）
+ *       ai_processing_status 未 completed 时禁止设为 approved；
+ *       每次流转写入 reviewer / reviewed_at / from_status / candidate_version，决策 70；
+ *       每次流转同时追加到追加式审核事件日志 review-events.json（决策 70：只追加、不改写历史），
+ *       review log 用于查看历史流转记录；
+ *       --reviewer 缺省回退到 GITHUB_ACTOR / USER / cli）
+ *
+ *   transcript —— 视频字幕/文字稿处理（B16 决策 51/52/54/61/67）
+ *     transcript status --id <id>
+ *     transcript fetch  --id <id> [--base-url ...] [--lang ...]
+ *     （fetch 尝试获取 YouTube 自动字幕：缺失/过短 → held，技术失败 → error；
+ *       成功且此前因字幕原因 held 的候选重置为 pending 等待复审，决策 52；
+ *       完整字幕写入 data/news/runtime/transcripts/，不进 PR）
+ *
+ *   legacy —— 旧热点数据迁移（B16 决策 64）
+ *     legacy import   [--dry-run]
+ *     legacy status
+ *     （import 把旧 hotspots.json 导入内部候选层，标记 legacy 并以 pending
+ *       进入待审核流程，不自动公开；只导入候选层中尚不存在的 id；
+ *       --dry-run 只打印将导入的条数，不写文件；
+ *       导入后通过 review set/batch --status approved 逐条/批量审核，
+ *       再运行 publish-news.js 重建公开投影，决策 64/59）
  *
  * 安全约束：
  *   - 不接受 --api-key 等凭据参数；API Key 只能由 GitHub Secrets 注入。
@@ -65,7 +86,21 @@ const {
   setReviewStatus,
   setBatchReviewStatus,
   reviewSummary,
+  importLegacyHotspots,
+  legacySummary,
 } = require('../core/news-candidates');
+const {
+  recordReviewTransition,
+  readReviewEventLog,
+  appendReviewEvent,
+  reviewEventFromCandidate,
+  writeReviewEventLog,
+} = require('../core/news-review-events');
+const {
+  fetchYouTubeTranscript,
+  applyTranscriptOutcome,
+  storeTranscript,
+} = require('../collectors/news-transcripts');
 const { NEWS_FILES } = require('../../shared/paths');
 
 /** CLI 操作的目标数据文件（均为绝对路径） */
@@ -78,6 +113,7 @@ const FILES = {
   lock: NEWS_FILES.lock,
   audit: NEWS_FILES.adminAudit,
   candidates: NEWS_FILES.candidates,
+  config: NEWS_FILES.config,
 };
 
 const PLATFORMS = new Set(['youtube', 'bilibili', 'x']);
@@ -124,6 +160,11 @@ function normalizeTags(value) {
  */
 function optionalNumber(flags, key, suffix = '') {
   return flags[key] !== undefined ? Number(String(flags[key]).replace(new RegExp(`${suffix}$`), '')) : undefined;
+}
+
+/** 审核者标识：--reviewer 优先，其次 GITHUB_ACTOR，再次本地用户，最后 fallback cli */
+function resolveReviewer(flags) {
+  return flags.reviewer || process.env.GITHUB_ACTOR || process.env.USER || process.env.USERNAME || 'cli';
 }
 
 // ── 来源校验 ──────────────────────────────────────────────
@@ -387,6 +428,11 @@ function reviewCommand(action, flags) {
         review_status: candidate.review_status,
         hold_reason: candidate.hold_reason || null,
         error_type: candidate.error_type || null,
+        reviewer: candidate.reviewer || null,
+        reviewed_at: candidate.reviewed_at || null,
+        candidate_version: candidate.candidate_version || 1,
+        batch_id: candidate.batch_id || null,
+        transcript_status: candidate.transcript_status || null,
       })),
     };
   }
@@ -394,13 +440,21 @@ function reviewCommand(action, flags) {
   if (action === 'set') {
     if (!flags.id) throw new Error('review set 缺少 --id');
     if (!flags.status) throw new Error('review set 缺少 --status');
-    const next = setReviewStatus(store, flags.id, flags.status, { reason: flags.reason });
+    const reviewer = resolveReviewer(flags);
+    const next = setReviewStatus(store, flags.id, flags.status, { reason: flags.reason, reviewer });
     writeCandidateStore(next, `review-set-${flags.id}-${Date.now()}`);
     const candidate = next.candidates.find(item => item.id === flags.id);
+    // 决策 70：每次审核流转追加到只追加审核事件日志，不改写历史
+    recordReviewTransition(candidate, { action: 'review_set', reason: flags.reason, reviewer });
     return {
       id: candidate.id,
       review_status: candidate.review_status,
       review_reason: candidate.review_reason || null,
+      reviewer: candidate.reviewer || null,
+      reviewed_at: candidate.reviewed_at || null,
+      from_status: candidate.from_status || null,
+      candidate_version: candidate.candidate_version || 1,
+      batch_id: candidate.batch_id || null,
       updated_at: next.updated_at,
     };
   }
@@ -408,17 +462,156 @@ function reviewCommand(action, flags) {
   if (action === 'batch') {
     if (!flags.ids) throw new Error('review batch 缺少 --ids（逗号分隔的明确 id 列表，决策 56）');
     if (!flags.status) throw new Error('review batch 缺少 --status');
+    const reviewer = resolveReviewer(flags);
     const ids = String(flags.ids).split(',').map(id => id.trim()).filter(Boolean);
     if (!ids.length) throw new Error('review batch 的 --ids 为空');
-    const result = setBatchReviewStatus(store, ids, flags.status, { reason: flags.reason });
-    if (result.updated > 0) writeCandidateStore(result.store, `review-batch-${Date.now()}`);
-    return { status: flags.status, ...result, updated_at: result.store.updated_at };
+    const result = setBatchReviewStatus(store, ids, flags.status, { reason: flags.reason, reviewer });
+    if (result.updated > 0) {
+      writeCandidateStore(result.store, `review-batch-${Date.now()}`);
+      // 决策 56/70：批量只记录实际流转成功的候选；每条独立追加到只追加审核事件日志
+      const updatedCandidates = ids
+        .map(id => result.store.candidates.find(candidate => candidate.id === id))
+        .filter(candidate => candidate && candidate.review_status === flags.status);
+      for (const candidate of updatedCandidates) {
+        recordReviewTransition(candidate, { action: 'review_batch', reason: flags.reason, reviewer });
+      }
+    }
+    return { status: flags.status, reviewer, ...result, updated_at: result.store.updated_at };
+  }
+
+  if (action === 'log') {
+    const log = readReviewEventLog();
+    let events = log.events;
+    if (flags.candidate_id) events = events.filter(event => event.candidate_id === flags.candidate_id);
+    if (flags.action) events = events.filter(event => event.action === flags.action);
+    const limit = optionalNumber(flags, 'limit');
+    if (limit !== undefined && limit > 0) events = events.slice(-limit); // 最近 N 条（从日志末尾取，保持追加顺序）
+    return { total: log.events.length, shown: events.length, events };
   }
 
   throw new Error(`未知 review 命令: ${action}`);
 }
 
-function main(argv = process.argv.slice(2)) {
+// ── transcript 命令组：视频字幕/文字稿处理（B16 决策 51/52/54/61/67）─────
+
+/** 从 news-config.json 读取字幕获取配置；CLI 标志可覆盖（--base-url / --lang）。 */
+function readTranscriptConfig(flags) {
+  const config = readJson(FILES.config, { schema_version: 1, collection: {} });
+  const c = config.collection || {};
+  return {
+    baseUrl: flags.base_url || c.transcript_base_url || 'https://www.youtube.com/api/timedtext',
+    languages: flags.lang ? [flags.lang] : (c.transcript_languages || ['zh-Hans', 'zh-Hant', 'zh', 'en']),
+    minChars: c.transcript_min_chars ?? 80,
+    timeoutMs: c.transcript_timeout_ms ?? 10000,
+  };
+}
+
+async function transcriptCommand(action, flags) {
+  const store = readCandidateStore();
+
+  if (action === 'status') {
+    if (!flags.id) throw new Error('transcript status 缺少 --id');
+    const candidate = store.candidates.find(item => item.id === flags.id);
+    if (!candidate) throw new Error(`候选不存在：${flags.id}`);
+    return {
+      id: candidate.id,
+      platform: candidate.platform,
+      transcript_status: candidate.transcript_status || null,
+      transcript: candidate.transcript || null,
+      review_status: candidate.review_status,
+      ai_processing_status: candidate.ai_processing_status,
+      hold_reason: candidate.hold_reason || null,
+      error_type: candidate.error_type || null,
+    };
+  }
+
+  if (action === 'fetch') {
+    if (!flags.id) throw new Error('transcript fetch 缺少 --id');
+    const candidate = store.candidates.find(item => item.id === flags.id);
+    if (!candidate) throw new Error(`候选不存在：${flags.id}`);
+    if (candidate.platform !== 'youtube') throw new Error(`候选 ${flags.id} 不是 YouTube 内容；字幕处理仅适用于 YouTube（B站采集已搁置，决策 52）`);
+    const config = readTranscriptConfig(flags);
+    const result = await fetchYouTubeTranscript(candidate.native_id, {
+      baseUrl: config.baseUrl, languages: config.languages,
+      minChars: config.minChars, timeoutMs: config.timeoutMs,
+    });
+    const wasHeld = candidate.review_status === 'held';
+    const reviewStatusBefore = candidate.review_status;
+    applyTranscriptOutcome(candidate, result);
+    if (result.ok) {
+      if (wasHeld) candidate.review_status = 'pending'; // 决策 52：补充字幕后重新置为 pending 再审核
+      storeTranscript(candidate, result, { runId: `transcript-fetch-${candidate.id}` });
+    }
+    writeCandidateStore(store, `transcript-fetch-${Date.now()}`);
+    // 决策 70：字幕导致的审核状态变化（held / 恢复为 pending）也追加到只追加审核事件日志
+    if (candidate.review_status !== reviewStatusBefore) {
+      const action = candidate.review_status === 'held' ? 'transcript_auto_hold' : 'transcript_recovery';
+      recordReviewTransition(candidate, { action, reason: candidate.hold_reason || null, reviewer: resolveReviewer(flags) });
+    }
+    return {
+      id: candidate.id,
+      transcript_status: candidate.transcript_status,
+      review_status: candidate.review_status,
+      ai_processing_status: candidate.ai_processing_status,
+      hold_reason: candidate.hold_reason || null,
+      error_type: candidate.error_type || null,
+      result: result.ok
+        ? { ok: true, language: result.language, chars: result.chars, fingerprint: result.fingerprint }
+        : { ok: false, reason: result.reason },
+    };
+  }
+
+  throw new Error(`未知 transcript 命令: ${action}`);
+}
+
+// ── legacy 命令组：旧热点数据迁移（B16 决策 64）─────
+
+/**
+ * legacy import —— 把旧 hotspots.json 数据导入内部候选层。
+ * 旧数据标记 legacy 并以 pending 进入待审核流程，不自动公开（决策 64）；
+ * 只导入候选层中尚不存在的 id，已存在候选保持原状（避免覆盖既有审核结论）。
+ * --dry-run：只打印将导入的条数，不写候选层与审核事件日志。
+ * 导入后管理者通过 `review set/batch --status approved` 逐条/批量审核，
+ * 再运行 publish-news.js 重建公开热点投影（决策 64/59）。
+ */
+function legacyCommand(action, flags) {
+  if (action === 'status') {
+    return legacySummary(readCandidateStore());
+  }
+
+  if (action === 'import') {
+    const dryRun = Boolean(flags.dry_run);
+    const oldData = readJson(NEWS_FILES.hotspots, null);
+    if (!oldData || !Array.isArray(oldData.items)) throw new Error('legacy import 无法读取旧 hotspots.json（缺少 items）');
+    const result = importLegacyHotspots(readCandidateStore(), oldData.items, { now: new Date().toISOString() });
+    if (!dryRun && result.imported.length) {
+      writeCandidateStore(result.store, `legacy-import-${Date.now()}`);
+      // 决策 70：legacy 导入的初始状态写入追加式审核事件日志（只追加、不改写历史），
+      // 批量一次性写回，避免每条导入各写一次文件。
+      const reviewer = resolveReviewer(flags);
+      const now = new Date().toISOString();
+      let log = readReviewEventLog();
+      let added = 0;
+      for (const id of result.imported) {
+        const candidate = result.store.candidates.find(item => item.id === id);
+        if (!candidate) continue;
+        log = appendReviewEvent(log, reviewEventFromCandidate(candidate, {
+          action: 'legacy_import',
+          reason: '旧热点迁移至内部候选层，等待人工审核',
+          reviewer,
+          now,
+        }));
+        added += 1;
+      }
+      if (added) writeReviewEventLog(log, `legacy-import-events-${Date.now()}`);
+    }
+    return { ...result, dry_run: dryRun, total: result.store.candidates.length };
+  }
+
+  throw new Error(`未知 legacy 命令: ${action}`);
+}
+
+async function main(argv = process.argv.slice(2)) {
   const { positional, flags } = parseArgs(argv);
   const [group, action] = positional;
   let result;
@@ -428,14 +621,21 @@ function main(argv = process.argv.slice(2)) {
   else if (group === 'quota') result = quotaCommand(action, flags);
   else if (group === 'lock') result = lockCommand(action, flags);
   else if (group === 'review') result = reviewCommand(action, flags);
-  else throw new Error('用法: news-cli.js source|content|authorization|quota|lock|review <action> [options]');
+  else if (group === 'transcript') result = await transcriptCommand(action, flags);
+  else if (group === 'legacy') result = legacyCommand(action, flags);
+  else throw new Error('用法: news-cli.js source|content|authorization|quota|lock|review|transcript|legacy <action> [options]');
   console.log(JSON.stringify(result, null, 2));
   return result;
 }
 
 if (require.main === module) {
-  try { main(); }
-  catch (error) { console.error(`❌ ${error.message}`); process.exitCode = 1; }
+  main().catch(error => {
+    console.error(`❌ ${error.message}`);
+    process.exitCode = 1;
+  });
 }
 
-module.exports = { parseArgs, normalizeTags, validateSource, importSources, optionalNumber, contentCommand, reviewCommand, main, FILES };
+module.exports = {
+  parseArgs, normalizeTags, validateSource, importSources, optionalNumber,
+  contentCommand, reviewCommand, transcriptCommand, legacyCommand, main, FILES,
+};

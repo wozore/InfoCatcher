@@ -55,6 +55,7 @@ const NEWS_FILES = Object.freeze({
   quota: path.join(NEWS_RUNTIME_DIR, 'news-quota.json'),
   authorizations: path.join(NEWS_RUNTIME_DIR, 'pending-authorizations.json'),
   candidates: path.join(NEWS_RUNTIME_DIR, 'hotspot-candidates.json'), // B16 决策 49：内部候选层，不发布到 dist/
+  reviewEvents: path.join(NEWS_RUNTIME_DIR, 'review-events.json'),    // B16 决策 70：追加式审核事件日志，不发布到 dist/
 
   adminAudit: path.join(NEWS_RUNTIME_DIR, 'news-admin-audit.json'),
   lock: path.join(NEWS_RUNTIME_DIR, '.news-build.lock'),

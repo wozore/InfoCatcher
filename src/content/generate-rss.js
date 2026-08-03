@@ -1,14 +1,20 @@
 /**
  * generate-rss.js — 零依赖 RSS 2.0 Feed 生成器
  *
- * 从 hotspots.json 取评分最高的 N 条内容，输出 standards-compliant feed.xml。
+ * 从 hotspots.json 取最近窗口内的 N 条内容，输出 standards-compliant feed.xml。
  * RSS 阅读器可通过 feed.xml 订阅 InfoCatcher AI 热点，每日自动更新。
+ *
+ * B16 决策 72：RSS 与热点视图/发布出口共用同一套公开过滤规则
+ * （news-public-gate.js 的 filterPublicItems：近期时间窗口 + 公开字段完整），
+ * 避免出现「热点视图有这条、RSS 却没有」或相反的口径漂移。
+ * 过滤逻辑集中在 news-public-gate.js，本文件只消费其结果。
  */
 'use strict';
 
 const fs = require('fs');
 const path = require('path');
 const { DIRS, NEWS_FILES } = require('../shared/paths');
+const { filterPublicItems } = require('../news/core/news-public-gate');
 
 const FEED_PATH = path.join(DIRS.public, 'feed.xml');
 const FEED_ITEM_LIMIT = 30;
@@ -37,14 +43,28 @@ function rfc822(dateStr) {
     String(d.getUTCSeconds()).padStart(2, '0') + ' GMT';
 }
 
+/**
+ * 从公开热点投影选出 RSS 条目（B16 决策 72）。
+ * 复用 news-public-gate.js 的 filterPublicItems（近期窗口 + 公开字段完整），
+ * 与热点视图/发布出口使用同一规则，再按发布时间倒序取前 limit 条。
+ * 纯函数，供单元测试直接验证；opts.config 为公开窗口配置（缺省回退 30 天）。
+ */
+function getFeedItems(hotspots, { config, now, limit = FEED_ITEM_LIMIT } = {}) {
+  return filterPublicItems(hotspots?.items || [], { config, now: now || Date.now() })
+    .slice()
+    .sort((a, b) => new Date(b.published_at) - new Date(a.published_at))
+    .slice(0, limit);
+}
+
 function generateRss() {
   let items = [];
   try {
     const hotspots = JSON.parse(fs.readFileSync(NEWS_FILES.hotspots, 'utf8'));
-    items = (hotspots.items || [])
-      .slice()
-      .sort((a, b) => new Date(b.published_at) - new Date(a.published_at))
-      .slice(0, FEED_ITEM_LIMIT);
+    // B16 决策 63/72：RSS 与热点视图共用同一公开过滤规则（单一来源规则，
+    // 规则集中在 news-public-gate.js）；读取失败时用默认 30 天窗口。
+    let config = null;
+    try { config = JSON.parse(fs.readFileSync(NEWS_FILES.config, 'utf8')); } catch { config = null; }
+    items = getFeedItems(hotspots, { config, now: Date.now() });
   } catch (e) {
     console.warn('⚠️ generate-rss: 无法读取 hotspots.json，跳过 RSS 生成');
     return;
@@ -102,4 +122,4 @@ if (require.main === module) {
   generateRss();
 }
 
-module.exports = { generateRss };
+module.exports = { getFeedItems, generateRss };

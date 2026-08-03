@@ -394,6 +394,7 @@ function validateNewsCandidates(data) {
   const ids = new Set();
   const aiStatuses = new Set(['not_requested', 'queued', 'processing', 'completed', 'error']);
   const reviewStatuses = new Set(['pending', 'approved', 'held', 'discarded']);
+  const transcriptStatuses = new Set(['ok', 'missing', 'too_short', 'fetch_failed']);
   for (let i = 0; i < data.candidates.length; i++) {
     const candidate = data.candidates[i];
     const tag = `hotspot-candidates.json.candidates[${i}] (${candidate.title || '未知'})`;
@@ -402,8 +403,48 @@ function validateNewsCandidates(data) {
     // B16 决策 16/69：每条候选必须带双状态轴，且取值为合法枚举
     if (!aiStatuses.has(candidate.ai_processing_status)) fail(`${tag}.ai_processing_status 无效`);
     if (!reviewStatuses.has(candidate.review_status)) fail(`${tag}.review_status 无效`);
+    // B16 决策 70：审核审计字段（存在时校验格式）
+    if (candidate.candidate_version !== undefined && (!Number.isInteger(candidate.candidate_version) || candidate.candidate_version < 1)) {
+      fail(`${tag}.candidate_version 应为正整数`);
+    }
+    if (candidate.reviewed_at !== undefined && Number.isNaN(new Date(candidate.reviewed_at).getTime())) {
+      fail(`${tag}.reviewed_at 不是有效时间`);
+    }
+    if (candidate.reviewer !== undefined && !String(candidate.reviewer).trim()) fail(`${tag}.reviewer 不能为空`);
+    if (candidate.batch_id !== undefined && !String(candidate.batch_id).trim()) fail(`${tag}.batch_id 不能为空`);
+    // B16 决策 52：字幕元数据（存在时校验格式）
+    if (candidate.transcript_status !== undefined && !transcriptStatuses.has(candidate.transcript_status)) {
+      fail(`${tag}.transcript_status 无效（合法值：${[...transcriptStatuses].join(' / ')}）`);
+    }
+    if (candidate.transcript) {
+      if (!candidate.transcript.fingerprint || !/^[0-9a-f]{64}$/.test(candidate.transcript.fingerprint)) {
+        fail(`${tag}.transcript.fingerprint 应为 64 位 hex 指纹`);
+      }
+      if (candidate.transcript.chars !== undefined && (!Number.isInteger(candidate.transcript.chars) || candidate.transcript.chars < 0)) {
+        fail(`${tag}.transcript.chars 应为非负整数`);
+      }
+    }
   }
   console.log(`  hotspot-candidates.json: ${data.candidates.length} 条候选，通过`);
+}
+
+function validateReviewEvents(data) {
+  if (!data || !Array.isArray(data.events)) return fail('review-events.json.events 应为数组');
+  const reviewStatuses = new Set(['pending', 'approved', 'held', 'discarded']);
+  for (let i = 0; i < data.events.length; i++) {
+    const event = data.events[i];
+    const tag = `review-events.json.events[${i}]`;
+    // B16 决策 70：追加式审核事件必须包含候选 id 与决策 70 核心字段
+    if (!event.candidate_id) fail(`${tag} 缺少 candidate_id`);
+    if (!event.action) fail(`${tag} 缺少 action`);
+    if (!reviewStatuses.has(event.review_status)) fail(`${tag}.review_status 无效（合法值：${[...reviewStatuses].join(' / ')}）`);
+    if (event.reviewed_at !== undefined && Number.isNaN(new Date(event.reviewed_at).getTime())) fail(`${tag}.reviewed_at 不是有效时间`);
+    if (event.candidate_version !== undefined && (!Number.isInteger(event.candidate_version) || event.candidate_version < 1)) {
+      fail(`${tag}.candidate_version 应为正整数`);
+    }
+    if (event.batch_id !== undefined && !String(event.batch_id).trim()) fail(`${tag}.batch_id 不能为空`);
+  }
+  console.log(`  review-events.json: ${data.events.length} 条审核事件，通过`);
 }
 
 function validateManualItems(data) {
@@ -689,6 +730,7 @@ for (const [name, file, validator] of [
   ['news-quota.json', NEWS_FILES.quota, validateNewsQuota],
   ['pending-authorizations.json', NEWS_FILES.authorizations, validateAuthorizations],
   ['hotspot-candidates.json', NEWS_FILES.candidates, validateNewsCandidates],
+  ['review-events.json', NEWS_FILES.reviewEvents, validateReviewEvents],
 ]) {
   try {
     validator(JSON.parse(fs.readFileSync(file, 'utf8')));

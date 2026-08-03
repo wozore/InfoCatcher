@@ -89,7 +89,9 @@ function stampCandidateStatuses(item, overrides = {}) {
  * 合并候选到内部候选层：
  *   - 新候选按 id 覆盖内容字段；
  *   - 已存在的候选保留既有 review_status / ai_processing_status，
- *     避免重新采集时重置人工审核结论（决策 55/70 的审计语义）。
+ *     避免重新采集时重置人工审核结论（决策 55/70 的审计语义）；
+ *   - 保留 candidate_version（版本号只随审核流转递增，不因内容刷新改变）
+ *     与 batch_id（所属抓取批次，保持首次采集批次，决策 70）。
  * 候选层按 id 积累（决策 49：保留全部候选），公开窗口由公开资格门禁与
  * pipeline 的 retention 逻辑共同约束，历史候选不会因积累而回流公开。
  */
@@ -102,6 +104,8 @@ function mergeCandidates(existingStore, incomingCandidates, updatedAt) {
     if (prev) {
       if (prev.review_status !== undefined) incoming.review_status = prev.review_status;
       if (prev.ai_processing_status !== undefined) incoming.ai_processing_status = prev.ai_processing_status;
+      if (prev.candidate_version !== undefined) incoming.candidate_version = prev.candidate_version;
+      if (prev.batch_id !== undefined) incoming.batch_id = prev.batch_id;
     }
     byId.set(incoming.id, incoming);
   }
@@ -126,11 +130,20 @@ function selectPublicEligible(candidates) {
 
 /**
  * 公开投影剔除内部状态字段（决策 77：不在公开卡片展示审核/处理状态、
- * AI 置信度、重试次数等内部信息）。
+ * AI 置信度、重试次数等内部信息；决策 52/70：字幕与审计字段同样不外泄）。
  */
+const INTERNAL_FIELDS = Object.freeze([
+  'review_status', 'ai_processing_status',
+  'review_reason', 'reviewer', 'reviewed_at', 'from_status',
+  'candidate_version', 'batch_id',
+  'hold_reason', 'error_type', 'error_message', 'retryable', 'retry_count',
+  'transcript', 'transcript_status', 'transcript_evidence', 'transcript_updated_at',
+]);
+
 function toPublicItem(candidate) {
   if (!candidate) return candidate;
-  const { review_status, ai_processing_status, ...publicItem } = candidate;
+  const publicItem = { ...candidate };
+  for (const key of INTERNAL_FIELDS) delete publicItem[key];
   return publicItem;
 }
 
@@ -172,11 +185,14 @@ function buildPublicProjection({
 }
 
 // ═══════════════════════════════════════════════════════════════
-// 审核状态操作（决策 48/50/55/56/57/69）
+// 审核状态操作（决策 48/50/55/56/57/69/70）
 //
-// 说明：本模块只负责状态值与状态流转的合法性，不写完整审计字段
-// （reviewer / reviewed_at / from_status / candidate_version / batch_id）
-// 与追加式审核日志 —— 那些属决策 70 的后续实现范围。
+// 说明：每次审核状态流转写入决策 70 的完整审计字段
+// （reviewer / reviewed_at / from_status / candidate_version），
+// review_reason 按决策 70 保存；batch_id（所属抓取批次）在采集时打上，
+// 审核流转不覆盖它。追加式审核日志（只追加、不改写历史）属于决策 70 的
+// 另一半，由独立模块实现，本模块只在候选主记录上保存当前状态与最近一次
+// 流转信息。
 // ═══════════════════════════════════════════════════════════════
 
 /** 校验 review_status 为合法枚举（决策 48）。 */
@@ -201,27 +217,48 @@ function assertCanApprove(candidate) {
 }
 
 /**
- * 单条设置审核状态（决策 55/48）。
- * 写入 review_status 与可选 review_reason；返回更新后的 store。
+ * 决策 70：写入一次审核状态流转的完整审计字段。
+ * 只改候选主记录（候选主记录只保存当前状态；历史状态由追加式审核日志追溯）。
+ * - from_status：变更前状态，用于审计；
+ * - reviewer / reviewed_at：审核者与审核时间（reviewer 缺省不写，now 缺省用当前时间）；
+ * - candidate_version：候选记录版本号，用于并发检测，每次审核流转递增；
+ * - review_reason：审核依据（决策 70）。
+ * batch_id（所属抓取批次）在采集时打上，这里不覆盖。
+ */
+function applyReviewTransition(candidate, status, { reason, reviewer, now } = {}) {
+  const timestamp = now || new Date().toISOString();
+  candidate.from_status = candidate.review_status;
+  candidate.review_status = status;
+  if (reason) candidate.review_reason = reason;
+  if (reason && status === 'held') candidate.hold_reason = reason; // 决策 50：held 也记录 hold_reason
+  if (reviewer) candidate.reviewer = reviewer;
+  candidate.reviewed_at = timestamp;
+  candidate.candidate_version = Number(candidate.candidate_version || 1) + 1;
+  return candidate;
+}
+
+/**
+ * 单条设置审核状态（决策 55/48/70）。
+ * 写入 review_status 与完整审计字段（reviewer / reviewed_at / from_status /
+ * candidate_version，review_reason 可选）；返回更新后的 store。
  * 未命中 id 或非法组合时抛错，不做部分写入。
  */
-function setReviewStatus(store, id, status, { reason } = {}) {
+function setReviewStatus(store, id, status, { reason, reviewer, now } = {}) {
   assertValidReviewStatus(status);
   const next = createCandidateStore(store);
   const candidate = next.candidates.find(item => item.id === id);
   if (!candidate) throw new Error(`候选不存在：${id}`);
   if (status === 'approved') assertCanApprove(candidate);
-  candidate.review_status = status;
-  if (reason) candidate.review_reason = reason;
+  applyReviewTransition(candidate, status, { reason, reviewer, now });
   return next;
 }
 
 /**
- * 批量设置审核状态（决策 56）：只处理显式列出的 ids，不做隐式范围
+ * 批量设置审核状态（决策 56/70）：只处理显式列出的 ids，不做隐式范围
  * （不支持「当前筛选结果全部通过」）。逐条报告未命中与被拒绝的候选，
- * 一条失败不覆盖其他候选的结果。
+ * 一条失败不覆盖其他候选的结果。每条写入完整的审计字段。
  */
-function setBatchReviewStatus(store, ids, status, { reason } = {}) {
+function setBatchReviewStatus(store, ids, status, { reason, reviewer, now } = {}) {
   assertValidReviewStatus(status);
   const next = createCandidateStore(store);
   const missing = [];
@@ -234,21 +271,25 @@ function setBatchReviewStatus(store, ids, status, { reason } = {}) {
       try { assertCanApprove(candidate); }
       catch (error) { blocked.push({ id, reason: error.message }); continue; }
     }
-    candidate.review_status = status;
-    if (reason) candidate.review_reason = reason;
+    applyReviewTransition(candidate, status, { reason, reviewer, now });
     updated += 1;
   }
   return { store: next, updated, missing, blocked };
 }
 
 /**
- * 决策 50：标记 held（保留 = 内部暂存、后续复审、不公开），记录 hold_reason。
- * 仅修改 review_status，不影响 ai_processing_status。
+ * 决策 50/70：标记 held（保留 = 内部暂存、后续复审、不公开），记录 hold_reason
+ * 与审计字段。仅修改 review_status，不影响 ai_processing_status。
  */
-function markHeld(candidate, { reason } = {}) {
+function markHeld(candidate, { reason, reviewer, now } = {}) {
   if (!candidate) throw new Error('候选不存在');
+  const timestamp = now || new Date().toISOString();
+  candidate.from_status = candidate.review_status;
   candidate.review_status = 'held';
   if (reason) candidate.hold_reason = reason;
+  if (reviewer) candidate.reviewer = reviewer;
+  candidate.reviewed_at = timestamp;
+  candidate.candidate_version = Number(candidate.candidate_version || 1) + 1;
   return candidate;
 }
 
@@ -325,6 +366,74 @@ function buildProjectionFromStore(store, { generatedAt } = {}) {
   };
 }
 
+// ═══════════════════════════════════════════════════════════════
+// legacy 旧热点迁移（决策 64）
+//
+// 说明：引入人工审核流程前，旧 hotspots.json 的内容未经逐条人工确认。
+// 迁移时把它们导入内部候选层并标记 legacy，进入待审核流程，不自动公开：
+//   - legacy: true + original_source：识别来源与迁移状态（决策 64）；
+//   - ai_processing_status：沿用 completed（旧数据是既有处理产物）；
+//   - review_status：置为 pending（等待管理者逐条/批量审核，不自动批准）。
+// 只导入候选层中尚不存在的 id，避免覆盖或混淆既有审核结论。
+// ═══════════════════════════════════════════════════════════════
+
+const LEGACY_ORIGINAL_SOURCE = '旧 hotspots.json';
+
+/**
+ * 把一条旧热点投影项转换为候选记录（决策 64）。
+ * item 缺少 id 时返回 null（无法进入候选层）。
+ * overrides 用于测试或显式覆盖（如 --status / --original-source）。
+ */
+function convertLegacyHotspotToCandidate(item, overrides = {}) {
+  if (!item || item.id == null) return null;
+  return {
+    ...item,
+    legacy: true,
+    original_source: overrides.original_source || LEGACY_ORIGINAL_SOURCE,
+    ai_processing_status: overrides.ai_processing_status || DEFAULT_AI_PROCESSING_STATUS,
+    review_status: overrides.review_status || 'pending',
+    candidate_version: Number(item.candidate_version || 1),
+  };
+}
+
+/**
+ * 把旧 hotspots.json 的 items 导入候选层（决策 64）。
+ * - 只导入候选层中尚不存在的 id：已存在候选保持原状（可能已由新采集管线
+ *   写入并经审核门禁通过），避免迁移覆盖或混淆既有审核结论；
+ * - 新导入候选以 pending 进入待审核流程，不自动公开（决策 64：不自动批准旧数据）；
+ * - 返回 { store, imported, skipped }，store 供调用方原子写回候选层文件。
+ */
+function importLegacyHotspots(existingStore, oldItems, { now } = {}) {
+  const store = createCandidateStore(existingStore);
+  const existingIds = new Set(store.candidates.map(candidate => candidate.id));
+  const imported = [];
+  const skipped = [];
+  for (const item of oldItems || []) {
+    const candidate = convertLegacyHotspotToCandidate(item);
+    if (!candidate) continue;
+    if (existingIds.has(candidate.id)) { skipped.push(candidate.id); continue; }
+    store.candidates.push(candidate);
+    existingIds.add(candidate.id);
+    imported.push(candidate.id);
+  }
+  if (imported.length) store.updated_at = now || new Date().toISOString();
+  return { store, imported, skipped };
+}
+
+/** 候选层中 legacy 旧记录的迁移状态统计（供 CLI legacy status / 审核 PR）。 */
+function legacySummary(store) {
+  const legacy = (store?.candidates || []).filter(candidate => candidate.legacy === true);
+  const summary = {
+    total: legacy.length,
+    by_review_status: {},
+  };
+  for (const candidate of legacy) {
+    summary.by_review_status[candidate.review_status] =
+      (summary.by_review_status[candidate.review_status] || 0) + 1;
+  }
+  return summary;
+}
+
 function readCandidateStore() {
   return createCandidateStore(readJson(CANDIDATES_PATH, null));
 }
@@ -348,6 +457,7 @@ module.exports = {
   buildPublicProjection,
   assertValidReviewStatus,
   assertCanApprove,
+  applyReviewTransition,
   setReviewStatus,
   setBatchReviewStatus,
   markHeld,
@@ -355,6 +465,10 @@ module.exports = {
   reviewSummary,
   attachProjectionSnapshot,
   buildProjectionFromStore,
+  LEGACY_ORIGINAL_SOURCE,
+  convertLegacyHotspotToCandidate,
+  importLegacyHotspots,
+  legacySummary,
   readCandidateStore,
   writeCandidateStore,
 };
