@@ -203,6 +203,11 @@
 
     <div class="search-results-shell" id="searchResultsPanel" hidden>
       <button class="btn-link search-back-button" id="searchBackButton" type="button"><svg class="icon" aria-hidden="true"><use href="#icon-arrow-left"/></svg> 返回 AI 搜索</button>
+      <!-- 决策 8.1：结果页持久静态演示边界。只要进入结果视图即始终显示，不随搜索状态隐藏。 -->
+      <div class="state info search-results-note" id="searchResultsBoundary" role="note">
+        <strong>静态演示 · 不代表实时联网检索或 AI 生成结果</strong>
+        <p>当前结果由已收录的静态资料整理而成；页面状态与示例历史仅保留在当前内存中。</p>
+      </div>
       <section class="search-query-panel section-rule" aria-labelledby="searchResultQuery">
         <span class="eyebrow">当前问题 · 静态演示</span>
         <div class="search-query-readonly" id="searchQueryReadonly">
@@ -584,6 +589,7 @@
           <h2 class="section-title" id="aboutMethodTitle">评测方法论</h2>
           <ul class="about-principles">
             <li><strong>明确维度</strong><span>每个工具的评分基于四个维度：综合能力、中文支持、易用性、性价比。</span></li>
+            <li><strong>评分口径</strong><span>四项评分为人工维护的 1–5 分，随每条记录一并展示来源与更新时间；它们是编辑对既有资料的整理结论，不代表第三方跑分或市场份额。</span></li>
             <li><strong>场景核对</strong><span>“适用场景”标签基于真实用例测试，非厂商宣传材料。</span></li>
             <li><strong>如实限制</strong><span>“不适合场景”如实标注——没有万能工具。</span></li>
             <li><strong>可追溯资料</strong><span>每条信息标注“最后更新日期”和“信息来源”。</span></li>

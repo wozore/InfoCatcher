@@ -298,6 +298,8 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 .search-stage[data-status="cancelled"]::after { content: "已中止"; color: var(--warn); font-size: 12px; font-weight: 600; }
 .search-results-shell { max-width: var(--content-reading); margin: 26px auto 0; }
 .search-back-button { margin-bottom: 20px; }
+/* B16 决策 8.1：结果页持久静态演示边界（轻量常驻，不随搜索状态隐藏） */
+.search-results-note { margin: 0 0 22px; padding: 11px 14px; }
 .search-query-panel { margin-top: 0; padding-top: 0; border-top: 0; }
 .search-query-readonly { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
 .search-query-readonly .page-title { margin-bottom: 0; overflow-wrap: anywhere; }
@@ -741,6 +743,7 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
   border-top: 1px solid var(--border);
 }
 .tool-card-actions { display: flex; align-items: center; justify-content: flex-end; gap: 7px; }
+.tool-card-updated { font-size: 12px; color: var(--text-hint); }
 .detail-button {
   min-height: 32px;
   padding: 5px 10px;
@@ -1133,6 +1136,11 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 .compare-bar-empty { display: block; padding: 1px 8px; color: var(--text-hint); font-size: 11px; line-height: 14px; }
 .compare-bar-value { color: var(--text); font-size: 12px; font-weight: 650; text-align: right; white-space: nowrap; }
 .compare-bars-gate { padding: 14px; border-left: 3px solid var(--warn); background: var(--warn-light); color: var(--text-secondary); font-size: 13px; }
+/* B16 决策 9.5/93：对比数据来源与更新时间说明条带（图表下方逐项展示，非表格） */
+.compare-provenance { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); display: grid; gap: 6px; }
+.compare-provenance-row { display: flex; gap: 8px; font-size: 12px; color: var(--text-secondary); }
+.compare-provenance-name { flex: 0 0 auto; font-weight: 650; }
+.compare-provenance-text { overflow-wrap: anywhere; }
 
 /* ═══ Modal ═════════════════════════════════════════════════════
    工具详情弹窗：全屏遮罩 + 居中面板。
@@ -1678,6 +1686,8 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 .empty-state .empty-icon { font-size: 32px; line-height: 1; margin-bottom: 12px; }
 .empty-state h3 { font-size: 18px; color: var(--text); margin-bottom: 8px; }
 .empty-state p { color: var(--text-secondary); }
+/* B16 决策 80：空状态的“下一步操作”按钮组 */
+.empty-state-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 18px; }
 
 /* ═══ Trending ══════════════════════════════════════════════════
    P0.4-E：公开数据状态、平台筛选和低装饰内容流。
@@ -1828,6 +1838,28 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 .skeleton span:nth-child(2) { width: 90%; }
 .skeleton span:nth-child(3) { width: 70%; }
 .skeleton-detail { height: 120px; }
+
+/* ═══ B16 决策 10.3：局部搜索/筛选/排序的“正在更新”反馈 ═══
+   只在受影响区域显示；原内容降强调但不清空，避免页面突然变空。 */
+.is-updating { position: relative; }
+.is-updating > * { opacity: 0.55; }
+.is-updating::after {
+  content: '正在更新…';
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  pointer-events: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  box-shadow: var(--shadow);
+  white-space: nowrap;
+}
 
 @media (max-width: 768px) {
   .trending-view { padding-top: 18px; }

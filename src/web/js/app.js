@@ -131,11 +131,17 @@ let searchState = {
   lastQuery: null
 };
 
-function renderState({ icon, title, message, type = 'empty' }) {
+function renderState({ icon, title, message, type = 'empty', actions }) {
   const role = type === 'error' ? 'alert' : 'status';
+  // 决策 80：空状态可携带“下一步操作”按钮组（其他视图不传 actions 时保持原样）
+  const actionHtml = Array.isArray(actions) && actions.length
+    ? '<div class="empty-state-actions">' + actions.map(action =>
+        '<button class="btn btn-small' + (action.primary ? ' btn-primary' : '') + '" type="button" data-' + action.dataKey + '="' + escapeHtml(action.dataValue) + '">' + escapeHtml(action.label) + '</button>'
+      ).join('') + '</div>'
+    : '';
   return '<div class="empty-state state-' + type + '" role="' + role + '" data-state="' + type + '">' +
     '<div class="empty-icon" aria-hidden="true">' + icon + '</div>' +
-    '<h3>' + title + '</h3><p>' + message + '</p></div>';
+    '<h3>' + title + '</h3><p>' + message + '</p>' + actionHtml + '</div>';
 }
 
 function announceStatus(message) {
@@ -145,9 +151,24 @@ function announceStatus(message) {
   window.requestAnimationFrame(() => { status.textContent = message; });
 }
 
+// B16 决策 10.3：局部刷新状态。只在受影响区域显示“正在更新”，原内容降强调、不遮挡页面。
+// 同步重渲染会立即清除（busy→false），因此仅在存在真实等待（防抖/异步）时可见，不会闪烁。
 function setRegionBusy(element, busy) {
   if (!element) return;
   element.setAttribute('aria-busy', String(busy));
+  element.classList.toggle('is-updating', busy);
+  const live = element.querySelector(':scope > .region-updating-sr');
+  if (busy) {
+    if (!live) {
+      const el = document.createElement('span');
+      el.className = 'region-updating-sr sr-only';
+      el.setAttribute('role', 'status');
+      el.textContent = '正在更新…';
+      element.prepend(el);
+    }
+  } else if (live) {
+    live.remove();
+  }
 }
 
 function setPressedState(controls, activeControl) {
@@ -1049,6 +1070,19 @@ function getItemLatestQueriedAt(collection, item) {
     .reverse()[0] || null;
 }
 
+// B16 决策 97/98：工具实体唯一发布时间。工具发布时间 ≠ 资料更新时间（last_updated）。
+// 公开数据契约当前未提供该字段时返回 null，工具卡/场景卡以“发布时间待补充”诚实标注，不猜测补齐。
+function getToolPublishedDate(tool) {
+  if (!tool) return null;
+  for (const key of ['published_at', 'release_date', 'released_at', 'publish_date']) {
+    const value = tool[key];
+    if (!value) continue;
+    if (!Number.isFinite(new Date(value).getTime())) continue;
+    return String(value).slice(0, 10);
+  }
+  return null;
+}
+
 // ═══════════════════════════════════════════════════════════════
 // 第 2 部分：数据加载
 // ═══════════════════════════════════════════════════════════════
@@ -1167,6 +1201,9 @@ function openMobileNav() {
   mobileNav.hidden = false;
   menuToggle.setAttribute('aria-expanded', 'true');
   menuToggle.setAttribute('aria-label', '关闭导航菜单');
+  // 决策 84：菜单打开后焦点移入菜单内第一个可聚焦项，键盘用户不丢失当前位置
+  const firstFocusable = mobileNav.querySelector('button, a[href], [tabindex]:not([tabindex="-1"])');
+  if (firstFocusable) firstFocusable.focus({ preventScroll: true });
 }
 
 // B16 决策 83：桌面分组下拉菜单的视图归属映射（父级菜单联动当前状态）
@@ -1200,6 +1237,10 @@ function switchView(view) {
   const target = document.getElementById('view-' + view);
   if (!target) return;
 
+  // 决策 84：记录是否从打开的移动菜单进入（用于关闭菜单后把焦点移入目标视图）
+  const mobileNav = document.getElementById('mobileNav');
+  const fromMobileMenu = Boolean(mobileNav && !mobileNav.hidden && mobileNav.contains(document.activeElement));
+
   currentView = view;
   const mobilePageTitle = document.getElementById('mobileCurrentPage');
   if (mobilePageTitle && VIEW_TITLES[view]) mobilePageTitle.textContent = VIEW_TITLES[view];
@@ -1215,6 +1256,15 @@ function switchView(view) {
   if (view === 'glossary') renderGlossary();
   if (view === 'trending') renderTrending();
   if (view === 'featured') renderFeatured();
+
+  // 决策 84：从移动菜单进入时，把焦点移入新视图标题，避免焦点停留在已隐藏的菜单项上
+  if (fromMobileMenu) {
+    const heading = target.querySelector('h1');
+    if (heading) {
+      heading.setAttribute('tabindex', '-1');
+      heading.focus({ preventScroll: true });
+    }
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -1392,6 +1442,7 @@ function renderTools() {
         ).join('') + '</div>'
       : '';
     const isSelected = isCompareSelected(t.id, null);
+    const publishedDate = getToolPublishedDate(t);
     return `
     <div class="tool-card${isCollection ? ' collection-card' : ''}" onclick="openDetail('${t.id}',null,this)">
       <div class="tool-card-header">
@@ -1412,7 +1463,7 @@ function renderTools() {
       </div>
 
       <div class="tool-card-footer" onclick="event.stopPropagation()">
-        <span style="font-size:12px;color:var(--text-hint)">资料更新于 ${escapeHtml(t.last_updated)}</span>
+        <span class="tool-card-updated">${publishedDate ? '发布时间 ' + escapeHtml(publishedDate) : '发布时间待补充'}</span>
         <div class="tool-card-actions">
           <button class="detail-button" type="button" onclick="openDetail('${escapeHtml(t.id)}',null,this)">查看详情</button>
           ${isComparableRootTool(t) ? '<button class="compare-toggle ' + (isSelected ? 'selected' : '') + '" aria-pressed="' + isSelected + '" onclick="toggleCompareRef(\'' + escapeHtml(t.id) + '\',null,this)">' + (isSelected ? '已选' : '+对比') + '</button>' : ''}
@@ -1901,6 +1952,35 @@ function compareTargetLabel(target) {
   return target.icon + ' ' + target.name;
 }
 
+// 决策 9.5/93：对比数据来源与更新时间说明。图表标题/单位/数值之外，逐项列出数据来源与时效。
+// 具体工具使用 tools.json 的 source + last_updated（评分来源/资料更新时间）；
+// API 模型与订阅套餐使用 tool-intelligence collection.sources 的标题与查询时间。
+function renderCompareProvenance(targets) {
+  const rows = targets.map(target => {
+    if (target.kind === 'tool') {
+      const tool = target.tool;
+      const info = getTimelinessInfo(tool.last_updated);
+      const updatedText = tool.last_updated
+        ? '资料更新于 ' + String(tool.last_updated).slice(0, 10) + (info ? ' ' + info.emoji : '')
+        : '资料更新时间待补充';
+      return { name: compareTargetLabel(target), text: '评分来源：' + (tool.source || '来源待补充') + ' · ' + updatedText };
+    }
+    const collection = getToolIntelligence(target.tool.id);
+    const refs = target.item.source_refs || [];
+    const sources = (collection?.sources || []).filter(source => refs.includes(source.id));
+    const titles = sources.map(source => source.title).filter(Boolean);
+    const queried = sources.map(source => source.queried_at).filter(Boolean).sort().reverse()[0] || null;
+    const info = getTimelinessInfo(queried);
+    const updatedText = queried
+      ? '查询于 ' + String(queried).slice(0, 10) + (info ? ' ' + info.emoji : '') + (info?.stale ? ' · 数据较旧' : '')
+      : '查询时间待补充';
+    return { name: compareTargetLabel(target), text: '资料来源：' + (titles.length ? titles.join('、') : '来源待补充') + ' · ' + updatedText };
+  });
+  return '<div class="compare-provenance" aria-label="对比数据来源与更新时间">' +
+    rows.map(row => '<div class="compare-provenance-row"><span class="compare-provenance-name">' + escapeHtml(row.name) + '</span><span class="compare-provenance-text">' + escapeHtml(row.text) + '</span></div>').join('') +
+  '</div>';
+}
+
 // 决策 9.5/93：关键量化指标横向柱状图。只对真实、同口径数值绘制；
 // 缺失不画 0 柱，币种/口径不一致时不直接比较。颜色不作为唯一区分，保留表格文本替代。
 function renderCompareBars(targets) {
@@ -1913,7 +1993,7 @@ function renderCompareBars(targets) {
     ];
     return '<section class="compare-bars" aria-labelledby="compareBarsTitle">' +
       '<div class="compare-bars-heading"><h3 id="compareBarsTitle">关键数据对比</h3>' +
-      '<span class="compare-bars-note">InfoCatcher 自定义评分（满分 5），评分维度与计算方式见“关于”页；不代表第三方跑分。</span></div>' +
+      '<span class="compare-bars-note">InfoCatcher 自定义评分（满分 5，人工维护），维度为综合、中文支持、易用性、性价比；不代表第三方跑分，评分口径见“关于”页。</span></div>' +
       dims.map(dim => {
         const row = targets.map(target => {
           const value = Number(target.tool[dim.key]);
@@ -1929,6 +2009,7 @@ function renderCompareBars(targets) {
         }).join('');
         return '<div class="compare-bar-row"><div class="compare-bar-label">' + dim.label + '</div><div class="compare-bar-group">' + row + '</div></div>';
       }).join('') +
+      renderCompareProvenance(targets) +
     '</section>';
   }
 
@@ -1963,8 +2044,9 @@ function renderCompareBars(targets) {
       }).join('');
       return '<section class="compare-bars" aria-labelledby="compareBarsTitle">' +
         '<div class="compare-bars-heading"><h3 id="compareBarsTitle">关键数据对比</h3>' +
-        '<span class="compare-bars-note">横向条仅在同一口径下比较；单位与数值以下方表格为准。</span></div>' +
+        '<span class="compare-bars-note">横向条仅在同一口径下比较；单位与数值以下方表格为准，数据来源与查询时间见下。</span></div>' +
         '<div class="compare-bar-row"><div class="compare-bar-label">' + (targets[0].kind === 'api_model' ? '输出价' : '套餐价格') + '</div><div class="compare-bar-group">' + rows + '</div></div>' +
+        renderCompareProvenance(targets) +
       '</section>';
     }
     return '<section class="compare-bars"><div class="compare-bars-gate"><strong>口径不同，不直接比较。</strong>各项目价格币种或口径不一致，仅保留下方表格逐项查看。</div></section>';
@@ -1990,6 +2072,11 @@ function renderRootToolCompare(targets) {
     '<tr><td class="dim">免费层说明</td>' + targets.map(target => '<td>' + escapeHtml(target.tool.free_tier || '无') + '</td>').join('') + '</tr>' +
     '<tr><td class="dim">最适合</td>' + targets.map(target => '<td>' + escapeHtml(target.tool.best_for.join('；')) + '</td>').join('') + '</tr>' +
     '<tr><td class="dim">不适合/限制</td>' + targets.map(target => '<td>' + escapeHtml((target.tool.not_for || []).join('；')) + '</td>').join('') + '</tr>' +
+    '<tr><td class="dim">评分来源 / 更新时间</td>' + targets.map(target => {
+      const tool = target.tool;
+      const info = getTimelinessInfo(tool.last_updated);
+      return '<td>' + escapeHtml((tool.source || '来源待补充') + ' · 资料更新于 ' + (tool.last_updated ? String(tool.last_updated).slice(0, 10) : '待补充')) + (info ? ' ' + info.emoji : '') + '</td>';
+    }).join('') + '</tr>' +
   '</tbody></table>';
 }
 
@@ -2794,6 +2881,34 @@ function renderTrendingSortHelp() {
     : '当前公开投影暂未提供可比较的热度字段，选择“热度”时仍按最近时间倒序；该字段由数据契约补充后自动生效，不会伪造排序。';
 }
 
+// 决策 80：筛选无匹配时“清除筛选”，重置内容类型筛选（平台已非列表级筛选维度），保留排序选择。
+function clearTrendingFilters() {
+  const changed = activeTrendingType !== 'all';
+  activeTrendingType = 'all';
+  setRegionBusy(document.getElementById('trendingGrid'), true);
+  renderTrending();
+  if (changed) announceStatus('已清除热点筛选');
+}
+
+// 决策 80：热点数据加载失败时“重新加载”，重新拉取公开投影；失败时保留上一版数据并保持失败状态。
+async function reloadHotspots() {
+  const grid = document.getElementById('trendingGrid');
+  const status = document.getElementById('trendingStatus');
+  setRegionBusy(grid, true);
+  if (status) status.innerHTML = '<div class="status-note status-neutral" role="status"><strong>正在重新加载：</strong>正在读取公开热点数据。</div>';
+  try {
+    const resp = await fetch('data/news/output/hotspots.json');
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    hotspots = await resp.json();
+    dataLoadFailures.delete('hotspots');
+    announceStatus('热点数据已重新加载');
+  } catch (error) {
+    dataLoadFailures.add('hotspots');
+    announceStatus('热点数据重新加载失败');
+  }
+  renderTrending();
+}
+
 function renderTrending() {
   renderTrendingTypeFilters();
   renderTrendingSortHelp();
@@ -2808,13 +2923,41 @@ function renderTrending() {
 
   if (!items.length) {
     const hasPublicItems = (hotspots.items || []).length > 0;
+    // 决策 80：四类空状态各自提供“下一步操作”——筛选无匹配可清除筛选；
+    // 没有公开热点/审核建设中可了解规则或返回其他视图；加载失败可重新加载。
     const state = dataLoadFailures.has('hotspots')
-      ? renderState({ icon: '⚠️', title: '热点数据加载失败', message: '请刷新页面重试；采集失败不会用空结果覆盖上一版数据。', type: 'error' })
+      ? renderState({
+          icon: '⚠️', title: '热点数据加载失败',
+          message: '公开热点数据暂时无法读取。采集失败不会用空结果覆盖上一版数据。',
+          type: 'error',
+          actions: [{ label: '重新加载', dataKey: 'trending-action', dataValue: 'reload', primary: true }]
+        })
       : hasPublicItems
-        ? renderState({ icon: '⌕', title: '当前筛选没有匹配内容', message: '请调整内容类型后继续浏览。', type: 'no-match' })
+        ? renderState({
+            icon: '⌕', title: '当前筛选没有匹配内容',
+            message: '当前内容类型下没有可展示的热点，可清除筛选后查看全部。',
+            type: 'no-match',
+            actions: [{ label: '清除筛选', dataKey: 'trending-action', dataValue: 'clear-filters', primary: true }]
+          })
         : hotspots.generated_at
-          ? renderState({ icon: '○', title: '暂无公开热点', message: '公开投影已生成，但当前没有可展示内容。', type: 'unavailable' })
-          : renderState({ icon: '○', title: '公开投影建设中', message: '等待公开构建任务生成可供浏览器读取的内容。', type: 'unavailable' });
+          ? renderState({
+              icon: '○', title: '暂无公开热点',
+              message: '公开投影已生成，但当前没有可展示内容。候选内容需经 AI 处理与人工审核后才会公开。',
+              type: 'unavailable',
+              actions: [
+                { label: '了解审核与来源规则', dataKey: 'trending-action', dataValue: 'goto-about' },
+                { label: '返回工具库', dataKey: 'trending-action', dataValue: 'goto-tools' }
+              ]
+            })
+          : renderState({
+              icon: '○', title: '公开投影建设中',
+              message: '热点资料正在建立中：旧资料与新采集内容正在整理与审核，通过后逐步公开。',
+              type: 'unavailable',
+              actions: [
+                { label: '了解审核与来源规则', dataKey: 'trending-action', dataValue: 'goto-about' },
+                { label: '返回工具库', dataKey: 'trending-action', dataValue: 'goto-tools' }
+              ]
+            });
     grid.innerHTML = state;
     return;
   }
@@ -2880,6 +3023,7 @@ function renderSceneToolCard(tool, selectedItemId = null) {
   const specificLabel = selectedLeaf?.name || null;
   const title = tool.card_kind === 'collection' && specificLabel ? specificLabel : tool.name;
   const description = selectedLeaf?.summary || tool.strengths;
+  const publishedDate = getToolPublishedDate(tool);
   return '<div class="tool-card scene-tool-card" onclick="openDetail(\'' + escapeHtml(tool.id) + '\',' + (selectedItemId ? '\'' + escapeHtml(selectedItemId) + '\'' : 'null') + ')">' +
     '<div class="tool-card-header">' +
       '<div><div class="tool-card-name">' + escapeHtml(tool.icon + ' ' + title) + '</div>' +
@@ -2894,7 +3038,7 @@ function renderSceneToolCard(tool, selectedItemId = null) {
       '<span class="tag ' + (tool.access_level === '开放' ? 'open' : 'restricted') + '">' + (tool.access_level === '开放' ? '国内可用' : '需科学上网') + '</span>' +
     '</div>' +
     '<div class="tool-card-footer" onclick="event.stopPropagation()">' +
-      '<span class="scene-tool-updated">资料更新于 ' + escapeHtml(tool.last_updated) + '</span>' +
+      '<span class="scene-tool-updated">' + (publishedDate ? '发布时间 ' + escapeHtml(publishedDate) : '发布时间待补充') + '</span>' +
       '<div class="tool-card-actions">' +
         '<button class="detail-button" type="button" onclick="openDetail(\'' + escapeHtml(tool.id) + '\',' + (selectedItemId ? '\'' + escapeHtml(selectedItemId) + '\'' : 'null') + ',this)">查看详情</button>' +
         (isComparable ? '<button class="compare-toggle ' + (isSelected ? 'selected' : '') + '" aria-pressed="' + isSelected + '" onclick="toggleCompareRef(\'' + escapeHtml(tool.id) + '\',' + (selectedLeaf ? '\'' + escapeHtml(selectedItemId) + '\'' : 'null') + ',this)">' + (isSelected ? '已选' : '+对比') + '</button>' : '') +
@@ -3333,22 +3477,32 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   // 决策 94：工具库筛选折叠（移动轻量面板）、已选标签一键清除
+  // 决策 94：移动筛选面板关闭并回焦触发按钮（支持 Escape / 完成 / 清除全部）
+  function closeToolsFilters({ restoreFocus = false } = {}) {
+    const panel = document.getElementById('toolsFiltersPanel');
+    const toggle = document.getElementById('toolsFilterToggle');
+    if (panel) panel.classList.remove('open');
+    if (toggle) {
+      toggle.setAttribute('aria-expanded', 'false');
+      if (restoreFocus) toggle.focus();
+    }
+  }
+
   document.getElementById('toolsFilterToggle')?.addEventListener('click', function() {
     const panel = document.getElementById('toolsFiltersPanel');
     const open = panel.classList.toggle('open');
     this.setAttribute('aria-expanded', String(open));
+    // 决策 94：面板打开后焦点移入面板内第一个可聚焦筛选项，键盘用户不丢失位置
+    if (open) {
+      const firstChip = panel.querySelector('button, a[href], [tabindex]:not([tabindex="-1"])');
+      if (firstChip) firstChip.focus({ preventScroll: true });
+    }
   });
-  document.getElementById('toolsFilterDone')?.addEventListener('click', () => {
-    document.getElementById('toolsFiltersPanel')?.classList.remove('open');
-    const toggle = document.getElementById('toolsFilterToggle');
-    if (toggle) toggle.setAttribute('aria-expanded', 'false');
-  });
+  document.getElementById('toolsFilterDone')?.addEventListener('click', () => closeToolsFilters({ restoreFocus: true }));
   document.getElementById('toolsClearFilters')?.addEventListener('click', clearToolFilters);
   document.getElementById('toolsFilterClear')?.addEventListener('click', () => {
     clearToolFilters();
-    document.getElementById('toolsFiltersPanel')?.classList.remove('open');
-    const toggle = document.getElementById('toolsFilterToggle');
-    if (toggle) toggle.setAttribute('aria-expanded', 'false');
+    closeToolsFilters({ restoreFocus: true });
   });
 
   // 热点公开内容类型、平台筛选与排序
@@ -3385,6 +3539,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
   const trendingGrid = document.getElementById('trendingGrid');
   trendingGrid?.addEventListener('click', event => {
+    // 决策 80：热点四类空状态的“下一步操作”按钮（清除筛选/重新加载/跳转）
+    const emptyAction = event.target.closest('[data-trending-action]');
+    if (emptyAction) {
+      const action = emptyAction.dataset.trendingAction;
+      if (action === 'clear-filters') clearTrendingFilters();
+      else if (action === 'reload') reloadHotspots();
+      else if (action === 'goto-tools') switchView('tools');
+      else if (action === 'goto-about') switchView('about');
+      return;
+    }
     const sourceToggle = event.target.closest('[data-hotspot-card-source-toggle]');
     if (sourceToggle) {
       const card = sourceToggle.closest('[data-hotspot-id]');
@@ -3429,6 +3593,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (e.key === 'Escape' && mobileNav && !mobileNav.hidden) {
       e.preventDefault();
       closeMobileNav({ restoreFocus: true });
+      return;
+    }
+    // 决策 94：移动筛选面板打开时，Escape 关闭并回焦筛选按钮
+    if (e.key === 'Escape' && document.getElementById('toolsFiltersPanel')?.classList.contains('open')) {
+      e.preventDefault();
+      closeToolsFilters({ restoreFocus: true });
       return;
     }
     if (e.key === 'Escape' && document.querySelector('.nav-dropdown-menu:not([hidden])')) {
