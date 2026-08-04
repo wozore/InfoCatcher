@@ -4,7 +4,7 @@ The role of this file is to describe common mistakes and confusion points that a
 
 ## Data inventory
 
-- tools.json  # 45 个工具
+- tools.json  # 28 个工具
 - data/catalog/ — tool-intelligence.json, glossary.json, scenes.json, featured.json
 - data/acquisition/ — intel-sources.json
 - data/news/ — config/, sources/, manual/, runtime/, output/

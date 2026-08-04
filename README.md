@@ -6,10 +6,10 @@
 
 ```bash
 python -m http.server 8000
-# 浏览器打开 http://localhost:8000
+# 浏览器打开 http://localhost:8000/dist/（站点根为 dist/，由 scripts/build-dist.js 构建）
 ```
 
-项目使用原生 HTML/CSS/JS、Node.js 20 和静态 JSON，无 npm 依赖或运行时后端。页面通过 `fetch` 读取数据，因此应使用 HTTP 服务访问。
+项目使用原生 HTML/CSS/JS、Node.js 20 和静态 JSON，无 npm 依赖或运行时后端。页面通过 `fetch` 读取数据，因此应使用 HTTP 服务访问。改动 `src/` 或 `data/` 后需运行 `node scripts/build-dist.js` 重建 dist 再刷新。
 
 ## 验证
 

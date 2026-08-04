@@ -15,6 +15,7 @@
 | ADR-007 | 概念索引通过前端适配层生成稳定概念 ID，不改写数据契约 |
 | ADR-008 | B16 热点浏览与详情体验（P1-B 阻塞级）实现与数据依赖 |
 | ADR-009 | B16 高优先级差异修复 |
+| ADR-010 | 热点 `content_type` 与 `source_type` 字段拆分（路径 B） |
 
 ## ADR-001：单仓库分层组织
 
@@ -113,3 +114,20 @@
 **理由**：来源与更新时间的可追溯性应随数据展示（决策 93/97）；时间字段按语义命名，工具发布时间与资料更新时间分离；缺失字段明确标注、不猜测补齐（决策 98）。
 
 **后续**：tools.json 补充工具发布时间字段（或由采集脚本提供）后，工具卡与场景卡自动显示实际发布时间。
+
+## ADR-010：热点 `content_type` 与 `source_type` 字段拆分（路径 B）
+
+**决策**：把「来源媒体类型」与「内容类型」拆成两个字段。采集时媒体类型写入 `source_type`（`youtube_video`/`x_post`/`bilibili_*`/`unknown`）；`content_type` 语义改为内容类型（决策 65 六类 + `unclassified`），当前统一置 `unclassified` 诚实占位，待路径 A（AI 分类 + 人工审核确认）填充。`content_type_status` 记录 `ai_suggested`/`reviewed`/`unclassified`。
+
+**实现（`src/`）**：
+
+- 采集层：`normalizeRssItem`/`normalizeTweet`/`normalizeHistoricalYouTube`/`normalizeHistoricalBilibili` 与 [news-bilibili.js](src/news/collectors/news-bilibili.js) 输出 `source_type`；B 站 `inferBilibiliType`/repost 判断、评分系数、溯源关系改读 `source_type`。
+- 手工条目与 CLI：`ALLOWED_SOURCE_TYPES`；`normalizeManualItem` 输出 `source_type` + `content_type`/`content_type_status` 默认 `unclassified`；review 命令双字段展示。
+- 候选层：`schema_version` 2→3，公开投影携带三字段。
+- 校验：`SOURCE_TYPES` 与 `CONTENT_TYPES`（六类 + `unclassified`）拆分，`source_type` 必填、`content_type` 可选。
+- 数据迁移：`--migrate-content-type` 幂等子命令，`hotspots.json` → `schema_version: 3`（100 条 `content_type` 全 `unclassified`，`source_type` 保留媒体类型，无缺失）。
+- 前端：`contentTypeLabels` 改为内容类型映射（含 `unclassified: '类型待确认'`）；`SOURCE_TYPE_LABELS` 进来源核验层；全部未分类时类型筛选区隐藏（决策 80 空状态）。
+
+**理由**：前端把「X 帖子 / YouTube 视频」当内容类型展示，等价于把平台作为列表级筛选，违背决策 65/74/79；`content_type` 的权威来源是决策 66 的「AI 建议 + 人工确认」，数据侧尚未具备，故先拆分字段并置 `unclassified` 诚实占位，不在前端硬编码分类（决策 79）。
+
+**后续**：路径 A（`src/news/classify/content-classifier.js` 分类模块 + 模型渠道 + 审核确认流程）待审核后台与渠道到位后启动（见开发计划 B16-R5）。

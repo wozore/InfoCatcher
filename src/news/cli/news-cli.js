@@ -102,6 +102,11 @@ const {
   storeTranscript,
 } = require('../collectors/news-transcripts');
 const { NEWS_FILES } = require('../../shared/paths');
+const {
+  classifyCandidate,
+  classifyCandidates,
+  confirmContentType,
+} = require('../classify/content-classifier');
 
 /** CLI 操作的目标数据文件（均为绝对路径） */
 const FILES = {
@@ -443,13 +448,19 @@ function reviewCommand(action, flags) {
     if (!flags.status) throw new Error('review set 缺少 --status');
     const reviewer = resolveReviewer(flags);
     const next = setReviewStatus(store, flags.id, flags.status, { reason: flags.reason, reviewer });
-    writeCandidateStore(next, `review-set-${flags.id}-${Date.now()}`);
     const candidate = next.candidates.find(item => item.id === flags.id);
+    // B16 路径 A：审核时可同时确认内容类型（content_type_status → reviewed）
+    if (flags.content_type && candidate) {
+      confirmContentType(candidate, flags.content_type, { reviewer });
+    }
+    writeCandidateStore(next, `review-set-${flags.id}-${Date.now()}`);
     // 决策 70：每次审核流转追加到只追加审核事件日志，不改写历史
     recordReviewTransition(candidate, { action: 'review_set', reason: flags.reason, reviewer });
     return {
       id: candidate.id,
       review_status: candidate.review_status,
+      content_type: candidate.content_type,
+      content_type_status: candidate.content_type_status,
       review_reason: candidate.review_reason || null,
       reviewer: candidate.reviewer || null,
       reviewed_at: candidate.reviewed_at || null,
@@ -468,6 +479,13 @@ function reviewCommand(action, flags) {
     if (!ids.length) throw new Error('review batch 的 --ids 为空');
     const result = setBatchReviewStatus(store, ids, flags.status, { reason: flags.reason, reviewer });
     if (result.updated > 0) {
+      // B16 路径 A：批量审核时可同时确认内容类型（content_type_status → reviewed）
+      if (flags.content_type) {
+        for (const id of ids) {
+          const candidate = result.store.candidates.find(item => item.id === id);
+          if (candidate && candidate.review_status === flags.status) confirmContentType(candidate, flags.content_type, { reviewer });
+        }
+      }
       writeCandidateStore(result.store, `review-batch-${Date.now()}`);
       // 决策 56/70：批量只记录实际流转成功的候选；每条独立追加到只追加审核事件日志
       const updatedCandidates = ids
@@ -491,6 +509,62 @@ function reviewCommand(action, flags) {
   }
 
   throw new Error(`未知 review 命令: ${action}`);
+}
+
+// ── classify 命令组：热点内容类型分类（B16 路径 A）─────
+//
+//   classify preview   --title <t> [--description <d>] 预览单条规则式分类（不写入）
+//   classify candidates [--provider <id>]               对候选层跑分类建议（ai_suggested，不覆盖已 reviewed）
+//   classify hotspots  [--provider <id>]               对公开热点跑分类建议（过渡用途；真实路径 A 走候选层）
+//   classify confirm   [--reviewer <name>]             批量确认：ai_suggested → reviewed（接受规则式建议，人工审核确认）
+//
+// L0 规则式分类零成本、可离线；L1 AI 分类（--provider）需先确认模型渠道与额度，
+// 未配置 provider 时保持规则式建议（b16-task-status.md 第 4 项成本提醒）。
+
+function classifyCommand(action, flags) {
+  if (action === 'preview') {
+    const title = flags.title || '';
+    const description = flags.description || '';
+    if (!title && !description) throw new Error('classify preview 需要 --title 或 --description');
+    return classifyCandidate({ title, description }, { provider: flags.provider });
+  }
+
+  if (action === 'candidates') {
+    const store = readCandidateStore();
+    const result = classifyCandidates(store.candidates, { provider: flags.provider });
+    if (result.classified > 0) {
+      writeCandidateStore({ ...store, candidates: result.items }, `classify-candidates-${Date.now()}`);
+    }
+    return { classified: result.classified, skipped: result.skipped, total: (store.candidates || []).length };
+  }
+
+  if (action === 'hotspots') {
+    const data = readJson(NEWS_FILES.hotspots, { items: [] });
+    const result = classifyCandidates(data.items, { provider: flags.provider });
+    if (result.classified > 0) {
+      writeJsonAtomic(NEWS_FILES.hotspots, { ...data, items: result.items }, `classify-hotspots-${Date.now()}`);
+    }
+    return { classified: result.classified, skipped: result.skipped, total: (data.items || []).length };
+  }
+
+  // 批量确认：接受 ai_suggested 建议 → reviewed（人工审核确认，记录 reviewer/时间）
+  if (action === 'confirm') {
+    const data = readJson(NEWS_FILES.hotspots, { items: [] });
+    const reviewer = resolveReviewer(flags);
+    let confirmed = 0;
+    for (const item of data.items || []) {
+      if (item && item.content_type_status === 'ai_suggested' && item.content_type && item.content_type !== 'unclassified') {
+        confirmContentType(item, item.content_type, { reviewer });
+        confirmed++;
+      }
+    }
+    if (confirmed > 0) {
+      writeJsonAtomic(NEWS_FILES.hotspots, data, `confirm-hotspots-${Date.now()}`);
+    }
+    return { confirmed, total: (data.items || []).length, reviewer };
+  }
+
+  throw new Error(`未知 classify 命令: ${action}`);
 }
 
 // ── transcript 命令组：视频字幕/文字稿处理（B16 决策 51/52/54/61/67）─────
@@ -622,9 +696,10 @@ async function main(argv = process.argv.slice(2)) {
   else if (group === 'quota') result = quotaCommand(action, flags);
   else if (group === 'lock') result = lockCommand(action, flags);
   else if (group === 'review') result = reviewCommand(action, flags);
+  else if (group === 'classify') result = classifyCommand(action, flags);
   else if (group === 'transcript') result = await transcriptCommand(action, flags);
   else if (group === 'legacy') result = legacyCommand(action, flags);
-  else throw new Error('用法: news-cli.js source|content|authorization|quota|lock|review|transcript|legacy <action> [options]');
+  else throw new Error('用法: news-cli.js source|content|authorization|quota|lock|review|classify|transcript|legacy <action> [options]');
   console.log(JSON.stringify(result, null, 2));
   return result;
 }

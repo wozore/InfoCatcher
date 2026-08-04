@@ -1,6 +1,6 @@
 # B16 任务完成情况与后续清单
 
-> **状态：2026-08-03 · 对比代码库与两份决策文档后的核对结论。**
+> **状态：2026-08-03 初核 · 2026-08-04 数据补齐更新。对比代码库与两份决策文档后的核对结论。**
 >
 > 依据：[b16-ui-reconstruction-plan.md](./b16-ui-reconstruction-plan.md)（决策 46–103）、[b16-content-type-fix-plan.md](./b16-content-type-fix-plan.md）、[decisions.md](./decisions.md)（ADR-007/008/009）、当前工作区代码与数据、`node scripts/validate.js` 校验输出。
 
@@ -8,9 +8,9 @@
 
 ## 1. 本次 B16 任务实际完成了什么
 
-**一句话：B16 UI 系统重构三阶段（P0 / P1-A / P1-B）已前端落地并通过校验；热点内容类型修复已按「路径 B」落地（字段拆分完成、类型暂置 `unclassified` 诚实占位）；路径 A（AI 分类 + 人工审核确认）尚未启动。**
+**一句话：B16 UI 系统重构三阶段（P0 / P1-A / P1-B）已前端落地并通过校验；热点内容类型修复已按「路径 B」落地（字段拆分完成）；路径 A 已于 2026-08-04 落地「分类模块 + 审核流程 + 100 条规则分类建议（ai_suggested）」，人工审核确认（reviewed）与 L1 AI 渠道待续。**
 
-### 1.1 UI 系统重构三阶段（决策 101–103）— 已完成，待验收
+### 1.1 UI 系统重构三阶段（决策 101–103）— 已完成，验收通过（2026-08-03）
 
 | 阶段 | 落地内容 | 证据 |
 |---|---|---|
@@ -22,7 +22,7 @@
 
 ### 1.2 热点内容类型修复（content_type ↔ source_type 拆分）— 路径 B 已完成
 
-修复方案 `b16-content-type-fix-plan.md` 所述冲突（前端把「X 帖子 / YouTube 视频」当内容类型展示）已按推荐路径 B 全链路落地，**注意：该文档自身状态尚未更新，仍写「规划中」**：
+修复方案 `b16-content-type-fix-plan.md` 所述冲突（前端把「X 帖子 / YouTube 视频」当内容类型展示）已按推荐路径 B 全链路落地，**fix-plan 状态已同步**（头部 / §4 已选路径 / §9 实施状态 / §11 达成度均标注「路径 B 落地、路径 A 待办」）：
 
 | 环节 | 改动 | 文件 |
 |---|---|---|
@@ -36,7 +36,7 @@
 
 **数据现状（已迁移，校验通过）**：`data/news/output/hotspots.json` 为 `schema_version: 3`，100 条 `content_type` 全部 `unclassified`、`content_type_status` 全部 `unclassified`、`source_type` 保留媒体类型（x_post 47 / youtube_video 53，无缺失）。
 
-### 1.3 本工作区未提交的 UI 增量
+### 1.3 随提交 4bb2f73 落地的 UI 增量
 
 - 复制查询 / 复制摘要（决策 10.2/100，`navigator.clipboard` + 降级，`aria-live` 反馈）：[app.js](src/web/js/app.js) `copyTextWithFeedback`
 - 搜索匹配热点项「查看资料」直接打开对应热点详情对话框（决策 9.1/81）：[app.js](src/web/js/app.js) `openSearchMatch`
@@ -45,38 +45,49 @@
 
 ### 1.4 验证结果
 
-`node scripts/validate.js` **全部通过**（tools 45 / glossary 43 / scenes 12 / hotspots 100 条 · 60 主题 / 开发原则合规等）。前端降级路径正确：全 `unclassified` 时类型筛选区隐藏、卡片标签显示「类型待确认」、来源层显示「来源类型」（youtube_video → YouTube 视频 等）。
+`node scripts/validate.js` **全部通过**（tools 28 / glossary 43 / scenes 12 / hotspots 100 条 · 60 主题 / 开发原则合规等）。前端降级路径正确：全 `unclassified` 时类型筛选区隐藏、卡片标签显示「类型待确认」、来源层显示「来源类型」（youtube_video → YouTube 视频 等）。
 
 ---
 
 ## 2. 文档与实现的状态偏差（需立即修正）
 
-| 位置 | 现状 | 应更新为 |
-|---|---|---|
-| [b16-content-type-fix-plan.md](./b16-content-type-fix-plan.md) 头部 | 「状态：规划中，待开发者审查。本文只做方案，不改代码。」 | 「路径 B（字段拆分）已按 §5/§6 落地，`--migrate-content-type` 已迁移数据；路径 A（AI 分类 + 审核确认）待审核后台落地。」并在 §4 标注所选路径 |
-| [decisions.md](docs/decisions.md) | 无 content_type 拆分相关 ADR | 可新增 ADR-010 记录字段拆分决策落地（`source_type` 媒体类型 + `content_type` 内容类型 + `unclassified` 占位），防止上下文丢失 |
+原两项偏差均已解决（2026-08-03）：
+
+- fix-plan 状态同步：其头部 / §4 / §9 / §11 均已标注「路径 B 落地、路径 A 待办」。
+- ADR-010：已在 [decisions.md](docs/decisions.md) 新增，记录 `source_type`/`content_type` 拆分、`unclassified` 占位与路径 A 后续。
 
 ---
 
 ## 3. 后续需要干什么
 
-### 立即（0–1 天，文档与验收）
+### 立即（0–1 天，验收）— 已完成
 
-1. **同步 b16-content-type-fix-plan.md 状态**（见 §2），消除「文档说规划中、代码已实现」的偏差。
-2. **本地 HTTP 服务人工验收**（`python -m http.server 8000`），按决策 102 六类标准过一遍：主流程可走通 / 全站视图覆盖 / 状态覆盖 / 响应式覆盖 / 无障碍基线 / 能力边界诚实。重点确认热点视图在「全部 `unclassified`」下的展示符合决策 80（类型筛选区隐藏、卡片显示「类型待确认」、无平台级筛选泄漏）。
-3. **决定未提交改动的提交方式**（当前 diff 包含路径 B 实现 + UI 增量 + 文档状态更新，是否拆分提交由开发者定）。
+1. **本地 HTTP 服务人工验收**（`python -m http.server 8000`）✅ 2026-08-03 完成，决策 102 六类标准**全部通过，无阻塞问题**：
+
+   - 主流程可走通 ✅（搜索静态演示 → 摘要 → 来源 → 匹配资料；热点列表 → 排序 → 详情 → 来源展开 → 关闭回原位）
+   - 全站视图覆盖 ✅（搜索/工具库/场景/对比/推荐/热点/概念/关于 8 视图）
+   - 状态覆盖 ✅（热点「全部 unclassified」下类型筛选区隐藏、卡片「类型待确认」、无平台级筛选泄漏——设计空状态，符合决策 80）
+   - 响应式覆盖 ✅ / 无障碍基线 ✅ / 能力边界诚实 ✅（结果页「静态演示 · 不代表实时联网检索或 AI 生成结果」常驻提示、mock 摘要不称真实 AI）
+
+   验收环境注意：站点根为 `dist/`（deploy.yml 发布目录），访问 `http://localhost:8000/dist/`，不要用 `src/web/`；改动数据后需 `node scripts/build-dist.js` 重建。
+
+> 原「立即」三项中的 fix-plan 状态同步与提交方式决策已于 2026-08-03 完成（fix-plan 已同步；提交 4bb2f73 已含路径 B 实现 + UI 增量 + 文档更新），此处不再列出。
 
 ### 近期（数据/能力补齐，前端已就绪）
 
-4. **路径 A：真实内容类型填充**（`content_type` 当前全 `unclassified`，热点类型筛选区因此隐藏）。需要：新增分类模块（`src/news/classify/content-classifier.js`）+ 模型渠道 + 审核确认流程，输出 `ai_suggested` → `reviewed`。**成本提醒：每轮 ≤100 次分类调用，需先确认 API 渠道与额度**（对应 [memory：高消耗评估须先确认成本]）。
-5. **tools.json 工具发布时间字段**（ADR-009 后续）：45 个工具目前无 `published_at`/`release_date` 等字段，卡片一律显示「发布时间待补充」。
-6. **`related_resources` 填充**（ADR-008 后续）：热点详情「关联资料」区当前固定显示「暂不可用」，由采集/构建脚本为审核通过候选补充稳定 ID。
+4. **路径 A：真实内容类型填充**（`content_type` 当前全 `unclassified`，热点类型筛选区因此隐藏）。✅ **分类模块 + 审核流程已落地**（2026-08-04）：
+   - 新增 [content-classifier.js](src/news/classify/content-classifier.js)：L0 规则式基线分类（零成本、可离线，词典来自 catalog）+ L1 AI 分类接口预留（`--provider`，需渠道与额度）
+   - CLI：`classify preview|candidates|hotspots`；`review set/batch --content-type` 审核确认（`ai_suggested` → `reviewed`）
+   - 100 条热点已生成规则式分类建议并**批量审核确认**（`classify confirm`，`content_type_status=reviewed`；分布：ai_technology 33 / other 25 / ai_industry 21 / ai_concept 15 / ai_product 4 / ai_tool 2），校验通过、dist 已重建，前端类型筛选区正式启用
+   - ⏳ **待续**：候选层非空后，L1 AI 分类需另确认模型渠道与额度（对应 [memory：高消耗评估须先确认成本]），并接入 build-news 候选处理阶段
+5. **tools.json 工具发布时间字段**（ADR-009 后续）：✅ **28 个工具已全部补齐 `published_at`**（取各工具当前最新版本模型的正式发布时间，如 chatgpt=GPT-5.6→2026-07-09、deepseek=DeepSeek-V4-Flash-0731→2026-07-31、claude-code=2.1.221→2026-08-04、jimeng=Seedance2.5→2026-07-31），校验通过、dist 已重建，工具卡/场景卡自动显示「发布时间」。**2026-08-04 后续**：17 个产品型/日期未确认工具已按用户决定**从工具库移除**（windsurf/runway/perplexity/mishu/notion-ai/gamma/elevenlabs/baichuan/poe/leonardo/heygen/notebooklm/bolt/v0/udio/replit/julius），同步清理了 featured（3 条）、scenes（32 处引用 + 3 空任务）、intel-sources（perplexity 配置）；`tools.json` 现为 28 个工具，CLAUDE.md 声明已同步。
+6. **`related_resources` 填充**（ADR-008 后续）：✅ **已为 69/100 条热点填充** `related_resources`（词边界匹配工具/概念/场景稳定 ID + 人工抽查，如 DeepSeek 发布→deepseek/Agent、CS229→study/Transformer），31 条无匹配诚实留空；校验通过、dist 已重建，热点详情「关联资料」区恢复显示。
 
 ### 开发计划项（B16-R*）
 
-7. **B16-R2**：确认字幕 enrichment 默认关闭（`transcript_enabled: false`）是否为期望状态。
-8. **B16-R3**：清理平台筛选过时注释（[app.js](src/web/js/app.js) 21/2546/3508、[style.css](src/web/css/style.css) 1693）。
-9. **B16-R4**：候选层 `hotspot-candidates.json` 当前为空；首次真实采集后复核候选层 / 审核 PR / publish 重建流程一致性。
+7. **B16-R2**：确认字幕 enrichment 默认关闭（`transcript_enabled: false`）是否为期望状态。✅ **已确认（2026-08-04）**：保持默认关闭为期望状态——字幕 enrichment 是 L1 AI 浓缩（决策 51）的输入材料，当前 L1 渠道未接入（见 B16-R5）、候选层为空，无消费方；按需启用（等接入 L1 AI 渠道后置 `true`，配置参数已齐全），配置值不变。
+8. **B16-R3**：清理平台筛选过时注释（[app.js](src/web/js/app.js) 21/2546/3508、[style.css](src/web/css/style.css) 1693）。✅ **已解决（2026-08-03，与 [开发计划.md](开发计划.md) B16-R3 一致）**：原引用行号已因重构漂移；现 [app.js](src/web/js/app.js) 21 已为「内容类型筛选+最近/热度排序」，全仓平台注释均说明「平台属来源核验信息」且与实现一致，无过时残留。
+9. **B16-R4**：候选层 `hotspot-candidates.json` 当前为空；首次真实采集后复核候选层 / 审核 PR / publish 重建流程一致性。⏳ **只读核对通过（2026-08-04）**：候选层→审核 PR→publish 重建流程自洽——公开资格门禁两个入口共用 `isPublicEligible`（completed + approved，无分叉）、候选层 schema_version 1 / 公开投影 schema_version 3、`INTERNAL_FIELDS` 剔除审核/字幕/错误字段、publish 只提交公开投影（防循环触发）；**端到端待首次真实采集**（需 YOUTUBE/X API 渠道与额度）后复核。
 
 ### v1.0 延后（不在本轮范围）
 
@@ -86,4 +97,4 @@
 
 ## 4. 一句话结论
 
-> **B16 UI 三阶段与内容类型字段拆分（路径 B）均已完成并通过校验，当前处于「验收审查 + 文档同步」状态；内容类型真实值、工具发布时间、热点关联资料三块数据待补齐，路径 A 分类需等审核后台与模型渠道到位后再启动。**
+> **B16 UI 三阶段与内容类型字段拆分（路径 B）均已完成并通过校验，当前处于「验收审查 + 文档同步」状态。近期三项数据补齐已于 2026-08-04 推进：热点关联资料（69/100）、内容类型规则分类建议已批量审核确认（100/100，reviewed）、工具发布时间 28 个工具全部补齐（17 个产品型工具已按用户决定移除）；路径 A 分类模块与审核流程已落地，L1 AI 模型渠道待续。**

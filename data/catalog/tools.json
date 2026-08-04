@@ -1,2577 +1,1724 @@
 [
-  {
-    "id": "chatgpt",
-    "name": "ChatGPT",
-    "vendor": "OpenAI",
-    "category": [
-      "对话",
-      "写作",
-      "编程",
-      "翻译",
-      "数据分析"
-    ],
-    "scenes": [
-      "写论文",
-      "写周报",
-      "写代码",
-      "翻译文档",
-      "数据分析",
-      "头脑风暴",
-      "学习辅导"
-    ],
-    "url": "https://chatgpt.com",
-    "icon": "🤖",
-    "free_tier": "GPT-5.2 每5小时约10条，超限降级到轻量模型",
-    "paid_tiers": [
-      {
-        "name": "Plus",
-        "price": "$20/月",
-        "features": "GPT-5.2 完整访问、文件上传、图像生成"
-      },
-      {
-        "name": "Pro",
-        "price": "$200/月",
-        "features": "无限使用、深度研究、优先访问"
-      }
-    ],
-    "chinese_support": 3,
-    "chinese_note": "中文能力中等偏上，对中文语境理解尚可但偶有生硬",
-    "access_barrier": "需要科学上网 + 海外手机号注册",
-    "access_level": "受限",
-    "strengths": "综合能力最强、生态最丰富(GPTs商店)、多模态领先、长期记忆",
-    "weaknesses": "国内访问困难、注册门槛高、免费版限制严格、高峰期降级",
-    "best_for": [
-      "需要最强综合能力的场景",
-      "复杂推理和长文档处理",
-      "多模态任务"
-    ],
-    "not_for": [
-      "国内网络受限用户",
-      "预算极度敏感用户"
-    ],
-    "rating_overall": 4.5,
-    "rating_chinese": 3.5,
-    "rating_ease": 2.5,
-    "rating_price": 3,
-    "last_updated": "2026-07-18",
-    "source": "openai.com",
-    "card_kind": "collection",
-    "entity_kind": "product",
-    "overview": {
-      "description": "OpenAI 提供 ChatGPT、Codex 和 API 等 AI 产品入口；具体模型与套餐在下方按可核实范围单独展示。",
-      "features": [
-        {
-          "tone": "positive",
-          "text": "优点：GPT-5.6 已在 ChatGPT、Codex 与 OpenAI API 中提供，并按能力、速度和成本分层。"
-        },
-        {
-          "tone": "negative",
-          "text": "限制：模型可用性会随产品、订阅等级、地区及逐步开放状态变化，需以叶节点条件为准。"
-        }
-      ],
-      "source_refs": [
-        "openai-model-compare",
-        "openai-gpt-56-chatgpt"
-      ]
-    }
-  },
-  {
-    "id": "claude",
-    "name": "Claude",
-    "vendor": "Anthropic",
-    "category": [
-      "对话",
-      "写作",
-      "编程",
-      "长文档分析"
-    ],
-    "scenes": [
-      "写论文",
-      "写周报",
-      "写代码",
-      "长文档分析",
-      "深度研究",
-      "头脑风暴"
-    ],
-    "url": "https://claude.ai",
-    "icon": "🧠",
-    "free_tier": "Sonnet 4.5 每对话窗口约9条，开新窗口可规避",
-    "paid_tiers": [
-      {
-        "name": "Pro",
-        "price": "$20/月",
-        "features": "更多使用量、Projects、优先访问"
-      },
-      {
-        "name": "Team",
-        "price": "$30/人/月",
-        "features": "团队协作、更高限额"
-      },
-      {
-        "name": "Enterprise",
-        "price": "定制",
-        "features": "企业级安全、管理控制台"
-      }
-    ],
-    "chinese_support": 3,
-    "chinese_note": "中文表现良好，长文档中文理解优秀",
-    "access_barrier": "需要科学上网，部分地区支持手机号注册",
-    "access_level": "受限",
-    "strengths": "推理能力强(Claude Code在SWE-bench达80.9%)、超长上下文、代码能力顶级、安全性高",
-    "weaknesses": "国内同样受限、免费版窗口限制、高峰期排队",
-    "best_for": [
-      "复杂推理和代码开发",
-      "长文档分析和研究",
-      "结构化写作"
-    ],
-    "not_for": [
-      "频繁大量使用的免费用户",
-      "国内直连用户"
-    ],
-    "rating_overall": 4.7,
-    "rating_chinese": 3.5,
-    "rating_ease": 2.5,
-    "rating_price": 3,
-    "last_updated": "2026-07-18",
-    "source": "anthropic.com",
-    "card_kind": "collection",
-    "entity_kind": "product",
-    "overview": {
-      "description": "Anthropic 的 Claude 产品入口覆盖对话产品与 API；具体模型和订阅套餐在下方独立展示。",
-      "features": [
-        {
-          "tone": "positive",
-          "text": "优点：模型层级、上下文和 API 计价可在具体叶节点中分别核对。"
-        },
-        {
-          "tone": "negative",
-          "text": "限制：订阅权益、地区可用性和使用限制需以各套餐官方条件为准。"
-        }
-      ],
-      "source_refs": [
-        "anthropic-models",
-        "anthropic-plans"
-      ]
-    }
-  },
-  {
-    "id": "gemini",
-    "name": "Gemini",
-    "vendor": "Google",
-    "category": [
-      "对话",
-      "写作",
-      "翻译",
-      "搜索",
-      "多模态"
-    ],
-    "scenes": [
-      "写论文",
-      "翻译文档",
-      "搜索研究",
-      "头脑风暴",
-      "数据分析"
-    ],
-    "url": "https://gemini.google.com",
-    "icon": "🌐",
-    "free_tier": "Gemini 3/3.5 Flash 免费，按计算单元计费，每5小时重置",
-    "paid_tiers": [
-      {
-        "name": "Advanced",
-        "price": "$20/月",
-        "features": "Gemini 3.0 Pro/Thinking、超长上下文、Google生态集成"
-      }
-    ],
-    "chinese_support": 4,
-    "chinese_note": "中文能力优秀，翻译质量高",
-    "access_barrier": "需要科学上网",
-    "access_level": "受限",
-    "strengths": "世界知识最强(Google搜索)、多模态原生、超长上下文(1M+)、Nano Banana绘画",
-    "weaknesses": "国内访问不稳定、付费版性价比争议、创作型写作不如Claude",
-    "best_for": [
-      "需要最新信息的搜索型任务",
-      "多模态任务",
-      "Google生态用户"
-    ],
-    "not_for": [
-      "国内直连用户",
-      "纯代码开发(不如Claude)"
-    ],
-    "rating_overall": 4.5,
-    "rating_chinese": 4,
-    "rating_ease": 3,
-    "rating_price": 4,
-    "last_updated": "2026-07-18",
-    "source": "google.com",
-    "card_kind": "collection",
-    "entity_kind": "product",
-    "overview": {
-      "description": "Google 的 Gemini 产品入口覆盖 API 模型与 Google AI 订阅；具体资料在下方按已核实范围展示。",
-      "features": [
-        {
-          "tone": "positive",
-          "text": "优点：已核实模型支持多档 API 价格与上下文条件的独立查看。"
-        },
-        {
-          "tone": "negative",
-          "text": "限制：官方套餐页面未稳定完整列出全部模型包含关系，相关项目明确标为部分核实。"
-        }
-      ],
-      "source_refs": [
-        "google-api-pricing",
-        "google-consumer-plans"
-      ]
-    }
-  },
-  {
-    "id": "deepseek",
-    "name": "DeepSeek",
-    "vendor": "深度求索",
-    "category": [
-      "对话",
-      "写作",
-      "编程",
-      "推理"
-    ],
-    "scenes": [
-      "写代码",
-      "写论文",
-      "翻译文档",
-      "深度研究",
-      "数学解题"
-    ],
-    "url": "https://chat.deepseek.com",
-    "icon": "🔍",
-    "free_tier": "完全免费，无限制使用 V4 Pro/Flash",
-    "paid_tiers": [
-      {
-        "name": "API",
-        "price": "约¥0.55/百万输入token",
-        "features": "开发调用，价格仅为OpenAI的1/10"
-      }
-    ],
-    "chinese_support": 5,
-    "chinese_note": "原生中文，中文理解和生成能力顶级",
-    "access_barrier": "国内可直接访问，偶尔需要手机验证",
-    "access_level": "开放",
-    "strengths": "完全免费、中文顶级、推理能力强(R1媲美o1)、API极其便宜、开源模型",
-    "weaknesses": "高峰期偶有排队、多模态能力弱于ChatGPT/Gemini、生态不如ChatGPT",
-    "best_for": [
-      "预算敏感用户",
-      "中文场景首选",
-      "编程和逻辑推理",
-      "高频使用场景"
-    ],
-    "not_for": [
-      "需要图像生成或识别的任务"
-    ],
-    "rating_overall": 4.3,
-    "rating_chinese": 5,
-    "rating_ease": 5,
-    "rating_price": 5,
-    "last_updated": "2026-07-18",
-    "source": "deepseek.com",
-    "card_kind": "collection",
-    "entity_kind": "product",
-    "overview": {
-      "description": "中国深度求索公司推出的开源大模型，以极致性价比和透明定价著称，V4 系列支持 1M 上下文。",
-      "features": [
-        {
-          "tone": "positive",
-          "text": "V4-Flash 缓存命中仅 ¥0.02/MTok，长系统提示词场景成本极低"
-        },
-        {
-          "tone": "positive",
-          "text": "1M 原生上下文，中英文双语定价透明"
-        },
-        {
-          "tone": "negative",
-          "text": "缓存为 best-effort，无 SLA 保证命中率"
-        },
-        {
-          "tone": "negative",
-          "text": "高峰时段 API 并发限制可能触发排队"
-        }
-      ],
-      "source_refs": [
-        "deepseek-pricing-cn"
-      ]
-    }
-  },
-  {
-    "id": "tongyi",
-    "name": "通义千问",
-    "vendor": "阿里巴巴",
-    "category": [
-      "对话",
-      "写作",
-      "编程",
-      "翻译",
-      "办公"
-    ],
-    "scenes": [
-      "写论文",
-      "写周报",
-      "翻译文档",
-      "办公文档处理",
-      "学习辅导"
-    ],
-    "url": "https://tongyi.aliyun.com",
-    "icon": "☁️",
-    "free_tier": "Qwen-Max/Turbo 每月100万Token免费，长期有效",
-    "paid_tiers": [
-      {
-        "name": "API",
-        "price": "按量计费",
-        "features": "Qwen系列模型API调用、阿里云集成"
-      }
-    ],
-    "chinese_support": 5,
-    "chinese_note": "阿里系中文理解深度最佳之一，企业场景适配强",
-    "access_barrier": "国内可直接访问，需阿里云/支付宝账号",
-    "access_level": "开放",
-    "strengths": "中文顶级、阿里云生态集成、企业级安全合规、通义灵码(IDE插件)",
-    "weaknesses": "创意写作灵动性不如ChatGPT、英文场景偏弱",
-    "best_for": [
-      "国内企业用户",
-      "中文办公和学习场景",
-      "阿里云生态用户"
-    ],
-    "not_for": [
-      "纯英文或国际化场景",
-      "需要最强推理的任务"
-    ],
-    "rating_overall": 4,
-    "rating_chinese": 5,
-    "rating_ease": 4.5,
-    "rating_price": 4.5,
-    "last_updated": "2026-07-18",
-    "source": "tongyi.aliyun.com",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "doubao",
-    "name": "豆包",
-    "vendor": "字节跳动",
-    "category": [
-      "对话",
-      "写作",
-      "翻译",
-      "创意"
-    ],
-    "scenes": [
-      "写周报",
-      "头脑风暴",
-      "翻译文档",
-      "创意写作",
-      "日常闲聊"
-    ],
-    "url": "https://www.doubao.com",
-    "icon": "🫘",
-    "free_tier": "完全免费，无限使用",
-    "paid_tiers": [],
-    "chinese_support": 5,
-    "chinese_note": "原生中文，语气自然接地气",
-    "access_barrier": "国内可直接访问，手机号注册",
-    "access_level": "开放",
-    "strengths": "完全免费、中文对话自然、多模态支持、字节生态(TikTok/抖音数据积累)",
-    "weaknesses": "深度推理和代码能力不如DeepSeek/Claude、国际化弱",
-    "best_for": [
-      "日常中文对话",
-      "创意和娱乐场景",
-      "零预算用户"
-    ],
-    "not_for": [
-      "复杂代码开发",
-      "深度学术研究"
-    ],
-    "rating_overall": 3.5,
-    "rating_chinese": 4.5,
-    "rating_ease": 5,
-    "rating_price": 5,
-    "last_updated": "2026-07-18",
-    "source": "doubao.com",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "kimi",
-    "name": "Kimi",
-    "vendor": "月之暗面",
-    "category": [
-      "对话",
-      "长文档",
-      "搜索",
-      "写作"
-    ],
-    "scenes": [
-      "写论文",
-      "长文档分析",
-      "搜索研究",
-      "学习辅导"
-    ],
-    "url": "https://kimi.moonshot.cn",
-    "icon": "🌙",
-    "free_tier": "免费使用，每日限额",
-    "paid_tiers": [
-      {
-        "name": "会员",
-        "price": "约¥50/月",
-        "features": "更高限额、优先响应"
-      }
-    ],
-    "chinese_support": 5,
-    "chinese_note": "中文长文档处理能力突出",
-    "access_barrier": "国内可直接访问，手机号注册",
-    "access_level": "开放",
-    "strengths": "超长上下文(200万字)、中文长文档分析最优、联网搜索、文件上传解析",
-    "weaknesses": "代码能力一般、创意写作偏弱、免费额度有限",
-    "best_for": [
-      "长文档分析(论文/合同/报告)",
-      "中文文献综述",
-      "需要联网搜索的研究"
-    ],
-    "not_for": [
-      "代码开发",
-      "需要多模态识别的任务"
-    ],
-    "rating_overall": 3.8,
-    "rating_chinese": 5,
-    "rating_ease": 4.5,
-    "rating_price": 3.5,
-    "last_updated": "2026-07-18",
-    "source": "kimi.moonshot.cn",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "zhipu",
-    "name": "智谱清言",
-    "vendor": "智谱AI",
-    "category": [
-      "对话",
-      "写作",
-      "编程",
-      "企业应用"
-    ],
-    "scenes": [
-      "写论文",
-      "写代码",
-      "办公文档处理",
-      "企业应用开发"
-    ],
-    "url": "https://chatglm.cn",
-    "icon": "🏛️",
-    "free_tier": "GLM-4-Flash 永久免费，注册送2500万Token",
-    "paid_tiers": [
-      {
-        "name": "API",
-        "price": "按量计费",
-        "features": "GLM系列、企业定制、私有化部署"
-      }
-    ],
-    "chinese_support": 5,
-    "chinese_note": "中文理解准确率高，企业合规性强",
-    "access_barrier": "国内可直接访问",
-    "access_level": "开放",
-    "strengths": "中文企业级应用强、GLM模型幻觉率最低、支持私有化部署、合规性好",
-    "weaknesses": "国际生态弱、多模态不如ChatGPT、大众认知度不如DeepSeek",
-    "best_for": [
-      "国内企业应用",
-      "需私有化部署的场景",
-      "高合规要求场景"
-    ],
-    "not_for": [
-      "个人创意类使用",
-      "需要最强国际模型的任务"
-    ],
-    "rating_overall": 3.8,
-    "rating_chinese": 4.5,
-    "rating_ease": 4.5,
-    "rating_price": 4,
-    "last_updated": "2026-07-18",
-    "source": "chatglm.cn",
-    "card_kind": "collection",
-    "entity_kind": "product",
-    "overview": {
-      "description": "清华大学孵化、港股上市的国产 AI 公司，提供 GLM 系列模型及全模态 API 服务，中文能力扎实。",
-      "features": [
-        {
-          "tone": "positive",
-          "text": "GLM-5.2 支持 1M 无损上下文，Coding 能力开源 SOTA"
-        },
-        {
-          "tone": "positive",
-          "text": "缓存存储限时免费，长系统提示词场景成本极低"
-        },
-        {
-          "tone": "negative",
-          "text": "定价体系复杂（按输入/输出长度分档），账单预估难度较高"
-        },
-        {
-          "tone": "negative",
-          "text": "多模态视觉模型（GLM-5V）定价高于纯文本模型"
-        }
-      ],
-      "source_refs": [
-        "zhipu-api-pricing"
-      ]
-    }
-  },
-  {
-    "id": "cursor",
-    "name": "Cursor",
-    "vendor": "Anysphere",
-    "category": [
-      "AI编程",
-      "IDE"
-    ],
-    "scenes": [
-      "写代码",
-      "项目开发",
-      "代码重构",
-      "Bug修复"
-    ],
-    "url": "https://cursor.com",
-    "icon": "⌨️",
-    "free_tier": "个人免费版(有限额)",
-    "paid_tiers": [
-      {
-        "name": "Pro",
-        "price": "$20/月",
-        "features": "无限补全、高级Agent模式"
-      },
-      {
-        "name": "Teams",
-        "price": "$40/人/月",
-        "features": "团队协作、管理面板"
-      }
-    ],
-    "chinese_support": 3,
-    "chinese_note": "支持中文注释和需求描述，界面为英文",
-    "access_barrier": "国内可直接访问，需海外支付方式",
-    "access_level": "开放",
-    "strengths": "AI原生IDE标杆、Plan模式(架构规划)、多文件批量编辑、VS Code无缝迁移",
-    "weaknesses": "企业合规性弱、仅支持VS Code生态、Pro版月费不低",
-    "best_for": [
-      "全栈开发者",
-      "复杂项目快速迭代",
-      "创业团队"
-    ],
-    "not_for": [
-      "企业合规敏感用户",
-      "纯JetBrains用户",
-      "轻度使用者(免费版够用)"
-    ],
-    "rating_overall": 4.7,
-    "rating_chinese": 3,
-    "rating_ease": 4,
-    "rating_price": 3,
-    "last_updated": "2026-07-18",
-    "source": "cursor.com",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "copilot",
-    "name": "GitHub Copilot",
-    "vendor": "Microsoft/GitHub",
-    "category": [
-      "AI编程",
-      "IDE插件"
-    ],
-    "scenes": [
-      "写代码",
-      "代码补全",
-      "Bug修复",
-      "代码审查"
-    ],
-    "url": "https://github.com/features/copilot",
-    "icon": "🐙",
-    "free_tier": "学生免费、开源维护者免费、普通用户50聊天+2000补全/月",
-    "paid_tiers": [
-      {
-        "name": "Pro",
-        "price": "$10/月",
-        "features": "无限补全和聊天"
-      },
-      {
-        "name": "Business",
-        "price": "$19/人/月",
-        "features": "企业管理、安全策略"
-      },
-      {
-        "name": "Max",
-        "price": "$100/月",
-        "features": "最高限额、所有模型"
-      }
-    ],
-    "chinese_support": 3,
-    "chinese_note": "支持中文注释理解，界面英文",
-    "access_barrier": "国内可访问GitHub但速度慢",
-    "access_level": "受限",
-    "strengths": "生态最广(37+语言)、GitHub深度集成、性价比高($10/月)、企业级安全",
-    "weaknesses": "多文件Agent能力弱、复杂推理不如Cursor、国内访问速度慢",
-    "best_for": [
-      "微软/GitHub生态用户",
-      "日常编码",
-      "团队协作开发"
-    ],
-    "not_for": [
-      "需要跨文件重构的复杂项目",
-      "国内网络不稳定用户"
-    ],
-    "rating_overall": 4,
-    "rating_chinese": 3,
-    "rating_ease": 3.5,
-    "rating_price": 4,
-    "last_updated": "2026-07-18",
-    "source": "github.com",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "claude-code",
-    "name": "Claude Code",
-    "vendor": "Anthropic",
-    "category": [
-      "AI编程",
-      "命令行"
-    ],
-    "scenes": [
-      "写代码",
-      "项目开发",
-      "代码重构",
-      "自动化测试",
-      "架构设计"
-    ],
-    "url": "https://claude.ai/claude-code",
-    "icon": "⚡",
-    "free_tier": "无(需Claude Pro订阅以上)",
-    "paid_tiers": [
-      {
-        "name": "按量",
-        "price": "重度使用约$100+/周",
-        "features": "终端使用、子代理并行、全代码库操作"
-      },
-      {
-        "name": "Max",
-        "price": "$200/月",
-        "features": "最高使用限额"
-      }
-    ],
-    "chinese_support": 4,
-    "chinese_note": "中文理解好，代码注释和文档支持中文",
-    "access_barrier": "需要科学上网 + 付费账号",
-    "access_level": "受限",
-    "strengths": "推理最强(SWE-bench 80.9%)、长任务自主完成、MCP/Skills生态、子代理并行",
-    "weaknesses": "成本高($100+/周)、仅终端使用(无GUI)、国内网络+支付双重门槛",
-    "best_for": [
-      "架构师和高级开发者",
-      "复杂系统重构",
-      "超长上下文任务"
-    ],
-    "not_for": [
-      "预算有限的个人开发者",
-      "不习惯终端的开发者",
-      "国内用户(双重障碍)"
-    ],
-    "rating_overall": 4.8,
-    "rating_chinese": 3.5,
-    "rating_ease": 2,
-    "rating_price": 1.5,
-    "last_updated": "2026-07-18",
-    "source": "anthropic.com",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "trae",
-    "name": "Trae",
-    "vendor": "字节跳动",
-    "category": [
-      "AI编程",
-      "IDE"
-    ],
-    "scenes": [
-      "写代码",
-      "项目开发",
-      "快速原型"
-    ],
-    "url": "https://www.trae.ai",
-    "icon": "🇨🇳",
-    "free_tier": "个人免费(多档可选)",
-    "paid_tiers": [
-      {
-        "name": "Lite",
-        "price": "$3/月",
-        "features": "基础AI辅助"
-      },
-      {
-        "name": "Pro",
-        "price": "$10/月",
-        "features": "完整AI功能"
-      },
-      {
-        "name": "Ultra",
-        "price": "$100/月",
-        "features": "最高级别支持"
-      }
-    ],
-    "chinese_support": 5,
-    "chinese_note": "原生中文IDE，中文适配最强",
-    "access_barrier": "国内可直接访问",
-    "access_level": "开放",
-    "strengths": "中文原生IDE、全链路开发闭环、VS Code无感迁移、多模态输入、价格亲民",
-    "weaknesses": "国际生态弱、用户基数不如Cursor、插件生态仍在建设",
-    "best_for": [
-      "国内开发者",
-      "中文项目",
-      "快速原型开发",
-      "全流程开发"
-    ],
-    "not_for": [
-      "国际化项目",
-      "需要GitHub深度集成的场景"
-    ],
-    "rating_overall": 4,
-    "rating_chinese": 5,
-    "rating_ease": 5,
-    "rating_price": 4.5,
-    "last_updated": "2026-07-18",
-    "source": "trae.ai",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "windsurf",
-    "name": "Windsurf",
-    "vendor": "Codeium",
-    "category": [
-      "AI编程",
-      "IDE"
-    ],
-    "scenes": [
-      "写代码",
-      "项目开发",
-      "代码重构"
-    ],
-    "url": "https://windsurf.com",
-    "icon": "🏄",
-    "free_tier": "有竞争力的免费层",
-    "paid_tiers": [
-      {
-        "name": "Pro",
-        "price": "$20/月",
-        "features": "无限使用、Cascade Agent模式"
-      },
-      {
-        "name": "Teams",
-        "price": "$40/月",
-        "features": "团队协作、更高限额"
-      }
-    ],
-    "chinese_support": 3,
-    "chinese_note": "中文支持一般，界面英文",
-    "access_barrier": "国内可直接访问",
-    "access_level": "开放",
-    "strengths": "免费层竞争力强、Cascade Agent模式、与Cursor对标性价比高",
-    "weaknesses": "生态不如Cursor/Copilot、知名度较低",
-    "best_for": [
-      "想体验AI IDE但预算有限的开发者",
-      "评估AI IDE的团队"
-    ],
-    "not_for": [
-      "需要最强生态集成的用户",
-      "中文深度用户"
-    ],
-    "rating_overall": 3.8,
-    "rating_chinese": 3,
-    "rating_ease": 4,
-    "rating_price": 4,
-    "last_updated": "2026-07-18",
-    "source": "windsurf.com",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "midjourney",
-    "name": "Midjourney",
-    "vendor": "Midjourney Inc.",
-    "category": [
-      "AI图像",
-      "AI绘画"
-    ],
-    "scenes": [
-      "设计配图",
-      "概念艺术",
-      "海报设计",
-      "插画创作"
-    ],
-    "url": "https://www.midjourney.com",
-    "icon": "🎨",
-    "free_tier": "无(已取消免费试用)",
-    "paid_tiers": [
-      {
-        "name": "Basic",
-        "price": "$10/月",
-        "features": "约200张/月"
-      },
-      {
-        "name": "Standard",
-        "price": "$30/月",
-        "features": "无限低速生成"
-      },
-      {
-        "name": "Pro",
-        "price": "$60/月",
-        "features": "高速生成、Stealth模式"
-      }
-    ],
-    "chinese_support": 2,
-    "chinese_note": "不支持中文提示词，需要英文Prompt",
-    "access_barrier": "需要科学上网 + 海外支付(Discord使用)",
-    "access_level": "受限",
-    "strengths": "艺术品质最高、审美极其出色、风格多样性、社区活跃",
-    "weaknesses": "需要英文prompt、必须用Discord(体验差)、国内不可用、无免费层",
-    "best_for": [
-      "需要最高艺术品质的设计师",
-      "概念艺术和插画",
-      "品牌视觉设计"
-    ],
-    "not_for": [
-      "中文用户(英文门槛)",
-      "预算敏感用户",
-      "需要API集成的场景"
-    ],
-    "rating_overall": 4.5,
-    "rating_chinese": 2,
-    "rating_ease": 2,
-    "rating_price": 3,
-    "last_updated": "2026-07-18",
-    "source": "midjourney.com",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "nano-banana",
-    "name": "Nano Banana",
-    "vendor": "Google",
-    "category": [
-      "AI图像",
-      "AI绘画"
-    ],
-    "scenes": [
-      "设计配图",
-      "海报设计",
-      "营销素材",
-      "角色设计"
-    ],
-    "url": "https://aistudio.google.com",
-    "icon": "🍌",
-    "free_tier": "Google AI Studio 免费使用",
-    "paid_tiers": [
-      {
-        "name": "Gemini Advanced",
-        "price": "$20/月",
-        "features": "Pro版画质、更高分辨率"
-      }
-    ],
-    "chinese_support": 4,
-    "chinese_note": "支持中文提示词，理解力强",
-    "access_barrier": "需要科学上网",
-    "access_level": "受限",
-    "strengths": "提示词理解最佳、角色一致性极好、多模态联动(Gemini)、免费可用",
-    "weaknesses": "国内访问受限、艺术性不如Midjourney、风格范围有限",
-    "best_for": [
-      "需要精准控制画面的设计师",
-      "营销素材制作",
-      "中文用户"
-    ],
-    "not_for": [
-      "需要极致艺术性的场景",
-      "国内直连用户"
-    ],
-    "rating_overall": 4.3,
-    "rating_chinese": 4,
-    "rating_ease": 3,
-    "rating_price": 4.5,
-    "last_updated": "2026-07-18",
-    "source": "aistudio.google.com",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "jimeng",
-    "name": "即梦",
-    "vendor": "字节跳动",
-    "category": [
-      "AI图像",
-      "AI视频"
-    ],
-    "scenes": [
-      "设计配图",
-      "短视频制作",
-      "营销素材",
-      "创意表达"
-    ],
-    "url": "https://jimeng.jianying.com",
-    "icon": "✨",
-    "free_tier": "每日免费额度",
-    "paid_tiers": [
-      {
-        "name": "会员",
-        "price": "约¥30/月",
-        "features": "更多生成次数、更高画质"
-      }
-    ],
-    "chinese_support": 5,
-    "chinese_note": "原生中文，对中文场景理解极佳",
-    "access_barrier": "国内可直接访问，抖音/剪映账号登录",
-    "access_level": "开放",
-    "strengths": "中文支持顶级、剪映生态集成、视频生成能力强、国内可用、免费额度足",
-    "weaknesses": "国际化弱、艺术性不如Midjourney、生态锁定字节系",
-    "best_for": [
-      "短视频创作者",
-      "中文营销素材",
-      "抖音/剪映生态用户"
-    ],
-    "not_for": [
-      "国际化创意项目",
-      "需要API集成的开发者"
-    ],
-    "rating_overall": 4,
-    "rating_chinese": 5,
-    "rating_ease": 5,
-    "rating_price": 4.5,
-    "last_updated": "2026-07-18",
-    "source": "jimeng.jianying.com",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "runway",
-    "name": "Runway",
-    "vendor": "Runway ML",
-    "category": [
-      "AI视频",
-      "AI创作"
-    ],
-    "scenes": [
-      "视频制作",
-      "特效合成",
-      "短视频创作",
-      "后期处理"
-    ],
-    "url": "https://runwayml.com",
-    "icon": "🎬",
-    "free_tier": "有限免费试用额度",
-    "paid_tiers": [
-      {
-        "name": "Standard",
-        "price": "$15/月",
-        "features": "基础视频生成"
-      },
-      {
-        "name": "Pro",
-        "price": "$35/月",
-        "features": "更多配额、更高分辨率"
-      },
-      {
-        "name": "Unlimited",
-        "price": "$95/月",
-        "features": "无限生成"
-      }
-    ],
-    "chinese_support": 2,
-    "chinese_note": "英文界面，中文prompt支持有限",
-    "access_barrier": "需要科学上网 + 海外支付",
-    "access_level": "受限",
-    "strengths": "视频编辑功能全面(去背景/字幕/特效)、Gen-4模型领先、专业级输出",
-    "weaknesses": "国内不可用、价格较高、中文支持弱",
-    "best_for": [
-      "专业视频创作者",
-      "后期制作团队",
-      "需要AI视频编辑的创作者"
-    ],
-    "not_for": [
-      "国内普通用户(双重障碍)",
-      "预算敏感用户"
-    ],
-    "rating_overall": 4.2,
-    "rating_chinese": 2,
-    "rating_ease": 2.5,
-    "rating_price": 2.5,
-    "last_updated": "2026-07-18",
-    "source": "runwayml.com",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "kling",
-    "name": "可灵",
-    "vendor": "快手",
-    "category": [
-      "AI视频",
-      "AI创作"
-    ],
-    "scenes": [
-      "短视频制作",
-      "视频生成",
-      "创意表达",
-      "营销视频"
-    ],
-    "url": "https://kling.kuaishou.com",
-    "icon": "🎥",
-    "free_tier": "每日免费生成额度",
-    "paid_tiers": [
-      {
-        "name": "会员",
-        "price": "约¥30/月",
-        "features": "更多生成、更高画质"
-      }
-    ],
-    "chinese_support": 5,
-    "chinese_note": "原生中文，中文视频场景理解顶级",
-    "access_barrier": "国内可直接访问",
-    "access_level": "开放",
-    "strengths": "视频质量国产最佳、物理规律模拟好、中文场景自然、国内可用、免费额度",
-    "weaknesses": "国际化弱、仅限视频生成、风格多样性不如Runway",
-    "best_for": [
-      "短视频创作者",
-      "中文视频内容制作",
-      "营销视频批量生成"
-    ],
-    "not_for": [
-      "国际化视频项目",
-      "需要专业后期编辑的场景"
-    ],
-    "rating_overall": 4,
-    "rating_chinese": 5,
-    "rating_ease": 5,
-    "rating_price": 4.5,
-    "last_updated": "2026-07-18",
-    "source": "kling.kuaishou.com",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "perplexity",
-    "name": "Perplexity",
-    "vendor": "Perplexity AI",
-    "category": [
-      "AI搜索",
-      "研究"
-    ],
-    "scenes": [
-      "搜索研究",
-      "学术调研",
-      "事实核查",
-      "资料收集"
-    ],
-    "url": "https://www.perplexity.ai",
-    "icon": "🔎",
-    "free_tier": "免费搜索(有限次数)",
-    "paid_tiers": [
-      {
-        "name": "Pro",
-        "price": "$20/月",
-        "features": "无限搜索、文件上传、多模型选择"
-      }
-    ],
-    "chinese_support": 3,
-    "chinese_note": "支持中文搜索，但中文源覆盖不如英文",
-    "access_barrier": "需要科学上网",
-    "access_level": "受限",
-    "strengths": "搜索式AI回答(附来源链接)、实时网络搜索、事实可溯源、学术引用",
-    "weaknesses": "国内不可用、中文资料源覆盖有限、免费版功能受限",
-    "best_for": [
-      "学术研究",
-      "需要事实核查的搜索",
-      "来源可追溯的信息查询"
-    ],
-    "not_for": [
-      "国内用户(访问受限)",
-      "不需要来源引用的闲聊场景"
-    ],
-    "rating_overall": 4.3,
-    "rating_chinese": 3,
-    "rating_ease": 3,
-    "rating_price": 3.5,
-    "last_updated": "2026-07-18",
-    "source": "perplexity.ai",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "mishu",
-    "name": "秘塔AI搜索",
-    "vendor": "秘塔科技",
-    "category": [
-      "AI搜索",
-      "研究"
-    ],
-    "scenes": [
-      "搜索研究",
-      "学术调研",
-      "事实核查",
-      "资料收集"
-    ],
-    "url": "https://metaso.cn",
-    "icon": "🔍",
-    "free_tier": "免费使用",
-    "paid_tiers": [],
-    "chinese_support": 5,
-    "chinese_note": "原生中文，中文搜索源覆盖全面",
-    "access_barrier": "国内可直接访问",
-    "access_level": "开放",
-    "strengths": "中文搜索最佳、国内可访问、完全免费、学术搜索强、来源可溯",
-    "weaknesses": "仅限搜索场景、无对话记忆、英文源覆盖不如Perplexity",
-    "best_for": [
-      "中文研究和调研",
-      "国内可访问的AI搜索",
-      "学术文献搜索"
-    ],
-    "not_for": [
-      "英文深度搜索",
-      "需要对话式交互的场景"
-    ],
-    "rating_overall": 4,
-    "rating_chinese": 5,
-    "rating_ease": 5,
-    "rating_price": 5,
-    "last_updated": "2026-07-18",
-    "source": "metaso.cn",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "notion-ai",
-    "name": "Notion AI",
-    "vendor": "Notion",
-    "category": [
-      "AI办公",
-      "写作",
-      "知识管理"
-    ],
-    "scenes": [
-      "写周报",
-      "办公文档处理",
-      "知识管理",
-      "会议纪要"
-    ],
-    "url": "https://www.notion.so/product/ai",
-    "icon": "📝",
-    "free_tier": "Notion免费版 + AI有限使用",
-    "paid_tiers": [
-      {
-        "name": "AI Add-on",
-        "price": "$10/月",
-        "features": "无限AI使用(需基础Notion订阅)"
-      }
-    ],
-    "chinese_support": 4,
-    "chinese_note": "中文支持好，界面支持中文",
-    "access_barrier": "国内可访问但速度较慢",
-    "access_level": "开放",
-    "strengths": "无缝集成Notion知识库、AI写作/总结/翻译、数据库AI、界面友好",
-    "weaknesses": "需额外付费(AI附加组件)、重度依赖Notion生态、国内速度慢",
-    "best_for": [
-      "Notion用户",
-      "知识管理+AI需求的用户",
-      "团队文档协作"
-    ],
-    "not_for": [
-      "不使用Notion的用户",
-      "需要独立AI工具的场景"
-    ],
-    "rating_overall": 3.8,
-    "rating_chinese": 4,
-    "rating_ease": 3.5,
-    "rating_price": 3,
-    "last_updated": "2026-07-18",
-    "source": "notion.so",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "gamma",
-    "name": "Gamma",
-    "vendor": "Gamma Tech",
-    "category": [
-      "AI办公",
-      "PPT制作",
-      "演示文稿"
-    ],
-    "scenes": [
-      "PPT制作",
-      "演示文稿",
-      "报告展示",
-      "方案汇报"
-    ],
-    "url": "https://gamma.app",
-    "icon": "📊",
-    "free_tier": "免费创建(有限次数)",
-    "paid_tiers": [
-      {
-        "name": "Plus",
-        "price": "$10/月",
-        "features": "无限创建、高级模板、品牌定制"
-      },
-      {
-        "name": "Pro",
-        "price": "$20/月",
-        "features": "更多AI功能、团队协作"
-      }
-    ],
-    "chinese_support": 3,
-    "chinese_note": "支持中文输入生成PPT，效果可接受",
-    "access_barrier": "国内可访问",
-    "access_level": "开放",
-    "strengths": "一键生成专业PPT、设计感强、模板丰富、节省大量排版时间",
-    "weaknesses": "中文排版偶有问题、高度依赖模板、定制深度有限",
-    "best_for": [
-      "需要快速制作PPT的职场人",
-      "学生课题汇报",
-      "创业路演"
-    ],
-    "not_for": [
-      "需要高度定制化的PPT",
-      "对中文排版要求极致的场景"
-    ],
-    "rating_overall": 3.8,
-    "rating_chinese": 3,
-    "rating_ease": 4.5,
-    "rating_price": 4,
-    "last_updated": "2026-07-18",
-    "source": "gamma.app",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "suno",
-    "name": "Suno",
-    "vendor": "Suno Inc.",
-    "category": [
-      "AI音乐",
-      "AI音频"
-    ],
-    "scenes": [
-      "音乐创作",
-      "背景音乐",
-      "歌曲制作",
-      "配乐"
-    ],
-    "url": "https://suno.com",
-    "icon": "🎵",
-    "free_tier": "每日免费额度(约5首)",
-    "paid_tiers": [
-      {
-        "name": "Pro",
-        "price": "$10/月",
-        "features": "500首/月、商业使用许可"
-      },
-      {
-        "name": "Premier",
-        "price": "$30/月",
-        "features": "2000首/月、更高音质"
-      }
-    ],
-    "chinese_support": 3,
-    "chinese_note": "支持中文歌词生成，质量尚可",
-    "access_barrier": "需要科学上网",
-    "access_level": "受限",
-    "strengths": "音乐质量惊艳(《技能五子棋》出圈)、曲风多样、一分钟成曲、专业级输出",
-    "weaknesses": "国内访问受限、中文歌词偶有不自然、版权归属有争议",
-    "best_for": [
-      "音乐创作者",
-      "短视频创作者(BGM)",
-      "需要原创配乐的项目"
-    ],
-    "not_for": [
-      "国内直连用户",
-      "版权敏感的商业项目"
-    ],
-    "rating_overall": 4.5,
-    "rating_chinese": 3,
-    "rating_ease": 3,
-    "rating_price": 4,
-    "last_updated": "2026-07-18",
-    "source": "suno.com",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "elevenlabs",
-    "name": "ElevenLabs",
-    "vendor": "ElevenLabs",
-    "category": [
-      "AI语音",
-      "AI音频"
-    ],
-    "scenes": [
-      "配音",
-      "有声书",
-      "播客制作",
-      "视频旁白"
-    ],
-    "url": "https://elevenlabs.io",
-    "icon": "🎙️",
-    "free_tier": "每月10分钟免费语音生成",
-    "paid_tiers": [
-      {
-        "name": "Starter",
-        "price": "$5/月",
-        "features": "30分钟/月、声音克隆"
-      },
-      {
-        "name": "Creator",
-        "price": "$22/月",
-        "features": "100小时/月、专业声音克隆"
-      },
-      {
-        "name": "Pro",
-        "price": "$99/月",
-        "features": "500小时/月、最高音质"
-      }
-    ],
-    "chinese_support": 3,
-    "chinese_note": "支持中文语音，但自然度不如英文",
-    "access_barrier": "国内可访问但速度不稳定",
-    "access_level": "受限",
-    "strengths": "语音最逼真(接近真人)、声音克隆精准、多语言支持、API成熟",
-    "weaknesses": "国内访问不稳定、中文语音自然度待提升、高额使用成本高",
-    "best_for": [
-      "专业配音需求",
-      "有声内容创作者",
-      "需要多语言配音的团队"
-    ],
-    "not_for": [
-      "中文长文本朗读(自然度待提升)",
-      "预算极度敏感用户"
-    ],
-    "rating_overall": 4.3,
-    "rating_chinese": 3,
-    "rating_ease": 3,
-    "rating_price": 3,
-    "last_updated": "2026-07-18",
-    "source": "elevenlabs.io",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "stable-diffusion",
-    "name": "Stable Diffusion",
-    "vendor": "Stability AI",
-    "category": [
-      "AI图像",
-      "开源"
-    ],
-    "scenes": [
-      "设计配图",
-      "概念艺术",
-      "AI艺术",
-      "图像研究"
-    ],
-    "url": "https://stability.ai",
-    "icon": "🖼️",
-    "free_tier": "完全免费开源(自行部署)",
-    "paid_tiers": [
-      {
-        "name": "云端使用",
-        "price": "按量或订阅",
-        "features": "无需本地GPU的SD体验"
-      }
-    ],
-    "chinese_support": 2,
-    "chinese_note": "英文prompt效果最佳，中文需要翻译",
-    "access_barrier": "本地部署需GPU(8GB+显存)，云端使用需海外服务",
-    "access_level": "受限",
-    "strengths": "完全开源免费、可本地部署(隐私)、生态最全(ControlNet/LoRA/ComfyUI)、无限生成",
-    "weaknesses": "部署门槛高(GPU需求)、英文Prompt门槛、艺术性不如Midjourney",
-    "best_for": [
-      "技术向用户",
-      "需要隐私和定制化的项目",
-      "AI艺术研究者",
-      "预算零但显卡够的用户"
-    ],
-    "not_for": [
-      "普通设计人员(部署门槛高)",
-      "无GPU的用户",
-      "追求极致审美的场景"
-    ],
-    "rating_overall": 4,
-    "rating_chinese": 2,
-    "rating_ease": 2,
-    "rating_price": 5,
-    "last_updated": "2026-07-18",
-    "source": "stability.ai",
-    "card_kind": "concrete",
-    "entity_kind": "open_source_project"
-  },
-  {
-    "id": "wenxin",
-    "name": "文心一言",
-    "vendor": "百度",
-    "category": [
-      "对话",
-      "写作",
-      "编程",
-      "搜索"
-    ],
-    "scenes": [
-      "写论文",
-      "写周报",
-      "翻译文档",
-      "搜索研究",
-      "学习辅导",
-      "头脑风暴"
-    ],
-    "url": "https://yiyan.baidu.com",
-    "icon": "📘",
-    "free_tier": "完全免费(2026年4月起全免费，此前付费已退款)",
-    "paid_tiers": [
-      {
-        "name": "API",
-        "price": "按量计费",
-        "features": "ERNIE 4.5系列API调用、千帆平台集成"
-      }
-    ],
-    "chinese_support": 5,
-    "chinese_note": "原生中文，理解深度顶级，国内语料积累深厚",
-    "access_barrier": "国内可直接访问，需百度账号",
-    "access_level": "开放",
-    "strengths": "完全免费、中文理解深度国内最佳之一、ERNIE 4.5 128K超长上下文、百度生态集成、AI搜索功能强",
-    "weaknesses": "国际生态弱、英文场景偏弱、创意写作灵动性不如ChatGPT",
-    "best_for": [
-      "中文深度理解场景",
-      "百度生态用户",
-      "需要AI搜索的中文研究"
-    ],
-    "not_for": [
-      "国际化场景",
-      "英文内容创作"
-    ],
-    "rating_overall": 4,
-    "rating_chinese": 5,
-    "rating_ease": 4,
-    "rating_price": 5,
-    "last_updated": "2026-07-21",
-    "source": "yiyan.baidu.com",
-    "card_kind": "collection",
-    "entity_kind": "product",
-    "overview": {
-      "description": "百度推出的文心大模型，通过千帆平台提供 ERNIE 系列 API，深度集成百度云生态。",
-      "features": [
-        {
-          "tone": "positive",
-          "text": "ERNIE 4.5 Turbo 在 ¥0.8/MTok 价位提供 128K 上下文"
-        },
-        {
-          "tone": "positive",
-          "text": "千帆平台支持 DeepSeek、GLM、Kimi 等第三方模型统一接入"
-        },
-        {
-          "tone": "negative",
-          "text": "官方计费页输出定价不够透明，需在控制台确认实际扣费"
-        },
-        {
-          "tone": "negative",
-          "text": "AI 编程和 Agent 生态相对 OpenAI/Claude 不够成熟"
-        }
-      ],
-      "source_refs": [
-        "wenxin-api-pricing"
-      ]
-    }
-  },
-  {
-    "id": "xinghuo",
-    "name": "讯飞星火",
-    "vendor": "科大讯飞",
-    "category": [
-      "对话",
-      "写作",
-      "语音",
-      "办公"
-    ],
-    "scenes": [
-      "写周报",
-      "办公文档处理",
-      "配音",
-      "学习辅导",
-      "翻译文档"
-    ],
-    "url": "https://xinghuo.xfyun.cn",
-    "icon": "🔥",
-    "free_tier": "Lite API永久免费，注册送1500万tokens",
-    "paid_tiers": [
-      {
-        "name": "Pro/Max",
-        "price": "0.21元/万tokens起",
-        "features": "更高精度、128K长文本、联网搜索"
-      }
-    ],
-    "chinese_support": 5,
-    "chinese_note": "语音识别和语音合成中文最强",
-    "access_barrier": "国内可直接访问",
-    "access_level": "开放",
-    "strengths": "语音技术国内第一(TTS/STT)、教育场景深耕、API性价比高、国产合规性顶级",
-    "weaknesses": "通用对话能力不如DeepSeek/通义千问、国际知名度低",
-    "best_for": [
-      "语音合成和识别需求",
-      "教育场景",
-      "企业办公(会议纪要/语音转写)"
-    ],
-    "not_for": [
-      "需要最强通用推理的任务",
-      "国际化场景"
-    ],
-    "rating_overall": 3.8,
-    "rating_chinese": 4.5,
-    "rating_ease": 4,
-    "rating_price": 4.5,
-    "last_updated": "2026-07-21",
-    "source": "xinghuo.xfyun.cn",
-    "card_kind": "collection",
-    "entity_kind": "product",
-    "overview": {
-      "description": "科大讯飞推出的星火认知大模型，深耕语音与教育场景，Lite 版本 API 永久免费。",
-      "features": [
-        {
-          "tone": "positive",
-          "text": "Spark Lite API 永久免费，适合高并发低成本的简单任务"
-        },
-        {
-          "tone": "positive",
-          "text": "内置搜索、天气、日期等插件，开箱即用"
-        },
-        {
-          "tone": "negative",
-          "text": "官方未公开详细 token 计价，缓存和输出定价不透明"
-        },
-        {
-          "tone": "negative",
-          "text": "Max 版本已下线合并，API 版本稳定性有不确定性"
-        }
-      ],
-      "source_refs": [
-        "xinghuo-api-docs"
-      ]
-    }
-  },
-  {
-    "id": "hunyuan",
-    "name": "腾讯混元",
-    "vendor": "腾讯",
-    "category": [
-      "对话",
-      "编程",
-      "图像",
-      "办公"
-    ],
-    "scenes": [
-      "写代码",
-      "办公文档处理",
-      "写周报",
-      "设计配图",
-      "学习辅导"
-    ],
-    "url": "https://hunyuan.tencent.com",
-    "icon": "💬",
-    "free_tier": "注册送100万tokens(1年有效)，Hunyuan Standard ¥0.3/百万tokens输入",
-    "paid_tiers": [
-      {
-        "name": "API后付费",
-        "price": "按量计费(¥0.3-2.4/百万tokens)",
-        "features": "混元全系列模型、腾讯云生态集成"
-      }
-    ],
-    "chinese_support": 5,
-    "chinese_note": "腾讯产品矩阵深度集成，中文理解自然",
-    "access_barrier": "国内可直接访问，需微信/QQ账号",
-    "access_level": "开放",
-    "strengths": "微信/QQ生态深度集成、多模态(文本+图像+视频)、企业级API价格低、合规性高",
-    "weaknesses": "C端知名度不如豆包/DeepSeek、独立产品体验中等",
-    "best_for": [
-      "微信/企业微信生态用户",
-      "需要多模态能力的国内企业",
-      "API开发(价格敏感)"
-    ],
-    "not_for": [
-      "追求独立AI助手的个人用户",
-      "国际场景"
-    ],
-    "rating_overall": 3.8,
-    "rating_chinese": 4.5,
-    "rating_ease": 4,
-    "rating_price": 4.5,
-    "last_updated": "2026-07-21",
-    "source": "hunyuan.tencent.com",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "tiangong",
-    "name": "天工AI",
-    "vendor": "昆仑万维",
-    "category": [
-      "AI搜索",
-      "对话",
-      "写作"
-    ],
-    "scenes": [
-      "搜索研究",
-      "写论文",
-      "写周报",
-      "资料收集",
-      "事实核查"
-    ],
-    "url": "https://www.tiangong.cn",
-    "icon": "🛠️",
-    "free_tier": "完全免费",
-    "paid_tiers": [],
-    "chinese_support": 5,
-    "chinese_note": "中文AI搜索覆盖全面",
-    "access_barrier": "国内可直接访问",
-    "access_level": "开放",
-    "strengths": "完全免费、AI搜索能力强、中文结果质量高、实时联网",
-    "weaknesses": "对话能力一般、品牌知名度低、功能相对单一",
-    "best_for": [
-      "中文AI搜索",
-      "需要实时联网信息的研究",
-      "零预算用户"
-    ],
-    "not_for": [
-      "需要深度对话和推理的场景",
-      "多模态任务"
-    ],
-    "rating_overall": 3.5,
-    "rating_chinese": 4.5,
-    "rating_ease": 4.5,
-    "rating_price": 5,
-    "last_updated": "2026-07-21",
-    "source": "tiangong.cn",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "baichuan",
-    "name": "百川智能",
-    "vendor": "百川智能",
-    "category": [
-      "对话",
-      "写作",
-      "编程"
-    ],
-    "scenes": [
-      "写论文",
-      "写周报",
-      "写代码",
-      "学习辅导",
-      "深度研究"
-    ],
-    "url": "https://www.baichuan-ai.com",
-    "icon": "🌊",
-    "free_tier": "有限免费试用",
-    "paid_tiers": [
-      {
-        "name": "API",
-        "price": "按量计费",
-        "features": "百川4 Turbo系列模型、企业定制"
-      }
-    ],
-    "chinese_support": 5,
-    "chinese_note": "中文能力扎实，逻辑推理见长",
-    "access_barrier": "国内可直接访问",
-    "access_level": "开放",
-    "strengths": "中文逻辑推理出色、百川4 Turbo性能均衡、企业级服务",
-    "weaknesses": "免费层限制较多、生态不如头部厂商、多模态能力弱",
-    "best_for": [
-      "中文逻辑推理任务",
-      "企业AI应用开发"
-    ],
-    "not_for": [
-      "需要多模态的场景",
-      "追求最先进技术生态的用户"
-    ],
-    "rating_overall": 3.5,
-    "rating_chinese": 4.5,
-    "rating_ease": 3.5,
-    "rating_price": 3.5,
-    "last_updated": "2026-07-21",
-    "source": "baichuan-ai.com",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "hailuo",
-    "name": "海螺AI",
-    "vendor": "MiniMax",
-    "category": [
-      "对话",
-      "写作",
-      "AI视频"
-    ],
-    "scenes": [
-      "短视频制作",
-      "创意写作",
-      "头脑风暴",
-      "写周报",
-      "视频生成"
-    ],
-    "url": "https://hailuoai.com",
-    "icon": "🐚",
-    "free_tier": "免费使用(有限额)",
-    "paid_tiers": [
-      {
-        "name": "会员",
-        "price": "约¥30/月",
-        "features": "更多次数、更高画质"
-      }
-    ],
-    "chinese_support": 5,
-    "chinese_note": "原生中文，视频生成中文场景自然",
-    "access_barrier": "国内可直接访问",
-    "access_level": "开放",
-    "strengths": "中文视频生成质量高、对话自然、MiniMax-01模型、国内可用",
-    "weaknesses": "通用能力不如头部大厂、品牌知名度提升中",
-    "best_for": [
-      "中文短视频创作",
-      "需要视频生成+对话的用户"
-    ],
-    "not_for": [
-      "专业级视频制作",
-      "需要最强推理能力的场景"
-    ],
-    "rating_overall": 3.5,
-    "rating_chinese": 4.5,
-    "rating_ease": 4,
-    "rating_price": 4.5,
-    "last_updated": "2026-07-21",
-    "source": "hailuoai.com",
-    "card_kind": "collection",
-    "entity_kind": "product",
-    "overview": {
-      "description": "MiniMax 推出的多模态 AI 平台，以海螺AI 视频生成和超低 API 文本价格著称。",
-      "features": [
-        {
-          "tone": "positive",
-          "text": "MiniMax-Text-01 在 /usr/bin/bash.30/MTok 价位极具性价比"
-        },
-        {
-          "tone": "positive",
-          "text": "Hailuo 02 视频生成支持 1080p 10 秒，质量对齐国内第一梯队"
-        },
-        {
-          "tone": "negative",
-          "text": "国际市场品牌知名度较低，社区和第三方工具生态有限"
-        },
-        {
-          "tone": "negative",
-          "text": "上下文窗口规格未在定价页公开，需查阅模型文档"
-        }
-      ],
-      "source_refs": [
-        "hailuo-api-pricing"
-      ]
-    }
-  },
-  {
-    "id": "grok",
-    "name": "Grok",
-    "vendor": "xAI",
-    "category": [
-      "对话",
-      "搜索",
-      "编程"
-    ],
-    "scenes": [
-      "搜索研究",
-      "写代码",
-      "头脑风暴",
-      "写周报",
-      "数据分析"
-    ],
-    "url": "https://grok.com",
-    "icon": "🚀",
-    "free_tier": "Grok 3免费(每2小时约10条)，含Aurora图像生成",
-    "paid_tiers": [
-      {
-        "name": "SuperGrok",
-        "price": "$30/月",
-        "features": "Grok 4、DeepSearch、128K上下文、Imagine模型"
-      },
-      {
-        "name": "X Premium",
-        "price": "$8-16/月",
-        "features": "含Grok + X Premium功能"
-      }
-    ],
-    "chinese_support": 3,
-    "chinese_note": "中文支持可接受但非核心优化",
-    "access_barrier": "需要科学上网",
-    "access_level": "受限",
-    "strengths": "X平台深度集成、Grok 4推理强、DeepSearch搜索、最大的上下文窗口(2M)、免费层慷慨",
-    "weaknesses": "国内访问受限、中文优化不足、依赖X生态",
-    "best_for": [
-      "X/Twitter重度用户",
-      "需要实时信息(通过X数据)",
-      "追求最大上下文窗口"
-    ],
-    "not_for": [
-      "国内直连用户",
-      "中文深度场景",
-      "需要ChatGPT级别多模态的用户"
-    ],
-    "rating_overall": 4.3,
-    "rating_chinese": 3,
-    "rating_ease": 3.5,
-    "rating_price": 3.5,
-    "last_updated": "2026-07-21",
-    "source": "grok.com",
-    "card_kind": "collection",
-    "entity_kind": "product",
-    "overview": {
-      "description": "Elon Musk 创办的 xAI 公司推出的 AI 模型，以实时 X 平台数据接入和推理能力见长，API 定价极具竞争力。",
-      "features": [
-        {
-          "tone": "positive",
-          "text": "Grok 4.1 Fast 在 /usr/bin/bash.20//usr/bin/bash.50 价位具备推理能力，同价位性价比领先"
-        },
-        {
-          "tone": "positive",
-          "text": "2M 上下文窗口（4.1 Fast），支持长文档和深度分析"
-        },
-        {
-          "tone": "negative",
-          "text": "中国市场网络访问受限"
-        },
-        {
-          "tone": "negative",
-          "text": "模型淘汰速度较快（2026-05 退役 8 个旧模型），需关注迁移通知"
-        }
-      ],
-      "source_refs": [
-        "xai-api-pricing"
-      ]
-    }
-  },
-  {
-    "id": "poe",
-    "name": "Poe",
-    "vendor": "Quora",
-    "category": [
-      "对话",
-      "写作",
-      "编程",
-      "搜索"
-    ],
-    "scenes": [
-      "写论文",
-      "写代码",
-      "头脑风暴",
-      "翻译文档",
-      "学习辅导"
-    ],
-    "url": "https://poe.com",
-    "icon": "🖋️",
-    "free_tier": "每日免费消息额度有限",
-    "paid_tiers": [
-      {
-        "name": "订阅",
-        "price": "$19.99/月",
-        "features": "不受限制访问多个AI模型、更高每日配额"
-      }
-    ],
-    "chinese_support": 3,
-    "chinese_note": "部分模型支持中文，界面为英文",
-    "access_barrier": "需要科学上网",
-    "access_level": "受限",
-    "strengths": "一站式聚合多个AI模型(ChatGPT/Claude/Gemini等)、方便对比、Poe Bot创建",
-    "weaknesses": "国内访问受限、免费额度有限、中文优化不足、依赖第三方模型",
-    "best_for": [
-      "想在一个平台体验多个AI模型的用户",
-      "模型对比测试",
-      "Bot创建和分享"
-    ],
-    "not_for": [
-      "国内直连用户",
-      "追求深度定制的用户",
-      "需要API集成的开发者"
-    ],
-    "rating_overall": 4,
-    "rating_chinese": 3,
-    "rating_ease": 4.5,
-    "rating_price": 3,
-    "last_updated": "2026-07-21",
-    "source": "poe.com",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "dalle",
-    "name": "DALL·E 3",
-    "vendor": "OpenAI",
-    "category": [
-      "AI图像",
-      "AI绘画"
-    ],
-    "scenes": [
-      "设计配图",
-      "海报设计",
-      "概念艺术",
-      "营销素材",
-      "插画创作"
-    ],
-    "url": "https://openai.com/dall-e-3",
-    "icon": "🖼️",
-    "free_tier": "ChatGPT免费版有限额度",
-    "paid_tiers": [
-      {
-        "name": "ChatGPT Plus",
-        "price": "$20/月",
-        "features": "DALL·E 3完整访问、更高额度"
-      },
-      {
-        "name": "ChatGPT Pro",
-        "price": "$200/月",
-        "features": "最高额度、商业使用"
-      }
-    ],
-    "chinese_support": 3,
-    "chinese_note": "支持中文提示词，但英文更精确",
-    "access_barrier": "需要科学上网 + ChatGPT账号",
-    "access_level": "受限",
-    "strengths": "提示词理解最智能、与ChatGPT无缝集成、安全性高(内容审核)、易上手",
-    "weaknesses": "国内访问双重门槛、生成速度较慢、风格多样性不如Midjourney",
-    "best_for": [
-      "ChatGPT生态用户",
-      "需要精确控制画面的场景",
-      "商业合规要求高的项目"
-    ],
-    "not_for": [
-      "国内直连用户",
-      "追求极致艺术品质的场景",
-      "大量生成需求(成本高)"
-    ],
-    "rating_overall": 4.2,
-    "rating_chinese": 3,
-    "rating_ease": 3.5,
-    "rating_price": 3,
-    "last_updated": "2026-07-21",
-    "source": "openai.com",
-    "card_kind": "concrete",
-    "entity_kind": "model"
-  },
-  {
-    "id": "leonardo",
-    "name": "Leonardo AI",
-    "vendor": "Leonardo AI",
-    "category": [
-      "AI图像",
-      "AI绘画"
-    ],
-    "scenes": [
-      "设计配图",
-      "游戏素材",
-      "概念艺术",
-      "营销素材",
-      "角色设计"
-    ],
-    "url": "https://leonardo.ai",
-    "icon": "🦁",
-    "free_tier": "每日免费150 tokens",
-    "paid_tiers": [
-      {
-        "name": "Apprentice",
-        "price": "$10/月",
-        "features": "更多tokens、高级模型"
-      },
-      {
-        "name": "Artisan",
-        "price": "$24/月",
-        "features": "更多配额、视频生成"
-      }
-    ],
-    "chinese_support": 2,
-    "chinese_note": "英文prompt效果最佳，中文需翻译使用",
-    "access_barrier": "国内可访问",
-    "access_level": "开放",
-    "strengths": "游戏素材生成最佳、角色设计一致性高、Canvas编辑、实时Canvas、免费日额度",
-    "weaknesses": "英文prompt门槛、艺术性不如Midjourney、高级功能付费",
-    "best_for": [
-      "游戏开发者",
-      "角色和场景设计",
-      "营销素材快速生成"
-    ],
-    "not_for": [
-      "中文用户(英文门槛)",
-      "追求极致审美的专业设计师"
-    ],
-    "rating_overall": 4,
-    "rating_chinese": 2,
-    "rating_ease": 4,
-    "rating_price": 4,
-    "last_updated": "2026-07-21",
-    "source": "leonardo.ai",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "heygen",
-    "name": "HeyGen",
-    "vendor": "HeyGen",
-    "category": [
-      "AI视频",
-      "AI创作"
-    ],
-    "scenes": [
-      "视频制作",
-      "营销素材",
-      "配音",
-      "短视频创作"
-    ],
-    "url": "https://www.heygen.com",
-    "icon": "🎭",
-    "free_tier": "每月3个视频(带水印)",
-    "paid_tiers": [
-      {
-        "name": "Creator",
-        "price": "$29/月",
-        "features": "无限视频、200月额度"
-      },
-      {
-        "name": "Pro",
-        "price": "$99/月",
-        "features": "更多额度、4K渲染"
-      }
-    ],
-    "chinese_support": 4,
-    "chinese_note": "支持175+语言，中文数字人自然",
-    "access_barrier": "国内可访问",
-    "access_level": "开放",
-    "strengths": "数字人质量行业第一、175+语言唇语同步、Avatar V逼真度领先、视频翻译",
-    "weaknesses": "高级功能氪金(按信用点计费)、免费版带水印、视频生成速度一般",
-    "best_for": [
-      "需要AI数字人的企业营销",
-      "多语言视频翻译",
-      "培训和教学视频"
-    ],
-    "not_for": [
-      "预算极度敏感用户",
-      "需要实拍级电影质量的场景"
-    ],
-    "rating_overall": 4,
-    "rating_chinese": 3.5,
-    "rating_ease": 3.5,
-    "rating_price": 3,
-    "last_updated": "2026-07-21",
-    "source": "heygen.com",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "notebooklm",
-    "name": "NotebookLM",
-    "vendor": "Google",
-    "category": [
-      "AI研究",
-      "写作",
-      "知识管理"
-    ],
-    "scenes": [
-      "深度研究",
-      "写论文",
-      "学习辅导",
-      "长文档分析",
-      "学术调研"
-    ],
-    "url": "https://notebooklm.google.com",
-    "icon": "📓",
-    "free_tier": "100个笔记本、50个来源/本、每天50次查询、3次音频概述",
-    "paid_tiers": [
-      {
-        "name": "Plus",
-        "price": "$7.99/月",
-        "features": "更高限额"
-      },
-      {
-        "name": "Pro",
-        "price": "$19.99/月",
-        "features": "深度研究、更多音频概述"
-      }
-    ],
-    "chinese_support": 3,
-    "chinese_note": "支持中文来源上传和分析，音频概述支持中文",
-    "access_barrier": "需要科学上网 + Google账号",
-    "access_level": "受限",
-    "strengths": "来源基于RAG(无幻觉)、音频概述(双人播客)惊艳、学生免费(Edu)、100笔记本免费",
-    "weaknesses": "国内访问受限、中文音频概述不够自然、依赖Google账号",
-    "best_for": [
-      "学生和研究者",
-      "长文档分析",
-      "知识管理和学习"
-    ],
-    "not_for": [
-      "国内直连用户",
-      "需要实时创作的用户",
-      "非Google生态用户"
-    ],
-    "rating_overall": 4.5,
-    "rating_chinese": 3,
-    "rating_ease": 4.5,
-    "rating_price": 5,
-    "last_updated": "2026-07-21",
-    "source": "notebooklm.google.com",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "bolt",
-    "name": "Bolt.new",
-    "vendor": "Bolt (StackBlitz)",
-    "category": [
-      "AI编程",
-      "IDE"
-    ],
-    "scenes": [
-      "写代码",
-      "项目开发",
-      "快速原型",
-      "全栈开发"
-    ],
-    "url": "https://bolt.new",
-    "icon": "⚡",
-    "free_tier": "1M tokens/月(无信用卡要求)",
-    "paid_tiers": [
-      {
-        "name": "Pro",
-        "price": "$25/月",
-        "features": "10M tokens、自定义域名、无品牌水印"
-      },
-      {
-        "name": "Teams",
-        "price": "$30/人/月",
-        "features": "团队协作、管理面板"
-      }
-    ],
-    "chinese_support": 3,
-    "chinese_note": "支持中文提示词生成应用，界面英文",
-    "access_barrier": "国内可访问",
-    "access_level": "开放",
-    "strengths": "全栈应用一键生成(Node.js+React)、免费层最慷慨(1M tokens)、部署集成、WebContainer技术",
-    "weaknesses": "复杂逻辑项目能力有限、外部API集成受限、代码质量参差不齐",
-    "best_for": [
-      "非技术背景创业者",
-      "快速原型验证",
-      "小型全栈应用"
-    ],
-    "not_for": [
-      "需要复杂后端逻辑的项目",
-      "企业级应用",
-      "需要精细控制代码的场景"
-    ],
-    "rating_overall": 4,
-    "rating_chinese": 2.5,
-    "rating_ease": 4.5,
-    "rating_price": 3.5,
-    "last_updated": "2026-07-21",
-    "source": "bolt.new",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "v0",
-    "name": "v0",
-    "vendor": "Vercel",
-    "category": [
-      "AI编程",
-      "IDE"
-    ],
-    "scenes": [
-      "写代码",
-      "快速原型",
-      "UI开发",
-      "前端开发"
-    ],
-    "url": "https://v0.dev",
-    "icon": "🟢",
-    "free_tier": "每日免费额度(约1M tokens/月)",
-    "paid_tiers": [
-      {
-        "name": "Pro",
-        "price": "$20/月",
-        "features": "更高日配额、优先渲染、自定义组件"
-      }
-    ],
-    "chinese_support": 2,
-    "chinese_note": "中文提示词支持有限，UI多为英文组件",
-    "access_barrier": "国内可访问",
-    "access_level": "开放",
-    "strengths": "React/Tailwind/shadcn UI代码质量高、Vercel部署一键、与Next.js生态无缝",
-    "weaknesses": "仅限前端(React)、中文支持弱、免费版组件复杂度有限、不适合后端",
-    "best_for": [
-      "React前端开发者",
-      "需要高质量UI组件的项目",
-      "Next.js/Vercel生态用户"
-    ],
-    "not_for": [
-      "中文用户(英文门槛)",
-      "需要后端逻辑的项目",
-      "非React技术栈"
-    ],
-    "rating_overall": 3.8,
-    "rating_chinese": 2,
-    "rating_ease": 4,
-    "rating_price": 3.5,
-    "last_updated": "2026-07-21",
-    "source": "v0.dev",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "udio",
-    "name": "Udio",
-    "vendor": "Udio",
-    "category": [
-      "AI音乐",
-      "AI音频"
-    ],
-    "scenes": [
-      "音乐创作",
-      "背景音乐",
-      "歌曲制作",
-      "配乐"
-    ],
-    "url": "https://www.udio.com",
-    "icon": "🎹",
-    "free_tier": "每日免费额度(约10首/天)",
-    "paid_tiers": [
-      {
-        "name": "Standard",
-        "price": "$10/月",
-        "features": "更多生成、更高音质、商业使用许可"
-      },
-      {
-        "name": "Pro",
-        "price": "$30/月",
-        "features": "更多配额、优先生成"
-      }
-    ],
-    "chinese_support": 2,
-    "chinese_note": "支持中文歌词但自然度不如英文",
-    "access_barrier": "需要科学上网",
-    "access_level": "受限",
-    "strengths": "音乐质量出色(与Suno并列顶级)、曲风多样、人声自然度好、社区活跃",
-    "weaknesses": "国内访问受限、中文歌词偶有不自然、版权归属有争议",
-    "best_for": [
-      "音乐创作者",
-      "短视频配乐",
-      "需要高品质人声的音乐"
-    ],
-    "not_for": [
-      "国内直连用户",
-      "需要API集成的场景"
-    ],
-    "rating_overall": 4,
-    "rating_chinese": 2.5,
-    "rating_ease": 4,
-    "rating_price": 4,
-    "last_updated": "2026-07-21",
-    "source": "udio.com",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "ideogram",
-    "name": "Ideogram",
-    "vendor": "Ideogram AI",
-    "category": [
-      "AI图像",
-      "AI绘画"
-    ],
-    "scenes": [
-      "设计配图",
-      "海报设计",
-      "营销素材",
-      "Logo设计"
-    ],
-    "url": "https://ideogram.ai",
-    "icon": "✍️",
-    "free_tier": "每日免费额度(约100张)",
-    "paid_tiers": [
-      {
-        "name": "Plus",
-        "price": "$20/月",
-        "features": "更多生成、无水印、商业使用"
-      }
-    ],
-    "chinese_support": 2,
-    "chinese_note": "不支持中文文字渲染，需英文prompt",
-    "access_barrier": "国内可访问",
-    "access_level": "开放",
-    "strengths": "图片内文字渲染业界最佳(海报/Logo/封面)、设计感好、国内可访问",
-    "weaknesses": "英文prompt门槛、中国风/中文字体渲染弱、艺术性不如Midjourney",
-    "best_for": [
-      "需要图片含文字的设计(海报/封面/Logo)",
-      "营销素材制作"
-    ],
-    "not_for": [
-      "中文文案设计(中文渲染差)",
-      "追求极致艺术性的场景"
-    ],
-    "rating_overall": 4,
-    "rating_chinese": 2,
-    "rating_ease": 4,
-    "rating_price": 3.5,
-    "last_updated": "2026-07-21",
-    "source": "ideogram.ai",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "replit",
-    "name": "Replit",
-    "vendor": "Replit",
-    "category": [
-      "AI编程",
-      "IDE"
-    ],
-    "scenes": [
-      "写代码",
-      "项目开发",
-      "快速原型",
-      "学习辅导"
-    ],
-    "url": "https://replit.com",
-    "icon": "🔄",
-    "free_tier": "有限AI使用和部署",
-    "paid_tiers": [
-      {
-        "name": "Core",
-        "price": "$20/月",
-        "features": "更多AI功能、更高部署限额"
-      },
-      {
-        "name": "Teams",
-        "price": "$40/人/月",
-        "features": "团队协作、无限部署"
-      }
-    ],
-    "chinese_support": 3,
-    "chinese_note": "支持中文注释和需求，界面英文",
-    "access_barrier": "国内可访问但速度较慢",
-    "access_level": "受限",
-    "strengths": "在线IDE+AI编程+部署一站式、Replit Agent自主开发、支持多种语言、即时分享",
-    "weaknesses": "国内访问速度慢、免费版限制多、复杂项目性能有限",
-    "best_for": [
-      "初学者学习编程",
-      "快速验证想法",
-      "团队协作开发"
-    ],
-    "not_for": [
-      "国内网络不稳定用户",
-      "大规模生产级应用"
-    ],
-    "rating_overall": 3.8,
-    "rating_chinese": 2.5,
-    "rating_ease": 4,
-    "rating_price": 3.5,
-    "last_updated": "2026-07-21",
-    "source": "replit.com",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "julius",
-    "name": "Julius AI",
-    "vendor": "Julius AI",
-    "category": [
-      "AI数据分析",
-      "AI办公"
-    ],
-    "scenes": [
-      "数据分析",
-      "写论文",
-      "写周报",
-      "办公文档处理"
-    ],
-    "url": "https://julius.ai",
-    "icon": "📈",
-    "free_tier": "有限数据分析和图表生成",
-    "paid_tiers": [
-      {
-        "name": "Pro",
-        "price": "$20/月",
-        "features": "更大数据集、更多分析、优先支持"
-      }
-    ],
-    "chinese_support": 3,
-    "chinese_note": "支持中文数据分析和提问，界面英文",
-    "access_barrier": "国内可访问",
-    "access_level": "开放",
-    "strengths": "数据可视化专业、CSV/Excel直接上传分析、统计方法自动选择、图表美观",
-    "weaknesses": "大型数据集受限、中文UI缺失、复杂统计不如专业工具",
-    "best_for": [
-      "非技术背景的数据分析需求",
-      "学生论文数据可视化",
-      "快速生成图表"
-    ],
-    "not_for": [
-      "大数据分析(>10万行)",
-      "需要专业统计软件的场景"
-    ],
-    "rating_overall": 3.5,
-    "rating_chinese": 2.5,
-    "rating_ease": 4,
-    "rating_price": 3.5,
-    "last_updated": "2026-07-21",
-    "source": "julius.ai",
-    "card_kind": "concrete",
-    "entity_kind": "product"
-  },
-  {
-    "id": "mistral",
-    "name": "Mistral AI（产品入口）",
-    "vendor": "Mistral AI",
-    "category": [
-      "对话"
-    ],
-    "scenes": [
-      "写代码",
-      "写论文",
-      "翻译文档"
-    ],
-    "url": "https://mistral.ai/",
-    "icon": "🏔️",
-    "free_tier": "开放权重模型免费自部署",
-    "paid_tiers": [
-      {
-        "name": "API 按量",
-        "price": "从 /usr/bin/bash.15/MTok"
-      }
-    ],
-    "chinese_support": 2,
-    "chinese_note": "主要面向英语，中文不在官方优先支持列表",
-    "access_barrier": "境外（需科学上网）",
-    "access_level": "受限",
-    "strengths": "开放权重模型丰富、Apache 2.0 许可、多语言多模态",
-    "weaknesses": "中国市场访问受限、缓存定价未公开",
-    "best_for": [
-      "需要开源部署",
-      "欧洲合规场景"
-    ],
-    "not_for": [
-      "中文为主的工作",
-      "需要国内直接访问"
-    ],
-    "rating_overall": 4,
-    "rating_chinese": 2,
-    "rating_ease": 3.5,
-    "rating_price": 4,
-    "last_updated": "2026-07-27",
-    "source": "https://mistral.ai/pricing/api/",
-    "card_kind": "collection",
-    "entity_kind": "product",
-    "overview": {
-      "description": "法国 AI 公司，提供开放权重和商业许可的多种模型，覆盖文本、编码、推理和 OCR 场景。",
-      "features": [
-        {
-          "tone": "positive",
-          "text": "Apache 2.0 许可的小模型适合自由部署和商用"
-        },
-        {
-          "tone": "positive",
-          "text": "旗舰模型 Mistral Medium 3.5 均衡性能和成本"
-        },
-        {
-          "tone": "negative",
-          "text": "中国市场网络访问受限"
-        },
-        {
-          "tone": "negative",
-          "text": "缓存定价信息未在官方价格页公开"
-        }
-      ],
-      "source_refs": [
-        "mistral-api-pricing"
-      ]
-    }
-  },
-  {
-    "id": "cohere",
-    "name": "Cohere（产品入口）",
-    "vendor": "Cohere",
-    "category": [
-      "对话",
-      "写作",
-      "编程",
-      "企业应用"
-    ],
-    "scenes": [
-      "写代码",
-      "写论文",
-      "翻译文档",
-      "企业应用开发"
-    ],
-    "url": "https://cohere.com",
-    "icon": "🔗",
-    "free_tier": "免费试用 API Key，每月限额",
-    "paid_tiers": [
-      {
-        "name": "API 按量",
-        "price": "从 $0.0375/MTok",
-        "features": "Command 系列、Rerank、Embed，按量计费"
-      }
-    ],
-    "chinese_support": 2,
-    "chinese_note": "主要面向英语和企业市场，中文不在官方优先支持列表",
-    "access_barrier": "境外（需科学上网）",
-    "access_level": "受限",
-    "strengths": "企业级 RAG 和检索能力领先、Embed/Rerank 模型行业标杆、Command R7B 极具性价比",
-    "weaknesses": "中国市场访问受限、中文能力有限、消费者端知名度低",
-    "best_for": [
-      "企业 RAG 和搜索增强",
-      "多语言文本分类和嵌入",
-      "需要高质量 Rerank 的场景"
-    ],
-    "not_for": [
-      "中文为主的对话场景",
-      "需要国内直接访问"
-    ],
-    "rating_overall": 3.8,
-    "rating_chinese": 2,
-    "rating_ease": 3.5,
-    "rating_price": 4.5,
-    "last_updated": "2026-07-28",
-    "source": "https://cohere.com/pricing",
-    "card_kind": "collection",
-    "entity_kind": "product",
-    "overview": {
-      "description": "加拿大 AI 公司，以企业级检索增强生成（RAG）、文本嵌入和重排序模型见长，Command 系列覆盖通用对话和编码。",
-      "features": [
-        {
-          "tone": "positive",
-          "text": "Embed 和 Rerank 模型是企业搜索和 RAG 的行业标杆"
-        },
-        {
-          "tone": "positive",
-          "text": "Command R7B 在 $0.0375/MTok 价位极具性价比"
-        },
-        {
-          "tone": "negative",
-          "text": "中国市场网络访问受限"
-        },
-        {
-          "tone": "negative",
-          "text": "Command A / R+ 缓存定价未在官方价格页公开"
-        }
-      ],
-      "source_refs": [
-        "cohere-api-pricing"
-      ]
-    }
-  }
+          {
+                    "id": "chatgpt",
+                    "name": "ChatGPT",
+                    "vendor": "OpenAI",
+                    "category": [
+                              "对话",
+                              "写作",
+                              "编程",
+                              "翻译",
+                              "数据分析"
+                    ],
+                    "scenes": [
+                              "写论文",
+                              "写周报",
+                              "写代码",
+                              "翻译文档",
+                              "数据分析",
+                              "头脑风暴",
+                              "学习辅导"
+                    ],
+                    "url": "https://chatgpt.com",
+                    "icon": "🤖",
+                    "free_tier": "GPT-5.2 每5小时约10条，超限降级到轻量模型",
+                    "paid_tiers": [
+                              {
+                                        "name": "Plus",
+                                        "price": "$20/月",
+                                        "features": "GPT-5.2 完整访问、文件上传、图像生成"
+                              },
+                              {
+                                        "name": "Pro",
+                                        "price": "$200/月",
+                                        "features": "无限使用、深度研究、优先访问"
+                              }
+                    ],
+                    "chinese_support": 3,
+                    "chinese_note": "中文能力中等偏上，对中文语境理解尚可但偶有生硬",
+                    "access_barrier": "需要科学上网 + 海外手机号注册",
+                    "access_level": "受限",
+                    "strengths": "综合能力最强、生态最丰富(GPTs商店)、多模态领先、长期记忆",
+                    "weaknesses": "国内访问困难、注册门槛高、免费版限制严格、高峰期降级",
+                    "best_for": [
+                              "需要最强综合能力的场景",
+                              "复杂推理和长文档处理",
+                              "多模态任务"
+                    ],
+                    "not_for": [
+                              "国内网络受限用户",
+                              "预算极度敏感用户"
+                    ],
+                    "rating_overall": 4.5,
+                    "rating_chinese": 3.5,
+                    "rating_ease": 2.5,
+                    "rating_price": 3,
+                    "last_updated": "2026-07-18",
+                    "source": "https://openai.com/index/gpt-5-6/",
+                    "card_kind": "collection",
+                    "entity_kind": "product",
+                    "overview": {
+                              "description": "OpenAI 提供 ChatGPT、Codex 和 API 等 AI 产品入口；具体模型与套餐在下方按可核实范围单独展示。",
+                              "features": [
+                                        {
+                                                  "tone": "positive",
+                                                  "text": "优点：GPT-5.6 已在 ChatGPT、Codex 与 OpenAI API 中提供，并按能力、速度和成本分层。"
+                                        },
+                                        {
+                                                  "tone": "negative",
+                                                  "text": "限制：模型可用性会随产品、订阅等级、地区及逐步开放状态变化，需以叶节点条件为准。"
+                                        }
+                              ],
+                              "source_refs": [
+                                        "openai-model-compare",
+                                        "openai-gpt-56-chatgpt"
+                              ]
+                    },
+                    "published_at": "2026-07-09"
+          },
+          {
+                    "id": "claude",
+                    "name": "Claude",
+                    "vendor": "Anthropic",
+                    "category": [
+                              "对话",
+                              "写作",
+                              "编程",
+                              "长文档分析"
+                    ],
+                    "scenes": [
+                              "写论文",
+                              "写周报",
+                              "写代码",
+                              "长文档分析",
+                              "深度研究",
+                              "头脑风暴"
+                    ],
+                    "url": "https://claude.ai",
+                    "icon": "🧠",
+                    "free_tier": "Sonnet 4.5 每对话窗口约9条，开新窗口可规避",
+                    "paid_tiers": [
+                              {
+                                        "name": "Pro",
+                                        "price": "$20/月",
+                                        "features": "更多使用量、Projects、优先访问"
+                              },
+                              {
+                                        "name": "Team",
+                                        "price": "$30/人/月",
+                                        "features": "团队协作、更高限额"
+                              },
+                              {
+                                        "name": "Enterprise",
+                                        "price": "定制",
+                                        "features": "企业级安全、管理控制台"
+                              }
+                    ],
+                    "chinese_support": 3,
+                    "chinese_note": "中文表现良好，长文档中文理解优秀",
+                    "access_barrier": "需要科学上网，部分地区支持手机号注册",
+                    "access_level": "受限",
+                    "strengths": "推理能力强(Claude Code在SWE-bench达80.9%)、超长上下文、代码能力顶级、安全性高",
+                    "weaknesses": "国内同样受限、免费版窗口限制、高峰期排队",
+                    "best_for": [
+                              "复杂推理和代码开发",
+                              "长文档分析和研究",
+                              "结构化写作"
+                    ],
+                    "not_for": [
+                              "频繁大量使用的免费用户",
+                              "国内直连用户"
+                    ],
+                    "rating_overall": 4.7,
+                    "rating_chinese": 3.5,
+                    "rating_ease": 2.5,
+                    "rating_price": 3,
+                    "last_updated": "2026-07-18",
+                    "source": "https://www.anthropic.com/news",
+                    "card_kind": "collection",
+                    "entity_kind": "product",
+                    "overview": {
+                              "description": "Anthropic 的 Claude 产品入口覆盖对话产品与 API；具体模型和订阅套餐在下方独立展示。",
+                              "features": [
+                                        {
+                                                  "tone": "positive",
+                                                  "text": "优点：模型层级、上下文和 API 计价可在具体叶节点中分别核对。"
+                                        },
+                                        {
+                                                  "tone": "negative",
+                                                  "text": "限制：订阅权益、地区可用性和使用限制需以各套餐官方条件为准。"
+                                        }
+                              ],
+                              "source_refs": [
+                                        "anthropic-models",
+                                        "anthropic-plans"
+                              ]
+                    },
+                    "published_at": "2026-07-24"
+          },
+          {
+                    "id": "gemini",
+                    "name": "Gemini",
+                    "vendor": "Google",
+                    "category": [
+                              "对话",
+                              "写作",
+                              "翻译",
+                              "搜索",
+                              "多模态"
+                    ],
+                    "scenes": [
+                              "写论文",
+                              "翻译文档",
+                              "搜索研究",
+                              "头脑风暴",
+                              "数据分析"
+                    ],
+                    "url": "https://gemini.google.com",
+                    "icon": "🌐",
+                    "free_tier": "Gemini 3/3.5 Flash 免费，按计算单元计费，每5小时重置",
+                    "paid_tiers": [
+                              {
+                                        "name": "Advanced",
+                                        "price": "$20/月",
+                                        "features": "Gemini 3.0 Pro/Thinking、超长上下文、Google生态集成"
+                              }
+                    ],
+                    "chinese_support": 4,
+                    "chinese_note": "中文能力优秀，翻译质量高",
+                    "access_barrier": "需要科学上网",
+                    "access_level": "受限",
+                    "strengths": "世界知识最强(Google搜索)、多模态原生、超长上下文(1M+)、Nano Banana绘画",
+                    "weaknesses": "国内访问不稳定、付费版性价比争议、创作型写作不如Claude",
+                    "best_for": [
+                              "需要最新信息的搜索型任务",
+                              "多模态任务",
+                              "Google生态用户"
+                    ],
+                    "not_for": [
+                              "国内直连用户",
+                              "纯代码开发(不如Claude)"
+                    ],
+                    "rating_overall": 4.5,
+                    "rating_chinese": 4,
+                    "rating_ease": 3,
+                    "rating_price": 4,
+                    "last_updated": "2026-07-18",
+                    "source": "https://blog.google/technology/ai/",
+                    "card_kind": "collection",
+                    "entity_kind": "product",
+                    "overview": {
+                              "description": "Google 的 Gemini 产品入口覆盖 API 模型与 Google AI 订阅；具体资料在下方按已核实范围展示。",
+                              "features": [
+                                        {
+                                                  "tone": "positive",
+                                                  "text": "优点：已核实模型支持多档 API 价格与上下文条件的独立查看。"
+                                        },
+                                        {
+                                                  "tone": "negative",
+                                                  "text": "限制：官方套餐页面未稳定完整列出全部模型包含关系，相关项目明确标为部分核实。"
+                                        }
+                              ],
+                              "source_refs": [
+                                        "google-api-pricing",
+                                        "google-consumer-plans"
+                              ]
+                    },
+                    "published_at": "2026-05-19"
+          },
+          {
+                    "id": "deepseek",
+                    "name": "DeepSeek",
+                    "vendor": "深度求索",
+                    "category": [
+                              "对话",
+                              "写作",
+                              "编程",
+                              "推理"
+                    ],
+                    "scenes": [
+                              "写代码",
+                              "写论文",
+                              "翻译文档",
+                              "深度研究",
+                              "数学解题"
+                    ],
+                    "url": "https://chat.deepseek.com",
+                    "icon": "🔍",
+                    "free_tier": "完全免费，无限制使用 V4 Pro/Flash",
+                    "paid_tiers": [
+                              {
+                                        "name": "API",
+                                        "price": "约¥0.55/百万输入token",
+                                        "features": "开发调用，价格仅为OpenAI的1/10"
+                              }
+                    ],
+                    "chinese_support": 5,
+                    "chinese_note": "原生中文，中文理解和生成能力顶级",
+                    "access_barrier": "国内可直接访问，偶尔需要手机验证",
+                    "access_level": "开放",
+                    "strengths": "完全免费、中文顶级、推理能力强(R1媲美o1)、API极其便宜、开源模型",
+                    "weaknesses": "高峰期偶有排队、多模态能力弱于ChatGPT/Gemini、生态不如ChatGPT",
+                    "best_for": [
+                              "预算敏感用户",
+                              "中文场景首选",
+                              "编程和逻辑推理",
+                              "高频使用场景"
+                    ],
+                    "not_for": [
+                              "需要图像生成或识别的任务"
+                    ],
+                    "rating_overall": 4.3,
+                    "rating_chinese": 5,
+                    "rating_ease": 5,
+                    "rating_price": 5,
+                    "last_updated": "2026-07-18",
+                    "source": "https://api-docs.deepseek.com/updates",
+                    "card_kind": "collection",
+                    "entity_kind": "product",
+                    "overview": {
+                              "description": "中国深度求索公司推出的开源大模型，以极致性价比和透明定价著称，V4 系列支持 1M 上下文。",
+                              "features": [
+                                        {
+                                                  "tone": "positive",
+                                                  "text": "V4-Flash 缓存命中仅 ¥0.02/MTok，长系统提示词场景成本极低"
+                                        },
+                                        {
+                                                  "tone": "positive",
+                                                  "text": "1M 原生上下文，中英文双语定价透明"
+                                        },
+                                        {
+                                                  "tone": "negative",
+                                                  "text": "缓存为 best-effort，无 SLA 保证命中率"
+                                        },
+                                        {
+                                                  "tone": "negative",
+                                                  "text": "高峰时段 API 并发限制可能触发排队"
+                                        }
+                              ],
+                              "source_refs": [
+                                        "deepseek-pricing-cn"
+                              ]
+                    },
+                    "published_at": "2026-07-31"
+          },
+          {
+                    "id": "tongyi",
+                    "name": "通义千问",
+                    "vendor": "阿里巴巴",
+                    "category": [
+                              "对话",
+                              "写作",
+                              "编程",
+                              "翻译",
+                              "办公"
+                    ],
+                    "scenes": [
+                              "写论文",
+                              "写周报",
+                              "翻译文档",
+                              "办公文档处理",
+                              "学习辅导"
+                    ],
+                    "url": "https://tongyi.aliyun.com",
+                    "icon": "☁️",
+                    "free_tier": "Qwen-Max/Turbo 每月100万Token免费，长期有效",
+                    "paid_tiers": [
+                              {
+                                        "name": "API",
+                                        "price": "按量计费",
+                                        "features": "Qwen系列模型API调用、阿里云集成"
+                              }
+                    ],
+                    "chinese_support": 5,
+                    "chinese_note": "阿里系中文理解深度最佳之一，企业场景适配强",
+                    "access_barrier": "国内可直接访问，需阿里云/支付宝账号",
+                    "access_level": "开放",
+                    "strengths": "中文顶级、阿里云生态集成、企业级安全合规、通义灵码(IDE插件)",
+                    "weaknesses": "创意写作灵动性不如ChatGPT、英文场景偏弱",
+                    "best_for": [
+                              "国内企业用户",
+                              "中文办公和学习场景",
+                              "阿里云生态用户"
+                    ],
+                    "not_for": [
+                              "纯英文或国际化场景",
+                              "需要最强推理的任务"
+                    ],
+                    "rating_overall": 4,
+                    "rating_chinese": 5,
+                    "rating_ease": 4.5,
+                    "rating_price": 4.5,
+                    "last_updated": "2026-07-18",
+                    "source": "https://github.com/QwenLM",
+                    "card_kind": "concrete",
+                    "entity_kind": "product",
+                    "published_at": "2026-02-16"
+          },
+          {
+                    "id": "doubao",
+                    "name": "豆包",
+                    "vendor": "字节跳动",
+                    "category": [
+                              "对话",
+                              "写作",
+                              "翻译",
+                              "创意"
+                    ],
+                    "scenes": [
+                              "写周报",
+                              "头脑风暴",
+                              "翻译文档",
+                              "创意写作",
+                              "日常闲聊"
+                    ],
+                    "url": "https://www.doubao.com",
+                    "icon": "🫘",
+                    "free_tier": "完全免费，无限使用",
+                    "paid_tiers": [],
+                    "chinese_support": 5,
+                    "chinese_note": "原生中文，语气自然接地气",
+                    "access_barrier": "国内可直接访问，手机号注册",
+                    "access_level": "开放",
+                    "strengths": "完全免费、中文对话自然、多模态支持、字节生态(TikTok/抖音数据积累)",
+                    "weaknesses": "深度推理和代码能力不如DeepSeek/Claude、国际化弱",
+                    "best_for": [
+                              "日常中文对话",
+                              "创意和娱乐场景",
+                              "零预算用户"
+                    ],
+                    "not_for": [
+                              "复杂代码开发",
+                              "深度学术研究"
+                    ],
+                    "rating_overall": 3.5,
+                    "rating_chinese": 4.5,
+                    "rating_ease": 5,
+                    "rating_price": 5,
+                    "last_updated": "2026-07-18",
+                    "source": "https://www.volcengine.com/product/doubao",
+                    "card_kind": "concrete",
+                    "entity_kind": "product",
+                    "published_at": "2026-06-23"
+          },
+          {
+                    "id": "kimi",
+                    "name": "Kimi",
+                    "vendor": "月之暗面",
+                    "category": [
+                              "对话",
+                              "长文档",
+                              "搜索",
+                              "写作"
+                    ],
+                    "scenes": [
+                              "写论文",
+                              "长文档分析",
+                              "搜索研究",
+                              "学习辅导"
+                    ],
+                    "url": "https://kimi.moonshot.cn",
+                    "icon": "🌙",
+                    "free_tier": "免费使用，每日限额",
+                    "paid_tiers": [
+                              {
+                                        "name": "会员",
+                                        "price": "约¥50/月",
+                                        "features": "更高限额、优先响应"
+                              }
+                    ],
+                    "chinese_support": 5,
+                    "chinese_note": "中文长文档处理能力突出",
+                    "access_barrier": "国内可直接访问，手机号注册",
+                    "access_level": "开放",
+                    "strengths": "超长上下文(200万字)、中文长文档分析最优、联网搜索、文件上传解析",
+                    "weaknesses": "代码能力一般、创意写作偏弱、免费额度有限",
+                    "best_for": [
+                              "长文档分析(论文/合同/报告)",
+                              "中文文献综述",
+                              "需要联网搜索的研究"
+                    ],
+                    "not_for": [
+                              "代码开发",
+                              "需要多模态识别的任务"
+                    ],
+                    "rating_overall": 3.8,
+                    "rating_chinese": 5,
+                    "rating_ease": 4.5,
+                    "rating_price": 3.5,
+                    "last_updated": "2026-07-18",
+                    "source": "https://kimi.com",
+                    "card_kind": "concrete",
+                    "entity_kind": "product",
+                    "published_at": "2026-07-17"
+          },
+          {
+                    "id": "zhipu",
+                    "name": "智谱清言",
+                    "vendor": "智谱AI",
+                    "category": [
+                              "对话",
+                              "写作",
+                              "编程",
+                              "企业应用"
+                    ],
+                    "scenes": [
+                              "写论文",
+                              "写代码",
+                              "办公文档处理",
+                              "企业应用开发"
+                    ],
+                    "url": "https://chatglm.cn",
+                    "icon": "🏛️",
+                    "free_tier": "GLM-4-Flash 永久免费，注册送2500万Token",
+                    "paid_tiers": [
+                              {
+                                        "name": "API",
+                                        "price": "按量计费",
+                                        "features": "GLM系列、企业定制、私有化部署"
+                              }
+                    ],
+                    "chinese_support": 5,
+                    "chinese_note": "中文理解准确率高，企业合规性强",
+                    "access_barrier": "国内可直接访问",
+                    "access_level": "开放",
+                    "strengths": "中文企业级应用强、GLM模型幻觉率最低、支持私有化部署、合规性好",
+                    "weaknesses": "国际生态弱、多模态不如ChatGPT、大众认知度不如DeepSeek",
+                    "best_for": [
+                              "国内企业应用",
+                              "需私有化部署的场景",
+                              "高合规要求场景"
+                    ],
+                    "not_for": [
+                              "个人创意类使用",
+                              "需要最强国际模型的任务"
+                    ],
+                    "rating_overall": 3.8,
+                    "rating_chinese": 4.5,
+                    "rating_ease": 4.5,
+                    "rating_price": 4,
+                    "last_updated": "2026-07-18",
+                    "source": "https://docs.bigmodel.cn/cn/guide/start/model-overview",
+                    "card_kind": "collection",
+                    "entity_kind": "product",
+                    "overview": {
+                              "description": "清华大学孵化、港股上市的国产 AI 公司，提供 GLM 系列模型及全模态 API 服务，中文能力扎实。",
+                              "features": [
+                                        {
+                                                  "tone": "positive",
+                                                  "text": "GLM-5.2 支持 1M 无损上下文，Coding 能力开源 SOTA"
+                                        },
+                                        {
+                                                  "tone": "positive",
+                                                  "text": "缓存存储限时免费，长系统提示词场景成本极低"
+                                        },
+                                        {
+                                                  "tone": "negative",
+                                                  "text": "定价体系复杂（按输入/输出长度分档），账单预估难度较高"
+                                        },
+                                        {
+                                                  "tone": "negative",
+                                                  "text": "多模态视觉模型（GLM-5V）定价高于纯文本模型"
+                                        }
+                              ],
+                              "source_refs": [
+                                        "zhipu-api-pricing"
+                              ]
+                    },
+                    "published_at": "2026-06-13"
+          },
+          {
+                    "id": "cursor",
+                    "name": "Cursor",
+                    "vendor": "Anysphere",
+                    "category": [
+                              "AI编程",
+                              "IDE"
+                    ],
+                    "scenes": [
+                              "写代码",
+                              "项目开发",
+                              "代码重构",
+                              "Bug修复"
+                    ],
+                    "url": "https://cursor.com",
+                    "icon": "⌨️",
+                    "free_tier": "个人免费版(有限额)",
+                    "paid_tiers": [
+                              {
+                                        "name": "Pro",
+                                        "price": "$20/月",
+                                        "features": "无限补全、高级Agent模式"
+                              },
+                              {
+                                        "name": "Teams",
+                                        "price": "$40/人/月",
+                                        "features": "团队协作、管理面板"
+                              }
+                    ],
+                    "chinese_support": 3,
+                    "chinese_note": "支持中文注释和需求描述，界面为英文",
+                    "access_barrier": "国内可直接访问，需海外支付方式",
+                    "access_level": "开放",
+                    "strengths": "AI原生IDE标杆、Plan模式(架构规划)、多文件批量编辑、VS Code无缝迁移",
+                    "weaknesses": "企业合规性弱、仅支持VS Code生态、Pro版月费不低",
+                    "best_for": [
+                              "全栈开发者",
+                              "复杂项目快速迭代",
+                              "创业团队"
+                    ],
+                    "not_for": [
+                              "企业合规敏感用户",
+                              "纯JetBrains用户",
+                              "轻度使用者(免费版够用)"
+                    ],
+                    "rating_overall": 4.7,
+                    "rating_chinese": 3,
+                    "rating_ease": 4,
+                    "rating_price": 3,
+                    "last_updated": "2026-07-18",
+                    "source": "https://cursor.com/cn/changelog",
+                    "card_kind": "concrete",
+                    "entity_kind": "product",
+                    "published_at": "2026-08-03"
+          },
+          {
+                    "id": "copilot",
+                    "name": "GitHub Copilot",
+                    "vendor": "Microsoft/GitHub",
+                    "category": [
+                              "AI编程",
+                              "IDE插件"
+                    ],
+                    "scenes": [
+                              "写代码",
+                              "代码补全",
+                              "Bug修复",
+                              "代码审查"
+                    ],
+                    "url": "https://github.com/features/copilot",
+                    "icon": "🐙",
+                    "free_tier": "学生免费、开源维护者免费、普通用户50聊天+2000补全/月",
+                    "paid_tiers": [
+                              {
+                                        "name": "Pro",
+                                        "price": "$10/月",
+                                        "features": "无限补全和聊天"
+                              },
+                              {
+                                        "name": "Business",
+                                        "price": "$19/人/月",
+                                        "features": "企业管理、安全策略"
+                              },
+                              {
+                                        "name": "Max",
+                                        "price": "$100/月",
+                                        "features": "最高限额、所有模型"
+                              }
+                    ],
+                    "chinese_support": 3,
+                    "chinese_note": "支持中文注释理解，界面英文",
+                    "access_barrier": "国内可访问GitHub但速度慢",
+                    "access_level": "受限",
+                    "strengths": "生态最广(37+语言)、GitHub深度集成、性价比高($10/月)、企业级安全",
+                    "weaknesses": "多文件Agent能力弱、复杂推理不如Cursor、国内访问速度慢",
+                    "best_for": [
+                              "微软/GitHub生态用户",
+                              "日常编码",
+                              "团队协作开发"
+                    ],
+                    "not_for": [
+                              "需要跨文件重构的复杂项目",
+                              "国内网络不稳定用户"
+                    ],
+                    "rating_overall": 4,
+                    "rating_chinese": 3,
+                    "rating_ease": 3.5,
+                    "rating_price": 4,
+                    "last_updated": "2026-07-18",
+                    "source": "https://learn.microsoft.com/zh-cn/power-platform/released-versions/copilotstudio",
+                    "card_kind": "concrete",
+                    "entity_kind": "product",
+                    "published_at": "2026-06-30"
+          },
+          {
+                    "id": "claude-code",
+                    "name": "Claude Code",
+                    "vendor": "Anthropic",
+                    "category": [
+                              "AI编程",
+                              "命令行"
+                    ],
+                    "scenes": [
+                              "写代码",
+                              "项目开发",
+                              "代码重构",
+                              "自动化测试",
+                              "架构设计"
+                    ],
+                    "url": "https://claude.ai/claude-code",
+                    "icon": "⚡",
+                    "free_tier": "无(需Claude Pro订阅以上)",
+                    "paid_tiers": [
+                              {
+                                        "name": "按量",
+                                        "price": "重度使用约$100+/周",
+                                        "features": "终端使用、子代理并行、全代码库操作"
+                              },
+                              {
+                                        "name": "Max",
+                                        "price": "$200/月",
+                                        "features": "最高使用限额"
+                              }
+                    ],
+                    "chinese_support": 4,
+                    "chinese_note": "中文理解好，代码注释和文档支持中文",
+                    "access_barrier": "需要科学上网 + 付费账号",
+                    "access_level": "受限",
+                    "strengths": "推理最强(SWE-bench 80.9%)、长任务自主完成、MCP/Skills生态、子代理并行",
+                    "weaknesses": "成本高($100+/周)、仅终端使用(无GUI)、国内网络+支付双重门槛",
+                    "best_for": [
+                              "架构师和高级开发者",
+                              "复杂系统重构",
+                              "超长上下文任务"
+                    ],
+                    "not_for": [
+                              "预算有限的个人开发者",
+                              "不习惯终端的开发者",
+                              "国内用户(双重障碍)"
+                    ],
+                    "rating_overall": 4.8,
+                    "rating_chinese": 3.5,
+                    "rating_ease": 2,
+                    "rating_price": 1.5,
+                    "last_updated": "2026-07-18",
+                    "source": "https://code.claude.com/docs/en/changelog",
+                    "card_kind": "concrete",
+                    "entity_kind": "product",
+                    "published_at": "2026-08-04"
+          },
+          {
+                    "id": "trae",
+                    "name": "Trae",
+                    "vendor": "字节跳动",
+                    "category": [
+                              "AI编程",
+                              "IDE"
+                    ],
+                    "scenes": [
+                              "写代码",
+                              "项目开发",
+                              "快速原型"
+                    ],
+                    "url": "https://www.trae.ai",
+                    "icon": "🇨🇳",
+                    "free_tier": "个人免费(多档可选)",
+                    "paid_tiers": [
+                              {
+                                        "name": "Lite",
+                                        "price": "$3/月",
+                                        "features": "基础AI辅助"
+                              },
+                              {
+                                        "name": "Pro",
+                                        "price": "$10/月",
+                                        "features": "完整AI功能"
+                              },
+                              {
+                                        "name": "Ultra",
+                                        "price": "$100/月",
+                                        "features": "最高级别支持"
+                              }
+                    ],
+                    "chinese_support": 5,
+                    "chinese_note": "原生中文IDE，中文适配最强",
+                    "access_barrier": "国内可直接访问",
+                    "access_level": "开放",
+                    "strengths": "中文原生IDE、全链路开发闭环、VS Code无感迁移、多模态输入、价格亲民",
+                    "weaknesses": "国际生态弱、用户基数不如Cursor、插件生态仍在建设",
+                    "best_for": [
+                              "国内开发者",
+                              "中文项目",
+                              "快速原型开发",
+                              "全流程开发"
+                    ],
+                    "not_for": [
+                              "国际化项目",
+                              "需要GitHub深度集成的场景"
+                    ],
+                    "rating_overall": 4,
+                    "rating_chinese": 5,
+                    "rating_ease": 5,
+                    "rating_price": 4.5,
+                    "last_updated": "2026-07-18",
+                    "source": "https://www.trae.cn/changelog",
+                    "card_kind": "concrete",
+                    "entity_kind": "product",
+                    "published_at": "2026-07-31"
+          },
+          {
+                    "id": "midjourney",
+                    "name": "Midjourney",
+                    "vendor": "Midjourney Inc.",
+                    "category": [
+                              "AI图像",
+                              "AI绘画"
+                    ],
+                    "scenes": [
+                              "设计配图",
+                              "概念艺术",
+                              "海报设计",
+                              "插画创作"
+                    ],
+                    "url": "https://www.midjourney.com",
+                    "icon": "🎨",
+                    "free_tier": "无(已取消免费试用)",
+                    "paid_tiers": [
+                              {
+                                        "name": "Basic",
+                                        "price": "$10/月",
+                                        "features": "约200张/月"
+                              },
+                              {
+                                        "name": "Standard",
+                                        "price": "$30/月",
+                                        "features": "无限低速生成"
+                              },
+                              {
+                                        "name": "Pro",
+                                        "price": "$60/月",
+                                        "features": "高速生成、Stealth模式"
+                              }
+                    ],
+                    "chinese_support": 2,
+                    "chinese_note": "不支持中文提示词，需要英文Prompt",
+                    "access_barrier": "需要科学上网 + 海外支付(Discord使用)",
+                    "access_level": "受限",
+                    "strengths": "艺术品质最高、审美极其出色、风格多样性、社区活跃",
+                    "weaknesses": "需要英文prompt、必须用Discord(体验差)、国内不可用、无免费层",
+                    "best_for": [
+                              "需要最高艺术品质的设计师",
+                              "概念艺术和插画",
+                              "品牌视觉设计"
+                    ],
+                    "not_for": [
+                              "中文用户(英文门槛)",
+                              "预算敏感用户",
+                              "需要API集成的场景"
+                    ],
+                    "rating_overall": 4.5,
+                    "rating_chinese": 2,
+                    "rating_ease": 2,
+                    "rating_price": 3,
+                    "last_updated": "2026-07-18",
+                    "source": "https://docs.midjourney.com/changelog",
+                    "card_kind": "concrete",
+                    "entity_kind": "product",
+                    "published_at": "2026-04-14"
+          },
+          {
+                    "id": "nano-banana",
+                    "name": "Nano Banana",
+                    "vendor": "Google",
+                    "category": [
+                              "AI图像",
+                              "AI绘画"
+                    ],
+                    "scenes": [
+                              "设计配图",
+                              "海报设计",
+                              "营销素材",
+                              "角色设计"
+                    ],
+                    "url": "https://aistudio.google.com",
+                    "icon": "🍌",
+                    "free_tier": "Google AI Studio 免费使用",
+                    "paid_tiers": [
+                              {
+                                        "name": "Gemini Advanced",
+                                        "price": "$20/月",
+                                        "features": "Pro版画质、更高分辨率"
+                              }
+                    ],
+                    "chinese_support": 4,
+                    "chinese_note": "支持中文提示词，理解力强",
+                    "access_barrier": "需要科学上网",
+                    "access_level": "受限",
+                    "strengths": "提示词理解最佳、角色一致性极好、多模态联动(Gemini)、免费可用",
+                    "weaknesses": "国内访问受限、艺术性不如Midjourney、风格范围有限",
+                    "best_for": [
+                              "需要精准控制画面的设计师",
+                              "营销素材制作",
+                              "中文用户"
+                    ],
+                    "not_for": [
+                              "需要极致艺术性的场景",
+                              "国内直连用户"
+                    ],
+                    "rating_overall": 4.3,
+                    "rating_chinese": 4,
+                    "rating_ease": 3,
+                    "rating_price": 4.5,
+                    "last_updated": "2026-07-18",
+                    "source": "https://blog.google/technology/ai/nano-banana-2/",
+                    "card_kind": "concrete",
+                    "entity_kind": "product",
+                    "published_at": "2026-02-26"
+          },
+          {
+                    "id": "jimeng",
+                    "name": "即梦",
+                    "vendor": "字节跳动",
+                    "category": [
+                              "AI图像",
+                              "AI视频"
+                    ],
+                    "scenes": [
+                              "设计配图",
+                              "短视频制作",
+                              "营销素材",
+                              "创意表达"
+                    ],
+                    "url": "https://jimeng.jianying.com",
+                    "icon": "✨",
+                    "free_tier": "每日免费额度",
+                    "paid_tiers": [
+                              {
+                                        "name": "会员",
+                                        "price": "约¥30/月",
+                                        "features": "更多生成次数、更高画质"
+                              }
+                    ],
+                    "chinese_support": 5,
+                    "chinese_note": "原生中文，对中文场景理解极佳",
+                    "access_barrier": "国内可直接访问，抖音/剪映账号登录",
+                    "access_level": "开放",
+                    "strengths": "中文支持顶级、剪映生态集成、视频生成能力强、国内可用、免费额度足",
+                    "weaknesses": "国际化弱、艺术性不如Midjourney、生态锁定字节系",
+                    "best_for": [
+                              "短视频创作者",
+                              "中文营销素材",
+                              "抖音/剪映生态用户"
+                    ],
+                    "not_for": [
+                              "国际化创意项目",
+                              "需要API集成的开发者"
+                    ],
+                    "rating_overall": 4,
+                    "rating_chinese": 5,
+                    "rating_ease": 5,
+                    "rating_price": 4.5,
+                    "last_updated": "2026-07-18",
+                    "source": "https://bytedance.larkoffice.com/wiki/F95cwC8nniilgbkmUX6cSJLengh",
+                    "card_kind": "concrete",
+                    "entity_kind": "product",
+                    "published_at": "2026-07-31"
+          },
+          {
+                    "id": "kling",
+                    "name": "可灵",
+                    "vendor": "快手",
+                    "category": [
+                              "AI视频",
+                              "AI创作"
+                    ],
+                    "scenes": [
+                              "短视频制作",
+                              "视频生成",
+                              "创意表达",
+                              "营销视频"
+                    ],
+                    "url": "https://kling.kuaishou.com",
+                    "icon": "🎥",
+                    "free_tier": "每日免费生成额度",
+                    "paid_tiers": [
+                              {
+                                        "name": "会员",
+                                        "price": "约¥30/月",
+                                        "features": "更多生成、更高画质"
+                              }
+                    ],
+                    "chinese_support": 5,
+                    "chinese_note": "原生中文，中文视频场景理解顶级",
+                    "access_barrier": "国内可直接访问",
+                    "access_level": "开放",
+                    "strengths": "视频质量国产最佳、物理规律模拟好、中文场景自然、国内可用、免费额度",
+                    "weaknesses": "国际化弱、仅限视频生成、风格多样性不如Runway",
+                    "best_for": [
+                              "短视频创作者",
+                              "中文视频内容制作",
+                              "营销视频批量生成"
+                    ],
+                    "not_for": [
+                              "国际化视频项目",
+                              "需要专业后期编辑的场景"
+                    ],
+                    "rating_overall": 4,
+                    "rating_chinese": 5,
+                    "rating_ease": 5,
+                    "rating_price": 4.5,
+                    "last_updated": "2026-07-18",
+                    "source": "https://kling.ai/release-note/release-history",
+                    "card_kind": "concrete",
+                    "entity_kind": "product",
+                    "published_at": "2026-01-31"
+          },
+          {
+                    "id": "suno",
+                    "name": "Suno",
+                    "vendor": "Suno Inc.",
+                    "category": [
+                              "AI音乐",
+                              "AI音频"
+                    ],
+                    "scenes": [
+                              "音乐创作",
+                              "背景音乐",
+                              "歌曲制作",
+                              "配乐"
+                    ],
+                    "url": "https://suno.com",
+                    "icon": "🎵",
+                    "free_tier": "每日免费额度(约5首)",
+                    "paid_tiers": [
+                              {
+                                        "name": "Pro",
+                                        "price": "$10/月",
+                                        "features": "500首/月、商业使用许可"
+                              },
+                              {
+                                        "name": "Premier",
+                                        "price": "$30/月",
+                                        "features": "2000首/月、更高音质"
+                              }
+                    ],
+                    "chinese_support": 3,
+                    "chinese_note": "支持中文歌词生成，质量尚可",
+                    "access_barrier": "需要科学上网",
+                    "access_level": "受限",
+                    "strengths": "音乐质量惊艳(《技能五子棋》出圈)、曲风多样、一分钟成曲、专业级输出",
+                    "weaknesses": "国内访问受限、中文歌词偶有不自然、版权归属有争议",
+                    "best_for": [
+                              "音乐创作者",
+                              "短视频创作者(BGM)",
+                              "需要原创配乐的项目"
+                    ],
+                    "not_for": [
+                              "国内直连用户",
+                              "版权敏感的商业项目"
+                    ],
+                    "rating_overall": 4.5,
+                    "rating_chinese": 3,
+                    "rating_ease": 3,
+                    "rating_price": 4,
+                    "last_updated": "2026-07-18",
+                    "source": "https://suno.com/blog/v5-5",
+                    "card_kind": "concrete",
+                    "entity_kind": "product",
+                    "published_at": "2026-03-26"
+          },
+          {
+                    "id": "stable-diffusion",
+                    "name": "Stable Diffusion",
+                    "vendor": "Stability AI",
+                    "category": [
+                              "AI图像",
+                              "开源"
+                    ],
+                    "scenes": [
+                              "设计配图",
+                              "概念艺术",
+                              "AI艺术",
+                              "图像研究"
+                    ],
+                    "url": "https://stability.ai",
+                    "icon": "🖼️",
+                    "free_tier": "完全免费开源(自行部署)",
+                    "paid_tiers": [
+                              {
+                                        "name": "云端使用",
+                                        "price": "按量或订阅",
+                                        "features": "无需本地GPU的SD体验"
+                              }
+                    ],
+                    "chinese_support": 2,
+                    "chinese_note": "英文prompt效果最佳，中文需要翻译",
+                    "access_barrier": "本地部署需GPU(8GB+显存)，云端使用需海外服务",
+                    "access_level": "受限",
+                    "strengths": "完全开源免费、可本地部署(隐私)、生态最全(ControlNet/LoRA/ComfyUI)、无限生成",
+                    "weaknesses": "部署门槛高(GPU需求)、英文Prompt门槛、艺术性不如Midjourney",
+                    "best_for": [
+                              "技术向用户",
+                              "需要隐私和定制化的项目",
+                              "AI艺术研究者",
+                              "预算零但显卡够的用户"
+                    ],
+                    "not_for": [
+                              "普通设计人员(部署门槛高)",
+                              "无GPU的用户",
+                              "追求极致审美的场景"
+                    ],
+                    "rating_overall": 4,
+                    "rating_chinese": 2,
+                    "rating_ease": 2,
+                    "rating_price": 5,
+                    "last_updated": "2026-07-18",
+                    "source": "https://stability.ai/news",
+                    "card_kind": "concrete",
+                    "entity_kind": "open_source_project",
+                    "published_at": "2024-10-22"
+          },
+          {
+                    "id": "wenxin",
+                    "name": "文心一言",
+                    "vendor": "百度",
+                    "category": [
+                              "对话",
+                              "写作",
+                              "编程",
+                              "搜索"
+                    ],
+                    "scenes": [
+                              "写论文",
+                              "写周报",
+                              "翻译文档",
+                              "搜索研究",
+                              "学习辅导",
+                              "头脑风暴"
+                    ],
+                    "url": "https://yiyan.baidu.com",
+                    "icon": "📘",
+                    "free_tier": "完全免费(2026年4月起全免费，此前付费已退款)",
+                    "paid_tiers": [
+                              {
+                                        "name": "API",
+                                        "price": "按量计费",
+                                        "features": "ERNIE 4.5系列API调用、千帆平台集成"
+                              }
+                    ],
+                    "chinese_support": 5,
+                    "chinese_note": "原生中文，理解深度顶级，国内语料积累深厚",
+                    "access_barrier": "国内可直接访问，需百度账号",
+                    "access_level": "开放",
+                    "strengths": "完全免费、中文理解深度国内最佳之一、ERNIE 4.5 128K超长上下文、百度生态集成、AI搜索功能强",
+                    "weaknesses": "国际生态弱、英文场景偏弱、创意写作灵动性不如ChatGPT",
+                    "best_for": [
+                              "中文深度理解场景",
+                              "百度生态用户",
+                              "需要AI搜索的中文研究"
+                    ],
+                    "not_for": [
+                              "国际化场景",
+                              "英文内容创作"
+                    ],
+                    "rating_overall": 4,
+                    "rating_chinese": 5,
+                    "rating_ease": 4,
+                    "rating_price": 5,
+                    "last_updated": "2026-07-21",
+                    "source": "https://ernie.baidu.com",
+                    "card_kind": "collection",
+                    "entity_kind": "product",
+                    "overview": {
+                              "description": "百度推出的文心大模型，通过千帆平台提供 ERNIE 系列 API，深度集成百度云生态。",
+                              "features": [
+                                        {
+                                                  "tone": "positive",
+                                                  "text": "ERNIE 4.5 Turbo 在 ¥0.8/MTok 价位提供 128K 上下文"
+                                        },
+                                        {
+                                                  "tone": "positive",
+                                                  "text": "千帆平台支持 DeepSeek、GLM、Kimi 等第三方模型统一接入"
+                                        },
+                                        {
+                                                  "tone": "negative",
+                                                  "text": "官方计费页输出定价不够透明，需在控制台确认实际扣费"
+                                        },
+                                        {
+                                                  "tone": "negative",
+                                                  "text": "AI 编程和 Agent 生态相对 OpenAI/Claude 不够成熟"
+                                        }
+                              ],
+                              "source_refs": [
+                                        "wenxin-api-pricing"
+                              ]
+                    },
+                    "published_at": "2026-05-08"
+          },
+          {
+                    "id": "xinghuo",
+                    "name": "讯飞星火",
+                    "vendor": "科大讯飞",
+                    "category": [
+                              "对话",
+                              "写作",
+                              "语音",
+                              "办公"
+                    ],
+                    "scenes": [
+                              "写周报",
+                              "办公文档处理",
+                              "配音",
+                              "学习辅导",
+                              "翻译文档"
+                    ],
+                    "url": "https://xinghuo.xfyun.cn",
+                    "icon": "🔥",
+                    "free_tier": "Lite API永久免费，注册送1500万tokens",
+                    "paid_tiers": [
+                              {
+                                        "name": "Pro/Max",
+                                        "price": "0.21元/万tokens起",
+                                        "features": "更高精度、128K长文本、联网搜索"
+                              }
+                    ],
+                    "chinese_support": 5,
+                    "chinese_note": "语音识别和语音合成中文最强",
+                    "access_barrier": "国内可直接访问",
+                    "access_level": "开放",
+                    "strengths": "语音技术国内第一(TTS/STT)、教育场景深耕、API性价比高、国产合规性顶级",
+                    "weaknesses": "通用对话能力不如DeepSeek/通义千问、国际知名度低",
+                    "best_for": [
+                              "语音合成和识别需求",
+                              "教育场景",
+                              "企业办公(会议纪要/语音转写)"
+                    ],
+                    "not_for": [
+                              "需要最强通用推理的任务",
+                              "国际化场景"
+                    ],
+                    "rating_overall": 3.8,
+                    "rating_chinese": 4.5,
+                    "rating_ease": 4,
+                    "rating_price": 4.5,
+                    "last_updated": "2026-07-21",
+                    "source": "https://www.xfyun.cn",
+                    "card_kind": "collection",
+                    "entity_kind": "product",
+                    "overview": {
+                              "description": "科大讯飞推出的星火认知大模型，深耕语音与教育场景，Lite 版本 API 永久免费。",
+                              "features": [
+                                        {
+                                                  "tone": "positive",
+                                                  "text": "Spark Lite API 永久免费，适合高并发低成本的简单任务"
+                                        },
+                                        {
+                                                  "tone": "positive",
+                                                  "text": "内置搜索、天气、日期等插件，开箱即用"
+                                        },
+                                        {
+                                                  "tone": "negative",
+                                                  "text": "官方未公开详细 token 计价，缓存和输出定价不透明"
+                                        },
+                                        {
+                                                  "tone": "negative",
+                                                  "text": "Max 版本已下线合并，API 版本稳定性有不确定性"
+                                        }
+                              ],
+                              "source_refs": [
+                                        "xinghuo-api-docs"
+                              ]
+                    },
+                    "published_at": "2026-02-11"
+          },
+          {
+                    "id": "hunyuan",
+                    "name": "腾讯混元",
+                    "vendor": "腾讯",
+                    "category": [
+                              "对话",
+                              "编程",
+                              "图像",
+                              "办公"
+                    ],
+                    "scenes": [
+                              "写代码",
+                              "办公文档处理",
+                              "写周报",
+                              "设计配图",
+                              "学习辅导"
+                    ],
+                    "url": "https://hunyuan.tencent.com",
+                    "icon": "💬",
+                    "free_tier": "注册送100万tokens(1年有效)，Hunyuan Standard ¥0.3/百万tokens输入",
+                    "paid_tiers": [
+                              {
+                                        "name": "API后付费",
+                                        "price": "按量计费(¥0.3-2.4/百万tokens)",
+                                        "features": "混元全系列模型、腾讯云生态集成"
+                              }
+                    ],
+                    "chinese_support": 5,
+                    "chinese_note": "腾讯产品矩阵深度集成，中文理解自然",
+                    "access_barrier": "国内可直接访问，需微信/QQ账号",
+                    "access_level": "开放",
+                    "strengths": "微信/QQ生态深度集成、多模态(文本+图像+视频)、企业级API价格低、合规性高",
+                    "weaknesses": "C端知名度不如豆包/DeepSeek、独立产品体验中等",
+                    "best_for": [
+                              "微信/企业微信生态用户",
+                              "需要多模态能力的国内企业",
+                              "API开发(价格敏感)"
+                    ],
+                    "not_for": [
+                              "追求独立AI助手的个人用户",
+                              "国际场景"
+                    ],
+                    "rating_overall": 3.8,
+                    "rating_chinese": 4.5,
+                    "rating_ease": 4,
+                    "rating_price": 4.5,
+                    "last_updated": "2026-07-21",
+                    "source": "https://cloud.tencent.com/product/tclm",
+                    "card_kind": "concrete",
+                    "entity_kind": "product",
+                    "published_at": "2026-07-06"
+          },
+          {
+                    "id": "tiangong",
+                    "name": "天工AI",
+                    "vendor": "昆仑万维",
+                    "category": [
+                              "AI搜索",
+                              "对话",
+                              "写作"
+                    ],
+                    "scenes": [
+                              "搜索研究",
+                              "写论文",
+                              "写周报",
+                              "资料收集",
+                              "事实核查"
+                    ],
+                    "url": "https://www.tiangong.cn",
+                    "icon": "🛠️",
+                    "free_tier": "完全免费",
+                    "paid_tiers": [],
+                    "chinese_support": 5,
+                    "chinese_note": "中文AI搜索覆盖全面",
+                    "access_barrier": "国内可直接访问",
+                    "access_level": "开放",
+                    "strengths": "完全免费、AI搜索能力强、中文结果质量高、实时联网",
+                    "weaknesses": "对话能力一般、品牌知名度低、功能相对单一",
+                    "best_for": [
+                              "中文AI搜索",
+                              "需要实时联网信息的研究",
+                              "零预算用户"
+                    ],
+                    "not_for": [
+                              "需要深度对话和推理的场景",
+                              "多模态任务"
+                    ],
+                    "rating_overall": 3.5,
+                    "rating_chinese": 4.5,
+                    "rating_ease": 4.5,
+                    "rating_price": 5,
+                    "last_updated": "2026-07-21",
+                    "source": "https://www.tiangong.cn",
+                    "card_kind": "concrete",
+                    "entity_kind": "product",
+                    "published_at": "2026-05-26"
+          },
+          {
+                    "id": "hailuo",
+                    "name": "海螺AI",
+                    "vendor": "MiniMax",
+                    "category": [
+                              "对话",
+                              "写作",
+                              "AI视频"
+                    ],
+                    "scenes": [
+                              "短视频制作",
+                              "创意写作",
+                              "头脑风暴",
+                              "写周报",
+                              "视频生成"
+                    ],
+                    "url": "https://hailuoai.com",
+                    "icon": "🐚",
+                    "free_tier": "免费使用(有限额)",
+                    "paid_tiers": [
+                              {
+                                        "name": "会员",
+                                        "price": "约¥30/月",
+                                        "features": "更多次数、更高画质"
+                              }
+                    ],
+                    "chinese_support": 5,
+                    "chinese_note": "原生中文，视频生成中文场景自然",
+                    "access_barrier": "国内可直接访问",
+                    "access_level": "开放",
+                    "strengths": "中文视频生成质量高、对话自然、MiniMax-01模型、国内可用",
+                    "weaknesses": "通用能力不如头部大厂、品牌知名度提升中",
+                    "best_for": [
+                              "中文短视频创作",
+                              "需要视频生成+对话的用户"
+                    ],
+                    "not_for": [
+                              "专业级视频制作",
+                              "需要最强推理能力的场景"
+                    ],
+                    "rating_overall": 3.5,
+                    "rating_chinese": 4.5,
+                    "rating_ease": 4,
+                    "rating_price": 4.5,
+                    "last_updated": "2026-07-21",
+                    "source": "https://platform.minimaxi.com/docs/release-notes/models",
+                    "card_kind": "collection",
+                    "entity_kind": "product",
+                    "overview": {
+                              "description": "MiniMax 推出的多模态 AI 平台，以海螺AI 视频生成和超低 API 文本价格著称。",
+                              "features": [
+                                        {
+                                                  "tone": "positive",
+                                                  "text": "MiniMax-Text-01 在 /usr/bin/bash.30/MTok 价位极具性价比"
+                                        },
+                                        {
+                                                  "tone": "positive",
+                                                  "text": "Hailuo 02 视频生成支持 1080p 10 秒，质量对齐国内第一梯队"
+                                        },
+                                        {
+                                                  "tone": "negative",
+                                                  "text": "国际市场品牌知名度较低，社区和第三方工具生态有限"
+                                        },
+                                        {
+                                                  "tone": "negative",
+                                                  "text": "上下文窗口规格未在定价页公开，需查阅模型文档"
+                                        }
+                              ],
+                              "source_refs": [
+                                        "hailuo-api-pricing"
+                              ]
+                    },
+                    "published_at": "2026-06-01"
+          },
+          {
+                    "id": "grok",
+                    "name": "Grok",
+                    "vendor": "xAI",
+                    "category": [
+                              "对话",
+                              "搜索",
+                              "编程"
+                    ],
+                    "scenes": [
+                              "搜索研究",
+                              "写代码",
+                              "头脑风暴",
+                              "写周报",
+                              "数据分析"
+                    ],
+                    "url": "https://grok.com",
+                    "icon": "🚀",
+                    "free_tier": "Grok 3免费(每2小时约10条)，含Aurora图像生成",
+                    "paid_tiers": [
+                              {
+                                        "name": "SuperGrok",
+                                        "price": "$30/月",
+                                        "features": "Grok 4、DeepSearch、128K上下文、Imagine模型"
+                              },
+                              {
+                                        "name": "X Premium",
+                                        "price": "$8-16/月",
+                                        "features": "含Grok + X Premium功能"
+                              }
+                    ],
+                    "chinese_support": 3,
+                    "chinese_note": "中文支持可接受但非核心优化",
+                    "access_barrier": "需要科学上网",
+                    "access_level": "受限",
+                    "strengths": "X平台深度集成、Grok 4推理强、DeepSearch搜索、最大的上下文窗口(2M)、免费层慷慨",
+                    "weaknesses": "国内访问受限、中文优化不足、依赖X生态",
+                    "best_for": [
+                              "X/Twitter重度用户",
+                              "需要实时信息(通过X数据)",
+                              "追求最大上下文窗口"
+                    ],
+                    "not_for": [
+                              "国内直连用户",
+                              "中文深度场景",
+                              "需要ChatGPT级别多模态的用户"
+                    ],
+                    "rating_overall": 4.3,
+                    "rating_chinese": 3,
+                    "rating_ease": 3.5,
+                    "rating_price": 3.5,
+                    "last_updated": "2026-07-21",
+                    "source": "https://x.ai/news",
+                    "card_kind": "collection",
+                    "entity_kind": "product",
+                    "overview": {
+                              "description": "Elon Musk 创办的 xAI 公司推出的 AI 模型，以实时 X 平台数据接入和推理能力见长，API 定价极具竞争力。",
+                              "features": [
+                                        {
+                                                  "tone": "positive",
+                                                  "text": "Grok 4.1 Fast 在 /usr/bin/bash.20//usr/bin/bash.50 价位具备推理能力，同价位性价比领先"
+                                        },
+                                        {
+                                                  "tone": "positive",
+                                                  "text": "2M 上下文窗口（4.1 Fast），支持长文档和深度分析"
+                                        },
+                                        {
+                                                  "tone": "negative",
+                                                  "text": "中国市场网络访问受限"
+                                        },
+                                        {
+                                                  "tone": "negative",
+                                                  "text": "模型淘汰速度较快（2026-05 退役 8 个旧模型），需关注迁移通知"
+                                        }
+                              ],
+                              "source_refs": [
+                                        "xai-api-pricing"
+                              ]
+                    },
+                    "published_at": "2026-07-16"
+          },
+          {
+                    "id": "dalle",
+                    "name": "DALL·E 3",
+                    "vendor": "OpenAI",
+                    "category": [
+                              "AI图像",
+                              "AI绘画"
+                    ],
+                    "scenes": [
+                              "设计配图",
+                              "海报设计",
+                              "概念艺术",
+                              "营销素材",
+                              "插画创作"
+                    ],
+                    "url": "https://openai.com/dall-e-3",
+                    "icon": "🖼️",
+                    "free_tier": "ChatGPT免费版有限额度",
+                    "paid_tiers": [
+                              {
+                                        "name": "ChatGPT Plus",
+                                        "price": "$20/月",
+                                        "features": "DALL·E 3完整访问、更高额度"
+                              },
+                              {
+                                        "name": "ChatGPT Pro",
+                                        "price": "$200/月",
+                                        "features": "最高额度、商业使用"
+                              }
+                    ],
+                    "chinese_support": 3,
+                    "chinese_note": "支持中文提示词，但英文更精确",
+                    "access_barrier": "需要科学上网 + ChatGPT账号",
+                    "access_level": "受限",
+                    "strengths": "提示词理解最智能、与ChatGPT无缝集成、安全性高(内容审核)、易上手",
+                    "weaknesses": "国内访问双重门槛、生成速度较慢、风格多样性不如Midjourney",
+                    "best_for": [
+                              "ChatGPT生态用户",
+                              "需要精确控制画面的场景",
+                              "商业合规要求高的项目"
+                    ],
+                    "not_for": [
+                              "国内直连用户",
+                              "追求极致艺术品质的场景",
+                              "大量生成需求(成本高)"
+                    ],
+                    "rating_overall": 4.2,
+                    "rating_chinese": 3,
+                    "rating_ease": 3.5,
+                    "rating_price": 3,
+                    "last_updated": "2026-07-21",
+                    "source": "https://openai.com",
+                    "card_kind": "concrete",
+                    "entity_kind": "model",
+                    "published_at": "2026-04-21"
+          },
+          {
+                    "id": "ideogram",
+                    "name": "Ideogram",
+                    "vendor": "Ideogram AI",
+                    "category": [
+                              "AI图像",
+                              "AI绘画"
+                    ],
+                    "scenes": [
+                              "设计配图",
+                              "海报设计",
+                              "营销素材",
+                              "Logo设计"
+                    ],
+                    "url": "https://ideogram.ai",
+                    "icon": "✍️",
+                    "free_tier": "每日免费额度(约100张)",
+                    "paid_tiers": [
+                              {
+                                        "name": "Plus",
+                                        "price": "$20/月",
+                                        "features": "更多生成、无水印、商业使用"
+                              }
+                    ],
+                    "chinese_support": 2,
+                    "chinese_note": "不支持中文文字渲染，需英文prompt",
+                    "access_barrier": "国内可访问",
+                    "access_level": "开放",
+                    "strengths": "图片内文字渲染业界最佳(海报/Logo/封面)、设计感好、国内可访问",
+                    "weaknesses": "英文prompt门槛、中国风/中文字体渲染弱、艺术性不如Midjourney",
+                    "best_for": [
+                              "需要图片含文字的设计(海报/封面/Logo)",
+                              "营销素材制作"
+                    ],
+                    "not_for": [
+                              "中文文案设计(中文渲染差)",
+                              "追求极致艺术性的场景"
+                    ],
+                    "rating_overall": 4,
+                    "rating_chinese": 2,
+                    "rating_ease": 4,
+                    "rating_price": 3.5,
+                    "last_updated": "2026-07-21",
+                    "source": "https://ideogram.ai",
+                    "card_kind": "concrete",
+                    "entity_kind": "product",
+                    "published_at": "2026-06-03"
+          },
+          {
+                    "id": "mistral",
+                    "name": "Mistral AI（产品入口）",
+                    "vendor": "Mistral AI",
+                    "category": [
+                              "对话"
+                    ],
+                    "scenes": [
+                              "写代码",
+                              "写论文",
+                              "翻译文档"
+                    ],
+                    "url": "https://mistral.ai/",
+                    "icon": "🏔️",
+                    "free_tier": "开放权重模型免费自部署",
+                    "paid_tiers": [
+                              {
+                                        "name": "API 按量",
+                                        "price": "从 /usr/bin/bash.15/MTok"
+                              }
+                    ],
+                    "chinese_support": 2,
+                    "chinese_note": "主要面向英语，中文不在官方优先支持列表",
+                    "access_barrier": "境外（需科学上网）",
+                    "access_level": "受限",
+                    "strengths": "开放权重模型丰富、Apache 2.0 许可、多语言多模态",
+                    "weaknesses": "中国市场访问受限、缓存定价未公开",
+                    "best_for": [
+                              "需要开源部署",
+                              "欧洲合规场景"
+                    ],
+                    "not_for": [
+                              "中文为主的工作",
+                              "需要国内直接访问"
+                    ],
+                    "rating_overall": 4,
+                    "rating_chinese": 2,
+                    "rating_ease": 3.5,
+                    "rating_price": 4,
+                    "last_updated": "2026-07-27",
+                    "source": "https://mistral.ai/news",
+                    "card_kind": "collection",
+                    "entity_kind": "product",
+                    "overview": {
+                              "description": "法国 AI 公司，提供开放权重和商业许可的多种模型，覆盖文本、编码、推理和 OCR 场景。",
+                              "features": [
+                                        {
+                                                  "tone": "positive",
+                                                  "text": "Apache 2.0 许可的小模型适合自由部署和商用"
+                                        },
+                                        {
+                                                  "tone": "positive",
+                                                  "text": "旗舰模型 Mistral Medium 3.5 均衡性能和成本"
+                                        },
+                                        {
+                                                  "tone": "negative",
+                                                  "text": "中国市场网络访问受限"
+                                        },
+                                        {
+                                                  "tone": "negative",
+                                                  "text": "缓存定价信息未在官方价格页公开"
+                                        }
+                              ],
+                              "source_refs": [
+                                        "mistral-api-pricing"
+                              ]
+                    },
+                    "published_at": "2026-04-29"
+          },
+          {
+                    "id": "cohere",
+                    "name": "Cohere（产品入口）",
+                    "vendor": "Cohere",
+                    "category": [
+                              "对话",
+                              "写作",
+                              "编程",
+                              "企业应用"
+                    ],
+                    "scenes": [
+                              "写代码",
+                              "写论文",
+                              "翻译文档",
+                              "企业应用开发"
+                    ],
+                    "url": "https://cohere.com",
+                    "icon": "🔗",
+                    "free_tier": "免费试用 API Key，每月限额",
+                    "paid_tiers": [
+                              {
+                                        "name": "API 按量",
+                                        "price": "从 $0.0375/MTok",
+                                        "features": "Command 系列、Rerank、Embed，按量计费"
+                              }
+                    ],
+                    "chinese_support": 2,
+                    "chinese_note": "主要面向英语和企业市场，中文不在官方优先支持列表",
+                    "access_barrier": "境外（需科学上网）",
+                    "access_level": "受限",
+                    "strengths": "企业级 RAG 和检索能力领先、Embed/Rerank 模型行业标杆、Command R7B 极具性价比",
+                    "weaknesses": "中国市场访问受限、中文能力有限、消费者端知名度低",
+                    "best_for": [
+                              "企业 RAG 和搜索增强",
+                              "多语言文本分类和嵌入",
+                              "需要高质量 Rerank 的场景"
+                    ],
+                    "not_for": [
+                              "中文为主的对话场景",
+                              "需要国内直接访问"
+                    ],
+                    "rating_overall": 3.8,
+                    "rating_chinese": 2,
+                    "rating_ease": 3.5,
+                    "rating_price": 4.5,
+                    "last_updated": "2026-07-28",
+                    "source": "https://docs.cohere.com/changelog",
+                    "card_kind": "collection",
+                    "entity_kind": "product",
+                    "overview": {
+                              "description": "加拿大 AI 公司，以企业级检索增强生成（RAG）、文本嵌入和重排序模型见长，Command 系列覆盖通用对话和编码。",
+                              "features": [
+                                        {
+                                                  "tone": "positive",
+                                                  "text": "Embed 和 Rerank 模型是企业搜索和 RAG 的行业标杆"
+                                        },
+                                        {
+                                                  "tone": "positive",
+                                                  "text": "Command R7B 在 $0.0375/MTok 价位极具性价比"
+                                        },
+                                        {
+                                                  "tone": "negative",
+                                                  "text": "中国市场网络访问受限"
+                                        },
+                                        {
+                                                  "tone": "negative",
+                                                  "text": "Command A / R+ 缓存定价未在官方价格页公开"
+                                        }
+                              ],
+                              "source_refs": [
+                                        "cohere-api-pricing"
+                              ]
+                    },
+                    "published_at": "2026-05-20"
+          }
 ]

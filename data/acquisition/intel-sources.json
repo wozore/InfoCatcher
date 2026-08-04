@@ -162,21 +162,6 @@
       ]
     },
     {
-      "tool_id": "perplexity",
-      "name": "Perplexity AI",
-      "intel_sources": [
-        {
-          "id": "perplexity-pricing",
-          "url": "https://www.perplexity.ai/pricing",
-          "type": "plans",
-          "method": "html_table",
-          "publisher": "Perplexity AI",
-          "interval_days": 14,
-          "usage": "subscription_plans"
-        }
-      ]
-    },
-    {
       "tool_id": "zhipu",
       "name": "智谱AI",
       "intel_sources": [
