@@ -38,6 +38,13 @@ function main() {
     return { dry_run: true, items: filtered.items.length };
   }
 
+  // B16 决策 51/69：候选层可能为空或全 pending/held/discarded，公开投影为空。
+  // 此时不覆盖 hotspots.json（保留上一版公开数据），避免重建把公开页清空。
+  if (filtered.items.length === 0) {
+    console.log('ℹ️ 公开投影为空（候选层无 approved），hotspots.json 保持不变');
+    return { dry_run: false, items: 0, skipped_empty: true };
+  }
+
   writeJsonAtomic(OUTPUT_PATH, filtered, `publish-${Date.now()}`);
   console.log('📄 已写 hotspots.json');
   generateRss();

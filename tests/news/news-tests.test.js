@@ -227,6 +227,7 @@ test('并发采集限制网络任务，并按来源顺序归并结果', async ()
     sourcePayload: { schema_version: 1, sources: xSources },
     state: { schema_version: 1, sources: {}, x_rotation_offset: 0 },
     oldOutput: emptyOutput(), now, noWrite: true, skipHistory: true,
+    defaultReviewStatus: 'approved', // 管线测试保持断言公开投影
     collector: async current => {
       active++;
       peak = Math.max(peak, active);
@@ -318,6 +319,7 @@ test('B站单平台范围不调用 YouTube/X 并保留旧投影', async () => {
     config, sourcePayload: { schema_version: 1, sources }, platformScope: 'bilibili-only',
     state: { schema_version: 1, sources: {}, x_rotation_offset: 7 },
     oldOutput: { ...emptyOutput(), items: [oldYoutube] }, now, noWrite: true,
+    defaultReviewStatus: 'approved', // 保留旧投影断言：门禁放行候选
     collector: async current => {
       calls.push(current.platform);
       return {
@@ -381,6 +383,7 @@ test('默认人工模式不调用B站网络并消费人工条目', async () => {
     config: manualConfig, sourcePayload: { schema_version: 1, sources: [bi] },
     state: { schema_version: 1, sources: {}, x_rotation_offset: 0 }, oldOutput: emptyOutput(),
     manualItems: { schema_version: 1, items: [manual] }, now, noWrite: true, skipHistory: true,
+    defaultReviewStatus: 'approved',
     fetchImpl: async () => { calls++; throw new Error('不应调用网络'); },
   });
   assert.equal(calls, 0);
@@ -419,6 +422,7 @@ test('采集批次保留 B站动态且显式记录动态降级', async () => {
   const result = await runCollection({
     config, sourcePayload: sources,
     state: { schema_version: 1, sources: {}, x_rotation_offset: 0 }, oldOutput: emptyOutput(), now, noWrite: true,
+    defaultReviewStatus: 'approved',
     collector: async current => current.platform === 'youtube'
       ? { items: [yt], routeCoverage: null }
       : { items: [dynamic], routeCoverage: { video: { status: 'success', items: 0 }, dynamic: { status: 'degraded', items: 1, reason: 'fixture' }, article: { status: 'success', items: 0 } } },

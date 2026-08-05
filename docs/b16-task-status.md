@@ -1,6 +1,6 @@
 # B16 任务完成情况与后续清单
 
-> **状态：2026-08-03 初核 · 2026-08-04 数据补齐更新。对比代码库与两份决策文档后的核对结论。**
+> **状态：2026-08-03 初核 · 2026-08-04 数据补齐、B16-R4 端到端验证与人工审核流启用更新。对比代码库与两份决策文档后的核对结论。**
 >
 > 依据：[b16-ui-reconstruction-plan.md](./b16-ui-reconstruction-plan.md)（决策 46–103）、[b16-content-type-fix-plan.md](./b16-content-type-fix-plan.md）、[decisions.md](./decisions.md)（ADR-007/008/009）、当前工作区代码与数据、`node scripts/validate.js` 校验输出。
 
@@ -79,7 +79,7 @@
    - 新增 [content-classifier.js](src/news/classify/content-classifier.js)：L0 规则式基线分类（零成本、可离线，词典来自 catalog）+ L1 AI 分类接口预留（`--provider`，需渠道与额度）
    - CLI：`classify preview|candidates|hotspots`；`review set/batch --content-type` 审核确认（`ai_suggested` → `reviewed`）
    - 100 条热点已生成规则式分类建议并**批量审核确认**（`classify confirm`，`content_type_status=reviewed`；分布：ai_technology 33 / other 25 / ai_industry 21 / ai_concept 15 / ai_product 4 / ai_tool 2），校验通过、dist 已重建，前端类型筛选区正式启用
-   - ⏳ **待续**：候选层非空后，L1 AI 分类需另确认模型渠道与额度（对应 [memory：高消耗评估须先确认成本]），并接入 build-news 候选处理阶段
+   - ⏳ **待续**：候选层已非空（100 条真实采集），L1 AI 分类需另确认模型渠道与额度（对应 [memory：高消耗评估须先确认成本]），并接入 build-news 候选处理阶段
 5. **tools.json 工具发布时间字段**（ADR-009 后续）：✅ **28 个工具已全部补齐 `published_at`**（取各工具当前最新版本模型的正式发布时间，如 chatgpt=GPT-5.6→2026-07-09、deepseek=DeepSeek-V4-Flash-0731→2026-07-31、claude-code=2.1.221→2026-08-04、jimeng=Seedance2.5→2026-07-31），校验通过、dist 已重建，工具卡/场景卡自动显示「发布时间」。**2026-08-04 后续**：17 个产品型/日期未确认工具已按用户决定**从工具库移除**（windsurf/runway/perplexity/mishu/notion-ai/gamma/elevenlabs/baichuan/poe/leonardo/heygen/notebooklm/bolt/v0/udio/replit/julius），同步清理了 featured（3 条）、scenes（32 处引用 + 3 空任务）、intel-sources（perplexity 配置）；`tools.json` 现为 28 个工具，CLAUDE.md 声明已同步。
 6. **`related_resources` 填充**（ADR-008 后续）：✅ **已为 69/100 条热点填充** `related_resources`（词边界匹配工具/概念/场景稳定 ID + 人工抽查，如 DeepSeek 发布→deepseek/Agent、CS229→study/Transformer），31 条无匹配诚实留空；校验通过、dist 已重建，热点详情「关联资料」区恢复显示。
 
@@ -87,7 +87,7 @@
 
 7. **B16-R2**：确认字幕 enrichment 默认关闭（`transcript_enabled: false`）是否为期望状态。✅ **已确认（2026-08-04）**：保持默认关闭为期望状态——字幕 enrichment 是 L1 AI 浓缩（决策 51）的输入材料，当前 L1 渠道未接入（见 B16-R5）、候选层为空，无消费方；按需启用（等接入 L1 AI 渠道后置 `true`，配置参数已齐全），配置值不变。
 8. **B16-R3**：清理平台筛选过时注释（[app.js](src/web/js/app.js) 21/2546/3508、[style.css](src/web/css/style.css) 1693）。✅ **已解决（2026-08-03，与 [开发计划.md](开发计划.md) B16-R3 一致）**：原引用行号已因重构漂移；现 [app.js](src/web/js/app.js) 21 已为「内容类型筛选+最近/热度排序」，全仓平台注释均说明「平台属来源核验信息」且与实现一致，无过时残留。
-9. **B16-R4**：候选层 `hotspot-candidates.json` 当前为空；首次真实采集后复核候选层 / 审核 PR / publish 重建流程一致性。⏳ **只读核对通过（2026-08-04）**：候选层→审核 PR→publish 重建流程自洽——公开资格门禁两个入口共用 `isPublicEligible`（completed + approved，无分叉）、候选层 schema_version 1 / 公开投影 schema_version 3、`INTERNAL_FIELDS` 剔除审核/字幕/错误字段、publish 只提交公开投影（防循环触发）；**端到端待首次真实采集**（需 YOUTUBE/X API 渠道与额度）后复核。
+9. **B16-R4**：候选层→审核→publish 重建流程一致性。✅ **端到端已通过（2026-08-04）**：首次真实采集已填充候选层 100 条（94 个启用来源、58/58 覆盖，非手工）；以真实候选 `x-9dd3da0625fba183ab33` 走通完整闭环——`review set --status pending` → `publish-news.js` 重建门禁正确剔除（100→99）→ `review set --status approved` → 恢复（99→100）；审核事件日志只追加记录流转（`candidate_version` 1→2→3、`from_status`、reviewer 留痕）；公开投影无内部字段泄漏（`INTERNAL_FIELDS` 生效）、schema_version 3；`node scripts/publish-news.js` 全量重建 + RSS 同步 + dist 重建（14 文件）全部通过。**人工审核流已启用（2026-08-04，决策 51/69）**：`DEFAULT_REVIEW_STATUS` 由 `approved` 改为 `pending`，新采集候选默认进入候选层待审、不自动公开；`build-news.js` 公开投影为空时跳过写 hotspots.json（保留上一版公开数据）、`publish-news.js` 同步保护；既有已 approved 候选经 `mergeCandidates` 保留审核结论。**说明**：首批 100 条候选为审核流启用前写入（全部 approved），后续采集的候选将默认 `pending`，公开区仅在人工 `review set/batch --status approved` 后经 publish 重建更新。候选层已非空，B16-R2 所述「无消费方」的前提也随之变化（字幕 enrichment 仍默认关闭，因 L1 AI 浓缩渠道未接入）。
 
 ### v1.0 延后（不在本轮范围）
 
@@ -97,4 +97,4 @@
 
 ## 4. 一句话结论
 
-> **B16 UI 三阶段与内容类型字段拆分（路径 B）均已完成并通过校验，当前处于「验收审查 + 文档同步」状态。近期三项数据补齐已于 2026-08-04 推进：热点关联资料（69/100）、内容类型规则分类建议已批量审核确认（100/100，reviewed）、工具发布时间 28 个工具全部补齐（17 个产品型工具已按用户决定移除）；路径 A 分类模块与审核流程已落地，L1 AI 模型渠道待续。**
+> **B16 UI 三阶段与内容类型字段拆分（路径 B）均已完成并通过校验，当前处于「验收审查 + 文档同步」状态。近期三项数据补齐已于 2026-08-04 推进：热点关联资料（69/100）、内容类型规则分类建议已批量审核确认（100/100，reviewed）、工具发布时间 28 个工具全部补齐（17 个产品型工具已按用户决定移除）；路径 A 分类模块与审核流程已落地，L1 AI 模型渠道待续；B16-R4 候选层已首次真实采集（100 条）并以真实数据端到端验证审核门禁与 publish 重建闭环，人工审核流已启用（新候选默认 pending 待审）。**

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-01T05:25:18.942Z",
+  "updated_at": "2026-08-04T10:00:00.000Z",
   "videos": {
     "youtube:R-Yqes8AotY": {
       "key": "youtube:R-Yqes8AotY",
@@ -73663,8 +73663,8 @@
       "title": "We are committed to pushing the model frontier across cost efficiency, capability, and speed.\n\nStarting today, we are reducing prices for GPT-5.6 Luna by 80% and GPT-5.6 Terra by 2",
       "published_at": "2026-07-30T17:17:05.000Z",
       "first_seen_at": "2026-07-31T05:34:12.898Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-1d",
         "recent-7d"
@@ -73675,7 +73675,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "x:2082866778774921261": {
@@ -73688,8 +73688,8 @@
       "title": "RT @jxnlco: one of the most beautiful things about OpenAI is that every employee really has a voice.\n\ni wanted to capture what it feels lik…",
       "published_at": "2026-07-30T16:31:52.000Z",
       "first_seen_at": "2026-07-31T05:34:12.898Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-1d",
         "recent-7d"
@@ -73700,7 +73700,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "x:2082616636989952217": {
@@ -73953,8 +73953,8 @@
       "title": "In a review of our cybersecurity evaluations, we found three incidents in which a Claude model reached the internet from within or while interacting with a third-party evaluation e",
       "published_at": "2026-07-30T23:02:34.000Z",
       "first_seen_at": "2026-07-31T05:34:12.898Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-1d",
         "recent-7d"
@@ -73965,7 +73965,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "x:2082228994653696371": {
@@ -74050,8 +74050,8 @@
       "title": "This is how Gemini Robotics 2 helps @Apptronik’s Apollo 2 use whole body intelligence to pack for a sports game ↓ https://t.co/rPYsclzJHR",
       "published_at": "2026-07-30T19:00:52.000Z",
       "first_seen_at": "2026-07-31T05:34:12.898Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-1d",
         "recent-7d"
@@ -74062,7 +74062,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "x:2082844162928381956": {
@@ -74075,8 +74075,8 @@
       "title": "One brain. For any robot. 🤖\n\nWe’re launching Gemini Robotics 2: our next-generation physical AI bringing full body intelligence to humanoids, advanced dexterity, multi-robot teamw",
       "published_at": "2026-07-30T15:02:00.000Z",
       "first_seen_at": "2026-07-31T05:34:12.898Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-1d",
         "recent-7d"
@@ -74087,7 +74087,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "x:2082541871612449180": {
@@ -74148,8 +74148,8 @@
       "title": "Cohere has joined @NVIDIA alongside industry leaders in founding the Open Secure AI Alliance.\n\nEverybody should have the capability to keep their infrastructure secure. Everybody d",
       "published_at": "2026-07-30T20:53:23.000Z",
       "first_seen_at": "2026-07-31T05:34:12.898Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-1d",
         "recent-7d"
@@ -74160,7 +74160,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "x:2082499845659484655": {
@@ -74773,8 +74773,8 @@
       "title": "RT @nvidia: Give a big welcome to the newest members of the Open Secure AI Alliance. 💚 \n\nhttps://t.co/tFQYKAqDc3 https://t.co/J2ak7vTYno",
       "published_at": "2026-07-30T19:33:14.000Z",
       "first_seen_at": "2026-07-31T05:34:12.898Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-1d",
         "recent-7d"
@@ -74785,7 +74785,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "x:2082895575914348582": {
@@ -74798,8 +74798,8 @@
       "title": "RT @vllm_project: 🎉 Congrats to @thinkymachines on Inkling-Small-- live with Day 0 vLLM support!\n\n276B total parameters with 12B active, na…",
       "published_at": "2026-07-30T18:26:18.000Z",
       "first_seen_at": "2026-07-31T05:34:12.898Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-1d",
         "recent-7d"
@@ -74810,7 +74810,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "x:2082895535049146641": {
@@ -75255,8 +75255,8 @@
       "title": "Lecture 11 is a tool-use/function calling/agentic 101! I almost skipped this one, as this chapter started as the only skill-specific topic in the book, but since writing it tool-us",
       "published_at": "2026-07-30T21:21:59.000Z",
       "first_seen_at": "2026-07-31T05:34:12.898Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-1d",
         "recent-7d"
@@ -75267,7 +75267,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "x:2082913213092655336": {
@@ -75568,8 +75568,8 @@
       "title": "Consistent with what I found with Qwen3.6 a while back: Claude Code uses 2-3x as many tokens than (many) other harnesses at similar success rate.\n\n- Unoptimized?\n- Buggy?\n- Deliber",
       "published_at": "2026-07-30T15:46:30.000Z",
       "first_seen_at": "2026-07-31T05:34:12.898Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-1d",
         "recent-7d"
@@ -75580,7 +75580,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "x:2082101241908249014": {
@@ -76769,10 +76769,11 @@
       "title": "This is Gemini Robotics 2 🤖",
       "published_at": "2026-07-31T16:10:59.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -76780,7 +76781,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:fo9WirRIaVs": {
@@ -76793,8 +76794,8 @@
       "title": "Robots working together with Gemini Robotics 2",
       "published_at": "2026-07-30T14:58:16.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -76804,7 +76805,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:nBftSI5mmHA": {
@@ -76817,8 +76818,8 @@
       "title": "Tasks that require whole-body control with Gemini Robotics 2",
       "published_at": "2026-07-30T14:58:12.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -76828,7 +76829,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:wYVHxw2-DP4": {
@@ -76841,8 +76842,8 @@
       "title": "Tough dexterity tasks with Gemini Robotics 2",
       "published_at": "2026-07-30T14:58:10.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -76852,7 +76853,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:9MNLEAzA59o": {
@@ -76961,10 +76962,11 @@
       "title": "Tau Crash Course: The Python Port of Pi",
       "published_at": "2026-07-31T12:30:44.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -76972,7 +76974,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:MW8-kqd2SD8": {
@@ -77033,10 +77035,11 @@
       "title": "Dassault Systèmes Accelerates Simulation with NVIDIA AI & GPUs",
       "published_at": "2026-07-31T21:07:01.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -77044,7 +77047,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:AAm5E3ZhXnE": {
@@ -77057,8 +77060,8 @@
       "title": "Build Bigger Than ‘Back to School’ With Jetson AGX Thor",
       "published_at": "2026-07-30T16:59:52.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -77068,7 +77071,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:4YeEfaRYC1c": {
@@ -77249,8 +77252,8 @@
       "title": "From Cloud Migration to Agentic AI: Transforming at Speed with AWS | Amazon Web Services",
       "published_at": "2026-07-30T15:20:38.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -77260,7 +77263,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:rGuGBeR2VMU": {
@@ -77537,10 +77540,11 @@
       "title": "ML Summer School 2026 - Career Building Panel with Puyuan Peng, Sreyan Ghosh & Elizabeth Lingg",
       "published_at": "2026-07-31T19:02:03.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -77548,7 +77552,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:hbqSsYM5nbA": {
@@ -77561,10 +77565,11 @@
       "title": "ML Summer School 2026 - Methodologies for Improving the Quality of AI Tutoring In K-12 Education",
       "published_at": "2026-07-31T18:16:46.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -77572,7 +77577,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:1XBTAgjdoRE": {
@@ -77585,8 +77590,8 @@
       "title": "ML Summer School 2026 - Computer Vision Fundamentals with Vivian White and Yash Mali",
       "published_at": "2026-07-30T18:17:39.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -77596,7 +77601,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:Vn5ObtR2SVA": {
@@ -77705,10 +77710,11 @@
       "title": "Passkeys Stop Phishing Attacks🎣",
       "published_at": "2026-07-31T16:00:22.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -77716,7 +77722,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:yb8Chvj--3c": {
@@ -77729,10 +77735,11 @@
       "title": "AI Security Costs Rise: Cost of a Data Breach Report & Claude Opus 5",
       "published_at": "2026-07-31T10:00:14.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -77740,7 +77747,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:b2PESRl7De4": {
@@ -77825,10 +77832,11 @@
       "title": "6 Questions Shaping Enterprise AI",
       "published_at": "2026-07-31T19:05:36.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -77836,7 +77844,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:wGOsOMXMCG0": {
@@ -77969,10 +77977,11 @@
       "title": "How To Skip The Kimi K3 Waitlist",
       "published_at": "2026-07-31T14:59:36.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -77980,7 +77989,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:sUmx-Yi6TwE": {
@@ -77993,10 +78002,11 @@
       "title": "AI News: Opus 5, the Slack Killer & Google Earth AI",
       "published_at": "2026-07-31T14:30:14.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -78004,7 +78014,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:Q60VNdtyiAA": {
@@ -78017,8 +78027,8 @@
       "title": "The Most Capable Humanoid Robot Yet!",
       "published_at": "2026-07-30T16:03:52.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -78028,7 +78038,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:zdG2bgFPxl4": {
@@ -78089,8 +78099,8 @@
       "title": "I tested Abacus's new SUPERCOMPUTER... (INSANE)",
       "published_at": "2026-07-30T20:37:37.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -78100,7 +78110,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:9lSIHaXT1rU": {
@@ -78137,10 +78147,11 @@
       "title": "Sam Altman isn't the only one who wants to pump the brakes on AI | Equity Podcast",
       "published_at": "2026-07-31T17:18:34.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -78148,7 +78159,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:AiZWd5cxmik": {
@@ -78161,8 +78172,8 @@
       "title": "SeatGeek Beat the Odds: Raising $400M, Surviving COVID & Competing with Ticketmaster l Build Mode",
       "published_at": "2026-07-30T17:43:06.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -78172,7 +78183,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:FZaMLWOjKdA": {
@@ -78257,10 +78268,11 @@
       "title": "Apple's Stumble, Amazon's Surge and Anthropic's Hacks | Bloomberg Tech 7/31/2026",
       "published_at": "2026-07-31T19:06:12.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -78268,7 +78280,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:palXzh1zYy0": {
@@ -78281,10 +78293,11 @@
       "title": "Moonshot's Kimi Built With Nvidia Compute",
       "published_at": "2026-07-31T18:55:46.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -78292,7 +78305,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:xSu3gFx7efQ": {
@@ -78305,10 +78318,11 @@
       "title": "The Next AI Boom Is in Health Care and Robotics, Says Lux Capital's Shakir",
       "published_at": "2026-07-31T18:50:54.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -78316,7 +78330,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:RbRuH8BDUtk": {
@@ -78329,10 +78343,11 @@
       "title": "Amazon's AI Story Is a 'Game Changer,' Says Mizuho",
       "published_at": "2026-07-31T18:46:01.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -78340,7 +78355,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:tpW-1uRa4yc": {
@@ -78353,10 +78368,11 @@
       "title": "Why Record Earnings Aren't Good Enough for AI, Chip Investors",
       "published_at": "2026-07-31T05:36:49.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -78364,7 +78380,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:HECOcXPuqhU": {
@@ -78377,8 +78393,8 @@
       "title": "Rivian Sees R2 Driving Its Path to Profitability",
       "published_at": "2026-07-30T20:48:35.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -78388,7 +78404,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:jCrr_x59Pq8": {
@@ -78401,8 +78417,8 @@
       "title": "Microsoft Wins, Meta Faces Questions, Qualcomm Sees Supply Chain Challenges | Bloomberg Tech",
       "published_at": "2026-07-30T18:52:11.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -78412,7 +78428,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:XNUtWdKI4D8": {
@@ -78425,8 +78441,8 @@
       "title": "Qualcomm Sees AI Driving Its Next Growth Wave",
       "published_at": "2026-07-30T18:09:39.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -78436,7 +78452,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:lYWvESoEJes": {
@@ -78449,8 +78465,8 @@
       "title": "K2 Space Lands $500 Million to Scale Satellite Production",
       "published_at": "2026-07-30T18:03:35.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -78460,7 +78476,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:78pWSEeqln8": {
@@ -78473,8 +78489,8 @@
       "title": "Microsoft's AI Story Is Still Being Discovered, Says Goldman",
       "published_at": "2026-07-30T17:57:12.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -78484,7 +78500,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:YR1fvqGu-T8": {
@@ -78641,10 +78657,11 @@
       "title": "How Researchers Test AI for Hidden Goals — Apollo Research",
       "published_at": "2026-07-31T20:12:29.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -78652,7 +78669,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:zBjdLgvZWag": {
@@ -78713,10 +78730,11 @@
       "title": "Stanford CS229 Machine Learning | Spring 2026 | Lecture 20: GMM (EM), PCA",
       "published_at": "2026-07-31T22:32:55.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -78724,7 +78742,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:xveNBYVTrqw": {
@@ -78737,10 +78755,11 @@
       "title": "Stanford CS229 Machine Learning | Spring 2026 | Lecture 18: GMM (EM), PCA",
       "published_at": "2026-07-31T22:30:12.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -78748,7 +78767,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:hHC-SF3utxg": {
@@ -78761,10 +78780,11 @@
       "title": "Stanford CS229 Machine Learning | Spring 2026 | Lecture 16: Basic Concept in RL, Policy Gradient",
       "published_at": "2026-07-31T22:26:34.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -78772,7 +78792,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:pwQ0l4hFCVI": {
@@ -78785,10 +78805,11 @@
       "title": "Stanford CS229 Machine Learning | Spring 2026 | Lecture 14: Transformers, In-Context Learning",
       "published_at": "2026-07-31T22:22:19.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -78796,7 +78817,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:lNTajqxxOn4": {
@@ -78809,10 +78830,11 @@
       "title": "Stanford CS229 Machine Learning | Spring 2026 | Lecture 13: LLMs, Next-Word Prediction Loss",
       "published_at": "2026-07-31T22:19:10.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -78820,7 +78842,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:_kREM2UAiJ8": {
@@ -78833,10 +78855,11 @@
       "title": "Stanford CS229 Machine Learning | Spring 2026 | Lecture 12: Representation Learning",
       "published_at": "2026-07-31T20:47:27.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -78844,7 +78867,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:dqUMCzWjZSI": {
@@ -78857,10 +78880,11 @@
       "title": "Stanford CS229 Machine Learning | Spring 2026 | Lecture 11: Diffusion Models",
       "published_at": "2026-07-31T20:44:04.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -78868,7 +78892,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:sUS-eTa0l6s": {
@@ -78881,8 +78905,8 @@
       "title": "Stanford CS229 Machine Learning | Spring 2026 | Lecture 10: GMM (EM), PCA",
       "published_at": "2026-07-31T00:06:06.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -78892,7 +78916,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:bSmIGBCoffA": {
@@ -78905,8 +78929,8 @@
       "title": "Stanford CS229 Machine Learning | Spring 2026 | Lecture 9: K-Means and GMM (non-EM)",
       "published_at": "2026-07-31T00:02:46.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -78916,7 +78940,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:ne2ngVAoMG8": {
@@ -78929,8 +78953,8 @@
       "title": "Stanford CS229 Machine Learning | Spring 2026 | Lecture 8: Neural Networks 2 (Backprop)",
       "published_at": "2026-07-30T23:51:36.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -78940,7 +78964,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:fRM41w9jzQo": {
@@ -78953,8 +78977,8 @@
       "title": "Stanford CS229 Machine Learning | Spring 2026 | Lecture 7: Neural Networks 1 (Architecture)",
       "published_at": "2026-07-30T23:43:45.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -78964,7 +78988,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:llnEgyyuYkQ": {
@@ -78977,8 +79001,8 @@
       "title": "Stanford CS229 Machine Learning | Spring 2026 | Lecture 6: Dataset Split, ML Advice",
       "published_at": "2026-07-30T23:39:26.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -78988,7 +79012,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:zRdE8A4UZes": {
@@ -79001,8 +79025,8 @@
       "title": "Stanford CS229 Machine Learning | Spring 2026 | Lecture 5: Gaussian Discriminant Analysis",
       "published_at": "2026-07-30T23:32:08.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -79012,7 +79036,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:8gVi4Rk21Eg": {
@@ -79361,10 +79385,11 @@
       "title": "You Have to Try the New ChatGPT Voice!",
       "published_at": "2026-08-01T01:23:31.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -79372,7 +79397,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:uaMbKQIOtwk": {
@@ -79385,8 +79410,8 @@
       "title": "Google Just Made Tutoring Free for Everyone!",
       "published_at": "2026-07-30T18:22:36.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -79396,7 +79421,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:DtLm3E0lTdk": {
@@ -79457,10 +79482,11 @@
       "title": "LIVE AI Engineering Bootcamp for Software Engineers",
       "published_at": "2026-07-31T13:30:38.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -79468,7 +79494,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:JNGi-x4-SQw": {
@@ -79481,10 +79507,11 @@
       "title": "Codebasics Learner Meetup - Bengaluru, 2026",
       "published_at": "2026-07-31T12:01:37.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -79492,7 +79519,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:yPe1I1ogd3A": {
@@ -79601,10 +79628,11 @@
       "title": "Kubernetes Operator Best Practices – Kubebuilder Deep Dive",
       "published_at": "2026-07-31T15:59:06.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -79612,7 +79640,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:Zy7EXDONlTY": {
@@ -79721,10 +79749,11 @@
       "title": "How AI Agents Use Tools The Harness Explained",
       "published_at": "2026-07-31T12:00:30.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -79732,7 +79761,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:J8fMcbIJ0to": {
@@ -79937,10 +79966,11 @@
       "title": "AI is definitely not killing SQL!! Databricks Genie",
       "published_at": "2026-07-31T19:23:01.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -79948,7 +79978,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:IuaOltfSPP4": {
@@ -79961,8 +79991,8 @@
       "title": "Free Databricks AI Boot Camp Information Session Q&A",
       "published_at": "2026-07-30T18:11:53.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -79972,7 +80002,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:vWRUenWqy6s": {
@@ -80129,10 +80159,11 @@
       "title": "Full AI Escape Seems Possible",
       "published_at": "2026-08-01T01:30:50.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -80140,7 +80171,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 3,
+      "times_seen": 4,
       "failure": null
     },
     "youtube:nc8KPtnBK38": {
@@ -80225,10 +80256,11 @@
       "title": "RT @DKThomp: New newsletter: THE FOUR HORSEMEN OF THE AI BUBBLE APOCALYPSE\n\nI am neither anti-AI nor certain that AI is a bubble. But the l…",
       "published_at": "2026-07-31T21:18:08.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -80236,7 +80268,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2083299235911364754": {
@@ -80249,10 +80281,11 @@
       "title": "RT @sayashk: Can AI agents conduct open-ended AI research?\n\nMost evaluations of agents conducting AI research focus on narrow, verifiable t…",
       "published_at": "2026-07-31T21:10:18.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -80260,7 +80293,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2083297577957568955": {
@@ -80297,10 +80330,11 @@
       "title": "RT @johnennis: It really annoys me how they report this stuff like they’ve gone on safari to do scientific observation\n\nClaude is a compute…",
       "published_at": "2026-07-31T20:57:17.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -80308,7 +80342,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2083295571205611684": {
@@ -80321,10 +80355,11 @@
       "title": "RT @kchonyc: since they all love biosecurity and use it to scare people of AI, i hope they know if it happened in a BSL, the lab would be s…",
       "published_at": "2026-07-31T20:55:44.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -80332,7 +80367,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2083294164511334782": {
@@ -80465,10 +80500,11 @@
       "title": "RT @stevesi: Again the rhetoric is trying to convince us that what happened was some new thing and worse that models are people. https://t.…",
       "published_at": "2026-07-31T19:11:10.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -80476,7 +80512,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2083269163988980096": {
@@ -80513,10 +80549,11 @@
       "title": "RT @che_shr_cat: 1/ SSL models like DINOv2 are engineering marvels, but they rely on fragile hacks like EMA, stop-gradients, and custom cen…",
       "published_at": "2026-07-31T19:08:30.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -80524,7 +80561,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2083078187236376649": {
@@ -80537,10 +80574,11 @@
       "title": "RT @pentagoniac: @ShawnFumo @METR_Evals The narrative: Blame the Agent, instead of the Agency that told him to “apply all your powers and t…",
       "published_at": "2026-07-31T06:31:56.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -80548,7 +80586,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2082723998656336047": {
@@ -80729,8 +80767,8 @@
       "title": "Gemini Robotics 2 is here, with our new suite of models, robots can now reason through every movement to manage tasks that weren’t possible before, like tying delicate knots - and ",
       "published_at": "2026-07-30T17:39:32.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -80740,7 +80778,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2050291108593258742": {
@@ -80801,8 +80839,8 @@
       "title": "RT @dawnsongtweets: 1/15\nIf you could ask the people building the future of Agentic AI one question, what would it be?\nThis Aug 1–2, ~5,000…",
       "published_at": "2026-07-31T01:04:16.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -80812,7 +80850,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2082974353868923021": {
@@ -81065,10 +81103,11 @@
       "title": "OpenAI reportedly finds evidence that more of its agents ran amok https://t.co/7sklcROznQ",
       "published_at": "2026-07-31T22:49:11.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -81076,7 +81115,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2083312037258813545": {
@@ -81137,10 +81176,11 @@
       "title": "Google nixes its Earth AI feature one day after launch, amid criticism it would spread misinformation https://t.co/aKnsKjRhir",
       "published_at": "2026-07-31T19:49:57.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -81148,7 +81188,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2083276703967891467": {
@@ -81161,10 +81201,11 @@
       "title": "Fresh off its Wiz payout, Index Ventures raises $2B across three funds https://t.co/vzziV7s77m",
       "published_at": "2026-07-31T19:40:46.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -81172,7 +81213,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2083266820589678924": {
@@ -81209,10 +81250,11 @@
       "title": "Sam Altman isn’t the only one who wants to pump the brakes on AI https://t.co/FQEtPlaKOf",
       "published_at": "2026-07-31T17:28:49.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -81220,7 +81262,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2083234736596795677": {
@@ -81233,10 +81275,11 @@
       "title": "Snapchat no longer rewards fully AI-generated Spotlight content https://t.co/NgVupdnqaS",
       "published_at": "2026-07-31T16:54:00.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -81244,7 +81287,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2083223686124093657": {
@@ -81257,10 +81300,11 @@
       "title": "Siri AI could come with a paywall for power users https://t.co/ouXiVefo6l",
       "published_at": "2026-07-31T16:10:05.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -81268,7 +81312,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2083219180564971598": {
@@ -81329,10 +81373,11 @@
       "title": "SpaceX won’t remove all of xAI’s unpermitted turbines for another year https://t.co/k0986eQlYr",
       "published_at": "2026-07-31T15:17:22.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -81340,7 +81385,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2083204189011001466": {
@@ -81377,10 +81422,11 @@
       "title": "https://t.co/YswVVp5Mwn raises $13M to build ultra-fast voice AI that sounds genuinely human https://t.co/ymqGh1CFAP",
       "published_at": "2026-07-31T14:50:35.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -81388,7 +81434,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2083201525481193668": {
@@ -81449,10 +81495,11 @@
       "title": "Repeat founder Ryan Williams raises $10M seed for an AI startup for private credit managers https://t.co/1y6W8WIFEg",
       "published_at": "2026-07-31T12:03:24.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -81460,7 +81507,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2082996743088800030": {
@@ -81473,8 +81520,8 @@
       "title": "Anthropic says its own AI models breached three companies during security tests https://t.co/m0ASEjEgvv",
       "published_at": "2026-07-31T01:08:18.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -81484,7 +81531,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2082972421360148868": {
@@ -81497,8 +81544,8 @@
       "title": "Apple stockpiles inventory as it braces for ‘significant supply constraints’ https://t.co/lNCBjmKliq",
       "published_at": "2026-07-30T23:31:39.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -81508,7 +81555,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2082971393118154972": {
@@ -81521,8 +81568,8 @@
       "title": "AI hedge fund Situational Awareness may have sold its public portfolio, but it still has its Anthropic shares https://t.co/MtaPfJ1Yub",
       "published_at": "2026-07-30T23:27:34.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -81532,7 +81579,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2083338479455338575": {
@@ -81665,10 +81712,11 @@
       "title": "As OpenAI and Anthropic employees grow quieter online, researchers at Chinese AI labs are flocking to X to explain their work, recruit talent, and shape the global conversation on ",
       "published_at": "2026-07-31T18:23:28.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -81676,7 +81724,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2083240525935604121": {
@@ -81713,10 +81761,11 @@
       "title": "In the immediate aftermath of Anthony Fauci’s tense congressional hearing on Wednesday, where he refused to answer any questions and invoked the Fifth Amendment, MAGA is loudly cal",
       "published_at": "2026-07-31T16:28:05.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -81724,7 +81773,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2083227706498666986": {
@@ -81737,10 +81786,11 @@
       "title": "RT @daithaigilbert: This week MAGA figures were baying for blood, demanding that Fauci be arrested and jailed. Steve Bannon even said: \"He…",
       "published_at": "2026-07-31T16:26:04.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -81748,7 +81798,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2083223747117342851": {
@@ -81785,10 +81835,11 @@
       "title": "Viral tales of good triumphing over evil are racking up millions of views. They’re almost entirely AI-generated clickbait. https://t.co/uotRoeUVZP",
       "published_at": "2026-07-31T15:03:46.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -81796,7 +81847,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2083204476517659132": {
@@ -81809,10 +81860,11 @@
       "title": "An ad for Orchid suggests the AI agent can fix relationship problems by simply doing everything for inconsiderate partners. https://t.co/MHSNmPJ0go",
       "published_at": "2026-07-31T14:53:45.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -81820,7 +81872,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2083132072076497254": {
@@ -81833,10 +81885,11 @@
       "title": "Created by legendary hardware hacker Andrew “bunnie” Huang, the badges for this year’s famed security conference aim to push the boundaries of security and transparency. https://t.",
       "published_at": "2026-07-31T10:06:03.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -81844,7 +81897,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2083116958707257422": {
@@ -81881,8 +81934,8 @@
       "title": "In a review triggered by OpenAI's Hugging Face incident, Anthropic discovered three of its AI models had breached real organizations during third-party evaluations. https://t.co/rT",
       "published_at": "2026-07-31T01:26:45.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -81892,7 +81945,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2082979586199961964": {
@@ -81905,8 +81958,8 @@
       "title": "Razer has finally caved and made its first Hall Effect gaming keyboard. I dug into its switches, features, and gaming performance to see if it was worth the wait. https://t.co/p3OF",
       "published_at": "2026-07-31T00:00:07.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -81916,7 +81969,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2082970073669496862": {
@@ -82001,8 +82054,8 @@
       "title": "A memo obtained by WIRED, issued by the water utilities information sharing group WaterISAC, links dozens of cyberattacks against Minnesota water utilities to Tehran. https://t.co/",
       "published_at": "2026-07-30T21:25:26.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -82012,7 +82065,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2083330966643462625": {
@@ -82025,10 +82078,11 @@
       "title": "really cool use of our open source infini-gram engine to study llm regurgitation",
       "published_at": "2026-07-31T23:16:23.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -82036,7 +82090,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2082159554792435863": {
@@ -82073,10 +82127,11 @@
       "title": "🦙 is coming coming to Las Vegas for @Ai4Conferences next week (Aug 4–6). Three ways to find us:\n\n📍 Booth 1561 on the Expo floor\n🎤 @jerryjliu0 will be speaking about unlocking do",
       "published_at": "2026-08-01T03:09:09.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -82084,7 +82139,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2082912887396311518": {
@@ -82169,10 +82224,11 @@
       "title": "RT @RedHat_AI: Kimi K3 now in NVFP4, the Blackwell counterpart to our FP8-Block checkpoint.\n\nMoE layers quantized to 4-bit for accelerated…",
       "published_at": "2026-08-01T02:00:57.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -82180,7 +82236,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2083270762610540817": {
@@ -82193,10 +82249,11 @@
       "title": "It's been a pleasure collaborating with the team to co-maintain standalone components, like the multimodal processors powering vLLM's Rust frontend, that can be standardized and sh",
       "published_at": "2026-07-31T19:17:09.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -82204,7 +82261,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2083226009009348788": {
@@ -82217,10 +82274,11 @@
       "title": "🎉 Congrats to @deepseek_ai on open-sourcing the official DeepSeek-V4-Flash-0731 release!\n\nA sparse MoE with 256 routed experts and six active per token, a 1M-token context window,",
       "published_at": "2026-07-31T16:19:19.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -82228,7 +82286,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2083001466743038420": {
@@ -82265,8 +82323,8 @@
       "title": "🎉 Congrats to @thinkymachines on Inkling-Small-- live with Day 0 vLLM support!\n\n276B total parameters with 12B active, native text, image, and audio input, and a 1M-token context ",
       "published_at": "2026-07-30T18:07:25.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
         "recent-7d"
       ],
@@ -82276,7 +82334,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2082728283163308061": {
@@ -82601,10 +82659,11 @@
       "title": "DeepSeek-V4-Flash-0731 is now available on Ollama's cloud. This update substantially enhances the model's agentic capabilities:\n\nollama run deepseek-v4-flash:0731-cloud\n\nUse it wit",
       "published_at": "2026-08-01T04:34:38.000Z",
       "first_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_seen_at": "2026-08-01T05:25:18.942Z",
-      "last_processed_at": "2026-08-01T05:25:18.942Z",
+      "last_seen_at": "2026-08-04T13:16:34.123Z",
+      "last_processed_at": "2026-08-04T13:16:34.123Z",
       "source_layers": [
-        "recent-1d"
+        "recent-1d",
+        "recent-7d"
       ],
       "discovery_status": "discovered",
       "processing_status": "published",
@@ -82612,7 +82671,7 @@
       "analysis_completed": true,
       "analysis_version": "rules-v1",
       "duplicate_skipped": false,
-      "times_seen": 2,
+      "times_seen": 3,
       "failure": null
     },
     "x:2082703271979037003": {
@@ -83430,9 +83489,33 @@
       "duplicate_skipped": false,
       "times_seen": 1,
       "failure": null
+    },
+    "youtube:video-ai-1": {
+      "key": "youtube:video-ai-1",
+      "platform": "youtube",
+      "native_id": "video-ai-1",
+      "id_fallback": null,
+      "source_id": "fixture-yt2",
+      "canonical_url": "https://www.youtube.com/watch?v=video-ai-1",
+      "title": "Claude Agent 实测与限制",
+      "published_at": "2026-07-23T01:00:00.000Z",
+      "first_seen_at": "2026-08-04T10:00:00.000Z",
+      "last_seen_at": "2026-08-04T10:00:00.000Z",
+      "last_processed_at": "2026-08-04T10:00:00.000Z",
+      "source_layers": [
+        "recent-30d"
+      ],
+      "discovery_status": "discovered",
+      "processing_status": "published",
+      "details_fetched": true,
+      "analysis_completed": true,
+      "analysis_version": "rules-v1",
+      "duplicate_skipped": false,
+      "times_seen": 2,
+      "failure": null
     }
   },
   "stats": {
-    "count": 3475
+    "count": 3476
   }
 }

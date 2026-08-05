@@ -49,7 +49,7 @@ const NOW = '2026-08-03T08:00:00.000Z';
 test('applyReviewTransition 写入 from_status / reviewed_at / candidate_version 递增', () => {
   const candidate = stampCandidateStatuses(baseItem());
   applyReviewTransition(candidate, 'held', { reason: '等待来源', reviewer: 'alice', now: NOW });
-  assert.equal(candidate.from_status, 'approved');       // 变更前状态
+  assert.equal(candidate.from_status, 'pending');       // 变更前状态（新候选默认 pending）
   assert.equal(candidate.review_status, 'held');
   assert.equal(candidate.review_reason, '等待来源');
   assert.equal(candidate.reviewer, 'alice');
@@ -61,7 +61,7 @@ test('applyReviewTransition 连续流转 candidate_version 递增且 from_status
   const candidate = stampCandidateStatuses(baseItem());
   applyReviewTransition(candidate, 'held', { reviewer: 'alice', now: NOW });
   assert.equal(candidate.candidate_version, 2);
-  assert.equal(candidate.from_status, 'approved');
+  assert.equal(candidate.from_status, 'pending');
   applyReviewTransition(candidate, 'approved', { reviewer: 'bob', now: NOW });
   assert.equal(candidate.candidate_version, 3);
   assert.equal(candidate.from_status, 'held');
@@ -86,7 +86,7 @@ test('setReviewStatus 写入完整审计字段', () => {
   assert.equal(candidate.review_reason, '规则误判');
   assert.equal(candidate.reviewer, 'reviewer-1');
   assert.equal(candidate.reviewed_at, NOW);
-  assert.equal(candidate.from_status, 'approved');
+  assert.equal(candidate.from_status, 'pending');
   assert.equal(candidate.candidate_version, 2);
 });
 
@@ -97,7 +97,7 @@ test('setReviewStatus 缺省 reviewer/now 时仍写 reviewed_at 与递增版本'
   assert.equal(candidate.review_status, 'held');
   assert.equal(candidate.reviewer, undefined);                 // 未提供则不写
   assert.ok(Number.isFinite(new Date(candidate.reviewed_at).getTime())); // 缺省为当前时间
-  assert.equal(candidate.from_status, 'approved');
+  assert.equal(candidate.from_status, 'pending');
   assert.equal(candidate.candidate_version, 2);
 });
 
@@ -122,7 +122,7 @@ test('setBatchReviewStatus 逐条写入审计字段且不互相影响', () => {
     assert.equal(candidate.review_status, 'approved');
     assert.equal(candidate.reviewer, 'batch-reviewer');
     assert.equal(candidate.reviewed_at, NOW);
-    assert.equal(candidate.from_status, 'approved');
+    assert.equal(candidate.from_status, 'pending'); // 新候选默认 pending，from_status 为变更前状态
     assert.equal(candidate.candidate_version, 2);
   }
 });
@@ -137,7 +137,7 @@ test('markHeld 写入 held + hold_reason + 审计字段，不影响 ai_processin
   assert.equal(candidate.hold_reason, '字幕缺失');
   assert.equal(candidate.reviewer, 'alice');
   assert.equal(candidate.reviewed_at, NOW);
-  assert.equal(candidate.from_status, 'approved');
+  assert.equal(candidate.from_status, 'pending'); // 新候选默认 pending
   assert.equal(candidate.candidate_version, 2);
   assert.equal(candidate.ai_processing_status, 'completed');
 });

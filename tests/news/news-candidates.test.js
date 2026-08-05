@@ -61,7 +61,7 @@ test('双状态轴枚举与决策 16 一致', () => {
   assert.deepEqual(AI_PROCESSING_STATUSES, ['not_requested', 'queued', 'processing', 'completed', 'error']);
   assert.deepEqual(REVIEW_STATUSES, ['pending', 'approved', 'held', 'discarded']);
   assert.equal(DEFAULT_AI_PROCESSING_STATUS, 'completed');
-  assert.equal(DEFAULT_REVIEW_STATUS, 'approved');
+  assert.equal(DEFAULT_REVIEW_STATUS, 'pending'); // 决策 51/69：新候选默认待审，不自动公开
 });
 
 test('createCandidateStore 空输入返回空候选层', () => {
@@ -78,9 +78,9 @@ test('createCandidateStore 保留既有候选', () => {
   assert.equal(store.updated_at, '2026-07-01T00:00:00Z');
 });
 
-test('stampCandidateStatuses 写入桥接默认双状态轴', () => {
+test('stampCandidateStatuses 写入默认双状态轴（新候选 pending 待审）', () => {
   const candidate = stampCandidateStatuses(baseItem());
-  assert.equal(candidate.review_status, 'approved');
+  assert.equal(candidate.review_status, 'pending'); // 决策 51/69：审核流启用后默认待审
   assert.equal(candidate.ai_processing_status, 'completed');
   assert.equal(candidate.id, 'x-item-1');
 });
@@ -93,10 +93,10 @@ test('stampCandidateStatuses 支持显式状态覆盖（测试/审核流注入�
 
 // ── 第 2 组：候选合并（决策 49/55/70）────────────────────────
 
-test('mergeCandidates 新候选使用桥接默认', () => {
+test('mergeCandidates 新候选使用默认双状态轴（pending 待审）', () => {
   const store = mergeCandidates(null, [stampCandidateStatuses(baseItem())], '2026-07-20T00:00:00Z');
   assert.equal(store.candidates.length, 1);
-  assert.equal(store.candidates[0].review_status, 'approved');
+  assert.equal(store.candidates[0].review_status, 'pending'); // 决策 51/69：默认待审
   assert.equal(store.candidates[0].ai_processing_status, 'completed');
   assert.equal(store.updated_at, '2026-07-20T00:00:00Z');
 });
@@ -129,7 +129,7 @@ test('isPublicEligible 仅放行 completed + approved', () => {
 
 test('selectPublicEligible 从混合候选筛出合格项', () => {
   const candidates = [
-    stampCandidateStatuses(baseItem({ id: 'pass' })),
+    stampCandidateStatuses(baseItem({ id: 'pass' }), { review_status: 'approved' }),
     stampCandidateStatuses(baseItem({ id: 'held' }), { review_status: 'held' }),
     stampCandidateStatuses(baseItem({ id: 'error' }), { ai_processing_status: 'error' }),
   ];
@@ -153,7 +153,7 @@ test('toPublicItem 剔除内部状态字段', () => {
 });
 
 test('buildPublicProjection 只输出合格候选并过滤关联记录', () => {
-  const pass = stampCandidateStatuses(baseItem({ id: 'pass' }));
+  const pass = stampCandidateStatuses(baseItem({ id: 'pass' }), { review_status: 'approved' });
   const held = stampCandidateStatuses(baseItem({ id: 'held' }), { review_status: 'held' });
   const output = buildPublicProjection({
     candidates: [pass, held],
@@ -174,7 +174,7 @@ test('buildPublicProjection 只输出合格候选并过滤关联记录', () => {
     heatDefinition: 'heat',
   });
 
-  assert.equal(output.schema_version, 2);
+  assert.equal(output.schema_version, 3);
   assert.equal(output.generated_at, '2026-07-20T00:00:00Z');
   assert.equal(output.heat_definition, 'heat');
   assert.deepEqual(output.items.map(item => item.id), ['pass']);
@@ -257,7 +257,7 @@ test('markAiError 写入 error + 错误字段，不覆盖 review_status', () => 
 test('reviewSummary 统计状态分布', () => {
   const store = createCandidateStore(null);
   store.candidates = [
-    stampCandidateStatuses(baseItem({ id: 'a' })),
+    stampCandidateStatuses(baseItem({ id: 'a' }), { review_status: 'approved' }),
     stampCandidateStatuses(baseItem({ id: 'b' }), { review_status: 'held' }),
     stampCandidateStatuses(baseItem({ id: 'c' }), { review_status: 'discarded' }),
   ];
@@ -299,7 +299,7 @@ test('createCandidateStore 保留投影快照（向后兼容）', () => {
 test('buildProjectionFromStore 从快照重建，只含 completed + approved', () => {
   const store = createCandidateStore(null);
   store.candidates = [
-    stampCandidateStatuses(baseItem({ id: 'pass' })),
+    stampCandidateStatuses(baseItem({ id: 'pass' }), { review_status: 'approved' }),
     stampCandidateStatuses(baseItem({ id: 'held' }), { review_status: 'held' }),
   ];
   attachProjectionSnapshot(store, {
@@ -314,7 +314,7 @@ test('buildProjectionFromStore 从快照重建，只含 completed + approved', (
   });
   store.updated_at = '2026-07-20T00:00:00Z';
   const output = buildProjectionFromStore(store, { generatedAt: '2026-07-21T00:00:00Z' });
-  assert.equal(output.schema_version, 2);
+  assert.equal(output.schema_version, 3);
   assert.equal(output.generated_at, '2026-07-21T00:00:00Z');
   assert.equal(output.heat_definition, 'heat');
   assert.deepEqual(output.items.map(item => item.id), ['pass']);
@@ -363,7 +363,7 @@ test('importLegacyHotspots 把旧数据导入候选层，不自动公开', () =>
 
 test('importLegacyHotspots 跳过候选层中已存在的 id，保持其既有审核结论', () => {
   const existing = createCandidateStore(null);
-  existing.candidates = [stampCandidateStatuses(baseItem({ id: 'already' }))]; // 已由新管线写入 approved
+  existing.candidates = [stampCandidateStatuses(baseItem({ id: 'already' }), { review_status: 'approved' })]; // 已由新管线写入 approved（模拟已审核通过的既有候选）
   const result = importLegacyHotspots(existing, [
     baseItem({ id: 'already' }),
     baseItem({ id: 'fresh-legacy' }),

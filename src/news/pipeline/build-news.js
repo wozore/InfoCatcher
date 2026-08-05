@@ -106,7 +106,7 @@ const { normalizeManualItem } = require('../../content/news-manual');
 const { createAuthorizationStore, createAuthorizationTask } = require('../core/news-authorization');
 const {
   readCandidateStore, writeCandidateStore, mergeCandidates, stampCandidateStatuses, buildPublicProjection,
-  attachProjectionSnapshot,
+  attachProjectionSnapshot, DEFAULT_REVIEW_STATUS,
 } = require('../core/news-candidates');
 const { isWithinPublicWindow, markAnomalousTimeCandidates, filterProjectionByWindow } = require('../core/news-public-gate');
 const { recordReviewTransition } = require('../core/news-review-events');
@@ -1123,6 +1123,10 @@ async function runCollection(options = {}) {
   const enabled = platformScope === 'bilibili-only'
     ? allEnabled.filter(source => source.platform === 'bilibili')
     : allEnabled.filter(source => !(bilibiliAutomatedPaused && source.platform === 'bilibili'));
+  // B16 决策 51/69：新候选默认 review_status 为 pending，等待人工审核。
+  // options.defaultReviewStatus 仅供测试/覆盖用（管线单元测试保持断言公开投影），
+  // 生产路径不传，沿用 DEFAULT_REVIEW_STATUS（pending）。
+  const defaultReviewStatus = options.defaultReviewStatus || DEFAULT_REVIEW_STATUS;
   const manualPayload = options.manualItems ?? readJson(MANUAL_ITEMS_PATH, { schema_version: 1, items: [] });
   const manualItems = (manualPayload.items || [])
     .map(item => normalizeManualItem(item, sourcePayload.sources, fetchedAt))
@@ -1304,7 +1308,7 @@ async function runCollection(options = {}) {
       content_type_status: item.content_type_status || 'unclassified',
       batch_id: batchId,
       candidate_version: item.candidate_version || 1,
-    })),
+    }, { review_status: defaultReviewStatus })),
     fetchedAt
   );
   const statusById = new Map(candidateStore.candidates.map(candidate => [candidate.id, candidate]));
@@ -1431,7 +1435,14 @@ async function runCollection(options = {}) {
       heatDefinition: HEAT_DEFINITION,
     });
     writeCandidateStore(candidateStore, runId);
-    writeJsonAtomic(OUTPUT_PATH, output, runId);
+    // B16 决策 51/69：新候选默认 pending 待人工审核。公开投影经门禁过滤后可能为空，
+    // 此时不覆盖 hotspots.json（保留上一版公开数据），避免本地采集误伤公开页；
+    // 公开区由审核通过后 publish-news.js 从候选层重建（决策 59）。
+    if (output.items.length > 0) {
+      writeJsonAtomic(OUTPUT_PATH, output, runId);
+    } else {
+      console.log('ℹ️ 本轮公开投影为空（候选层无 approved），hotspots.json 保持不变；公开区由审核通过后 publish-news.js 重建');
+    }
   }
   return { output, state, registry, quota: finalizedQuota, authorizations };
 }
@@ -1474,6 +1485,9 @@ async function runFixtureBuild() {
     sourcePayload: { schema_version: 1, sources: [youtubeSource, xSource, bilibiliSource] },
     state: initialState(), oldOutput: EMPTY_OUTPUT,
     now: fixedNow, noWrite: true, allowEmpty: false, skipHistory: true,
+    // fixture 用于确定性测试采集+评分管线，用 approved 保持断言公开投影的能力；
+    // 生产路径不传该选项，新候选默认 pending 待人工审核（决策 51/69）。
+    defaultReviewStatus: 'approved',
     collector: async current => {
       if (current.platform === 'youtube') return { items: youtubeItems, routeCoverage: null };
       if (current.platform === 'x') return { items: xItems, routeCoverage: null };

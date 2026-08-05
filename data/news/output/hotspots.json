@@ -1,6 +1,7 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-08-01T05:25:18.942Z",
+  "generated_at": "2026-08-04T14:19:55.969Z",
+  "heat_definition": "hot_score 表示条目在其来源平台内的相对互动量级（0–100），由公开互动数据（浏览/点赞/评论/转发）的加权对数指数按平台归一化得到；仅在平台内可比，跨平台不构成权威综合热度。无互动数据时为 null，前端按“最近”时间回退排序。",
   "items": [
     {
       "id": "x-9dd3da0625fba183ab33",
@@ -30,24 +31,7 @@
       "explicit_links": [],
       "hot_score": 33,
       "evidence_excerpt": "DeepSeek-V4-Flash-0731 is now available on Ollama's cloud. This update substantially enhances the model's agentic capabilities: ollama run…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "claude"
-        },
-        {
-          "type": "tool",
-          "id": "deepseek"
-        },
-        {
-          "type": "tool",
-          "id": "claude-code"
-        },
-        {
-          "type": "concept",
-          "id": "Agent"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -86,12 +70,7 @@
       "explicit_links": [],
       "hot_score": 3,
       "evidence_excerpt": "🦙 is coming coming to Las Vegas for @Ai4Conferences next week (Aug 4–6). Three ways to find us: 📍 Booth 1561 on the Expo floor 🎤 @jerryjliu0 will be…",
-      "related_resources": [
-        {
-          "type": "concept",
-          "id": "Agent"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -130,20 +109,7 @@
       "explicit_links": [],
       "hot_score": 34,
       "evidence_excerpt": "RT @RedHat_AI: Kimi K3 now in NVFP4, the Blackwell counterpart to our FP8-Block checkpoint. MoE layers quantized to 4-bit for accelerated…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "kimi"
-        },
-        {
-          "type": "concept",
-          "id": "MoE"
-        },
-        {
-          "type": "concept",
-          "id": "量化"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -238,20 +204,7 @@
       ],
       "hot_score": 57,
       "evidence_excerpt": "In this week's AI News You Can Use, Igor showcases the new ChatGPT Voice mode across web, mobile, and desktop. The update makes it extremely easy to get work…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "chatgpt"
-        },
-        {
-          "type": "tool",
-          "id": "claude"
-        },
-        {
-          "type": "scene",
-          "id": "voice"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -290,16 +243,7 @@
       "explicit_links": [],
       "hot_score": 0,
       "evidence_excerpt": "really cool use of our open source infini-gram engine to study llm regurgitation",
-      "related_resources": [
-        {
-          "type": "concept",
-          "id": "开源模型"
-        },
-        {
-          "type": "scene",
-          "id": "study"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -340,12 +284,7 @@
       ],
       "hot_score": 40,
       "evidence_excerpt": "OpenAI reportedly finds evidence that more of its agents ran amok https://t.co/7sklcROznQ",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "chatgpt"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -391,12 +330,7 @@
       ],
       "hot_score": 18,
       "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
-      "related_resources": [
-        {
-          "type": "scene",
-          "id": "study"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -442,12 +376,7 @@
       ],
       "hot_score": 9,
       "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
-      "related_resources": [
-        {
-          "type": "scene",
-          "id": "study"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -493,12 +422,7 @@
       ],
       "hot_score": 8,
       "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
-      "related_resources": [
-        {
-          "type": "scene",
-          "id": "study"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -544,16 +468,7 @@
       ],
       "hot_score": 22,
       "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
-      "related_resources": [
-        {
-          "type": "concept",
-          "id": "Transformer"
-        },
-        {
-          "type": "scene",
-          "id": "study"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -599,12 +514,7 @@
       ],
       "hot_score": 14,
       "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
-      "related_resources": [
-        {
-          "type": "scene",
-          "id": "study"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -682,16 +592,7 @@
       "explicit_links": [],
       "hot_score": 56,
       "evidence_excerpt": "RT @sayashk: Can AI agents conduct open-ended AI research? Most evaluations of agents conducting AI research focus on narrow, verifiable t…",
-      "related_resources": [
-        {
-          "type": "concept",
-          "id": "Agent"
-        },
-        {
-          "type": "scene",
-          "id": "research"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -735,12 +636,7 @@
       ],
       "hot_score": 0,
       "evidence_excerpt": "Join Michelle Ash, CEO of SIMULIA at Dassault Systèmes, and Neil Ashton, Distinguished Engineer at NVIDIA, for a discussion on how Dassault Systèmes and NVIDIA…",
-      "related_resources": [
-        {
-          "type": "concept",
-          "id": "Agent"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -779,12 +675,7 @@
       "explicit_links": [],
       "hot_score": 63,
       "evidence_excerpt": "RT @johnennis: It really annoys me how they report this stuff like they’ve gone on safari to do scientific observation Claude is a compute…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "claude"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -869,12 +760,7 @@
       ],
       "hot_score": 26,
       "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
-      "related_resources": [
-        {
-          "type": "scene",
-          "id": "study"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -920,16 +806,7 @@
       ],
       "hot_score": 17,
       "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
-      "related_resources": [
-        {
-          "type": "concept",
-          "id": "扩散模型"
-        },
-        {
-          "type": "scene",
-          "id": "study"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -979,16 +856,7 @@
       ],
       "hot_score": 42,
       "evidence_excerpt": "Can an AI do the right thing for the wrong reason? Tim Scarfe speaks with Apollo Research’s Alexander Meinke, Axel Højmark and Jérémy Scheurer about Measuring…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "chatgpt"
-        },
-        {
-          "type": "scene",
-          "id": "research"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -1153,12 +1021,7 @@
       "explicit_links": [],
       "hot_score": 24,
       "evidence_excerpt": "It's been a pleasure collaborating with the team to co-maintain standalone components, like the multimodal processors powering vLLM's Rust frontend, that can…",
-      "related_resources": [
-        {
-          "type": "concept",
-          "id": "开源模型"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -1288,16 +1151,7 @@
       ],
       "hot_score": 63,
       "evidence_excerpt": "Bloomberg’s Ed Ludlow breaks down Tim Cook's final Apple earnings call as CEO - a story of supply crunches, demand misreads and a tough outlook. Plus, Amazon's…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "chatgpt"
-        },
-        {
-          "type": "tool",
-          "id": "claude"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -1344,20 +1198,7 @@
       ],
       "hot_score": 41,
       "evidence_excerpt": "Six questions shaping enterprise AI focus on strategy, architecture, cost allocation, upskilling, monitoring, and external business models. Sam Altman's…",
-      "related_resources": [
-        {
-          "type": "concept",
-          "id": "Agent"
-        },
-        {
-          "type": "concept",
-          "id": "Token"
-        },
-        {
-          "type": "scene",
-          "id": "research"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -1401,16 +1242,7 @@
       ],
       "hot_score": 3,
       "evidence_excerpt": "What does building a career in ML actually looks like in 2026, beyond the LinkedIn highlights and the standard advice? This panel brings together people who…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "cohere"
-        },
-        {
-          "type": "scene",
-          "id": "research"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -1460,12 +1292,7 @@
       ],
       "hot_score": 53,
       "evidence_excerpt": "Chinese AI startup Moonshot's Kimi models are powered in part by around 20,000 Nvidia Hopper chips supplied through a computing agreement with Alibaba,…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "kimi"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -1515,16 +1342,7 @@
       ],
       "hot_score": 51,
       "evidence_excerpt": "Recent disclosures from Anthropic and OpenAI have shifted the AI conversation from model capabilities to real-world deployment and security. Lux Capital…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "chatgpt"
-        },
-        {
-          "type": "tool",
-          "id": "claude"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -1615,16 +1433,7 @@
       ],
       "hot_score": 31,
       "evidence_excerpt": "As OpenAI and Anthropic employees grow quieter online, researchers at Chinese AI labs are flocking to X to explain their work, recruit talent, and shape the…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "chatgpt"
-        },
-        {
-          "type": "tool",
-          "id": "claude"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -1668,16 +1477,7 @@
       ],
       "hot_score": 3,
       "evidence_excerpt": "​Many AI tutors leverage large language models (LLMs) today. Given that LLMs are opaque black boxes, robust evaluation and live experimentation to measure the…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "cohere"
-        },
-        {
-          "type": "scene",
-          "id": "study"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -1762,16 +1562,7 @@
       ],
       "hot_score": 8,
       "evidence_excerpt": "After years of pushing full speed ahead on AI, OpenAI CEO Sam Altman says maybe it’s time for the AI industry to “pace” itself. The comments came just days…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "chatgpt"
-        },
-        {
-          "type": "tool",
-          "id": "claude"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -1933,24 +1724,7 @@
       ],
       "hot_score": 43,
       "evidence_excerpt": "🎉 Congrats to @deepseek_ai on open-sourcing the official DeepSeek-V4-Flash-0731 release! A sparse MoE with 256 routed experts and six active per token, a…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "deepseek"
-        },
-        {
-          "type": "concept",
-          "id": "MoE"
-        },
-        {
-          "type": "concept",
-          "id": "Tool Use"
-        },
-        {
-          "type": "concept",
-          "id": "上下文窗口"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -1994,12 +1768,7 @@
       ],
       "hot_score": 67,
       "evidence_excerpt": "This is Gemini Robotics 2 🤖",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "gemini"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -2131,12 +1900,7 @@
       ],
       "hot_score": 81,
       "evidence_excerpt": "Learn the best practices for building robust and scalable Kubernetes operators using Kubebuilder. This course covers critical techniques, including managing…",
-      "related_resources": [
-        {
-          "type": "scene",
-          "id": "write-code"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -2177,12 +1941,7 @@
       ],
       "hot_score": 44,
       "evidence_excerpt": "SpaceX won’t remove all of xAI’s unpermitted turbines for another year https://t.co/k0986eQlYr",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "grok"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -2267,12 +2026,7 @@
       ],
       "hot_score": 34,
       "evidence_excerpt": "Here's how to access the secret AI model everyone is trying to get their hands on 👀 Kimi K3 is apparently so powerful that they had to pause new subscriptions…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "kimi"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -2313,12 +2067,7 @@
       ],
       "hot_score": 34,
       "evidence_excerpt": "An ad for Orchid suggests the AI agent can fix relationship problems by simply doing everything for inconsiderate partners. https://t.co/MHSNmPJ0go",
-      "related_resources": [
-        {
-          "type": "concept",
-          "id": "Agent"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -2360,12 +2109,7 @@
       ],
       "hot_score": 41,
       "evidence_excerpt": "https://t.co/YswVVp5Mwn raises $13M to build ultra-fast voice AI that sounds genuinely human https://t.co/ymqGh1CFAP",
-      "related_resources": [
-        {
-          "type": "scene",
-          "id": "voice"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -2415,12 +2159,7 @@
       ],
       "hot_score": 100,
       "evidence_excerpt": "Here's The AI News From The Past Week! Build with Retool here: https://fandf.co/3RjilvK Discover More: 🛠️ Explore AI Tools & News: https://futuretools.io/ 📰…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "claude"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -2470,12 +2209,7 @@
       ],
       "hot_score": 39,
       "evidence_excerpt": "Our LIVE Software Engineering Bootcamp is back with its 3rd cohort after the successful completion of the first two batches. Check it out here:…",
-      "related_resources": [
-        {
-          "type": "scene",
-          "id": "study"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -2525,12 +2259,7 @@
       ],
       "hot_score": 47,
       "evidence_excerpt": "Tau is a minimalist coding-agent harness inspired by Pi and implemented in Python. This crash course tours its Textual TUI, provider login and model selection,…",
-      "related_resources": [
-        {
-          "type": "scene",
-          "id": "write-code"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -2615,12 +2344,7 @@
       ],
       "hot_score": 42,
       "evidence_excerpt": "120 learners showed up at the Codebasics Learner Meetup in Bengaluru. Every single one had a story. A pediatric surgeon drove 4 hours one way just to attend…",
-      "related_resources": [
-        {
-          "type": "scene",
-          "id": "study"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -2664,12 +2388,7 @@
       ],
       "hot_score": 54,
       "evidence_excerpt": "How do AI agents actually use tools like web search? The model can't magically go online, it can only predict text. So when it wants to search, it outputs a…",
-      "related_resources": [
-        {
-          "type": "concept",
-          "id": "Agent"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -2756,12 +2475,7 @@
       ],
       "hot_score": 56,
       "evidence_excerpt": "Read the 2026 Cost of a Data Breach Report → https://ibm.biz/~rQKxmFpBi Are AI-powered cyberattacks getting cheaper while defenses get more expensive? This…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "claude"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -2891,16 +2605,7 @@
       ],
       "hot_score": 37,
       "evidence_excerpt": "In a review triggered by OpenAI's Hugging Face incident, Anthropic discovered three of its AI models had breached real organizations during third-party…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "chatgpt"
-        },
-        {
-          "type": "tool",
-          "id": "claude"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -2941,12 +2646,7 @@
       ],
       "hot_score": 48,
       "evidence_excerpt": "Anthropic says its own AI models breached three companies during security tests https://t.co/m0ASEjEgvv",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "claude"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -2985,12 +2685,7 @@
       "explicit_links": [],
       "hot_score": 56,
       "evidence_excerpt": "RT @dawnsongtweets: 1/15 If you could ask the people building the future of Agentic AI one question, what would it be? This Aug 1–2, ~5,000…",
-      "related_resources": [
-        {
-          "type": "concept",
-          "id": "Agent"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -3036,12 +2731,7 @@
       ],
       "hot_score": 27,
       "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
-      "related_resources": [
-        {
-          "type": "scene",
-          "id": "study"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -3087,12 +2777,7 @@
       ],
       "hot_score": 13,
       "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
-      "related_resources": [
-        {
-          "type": "scene",
-          "id": "study"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -3179,12 +2864,7 @@
       ],
       "hot_score": 17,
       "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
-      "related_resources": [
-        {
-          "type": "scene",
-          "id": "study"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -3230,12 +2910,7 @@
       ],
       "hot_score": 54,
       "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
-      "related_resources": [
-        {
-          "type": "scene",
-          "id": "study"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -3281,12 +2956,7 @@
       ],
       "hot_score": 30,
       "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
-      "related_resources": [
-        {
-          "type": "scene",
-          "id": "study"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -3332,12 +3002,7 @@
       ],
       "hot_score": 41,
       "evidence_excerpt": "For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate…",
-      "related_resources": [
-        {
-          "type": "scene",
-          "id": "study"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -3419,12 +3084,7 @@
       ],
       "hot_score": 40,
       "evidence_excerpt": "AI hedge fund Situational Awareness may have sold its public portfolio, but it still has its Anthropic shares https://t.co/MtaPfJ1Yub",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "claude"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -3465,12 +3125,7 @@
       ],
       "hot_score": 96,
       "evidence_excerpt": "In a review of our cybersecurity evaluations, we found three incidents in which a Claude model reached the internet from within or while interacting with a…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "claude"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -3551,20 +3206,7 @@
       "explicit_links": [],
       "hot_score": 36,
       "evidence_excerpt": "Lecture 11 is a tool-use/function calling/agentic 101! I almost skipped this one, as this chapter started as the only skill-specific topic in the book, but…",
-      "related_resources": [
-        {
-          "type": "concept",
-          "id": "Function Calling"
-        },
-        {
-          "type": "concept",
-          "id": "Agent"
-        },
-        {
-          "type": "scene",
-          "id": "study"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -3606,12 +3248,7 @@
       ],
       "hot_score": 32,
       "evidence_excerpt": "Cohere has joined @NVIDIA alongside industry leaders in founding the Open Secure AI Alliance. Everybody should have the capability to keep their infrastructure…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "cohere"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -3711,20 +3348,7 @@
       ],
       "hot_score": 83,
       "evidence_excerpt": "🖥️ Try Abacus AI SuperComputer: https://supercomputer.abacus.ai/wrt A real always-on Linux box in the cloud, that an AI agent builds on for you. First month…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "tongyi"
-        },
-        {
-          "type": "concept",
-          "id": "Agent"
-        },
-        {
-          "type": "concept",
-          "id": "Arena ELO"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -3807,12 +3431,7 @@
       ],
       "hot_score": 54,
       "evidence_excerpt": "This is how Gemini Robotics 2 helps @Apptronik’s Apollo 2 use whole body intelligence to pack for a sports game ↓ https://t.co/rPYsclzJHR",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "gemini"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -3862,12 +3481,7 @@
       ],
       "hot_score": 67,
       "evidence_excerpt": "Bloomberg’s Ed Ludlow breaks down big tech's earnings, with Microsoft soaring on cloud growth as its AI gets traction, while Meta plummets as Zuckerberg's AI…",
-      "related_resources": [
-        {
-          "type": "scene",
-          "id": "research"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -3951,20 +3565,7 @@
       ],
       "hot_score": 63,
       "evidence_excerpt": "In this video, Igor shows you how to access Gemini's new Study Notebooks feature and get the most out of them. Enjoy! Discover 10 practical ways to use ChatGPT…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "chatgpt"
-        },
-        {
-          "type": "tool",
-          "id": "gemini"
-        },
-        {
-          "type": "scene",
-          "id": "study"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -4008,16 +3609,7 @@
       ],
       "hot_score": 34,
       "evidence_excerpt": "How did computer vision evolve from recognizing objects in images to today's powerful AI systems? In this session, PhD researcher Vivian White and Senior…",
-      "related_resources": [
-        {
-          "type": "concept",
-          "id": "Transformer"
-        },
-        {
-          "type": "scene",
-          "id": "research"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -4150,20 +3742,7 @@
       "explicit_links": [],
       "hot_score": 36,
       "evidence_excerpt": "🎉 Congrats to @thinkymachines on Inkling-Small-- live with Day 0 vLLM support! 276B total parameters with 12B active, native text, image, and audio input, and…",
-      "related_resources": [
-        {
-          "type": "concept",
-          "id": "RAG"
-        },
-        {
-          "type": "concept",
-          "id": "Agent"
-        },
-        {
-          "type": "concept",
-          "id": "开源模型"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -4263,16 +3842,7 @@
       ],
       "hot_score": 66,
       "evidence_excerpt": "Gabriela Borges, Goldman Sachs managing director and senior software equity research analyst, joins Bloomberg after raising her price target on Microsoft,…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "copilot"
-        },
-        {
-          "type": "scene",
-          "id": "research"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -4355,12 +3925,7 @@
       "explicit_links": [],
       "hot_score": 74,
       "evidence_excerpt": "Gemini Robotics 2 is here, with our new suite of models, robots can now reason through every movement to manage tasks that weren’t possible before, like tying…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "gemini"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -4399,12 +3964,7 @@
       "explicit_links": [],
       "hot_score": 100,
       "evidence_excerpt": "We are committed to pushing the model frontier across cost efficiency, capability, and speed. Starting today, we are reducing prices for GPT-5.6 Luna by 80%…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "chatgpt"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -4487,16 +4047,7 @@
       "explicit_links": [],
       "hot_score": 74,
       "evidence_excerpt": "RT @jxnlco: one of the most beautiful things about OpenAI is that every employee really has a voice. i wanted to capture what it feels lik…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "chatgpt"
-        },
-        {
-          "type": "scene",
-          "id": "voice"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -4540,12 +4091,7 @@
       ],
       "hot_score": 77,
       "evidence_excerpt": "Google just released Gemini Robotics 2 today, and it's a much bigger leap than you may think. Unlike previous models, it coordinates everything from feet to…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "gemini"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -4585,24 +4131,7 @@
       "explicit_links": [],
       "hot_score": 49,
       "evidence_excerpt": "Consistent with what I found with Qwen3.6 a while back: Claude Code uses 2-3x as many tokens than (many) other harnesses at similar success rate. - Unoptimized?…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "claude"
-        },
-        {
-          "type": "tool",
-          "id": "tongyi"
-        },
-        {
-          "type": "tool",
-          "id": "claude-code"
-        },
-        {
-          "type": "concept",
-          "id": "Token"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -4652,12 +4181,7 @@
       ],
       "hot_score": 8,
       "evidence_excerpt": "After migrating 850 applications to AWS in just 15 months—up to six times faster than industry benchmarks—the organization is now building agentic AI solutions…",
-      "related_resources": [
-        {
-          "type": "concept",
-          "id": "Agent"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -4696,12 +4220,7 @@
       "explicit_links": [],
       "hot_score": 81,
       "evidence_excerpt": "One brain. For any robot. 🤖 We’re launching Gemini Robotics 2: our next-generation physical AI bringing full body intelligence to humanoids, advanced…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "gemini"
-        }
-      ],
+      "related_resources": [],
       "source_type": "x_post",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -4750,12 +4269,7 @@
       ],
       "hot_score": 72,
       "evidence_excerpt": "Introducing multi-robot collaboration. This enables different types of robots to communicate and work together to solve complex workflows a single robot could…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "gemini"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -4804,12 +4318,7 @@
       ],
       "hot_score": 72,
       "evidence_excerpt": "The world is built for human movements; it requires us to reach, bend, and balance in tight, cluttered spaces. While our previous models controlled the…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "gemini"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -4858,12 +4367,7 @@
       ],
       "hot_score": 70,
       "evidence_excerpt": "To be genuinely useful in our homes and workplaces, robots need finesse. Gemini Robotics 2 unlocks a new level of physical dexterity across different end…",
-      "related_resources": [
-        {
-          "type": "tool",
-          "id": "gemini"
-        }
-      ],
+      "related_resources": [],
       "source_type": "youtube_video",
       "content_type_status": "reviewed",
       "classifier": "rule_based",
@@ -7875,12 +7379,12 @@
       "event_id": "event-4426b83dfbadd3c3c35b",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.94580120588164,
+        "recent_timeliness": 94.95255820180236,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 62.5,
+      "final_score": 61.2,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -7901,19 +7405,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "x-6b09d31ba2f947f71def",
       "event_id": "event-d4f0bc5a29de06b510f9",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.85445344311617,
+        "recent_timeliness": 94.8657741282751,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 62.5,
+      "final_score": 61.2,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -7934,19 +7438,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "x-68ce6a79891d296c884c",
       "event_id": "event-e4f9c522e1c89280e956",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.78163458474056,
+        "recent_timeliness": 94.79659326420003,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 62.4,
+      "final_score": 61.2,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -7967,19 +7471,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-383d76b2c53f78776283",
       "event_id": "event-8f720f8fb61cb74424d5",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.19703678905097,
+        "recent_timeliness": 84.13089343370167,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 62.3,
+      "final_score": 58.5,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8000,19 +7504,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-4fe53ccdd3ccd9554a29",
       "event_id": "event-930e40a5bed88f15e503",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.44729260857767,
+        "recent_timeliness": 89.10406118932951,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 62.4,
+      "final_score": 59.8,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8033,19 +7537,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "x-1b2c08e3e484d5c737e5",
       "event_id": "event-39ba4521a2d2e79281a8",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 91.50347788269251,
+        "recent_timeliness": 28.882528731497498,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 60.4,
+      "final_score": 44.7,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8066,19 +7570,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "x-403cdc04f0357a141ab0",
       "event_id": "event-3a8952ef0be08bbf5694",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 90.90641685602446,
+        "recent_timeliness": 28.694069968440374,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 60.2,
+      "final_score": 44.7,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8099,19 +7603,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-ab7c07d86b8d0b1d520f",
       "event_id": "event-d0ad9d7f13f35c57bc34",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.55984003247819,
+        "recent_timeliness": 94.58587945853296,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 62.4,
+      "final_score": 61.1,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8132,19 +7636,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-6c3fb14cd54992355ef6",
       "event_id": "event-d0ad9d7f13f35c57bc34",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.55694692419195,
+        "recent_timeliness": 94.58313088851182,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 62.4,
+      "final_score": 61.1,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8165,19 +7669,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-83b5ee9fe01a000f9d12",
       "event_id": "event-d0ad9d7f13f35c57bc34",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.5530777451307,
+        "recent_timeliness": 94.57945501173086,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 62.4,
+      "final_score": 61.1,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8198,19 +7702,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-35a138fa375dedd21f35",
       "event_id": "event-d0ad9d7f13f35c57bc34",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.54855206136051,
+        "recent_timeliness": 94.57515542889288,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 62.4,
+      "final_score": 61.1,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8231,19 +7735,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-0016aa1a2e7f67027f12",
       "event_id": "event-d0ad9d7f13f35c57bc34",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.5451978637914,
+        "recent_timeliness": 94.57196880538237,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 62.4,
+      "final_score": 61.1,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8264,19 +7768,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "x-4a3c82e745ecac3784a0",
       "event_id": "event-59af76cbb3c569092e5f",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.48023037192661,
+        "recent_timeliness": 94.51024705741408,
         "light_user_experience": 50,
         "source_reliability": 70,
         "interaction_quality": 50
       },
-      "final_score": 66.4,
+      "final_score": 65.1,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8297,19 +7801,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "x-9d519f176808cd83fc0a",
       "event_id": "event-d4f0bc5a29de06b510f9",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.47189517912035,
+        "recent_timeliness": 94.50232828673528,
         "light_user_experience": 50,
         "source_reliability": 70,
         "interaction_quality": 50
       },
-      "final_score": 66.4,
+      "final_score": 65.1,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8330,19 +7834,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-6aaab4feaef90b88ad3b",
       "event_id": "event-d4f0bc5a29de06b510f9",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 96.63150740578499,
+        "recent_timeliness": 69.50761038371049,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 67.7,
+      "final_score": 60.9,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8363,19 +7867,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "x-d7340f1c4b631431dab3",
       "event_id": "event-c857d09db23e6822e360",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.45804611593294,
+        "recent_timeliness": 94.48917111592394,
         "light_user_experience": 50,
         "source_reliability": 70,
         "interaction_quality": 50
       },
-      "final_score": 66.4,
+      "final_score": 65.1,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8396,19 +7900,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "x-2c2cbc6fa29369394b93",
       "event_id": "event-d8600ebbc4b7d665fc2f",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.4563971242082,
+        "recent_timeliness": 94.48760450701361,
         "light_user_experience": 50,
         "source_reliability": 70,
         "interaction_quality": 50
       },
-      "final_score": 66.4,
+      "final_score": 65.1,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8429,19 +7933,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-0ee28ed39f27fe7d74ad",
       "event_id": "event-d0ad9d7f13f35c57bc34",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.44758523402837,
+        "recent_timeliness": 94.47923285452724,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 62.4,
+      "final_score": 61.1,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8462,19 +7966,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-86e16e1bf78ff3d343ba",
       "event_id": "event-d0ad9d7f13f35c57bc34",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.44398623585536,
+        "recent_timeliness": 94.47581366053042,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 62.4,
+      "final_score": 61.1,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8495,19 +7999,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-24870d2dc4be55e50172",
       "event_id": "event-7d3194f79e645c42e439",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.41039595884556,
+        "recent_timeliness": 94.44390153721652,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 62.4,
+      "final_score": 61.1,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8528,19 +8032,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "x-5c7a7610bc2dd2c371a6",
       "event_id": "event-450a1f061ebc6d7a6f14",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 87.06834724324463,
+        "recent_timeliness": 27.482606115594088,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 59.3,
+      "final_score": 44.4,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8561,19 +8065,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "x-7db0fd98ae28bd2142c4",
       "event_id": "event-72fe84b37b054ef3e9d1",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 86.87612051684322,
+        "recent_timeliness": 27.421930892348822,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 59.2,
+      "final_score": 44.4,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8594,19 +8098,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-9303ec00f251da164cb1",
       "event_id": "event-8f9591886ff7eb9f99ac",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.35780876328721,
+        "recent_timeliness": 94.39394157204863,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 62.3,
+      "final_score": 61.1,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8627,19 +8131,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "x-c2a9148eeb818b42c90b",
       "event_id": "event-e2ea3190394a443b5cd9",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.35157385246038,
+        "recent_timeliness": 94.38801815429595,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 62.3,
+      "final_score": 61.1,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8660,19 +8164,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "x-ee6d1d254a006ffedd9c",
       "event_id": "event-9dcc3f0396369e6653a8",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.34521535493144,
+        "recent_timeliness": 94.38197732417194,
         "light_user_experience": 50,
         "source_reliability": 70,
         "interaction_quality": 50
       },
-      "final_score": 66.3,
+      "final_score": 65.1,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8693,19 +8197,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "x-8c2610910581e7c155f2",
       "event_id": "event-a3e690053061793bb12a",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 99.34238161526801,
+        "recent_timeliness": 94.37928515674645,
         "light_user_experience": 50,
         "source_reliability": 70,
         "interaction_quality": 50
       },
-      "final_score": 66.3,
+      "final_score": 65.1,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8726,19 +8230,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-8a5752b58f7fdc357b9c",
       "event_id": "event-1a27bc65f42ddf693260",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 86.15636397955848,
+        "recent_timeliness": 27.194744020889583,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 59,
+      "final_score": 44.3,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8759,19 +8263,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-be255fc5c46f95aa397b",
       "event_id": "event-d4f0bc5a29de06b510f9",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 86.14392341099526,
+        "recent_timeliness": 27.19081722939184,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 59,
+      "final_score": 44.3,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8792,19 +8296,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-8b656e05fbbd85ba4b9a",
       "event_id": "event-b14ac4b38a7445a635b8",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 95.8046831710516,
+        "recent_timeliness": 68.91287085923715,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 67.5,
+      "final_score": 60.7,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8825,19 +8329,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-3e374f7beaf3acacd55d",
       "event_id": "event-e4f9c522e1c89280e956",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 85.94029209287719,
+        "recent_timeliness": 27.126542214580724,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 59,
+      "final_score": 44.3,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8858,19 +8362,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-11875a4daae447e7a2c1",
       "event_id": "event-1a27bc65f42ddf693260",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 85.83968998460419,
+        "recent_timeliness": 27.094787757265248,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 59,
+      "final_score": 44.3,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8891,19 +8395,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-ee4f753761e8ef6f298a",
       "event_id": "event-5a716218d64e1127244d",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 85.73886171935318,
+        "recent_timeliness": 27.06296191484434,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 58.9,
+      "final_score": 44.3,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -8924,14 +8428,1631 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "x-0cb6194d3a276296d20e",
       "event_id": "event-1a27bc65f42ddf693260",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 85.2747962497491,
+        "recent_timeliness": 26.91648240860832,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 44.2,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 9,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "youtube-ef025f52525025ff85a1",
+      "event_id": "event-bc4a522911c5eeb8d6d5",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 68.69861748887989,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 60.7,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 3,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-245d869e5ed0bf6d0746",
+      "event_id": "event-d557fe348f6eb99318b5",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 26.56476938769546,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 44.1,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 12,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "youtube-31f5d67150db3a0a691d",
+      "event_id": "event-1a27bc65f42ddf693260",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 26.49931672606185,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 44.1,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 2,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-95c0dff29d3dfa42e116",
+      "event_id": "event-8e9d83584487f4ea651e",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 26.343098893418027,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 44.1,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 12,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-b014ee061ff03e31a8f7",
+      "event_id": "event-ef1785927c4ff279e43e",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 26.179294622232213,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 44,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 9,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-b8a6552b37e9084c668e",
+      "event_id": "event-3c66adacf239404421cb",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 26.166591231895843,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 44,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 9,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-26bd2605ec62d3e082a1",
+      "event_id": "event-9cab093fc83b526c25ed",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 94.20864085023697,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 61.1,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 4,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "youtube-a9db729a11001d76e0b2",
+      "event_id": "event-5d72436256ada53828b5",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 68.10697524242364,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 60.5,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 4,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-4dac3dfd383a06020778",
+      "event_id": "event-6a61bfd9e82d77fb912c",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 26.066126778782294,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 44,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 12,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "youtube-2b14dc3c6ab80bf5caa8",
+      "event_id": "event-61690580bce64b71a204",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 68.05727183248,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 60.5,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 2,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "youtube-ea0b4dd8637390b2296e",
+      "event_id": "event-a3e690053061793bb12a",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 94.18827025186616,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 61,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 1,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-023718e9eeaa4631baf3",
+      "event_id": "event-0ab16d0f6082a462207a",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 25.737498263622165,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 43.9,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 12,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-44ea5fbab03d4f760dcf",
+      "event_id": "event-3fe679ff273517c507e6",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 25.653392135467424,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 43.9,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 9,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "youtube-78403818fdbfae0a1586",
+      "event_id": "event-3205f540364da88c538c",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 25.627679369877722,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 43.9,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 3,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-487da2f44f915102fb42",
+      "event_id": "event-d4f0bc5a29de06b510f9",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 25.59162213461816,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 43.9,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 9,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-b528d77e407438a0e2ff",
+      "event_id": "event-2afd8679664e09bec71f",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 25.57212514087884,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 43.9,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 12,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "youtube-0d3402343de16acd5f9b",
+      "event_id": "event-4c16c1d6c80e1dfae393",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 25.447185254350067,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 43.9,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 3,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "youtube-0eb6ac3ce7dd379ce096",
+      "event_id": "event-c39faaa084f2139c1d00",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 94.03880803234718,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 61,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 2,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "youtube-7907fc19d629cec3d509",
+      "event_id": "event-d4f0bc5a29de06b510f9",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 67.08323963961924,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 60.3,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 1,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-a81faa2f49b5bff37dd6",
+      "event_id": "event-842d2444272554507e35",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 24.563604687669596,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 43.6,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 12,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "youtube-2e81e124d7c709eb71c8",
+      "event_id": "event-5b7718dedfcef5f77e89",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 93.94930821473345,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 61,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 2,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "youtube-de5e1c05f582e9f10494",
+      "event_id": "event-d4f0bc5a29de06b510f9",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 93.94818602833548,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 61,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 1,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-c0ccbe66d517054771b7",
+      "event_id": "event-f3b3d67d213e5dee7ebf",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 23.879551867554046,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 43.5,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 9,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "youtube-8b3fd5f26da92ae7c623",
+      "event_id": "event-4c16c1d6c80e1dfae393",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 66.39257038737098,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 60.1,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 2,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-7f3c28f3cdd99690291b",
+      "event_id": "event-d4f0bc5a29de06b510f9",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 93.61857677355822,
+        "light_user_experience": 50,
+        "source_reliability": 70,
+        "interaction_quality": 50
+      },
+      "final_score": 64.9,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 7,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "youtube-fc97d77935cb6f0b171e",
+      "event_id": "event-a3e690053061793bb12a",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 22.38127098774881,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 43.1,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 10,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-fd954bdf9277c319682c",
+      "event_id": "event-1a27bc65f42ddf693260",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 21.073986684627894,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 42.8,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 9,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-81b31688f1c0d5be0d12",
+      "event_id": "event-c70eca6b0f88f44d81a4",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 20.980615651285927,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 42.7,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 12,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-893b8ac9b632cde732d8",
+      "event_id": "event-d4f0bc5a29de06b510f9",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 93.29102203740587,
+        "light_user_experience": 50,
+        "source_reliability": 70,
+        "interaction_quality": 50
+      },
+      "final_score": 64.8,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 1,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "youtube-77640299143d05863728",
+      "event_id": "event-d0ad9d7f13f35c57bc34",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 93.23299513570662,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 60.8,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 13,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "youtube-083d838bc974df0160ee",
+      "event_id": "event-d0ad9d7f13f35c57bc34",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 93.22967090547945,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 60.8,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 13,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-c96228d10a9982360104",
+      "event_id": "event-8975d3fe3258475aef30",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 20.639131230125397,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 42.7,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 9,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "youtube-6072b4e49c326a65680e",
+      "event_id": "event-d0ad9d7f13f35c57bc34",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 93.21853559780222,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 60.8,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 13,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "youtube-3a6beae71bc91671bebb",
+      "event_id": "event-d0ad9d7f13f35c57bc34",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 93.2107084388308,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 60.8,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 13,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "youtube-d90a2cb9086309d98b3e",
+      "event_id": "event-d0ad9d7f13f35c57bc34",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 93.20640461237237,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 60.8,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 13,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "youtube-fef5ff5b43e037db255c",
+      "event_id": "event-d0ad9d7f13f35c57bc34",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 93.19912677888664,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 60.8,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 13,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-cd0a5ffd6471f2aa0b32",
+      "event_id": "event-894e404184b74d425176",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 20.498210747518115,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 42.6,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 12,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-ba70df181c9ad052534a",
+      "event_id": "event-c70eca6b0f88f44d81a4",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 20.478075805891834,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 42.6,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 12,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-fa7c2b590b403726b309",
+      "event_id": "event-353d4aebb36749a7179a",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 63.4569023534044,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 59.4,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 1,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-20799c075002cc42576d",
+      "event_id": "event-90e2165ec4cfd3bb3adf",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 19.884892371294793,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 42.5,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 9,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-b749bc57f10ba21f7c2d",
+      "event_id": "event-d4f0bc5a29de06b510f9",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 79.38483005673996,
+        "light_user_experience": 50,
+        "source_reliability": 70,
+        "interaction_quality": 50
+      },
+      "final_score": 61.3,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 1,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-98cf2745023564d69e8d",
+      "event_id": "event-dfe3f57b51f45ba71566",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 62.89569579137807,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 59.2,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 1,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "youtube-2d83f5e53b30fbe739fd",
+      "event_id": "event-c67f9cf8e311938faf56",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 19.709314704619477,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 42.4,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 10,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "youtube-0298717264e64382e1c8",
+      "event_id": "event-2e90b09ab63ccf6aedf8",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 19.65736224361509,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 42.4,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 1,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-0ae5f73e1f96c0b2fc04",
+      "event_id": "event-a60a946bac09c02c44c3",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 62.55000076763565,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 59.1,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 2,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-c8298e2e7df4c5a76f87",
+      "event_id": "event-5d72436256ada53828b5",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 62.410939234649575,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 59.1,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 2,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "youtube-758b240ca0246ef67520",
+      "event_id": "event-54ae231c82cad1cde950",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 19.164826639209267,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 50
+      },
+      "final_score": 42.3,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 10,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "not_checked",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "x-03166bff6034e0514172",
+      "event_id": "event-7abf2a11e1d342209c0b",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 62.26276690802597,
+        "light_user_experience": 50,
+        "source_reliability": 80,
+        "interaction_quality": 50
+      },
+      "final_score": 59.1,
+      "confidence": 0.45,
+      "commercial_assessment": {
+        "label": "none_confirmed",
+        "confidence": 0.5,
+        "penalty": 0,
+        "evidence": []
+      },
+      "anomaly_assessment": {
+        "status": "insufficient_sample",
+        "method": "mad",
+        "sample_count": 2,
+        "min_samples": 30,
+        "adjustment": 0,
+        "evidence": []
+      },
+      "official_cross_check": {
+        "status": "official_source",
+        "evidence": []
+      },
+      "evidence": [],
+      "assessed_at": "2026-08-04T13:16:34.123Z"
+    },
+    {
+      "content_id": "youtube-df17200a83f3f4c3b1ca",
+      "event_id": "event-f3cb9267f221f5a39659",
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 85.38324177423861,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
@@ -8947,105 +10068,6 @@
       "anomaly_assessment": {
         "status": "insufficient_sample",
         "method": "mad",
-        "sample_count": 9,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "youtube-ef025f52525025ff85a1",
-      "event_id": "event-bc4a522911c5eeb8d6d5",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 95.5068218860772,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 67.4,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 3,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-245d869e5ed0bf6d0746",
-      "event_id": "event-d557fe348f6eb99318b5",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 84.16052523389244,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 58.5,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 12,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "youtube-31f5d67150db3a0a691d",
-      "event_id": "event-1a27bc65f42ddf693260",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 83.9531629827602,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 58.5,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
         "sample_count": 2,
         "min_samples": 30,
         "adjustment": 0,
@@ -9056,1537 +10078,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-95c0dff29d3dfa42e116",
-      "event_id": "event-8e9d83584487f4ea651e",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 83.45824527222689,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 58.4,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 12,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-b014ee061ff03e31a8f7",
-      "event_id": "event-ef1785927c4ff279e43e",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 82.93929277174183,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 58.2,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 9,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-b8a6552b37e9084c668e",
-      "event_id": "event-3c66adacf239404421cb",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 82.89904683595533,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 58.2,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 9,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-26bd2605ec62d3e082a1",
-      "event_id": "event-9cab093fc83b526c25ed",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 99.1627636854481,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 62.3,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 4,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "youtube-a9db729a11001d76e0b2",
-      "event_id": "event-5d72436256ada53828b5",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 94.68430357758689,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 67.2,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 4,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-4dac3dfd383a06020778",
-      "event_id": "event-6a61bfd9e82d77fb912c",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 82.58076283288442,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 58.1,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 12,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "youtube-2b14dc3c6ab80bf5caa8",
-      "event_id": "event-61690580bce64b71a204",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 94.61520444729673,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 67.2,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 2,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "youtube-ea0b4dd8637390b2296e",
-      "event_id": "event-a3e690053061793bb12a",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 99.14132186425053,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 62.3,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 1,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-023718e9eeaa4631baf3",
-      "event_id": "event-0ab16d0f6082a462207a",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 81.53962643003948,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 57.9,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 12,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-44ea5fbab03d4f760dcf",
-      "event_id": "event-3fe679ff273517c507e6",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 81.27316765459943,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 57.8,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 9,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "youtube-78403818fdbfae0a1586",
-      "event_id": "event-3205f540364da88c538c",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 81.19170638438614,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 57.8,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 3,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-487da2f44f915102fb42",
-      "event_id": "event-d4f0bc5a29de06b510f9",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 81.07747253527423,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 57.8,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 9,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-b528d77e407438a0e2ff",
-      "event_id": "event-2afd8679664e09bec71f",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 81.01570361081507,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 57.8,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 12,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "youtube-0d3402343de16acd5f9b",
-      "event_id": "event-4c16c1d6c80e1dfae393",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 80.6198783612349,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 57.7,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 3,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "youtube-0eb6ac3ce7dd379ce096",
-      "event_id": "event-c39faaa084f2139c1d00",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 98.98399991776769,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 62.2,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 2,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "youtube-7907fc19d629cec3d509",
-      "event_id": "event-d4f0bc5a29de06b510f9",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 93.2610764814768,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 66.8,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 1,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-a81faa2f49b5bff37dd6",
-      "event_id": "event-842d2444272554507e35",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 77.82058417226548,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 57,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 12,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "youtube-2e81e124d7c709eb71c8",
-      "event_id": "event-5b7718dedfcef5f77e89",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 98.88979359885867,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 62.2,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 2,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "youtube-de5e1c05f582e9f10494",
-      "event_id": "event-d4f0bc5a29de06b510f9",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 98.88861240036574,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 62.2,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 1,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-c0ccbe66d517054771b7",
-      "event_id": "event-f3b3d67d213e5dee7ebf",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 75.65341893968055,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 56.4,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 9,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "youtube-8b3fd5f26da92ae7c623",
-      "event_id": "event-4c16c1d6c80e1dfae393",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 92.30088794104014,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 66.6,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 2,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-7f3c28f3cdd99690291b",
-      "event_id": "event-d4f0bc5a29de06b510f9",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 98.54167007803703,
-        "light_user_experience": 50,
-        "source_reliability": 70,
-        "interaction_quality": 50
-      },
-      "final_score": 66.1,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 7,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "youtube-fc97d77935cb6f0b171e",
-      "event_id": "event-a3e690053061793bb12a",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 70.9066769690646,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 55.2,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 10,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-fd954bdf9277c319682c",
-      "event_id": "event-1a27bc65f42ddf693260",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 66.76503613736817,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 54.2,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 9,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-81b31688f1c0d5be0d12",
-      "event_id": "event-c70eca6b0f88f44d81a4",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 66.46922497887451,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 54.1,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 12,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-893b8ac9b632cde732d8",
-      "event_id": "event-d4f0bc5a29de06b510f9",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 98.19689031471617,
-        "light_user_experience": 50,
-        "source_reliability": 70,
-        "interaction_quality": 50
-      },
-      "final_score": 66,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 1,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "youtube-77640299143d05863728",
-      "event_id": "event-d0ad9d7f13f35c57bc34",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 98.13581196894373,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 62,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 13,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "youtube-083d838bc974df0160ee",
-      "event_id": "event-d0ad9d7f13f35c57bc34",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 98.13231292837295,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 62,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 13,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-c96228d10a9982360104",
-      "event_id": "event-8975d3fe3258475aef30",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 65.38735945146759,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 53.8,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 9,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "youtube-6072b4e49c326a65680e",
-      "event_id": "event-d0ad9d7f13f35c57bc34",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 98.12059205145768,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 62,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 13,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "youtube-3a6beae71bc91671bebb",
-      "event_id": "event-d0ad9d7f13f35c57bc34",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 98.11235328791746,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 62,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 13,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "youtube-d90a2cb9086309d98b3e",
-      "event_id": "event-d0ad9d7f13f35c57bc34",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 98.10782313736874,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 62,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 13,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "youtube-fef5ff5b43e037db255c",
-      "event_id": "event-d0ad9d7f13f35c57bc34",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 98.10016258653631,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 62,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 13,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-cd0a5ffd6471f2aa0b32",
-      "event_id": "event-894e404184b74d425176",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 64.94090566678177,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 53.7,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 12,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-ba70df181c9ad052534a",
-      "event_id": "event-c70eca6b0f88f44d81a4",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 64.87711564330783,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 53.7,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 12,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-fa7c2b590b403726b309",
-      "event_id": "event-353d4aebb36749a7179a",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 88.21963661044269,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 65.6,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 1,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-20799c075002cc42576d",
-      "event_id": "event-90e2165ec4cfd3bb3adf",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 62.9978360347728,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 53.2,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 9,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-b749bc57f10ba21f7c2d",
-      "event_id": "event-d4f0bc5a29de06b510f9",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 93.60104934386068,
-        "light_user_experience": 50,
-        "source_reliability": 70,
-        "interaction_quality": 50
-      },
-      "final_score": 64.9,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 1,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-98cf2745023564d69e8d",
-      "event_id": "event-dfe3f57b51f45ba71566",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 87.43943087821783,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 65.4,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 1,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "youtube-2d83f5e53b30fbe739fd",
-      "event_id": "event-c67f9cf8e311938faf56",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 62.44158393895825,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 53.1,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 10,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "youtube-0298717264e64382e1c8",
-      "event_id": "event-2e90b09ab63ccf6aedf8",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 62.27699201867802,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 53.1,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 1,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-0ae5f73e1f96c0b2fc04",
-      "event_id": "event-a60a946bac09c02c44c3",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 86.9588355727182,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 65.2,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 2,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-c8298e2e7df4c5a76f87",
-      "event_id": "event-5d72436256ada53828b5",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 86.7655081733094,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 65.2,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 2,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "youtube-758b240ca0246ef67520",
-      "event_id": "event-54ae231c82cad1cde950",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 60.71657737482319,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 52.7,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 10,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "x-03166bff6034e0514172",
-      "event_id": "event-7abf2a11e1d342209c0b",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 86.5595146828352,
-        "light_user_experience": 50,
-        "source_reliability": 80,
-        "interaction_quality": 50
-      },
-      "final_score": 65.1,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 2,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "official_source",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
-    },
-    {
-      "content_id": "youtube-df17200a83f3f4c3b1ca",
-      "event_id": "event-f3cb9267f221f5a39659",
-      "score_breakdown": {
-        "long_term_quality": 50,
-        "recent_timeliness": 95.29455913967341,
-        "light_user_experience": 50,
-        "source_reliability": 50,
-        "interaction_quality": 50
-      },
-      "final_score": 61.3,
-      "confidence": 0.45,
-      "commercial_assessment": {
-        "label": "none_confirmed",
-        "confidence": 0.5,
-        "penalty": 0,
-        "evidence": []
-      },
-      "anomaly_assessment": {
-        "status": "insufficient_sample",
-        "method": "mad",
-        "sample_count": 2,
-        "min_samples": 30,
-        "adjustment": 0,
-        "evidence": []
-      },
-      "official_cross_check": {
-        "status": "not_checked",
-        "evidence": []
-      },
-      "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-7c83f58e45dc21f2ef0a",
       "event_id": "event-c9a4826a06f435b5013a",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 86.50804319840539,
+        "recent_timeliness": 62.22574316720204,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 65.1,
+      "final_score": 59.1,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -10607,19 +10111,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-a09c3d8f0df28b6ac978",
       "event_id": "event-df2c7ebfc8e7917cd2fd",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 97.76468333264626,
+        "recent_timeliness": 92.8804079032945,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 61.9,
+      "final_score": 60.7,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -10640,19 +10144,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-ec3f28094e2fa14847b3",
       "event_id": "event-03367729f64705d94cc0",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 60.09820698174375,
+        "recent_timeliness": 18.9696417013458,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 52.5,
+      "final_score": 42.2,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -10673,19 +10177,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "x-1ad2ad85a6f8ba7d597a",
       "event_id": "event-bc4a522911c5eeb8d6d5",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 97.76001237830833,
+        "recent_timeliness": 92.87597030753483,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 61.9,
+      "final_score": 60.7,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -10706,19 +10210,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-f51d8eb95b5d8c83453b",
       "event_id": "event-986148a79478d497c67b",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 60.0105215180007,
+        "recent_timeliness": 18.941964306076304,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 52.5,
+      "final_score": 42.2,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -10739,19 +10243,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-7e7dee81037f3614aba9",
       "event_id": "event-3ea125d0bff386e6754b",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 59.91839718980635,
+        "recent_timeliness": 18.912885809635387,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 52.5,
+      "final_score": 42.2,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -10772,19 +10276,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-423cf85c2e1ea1b6b544",
       "event_id": "event-506d1022e0dd49815b14",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 59.71540674954235,
+        "recent_timeliness": 18.84881308410838,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 52.4,
+      "final_score": 42.2,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -10805,19 +10309,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "x-308fdfe17f250e4dfb71",
       "event_id": "event-5d72436256ada53828b5",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 97.7308588160268,
+        "recent_timeliness": 92.84827324286648,
         "light_user_experience": 50,
         "source_reliability": 70,
         "interaction_quality": 50
       },
-      "final_score": 65.9,
+      "final_score": 64.7,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -10838,19 +10342,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "x-d6b27fdb6f576dd766bd",
       "event_id": "event-ade398bff01558ed07ea",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 86.14850004779154,
+        "recent_timeliness": 61.96712166889451,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 65,
+      "final_score": 59,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -10871,19 +10375,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-18ec914ab88500b3549e",
       "event_id": "event-525ee41e9fa9c292e9d3",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 86.04656942783414,
+        "recent_timeliness": 61.89380237575322,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 65,
+      "final_score": 59,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -10904,19 +10408,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "x-951e7066d692a91f71f4",
       "event_id": "event-7d3194f79e645c42e439",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 85.88105399641613,
+        "recent_timeliness": 61.774746154564575,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 65,
+      "final_score": 58.9,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -10937,19 +10441,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-9e087f273b7a178cd4df",
       "event_id": "event-5d72436256ada53828b5",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 58.306114309523736,
+        "recent_timeliness": 18.403978304799754,
         "light_user_experience": 50,
         "source_reliability": 50,
         "interaction_quality": 50
       },
-      "final_score": 52.1,
+      "final_score": 42.1,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -10970,19 +10474,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "x-a1906da9f74603744779",
       "event_id": "event-f4eb02ca6604e5973f13",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 92.52759325917278,
+        "recent_timeliness": 78.47441153628871,
         "light_user_experience": 50,
         "source_reliability": 70,
         "interaction_quality": 50
       },
-      "final_score": 64.6,
+      "final_score": 61.1,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -11003,19 +10507,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-5f87a6344beb205e8c53",
       "event_id": "event-d4f0bc5a29de06b510f9",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 85.46140872182052,
+        "recent_timeliness": 61.472892845752284,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 64.9,
+      "final_score": 58.9,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -11036,19 +10540,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "x-82e59c917b3002d7399a",
       "event_id": "event-5d72436256ada53828b5",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 85.35197596869706,
+        "recent_timeliness": 61.394177224196454,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 64.8,
+      "final_score": 58.8,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -11069,19 +10573,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-f3da14a21da982d4c895",
       "event_id": "event-5d72436256ada53828b5",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 85.33006712123591,
+        "recent_timeliness": 61.37841806163997,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 64.8,
+      "final_score": 58.8,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -11102,19 +10606,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-8b210c24c7a8aee343f6",
       "event_id": "event-5d72436256ada53828b5",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 85.32967594292988,
+        "recent_timeliness": 61.37813668478872,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 64.8,
+      "final_score": 58.8,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -11135,19 +10639,19 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     },
     {
       "content_id": "youtube-fecc7c62cafdd584556a",
       "event_id": "event-5d72436256ada53828b5",
       "score_breakdown": {
         "long_term_quality": 50,
-        "recent_timeliness": 85.32948035444936,
+        "recent_timeliness": 61.37799599684681,
         "light_user_experience": 50,
         "source_reliability": 80,
         "interaction_quality": 50
       },
-      "final_score": 64.8,
+      "final_score": 58.8,
       "confidence": 0.45,
       "commercial_assessment": {
         "label": "none_confirmed",
@@ -11168,7 +10672,7 @@
         "evidence": []
       },
       "evidence": [],
-      "assessed_at": "2026-08-01T05:25:18.942Z"
+      "assessed_at": "2026-08-04T13:16:34.123Z"
     }
   ],
   "coverage": {
@@ -11180,11 +10684,11 @@
     "platforms": {
       "youtube": {
         "status": "degraded",
-        "items": 484
+        "items": 0
       },
       "x": {
-        "status": "rotating",
-        "items": 177,
+        "status": "degraded",
+        "items": 0,
         "attempted": 15,
         "total": 31
       },
@@ -11205,10 +10709,10 @@
     },
     "time_layers": {
       "recent-1d": {
-        "items": 59
+        "items": 0
       },
       "recent-7d": {
-        "items": 41
+        "items": 100
       },
       "recent-30d": {
         "items": 0
@@ -11231,10 +10735,9 @@
     },
     "registry": {
       "total": 3475,
-      "observations_in_run": 870,
+      "observations_in_run": 0,
       "new_in_projection": 0,
       "analysis_version": "rules-v1"
     }
-  },
-  "heat_definition": "hot_score 表示条目在其来源平台内的相对互动量级（0–100），由公开互动数据（浏览/点赞/评论/转发）的加权对数指数按平台归一化得到；仅在平台内可比，跨平台不构成权威综合热度。无互动数据时为 null，前端按“最近”时间回退排序。"
+  }
 }

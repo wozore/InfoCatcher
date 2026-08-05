@@ -1,5 +1,30 @@
 {
   "schema_version": 1,
-  "updated_at": null,
-  "events": []
+  "updated_at": "2026-08-04T14:19:39.382Z",
+  "events": [
+    {
+      "candidate_id": "x-9dd3da0625fba183ab33",
+      "action": "review_set",
+      "from_status": "approved",
+      "review_status": "pending",
+      "review_reason": null,
+      "reviewer": "claude-e2e",
+      "reviewed_at": "2026-08-04T14:19:19.775Z",
+      "candidate_version": 2,
+      "batch_id": "batch_20260804",
+      "logged_at": "2026-08-04T14:19:19.781Z"
+    },
+    {
+      "candidate_id": "x-9dd3da0625fba183ab33",
+      "action": "review_set",
+      "from_status": "pending",
+      "review_status": "approved",
+      "review_reason": null,
+      "reviewer": "claude-e2e",
+      "reviewed_at": "2026-08-04T14:19:39.375Z",
+      "candidate_version": 3,
+      "batch_id": "batch_20260804",
+      "logged_at": "2026-08-04T14:19:39.382Z"
+    }
+  ]
 }

@@ -27,9 +27,9 @@
  *     ai_processing_status === 'completed' 且 review_status === 'approved'
  * 时，候选才可进入公开 hotspots.json。
  *
- * 桥接默认：人工审核流程（决策 46–60）尚未落地，新候选暂以
- * completed / approved 写入，保留现有公开行为；审核流上线后改由
- * 管理者逐条设置 review_status。
+ * 桥接默认：人工审核流程（决策 46–60）已启用，新候选以 pending 进入候选层，
+ * 等待管理者逐条设置 review_status；只有 approved 才进入公开 hotspots.json。
+ * ai_processing_status 记录 AI/规则处理状态，二者分属不同状态轴，互不混淆。
  *
  * 本模块只提供纯函数与存储读写，不发起网络请求、不消费额度。
  */
@@ -51,9 +51,11 @@ const REVIEW_STATUSES = Object.freeze([
   'pending', 'approved', 'held', 'discarded',
 ]);
 
-// 桥接默认（见文件头注释）：审核流上线后由 pipeline 改为 pending。
+// 桥接默认：人工审核流程（决策 46–60）已启用，新采集候选以 pending 写入，
+// 只有管理者逐条/批量审核为 approved 后才进入公开 hotspots.json（决策 51/69）。
+// ai_processing_status 保持 completed（L0 规则式分类/既有处理产物，见 classify 模块）。
 const DEFAULT_AI_PROCESSING_STATUS = 'completed';
-const DEFAULT_REVIEW_STATUS = 'approved';
+const DEFAULT_REVIEW_STATUS = 'pending';
 
 function createCandidateStore(existing) {
   if (existing && Array.isArray(existing.candidates)) {
@@ -161,7 +163,7 @@ function filterRelatedByIds(records, contentIds, idKey) {
 }
 
 /**
- * 从候选构建公开投影（schema_version=2，与既有前端契约一致）。
+ * 从候选构建公开投影（schema_version=3，含 source_type/content_type 拆分，见 ADR-010）。
  * candidates 应为“本轮 pipeline 的 items 加上状态轴”的候选集合；
  * 公开 items 仅包含通过门禁的候选，并剔除内部状态字段。
  * heatDefinition 由 pipeline 传入，与既有热点定义文案保持一致。
