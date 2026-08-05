@@ -8,8 +8,8 @@
  * ═══════════════════════════════════════════════════════════════
  *   L0 规则式基线 —— 零外部依赖、零成本、可离线。基于标题/描述关键词与
  *                     catalog 词典（tools/glossary）匹配内容类型六类。
- *   L1 AI 分类    —— 需要模型渠道（provider 配置）与额度。对规则式不确定
- *                     的候选做语义分类。本模块只提供接口占位，不发起请求。
+ *   L1 AI 分类    —— DeepSeek（llm-provider.js），对规则式不确定的候选做语义分类；
+ *                     任何失败自动回退 L0。当前唯一支持的 provider 为 deepseek。
  *
  * 内容类型状态机（路径 A：ai_suggested → reviewed）：
  *   content_type_status: unclassified → ai_suggested → reviewed
@@ -17,14 +17,17 @@
  *     - ai_suggested：分类器给出建议，待人工审核
  *     - reviewed：人工审核确认，可进入公开投影
  *
- * 本模块只提供纯函数与词典读取，不发起网络请求、不消费额度。
- * AI 分类（L1）需先确认模型渠道与额度，见 b16-task-status.md 第 4 项成本提醒。
+ * 本模块的 L0 规则式分类为纯函数、零成本、可离线；L1 AI 分类（DeepSeek，
+ * 见同目录 llm-provider.js）会发起网络请求并消费少量额度，但任何失败自动回退 L0，
+ * 不阻塞采集管线。模型渠道与额度成本确认见 b16-task-status.md 第 4 项 /
+ * b16-content-type-fix-plan.md §8。
  */
 
 'use strict';
 
 const fs = require('fs');
 const { CATALOG_FILES } = require('../../shared/paths');
+const { classifyWithDeepSeek } = require('./llm-provider');
 
 // ═══════════════════════════════════════════════════════════════
 // 常量
@@ -236,58 +239,112 @@ function classifyRuleBased(item) {
 
 /**
  * 分类单个候选/条目，输出 ai_suggested 建议。
+ *
+ * 分级逻辑：
+ *   - 未配置 provider：L0 规则式基线（classifier=rule_based）。
+ *   - provider=deepseek：先跑 L1 DeepSeek 语义分类；成功用 L1 结果（classifier=llm_deepseek），
+ *     任何失败（缺 key/网络/超时/输出无法映射）自动回退 L0（classifier=rule_based_fallback），
+ *     并保留 L0 的 reasons 供审核回溯，保证不阻塞采集管线。
+ *   - provider 为其他未知值：回退 L0 并标注（不产出 unclassified 占位）。
+ *
  * @param {object} item - 含 title / description（可选 source_type）
- * @param {{provider?: string, method?: string}} [options]
- * @returns {{ content_type: string, content_type_status: string, classifier: string,
- *             ai_confidence: number|null, reasons: string[], hit_tools: string[], hit_concepts: string[] }}
+ * @param {{provider?: string, model?: string, apiKey?: string, fetchImpl?: Function, concurrency?: number}} [options]
+ * @returns {Promise<{ content_type: string, content_type_status: string, classifier: string,
+ *                     ai_confidence: number|null, reasons: string[], hit_tools: string[], hit_concepts: string[] }>}
  */
-function classifyCandidate(item, options = {}) {
+async function classifyCandidate(item, options = {}) {
   const provider = options.provider || process.env.INFOCATCHER_CLASSIFY_PROVIDER;
+  const ruleResult = classifyRuleBased(item);
+  let classifier = 'rule_based';
+  let aiConfidence = null;
+  let extraReasons = [];
+
   if (provider) {
-    // L1：AI 分类预留。需先确认模型渠道与额度，本模块不发起请求。
-    return {
-      content_type: 'unclassified',
-      content_type_status: 'unclassified',
-      classifier: 'ai_pending',
-      ai_confidence: null,
-      reasons: [`AI 分类（provider=${provider}）需先确认模型渠道与额度后启用（b16 成本提醒），当前保持 unclassified`],
-      hit_tools: [],
-      hit_concepts: [],
-    };
+    if (provider === 'deepseek') {
+      const llm = await classifyWithDeepSeek(item, options);
+      if (llm.ok) {
+        return {
+          content_type: llm.content_type,
+          content_type_status: 'ai_suggested',
+          classifier: 'llm_deepseek',
+          ai_confidence: llm.ai_confidence,
+          reasons: [`L1 DeepSeek 语义分类（置信度 ${llm.ai_confidence}）`, ...ruleResult.reasons],
+          hit_tools: ruleResult.hit_tools,
+          hit_concepts: ruleResult.hit_concepts,
+        };
+      }
+      classifier = 'rule_based_fallback';
+      extraReasons = [`L1 DeepSeek 分类失败（${llm.error}），回退 L0 规则式`];
+    } else {
+      classifier = 'rule_based_fallback';
+      extraReasons = [`未知分类 provider=${provider}，回退 L0 规则式`];
+    }
   }
-  const result = classifyRuleBased(item);
+
   return {
-    content_type: result.content_type,
+    content_type: ruleResult.content_type,
     content_type_status: 'ai_suggested',
-    classifier: 'rule_based',
-    ai_confidence: null, // 规则式不产出置信度；AI 分类（L1）才填
-    reasons: result.reasons,
-    hit_tools: result.hit_tools,
-    hit_concepts: result.hit_concepts,
+    classifier,
+    ai_confidence: aiConfidence,
+    reasons: [...extraReasons, ...ruleResult.reasons],
+    hit_tools: ruleResult.hit_tools,
+    hit_concepts: ruleResult.hit_concepts,
   };
 }
 
 /**
- * 批量分类候选：每条附加分类建议（ai_suggested），不改动既有审核状态。
- * @param {Array<object>} items
- * @param {{provider?: string}} [options]
- * @returns {{ classified: number, skipped: number, items: Array }}
+ * 固定并发池：按 concurrency 并行执行 worker，保持输入顺序。
+ * @param {Array} items - 待处理项（可为索引数组）
+ * @param {number} concurrency - 并发上限
+ * @param {(item: any) => Promise<any>} worker
+ * @returns {Promise<Array>} 与 items 顺序一致的完成数组
  */
-function classifyCandidates(items, options = {}) {
+async function runPool(items, concurrency, worker) {
+  const results = new Array(items.length);
+  let next = 0;
+  const limit = Math.max(1, Math.min(concurrency, items.length));
+  const runners = Array.from({ length: limit }, async () => {
+    while (next < items.length) {
+      const index = next++;
+      results[index] = await worker(items[index]);
+    }
+  });
+  await Promise.all(runners);
+  return results;
+}
+
+/**
+ * 批量分类候选：每条附加分类建议（ai_suggested），不改动既有审核状态。
+ * 跳过：无标题项、已 reviewed（人工结论）项。L1 开启时用并发池限流（默认 5）。
+ * @param {Array<object>} items
+ * @param {{provider?: string, model?: string, apiKey?: string, fetchImpl?: Function, concurrency?: number}} [options]
+ * @returns {Promise<{ classified: number, skipped: number, items: Array }>}
+ */
+async function classifyCandidates(items, options = {}) {
+  const source = items || [];
+  const out = new Array(source.length);
   let classified = 0;
   let skipped = 0;
-  const out = (items || []).map(item => {
-    if (!item || !item.title) { skipped++; return item; }
-    const suggestion = classifyCandidate(item, options);
-    // 只写建议，不覆盖已审核（reviewed）的确认结果
-    if (item.content_type_status === 'reviewed') { skipped++; return item; }
+  const pending = [];
+  source.forEach((item, index) => {
+    if (!item || !item.title || item.content_type_status === 'reviewed') {
+      skipped++;
+      out[index] = item;
+      return;
+    }
+    pending.push(index);
+  });
+  await runPool(pending, options.concurrency ?? 5, async index => {
+    const item = source[index];
+    const suggestion = await classifyCandidate(item, options);
+    // 只写建议，不覆盖已审核（reviewed）的确认结果（上方已跳过，双保险）
     item.content_type = suggestion.content_type;
     item.content_type_status = suggestion.content_type_status;
     item.classifier = suggestion.classifier;
     item.classify_reasons = suggestion.reasons;
     item.ai_confidence = suggestion.ai_confidence;
     classified++;
-    return item;
+    out[index] = item;
   });
   return { classified, skipped, items: out };
 }

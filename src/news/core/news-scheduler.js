@@ -61,20 +61,39 @@ function validateTimeLayers(layers) {
 /**
  * 将一条内容的发布时间归入对应时间层。
  * 计算公式：ageDays = (nowUtcMs - publishedMs) / 86400000
- * 返回匹配的 layer.id，超出所有层时返回 null。
+ *
+ * 策略参数 opts（决定边界内容归类，默认与历史调度语义一致——边界内容不参与层）：
+ *   - opts.future    = 'recent' | 'none'（默认）：未来日期归第一层（如 recent-1d）或 null；
+ *   - opts.overflow  = 'older'  | 'none'（默认）：超窗（超过最后一层 max_age_days）归 'older' 或 null；
+ *   - opts.invalid   = 'older'  | 'none'（默认）：无效日期归 'older' 或 null。
+ *
+ * 使用约定（N-P1 决策，2026-08-05）：
+ *   - 采集器（news-youtube / news-bilibili 历史回溯调度）用默认：未来/超窗/无效都 null，
+ *     内容不进入当前调度层；
+ *   - build-news 管线统计（coverage / registry / 公开投影 layer_id）用
+ *     { future:'recent', overflow:'older', invalid:'older' }，保证总能得到非 null 层标识。
+ *   - 本函数是统一实现（单一事实来源）；此前 build-news 有行为不同且注释谎称「转发」的
+ *     独立副本，已改为真正转发本实现（见 build-news.js）。
  *
  * @param {string} publishedAt ISO 日期字符串
  * @param {Array} layers 时间层配置数组
  * @param {number} nowUtcMs 基准时间（毫秒），测试时可注入固定值
+ * @param {{future?: string, overflow?: string, invalid?: string}} [opts] 边界归类策略
  * @returns {string|null} 层 ID 或 null
  */
-function classifyTimeLayer(publishedAt, layers, nowUtcMs = Date.now()) {
+function classifyTimeLayer(publishedAt, layers, nowUtcMs = Date.now(), opts = {}) {
   validateTimeLayers(layers);
   const publishedMs = new Date(publishedAt).getTime();
-  if (!Number.isFinite(publishedMs)) return null;
+  if (!Number.isFinite(publishedMs)) return opts.invalid === 'older' ? 'older' : null;
   const ageDays = (nowUtcMs - publishedMs) / 86400000;
-  if (ageDays < 0) return null; // 未来时间，归入 null
-  return layers.find(layer => ageDays >= layer.min_age_days && ageDays < layer.max_age_days)?.id || null;
+  if (ageDays < 0) {
+    // 未来时间：默认 null（不属于任何层）；统计场景 opts.future='recent' 归第一层
+    return opts.future === 'recent' ? (layers[0]?.id || null) : null;
+  }
+  const matched = layers.find(layer => ageDays >= layer.min_age_days && ageDays < layer.max_age_days);
+  if (matched) return matched.id;
+  // 超窗（超过最后一层）：默认 null（授权范围外）；统计场景 opts.overflow='older' 保留历史标识
+  return opts.overflow === 'older' ? 'older' : null;
 }
 
 /** 生成"层ID:来源ID"形式的复合键，用于 state.sources 索引 */
@@ -116,6 +135,7 @@ function initializeLayer(state, layer, sources, now = new Date().toISOString()) 
       resume_page_token: null,
       pages_fetched: 0,
       items_observed: 0,
+      items_contributed: 0,   // N-P3：本层已贡献给历史回溯的候选条数（跨 run 累计，配合 max_items_per_source_layer）
       oldest_observed_at: null,
       new_video_count: 0,
       duplicate_count: 0,

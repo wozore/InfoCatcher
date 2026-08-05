@@ -92,6 +92,8 @@ function stampCandidateStatuses(item, overrides = {}) {
  *   - 新候选按 id 覆盖内容字段；
  *   - 已存在的候选保留既有 review_status / ai_processing_status，
  *     避免重新采集时重置人工审核结论（决策 55/70 的审计语义）；
+ *   - 已人工确认的内容类型结论（content_type_status=reviewed）同样保留，
+ *     防止重新采集时被 AI 分类建议覆盖（B16 路径 A，决策 66 的人工确认兜底）；
  *   - 保留 candidate_version（版本号只随审核流转递增，不因内容刷新改变）
  *     与 batch_id（所属抓取批次，保持首次采集批次，决策 70）。
  * 候选层按 id 积累（决策 49：保留全部候选），公开窗口由公开资格门禁与
@@ -108,6 +110,14 @@ function mergeCandidates(existingStore, incomingCandidates, updatedAt) {
       if (prev.ai_processing_status !== undefined) incoming.ai_processing_status = prev.ai_processing_status;
       if (prev.candidate_version !== undefined) incoming.candidate_version = prev.candidate_version;
       if (prev.batch_id !== undefined) incoming.batch_id = prev.batch_id;
+      // B16 路径 A：人工确认的内容类型结论（reviewed）是人工审计结果，不因重新采集
+      // 被 AI 建议（ai_suggested）覆盖，与上方 review_status 的保留语义一致。
+      if (prev.content_type_status === 'reviewed') {
+        incoming.content_type = prev.content_type;
+        incoming.content_type_status = prev.content_type_status;
+        if (prev.content_type_reviewer !== undefined) incoming.content_type_reviewer = prev.content_type_reviewer;
+        if (prev.reviewed_content_type_at !== undefined) incoming.reviewed_content_type_at = prev.reviewed_content_type_at;
+      }
     }
     byId.set(incoming.id, incoming);
   }

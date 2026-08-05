@@ -92,12 +92,13 @@ const crypto = require('crypto');
 const {
   readJson, writeJsonAtomic, acquireLock, releaseLock,
 } = require('../core/news-storage');
-const { createRegistry, bulkDiscover, updateLifecycle, finalizeRegistry } = require('../core/news-registry');
+const { createRegistry, bulkDiscover, updateLifecycle, finalizeRegistry, pruneRegistry } = require('../core/news-registry');
 const {
   createQuotaLedger, reserveQuota, consumeQuota, finishQuotaLedger,
 } = require('../core/news-quota');
 const {
   createSchedulerState, initializeLayer, updateSourceProgress, advanceLayer,
+  classifyTimeLayer: schedulerClassifyTimeLayer,
 } = require('../core/news-scheduler');
 const { collectYouTubeLayerStep } = require('../collectors/news-youtube');
 const { collectBilibiliLayerStep } = require('../collectors/news-bilibili');
@@ -108,6 +109,7 @@ const {
   readCandidateStore, writeCandidateStore, mergeCandidates, stampCandidateStatuses, buildPublicProjection,
   attachProjectionSnapshot, DEFAULT_REVIEW_STATUS,
 } = require('../core/news-candidates');
+const { classifyCandidates } = require('../classify/content-classifier');
 const { isWithinPublicWindow, markAnomalousTimeCandidates, filterProjectionByWindow } = require('../core/news-public-gate');
 const { recordReviewTransition } = require('../core/news-review-events');
 const { NEWS_FILES, CATALOG_FILES, DIRS } = require('../../shared/paths');
@@ -120,6 +122,7 @@ const CONFIG_PATH = NEWS_FILES.config;                              // 评分/�
 const OUTPUT_PATH = NEWS_FILES.hotspots;                            // 前端热点投影（最后写入！）
 const STATE_PATH = NEWS_FILES.state;                                // 构建批次和来源游标
 const REGISTRY_PATH = NEWS_FILES.registry;                          // 持久视频记录
+const REGISTRY_PRUNED_PATH = NEWS_FILES.registryPruned;             // N-P2：裁剪记录归档（可审计回滚）
 const QUOTA_PATH = NEWS_FILES.quota;                                // 平台额度账本
 const AUTHORIZATIONS_PATH = NEWS_FILES.authorizations;              // 待授权任务
 const MANUAL_ITEMS_PATH = NEWS_FILES.manualItems;                    // B站人工精选暂存
@@ -755,13 +758,26 @@ function migrateContentTypeProjection() {
 //   每条记录通过 content_id 关联到内容条目。
 // 事件聚合（events）：按确定性关键词、显式 URL 关联或人工 topic_key
 //   将多条内容归入同一事件/主题，保留各自观点而不合并为单一结论。
-// 去重（dedupeItems）：按 url + title 组合去重，保留先出现的条目。
+// 去重（dedupeItems）：按 platform:native_id 去重（与 registry 主键一致，N-P6 确认，
+//   2026-08-05）。跨平台重复观察由 buildProvenance 以 duplicate_observation/repost 溯源保留，
+//   不在此合并（B16 决策 46/47：保留各自观点）。保留先出现的条目。
+//   历史：此处注释曾宣称「按 url + title 组合去重」，与实现不符且语义错误——
+//   url+title 会误合并跨平台同标题内容与同平台同标题不同视频。真实数据（候选层/registry）
+//   两种键零差异，故保留实现、修正注释。
 // ═══════════════════════════════════════════════════════════════
 
-/** 将内容归入五层时间窗口（转发到 news-scheduler 的实现） */
+/** 管线统计策略（N-P1 决策）：未来归第一层、超窗归 older、无效归 older——保证 coverage/registry 恒有层标识。 */
+const TIME_LAYER_STATS_OPTS = Object.freeze({ future: 'recent', overflow: 'older', invalid: 'older' });
+
+/**
+ * 将内容归入五层时间窗口。
+ * N-P1（2026-08-05）：真正转发到 news-scheduler 的统一实现（单一事实来源）。
+ * 历史：此处曾是独立实现且行为与 scheduler 不同（未来归 recent-1d、超窗/无效归 older），
+ * 注释谎称「转发」；现改为真正转发，并用 TIME_LAYER_STATS_OPTS 参数保持统计行为不变。
+ * 采集器侧（news-youtube / news-bilibili）用 scheduler 默认策略（边界内容归 null，不进入调度层）。
+ */
 function classifyTimeLayer(item, config, now) {
-  const ageDays = Math.max(0, (now - new Date(item.published_at).getTime()) / 86400000);
-  return config.time_layers.find(layer => ageDays >= layer.min_age_days && ageDays < layer.max_age_days)?.id || 'older';
+  return schedulerClassifyTimeLayer(item.published_at, config.time_layers, now, TIME_LAYER_STATS_OPTS);
 }
 
 function topicKey(item, config) {
@@ -1021,7 +1037,7 @@ function historicalPageToken(progress) {
 }
 
 async function runHistoricalLayerPass(options) {
-  const { config, sourcePayload, state, registryIndex, quota, now, fetchedAt, youtubeApiKey } = options;
+  const { config, sourcePayload, state, registryIndex, quota, now, fetchedAt, youtubeApiKey, fetchImpl } = options;
   const sourceScope = options.sources || sourcePayload.sources;
   const sources = sourceScope.filter(source => source.enabled && ['youtube', 'bilibili'].includes(source.platform));
   if (!sources.length) return { status: 'not_applicable', active_layer: null, items: [] };
@@ -1030,11 +1046,20 @@ async function runHistoricalLayerPass(options) {
   const layer = config.time_layers.find(item => item.id === scheduler.active_layer) || config.time_layers[0];
   scheduler.active_layer = layer.id;
   initializeLayer(scheduler, layer, sources, fetchedAt);
+  // N-P3（2026-08-05）：历史回溯预算——单来源单层翻页/贡献条数硬上限，达限强制终态。
+  // 页上限防病理频道无限翻页阻塞层推进；条数上限防单一来源淹没候选层。
+  const maxPages = config.collection.max_pages_per_source_layer;
+  const maxItems = config.collection.max_items_per_source_layer;
 
   for (const source of sources) {
     const key = `${layer.id}:${source.id}`;
     const progress = scheduler.sources[key];
     if (['complete', 'observed_empty', 'partial', 'history_unsupported', 'skipped_by_user'].includes(progress.status)) continue;
+    // N-P3 max_pages：已达翻页上限 → 强制终态，不再调用采集器（页数跨 run 累计在 result.pages_fetched）
+    if (source.platform === 'youtube' && maxPages && (progress.pages_fetched || 0) >= maxPages) {
+      updateSourceProgress(scheduler, layer.id, source.id, { status: 'partial', stop_reason: 'max_pages_reached' }, fetchedAt);
+      continue;
+    }
     let result;
     try {
       if (source.platform === 'youtube') {
@@ -1050,6 +1075,7 @@ async function runHistoricalLayerPass(options) {
             videoBatchSize: config.collection.youtube_video_batch_size,
             stopAfterNew: config.collection.stop_after_new_videos_per_source_layer,
             analysisVersion: config.collection.analysis_version,
+            fetch: fetchImpl,
           });
         }
       } else {
@@ -1062,13 +1088,33 @@ async function runHistoricalLayerPass(options) {
             { type: 'bilibili_dynamic', url: `${base}/bilibili/user/dynamic/${source.external_id}` },
             { type: 'bilibili_article', url: `${base}/bilibili/user/article/${source.external_id}` },
           ],
+          fetch: fetchImpl,
         });
       }
+      // N-P3：逐来源累计「本层已贡献条数」（跨 run，存 scheduler progress），
+      // 超过 max_items_per_source_layer 时截断并强制终态。
       if (source.platform === 'youtube' && result.details) {
-        historicalItems.push(...result.details.map(detail => normalizeHistoricalYouTube(detail, source, fetchedAt)).filter(item => item.title && item.published_at));
+        const added = result.details.map(detail => normalizeHistoricalYouTube(detail, source, fetchedAt)).filter(item => item.title && item.published_at);
+        const remaining = maxItems ? Math.max(0, maxItems - (progress.items_contributed || 0)) : added.length;
+        historicalItems.push(...added.slice(0, remaining));
+        result.items_contributed = (progress.items_contributed || 0) + Math.min(added.length, remaining);
       }
       if (source.platform === 'bilibili' && result.items) {
-        historicalItems.push(...result.items.map(item => normalizeHistoricalBilibili(item, source, fetchedAt)).filter(item => item.title && item.url && item.published_at));
+        const added = result.items.map(item => normalizeHistoricalBilibili(item, source, fetchedAt)).filter(item => item.title && item.url && item.published_at);
+        const remaining = maxItems ? Math.max(0, maxItems - (progress.items_contributed || 0)) : added.length;
+        historicalItems.push(...added.slice(0, remaining));
+        result.items_contributed = (progress.items_contributed || 0) + Math.min(added.length, remaining);
+      }
+      // N-P3 max_pages：翻页数跨 run 累计（collector 单步返回 pages_fetched=1）
+      if (source.platform === 'youtube' && result.pages_fetched) {
+        result.pages_fetched = (progress.pages_fetched || 0) + result.pages_fetched;
+      }
+      // N-P3 max_items：贡献条数达到上限后强制终态，后续不再为该来源翻页/聚合。
+      // 不覆盖 quota_paused / 失败状态（额度或错误优先，保留恢复游标与审计）。
+      if (maxItems && (result.items_contributed || 0) >= maxItems
+        && !['quota_paused', 'temporarily_failed', 'permanently_failed'].includes(result.status)) {
+        result.status = 'partial';
+        result.stop_reason = 'max_items_reached';
       }
     } catch (error) {
       result = { status: 'temporarily_failed', stop_reason: error.code || error.name || 'history_step_failed', error_message: error.message };
@@ -1252,6 +1298,7 @@ async function runCollection(options = {}) {
     : await runHistoricalLayerPass({
       config, sourcePayload, sources: enabled, state, registryIndex, quota, now, fetchedAt,
       youtubeApiKey: context.youtubeApiKey,
+      fetchImpl: context.fetchImpl, // 测试注入点：历史采集复用统一 fetch（N-P3 集成测试需要）
     });
   freshItems.push(...(history.items || []).filter(item => matchesAi(item, config)));
 
@@ -1259,7 +1306,10 @@ async function runCollection(options = {}) {
   // 规则集中在 news-public-gate.js，RSS 与热点视图共用，避免口径漂移）。
   const retainedOld = (oldOutput.items || []).filter(item => isWithinPublicWindow(item, { now, config }));
   const items = dedupeItems([...freshItems, ...retainedOld])
-    .sort((a, b) => new Date(b.published_at) - new Date(a.published_at))
+    // N-P1：排序前预解析 published_at 为时间戳，避免比较器内重复 new Date（N-P4 印证的排序热点）
+    .map(item => [item, new Date(item.published_at).getTime()])
+    .sort((a, b) => b[1] - a[1])
+    .map(([item]) => item)
     .slice(0, config.collection.max_output_items);
 
   // B16 决策 74/77/78/85/88/89：写出前补充公开热点数据契约字段（热度/依据片段/稳定关联）
@@ -1296,13 +1346,29 @@ async function runCollection(options = {}) {
   // 由候选层经公开资格门禁派生，不再直接写原始 items。
   // 决策 70：采集时给候选打上所属抓取批次 batch_id 与初版 candidate_version。
   const batchId = `batch_${fetchedAt.slice(0, 10).replace(/-/g, '')}`;
+  // B16 路径 A：候选创建前跑内容分类建议（决策 65/66/79）。
+  //   - L0 规则式恒兜底：新候选默认得 ai_suggested 建议（classifier=rule_based），
+  //     不再是无条件 unclassified；
+  //   - L1 DeepSeek 显式启用：INFOCATCHER_CLASSIFY_PROVIDER=deepseek 或存在
+  //     DEEPSEEK_API_KEY 时启用；缺 key/网络失败时 classifyWithDeepSeek 返回降级对象，
+  //     分类器自动回退 L0，build 不因 LLM 故障阻塞（b16 成本/可靠性约定）；
+  //   - 已人工确认（content_type_status=reviewed）的候选被 classifyCandidates 跳过，
+  //     且 mergeCandidates 保留其结论，双保险防止 AI 建议覆盖人工确认。
+  const classifyProvider = process.env.INFOCATCHER_CLASSIFY_PROVIDER
+    || (process.env.DEEPSEEK_API_KEY ? 'deepseek' : null);
+  const classifiedItems = await classifyCandidates(items, {
+    provider: classifyProvider,
+    model: process.env.INFOCATCHER_CLASSIFY_MODEL || undefined,
+    fetchImpl: context.fetchImpl,
+    concurrency: config.collection.concurrency, // N-P3：统一用配置值（此前硬编码 5，与采集并发不一致）
+  });
   const candidateStore = mergeCandidates(
     readCandidateStore(),
-    items.map(item => stampCandidateStatuses({
+    classifiedItems.items.map(item => stampCandidateStatuses({
       ...item,
       // B16 决策 65/66：content_type 为内容类型（AI 工具/产品/概念/技术动态/行业事件/其他）。
-      // 路径 B：AI 分类+审核确认未上线前统一置 unclassified，content_type_status 记录诚实状态；
-      // 路径 A 上线后由分类器写 ai_suggested，审核确认后改 reviewed。
+      // 分类建议由上方 classifyCandidates 写入（L0 或 L1，classifier 字段标注来源）；
+      // 未分类（缺 title 等异常）时兜底 unclassified，content_type_status 诚实记录状态。
       source_type: item.source_type || item.content_type || 'unknown',
       content_type: item.content_type || 'unclassified',
       content_type_status: item.content_type_status || 'unclassified',
@@ -1408,11 +1474,18 @@ async function runCollection(options = {}) {
     }
   }
   const registry = finalizeRegistry(registryIndex, fetchedAt);
+  // N-P2（2026-08-05）：每轮 build 自动裁剪超期 Registry 记录（用户拍板：以 last_seen_at
+  // 起算、保留 registry_retention_days 天）。裁剪在内存中先完成，归档批次先于 registry
+  // 写盘：若归档写失败则异常先抛，registry 文件保持旧版（未裁剪），下一轮重新裁剪，安全。
+  const registryPrune = pruneRegistry(registryIndex, {
+    now: fetchedAt, retentionDays: config.collection.registry_retention_days, runId,
+  });
   const finalizedQuota = finishQuotaLedger(quota, fetchedAt);
   output.coverage.registry = {
     total: registry.stats.count,
     observations_in_run: observedRegistryResults.length,
     new_in_projection: registryResults.filter(result => result.isNew).length,
+    pruned_in_run: registryPrune.pruned_count,
     analysis_version: config.collection.analysis_version,
   };
 
@@ -1423,6 +1496,20 @@ async function runCollection(options = {}) {
   // 候选层写入前附带投影快照（events/provenance/assessments/coverage/热度定义），
   // 使 PR 合并后可由 Actions 独立重建最终公开投影（决策 49/59）。
   if (!options.noWrite) {
+    if (registryPrune.pruned_count > 0) {
+      // N-P2 归档：追加批次到 news-registry-pruned.json（run_id/规则/时间 + 记录全文），
+      // 提供「可审计清理与回滚」——从归档可恢复被裁剪记录（CLI/手动重新导入）。
+      const archive = readJson(REGISTRY_PRUNED_PATH, { schema_version: 1, prunes: [] });
+      archive.prunes ||= [];
+      archive.prunes.push({
+        run_id: runId,
+        pruned_at: fetchedAt,
+        retention_days: config.collection.registry_retention_days,
+        count: registryPrune.pruned_count,
+        records: registryPrune.pruned,
+      });
+      writeJsonAtomic(REGISTRY_PRUNED_PATH, archive, runId);
+    }
     writeJsonAtomic(REGISTRY_PATH, registry, runId);
     writeJsonAtomic(STATE_PATH, state, runId);
     writeJsonAtomic(QUOTA_PATH, finalizedQuota, runId);
@@ -1567,6 +1654,7 @@ module.exports = {
   enrichHotspotProjection,
   upgradeHotspotsProjection,
   migrateContentTypeProjection,
+  dedupeItems,
   runCollection,
   runFixtureBuild,
   historicalPageToken,

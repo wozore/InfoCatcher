@@ -124,6 +124,9 @@ function inspectLock(lockPath) {
  * 强制解锁（运维操作，需要明确 reason）。
  * 删除锁文件后，将原锁信息和 reason 写入 auditPath 审计日志。
  * 不自动判断锁是否"过期"——由操作者通过 news-cli.js lock status 判断后执行。
+ * N-P3（2026-08-05）契约：锁**从不自动过期**（并发安全），news-config.json
+ * 不配置任何锁过期阈值字段（曾有过 `lock_stale_after_ms` 死配置，已移除，
+ * 避免误导以为自动过期由配置控制）。
  *
  * @param {string} lockPath 锁文件路径
  * @param {string} reason 强制解锁原因（必填）

@@ -1,5 +1,9 @@
 'use strict';
 
+// 先加载 .env（密钥只经环境变量注入，见 src/shared/env.js），再加载实现。
+const { loadDotEnv } = require('../src/shared/env');
+loadDotEnv();
+
 const implementation = require('../src/news/cli/news-cli');
 
 if (require.main === module) {

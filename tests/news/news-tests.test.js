@@ -1,5 +1,5 @@
 /**
- * news-tests.test.js — 内容语义与采集行为测试（23 项）
+ * news-tests.test.js — 内容语义与采集行为测试（33 项）
  *
  * 测试原理：
  *   这些测试不请求真实 API（YouTube/X/RSSHub），而是使用本地夹具文件
@@ -51,9 +51,11 @@ const {
   resolveRelatedResources,
   computeHotScores,
   enrichHotspotProjection,
+  dedupeItems,
   runCollection,
 } = require('../../src/news/pipeline/build-news');
 const { parseBilibiliUrl, normalizeManualItem, importManualItems } = require('../../src/content/news-manual');
+const { createRegistry } = require('../../src/news/core/news-registry');
 const { NEWS_FILES, DIRS } = require('../../src/shared/paths');
 
 const config = JSON.parse(fs.readFileSync(NEWS_FILES.config, 'utf8'));
@@ -87,7 +89,7 @@ test('B站动态作为一等内容并区分转发与文字', () => {
   assert.equal(inferBilibiliType(entries[0]), 'bilibili_dynamic_repost');
   assert.equal(inferBilibiliType(entries[1]), 'bilibili_dynamic_text');
   const item = normalizeRssItem(entries[1], source({ platform: 'bilibili' }), 'bilibili_dynamic', new Date(now).toISOString());
-  assert.equal(item.content_type, 'bilibili_dynamic_text');
+  assert.equal(item.source_type, 'bilibili_dynamic_text');
 });
 
 test('TwitterAPI.io 响应可标准化并保留互动', () => {
@@ -129,7 +131,7 @@ test('低频优质来源不会因频率直接降低长期质量', () => {
   assert.equal(assessment.score_breakdown.long_term_quality, 90);
 });
 
-// ── 第 3 组：溯源与异常（4 项）────────────────────────────────
+// ── 第 3 组：溯源与异常（5 项）────────────────────────────────
 // 异常检测不能自动删除内容（只标记 review）；
 // 重复观察保留溯源关系；多观点保留而不合并为单一结论。
 
@@ -149,6 +151,25 @@ test('重复观察保留溯源关系，同主题观点均保留', () => {
   const events = buildEvents([first, duplicate], assessments, config);
   assert.equal(events[0].content_ids.length, 2);
   assert.equal(events[0].viewpoints.length, 2);
+});
+
+test('dedupeItems 按 platform:native_id 去重，跨平台同内容保留走溯源（N-P6）', () => {
+  const base = normalizeRssItem(parseFeed(fixture('youtube.xml'))[0], source(), 'youtube_video', new Date(now).toISOString());
+  // 同平台同 native_id（fresh 与 retained 合并场景）→ 去重，保留先出现者
+  const sameNative = dedupeItems([base, { ...base, id: 'fresh-copy', source_id: 'source-fresh' }]);
+  assert.equal(sameNative.length, 1);
+  assert.equal(sameNative[0].id, base.id);
+  // 同 native_id 但 URL 不同 → 仍去重（键是 platform:native_id，与 registry 主键一致）
+  const sameNativeDiffUrl = dedupeItems([base, { ...base, id: 'copy-2', url: 'https://www.youtube.com/watch?v=OTHER' }]);
+  assert.equal(sameNativeDiffUrl.length, 1);
+  // 跨平台同 URL/同标题 → 不去重，交由 buildProvenance 溯源保留（N-P6 语义决策）
+  const cross = { ...base, id: 'bili-copy', platform: 'bilibili', native_id: 'BV123', source_id: 'bili' };
+  const kept = dedupeItems([base, cross]);
+  assert.equal(kept.length, 2);
+  const provenance = buildProvenance(kept);
+  // 跨平台同 URL 记为重复观察，但内容条目本身全部保留
+  assert.equal(provenance[1].relation, 'duplicate_observation');
+  assert.deepEqual(kept.map(item => item.id), [base.id, 'bili-copy']);
 });
 
 test('事件聚合按内容索引写入评分并保留时间边界', () => {
@@ -269,7 +290,7 @@ test('互动绝对量在无来源基线时保持中性', () => {
 test('B站纯转发的长期与真实体验贡献低于原创动态', () => {
   const base = normalizeRssItem(parseFeed(fixture('bilibili-dynamic.xml'))[1], source({ platform: 'bilibili' }), 'bilibili_dynamic', new Date(now).toISOString());
   const original = assessItem(base, source({ quality_prior: 80 }), config, now);
-  const repost = assessItem({ ...base, id: 'repost', content_type: 'bilibili_dynamic_repost' }, source({ quality_prior: 80 }), config, now);
+  const repost = assessItem({ ...base, id: 'repost', source_type: 'bilibili_dynamic_repost' }, source({ quality_prior: 80 }), config, now);
   assert.ok(repost.score_breakdown.long_term_quality < original.score_breakdown.long_term_quality);
   assert.equal(repost.score_breakdown.light_user_experience, config.scoring.neutral_score);
 });
@@ -281,7 +302,7 @@ test('显式引用能关联本批次已采集的候选原文', () => {
   };
   const commentary = {
     id: 'commentary', platform: 'bilibili', native_id: '2', url: 'https://t.bilibili.com/2',
-    content_type: 'bilibili_dynamic_repost', fetched_at: new Date(now).toISOString(),
+    source_type: 'bilibili_dynamic_repost', fetched_at: new Date(now).toISOString(),
     explicit_links: ['https://x.com/source/status/1'],
   };
   const result = buildProvenance([original, commentary]);
@@ -350,7 +371,7 @@ test('采集范围拒绝未知值', () => {
 test('人工B站内容校验链接类型并形成统一模型', () => {
   const sources = [source({ id: 'bi-manual', platform: 'bilibili', external_id: '123' })];
   const item = normalizeManualItem({
-    source_id: 'bi-manual', content_type: 'bilibili_dynamic_text',
+    source_id: 'bi-manual', source_type: 'bilibili_dynamic_text',
     url: 'https://www.bilibili.com/opus/123456', title: 'Claude AI 实测',
     summary: '实际使用 Claude AI 完成工作流', published_at: '2026-07-25T08:00:00Z',
   }, sources, '2026-07-25T09:00:00Z');
@@ -358,13 +379,13 @@ test('人工B站内容校验链接类型并形成统一模型', () => {
   assert.equal(item.acquisition_method, 'manual_curated');
   assert.equal(item.metrics.views, null);
   assert.throws(() => parseBilibiliUrl('https://example.com/opus/1'), /只允许/);
-  assert.throws(() => normalizeManualItem({ ...item, url: 'https://www.bilibili.com/video/BV1abc', content_type: 'bilibili_article' }, sources), /不匹配/);
+  assert.throws(() => normalizeManualItem({ ...item, url: 'https://www.bilibili.com/video/BV1abc', source_type: 'bilibili_article' }, sources), /不匹配/);
 });
 
 test('人工B站批量导入默认全有或全无并防重复', () => {
   const sources = [source({ id: 'bi-manual', platform: 'bilibili', external_id: '123' })];
   const payload = { schema_version: 1, items: [] };
-  const valid = { source_id: 'bi-manual', content_type: 'bilibili_video', url: 'https://www.bilibili.com/video/BV1abc', title: 'AI 模型发布', summary: '新的 AI 模型发布', published_at: '2026-07-25T08:00:00Z' };
+  const valid = { source_id: 'bi-manual', source_type: 'bilibili_video', url: 'https://www.bilibili.com/video/BV1abc', title: 'AI 模型发布', summary: '新的 AI 模型发布', published_at: '2026-07-25T08:00:00Z' };
   const failed = importManualItems(payload, [valid, { ...valid, url: 'https://example.com/x' }], sources);
   assert.equal(failed.committed, false);
   assert.equal(payload.items.length, 0);
@@ -377,7 +398,7 @@ test('默认人工模式不调用B站网络并消费人工条目', async () => {
   const manualConfig = JSON.parse(JSON.stringify(config));
   manualConfig.collection.bilibili_collection_mode = 'manual';
   const bi = source({ id: 'bi-manual', platform: 'bilibili', external_id: '123' });
-  const manual = { source_id: bi.id, content_type: 'bilibili_article', url: 'https://www.bilibili.com/read/cv123', title: 'Claude AI 深度解读', description: 'Claude AI 深度解读和实际使用', published_at: '2026-07-23T08:00:00Z' };
+  const manual = { source_id: bi.id, source_type: 'bilibili_article', url: 'https://www.bilibili.com/read/cv123', title: 'Claude AI 深度解读', description: 'Claude AI 深度解读和实际使用', published_at: '2026-07-23T08:00:00Z' };
   let calls = 0;
   const result = await runCollection({
     config: manualConfig, sourcePayload: { schema_version: 1, sources: [bi] },
@@ -427,8 +448,78 @@ test('采集批次保留 B站动态且显式记录动态降级', async () => {
       ? { items: [yt], routeCoverage: null }
       : { items: [dynamic], routeCoverage: { video: { status: 'success', items: 0 }, dynamic: { status: 'degraded', items: 1, reason: 'fixture' }, article: { status: 'success', items: 0 } } },
   });
-  assert.ok(result.output.items.some(item => item.content_type === 'bilibili_dynamic_text'));
+  assert.ok(result.output.items.some(item => item.source_type === 'bilibili_dynamic_text'));
   assert.equal(result.output.coverage.platforms.bilibili.dynamic.status, 'degraded');
+});
+
+test('build 结束自动裁剪超期 Registry 记录并计入 coverage（N-P2）', async () => {
+  const sources = { schema_version: 1, sources: [source({ id: 'yt', platform: 'youtube', content_tags: ['即时资讯'] })] };
+  const yt = normalizeRssItem(parseFeed(fixture('youtube.xml'))[0], sources.sources[0], 'youtube_video', new Date(now).toISOString());
+  const registryIndex = createRegistry({
+    schema_version: 1, stats: { count: 2 },
+    videos: {
+      'youtube:old': { key: 'youtube:old', platform: 'youtube', native_id: 'old', source_id: 'yt', canonical_url: 'https://y.test/old', last_seen_at: '2025-06-01T00:00:00Z' },
+      'youtube:recent': { key: 'youtube:recent', platform: 'youtube', native_id: 'recent', source_id: 'yt', canonical_url: 'https://y.test/recent', last_seen_at: '2026-07-22T00:00:00Z' },
+    },
+  });
+  const result = await runCollection({
+    config, sourcePayload: sources,
+    state: { schema_version: 1, sources: {}, x_rotation_offset: 0 }, oldOutput: emptyOutput(),
+    manualItems: { schema_version: 1, items: [] }, now, noWrite: true,
+    defaultReviewStatus: 'approved', registryIndex,
+    collector: async () => ({ items: [yt], routeCoverage: null }),
+  });
+  // old(last_seen 超 270 天) 被裁剪，recent 保留，fixture 视频新发现
+  assert.equal(result.output.coverage.registry.pruned_in_run, 1);
+  assert.equal(result.output.coverage.registry.total, 2);
+  assert.equal(result.registry.stats.count, 2);
+  assert.equal(result.registry.videos['youtube:old'], undefined);
+  assert.equal(result.registry.stats.last_prune.count, 1);
+});
+
+test('历史回溯 max_pages_per_source_layer 达限强制终态且不再翻页（N-P3）', async () => {
+  const maxPagesConfig = JSON.parse(JSON.stringify(config));
+  maxPagesConfig.collection.max_pages_per_source_layer = 2;
+  const yt = source({ id: 'yt', platform: 'youtube', content_tags: ['即时资讯'] });
+  const historyState = {
+    schema_version: 1, active_layer: 'recent-1d', layer_coverage: {},
+    sources: { 'recent-1d:yt': { status: 'running', pages_fetched: 2, page_token: 'next-page', uploads_playlist_id: 'UU-test' } },
+  };
+  let playlistCalls = 0;
+  const result = await runCollection({
+    config: maxPagesConfig, sourcePayload: { schema_version: 1, sources: [yt] },
+    state: { schema_version: 1, sources: {}, history_scheduler: historyState, x_rotation_offset: 0 },
+    oldOutput: emptyOutput(), now, noWrite: true, allowEmpty: true, defaultReviewStatus: 'approved',
+    youtubeApiKey: 'fixture-key', skipHistory: false,
+    collector: async () => ({ items: [], routeCoverage: null }), // 最近路径用桩，不联网
+    fetchImpl: async () => { playlistCalls++; return { ok: true, status: 200, json: async () => ({ items: [] }) }; },
+  });
+  assert.equal(playlistCalls, 0, '已达 max_pages，不应再调用播放列表分页');
+  const prog = result.state.history_scheduler.sources['recent-1d:yt'];
+  assert.equal(prog.status, 'partial');
+  assert.equal(prog.stop_reason, 'max_pages_reached');
+});
+
+test('历史回溯 max_items_per_source_layer 截断贡献并强制终态（N-P3）', async () => {
+  const maxItemsConfig = JSON.parse(JSON.stringify(config));
+  maxItemsConfig.collection.max_items_per_source_layer = 5;
+  const bi = source({ id: 'bi', platform: 'bilibili', external_id: '123', content_tags: ['即时资讯'] });
+  const historyState = {
+    schema_version: 1, active_layer: 'recent-90d', layer_coverage: {},
+    sources: { 'recent-90d:bi': { status: 'running', items_contributed: 5 } }, // 已达上限
+  };
+  const result = await runCollection({
+    config: maxItemsConfig, sourcePayload: { schema_version: 1, sources: [bi] },
+    state: { schema_version: 1, sources: {}, history_scheduler: historyState, x_rotation_offset: 0 },
+    oldOutput: emptyOutput(), now, noWrite: true, allowEmpty: true, defaultReviewStatus: 'approved',
+    skipHistory: false, manualItems: { schema_version: 1, items: [] },
+    collector: async () => ({ items: [], routeCoverage: null }), // 最近路径用桩，不联网
+    fetchImpl: async () => ({ ok: true, status: 200, text: async () => fixture('bilibili-dynamic.xml') }),
+  });
+  const prog = result.state.history_scheduler.sources['recent-90d:bi'];
+  assert.equal(prog.status, 'partial');
+  assert.equal(prog.stop_reason, 'max_items_reached');
+  assert.equal(prog.items_contributed, 5, '已到上限后不再贡献');
 });
 
 // ── 第 5 组：公开热点数据契约（B16 决策 74/77/78/85/88/89）──

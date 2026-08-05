@@ -1,6 +1,6 @@
 # B16 任务完成情况与后续清单
 
-> **状态：2026-08-03 初核 · 2026-08-04 数据补齐、B16-R4 端到端验证与人工审核流启用更新。对比代码库与两份决策文档后的核对结论。**
+> **状态：2026-08-03 初核 · 2026-08-04 数据补齐、B16-R4 端到端验证与人工审核流启用更新 · 2026-08-05 B16-R5 L1 DeepSeek 分类接入更新。对比代码库与两份决策文档后的核对结论。**
 >
 > 依据：[b16-ui-reconstruction-plan.md](./b16-ui-reconstruction-plan.md)（决策 46–103）、[b16-content-type-fix-plan.md](./b16-content-type-fix-plan.md）、[decisions.md](./decisions.md)（ADR-007/008/009）、当前工作区代码与数据、`node scripts/validate.js` 校验输出。
 
@@ -8,7 +8,7 @@
 
 ## 1. 本次 B16 任务实际完成了什么
 
-**一句话：B16 UI 系统重构三阶段（P0 / P1-A / P1-B）已前端落地并通过校验；热点内容类型修复已按「路径 B」落地（字段拆分完成）；路径 A 已于 2026-08-04 落地「分类模块 + 审核流程 + 100 条规则分类建议（ai_suggested）」，人工审核确认（reviewed）与 L1 AI 渠道待续。**
+**一句话：B16 UI 系统重构三阶段（P0 / P1-A / P1-B）已前端落地并通过校验；热点内容类型修复已按「路径 B」落地（字段拆分完成）；路径 A 已于 2026-08-04 落地「分类模块 + 审核流程 + 100 条规则分类建议并批量审核确认（reviewed）」，L1 AI 分类已于 2026-08-05 接入 DeepSeek（失败自动回退 L0，生产启用需配置 DEEPSEEK_API_KEY）。**
 
 ### 1.1 UI 系统重构三阶段（决策 101–103）— 已完成，验收通过（2026-08-03）
 
@@ -75,11 +75,13 @@
 
 ### 近期（数据/能力补齐，前端已就绪）
 
-4. **路径 A：真实内容类型填充**（`content_type` 当前全 `unclassified`，热点类型筛选区因此隐藏）。✅ **分类模块 + 审核流程已落地**（2026-08-04）：
-   - 新增 [content-classifier.js](src/news/classify/content-classifier.js)：L0 规则式基线分类（零成本、可离线，词典来自 catalog）+ L1 AI 分类接口预留（`--provider`，需渠道与额度）
-   - CLI：`classify preview|candidates|hotspots`；`review set/batch --content-type` 审核确认（`ai_suggested` → `reviewed`）
+4. **路径 A：真实内容类型填充**（`content_type` 当前全 `unclassified`，热点类型筛选区因此隐藏）。✅ **分类模块 + 审核流程已落地**（2026-08-04）；✅ **L1 DeepSeek 分类已接入**（2026-08-05，见 [开发日志.md](../开发日志.md#log-entry-42)）：
+   - 新增 [content-classifier.js](src/news/classify/content-classifier.js)（L0 规则式基线分类，零成本、可离线，词典来自 catalog）+ [llm-provider.js](src/news/classify/llm-provider.js)（DeepSeek chat completions 封装，fetch 注入可 mock；缺 key/网络/非 200/输出无法映射一律返回降级对象，不阻塞管线）
+   - CLI：`classify preview|candidates|hotspots --provider deepseek [--model <m>]`；`review set/batch --content-type` 审核确认（`ai_suggested` → `reviewed`）
+   - [build-news.js](src/news/pipeline/build-news.js) 候选创建阶段已接入分类器：**L0 恒兜底**（新候选默认 `ai_suggested`，不再无条件 unclassified）；L1 显式启用（`INFOCATCHER_CLASSIFY_PROVIDER=deepseek` 或存在 `DEEPSEEK_API_KEY`），缺 key 自动退化 L0 不影响构建；批量并发上限 5；[mergeCandidates](src/news/core/news-candidates.js) 保留人工 reviewed 结论不因重新采集被 AI 建议覆盖
    - 100 条热点已生成规则式分类建议并**批量审核确认**（`classify confirm`，`content_type_status=reviewed`；分布：ai_technology 33 / other 25 / ai_industry 21 / ai_concept 15 / ai_product 4 / ai_tool 2），校验通过、dist 已重建，前端类型筛选区正式启用
-   - ⏳ **待续**：候选层已非空（100 条真实采集），L1 AI 分类需另确认模型渠道与额度（对应 [memory：高消耗评估须先确认成本]），并接入 build-news 候选处理阶段
+   - 验证：完整新闻套件 **159/159 通过**；真实 DeepSeek 联调两条分类正确（`ai_product` / `ai_industry`，其中 L1 语义优于 L0 规则），公开数据零变化（100 条 reviewed 不受影响）
+   - ⏳ **待续（运营决策）**：生产启用需配置 `DEEPSEEK_API_KEY`（本地/CI secrets）；对候选层全量跑 `classify candidates --provider deepseek` 重分类（覆盖 `ai_suggested`、不覆盖 `reviewed`）需先确认预算（每轮 ≤100 次分类调用、单轮约几十 k token、约几分钱量级）
 5. **tools.json 工具发布时间字段**（ADR-009 后续）：✅ **28 个工具已全部补齐 `published_at`**（取各工具当前最新版本模型的正式发布时间，如 chatgpt=GPT-5.6→2026-07-09、deepseek=DeepSeek-V4-Flash-0731→2026-07-31、claude-code=2.1.221→2026-08-04、jimeng=Seedance2.5→2026-07-31），校验通过、dist 已重建，工具卡/场景卡自动显示「发布时间」。**2026-08-04 后续**：17 个产品型/日期未确认工具已按用户决定**从工具库移除**（windsurf/runway/perplexity/mishu/notion-ai/gamma/elevenlabs/baichuan/poe/leonardo/heygen/notebooklm/bolt/v0/udio/replit/julius），同步清理了 featured（3 条）、scenes（32 处引用 + 3 空任务）、intel-sources（perplexity 配置）；`tools.json` 现为 28 个工具，CLAUDE.md 声明已同步。
 6. **`related_resources` 填充**（ADR-008 后续）：✅ **已为 69/100 条热点填充** `related_resources`（词边界匹配工具/概念/场景稳定 ID + 人工抽查，如 DeepSeek 发布→deepseek/Agent、CS229→study/Transformer），31 条无匹配诚实留空；校验通过、dist 已重建，热点详情「关联资料」区恢复显示。
 

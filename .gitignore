@@ -56,6 +56,9 @@ $RECYCLE.BIN/
 .obsidian/workspace.json
 .obsidian/workspaces.json
 .obsidian/workspace-mobile.json
+# 第三方插件 bundle（main.js 等，含自带密钥检测正则等外部代码，非工程交付物），
+# 只解除版本跟踪，磁盘文件保留
+.obsidian/plugins/
 
 # ===== 脚本生成的临时输出 =====
 # 分析脚本运行产生的中间/输出文件（若生成到这些位置）
@@ -67,6 +70,7 @@ $RECYCLE.BIN/
 # ===== 敏感信息（API Key / 环境变量） =====
 .env
 .env.*
+!.env.example
 *.secret
 *_secret.*
 credentials.json

@@ -1,6 +1,6 @@
 # B16 热点内容类型修复方案（content_type ↔ source_type 拆分 + 内容分类）
 
-> **状态：路径 B（字段拆分 + 数据迁移）已实现并落地（2026-08-03）；路径 A（真实 AI 分类 + 人工审核确认）待审核后台与模型渠道落地。**
+> **状态：路径 B（字段拆分 + 数据迁移）已实现并落地（2026-08-03）；路径 A（真实 AI 分类 + 人工审核确认）分类模块与审核流程已落地（2026-08-04），L1 DeepSeek 分类已接入（2026-08-05，见 [b16-task-status.md](./b16-task-status.md) 第 4 项与 [开发日志.md](../开发日志.md#log-entry-42)）。**
 >
 > 配套文档：[b16-ui-reconstruction-plan.md](./b16-ui-reconstruction-plan.md)（决策 46–103）、[decisions.md](./decisions.md)（ADR-008/009）、[b16-task-status.md](./b16-task-status.md)。
 >
@@ -87,7 +87,7 @@
 
 **推荐**：短期选 **B**（本轮即可消除冲突且诚实），中长期随审核后台落地路径 **A**（真实分类+确认）。路径 C 不建议。
 
-**已选路径（2026-08-03）**：按推荐实施 **路径 B**。字段拆分（采集层 `source_type`、手工条目与 CLI、候选层透传、校验枚举、前端映射）与数据迁移（`--migrate-content-type`，`hotspots.json` → `schema_version: 3`）均已完成；`content_type` 统一置 `unclassified`（`content_type_status: unclassified`）。路径 A 待审核后台与模型渠道到位后启动（见开发计划 B16-R5）。
+**已选路径（2026-08-03）**：按推荐实施 **路径 B**。字段拆分（采集层 `source_type`、手工条目与 CLI、候选层透传、校验枚举、前端映射）与数据迁移（`--migrate-content-type`，`hotspots.json` → `schema_version: 3`）均已完成；`content_type` 统一置 `unclassified`（`content_type_status: unclassified`）。**路径 A 后续已推进**：分类模块 + 审核流程 2026-08-04 落地（L0 规则分类 + CLI 确认，100 条批量 reviewed），L1 DeepSeek 分类 2026-08-05 接入（llm-provider + build-news 候选阶段，失败自动回退 L0）——见 [开发计划.md](../开发计划.md) B16-R5 与 [开发日志.md](../开发日志.md#log-entry-42)。
 
 ---
 
@@ -163,7 +163,7 @@
 
 建议先完成 P1（消除冲突的最小诚实改动，路径 B），P2/P3 随审核后台节奏推进（路径 A）。
 
-**实施状态（2026-08-03）**：P1 与 P2-路径 B 已完成（字段拆分 + 数据迁移 + 前端映射），`node scripts/validate.js` 通过（100 热点 · 60 主题）；P2-路径 A（分类模块接入）与 P3（审核确认）待审核后台落地；P4 验收待本地 HTTP 服务人工复核（见 [b16-task-status.md](./b16-task-status.md)）。
+**实施状态（2026-08-05）**：P1 与 P2-路径 B 已完成（字段拆分 + 数据迁移 + 前端映射）；P2-路径 A（分类模块接入）与 P3（审核确认）已于 2026-08-04 落地（L0 规则分类 + CLI `classify confirm` 批量确认 100 条 reviewed），L1 DeepSeek 分类 2026-08-05 接入（新增 llm-provider、build-news 候选创建阶段接入分类器，L0 恒兜底、L1 显式启用、失败自动回退）；`node scripts/validate.js` 通过、完整新闻套件 159/159 通过；P4 验收待本地 HTTP 服务人工复核（见 [b16-task-status.md](./b16-task-status.md)）。
 
 ---
 
@@ -186,4 +186,4 @@
 5. 移动端、键盘、`prefers-reduced-motion` 无回归；决策 80 四类空状态仍区分。
 6. 工具/场景/对比/概念视图无回归。
 
-**当前达成度（2026-08-03）**：第 1 条（`source_type` 合法 + `content_type` 为枚举或 `unclassified`）、第 3 条（平台只在来源核验层）、第 4 条（校验通过）已满足；第 2 条「类型筛选与卡片显示内容类型」当前因全 `unclassified` 处于「审核建设期」展示（类型筛选区隐藏、卡片「类型待确认」），待路径 A 填充后自动满足；第 5、6 条待本地 HTTP 服务人工复验。
+**当前达成度（2026-08-05）**：第 1 条（`source_type` 合法 + `content_type` 为枚举或 `unclassified`）、第 3 条（平台只在来源核验层）、第 4 条（校验通过）已满足；第 2 条「类型筛选与卡片显示内容类型」已基本满足——100 条热点已于 2026-08-04 经规则分类批量审核确认（reviewed），前端类型筛选区正式启用；L1 DeepSeek 分类 2026-08-05 接入后，新采集候选将自动获得 AI 分类建议（`ai_suggested`），经人工审核确认后进入公开；第 5、6 条待本地 HTTP 服务人工复验。

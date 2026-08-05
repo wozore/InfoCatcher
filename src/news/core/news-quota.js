@@ -19,6 +19,7 @@
  *   4. 状态自动切换：
  *      - remaining === 0 → exhausted
  *      - remaining > 0 但不足以支付当前 cost → quota_paused
+ *      - remaining ≤ quota_low_watermark（N-P3 低水位早停）→ low_watermark
  *      - reserved !== 0 在 finishQuotaLedger 时 → incomplete_reservations（异常）
  *   5. withQuota() 便捷封装：reserve → 执行异步请求 → 成功/失败 consume，
  *      失败时自动在 error 上附加 quotaReservationId 供排查。
@@ -51,15 +52,15 @@ function createQuotaLedger(config, runId, now = new Date().toISOString()) {
     started_at: now,
     finished_at: null,
     platforms: {
-      youtube: platformLedger(config.youtube_quota_units_per_run || 1000, 'quota_units'),
-      bilibili: platformLedger(config.bilibili_rsshub_requests_per_run || 300, 'http_attempts'),
+      youtube: platformLedger(config.youtube_quota_units_per_run || 1000, 'quota_units', config.quota_low_watermark),
+      bilibili: platformLedger(config.bilibili_rsshub_requests_per_run || 300, 'http_attempts', config.quota_low_watermark),
     },
   };
 }
 
-/** 创建单个平台的额度账本初始值 */
-function platformLedger(limit, unit) {
-  return { limit, unit, reserved: 0, consumed: 0, remaining: limit, status: 'available', operations: [] };
+/** 创建单个平台的额度账本初始值；lowWatermark > 0 时启用低水位早停（N-P3）。 */
+function platformLedger(limit, unit, lowWatermark = 0) {
+  return { limit, unit, lowWatermark, reserved: 0, consumed: 0, remaining: limit, status: 'available', operations: [] };
 }
 
 /** 内部：获取平台账本，不存在时抛出明确错误 */
@@ -92,6 +93,12 @@ function reserveQuota(ledger, platform, operation) {
   if (!canReserve(ledger, platform, cost)) {
     account.status = account.remaining === 0 ? 'exhausted' : 'quota_paused';
     return { accepted: false, reason: 'insufficient_quota', remaining: account.remaining - account.reserved };
+  }
+  // N-P3（2026-08-05）：低水位早停。remaining ≤ quota_low_watermark 时拒绝新预留，
+  // 保护最后一点预算头寸，避免被廉价操作耗尽到 0 导致 run 中途无预算可重试。
+  if (account.lowWatermark > 0 && account.remaining - account.reserved <= account.lowWatermark) {
+    account.status = 'low_watermark';
+    return { accepted: false, reason: 'low_watermark', remaining: account.remaining - account.reserved, watermark: account.lowWatermark };
   }
   const reservationId = `${platform}-${account.operations.length + 1}`;
   account.reserved += cost;

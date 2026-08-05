@@ -39,10 +39,14 @@ jobs:
       - name: Validate source configuration
         run: node scripts/validate.js
 
+      - name: Secret scan guard
+        run: node scripts/check-secrets.js
+
       - name: Collect and build news
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           X_API_KEY: ${{ secrets.X_API_KEY }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           NEWS_PLATFORM_SCOPE: ${{ github.event.inputs.platform_scope || 'all' }}
         run: node scripts/build-news.js
 

@@ -773,7 +773,7 @@ try {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// 开发原则自动门禁（对应 CLAUDE.md 开发原则 1-5）
+// 开发原则自动门禁（对应 CLAUDE.md 开发原则 1-6）
 // ═══════════════════════════════════════════════════════════════
 console.log('\n📋 开发原则合规检查\n');
 
@@ -835,7 +835,7 @@ try {
   if (fs.existsSync(`${DIRS.src}/package.json`)) fail('原则4: src/ 禁止 package.json');
   if (fs.existsSync(`${DIRS.project}/package.json`)) fail('原则4: 项目根禁止 package.json');
 
-  const NODE_BUILTINS = new Set(['fs', 'path', 'crypto', 'os', 'child_process', 'http', 'https', 'url', 'zlib', 'stream', 'assert', 'test', 'module']);
+  const NODE_BUILTINS = new Set(['fs', 'path', 'crypto', 'os', 'child_process', 'http', 'https', 'url', 'zlib', 'stream', 'assert', 'test', 'module', 'perf_hooks']);
   const jsFiles = [];
   (function walk(d) {
     for (const e of fs.readdirSync(d, { withFileTypes: true }))
@@ -875,6 +875,14 @@ try {
 
   console.log(`  原则5 路径登记: ${dataJson.length} 个 JSON 全部覆盖，通过`);
 } catch (e) { fail(`原则5 检查异常: ${e.message}`); }
+
+// --- 原则 6: 密钥零残留 — check-secrets 高熵扫描 ---
+try {
+  const { scanRepo } = require('../../scripts/check-secrets');
+  const findings = scanRepo();
+  if (findings.length) findings.forEach(f => fail(`原则6: ${f.file}:${f.line} 疑似密钥 [${f.pattern}] ${f.preview}`));
+  else console.log('  原则6 密钥扫描: 通过');
+} catch (e) { fail(`原则6 检查异常: ${e.message}`); }
 
 console.log(failed ? '\n❌ 校验未通过，请修复上述错误后重试\n' : '\n✅ 全部通过\n');
 process.exit(failed ? 1 : 0);

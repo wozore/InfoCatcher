@@ -199,7 +199,74 @@ function finalizeRegistry(index, now = new Date().toISOString()) {
   return index.registry;
 }
 
+/**
+ * 裁剪超期 Registry 记录（N-P2，2026-08-05）。
+ *
+ * 保留语义：以 last_seen_at 起算，超过 retentionDays 未被观察到的记录不可能再被
+ * 任何采集器遇到（采集回溯最深 270 天 = registry_retention_days），删除安全——
+ * 不会造成重复处理或重复发布，重新出现时作为新发现处理。裁剪依据必须用
+ * last_seen_at 而非 published_at：回溯收集的历史视频 published_at 虽旧但
+ * last_seen_at 很新，按发布时间裁剪会误删仍在处理的回溯记录。
+ *
+ * 安全约束：
+ *   - dryRun 时只返回候选，不修改任何索引/文件；
+ *   - apply 时同步移除 byKey/byUrl/bySource 三份索引与 registry.videos，并更新
+ *     stats.count（若裁剪数 >0 则在 stats.last_prune 记录本次审计摘要）；
+ *   - last_seen_at 缺失或无效的记录**保留**（无法判断年龄时不删除）；
+ *   - 边界半开：恰好 retentionDays 天的记录保留，超过才裁剪。
+ *
+ * @param {object} index createRegistry 返回的索引对象
+ * @param {object} [options] { now, retentionDays, dryRun }
+ * @returns {{ dryRun, pruned_count, pruned, stats }} pruned 为被裁剪记录数组（供归档/回滚）
+ */
+function pruneRegistry(index, options = {}) {
+  const now = options.now || new Date().toISOString();
+  const retentionDays = options.retentionDays ?? 270;
+  const dryRun = Boolean(options.dryRun);
+  const cutoffMs = Date.parse(now) - retentionDays * 86400000;
+  const pruned = [];
+  let oldestKept = null;
+  for (const [key, record] of [...index.byKey]) {
+    const seenMs = Date.parse(record.last_seen_at);
+    if (!Number.isFinite(seenMs)) { oldestKept = pickOldest(oldestKept, record.last_seen_at); continue; }
+    if (seenMs < cutoffMs) {
+      pruned.push(record);
+      if (!dryRun) {
+        index.byKey.delete(key);
+        delete index.registry.videos[key];
+        if (record.canonical_url) index.byUrl.delete(urlKey(record.platform, record.canonical_url));
+        const bySourceSet = index.bySource.get(record.source_id);
+        if (bySourceSet) {
+          bySourceSet.delete(key);
+          if (!bySourceSet.size) index.bySource.delete(record.source_id);
+        }
+      }
+      continue;
+    }
+    oldestKept = pickOldest(oldestKept, record.last_seen_at);
+  }
+  if (!dryRun) {
+    index.registry.stats.count = index.byKey.size;
+    if (pruned.length) {
+      index.registry.stats.last_prune = {
+        run_id: options.runId || null,
+        pruned_at: now,
+        retention_days: retentionDays,
+        count: pruned.length,
+      };
+    }
+  }
+  return { dryRun, pruned_count: pruned.length, pruned, stats: { oldest_kept_last_seen_at: oldestKept } };
+}
+
+/** 返回较旧的时间（字符串比较需同 ISO 格式；last_seen_at 均为 ISO 字符串）。 */
+function pickOldest(current, candidate) {
+  if (!candidate) return current;
+  if (!current || candidate < current) return candidate;
+  return current;
+}
+
 module.exports = {
   DISCOVERY, PROCESSING, registryKey, createRegistry, discoverVideo, bulkDiscover,
-  updateLifecycle, needsExpensiveProcessing, finalizeRegistry,
+  updateLifecycle, needsExpensiveProcessing, finalizeRegistry, pruneRegistry,
 };

@@ -32,6 +32,14 @@
  *     lock force-unlock --reason ...
  *     （status 只读；force-unlock 删除锁并写入审计，必须提供 reason）
  *
+ *   registry —— Registry 保留策略（N-P2）
+ *     registry prune   [--apply] [--retention-days <n>]
+ *     （默认 dry-run 只预览将裁剪的记录数；--apply 才实际裁剪并归档到
+ *       news-registry-pruned.json（含 run_id/规则/时间 + 记录全文，可回滚）；
+ *       裁剪依据 last_seen_at 超 retention_days 天（默认取 news-config.json
+ *       的 registry_retention_days=270，与采集回溯窗口一致）；
+ *       build-news 每轮结束也会自动执行同等裁剪）
+ *
  *   review —— 热点审核状态管理（B16 决策 46/48/50/55/56/57/69/70）
  *     review list    [--status pending|approved|held|discarded] [--platform ...] [--limit N]
  *     review summary
@@ -77,6 +85,7 @@
 const fs = require('fs');
 const path = require('path');
 const { readJson, writeJsonAtomic, inspectLock, forceUnlock, acquireLock, releaseLock } = require('../core/news-storage');
+const { createRegistry, pruneRegistry } = require('../core/news-registry');
 const { createAuthorizationStore, decideAuthorization } = require('../core/news-authorization');
 const { normalizeManualItem, importManualItems } = require('../../content/news-manual');
 const {
@@ -119,6 +128,7 @@ const FILES = {
   audit: NEWS_FILES.adminAudit,
   candidates: NEWS_FILES.candidates,
   config: NEWS_FILES.config,
+  registryPruned: NEWS_FILES.registryPruned,
 };
 
 const PLATFORMS = new Set(['youtube', 'bilibili', 'x']);
@@ -402,6 +412,47 @@ function lockCommand(action, flags) {
   throw new Error(`未知 lock 命令: ${action}`);
 }
 
+/**
+ * registry prune —— N-P2 裁剪超期 Registry 记录（以 last_seen_at 起算，保留
+ * registry_retention_days 天）。默认 --dry-run 只预览不修改；--apply 才实际裁剪并
+ * 归档（归档批次先写，再写裁剪后的 registry，与 build 同顺序：归档失败则不落盘）。
+ * --retention-days <n> 可临时覆盖阈值（默认取 news-config.json 配置，缺省 270）。
+ */
+function registryCommand(action, flags) {
+  if (action !== 'prune') throw new Error(`未知 registry 命令: ${action}`);
+  const registry = readJson(FILES.registry, null);
+  if (!registry) return { status: 'no_registry', dry_run: true, retention_days: null };
+  const config = readJson(FILES.config, null);
+  const retentionDays = flags.retention_days !== undefined
+    ? Number(flags.retention_days)
+    : config?.collection?.registry_retention_days ?? 270;
+  const dryRun = !flags.apply;
+  const now = new Date().toISOString();
+  const runId = `cli-prune-${Date.now()}`;
+  const index = createRegistry(registry);
+  const result = pruneRegistry(index, { now, retentionDays, dryRun, runId });
+  if (!dryRun && result.pruned_count > 0) {
+    const archive = readJson(FILES.registryPruned, { schema_version: 1, prunes: [] });
+    archive.prunes ||= [];
+    archive.prunes.push({
+      run_id: runId,
+      pruned_at: now,
+      retention_days: retentionDays,
+      count: result.pruned_count,
+      records: result.pruned,
+    });
+    save(FILES.registryPruned, archive, 'registry-prune');
+    save(FILES.registry, index.registry, 'registry-prune');
+  }
+  return {
+    status: dryRun ? 'dry_run' : (result.pruned_count ? 'pruned' : 'nothing_to_prune'),
+    dry_run: dryRun,
+    pruned_count: result.pruned_count,
+    retention_days: retentionDays,
+    oldest_kept_last_seen_at: result.stats.oldest_kept_last_seen_at,
+  };
+}
+
 // ── 入口 ──────────────────────────────────────────────────
 
 // ── review 命令组：热点审核状态管理（B16 决策 46/48/50/55/56/57/69）─────
@@ -513,25 +564,27 @@ function reviewCommand(action, flags) {
 
 // ── classify 命令组：热点内容类型分类（B16 路径 A）─────
 //
-//   classify preview   --title <t> [--description <d>] 预览单条规则式分类（不写入）
-//   classify candidates [--provider <id>]               对候选层跑分类建议（ai_suggested，不覆盖已 reviewed）
-//   classify hotspots  [--provider <id>]               对公开热点跑分类建议（过渡用途；真实路径 A 走候选层）
-//   classify confirm   [--reviewer <name>]             批量确认：ai_suggested → reviewed（接受规则式建议，人工审核确认）
+//   classify preview   --title <t> [--description <d>]    预览单条分类（不写入）
+//   classify candidates [--provider <id>] [--model <m>]   对候选层跑分类建议（ai_suggested，不覆盖已 reviewed）
+//   classify hotspots  [--provider <id>] [--model <m>]    对公开热点跑分类建议（过渡用途；真实路径 A 走候选层）
+//   classify confirm   [--reviewer <name>]                批量确认：ai_suggested → reviewed（接受分类建议，人工审核确认）
 //
-// L0 规则式分类零成本、可离线；L1 AI 分类（--provider）需先确认模型渠道与额度，
-// 未配置 provider 时保持规则式建议（b16-task-status.md 第 4 项成本提醒）。
+// L0 规则式分类零成本、可离线（默认，不配 --provider 时）。L1 AI 分类：
+// --provider deepseek 走 DeepSeek（需环境变量 DEEPSEEK_API_KEY，缺 key 时自动回退 L0，
+// 不阻塞）；--model 可覆盖默认 deepseek-chat（b16-task-status.md 第 4 项成本提醒）。
 
-function classifyCommand(action, flags) {
+async function classifyCommand(action, flags) {
+  const classifyOptions = { provider: flags.provider, model: flags.model };
   if (action === 'preview') {
     const title = flags.title || '';
     const description = flags.description || '';
     if (!title && !description) throw new Error('classify preview 需要 --title 或 --description');
-    return classifyCandidate({ title, description }, { provider: flags.provider });
+    return classifyCandidate({ title, description }, classifyOptions);
   }
 
   if (action === 'candidates') {
     const store = readCandidateStore();
-    const result = classifyCandidates(store.candidates, { provider: flags.provider });
+    const result = await classifyCandidates(store.candidates, classifyOptions);
     if (result.classified > 0) {
       writeCandidateStore({ ...store, candidates: result.items }, `classify-candidates-${Date.now()}`);
     }
@@ -540,7 +593,7 @@ function classifyCommand(action, flags) {
 
   if (action === 'hotspots') {
     const data = readJson(NEWS_FILES.hotspots, { items: [] });
-    const result = classifyCandidates(data.items, { provider: flags.provider });
+    const result = await classifyCandidates(data.items, classifyOptions);
     if (result.classified > 0) {
       writeJsonAtomic(NEWS_FILES.hotspots, { ...data, items: result.items }, `classify-hotspots-${Date.now()}`);
     }
@@ -695,11 +748,12 @@ async function main(argv = process.argv.slice(2)) {
   else if (group === 'authorization') result = authorizationCommand(action, flags);
   else if (group === 'quota') result = quotaCommand(action, flags);
   else if (group === 'lock') result = lockCommand(action, flags);
+  else if (group === 'registry') result = registryCommand(action, flags);
   else if (group === 'review') result = reviewCommand(action, flags);
-  else if (group === 'classify') result = classifyCommand(action, flags);
+  else if (group === 'classify') result = await classifyCommand(action, flags);
   else if (group === 'transcript') result = await transcriptCommand(action, flags);
   else if (group === 'legacy') result = legacyCommand(action, flags);
-  else throw new Error('用法: news-cli.js source|content|authorization|quota|lock|review|classify|transcript|legacy <action> [options]');
+  else throw new Error('用法: news-cli.js source|content|authorization|quota|lock|registry|review|classify|transcript|legacy <action> [options]');
   console.log(JSON.stringify(result, null, 2));
   return result;
 }

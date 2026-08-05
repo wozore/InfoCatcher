@@ -1,5 +1,5 @@
 /**
- * news-foundation.test.js — 持久基础设施与运维安全测试（20 项）
+ * news-foundation.test.js — 持久基础设施与运维安全测试（29 项）
  *
  * 测试原理：
  *   这些测试验证热点管线的"底盘"——存储安全、状态转换、额度控制和运维 CLI。
@@ -15,10 +15,10 @@
  * 测试分组（按模块依赖顺序）：
  *   第 1 组 — 存储与并发（4 项）
  *     原子写、排他锁、归属校验、审计解锁、缺锁状态
- *   第 2 组 — Registry 生命周期（3 项）
- *     唯一性/防重、URL fallback隔离、发现/处理状态分离
- *   第 3 组 — 额度账本（2 项）
- *     预留→消费→暂停，失败请求计费，未发送不计费
+ *   第 2 组 — Registry 生命周期（7 项）
+ *     唯一性/防重、URL fallback隔离、发现/处理状态分离、裁剪（N-P2：dry-run/索引同步/半开边界/审计）
+ *   第 3 组 — 额度账本（3 项）
+ *     预留→消费→暂停，失败请求计费，未发送不计费，低水位早停（N-P3）
  *   第 4 组 — 时间调度与回溯（3 项）
  *     五层半开边界、同层终态才推进、低频回溯资格
  *   第 5 组 — 平台历史适配（3 项）
@@ -41,7 +41,7 @@ const {
 } = require('../../src/news/core/news-storage');
 const {
   createRegistry, discoverVideo, bulkDiscover, updateLifecycle,
-  needsExpensiveProcessing, finalizeRegistry,
+  needsExpensiveProcessing, finalizeRegistry, pruneRegistry,
 } = require('../../src/news/core/news-registry');
 const {
   createQuotaLedger, reserveQuota, consumeQuota, withQuota, finishQuotaLedger,
@@ -101,10 +101,11 @@ test('强制解锁必须提供理由并写入审计', () => {
   assert.equal(JSON.parse(fs.readFileSync(audit, 'utf8')).events[0].previous_lock.run_id, 'stale');
 });
 
-// ── 第 2 组：Registry 生命周期（3 项）───────────────────────
+// ── 第 2 组：Registry 生命周期（7 项）───────────────────────
 // 唯一键：不同平台相同 native ID 不冲突
 // URL fallback：按平台隔离，无标识符拒绝
 // 状态分离：发现状态 vs 处理状态，分析版本升级触发重新处理
+// 裁剪（N-P2）：dry-run 不修改、apply 同步三份索引、半开边界、无超期不写审计
 
 test('Registry 以平台和原生 ID 唯一并批量防重', () => {
   const index = createRegistry();
@@ -141,9 +142,83 @@ test('Registry 分离发现与处理状态并支持分析版本升级', () => {
   assert.throws(() => updateLifecycle(record, { discovery_status: 'invalid' }), /无效/);
 });
 
-// ── 第 3 组：额度账本（2 项）────────────────────────────────
+test('pruneRegistry dry-run 识别超期记录但不修改任何索引', () => {
+  const now = '2026-07-23T00:00:00Z';
+  const index = createRegistry({
+    schema_version: 1, updated_at: now, stats: { count: 3 },
+    videos: {
+      'youtube:old': { key: 'youtube:old', platform: 'youtube', native_id: 'old', source_id: 'yt', canonical_url: 'https://y.test/old', last_seen_at: '2025-06-01T00:00:00Z' },
+      'youtube:recent': { key: 'youtube:recent', platform: 'youtube', native_id: 'recent', source_id: 'yt', canonical_url: 'https://y.test/recent', last_seen_at: '2026-07-20T00:00:00Z' },
+      'youtube:nodate': { key: 'youtube:nodate', platform: 'youtube', native_id: 'nodate', source_id: 'yt', canonical_url: 'https://y.test/nodate', last_seen_at: null },
+    },
+  });
+  const result = pruneRegistry(index, { now, retentionDays: 270, dryRun: true });
+  assert.equal(result.pruned_count, 1);
+  assert.equal(result.pruned[0].native_id, 'old');
+  assert.equal(index.byKey.size, 3);
+  assert.equal(index.registry.stats.count, 3);
+  assert.equal(result.stats.oldest_kept_last_seen_at, '2026-07-20T00:00:00Z');
+});
+
+test('pruneRegistry 应用时同步三份索引并更新计数与审计', () => {
+  const now = '2026-07-23T00:00:00Z';
+  const index = createRegistry({
+    schema_version: 1, updated_at: now, stats: { count: 2 },
+    videos: {
+      'youtube:old': { key: 'youtube:old', platform: 'youtube', native_id: 'old', source_id: 'yt', canonical_url: 'https://y.test/old', last_seen_at: '2025-06-01T00:00:00Z' },
+      'youtube:recent': { key: 'youtube:recent', platform: 'youtube', native_id: 'recent', source_id: 'yt', canonical_url: 'https://y.test/recent', last_seen_at: '2026-07-20T00:00:00Z' },
+    },
+  });
+  const result = pruneRegistry(index, { now, retentionDays: 270, runId: 'run-test', dryRun: false });
+  assert.equal(result.pruned_count, 1);
+  assert.equal(result.pruned[0].native_id, 'old');
+  assert.equal(index.byKey.size, 1);
+  assert.equal(index.byKey.has('youtube:old'), false);
+  assert.equal(index.byUrl.has('youtube:https://y.test/old'), false);
+  assert.equal(index.bySource.get('yt').has('youtube:old'), false);
+  assert.equal(index.registry.videos['youtube:old'], undefined);
+  assert.equal(index.registry.stats.count, 1);
+  assert.equal(index.registry.stats.last_prune.run_id, 'run-test');
+  assert.equal(index.registry.stats.last_prune.retention_days, 270);
+  assert.equal(index.registry.stats.last_prune.count, 1);
+});
+
+test('pruneRegistry 边界半开：恰好 retention 天保留，超过才裁剪，无效日期保留', () => {
+  const now = Date.parse('2026-07-23T00:00:00Z');
+  const at = days => new Date(now - days * 86400000).toISOString();
+  const index = createRegistry({
+    schema_version: 1, stats: { count: 4 },
+    videos: {
+      'youtube:exact': { key: 'youtube:exact', platform: 'youtube', native_id: 'exact', source_id: 'yt', last_seen_at: at(270) },
+      'youtube:over': { key: 'youtube:over', platform: 'youtube', native_id: 'over', source_id: 'yt', last_seen_at: at(271) },
+      'youtube:invalid': { key: 'youtube:invalid', platform: 'youtube', native_id: 'invalid', source_id: 'yt', last_seen_at: 'not-a-date' },
+      'youtube:missing': { key: 'youtube:missing', platform: 'youtube', native_id: 'missing', source_id: 'yt', last_seen_at: null },
+    },
+  });
+  const result = pruneRegistry(index, { now: new Date(now).toISOString(), retentionDays: 270 });
+  assert.equal(result.pruned_count, 1);
+  assert.equal(result.pruned[0].native_id, 'over');
+  assert.equal(index.byKey.size, 3);
+});
+
+test('pruneRegistry 无超期记录时不写入 last_prune 审计', () => {
+  const now = '2026-07-23T00:00:00Z';
+  const index = createRegistry({
+    schema_version: 1, stats: { count: 1 },
+    videos: {
+      'youtube:recent': { key: 'youtube:recent', platform: 'youtube', native_id: 'recent', source_id: 'yt', last_seen_at: '2026-07-22T00:00:00Z' },
+    },
+  });
+  const result = pruneRegistry(index, { now, retentionDays: 270 });
+  assert.equal(result.pruned_count, 0);
+  assert.equal(index.registry.stats.last_prune, undefined);
+  assert.equal(index.byKey.size, 1);
+});
+
+// ── 第 3 组：额度账本（3 项）────────────────────────────────
 // reserve → consume 三步流程：已发送但失败的请求仍消耗额度
 // 未发送的请求不消耗额度；余额为 0 时 exhausted
+// 低水位早停（N-P3）：remaining ≤ quota_low_watermark 时拒绝新预留
 
 test('额度预留、发送后消费与不足暂停均可审计', () => {
   const ledger = createQuotaLedger({ youtube_quota_units_per_run: 2, bilibili_rsshub_requests_per_run: 1 }, 'run');
@@ -165,6 +240,22 @@ test('失败的实际请求仍消费额度，未发送请求不消费', async ()
   assert.equal(finishQuotaLedger(ledger).platforms.bilibili.status, 'exhausted');
 });
 
+test('额度低水位：remaining ≤ quota_low_watermark 时拒绝新预留（N-P3）', () => {
+  const ledger = createQuotaLedger({ youtube_quota_units_per_run: 3, bilibili_rsshub_requests_per_run: 1, quota_low_watermark: 2 }, 'run');
+  const first = reserveQuota(ledger, 'youtube', { operation: 'videos.list', cost: 1 });
+  assert.equal(first.accepted, true);
+  const second = reserveQuota(ledger, 'youtube', { operation: 'videos.list', cost: 1 });
+  assert.equal(second.accepted, false);
+  assert.equal(second.reason, 'low_watermark');
+  assert.equal(ledger.platforms.youtube.status, 'low_watermark');
+  assert.equal(ledger.platforms.youtube.remaining, 3);
+  // 未配置 quota_low_watermark 时低水位禁用（保持既有语义）
+  const plain = createQuotaLedger({ youtube_quota_units_per_run: 3, bilibili_rsshub_requests_per_run: 1 }, 'run');
+  assert.equal(reserveQuota(plain, 'youtube', { operation: 'videos.list', cost: 1 }).accepted, true);
+  assert.equal(reserveQuota(plain, 'youtube', { operation: 'videos.list', cost: 1 }).accepted, true);
+  assert.equal(reserveQuota(plain, 'youtube', { operation: 'videos.list', cost: 1 }).accepted, true);
+});
+
 // ── 第 4 组：时间调度与回溯（3 项）──────────────────────────
 // UTC 半开区间：恰好 1/7/30/90/270 天进入后一层
 // 时间层优先：同层全部终态后才推进，阻断态阻止推进
@@ -180,6 +271,23 @@ test('UTC 半开时间层在 1/7/30/90/270 天边界无重叠', () => {
   assert.equal(classifyTimeLayer(atAge(30), layers, now), 'recent-90d');
   assert.equal(classifyTimeLayer(atAge(90), layers, now), 'recent-270d');
   assert.equal(classifyTimeLayer(atAge(270), layers, now), null);
+});
+
+test('classifyTimeLayer 策略参数：调度默认（边界 null）与统计策略（未来 recent / 超窗·无效 older）', () => {
+  const now = Date.parse('2026-07-23T00:00:00Z');
+  const atAge = days => new Date(now - days * 86400000).toISOString();
+  const stats = { future: 'recent', overflow: 'older', invalid: 'older' };
+  // 默认（采集器调度语义，N-P1 决策）：未来 / 超窗 / 无效 → null，不进入调度层
+  assert.equal(classifyTimeLayer(new Date(now + 3600000).toISOString(), layers, now), null);
+  assert.equal(classifyTimeLayer(atAge(270), layers, now), null);
+  assert.equal(classifyTimeLayer('not-a-date', layers, now), null);
+  // 统计策略（build-news coverage/registry，保持历史行为）：未来→第一层、超窗→older、无效→older
+  assert.equal(classifyTimeLayer(new Date(now + 3600000).toISOString(), layers, now, stats), 'recent-1d');
+  assert.equal(classifyTimeLayer(atAge(270), layers, now, stats), 'older');
+  assert.equal(classifyTimeLayer('not-a-date', layers, now, stats), 'older');
+  // 正常层内边界不受策略影响
+  assert.equal(classifyTimeLayer(atAge(1), layers, now, stats), 'recent-7d');
+  assert.equal(classifyTimeLayer(atAge(90), layers, now, stats), 'recent-270d');
 });
 
 test('Scheduler 仅在同层所有来源终态后推进', () => {
@@ -209,7 +317,7 @@ test('Scheduler 只持久化进度，不保留采集临时载荷', () => {
   assert.deepEqual(progress, {
     layer_id: 'recent-1d', source_id: 'youtube', status: 'partial',
     page_token: 'next-page', resume_page_token: 'resume-page', pages_fetched: 0,
-    items_observed: 0, oldest_observed_at: null, new_video_count: 2,
+    items_observed: 0, items_contributed: 0, oldest_observed_at: null, new_video_count: 2,
     duplicate_count: 3, filtered_count: 4, stop_reason: null,
     checked_at: '2026-07-23T00:00:00Z', uploads_playlist_id: 'UU-test',
   });
