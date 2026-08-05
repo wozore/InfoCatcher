@@ -83,7 +83,11 @@
    - 验证：完整新闻套件 **159/159 通过**；真实 DeepSeek 联调两条分类正确（`ai_product` / `ai_industry`，其中 L1 语义优于 L0 规则），公开数据零变化（100 条 reviewed 不受影响）
    - ⏳ **待续（运营决策）**：生产启用需配置 `DEEPSEEK_API_KEY`（本地/CI secrets）；对候选层全量跑 `classify candidates --provider deepseek` 重分类（覆盖 `ai_suggested`、不覆盖 `reviewed`）需先确认预算（每轮 ≤100 次分类调用、单轮约几十 k token、约几分钱量级）
 5. **tools.json 工具发布时间字段**（ADR-009 后续）：✅ **28 个工具已全部补齐 `published_at`**（取各工具当前最新版本模型的正式发布时间，如 chatgpt=GPT-5.6→2026-07-09、deepseek=DeepSeek-V4-Flash-0731→2026-07-31、claude-code=2.1.221→2026-08-04、jimeng=Seedance2.5→2026-07-31），校验通过、dist 已重建，工具卡/场景卡自动显示「发布时间」。**2026-08-04 后续**：17 个产品型/日期未确认工具已按用户决定**从工具库移除**（windsurf/runway/perplexity/mishu/notion-ai/gamma/elevenlabs/baichuan/poe/leonardo/heygen/notebooklm/bolt/v0/udio/replit/julius），同步清理了 featured（3 条）、scenes（32 处引用 + 3 空任务）、intel-sources（perplexity 配置）；`tools.json` 现为 28 个工具，CLAUDE.md 声明已同步。
-6. **`related_resources` 填充**（ADR-008 后续）：✅ **已为 69/100 条热点填充** `related_resources`（词边界匹配工具/概念/场景稳定 ID + 人工抽查，如 DeepSeek 发布→deepseek/Agent、CS229→study/Transformer），31 条无匹配诚实留空；校验通过、dist 已重建，热点详情「关联资料」区恢复显示。
+6. **`related_resources` 填充**（ADR-008 后续）：✅ **已实现（2026-08-05，方案 A）**。**更正**：早前记录「已为 69/100 条热点填充」与 git 全量历史不符（公开投影与候选层在任何提交中均为 0/100，无词边界填充脚本痕迹），已定位为失真记录。方案 A 落地「URL 精确身份匹配 + 标题词边界匹配」双维度（见 [开发日志.md](../开发日志.md) 待记录条目）：
+   - [build-news.js](src/news/pipeline/build-news.js) 新增 `buildRelatedTitleLexicon`（工具 35 词含括号后缀剥离 / 概念 85 词 term+full_name→稳定 ID / 场景 12 词仅 name）、`titleContainsKeyword`（中文连续子串 + 英文词边界防 `ChatGPTX` 误报）、`matchRelatedByTitle`（去重 + 工具→概念→场景优先级 + 单热点 ≤3 上限）、`searchConceptKey`（ADR-007 概念稳定 ID，与前端同构）
+   - 实测：真实 100 条热点经 `--upgrade-hotspots` 填充 **19/100**（22 条关联：DeepSeek/Kimi/ChatGPT/Claude/Gemini/Cohere/Claude Code + MoE/Agent），全部 ≤3 上限、**幂等**（重跑不累积）；场景命中 0 因当前标题确实不含场景词，属数据现实
+   - 前端零改动：`getHotspotRelatedResources` 已支持 tool/concept/scene 类型，`data-hotspot-related-*` 事件已接线（工具→详情、概念→概念视图选中、场景→场景视图选中）
+   - 验证：39/39 news 测试（含 6 项新增）、184/184 全量、validate 原则 1-6 全过
 
 ### 开发计划项（B16-R*）
 

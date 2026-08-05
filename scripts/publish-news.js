@@ -18,6 +18,7 @@ const { filterProjectionByWindow } = require('../src/news/core/news-public-gate'
 const { readJson, writeJsonAtomic } = require('../src/news/core/news-storage');
 const { NEWS_FILES } = require('../src/shared/paths');
 const { generateRss } = require('../src/content/generate-rss');
+const { enrichHotspotProjection } = require('../src/news/pipeline/build-news');
 
 const OUTPUT_PATH = NEWS_FILES.hotspots;
 
@@ -25,6 +26,9 @@ function main() {
   const dryRun = process.argv.includes('--dry-run');
   const store = readCandidateStore();
   const output = buildProjectionFromStore(store, { generatedAt: new Date().toISOString() });
+  // 候选层不存热度/依据片段/关联（这些由公开投影阶段确定性推导），
+  // 重建时补跑 enrich，与 build-news 的公开投影输出保持一致（决策 59/85/89）。
+  enrichHotspotProjection(output.items);
   // B16 决策 63/72：公开投影生成时再次按统一近期窗口一致过滤（第二道防线），
   // 与 build-news.js / RSS 共用同一规则，防止审核通过但已过期的候选回流公开。
   const config = readJson(NEWS_FILES.config, null);

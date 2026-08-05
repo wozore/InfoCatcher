@@ -152,6 +152,28 @@ test('toPublicItem 剔除内部状态字段', () => {
   assert.equal(publicItem.title, '测试候选');
 });
 
+test('toPublicItem 剔除分类元数据内部字段（决策 80），保留 content_type 本体', () => {
+  const candidate = stampCandidateStatuses(baseItem({
+    content_type: 'ai_technology',
+    content_type_status: 'reviewed',
+    classifier: 'rule_based',
+    ai_confidence: 0.85,
+    classify_reasons: ['命中关键词'],
+    reviewed_content_type_at: '2026-08-04T00:00:00Z',
+    content_type_reviewer: 'cli',
+  }));
+  const publicItem = toPublicItem(candidate);
+  // 内部分类痕迹全部剔除
+  assert.equal(publicItem.content_type_status, undefined);
+  assert.equal(publicItem.classifier, undefined);
+  assert.equal(publicItem.ai_confidence, undefined);
+  assert.equal(publicItem.classify_reasons, undefined);
+  assert.equal(publicItem.reviewed_content_type_at, undefined);
+  assert.equal(publicItem.content_type_reviewer, undefined);
+  // content_type 本体保留，供前端内容类型筛选（决策 79）
+  assert.equal(publicItem.content_type, 'ai_technology');
+});
+
 test('buildPublicProjection 只输出合格候选并过滤关联记录', () => {
   const pass = stampCandidateStatuses(baseItem({ id: 'pass' }), { review_status: 'approved' });
   const held = stampCandidateStatuses(baseItem({ id: 'held' }), { review_status: 'held' });

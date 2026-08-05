@@ -656,6 +656,154 @@ function resolveRelatedResources(item, toolUrlIndex) {
   return resources;
 }
 
+// ═══════════════════════════════════════════════════════════════
+// B16-R7 词边界标题匹配（方案 A）：热点标题 ↔ 工具/概念/场景 name/aliases。
+//
+// 设计（用户 2026-08-05 拍板）：
+//   - URL 精确身份匹配（决策 89）与标题词边界匹配为两个独立维度，合并输出；
+//   - 标题匹配用于在 URL 匹配空转时兜底，命中工具/概念/场景稳定 ID；
+//   - 词边界控制：英文/数字按 \b 边界（"ChatGPT"不命中"ChatGPTX"）；
+//     中文按子串包含但要求前后非中文连续字符，避免"写作论文"误命中"写论文"；
+//   - 纯泛词（长度过短、常见词）不进匹配词表，控制误报；
+//   - 每热点标题匹配结果上限 RELATED_TITLE_MATCH_MAX 条，按 工具→概念→场景 优先级截断；
+//   - 匹配结果确定性（同输入同输出），保证 upgrade 幂等。
+// ═══════════════════════════════════════════════════════════════
+
+/** 标题词边界匹配的单热点上限。 */
+const RELATED_TITLE_MATCH_MAX = 3;
+
+/** 不参与标题匹配的泛词（常见 AI 词/通用词，避免把普通话题误关联为工具）。 */
+const RELATED_TITLE_STOPWORDS = new Set([
+  'ai', '人工智能', '大模型', 'llm', 'gpt', '模型', '工具', '应用',
+  '新闻', '动态', '发布', '更新', '来了', '上线', 'openai', 'deepseek',
+  'video', 'photos', 'access', 'news',
+]);
+
+/**
+ * 构造标题词边界匹配词表（工具 name / 概念 term+full_name / 场景 name+search_terms）。
+ * 只收录可用于标题匹配的候选词，短词与泛词剔除；重复词去重。
+ */
+function buildRelatedTitleLexicon(toolData, glossaryData, scenesData) {
+  const lexicon = []; // { text, type, id, label }
+  const seenKey = new Set();
+  // 工具名是明确品牌身份，不经过 stopword 过滤；概念 full_name / 场景名才做泛词过滤。
+  const push = (text, type, id, label, skipStopword = false) => {
+    const t = String(text || '').trim();
+    if (!t) return;
+    if (t.length < 2) return;                 // 单字符太短，匹配噪声大
+    if (/^\d+$/.test(t)) return;              // 纯数字不匹配
+    if (!skipStopword && RELATED_TITLE_STOPWORDS.has(t.toLocaleLowerCase('zh-CN'))) return;
+    const key = `${type}:${t.toLocaleLowerCase('zh-CN')}`;
+    if (seenKey.has(key)) return;
+    seenKey.add(key);
+    lexicon.push({ text: t, type, id, label });
+  };
+  for (const tool of toolData || []) {
+    if (!tool || !tool.id || !tool.name) continue;
+    // 工具名作为匹配词；带括号身份后缀（如“Mistral AI（产品入口）”）时，
+    // 同时用剥离括号后的主体做匹配词；主体若含空格则再取第一个品牌 token
+    //（标题通常写 Mistral 而非 Mistral AI）。label 统一保留原品牌名。
+    const base = String(tool.name);
+    const noSuffix = base.replace(/\s*[（(][^）)]*[）)]\s*$/, '').trim();
+    const brandToken = noSuffix.split(/\s+/)[0];
+    push(base, 'tool', tool.id, base, true);
+    if (noSuffix && noSuffix !== base) push(noSuffix, 'tool', tool.id, base, true);
+    if (brandToken && brandToken !== noSuffix) push(brandToken, 'tool', tool.id, base, true);
+  }
+  for (const concept of glossaryData || []) {
+    if (!concept || !concept.term) continue;
+    push(concept.term, 'concept', searchConceptKey(concept.term), concept.term);
+    if (concept.full_name) push(concept.full_name, 'concept', searchConceptKey(concept.term), concept.term);
+  }
+  for (const scene of scenesData || []) {
+    if (!scene || !scene.id || !scene.name) continue;
+    // 只收场景 name（12 个核心场景名），不收 search_terms：
+    // search_terms 是任务泛化词（如“研究/视频/代码”），用于标题匹配会大量误关联。
+    push(scene.name, 'scene', scene.id, scene.name);
+  }
+  return lexicon;
+}
+
+/**
+ * 中文子串 + 词边界命中判定。
+ * - 含中文词：直接子串包含即命中（中文无空格分词，indexOf 已保证连续子串；
+ *   "写作论文"不含连续子串"写论文"，天然不会误命中）；
+ * - 纯 ASCII 词：要求两侧为非字母/数字，避免 "ChatGPTX" 误命中 "ChatGPT"。
+ */
+function titleContainsKeyword(title, keyword) {
+  const text = String(title || '');
+  const kw = String(keyword || '');
+  if (!text || !kw) return false;
+  let index = 0;
+  while ((index = text.indexOf(kw, index)) !== -1) {
+    const before = text[index - 1];
+    const after = text[index + kw.length];
+    if (/[一-鿿]/.test(kw)) {
+      // 中文词：连续子串已出现即命中（不需要额外词边界）
+      return true;
+    } else {
+      // ASCII 词：词边界（前后非字母/数字）
+      const isBoundary = (ch) => ch === undefined || !/[\p{L}\p{N}]/u.test(ch);
+      if (isBoundary(before) && isBoundary(after)) return true;
+    }
+    index += kw.length;
+  }
+  return false;
+}
+
+/**
+ * 标题词边界匹配：对热点标题匹配工具/概念/场景，输出稳定关联条目。
+ * lexicon 可用 buildRelatedTitleLexicon 预构建；结果为确定性、无重复、上限截断。
+ */
+function matchRelatedByTitle(item, lexicon) {
+  const title = String(item?.title || '');
+  if (!title) return [];
+  const hits = [];
+  const seen = new Set();
+  const priority = { tool: 0, concept: 1, scene: 2 };
+  for (const entry of lexicon) {
+    if (hits.length >= RELATED_TITLE_MATCH_MAX) break;
+    if (!titleContainsKeyword(title, entry.text)) continue;
+    const key = `${entry.type}:${entry.id}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    hits.push({ type: entry.type, id: entry.id, label: entry.label });
+  }
+  // 若命中超上限，按优先级截断并稳定（lexicon 顺序本身按工具→概念→场景分组）
+  return hits.slice(0, RELATED_TITLE_MATCH_MAX).sort((a, b) => priority[a.type] - priority[b.type]);
+}
+
+/**
+ * 概念稳定 ID 适配层（ADR-007）：与前端 app.js searchConceptKey 同构，
+ * 保证前后端对同一概念生成相同的稳定 ID。glossary 无独立 id 字段，
+ * 由 term 规范化派生（concept-<term>）。
+ */
+function searchConceptKey(term) {
+  const normalizedTerm = String(term || '')
+    .trim()
+    .toLocaleLowerCase('zh-CN')
+    .normalize('NFKC')
+    .replace(/[^\p{Letter}\p{Number}]+/gu, '-')
+    .replace(/^-+|-+$/g, '');
+  return normalizedTerm ? 'concept-' + normalizedTerm : 'concept-unknown';
+}
+
+let cachedRelatedLexicon = null;
+/** 惰性构建标题匹配词表（一次构建只读一次；读取失败时降级为空词表）。 */
+function getRelatedLexicon() {
+  if (cachedRelatedLexicon === null) {
+    let tools = [], glossary = [], scenes = [];
+    try { tools = JSON.parse(fs.readFileSync(CATALOG_FILES.tools, 'utf8')); } catch { tools = []; }
+    try { glossary = JSON.parse(fs.readFileSync(CATALOG_FILES.glossary, 'utf8')); } catch { glossary = []; }
+    try {
+      const scenesData = JSON.parse(fs.readFileSync(CATALOG_FILES.scenes, 'utf8'));
+      scenes = Array.isArray(scenesData) ? scenesData : (scenesData.scenes || []);
+    } catch { scenes = []; }
+    cachedRelatedLexicon = buildRelatedTitleLexicon(tools, glossary, scenes);
+  }
+  return cachedRelatedLexicon;
+}
+
 /** 热度：对同一平台内的条目按互动量级归一化到 0–100；无互动数据为 null。 */
 function computeHotScores(items) {
   const byPlatform = new Map();
@@ -697,12 +845,24 @@ function getToolUrlIndex() {
  * toolUrlIndex 可注入（测试用）；缺省时使用工具目录的规范 URL 索引。
  * 对同一批 items 重复调用保持幂等（各字段由现有公开字段确定性推导）。
  */
-function enrichHotspotProjection(items, toolUrlIndex = null) {
+function enrichHotspotProjection(items, toolUrlIndex = null, relatedLexicon = null) {
   computeHotScores(items);
   const index = toolUrlIndex || getToolUrlIndex();
+  const lexicon = relatedLexicon || getRelatedLexicon();
   for (const item of items) {
     item.evidence_excerpt = buildEvidenceExcerpt(item);
-    item.related_resources = resolveRelatedResources(item, index);
+    // URL 精确身份匹配 + 标题词边界匹配（B16-R7 方案 A），合并去重、确定性、上限截断。
+    const urlMatches = resolveRelatedResources(item, index);
+    const titleMatches = matchRelatedByTitle(item, lexicon);
+    const merged = [];
+    const seen = new Set();
+    for (const resource of [...urlMatches, ...titleMatches]) {
+      const key = `${resource.type}:${resource.id}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      merged.push(resource);
+    }
+    item.related_resources = merged.slice(0, RELATED_TITLE_MATCH_MAX);
   }
   return items;
 }
@@ -711,11 +871,12 @@ function enrichHotspotProjection(items, toolUrlIndex = null) {
 function upgradeHotspotsProjection() {
   const data = readJson(OUTPUT_PATH, null);
   if (!data || !Array.isArray(data.items)) throw new Error('--upgrade-hotspots：无法读取现有 hotspots.json');
-  enrichHotspotProjection(data.items, getToolUrlIndex());
+  enrichHotspotProjection(data.items, getToolUrlIndex(), getRelatedLexicon());
   data.schema_version = 2;
   data.heat_definition = HEAT_DEFINITION;
   writeJsonAtomic(OUTPUT_PATH, data, `upgrade-${Date.now()}`);
-  console.log(`✅ hotspots.json 公开投影已升级：${data.items.length} 条内容（schema_version=${data.schema_version}，新增 hot_score/evidence_excerpt/related_resources）`);
+  const filled = (data.items || []).filter(item => Array.isArray(item.related_resources) && item.related_resources.length).length;
+  console.log(`✅ hotspots.json 公开投影已升级：${data.items.length} 条内容（schema_version=${data.schema_version}；新增 hot_score/evidence_excerpt/related_resources；词边界标题匹配填充 ${filled} 条）`);
 }
 
 // B16 决策 65：内容类型枚举（决策 65 六类 + unclassified 占位）。
@@ -1650,6 +1811,10 @@ module.exports = {
   buildEvidenceExcerpt,
   buildToolUrlIndex,
   resolveRelatedResources,
+  buildRelatedTitleLexicon,
+  titleContainsKeyword,
+  matchRelatedByTitle,
+  searchConceptKey,
   computeHotScores,
   enrichHotspotProjection,
   upgradeHotspotsProjection,

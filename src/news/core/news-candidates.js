@@ -142,7 +142,10 @@ function selectPublicEligible(candidates) {
 
 /**
  * 公开投影剔除内部状态字段（决策 77：不在公开卡片展示审核/处理状态、
- * AI 置信度、重试次数等内部信息；决策 52/70：字幕与审计字段同样不外泄）。
+ * AI 置信度、重试次数等内部信息；决策 52/70：字幕与审计字段同样不外泄；
+ * 决策 80：分类元数据——content_type_status / classifier / ai_confidence /
+ * classify_reasons / reviewed_content_type_at / content_type_reviewer——
+ * 均为内部审核痕迹，不进公开投影。content_type 本体保留，供前端内容类型筛选）。
  */
 const INTERNAL_FIELDS = Object.freeze([
   'review_status', 'ai_processing_status',
@@ -150,6 +153,8 @@ const INTERNAL_FIELDS = Object.freeze([
   'candidate_version', 'batch_id',
   'hold_reason', 'error_type', 'error_message', 'retryable', 'retry_count',
   'transcript', 'transcript_status', 'transcript_evidence', 'transcript_updated_at',
+  'content_type_status', 'classifier', 'ai_confidence',
+  'classify_reasons', 'reviewed_content_type_at', 'content_type_reviewer',
 ]);
 
 function toPublicItem(candidate) {

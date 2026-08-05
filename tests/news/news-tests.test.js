@@ -49,6 +49,10 @@ const {
   buildEvidenceExcerpt,
   buildToolUrlIndex,
   resolveRelatedResources,
+  buildRelatedTitleLexicon,
+  titleContainsKeyword,
+  matchRelatedByTitle,
+  searchConceptKey,
   computeHotScores,
   enrichHotspotProjection,
   dedupeItems,
@@ -581,4 +585,113 @@ test('公开投影补充热度/依据/关联字段，无互动数据热度为 nu
   assert.equal(items[0].hot_score, null);
   assert.equal(items[0].evidence_excerpt, '测试依据片段内容');
   assert.deepEqual(items[0].related_resources, [{ type: 'tool', id: 'tool-a', label: 'Tool A' }]);
+});
+
+// ═══════════════════════════════════════════════════════════════
+// B16-R7 词边界标题匹配（方案 A）：标题 ↔ 工具/概念/场景 稳定 ID
+// ═══════════════════════════════════════════════════════════════
+
+const testToolData = [
+  { id: 'chatgpt', name: 'ChatGPT' },
+  { id: 'deepseek', name: 'DeepSeek' },
+  { id: 'mistral', name: 'Mistral AI（产品入口）' },
+];
+const testGlossaryData = [
+  { term: 'RAG', full_name: 'Retrieval-Augmented Generation' },
+  { term: 'MoE', full_name: 'Mixture of Experts' },
+  { term: '微调', full_name: 'Fine-tuning' },
+];
+const testScenesData = [
+  { id: 'write-paper', name: '写论文' },
+  { id: 'write-code', name: '写代码' },
+];
+const buildTestLexicon = () => buildRelatedTitleLexicon(testToolData, testGlossaryData, testScenesData);
+
+test('searchConceptKey 生成稳定概念 ID（ADR-007，与前端同构）', () => {
+  assert.equal(searchConceptKey('RAG'), 'concept-rag');
+  assert.equal(searchConceptKey('Retrieval-Augmented Generation'), 'concept-retrieval-augmented-generation');
+  assert.equal(searchConceptKey('微调'), 'concept-微调');
+  assert.equal(searchConceptKey(''), 'concept-unknown');
+});
+
+test('标题词表：工具名（含括号身份后缀剥离）、概念 term/full_name、场景 name', () => {
+  const lexicon = buildTestLexicon();
+  const texts = lexicon.map(e => e.text);
+  // 工具：原品牌名 + 括号剥离后的主体（Mistral）都进词表，label 保留原品牌名
+  assert.ok(texts.includes('ChatGPT'));
+  assert.ok(texts.includes('Mistral AI（产品入口）'), '原品牌名应保留');
+  assert.ok(texts.includes('Mistral'), '括号身份后缀应剥离出主体词');
+  assert.equal(lexicon.find(e => e.text === 'Mistral').label, 'Mistral AI（产品入口）');
+  // 概念：term 与 full_name 映射同一稳定 ID
+  const ragConcept = lexicon.find(e => e.text === 'RAG');
+  assert.equal(ragConcept.type, 'concept');
+  assert.equal(ragConcept.id, 'concept-rag');
+  assert.ok(texts.includes('Retrieval-Augmented Generation'));
+  // 场景：只收 name，不收 search_terms
+  assert.ok(texts.includes('写论文'));
+  assert.equal(lexicon.find(e => e.text === '写论文').id, 'write-paper');
+});
+
+test('标题匹配：英文工具名按词边界命中，防 ChatGPTX 误报', () => {
+  const lexicon = buildTestLexicon();
+  assert.deepEqual(
+    matchRelatedByTitle({ title: 'You Have to Try the New ChatGPT Voice!' }, lexicon),
+    [{ type: 'tool', id: 'chatgpt', label: 'ChatGPT' }],
+  );
+  // 词边界：ChatGPTX / MyChatGPT 不命中
+  assert.deepEqual(matchRelatedByTitle({ title: 'ChatGPTX is the future' }, lexicon), []);
+  assert.deepEqual(matchRelatedByTitle({ title: 'Use MyChatGPT today' }, lexicon), []);
+});
+
+test('标题匹配：中文概念与场景按连续子串命中，写作论文不误命中写论文', () => {
+  const lexicon = buildTestLexicon();
+  // 中文概念 term
+  assert.deepEqual(
+    matchRelatedByTitle({ title: '如何微调大模型' }, lexicon),
+    [{ type: 'concept', id: searchConceptKey('微调'), label: '微调' }],
+  );
+  // 中文场景 name
+  assert.deepEqual(
+    matchRelatedByTitle({ title: 'AI 如何写论文更高效' }, lexicon),
+    [{ type: 'scene', id: 'write-paper', label: '写论文' }],
+  );
+  // “写作论文”不含连续子串“写论文”，不误命中
+  assert.deepEqual(matchRelatedByTitle({ title: '如何写作论文' }, lexicon), []);
+});
+
+test('标题匹配：命中去重、优先级排序、单热点上限截断', () => {
+  const lexicon = buildTestLexicon();
+  // 同一条命中工具与概念；DeepSeek 与 RAG 都出现
+  const hits = matchRelatedByTitle({ title: 'DeepSeek 用 RAG 提升能力' }, lexicon);
+  const types = hits.map(h => h.type);
+  // 去重：同一 id 只出现一次；上限 3
+  assert.ok(hits.length <= 3);
+  assert.equal(new Set(hits.map(h => h.type + ':' + h.id)).size, hits.length, '结果应无重复');
+  // 工具优先级高于概念
+  assert.equal(types[0], 'tool');
+});
+
+test('enrichHotspotProjection 合并 URL 精确匹配与标题词边界匹配，且幂等', () => {
+  const lexicon = buildTestLexicon();
+  const index = buildToolUrlIndex([{ id: 'tool-x', name: 'Tool X', url: 'https://example.com/tool' }]);
+  const items = [
+    // URL 命中 tool-x + 标题命中 ChatGPT
+    { id: 'a', title: 'ChatGPT 新功能发布', url: 'https://example.com/tool', explicit_links: [], description: '描述', published_at: new Date(now).toISOString() },
+    // 仅标题命中
+    { id: 'b', title: 'RAG 技术详解', url: 'https://example.org/other', explicit_links: [], description: '描述', published_at: new Date(now).toISOString() },
+    // 标题命中 + 同 id 与 URL 重复时应去重
+    { id: 'c', title: 'Tool X 更新', url: 'https://example.com/tool', explicit_links: [], description: '描述', published_at: new Date(now).toISOString() },
+  ];
+  enrichHotspotProjection(items, index, lexicon);
+  const byId = id => items.find(i => i.id === id).related_resources;
+  // a：URL 的 tool-x + 标题的 ChatGPT，且按优先级工具在前
+  assert.deepEqual(byId('a').map(r => r.id), ['tool-x', 'chatgpt']);
+  // b：仅标题命中概念 RAG
+  assert.deepEqual(byId('b'), [{ type: 'concept', id: 'concept-rag', label: 'RAG' }]);
+  // c：URL 与标题同一工具，去重后只有一条
+  assert.deepEqual(byId('c'), [{ type: 'tool', id: 'tool-x', label: 'Tool X' }]);
+  // 幂等：二次调用结果一致
+  const snapshot = JSON.stringify(items);
+  enrichHotspotProjection(items, index, lexicon);
+  assert.equal(JSON.stringify(items), snapshot, '重复 enrich 应保持确定性（幂等）');
 });
