@@ -4,12 +4,21 @@
  * 在热点管线中的位置：GitHub Actions（collect-news.yml）调用此脚本，
  * 它是整个热点系统的唯一入口，负责编排所有模块完成一次完整的构建运行。
  *
+ * 本文件为「编排入口」，不内联实现：
+ *   - 平台采集（collectYouTube / collectX / collectBilibili）在
+ *     src/news/collectors/{news-youtube,news-x,news-bilibili}.js（单一实现）；
+ *   - 通用解析/规范化在 src/news/pipeline/feed-parser.js；
+ *   - 评分/异常检测在 src/news/pipeline/scoring.js；
+ *   - 公开投影/关联/去重在 src/news/pipeline/projection.js。
+ * 本文件保留 resolvePlatformScope / classifyTimeLayer / runCollection /
+ * runFixtureBuild / main 等编排逻辑，并对上列子模块做汇总 re-export。
+ *
  * ═══════════════════════════════════════════════════════════════
  * 模块依赖关系（数据流向）：
  * ═══════════════════════════════════════════════════════════════
  *
  *   外部平台 API ──┐
- *   news-sources   ├──→ 采集层（collectYouTube / collectX / collectBilibili）
+ *   news-sources   ├──→ 采集层（collectors/news-youtube | news-x | news-bilibili）
  *   news-config ───┘        │
  *                            ▼
  *                    标准化 + AI 过滤 + 去重
@@ -65,9 +74,9 @@
  * 扩展点：
  * ═══════════════════════════════════════════════════════════════
  *
- *   - 新增采集平台：实现 collectXxx() 函数，在 collectSource() 增加分支，
+ *   - 新增采集平台：在 collectors/ 实现 collectXxx()，在 collectSource() 增加分支，
  *     在 runHistoricalLayerPass() 增加对应适配器调用。
- *   - 新增评分维度：在 assessItem() 增加新函数，修改 scoring.weights 配置。
+ *   - 新增评分维度：在 scoring.js 的 assessItem() 增加新函数，修改 scoring.weights 配置。
  *   - 新增内容类型：在 CONTENT_TYPES 列表和 normalizeRssItem/normalizeTweet
  *     中增加支持，更新 AI 关键词和信号配置。
  *   - 调整时间层：修改 news-config.json 的 time_layers 数组，
@@ -81,27 +90,23 @@
 
 'use strict';
 
-// ═══════════════════════════════════════════════════════════════
-// 第 1 部分：XML/RSS 解析与内容标准化
-// 将三个平台的原始格式转换为统一的内容模型
-// ═══════════════════════════════════════════════════════════════
-
+// ── 核心依赖 ──────────────────────────────────────────────────
 const fs = require('fs');
 const path = require('path');
-const crypto = require('crypto');
 const {
   readJson, writeJsonAtomic, acquireLock, releaseLock,
 } = require('../core/news-storage');
 const { createRegistry, bulkDiscover, updateLifecycle, finalizeRegistry, pruneRegistry } = require('../core/news-registry');
 const {
-  createQuotaLedger, reserveQuota, consumeQuota, finishQuotaLedger,
+  createQuotaLedger, finishQuotaLedger,
 } = require('../core/news-quota');
 const {
   createSchedulerState, initializeLayer, updateSourceProgress, advanceLayer,
   classifyTimeLayer: schedulerClassifyTimeLayer,
 } = require('../core/news-scheduler');
-const { collectYouTubeLayerStep } = require('../collectors/news-youtube');
-const { collectBilibiliLayerStep } = require('../collectors/news-bilibili');
+const { collectYouTube, collectYouTubeLayerStep } = require('../collectors/news-youtube');
+const { collectBilibili, probeBilibiliProvider, collectBilibiliLayerStep } = require('../collectors/news-bilibili');
+const { collectX, normalizeTweet } = require('../collectors/news-x');
 const { enrichYouTubeTranscripts } = require('../collectors/news-transcripts');
 const { normalizeManualItem } = require('../../content/news-manual');
 const { createAuthorizationStore, createAuthorizationTask } = require('../core/news-authorization');
@@ -112,8 +117,23 @@ const {
 const { classifyCandidates } = require('../classify/content-classifier');
 const { isWithinPublicWindow, markAnomalousTimeCandidates, filterProjectionByWindow } = require('../core/news-public-gate');
 const { recordReviewTransition } = require('../core/news-review-events');
-const { NEWS_FILES, CATALOG_FILES, DIRS } = require('../../shared/paths');
+const { NEWS_FILES, DIRS } = require('../../shared/paths');
 const { generateRss } = require('../../content/generate-rss');
+
+// ── 管线子模块（本文件只编排，不内联实现） ───────────────────
+const {
+  parseFeed, normalizeRssItem, inferBilibiliType, extractTweetArray, historicalPageToken, numberOrNull,
+} = require('./feed-parser');
+const {
+  matchesAi, scoreTimeliness, detectLightExperience, detectCommercial, assessItem,
+  applyAnomalyDetection, HEAT_DEFINITION,
+} = require('./scoring');
+const {
+  buildEvidenceExcerpt, buildToolUrlIndex, resolveRelatedResources, buildRelatedTitleLexicon,
+  titleContainsKeyword, matchRelatedByTitle, searchConceptKey, computeHotScores,
+  enrichHotspotProjection, upgradeHotspotsProjection, migrateContentTypeProjection,
+  dedupeItems, buildProvenance, buildEvents, getToolUrlIndex,
+} = require('./projection');
 
 // ── 数据文件路径（按读写频率排列） ──────────────────────────
 // 前两个是每次构建的配置输入，后六个是构建状态/输出
@@ -139,904 +159,28 @@ function resolvePlatformScope(value = 'all') {
   return scope;
 }
 
-function decodeXml(value = '') {
-  return value
-    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
-    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"').replace(/&#39;/g, "'")
-    .replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-}
-
-function matchTag(xml, tag) {
-  const escaped = tag.replace(':', '\\:');
-  const match = xml.match(new RegExp(`<${escaped}(?:\\s[^>]*)?>([\\s\\S]*?)<\\/${escaped}>`, 'i'));
-  return match ? decodeXml(match[1]) : '';
-}
-
-function parseFeed(xml) {
-  const atomEntries = xml.match(/<entry(?:\s[^>]*)?>[\s\S]*?<\/entry>/gi) || [];
-  const rssItems = xml.match(/<item(?:\s[^>]*)?>[\s\S]*?<\/item>/gi) || [];
-  return [...atomEntries, ...rssItems].map(block => {
-    const linkAttr = block.match(/<link[^>]+href=["']([^"']+)["']/i);
-    const guid = matchTag(block, 'guid') || matchTag(block, 'yt:videoId') || matchTag(block, 'id');
-    const url = linkAttr?.[1] || matchTag(block, 'link');
-    const media = block.match(/<(?:media:thumbnail|media:content)[^>]+url=["']([^"']+)["']/i);
-    return {
-      native_id: matchTag(block, 'yt:videoId') || guid || url,
-      title: matchTag(block, 'title'),
-      description: matchTag(block, 'description') || matchTag(block, 'media:description') || matchTag(block, 'summary') || matchTag(block, 'content'),
-      url,
-      published_at: matchTag(block, 'published') || matchTag(block, 'pubDate') || matchTag(block, 'updated'),
-      author_name: matchTag(block, 'name') || matchTag(block, 'author') || matchTag(block, 'dc:creator'),
-      thumbnail: media?.[1] || null,
-      raw_block: block,
-    };
-  }).filter(item => item.title && item.url && item.published_at);
-}
-
-function hash(value) {
-  return crypto.createHash('sha256').update(value).digest('hex').slice(0, 20);
-}
-
-function normalizeUrl(value = '') {
-  try {
-    const url = new URL(value);
-    if (!['http:', 'https:'].includes(url.protocol)) return '';
-    url.hash = '';
-    for (const key of [...url.searchParams.keys()]) {
-      if (key.startsWith('utm_') || ['feature', 'si', 'spm_id_from'].includes(key)) url.searchParams.delete(key);
-    }
-    return url.toString();
-  } catch { return ''; }
-}
-
-function inferBilibiliType(item) {
-  const text = `${item.title} ${item.description}`;
-  if (/专栏|article|read\/cv/i.test(item.url)) return 'bilibili_article';
-  if (/转发|转自|repost/i.test(text)) return 'bilibili_dynamic_repost';
-  if (/video\/BV|视频|投稿/i.test(item.url + text)) return 'bilibili_dynamic_video';
-  return 'bilibili_dynamic_text';
-}
-
-function normalizeRssItem(item, source, contentType, fetchedAt) {
-  const nativeId = String(item.native_id || hash(item.url));
-  return {
-    id: `${source.platform}-${hash(nativeId)}`,
-    platform: source.platform,
-    native_id: nativeId,
-    source_type: contentType === 'bilibili_dynamic' ? inferBilibiliType(item) : contentType,
-    url: normalizeUrl(item.url),
-    title: item.title,
-    description: item.description?.slice(0, 600) || '',
-    published_at: new Date(item.published_at).toISOString(),
-    fetched_at: fetchedAt,
-    author_id: source.id,
-    author_name: item.author_name || source.name,
-    source_id: source.id,
-    language: source.language,
-    source_tags: source.content_tags,
-    thumbnail: item.thumbnail,
-    metrics: { views: null, likes: null, comments: null, reposts: null, replies: null },
-    explicit_links: [...new Set((item.raw_block.match(/https?:\/\/[^\s"'<>]+/g) || []).map(normalizeUrl))].slice(0, 10),
-  };
-}
-
-function extractTweetArray(payload) {
-  if (Array.isArray(payload)) return payload;
-  if (Array.isArray(payload.tweets)) return payload.tweets;
-  if (Array.isArray(payload.data?.tweets)) return payload.data.tweets;
-  if (Array.isArray(payload.data)) return payload.data;
-  return [];
-}
-
-function normalizeTweet(tweet, source, fetchedAt) {
-  const nativeId = String(tweet.id || tweet.id_str || tweet.tweetId || tweet.rest_id || hash(JSON.stringify(tweet)));
-  const text = tweet.text || tweet.full_text || tweet.fullText || tweet.content || '';
-  const created = tweet.createdAt || tweet.created_at || tweet.created || tweet.timestamp;
-  if (!text || !created) return null;
-  return {
-    id: `x-${hash(nativeId)}`,
-    platform: 'x',
-    native_id: nativeId,
-    source_type: 'x_post',
-    url: normalizeUrl(tweet.url || `https://x.com/${source.handle}/status/${nativeId}`),
-    title: text.slice(0, 180),
-    description: text.slice(0, 600),
-    published_at: new Date(created).toISOString(),
-    fetched_at: fetchedAt,
-    author_id: source.id,
-    author_name: tweet.author?.name || tweet.authorName || source.name,
-    source_id: source.id,
-    language: source.language,
-    source_tags: source.content_tags,
-    thumbnail: tweet.media?.[0]?.url || tweet.extendedEntities?.media?.[0]?.media_url_https || null,
-    metrics: {
-      views: numberOrNull(tweet.viewCount ?? tweet.views),
-      likes: numberOrNull(tweet.likeCount ?? tweet.favorite_count ?? tweet.likes),
-      comments: null,
-      reposts: numberOrNull(tweet.retweetCount ?? tweet.retweet_count ?? tweet.reposts),
-      replies: numberOrNull(tweet.replyCount ?? tweet.reply_count ?? tweet.replies),
-    },
-    explicit_links: [...new Set([...(text.match(/https?:\/\/\S+/g) || []), ...(tweet.urls || []).map(v => v.expanded_url || v.url).filter(Boolean)].map(normalizeUrl))],
-  };
-}
-
-function numberOrNull(value) {
-  const n = Number(value);
-  return Number.isFinite(n) ? n : null;
-}
-
 // ═══════════════════════════════════════════════════════════════
-// 第 2 部分：平台采集器
-// 每个平台一个采集函数，负责网络请求、原始数据解析和 AI 关键词初筛
-// X 采用来源轮转（每次只采集部分来源以控制日调用量）
-// Bilibili 发送三条 RSSHub 路由（视频/动态/专栏），取最差状态
-// ═══════════════════════════════════════════════════════════════
-
-  // beforeAttempt 回调用于在每次重试前检查额度。
-  // 如果额度不足（返回 false），立即抛出 quota_paused 并跳过后续重试——
-  // 额度不足不是网络问题，重试不会让额度恢复。
-async function requestText(url, options, config, beforeAttempt = null) {
-  const timeout = config.collection.request_timeout_ms;
-  const fetchImpl = options.fetchImpl || fetch;
-  const requestOptions = { ...options };
-  delete requestOptions.fetchImpl;
-  let lastError;
-  for (let attempt = 0; attempt <= config.collection.max_retries; attempt++) {
-    try {
-      if (beforeAttempt && beforeAttempt(attempt) === false) throw Object.assign(new Error('请求额度不足'), { code: 'quota_paused' });
-      const response = await fetchImpl(url, { ...requestOptions, signal: AbortSignal.timeout(timeout) });
-      if (!response.ok) {
-        const body = await response.text();
-        const cloudflare = response.status === 403 && (/cloudflare/i.test(response.headers?.get?.('server') || '') || /just a moment/i.test(body));
-        throw Object.assign(new Error(`HTTP ${response.status}`), { code: cloudflare ? 'cloudflare_challenge' : `http_${response.status}` });
-      }
-      return await response.text();
-    } catch (error) {
-      lastError = error;
-      // 额度不足不是网络问题，立即终止重试并向上传递 quota_paused
-      if (error.code === 'quota_paused' || error.code === 'cloudflare_challenge') throw error;
-      if (attempt < config.collection.max_retries) {
-        await new Promise(resolve => setTimeout(resolve, config.collection.retry_base_ms * (attempt + 1)));
-      }
-    }
-  }
-  throw lastError;
-}
-
-/**
- * 通过 Data API 补充 YouTube RSS 缺少的互动数据（浏览量/点赞/评论）。
- * 需要 YOUTUBE_API_KEY，每次调用消耗 1 quota unit（含重试）。
- * 无 API Key 时降级为 rss_only，不影响 RSS 内容的采集。
- */
-async function enrichYouTubeStatistics(items, context, sourceId) {
-  if (!context.youtubeApiKey || !items.length) return { items, status: 'rss_only' };
-  try {
-    const url = new URL('https://www.googleapis.com/youtube/v3/videos');
-    url.searchParams.set('part', 'statistics');
-    url.searchParams.set('id', items.map(item => item.native_id).slice(0, 50).join(','));
-    url.searchParams.set('key', context.youtubeApiKey);
-    const text = await requestText(url, {}, context.config, attempt => {
-      const reservation = reserveQuota(context.quota, 'youtube', {
-        source_id: sourceId,
-        layer_id: 'recent-feed',
-        operation: 'videos.list:latest-feed',
-        cost: 1,
-        attempt: attempt + 1,
-      });
-      if (!reservation.accepted) return false;
-      consumeQuota(context.quota, 'youtube', reservation.reservation_id, 'sent');
-      return true;
-    });
-    const payload = JSON.parse(text);
-    const statistics = new Map((payload.items || []).map(item => [item.id, item.statistics || {}]));
-    for (const item of items) {
-      const stats = statistics.get(item.native_id);
-      if (!stats) continue;
-      item.metrics.views = numberOrNull(stats.viewCount);
-      item.metrics.likes = numberOrNull(stats.likeCount);
-      item.metrics.comments = numberOrNull(stats.commentCount);
-    }
-    return { items, status: 'enriched' };
-  } catch (error) {
-    return { items, status: 'rss_only', reason: error.code || error.name || 'youtube_api_failed' };
-  }
-}
-
-async function collectYouTube(source, context) {
-  const url = `https://www.youtube.com/feeds/videos.xml?channel_id=${encodeURIComponent(source.external_id)}`;
-  const xml = await requestText(url, {}, context.config);
-  const items = parseFeed(xml)
-    .slice(0, context.config.collection.youtube_max_per_source)
-    .map(item => normalizeRssItem(item, source, 'youtube_video', context.fetchedAt));
-  const enriched = await enrichYouTubeStatistics(items, context, source.id);
-  return { items: enriched.items, enrichment: enriched };
-}
-
-async function collectX(source, context) {
-  if (!context.xApiKey) throw Object.assign(new Error('X_API_KEY 未配置'), { code: 'missing_api_key' });
-  const items = [];
-  let cursor = '';
-  const maxPages = Math.max(1, context.config.collection.x_max_pages_per_source || 1);
-  for (let page = 0; page < maxPages; page++) {
-    const url = new URL('/twitter/user/last_tweets', context.config.collection.twitter_api_base_url);
-    url.searchParams.set('userName', source.handle);
-    if (cursor) url.searchParams.set('cursor', cursor);
-    const text = await requestText(url, { headers: { 'X-API-Key': context.xApiKey } }, context.config);
-    const payload = JSON.parse(text);
-    items.push(...extractTweetArray(payload).map(tweet => normalizeTweet(tweet, source, context.fetchedAt)).filter(Boolean));
-    const nextCursor = payload.next_cursor || payload.nextCursor || payload.data?.next_cursor || payload.data?.nextCursor;
-    if (!nextCursor || nextCursor === cursor) break;
-    cursor = nextCursor;
-  }
-  return items;
-}
-
-async function probeBilibiliProvider(source, context) {
-  const probeConfig = { ...context.config, collection: { ...context.config.collection, max_retries: 0 } };
-  const base = context.config.collection.rsshub_base_url.replace(/\/$/, '');
-  try {
-    const xml = await requestText(`${base}/bilibili/user/video/${source.external_id}`, { fetchImpl: context.fetchImpl }, probeConfig, attempt => {
-      const reservation = reserveQuota(context.quota, 'bilibili', {
-        source_id: source.id, layer_id: 'provider-probe', operation: 'rsshub:provider-probe', cost: 1, attempt: attempt + 1,
-      });
-      if (!reservation.accepted) return false;
-      consumeQuota(context.quota, 'bilibili', reservation.reservation_id, 'sent');
-      return true;
-    });
-    return { blocked: false, xml };
-  } catch (error) {
-    if (error.code === 'cloudflare_challenge') return { blocked: true, reason: 'cloudflare_challenge' };
-    return { blocked: true, reason: error.code || error.name || 'provider_probe_failed' };
-  }
-}
-
-async function collectBilibili(source, context) {
-  const base = context.config.collection.rsshub_base_url.replace(/\/$/, '');
-  const routes = [
-    { key: 'video', path: `/bilibili/user/video/${source.external_id}`, type: 'bilibili_video' },
-    { key: 'dynamic', path: `/bilibili/user/dynamic/${source.external_id}`, type: 'bilibili_dynamic' },
-    { key: 'article', path: `/bilibili/user/article/${source.external_id}`, type: 'bilibili_article' },
-  ];
-  const items = [];
-  const routeCoverage = {};
-  for (const route of routes) {
-    try {
-      const xml = await requestText(`${base}${route.path}`, { fetchImpl: context.fetchImpl }, context.config, attempt => {
-        const reservation = reserveQuota(context.quota, 'bilibili', {
-          source_id: source.id,
-          layer_id: 'recent-feed',
-          operation: `rsshub:${route.key}:latest-feed`,
-          cost: 1,
-          attempt: attempt + 1,
-        });
-        if (!reservation.accepted) return false;
-        consumeQuota(context.quota, 'bilibili', reservation.reservation_id, 'sent');
-        return true;
-      });
-      const routeItems = parseFeed(xml)
-        .slice(0, context.config.collection.bilibili_max_per_route)
-        .map(item => normalizeRssItem(item, source, route.type, context.fetchedAt));
-      items.push(...routeItems);
-      routeCoverage[route.key] = { status: 'success', items: routeItems.length };
-    } catch (error) {
-      routeCoverage[route.key] = { status: 'degraded', items: 0, reason: error.code || error.name || 'request_failed' };
-    }
-  }
-  return { items, routeCoverage };
-}
-
-// ═══════════════════════════════════════════════════════════════
-// 第 3 部分：评分、溯源与主题聚合
+// 时间层统计（N-P1 决策）
 //
-// 评分公式（见 news-config.json scoring.weights）：
-//   基础分 = 0.30×长期专业质量 + 0.25×近期时效性 + 0.10×轻度用户体验
-//          + 0.20×来源可靠性 + 0.15×互动质量
-//   最终分 = clamp(基础分 - 商业推广扣分 - 异常调整, 0, 100)
-//
-// 时效分使用指数衰减：100 × exp(-ln(2) × 内容年龄天数 / 半衰期天数)
-// 轻度用户体验、商单和异常必须在有证据时才能扣分/加分，
-// 证据不足时保持中性（50 分、0 扣分、insufficient_sample）。
-// ═══════════════════════════════════════════════════════════════
-
-/** AI 关键词过滤：标题或描述包含任一配置关键词（大小写不敏感） */
-function matchesAi(item, config) {
-  const text = `${item.title} ${item.description}`.toLowerCase();
-  return config.ai_keywords.some(keyword => text.includes(keyword.toLowerCase()));
-}
-
-function primaryTag(item) {
-  return item.source_tags?.[0] || 'default';
-}
-
-function scoreTimeliness(item, config, now = Date.now()) {
-  const ageDays = Math.max(0, (now - new Date(item.published_at).getTime()) / 86400000);
-  const halfLife = config.scoring.half_life_days[primaryTag(item)] || config.scoring.half_life_days.default;
-  return Math.max(0, Math.min(100, 100 * Math.exp(-Math.LN2 * ageDays / halfLife)));
-}
-
-function detectLightExperience(item, config) {
-  const text = `${item.title} ${item.description}`.toLowerCase();
-  const categories = Object.entries(config.light_user_signals)
-    .filter(([, words]) => words.some(word => text.includes(word.toLowerCase())))
-    .map(([category]) => category);
-  if (categories.length < 2) return { score: config.scoring.neutral_score, confidence: 0.25, evidence: [] };
-  return {
-    score: Math.min(100, 50 + categories.length * 12.5),
-    confidence: Math.min(1, categories.length / 4),
-    evidence: categories.map(category => ({ type: `light_experience_${category}`, source_url: item.url })),
-  };
-}
-
-function detectCommercial(item, config) {
-  const text = `${item.title} ${item.description}`.toLowerCase();
-  for (const [label, words] of Object.entries(config.commercial_signals)) {
-    const matched = words.find(word => text.includes(word.toLowerCase()));
-    if (matched) {
-      return {
-        label,
-        confidence: 0.9,
-        penalty: config.scoring.commercial_penalties[label] || 0,
-        evidence: [{ type: 'explicit_text_match', text: matched, source_url: item.url }],
-      };
-    }
-  }
-  const affiliateUrl = (item.explicit_links || []).find(link => /(?:affiliate|aff_id|ref=|referral|partner)/i.test(link));
-  if (affiliateUrl) {
-    return {
-      label: 'affiliate_link', confidence: 0.8,
-      penalty: config.scoring.commercial_penalties.affiliate_link || 0,
-      evidence: [{ type: 'affiliate_url_pattern', source_url: affiliateUrl }],
-    };
-  }
-  return { label: 'none_confirmed', confidence: 0.5, penalty: 0, evidence: [] };
-}
-
-function interactionScore(item, neutral) {
-  const values = Object.values(item.metrics || {}).filter(value => Number.isFinite(value));
-  if (!values.length) return { score: neutral, confidence: 0, reason: 'metrics_unavailable' };
-  return { score: neutral, confidence: 0.1, reason: 'awaiting_source_baseline' };
-}
-
-function assessItem(item, source, config, now) {
-  const light = detectLightExperience(item, config);
-  const commercial = detectCommercial(item, config);
-  const interaction = interactionScore(item, config.scoring.neutral_score);
-  const contentTypeFactor = item.source_type === 'bilibili_dynamic_repost' ? 0.6 : 1;
-  const scores = {
-    long_term_quality: (source.quality_prior ?? config.scoring.neutral_score) * contentTypeFactor,
-    recent_timeliness: scoreTimeliness(item, config, now),
-    light_user_experience: item.source_type === 'bilibili_dynamic_repost'
-      ? config.scoring.neutral_score
-      : light.score,
-    source_reliability: source.reliability_prior ?? config.scoring.neutral_score,
-    interaction_quality: interaction.score,
-  };
-  const weighted = Object.entries(config.scoring.weights)
-    .reduce((sum, [key, weight]) => sum + scores[key] * weight, 0);
-  return {
-    content_id: item.id,
-    event_id: null,
-    score_breakdown: scores,
-    final_score: Math.round(Math.max(0, Math.min(100, weighted - commercial.penalty)) * 10) / 10,
-    confidence: Math.round(((light.confidence + interaction.confidence + 1) / 3) * 100) / 100,
-    commercial_assessment: commercial,
-    anomaly_assessment: {
-      status: 'insufficient_sample',
-      method: config.anomaly.method,
-      sample_count: 0,
-      min_samples: config.anomaly.min_samples,
-      adjustment: 0,
-      evidence: [],
-    },
-    official_cross_check: { status: source.content_tags.includes('官方来源') ? 'official_source' : 'not_checked', evidence: [] },
-    evidence: [...light.evidence],
-    assessed_at: new Date(now).toISOString(),
-  };
-}
-
-function interactionValue(item) {
-  const metrics = item.metrics || {};
-  const weights = { views: 0.02, likes: 1, comments: 2, reposts: 2, replies: 2 };
-  let total = 0;
-  let available = false;
-  for (const [key, weight] of Object.entries(weights)) {
-    if (Number.isFinite(metrics[key])) {
-      available = true;
-      total += metrics[key] * weight;
-    }
-  }
-  return available ? Math.log10(total + 1) : null;
-}
-
-function median(values) {
-  const sorted = [...values].sort((a, b) => a - b);
-  const mid = Math.floor(sorted.length / 2);
-  return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
-}
-
-function applyAnomalyDetection(items, assessments, config) {
-  const groups = new Map();
-  for (const item of items) {
-    const value = interactionValue(item);
-    if (value == null) continue;
-    if (!groups.has(item.source_id)) groups.set(item.source_id, []);
-    groups.get(item.source_id).push({ item, value });
-  }
-
-  const assessmentMap = new Map(assessments.map(assessment => [assessment.content_id, assessment]));
-  for (const samples of groups.values()) {
-    const values = samples.map(sample => sample.value);
-    if (values.length < config.anomaly.min_samples) {
-      for (const sample of samples) {
-        const target = assessmentMap.get(sample.item.id).anomaly_assessment;
-        target.sample_count = values.length;
-      }
-      continue;
-    }
-    const center = median(values);
-    const deviations = values.map(value => Math.abs(value - center));
-    const mad = median(deviations);
-    for (const sample of samples) {
-      const robustZ = mad === 0 ? 0 : 0.6745 * (sample.value - center) / mad;
-      const target = assessmentMap.get(sample.item.id).anomaly_assessment;
-      target.sample_count = values.length;
-      target.baseline = { median: center, mad };
-      target.threshold = config.anomaly.mad_threshold;
-      target.trigger_value = sample.value;
-      if (Math.abs(robustZ) > config.anomaly.mad_threshold) {
-        target.status = 'review';
-        target.robust_z = robustZ;
-        target.adjustment = config.anomaly.confirmed_adjustment;
-        target.evidence = [{
-          type: 'mad_outlier', sample_count: values.length, median: center, mad,
-          robust_z: robustZ, threshold: config.anomaly.mad_threshold,
-        }];
-      } else {
-        target.status = 'within_baseline';
-        target.robust_z = robustZ;
-      }
-    }
-  }
-}
-
-// ═══════════════════════════════════════════════════════════════
-// 第 3.5 部分：公开热点数据契约补充（B16 决策 74/77/78/85/88/89）
-//
-// 在写出 hotspots.json 前，对每条内容补充公开投影字段：
-//   - hot_score          热度语义（0–100 平台内相对互动量级；无互动数据为 null）
-//   - evidence_excerpt   依据片段（来源原文的受控节选；纯链接或缺失为 null）
-//   - related_resources  稳定关联 ID（仅精确规范 URL 身份匹配工具目录；不模糊匹配）
-//
-// 语义边界（决策 85）：hot_score 只在来源平台内计算相对量级，不构成跨平台
-// 权威综合热度；缺失互动数据的条目为 null，前端按“最近”时间回退，不伪装为 0 或高热度。
-// 关联关系只来自精确 URL 身份（已有数据关系），不根据标题普通词做模糊匹配（决策 89）。
-// ═══════════════════════════════════════════════════════════════
-
-const HEAT_DEFINITION = 'hot_score 表示条目在其来源平台内的相对互动量级（0–100），由公开互动数据（浏览/点赞/评论/转发）的加权对数指数按平台归一化得到；仅在平台内可比，跨平台不构成权威综合热度。无互动数据时为 null，前端按“最近”时间回退排序。';
-
-/** 依据片段：取来源原文（描述优先，标题兜底）的受控节选；纯链接或空文本返回 null，不伪造原文。 */
-function buildEvidenceExcerpt(item) {
-  const raw = String(item.description || item.title || '').trim();
-  if (!raw) return null;
-  if (/^(?:https?:\/\/\S+\s*)+$/.test(raw)) return null; // 纯链接不能当作可定位依据片段
-  const text = raw.replace(/\s+/g, ' ').trim();
-  if (!text) return null;
-  const max = 160;
-  if (text.length <= max) return text;
-  const cut = text.slice(0, max);
-  const boundary = Math.max(cut.lastIndexOf('。'), cut.lastIndexOf('，'), cut.lastIndexOf('.'), cut.lastIndexOf(' '), cut.lastIndexOf('?'), cut.lastIndexOf('!'));
-  return (boundary > 60 ? cut.slice(0, boundary + 1) : cut).trim() + '…';
-}
-
-/** 工具目录规范 URL → 工具 的索引（用于精确身份匹配）。 */
-function buildToolUrlIndex(toolData) {
-  const index = new Map();
-  for (const tool of toolData || []) {
-    if (!tool || !tool.url) continue;
-    const normalized = normalizeUrl(tool.url);
-    if (normalized) index.set(normalized, tool);
-  }
-  return index;
-}
-
-/** 稳定关联 ID：仅当条目 URL 或显式链接与工具目录的规范 URL 完全一致时匹配，避免模糊匹配误关联。 */
-function resolveRelatedResources(item, toolUrlIndex) {
-  const resources = [];
-  const seen = new Set();
-  for (const raw of [item.url, ...(item.explicit_links || [])]) {
-    const normalized = normalizeUrl(raw);
-    if (!normalized) continue;
-    const tool = toolUrlIndex.get(normalized);
-    if (tool && !seen.has(tool.id)) {
-      seen.add(tool.id);
-      resources.push({ type: 'tool', id: tool.id, label: tool.name });
-    }
-  }
-  return resources;
-}
-
-// ═══════════════════════════════════════════════════════════════
-// B16-R7 词边界标题匹配（方案 A）：热点标题 ↔ 工具/概念/场景 name/aliases。
-//
-// 设计（用户 2026-08-05 拍板）：
-//   - URL 精确身份匹配（决策 89）与标题词边界匹配为两个独立维度，合并输出；
-//   - 标题匹配用于在 URL 匹配空转时兜底，命中工具/概念/场景稳定 ID；
-//   - 词边界控制：英文/数字按 \b 边界（"ChatGPT"不命中"ChatGPTX"）；
-//     中文按子串包含但要求前后非中文连续字符，避免"写作论文"误命中"写论文"；
-//   - 纯泛词（长度过短、常见词）不进匹配词表，控制误报；
-//   - 每热点标题匹配结果上限 RELATED_TITLE_MATCH_MAX 条，按 工具→概念→场景 优先级截断；
-//   - 匹配结果确定性（同输入同输出），保证 upgrade 幂等。
-// ═══════════════════════════════════════════════════════════════
-
-/** 标题词边界匹配的单热点上限。 */
-const RELATED_TITLE_MATCH_MAX = 3;
-
-/** 不参与标题匹配的泛词（常见 AI 词/通用词，避免把普通话题误关联为工具）。 */
-const RELATED_TITLE_STOPWORDS = new Set([
-  'ai', '人工智能', '大模型', 'llm', 'gpt', '模型', '工具', '应用',
-  '新闻', '动态', '发布', '更新', '来了', '上线', 'openai', 'deepseek',
-  'video', 'photos', 'access', 'news',
-]);
-
-/**
- * 构造标题词边界匹配词表（工具 name / 概念 term+full_name / 场景 name+search_terms）。
- * 只收录可用于标题匹配的候选词，短词与泛词剔除；重复词去重。
- */
-function buildRelatedTitleLexicon(toolData, glossaryData, scenesData) {
-  const lexicon = []; // { text, type, id, label }
-  const seenKey = new Set();
-  // 工具名是明确品牌身份，不经过 stopword 过滤；概念 full_name / 场景名才做泛词过滤。
-  const push = (text, type, id, label, skipStopword = false) => {
-    const t = String(text || '').trim();
-    if (!t) return;
-    if (t.length < 2) return;                 // 单字符太短，匹配噪声大
-    if (/^\d+$/.test(t)) return;              // 纯数字不匹配
-    if (!skipStopword && RELATED_TITLE_STOPWORDS.has(t.toLocaleLowerCase('zh-CN'))) return;
-    const key = `${type}:${t.toLocaleLowerCase('zh-CN')}`;
-    if (seenKey.has(key)) return;
-    seenKey.add(key);
-    lexicon.push({ text: t, type, id, label });
-  };
-  for (const tool of toolData || []) {
-    if (!tool || !tool.id || !tool.name) continue;
-    // 工具名作为匹配词；带括号身份后缀（如“Mistral AI（产品入口）”）时，
-    // 同时用剥离括号后的主体做匹配词；主体若含空格则再取第一个品牌 token
-    //（标题通常写 Mistral 而非 Mistral AI）。label 统一保留原品牌名。
-    const base = String(tool.name);
-    const noSuffix = base.replace(/\s*[（(][^）)]*[）)]\s*$/, '').trim();
-    const brandToken = noSuffix.split(/\s+/)[0];
-    push(base, 'tool', tool.id, base, true);
-    if (noSuffix && noSuffix !== base) push(noSuffix, 'tool', tool.id, base, true);
-    if (brandToken && brandToken !== noSuffix) push(brandToken, 'tool', tool.id, base, true);
-  }
-  for (const concept of glossaryData || []) {
-    if (!concept || !concept.term) continue;
-    push(concept.term, 'concept', searchConceptKey(concept.term), concept.term);
-    if (concept.full_name) push(concept.full_name, 'concept', searchConceptKey(concept.term), concept.term);
-  }
-  for (const scene of scenesData || []) {
-    if (!scene || !scene.id || !scene.name) continue;
-    // 只收场景 name（12 个核心场景名），不收 search_terms：
-    // search_terms 是任务泛化词（如“研究/视频/代码”），用于标题匹配会大量误关联。
-    push(scene.name, 'scene', scene.id, scene.name);
-  }
-  return lexicon;
-}
-
-/**
- * 中文子串 + 词边界命中判定。
- * - 含中文词：直接子串包含即命中（中文无空格分词，indexOf 已保证连续子串；
- *   "写作论文"不含连续子串"写论文"，天然不会误命中）；
- * - 纯 ASCII 词：要求两侧为非字母/数字，避免 "ChatGPTX" 误命中 "ChatGPT"。
- */
-function titleContainsKeyword(title, keyword) {
-  const text = String(title || '');
-  const kw = String(keyword || '');
-  if (!text || !kw) return false;
-  let index = 0;
-  while ((index = text.indexOf(kw, index)) !== -1) {
-    const before = text[index - 1];
-    const after = text[index + kw.length];
-    if (/[一-鿿]/.test(kw)) {
-      // 中文词：连续子串已出现即命中（不需要额外词边界）
-      return true;
-    } else {
-      // ASCII 词：词边界（前后非字母/数字）
-      const isBoundary = (ch) => ch === undefined || !/[\p{L}\p{N}]/u.test(ch);
-      if (isBoundary(before) && isBoundary(after)) return true;
-    }
-    index += kw.length;
-  }
-  return false;
-}
-
-/**
- * 标题词边界匹配：对热点标题匹配工具/概念/场景，输出稳定关联条目。
- * lexicon 可用 buildRelatedTitleLexicon 预构建；结果为确定性、无重复、上限截断。
- */
-function matchRelatedByTitle(item, lexicon) {
-  const title = String(item?.title || '');
-  if (!title) return [];
-  const hits = [];
-  const seen = new Set();
-  const priority = { tool: 0, concept: 1, scene: 2 };
-  for (const entry of lexicon) {
-    if (hits.length >= RELATED_TITLE_MATCH_MAX) break;
-    if (!titleContainsKeyword(title, entry.text)) continue;
-    const key = `${entry.type}:${entry.id}`;
-    if (seen.has(key)) continue;
-    seen.add(key);
-    hits.push({ type: entry.type, id: entry.id, label: entry.label });
-  }
-  // 若命中超上限，按优先级截断并稳定（lexicon 顺序本身按工具→概念→场景分组）
-  return hits.slice(0, RELATED_TITLE_MATCH_MAX).sort((a, b) => priority[a.type] - priority[b.type]);
-}
-
-/**
- * 概念稳定 ID 适配层（ADR-007）：与前端 app.js searchConceptKey 同构，
- * 保证前后端对同一概念生成相同的稳定 ID。glossary 无独立 id 字段，
- * 由 term 规范化派生（concept-<term>）。
- */
-function searchConceptKey(term) {
-  const normalizedTerm = String(term || '')
-    .trim()
-    .toLocaleLowerCase('zh-CN')
-    .normalize('NFKC')
-    .replace(/[^\p{Letter}\p{Number}]+/gu, '-')
-    .replace(/^-+|-+$/g, '');
-  return normalizedTerm ? 'concept-' + normalizedTerm : 'concept-unknown';
-}
-
-let cachedRelatedLexicon = null;
-/** 惰性构建标题匹配词表（一次构建只读一次；读取失败时降级为空词表）。 */
-function getRelatedLexicon() {
-  if (cachedRelatedLexicon === null) {
-    let tools = [], glossary = [], scenes = [];
-    try { tools = JSON.parse(fs.readFileSync(CATALOG_FILES.tools, 'utf8')); } catch { tools = []; }
-    try { glossary = JSON.parse(fs.readFileSync(CATALOG_FILES.glossary, 'utf8')); } catch { glossary = []; }
-    try {
-      const scenesData = JSON.parse(fs.readFileSync(CATALOG_FILES.scenes, 'utf8'));
-      scenes = Array.isArray(scenesData) ? scenesData : (scenesData.scenes || []);
-    } catch { scenes = []; }
-    cachedRelatedLexicon = buildRelatedTitleLexicon(tools, glossary, scenes);
-  }
-  return cachedRelatedLexicon;
-}
-
-/** 热度：对同一平台内的条目按互动量级归一化到 0–100；无互动数据为 null。 */
-function computeHotScores(items) {
-  const byPlatform = new Map();
-  for (const item of items) {
-    if (!byPlatform.has(item.platform)) byPlatform.set(item.platform, []);
-    byPlatform.get(item.platform).push(item);
-  }
-  for (const platformItems of byPlatform.values()) {
-    const indexed = platformItems.map(item => ({ item, value: interactionValue(item) }));
-    const present = indexed.filter(entry => entry.value !== null).map(entry => entry.value);
-    if (!present.length) {
-      indexed.forEach(entry => { entry.item.hot_score = null; });
-      continue;
-    }
-    const min = Math.min(...present);
-    const max = Math.max(...present);
-    const range = max - min;
-    indexed.forEach(entry => {
-      entry.item.hot_score = entry.value === null
-        ? null
-        : range > 0 ? Math.round(((entry.value - min) / range) * 100) : 50;
-    });
-  }
-}
-
-let cachedToolUrlIndex = null;
-/** 惰性加载工具目录 URL 索引（一次构建只读一次；读取失败时降级为空索引）。 */
-function getToolUrlIndex() {
-  if (cachedToolUrlIndex === null) {
-    let tools = [];
-    try { tools = JSON.parse(fs.readFileSync(CATALOG_FILES.tools, 'utf8')); } catch { tools = []; }
-    cachedToolUrlIndex = buildToolUrlIndex(tools);
-  }
-  return cachedToolUrlIndex;
-}
-
-/**
- * 对一条热点投影的整体 items 应用公开契约补充（热度/依据片段/稳定关联）。
- * toolUrlIndex 可注入（测试用）；缺省时使用工具目录的规范 URL 索引。
- * 对同一批 items 重复调用保持幂等（各字段由现有公开字段确定性推导）。
- */
-function enrichHotspotProjection(items, toolUrlIndex = null, relatedLexicon = null) {
-  computeHotScores(items);
-  const index = toolUrlIndex || getToolUrlIndex();
-  const lexicon = relatedLexicon || getRelatedLexicon();
-  for (const item of items) {
-    item.evidence_excerpt = buildEvidenceExcerpt(item);
-    // URL 精确身份匹配 + 标题词边界匹配（B16-R7 方案 A），合并去重、确定性、上限截断。
-    const urlMatches = resolveRelatedResources(item, index);
-    const titleMatches = matchRelatedByTitle(item, lexicon);
-    const merged = [];
-    const seen = new Set();
-    for (const resource of [...urlMatches, ...titleMatches]) {
-      const key = `${resource.type}:${resource.id}`;
-      if (seen.has(key)) continue;
-      seen.add(key);
-      merged.push(resource);
-    }
-    item.related_resources = merged.slice(0, RELATED_TITLE_MATCH_MAX);
-  }
-  return items;
-}
-
-/** 就地升级现有 hotspots.json 的公开投影（无需 API secrets，供开发/数据契约补齐使用）。 */
-function upgradeHotspotsProjection() {
-  const data = readJson(OUTPUT_PATH, null);
-  if (!data || !Array.isArray(data.items)) throw new Error('--upgrade-hotspots：无法读取现有 hotspots.json');
-  enrichHotspotProjection(data.items, getToolUrlIndex(), getRelatedLexicon());
-  data.schema_version = 2;
-  data.heat_definition = HEAT_DEFINITION;
-  writeJsonAtomic(OUTPUT_PATH, data, `upgrade-${Date.now()}`);
-  const filled = (data.items || []).filter(item => Array.isArray(item.related_resources) && item.related_resources.length).length;
-  console.log(`✅ hotspots.json 公开投影已升级：${data.items.length} 条内容（schema_version=${data.schema_version}；新增 hot_score/evidence_excerpt/related_resources；词边界标题匹配填充 ${filled} 条）`);
-}
-
-// B16 决策 65：内容类型枚举（决策 65 六类 + unclassified 占位）。
-const CONTENT_TYPE_VALUES = new Set([
-  'ai_tool', 'ai_product', 'ai_concept', 'ai_technology', 'ai_industry', 'other', 'unclassified'
-]);
-
-/**
- * 就地迁移现有 hotspots.json（B16 决策 65/66，路径 B）：
- *   - 旧 content_type（来源媒体类型，如 x_post/youtube_video）→ 移到 source_type；
- *   - content_type 统一置 unclassified + content_type_status=unclassified（AI 分类+审核确认未上线前的诚实占位）；
- *   - schema_version 2 → 3（content_type 语义变化）。
- * 幂等：source_type 已存在或 content_type 已是内容类型时不做重复迁移。
- */
-function migrateContentTypeProjection() {
-  const data = readJson(OUTPUT_PATH, null);
-  if (!data || !Array.isArray(data.items)) throw new Error('--migrate-content-type：无法读取现有 hotspots.json');
-  let changed = 0;
-  for (const item of data.items) {
-    if (!item.source_type && item.content_type && !CONTENT_TYPE_VALUES.has(item.content_type)) {
-      item.source_type = item.content_type;
-      item.content_type = 'unclassified';
-      item.content_type_status = 'unclassified';
-      changed += 1;
-    } else if (!item.source_type) {
-      // content_type 缺失或已是内容类型但无来源媒体类型 → source_type 置 unknown
-      item.source_type = 'unknown';
-      changed += 1;
-    }
-  }
-  data.schema_version = 3;
-  writeJsonAtomic(OUTPUT_PATH, data, `migrate-content-type-${Date.now()}`);
-  console.log(`✅ hotspots.json 内容类型字段已迁移：${changed} 条调整，content_type 统一置 unclassified（schema_version=${data.schema_version}）`);
-}
-
-// ═══════════════════════════════════════════════════════════════
-// 第 4 部分：溯源关系、事件聚合与去重
-//
-// 溯源（provenance）：识别重复观察、转载、评论、翻译和引用关系，
-//   每条记录通过 content_id 关联到内容条目。
-// 事件聚合（events）：按确定性关键词、显式 URL 关联或人工 topic_key
-//   将多条内容归入同一事件/主题，保留各自观点而不合并为单一结论。
-// 去重（dedupeItems）：按 platform:native_id 去重（与 registry 主键一致，N-P6 确认，
-//   2026-08-05）。跨平台重复观察由 buildProvenance 以 duplicate_observation/repost 溯源保留，
-//   不在此合并（B16 决策 46/47：保留各自观点）。保留先出现的条目。
-//   历史：此处注释曾宣称「按 url + title 组合去重」，与实现不符且语义错误——
-//   url+title 会误合并跨平台同标题内容与同平台同标题不同视频。真实数据（候选层/registry）
-//   两种键零差异，故保留实现、修正注释。
+// classifyTimeLayer 为真正转发到 news-scheduler 的统一实现（单一事实来源）。
+// 历史：此处曾是独立实现且行为与 scheduler 不同（未来归 recent-1d、超窗/无效归 older），
+// 注释谎称「转发」；现改为真正转发，并用 TIME_LAYER_STATS_OPTS 参数保持统计行为不变。
+// 采集器侧（news-youtube / news-bilibili）用 scheduler 默认策略（边界内容归 null，不进入调度层）。
 // ═══════════════════════════════════════════════════════════════
 
 /** 管线统计策略（N-P1 决策）：未来归第一层、超窗归 older、无效归 older——保证 coverage/registry 恒有层标识。 */
 const TIME_LAYER_STATS_OPTS = Object.freeze({ future: 'recent', overflow: 'older', invalid: 'older' });
 
 /**
- * 将内容归入五层时间窗口。
- * N-P1（2026-08-05）：真正转发到 news-scheduler 的统一实现（单一事实来源）。
- * 历史：此处曾是独立实现且行为与 scheduler 不同（未来归 recent-1d、超窗/无效归 older），
- * 注释谎称「转发」；现改为真正转发，并用 TIME_LAYER_STATS_OPTS 参数保持统计行为不变。
- * 采集器侧（news-youtube / news-bilibili）用 scheduler 默认策略（边界内容归 null，不进入调度层）。
+ * 将内容归入五层时间窗口（统计口径转发自 news-scheduler 的统一实现）。
  */
 function classifyTimeLayer(item, config, now) {
   return schedulerClassifyTimeLayer(item.published_at, config.time_layers, now, TIME_LAYER_STATS_OPTS);
 }
 
-function topicKey(item, config) {
-  const text = `${item.title} ${item.description}`.toLowerCase();
-  const entities = config.topic_entities.filter(entity => text.includes(entity.toLowerCase())).sort();
-  if (entities.length) return entities.slice(0, 3).join('+');
-  const words = text.match(/[a-z][a-z0-9-]{3,}|[一-鿿]{2,6}/g) || [];
-  return words.slice(0, 3).join('+') || hash(item.title);
-}
-
-function buildProvenance(items) {
-  const byNative = new Map();
-  const byUrl = new Map(items.map(item => [normalizeUrl(item.url), item]));
-  const observedUrls = new Map();
-  const provenance = [];
-  for (const item of items) {
-    const nativeKey = `${item.platform}:${item.native_id}`;
-    const urlKey = normalizeUrl(item.url);
-    const duplicate = byNative.get(nativeKey) || observedUrls.get(urlKey);
-    if (duplicate) {
-      provenance.push({
-        content_id: item.id,
-        canonical_content_id: duplicate.id,
-        origin_status: 'confirmed',
-        relation: 'duplicate_observation',
-        detected_by: 'platform_id_or_url',
-        confidence: 1,
-        evidence: [{ type: 'matching_platform_id_or_url', source_url: item.url }],
-        checked_at: item.fetched_at,
-      });
-      continue;
-    }
-    byNative.set(nativeKey, item);
-    observedUrls.set(urlKey, item);
-    const external = item.explicit_links.find(link => link && normalizeUrl(link) !== urlKey);
-    const linkedOriginal = external ? byUrl.get(normalizeUrl(external)) : null;
-    provenance.push({
-      content_id: item.id,
-      canonical_content_id: linkedOriginal?.id || (external ? null : item.id),
-      origin_status: linkedOriginal ? 'candidate' : external ? 'candidate' : 'unknown',
-      relation: item.source_type === 'bilibili_dynamic_repost' ? 'repost' : external ? 'citation' : 'original',
-      detected_by: linkedOriginal ? 'explicit_link_to_collected_content' : external ? 'explicit_link' : 'self_observation',
-      confidence: linkedOriginal ? 0.85 : external ? 0.65 : 0.35,
-      evidence: external ? [{ type: 'explicit_link', source_url: external }] : [],
-      checked_at: item.fetched_at,
-    });
-  }
-  return provenance;
-}
-
-function buildEvents(items, assessments, config) {
-  const groups = new Map();
-  const assessmentsByContentId = new Map();
-  for (const assessment of assessments) {
-    if (!assessmentsByContentId.has(assessment.content_id)) assessmentsByContentId.set(assessment.content_id, []);
-    assessmentsByContentId.get(assessment.content_id).push(assessment);
-  }
-  for (const item of items) {
-    const key = topicKey(item, config);
-    if (!groups.has(key)) groups.set(key, []);
-    groups.get(key).push(item);
-  }
-  return [...groups.entries()].map(([key, group]) => {
-    const id = `event-${hash(key)}`;
-    let firstSeenAt = group[0].published_at;
-    let updatedAt = group[0].published_at;
-    for (const item of group) {
-      for (const assessment of assessmentsByContentId.get(item.id) || []) assessment.event_id = id;
-      if (item.published_at < firstSeenAt) firstSeenAt = item.published_at;
-      if (item.published_at > updatedAt) updatedAt = item.published_at;
-    }
-    return {
-      id,
-      topic_key: key,
-      title: group[0].title,
-      first_seen_at: firstSeenAt,
-      updated_at: updatedAt,
-      content_ids: group.map(item => item.id),
-      viewpoints: group.map(item => ({
-        content_id: item.id,
-        position: 'unclassified',
-        summary: item.description || item.title,
-        evidence_level: 'source_content',
-      })),
-      official_verification: { status: group.some(item => item.source_tags.includes('官方来源')) ? 'official_source_present' : 'not_checked', evidence: [] },
-    };
-  });
-}
-
-function dedupeItems(items) {
-  const seen = new Set();
-  return items.filter(item => {
-    const key = `${item.platform}:${item.native_id}`;
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
-}
+// ═══════════════════════════════════════════════════════════════
+// 第 4 部分补充：状态合并与平台分发
+// ═══════════════════════════════════════════════════════════════
 
 function mergeStatus(current, next) {
   const rank = { not_run: 0, success: 1, rotating: 2, partial: 3, degraded: 4, failed: 5 };
@@ -1086,7 +230,7 @@ function initialState() {
   };
 }
 
-/** 根据平台分发到对应采集函数。新增平台时在此增加分支。 */
+/** 根据平台分发到对应采集函数（collectors/ 下的单一实现）。新增平台时在此增加分支。 */
 async function collectSource(source, context) {
   if (source.platform === 'youtube') {
     const result = await collectYouTube(source, context);
@@ -1191,10 +335,6 @@ function normalizeHistoricalBilibili(candidate, source, fetchedAt) {
     metrics: { views: null, likes: null, comments: null, reposts: null, replies: null },
     explicit_links: [],
   };
-}
-
-function historicalPageToken(progress) {
-  return progress.page_token ?? progress.resume_page_token ?? null;
 }
 
 async function runHistoricalLayerPass(options) {
@@ -1791,6 +931,20 @@ if (require.main === module) {
     process.exit(1);
   });
 }
+
+// ═══════════════════════════════════════════════════════════════
+// 汇总 re-export（scripts/、GitHub Actions、测试依赖这些名字）
+//
+// 本文件只负责编排与汇总，具体实现分布在：
+//   - feed-parser.js：parseFeed / normalizeRssItem / inferBilibiliType / historicalPageToken
+//   - news-x.js：normalizeTweet
+//   - scoring.js：matchesAi / scoreTimeliness / detectLightExperience / detectCommercial /
+//     assessItem / applyAnomalyDetection / HEAT_DEFINITION
+//   - projection.js：buildProvenance / buildEvents / dedupeItems / buildEvidenceExcerpt /
+//     buildToolUrlIndex / resolveRelatedResources / buildRelatedTitleLexicon /
+//     titleContainsKeyword / matchRelatedByTitle / searchConceptKey / computeHotScores /
+//     enrichHotspotProjection / upgradeHotspotsProjection / migrateContentTypeProjection
+// ═══════════════════════════════════════════════════════════════
 
 module.exports = {
   parseFeed,
