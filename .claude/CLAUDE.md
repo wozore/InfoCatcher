@@ -8,13 +8,6 @@ The role of this file is to describe common mistakes and confusion points that a
 
 改动代码前先读上面的索引定位文件；新增/移动/删除代码文件后同步更新 `CODEBASE-MAP.md`。
 
-## Data inventory
-
-- tools.json  # 28 个工具
-- data/catalog/ — tool-intelligence.json, glossary.json, scenes.json, featured.json
-- data/acquisition/ — intel-sources.json
-- data/news/ — config/, sources/, manual/, runtime/, output/
-
 ## Agent skills
 
 ### Issue tracker

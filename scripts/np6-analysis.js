@@ -1,4 +1,11 @@
-// N-P6 去重键语义分析（只读，不改数据）
+/**
+ * N-P6 去重键语义分析（一次性只读脚本，不修改任何数据）
+ *
+ * 对比候选层/registry 中 native_id、URL、url+title 三种去重键的命中差异，
+ * 为去重键选型提供真实数据（历史结论：registry 主键 = platform:native_id）。
+ * normUrl 故意内联复刻而非 require feed-parser：本脚本只读数据，不引入构建模块
+ * （避免潜在的模块加载副作用）。
+ */
 'use strict';
 const path = require('path');
 const DATA = p => require(path.join(__dirname, '..', 'data', 'news', 'runtime', p));

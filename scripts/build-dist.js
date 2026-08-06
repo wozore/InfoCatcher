@@ -1,3 +1,10 @@
+/**
+ * scripts/build-dist.js — 前端静态站构建（src/web + public + data → dist/）
+ *
+ * 产出 dist/ 供 GitHub Pages 部署。步骤：清空重建 dist/ → 复制 src/web
+ * （原生 ES module，无打包器，build-news 等脚本原样使用）→ 复制 public 静态资源
+ * → 复制浏览器可读的 catalog 与 news/output 数据（保留子目录结构）。
+ */
 'use strict';
 
 const fs = require('fs');

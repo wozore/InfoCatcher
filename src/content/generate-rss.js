@@ -114,10 +114,6 @@ function generateRss() {
   console.log('📡 RSS feed 已生成：' + FEED_PATH + '（' + items.length + ' 条）');
 }
 
-function writeJsonAtomic(filePath, data, runId) {
-  // Stub — 仅用于满足模块加载；实际由 build-news.js 提供
-}
-
 if (require.main === module) {
   generateRss();
 }

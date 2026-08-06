@@ -103,6 +103,8 @@ try {
 } catch (e) { fail(`原则2 检查异常: ${e.message}`); }
 
 // --- 原则 3: CLAUDE.md 同步 — 工具数 + 子目录登记 ---
+// 注意：代码索引已迁移至根目录 CODEBASE-MAP.md（CLAUDE.md 仅 @import），
+// 以下清单同步检查降为软警告：清单缺失/漂移只提示、不阻塞 CI（2026-08-06 用户拍板）。
 try {
   const claudePath = path.resolve(DIRS.project, '.claude', 'CLAUDE.md');
   if (!fs.existsSync(claudePath)) {
@@ -112,27 +114,27 @@ try {
 
     // 工具数一致
     const m = claudeMd.match(/tools\.json\s+#\s*(\d+)\s*个工具/);
-    if (!m) fail('原则3: CLAUDE.md 缺少 "tools.json  # N 个工具" 数量声明');
+    if (!m) console.warn('  ⚠️  原则3: CLAUDE.md 缺少 "tools.json  # N 个工具" 数量声明（仅警告，不阻塞）');
     else {
       const declared = parseInt(m[1], 10);
-      if (declared !== validatedTools.length) fail(`原则3: CLAUDE.md 声明 ${declared} 个工具，实际 ${validatedTools.length}`);
+      if (declared !== validatedTools.length) console.warn(`  ⚠️  原则3: CLAUDE.md 声明 ${declared} 个工具，实际 ${validatedTools.length}（仅警告，不阻塞）`);
     }
 
     // scripts/ 子目录全覆盖（CLAUDE.md 用树形格式如 ├── acquisition/）
     const scriptDirs = fs.readdirSync(DIRS.scripts, { withFileTypes: true })
       .filter(d => d.isDirectory()).map(d => d.name);
     for (const d of scriptDirs) {
-      if (!claudeMd.includes(`${d}/`)) fail(`原则3: CLAUDE.md 缺少 scripts/${d}/ 目录`);
+      if (!claudeMd.includes(`${d}/`)) console.warn(`  ⚠️  原则3: CLAUDE.md 缺少 scripts/${d}/ 目录（仅警告，不阻塞）`);
     }
 
     // data/ 子目录全覆盖
     const dataDirs = fs.readdirSync(DIRS.data, { withFileTypes: true })
       .filter(d => d.isDirectory()).map(d => d.name);
     for (const d of dataDirs) {
-      if (!claudeMd.includes(`${d}/`)) fail(`原则3: CLAUDE.md 缺少 data/${d}/ 目录`);
+      if (!claudeMd.includes(`${d}/`)) console.warn(`  ⚠️  原则3: CLAUDE.md 缺少 data/${d}/ 目录（仅警告，不阻塞）`);
     }
   }
-  console.log('  原则3 CLAUDE.md同步: 通过');
+  console.log('  原则3 CLAUDE.md同步: 通过（清单未同步仅警告，不阻塞）');
 } catch (e) { fail(`原则3 检查异常: ${e.message}`); }
 
 // --- 原则 4: 零外部依赖 — 无 package.json + 无 npm require ---

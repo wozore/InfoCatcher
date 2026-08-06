@@ -35,6 +35,10 @@ function scoreTimeliness(item, config, now = Date.now()) {
   return Math.max(0, Math.min(100, 100 * Math.exp(-Math.LN2 * ageDays / halfLife)));
 }
 
+/**
+ * 轻度用户体验信号：须命中 ≥2 个类别才计分（单个类别不足以断定），
+ * 得分 = 50 + 类别数×12.5（上限 100），置信度 = 类别数/4；证据不足返回中性分。
+ */
 function detectLightExperience(item, config) {
   const text = `${item.title} ${item.description}`.toLowerCase();
   const categories = Object.entries(config.light_user_signals)
@@ -48,6 +52,10 @@ function detectLightExperience(item, config) {
   };
 }
 
+/**
+ * 商业推广检测：命中任一配置文本信号，或显式链接含 affiliate/ref= 等联盟 URL 模式时
+ * 返回对应扣分；未命中返回 none_confirmed（0 扣分，不给无证据的扣分）。
+ */
 function detectCommercial(item, config) {
   const text = `${item.title} ${item.description}`.toLowerCase();
   for (const [label, words] of Object.entries(config.commercial_signals)) {
@@ -72,12 +80,21 @@ function detectCommercial(item, config) {
   return { label: 'none_confirmed', confidence: 0.5, penalty: 0, evidence: [] };
 }
 
+/**
+ * 互动质量：当前为占位实现——一律返回中性分 + confidence 0.1（awaiting_source_baseline），
+ * 等待接入来源平台互动基线后再做真实评分。真实计算见 interactionValue（仅用于异常检测）。
+ */
 function interactionScore(item, neutral) {
   const values = Object.values(item.metrics || {}).filter(value => Number.isFinite(value));
   if (!values.length) return { score: neutral, confidence: 0, reason: 'metrics_unavailable' };
   return { score: neutral, confidence: 0.1, reason: 'awaiting_source_baseline' };
 }
 
+/**
+ * 组装单条评估：加权求和（权重见配置），扣商业推广罚分后 clamp 到 0–100。
+ * 两个 repost 特例：contentTypeFactor=0.6 压低长期质量分；light_experience 直接取中性
+ * （转发内容不评用户体验）。互动质量占位为中性（见 interactionScore）。
+ */
 function assessItem(item, source, config, now) {
   const light = detectLightExperience(item, config);
   const commercial = detectCommercial(item, config);
@@ -135,6 +152,12 @@ function median(values) {
   return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
 }
 
+/**
+ * MAD 鲁棒异常检测：按来源平台分组，以互动对数指数（interactionValue）为样本。
+ * 样本数 < min_samples 时仅标记 insufficient_sample、不做调整；
+ * 否则以中位数为中心，计算鲁棒 z-score = 0.6745×(x−median)/MAD，
+ * 超过 mad_threshold 的条目标记 review 并应用 confirmed_adjustment 扣分。
+ */
 function applyAnomalyDetection(items, assessments, config) {
   const groups = new Map();
   for (const item of items) {

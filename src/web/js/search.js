@@ -28,6 +28,8 @@ import { openGlossaryConcept, setActiveGlossaryId } from './glossary.js';
 import { renderScenes, setActiveSceneId } from './scenes.js';
 
 // P1-A：固定静态搜索状态。只在当前页面内存中存在，不写入 URL、localStorage 或后端。
+// 产品约束（MVP）：AI 搜索只支持 3 个固定示例查询（写论文/写代码/深度研究），
+// 只有命中 SEARCH_DEMOS 的查询才产出结果，其余查询一律走「无对应示例」提示。
 const SEARCH_DEMOS = Object.freeze([
   Object.freeze({ key: 'writing', query: '写论文', hint: '适合查找论文写作、资料整理和研究辅助工具。' }),
   Object.freeze({ key: 'coding', query: '写代码', hint: '适合查找编程开发、代码补全和命令行工具。' }),
@@ -38,14 +40,19 @@ const SEARCH_PROCESSING_STAGES = Object.freeze([
   '匹配已收录资料',
   '准备示例摘要'
 ]);
+// 处理动画防竞态：每次提交/取消递增 runId，定时器与完成回调都校验归属，
+// 避免旧一轮的定时器在新一轮开始后误改状态。
 let searchProcessingRun = 0;
 let searchProcessingTimer = null;
+// 反向引用表：sourceId → 触发它的 [n] 引用按钮，支撑结果页「返回引用位置」与来源高亮联动。
 const searchCitationOrigins = new Map();
 let searchConceptTrigger = null;
 let searchConceptHoverTimer = null;
 let searchConceptCloseTimer = null;
 // 决策 9.8.1：关闭解释框回焦时，抑制因 focus 事件触发的立即重新打开
 let searchConceptRestoring = false;
+// 搜索视图的唯一状态载体（当前页面内存）：mode 在 home/results 间切换，
+// recent 为「继续探索」历史（最多 3 条），editing 控制结果页内联改写表单。
 let searchState = {
   mode: 'home',
   query: '',
@@ -59,6 +66,8 @@ let searchState = {
 };
 
 // ═══ P1-A：静态搜索匹配适配器 ═══════════════════════════════════
+// 四个 getSearch*Matches 均为「归一化后子串包含（includes）」匹配，非语义匹配；
+// 仅在命中 demo 查询时由 getSearchMatches 调用，非 demo 查询直接返回空数组。
 function getSearchToolMatches(query) {
   const text = String(query || '').trim().toLocaleLowerCase('zh-CN');
   if (!text) return [];
@@ -98,6 +107,8 @@ function getSearchGlossaryMatches(query) {
   ].filter(Boolean).join(' ').toLocaleLowerCase('zh-CN').includes(text));
 }
 
+// 匹配中枢：识别命中 demo、执行四路子串匹配、汇总数据加载失败项（unavailable）。
+// demoKey 为 null 表示查询不在 3 个固定示例内，上游据此进入「无对应示例」分支。
 function getSearchMatches(query) {
   const normalizedQuery = String(query || '').trim();
   const demo = SEARCH_DEMOS.find(item => item.query === normalizedQuery) || null;
@@ -167,6 +178,8 @@ function selectSearchExample(query) {
   input.focus();
 }
 
+// 结果可用性状态机：success / partial（部分静态资料未加载）/ no-match / error（所需资料全不可用）。
+// 决定结果页是渲染完整投影，还是只显示对应提示块。
 function getSearchResultAvailability(matches) {
   if (!matches.demoKey) return { type: 'no-match', message: '当前问题没有对应的固定静态示例。' };
   const availableGroups = [matches.tools, matches.scenes, matches.hotspots, matches.concepts].filter(group => group.length > 0).length;
@@ -181,6 +194,8 @@ function getSearchResultAvailability(matches) {
   return { type: 'success', message: '' };
 }
 
+// 将命中的静态资料投影为「来源列表 + 摘要段落」：首场景 + 前 3 个工具作为来源，
+// 段落按 场景描述/已收录任务/匹配工具 三块生成，每段携带 sourceIds 供 [n] 引用定位。
 function getSearchResultProjection(query) {
   const matches = getSearchMatches(query);
   if (!matches.demoKey) return { matches, sources: [], paragraphs: [] };

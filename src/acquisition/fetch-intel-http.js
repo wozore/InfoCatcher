@@ -34,6 +34,11 @@ const DEFAULT_TIMEOUT = 15000;
 const MAX_RETRIES = 2;
 const RETRY_BASE_MS = 1000;
 
+/**
+ * 带重试与超时的文本抓取（fetch 注入模式，便于测试）。
+ * 重试语义：forbidden/not_found 属确定性失败，立即抛出不重试；
+ * 其余错误（含 429 rate_limited）按指数退避重试到 MAX_RETRIES 次。
+ */
 async function requestText(url, options = {}) {
   const timeout = options.timeout || DEFAULT_TIMEOUT;
   const fetchImpl = options.fetchImpl || fetch;

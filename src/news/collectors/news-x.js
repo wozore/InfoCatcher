@@ -17,6 +17,11 @@
 
 const { requestText, extractTweetArray, hash, normalizeUrl, numberOrNull } = require('../pipeline/feed-parser');
 
+/**
+ * 将单条 TwitterAPI.io 推文标准化为统一内容模型。
+ * 兼容多套字段命名（id/id_str/tweetId/rest_id、text/full_text 等），全部缺失时
+ * 以推文 JSON 的 hash 兜底 native_id；缺正文或时间则返回 null（不进入管线）。
+ */
 function normalizeTweet(tweet, source, fetchedAt) {
   const nativeId = String(tweet.id || tweet.id_str || tweet.tweetId || tweet.rest_id || hash(JSON.stringify(tweet)));
   const text = tweet.text || tweet.full_text || tweet.fullText || tweet.content || '';
@@ -49,6 +54,10 @@ function normalizeTweet(tweet, source, fetchedAt) {
   };
 }
 
+/**
+ * 采集单个 X 来源：按 cursor 翻页取最近推文，直至无下一页或达到 x_max_pages_per_source。
+ * 每页一次请求（经 requestText 的 beforeAttempt 计入 quota）；X_API_KEY 未配置时直接抛 missing_api_key。
+ */
 async function collectX(source, context) {
   if (!context.xApiKey) throw Object.assign(new Error('X_API_KEY 未配置'), { code: 'missing_api_key' });
   const items = [];

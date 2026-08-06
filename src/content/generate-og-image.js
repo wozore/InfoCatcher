@@ -1,7 +1,11 @@
-// Zero-dependency OG image generator for InfoCatcher.
-// Produces a 1200×630 brand-color placeholder image; pair with og-image.html
-// for the version containing text.
-
+/**
+ * generate-og-image.js — 零依赖 OG 图生成（不依赖 Canvas / 任何图片库）
+ *
+ * 手写 PNG 编码器：像素行 → zlib deflate 压缩 → IHDR/IDAT/IEND chunk → 落盘。
+ * 输出 1200×630 品牌色占位图（上/左品牌蓝 #2563eb、下品牌绿 #059669、主体深色 #1a1d23）。
+ * 含文字版本见 og-image.html（本脚本只产纯色占位）。
+ * 副作用：向 outputPath 写入 PNG 文件，返回写入字节数。
+ */
 'use strict';
 
 const zlib = require('zlib');
@@ -11,6 +15,7 @@ const path = require('path');
 const WIDTH = 1200;
 const HEIGHT = 630;
 
+// PNG chunk 校验用 CRC-32：IEEE 多项式 0xEDB88320（反射实现）。因零依赖，手写查表法而非引第三方库。
 function createCrcTable() {
   const table = [];
   for (let n = 0; n < 256; n++) {
@@ -38,6 +43,10 @@ function createChunk(type, data) {
   return Buffer.concat([length, typeBuffer, data, crc]);
 }
 
+/**
+ * 生成全部像素行：每行首字节为 filter 类型 0（None，PNG 规定逐行 filter），
+ * 之后每像素 3 字节 RGB。上 8px 与左 16px 为品牌蓝边，下 8px 为品牌绿边，其余主体深色。
+ */
 function createImageRows() {
   const rows = [];
   for (let y = 0; y < HEIGHT; y++) {
@@ -57,6 +66,11 @@ function createImageRows() {
   return Buffer.concat(rows);
 }
 
+/**
+ * 组装并写出 PNG 文件。
+ * 结构：8 字节 PNG 签名 + IHDR（宽/高/位深 8/颜色类型 2=truecolor）+ IDAT（deflateSync 压缩像素行）+ IEND。
+ * @returns {number} 写入的字节数
+ */
 function generateOgImage(outputPath = path.resolve(__dirname, '..', '..', 'og-image.png')) {
   const header = Buffer.alloc(13);
   header.writeUInt32BE(WIDTH, 0);
