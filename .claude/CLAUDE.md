@@ -2,6 +2,12 @@ This project is very early-stage with no user feedback. Even if you modify the d
 
 The role of this file is to describe common mistakes and confusion points that agents might encounter as they work in this project. If you ever encounter something in the project that surprises you, please alert the developer working with you.
 
+# Codebase map
+
+@../CODEBASE-MAP.md
+
+改动代码前先读上面的索引定位文件；新增/移动/删除代码文件后同步更新 `CODEBASE-MAP.md`。
+
 ## Data inventory
 
 - tools.json  # 28 个工具

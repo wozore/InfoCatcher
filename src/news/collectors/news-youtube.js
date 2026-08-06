@@ -39,11 +39,65 @@
 
 'use strict';
 
-const { withQuota } = require('../core/news-quota');
+const { withQuota, reserveQuota, consumeQuota } = require('../core/news-quota');
 const { bulkDiscover, needsExpensiveProcessing, updateLifecycle } = require('../core/news-registry');
 const { classifyTimeLayer } = require('../core/news-scheduler');
+const { requestText, parseFeed, normalizeRssItem, numberOrNull } = require('../pipeline/feed-parser');
 
 const YOUTUBE_API = 'https://www.googleapis.com/youtube/v3';
+
+// ═══════════════════════════════════════════════════════════════
+// 最新 Feed 采集（从 build-news.js 内联合并而来，单一采集实现）
+// ═══════════════════════════════════════════════════════════════
+
+/**
+ * 通过 Data API 补充 YouTube RSS 缺少的互动数据（浏览量/点赞/评论）。
+ * 需要 YOUTUBE_API_KEY，每次调用消耗 1 quota unit（含重试）。
+ * 无 API Key 时降级为 rss_only，不影响 RSS 内容的采集。
+ */
+async function enrichYouTubeStatistics(items, context, sourceId) {
+  if (!context.youtubeApiKey || !items.length) return { items, status: 'rss_only' };
+  try {
+    const url = new URL('https://www.googleapis.com/youtube/v3/videos');
+    url.searchParams.set('part', 'statistics');
+    url.searchParams.set('id', items.map(item => item.native_id).slice(0, 50).join(','));
+    url.searchParams.set('key', context.youtubeApiKey);
+    const text = await requestText(url, {}, context.config, attempt => {
+      const reservation = reserveQuota(context.quota, 'youtube', {
+        source_id: sourceId,
+        layer_id: 'recent-feed',
+        operation: 'videos.list:latest-feed',
+        cost: 1,
+        attempt: attempt + 1,
+      });
+      if (!reservation.accepted) return false;
+      consumeQuota(context.quota, 'youtube', reservation.reservation_id, 'sent');
+      return true;
+    });
+    const payload = JSON.parse(text);
+    const statistics = new Map((payload.items || []).map(item => [item.id, item.statistics || {}]));
+    for (const item of items) {
+      const stats = statistics.get(item.native_id);
+      if (!stats) continue;
+      item.metrics.views = numberOrNull(stats.viewCount);
+      item.metrics.likes = numberOrNull(stats.likeCount);
+      item.metrics.comments = numberOrNull(stats.commentCount);
+    }
+    return { items, status: 'enriched' };
+  } catch (error) {
+    return { items, status: 'rss_only', reason: error.code || error.name || 'youtube_api_failed' };
+  }
+}
+
+async function collectYouTube(source, context) {
+  const url = `https://www.youtube.com/feeds/videos.xml?channel_id=${encodeURIComponent(source.external_id)}`;
+  const xml = await requestText(url, {}, context.config);
+  const items = parseFeed(xml)
+    .slice(0, context.config.collection.youtube_max_per_source)
+    .map(item => normalizeRssItem(item, source, 'youtube_video', context.fetchedAt));
+  const enriched = await enrichYouTubeStatistics(items, context, source.id);
+  return { items: enriched.items, enrichment: enriched };
+}
 
 /** 构造带 API Key 的 YouTube Data API URL */
 function apiUrl(resource, params, apiKey) {
@@ -215,5 +269,5 @@ async function collectYouTubeLayerStep(options) {
 
 module.exports = {
   apiUrl, resolveUploadsPlaylist, playlistCandidates, batch, fetchVideoDetails,
-  collectYouTubeLayerStep,
+  collectYouTubeLayerStep, collectYouTube, enrichYouTubeStatistics,
 };

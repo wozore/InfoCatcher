@@ -27,9 +27,68 @@
 
 'use strict';
 
-const { withQuota } = require('../core/news-quota');
+const { withQuota, reserveQuota, consumeQuota } = require('../core/news-quota');
 const { bulkDiscover } = require('../core/news-registry');
 const { classifyTimeLayer } = require('../core/news-scheduler');
+const { requestText, parseFeed, normalizeRssItem } = require('../pipeline/feed-parser');
+
+// ═══════════════════════════════════════════════════════════════
+// 最新 Feed 采集 + 提供方探活（从 build-news.js 内联合并而来，单一采集实现）
+// ═══════════════════════════════════════════════════════════════
+
+async function probeBilibiliProvider(source, context) {
+  const probeConfig = { ...context.config, collection: { ...context.config.collection, max_retries: 0 } };
+  const base = context.config.collection.rsshub_base_url.replace(/\/$/, '');
+  try {
+    const xml = await requestText(`${base}/bilibili/user/video/${source.external_id}`, { fetchImpl: context.fetchImpl }, probeConfig, attempt => {
+      const reservation = reserveQuota(context.quota, 'bilibili', {
+        source_id: source.id, layer_id: 'provider-probe', operation: 'rsshub:provider-probe', cost: 1, attempt: attempt + 1,
+      });
+      if (!reservation.accepted) return false;
+      consumeQuota(context.quota, 'bilibili', reservation.reservation_id, 'sent');
+      return true;
+    });
+    return { blocked: false, xml };
+  } catch (error) {
+    if (error.code === 'cloudflare_challenge') return { blocked: true, reason: 'cloudflare_challenge' };
+    return { blocked: true, reason: error.code || error.name || 'provider_probe_failed' };
+  }
+}
+
+async function collectBilibili(source, context) {
+  const base = context.config.collection.rsshub_base_url.replace(/\/$/, '');
+  const routes = [
+    { key: 'video', path: `/bilibili/user/video/${source.external_id}`, type: 'bilibili_video' },
+    { key: 'dynamic', path: `/bilibili/user/dynamic/${source.external_id}`, type: 'bilibili_dynamic' },
+    { key: 'article', path: `/bilibili/user/article/${source.external_id}`, type: 'bilibili_article' },
+  ];
+  const items = [];
+  const routeCoverage = {};
+  for (const route of routes) {
+    try {
+      const xml = await requestText(`${base}${route.path}`, { fetchImpl: context.fetchImpl }, context.config, attempt => {
+        const reservation = reserveQuota(context.quota, 'bilibili', {
+          source_id: source.id,
+          layer_id: 'recent-feed',
+          operation: `rsshub:${route.key}:latest-feed`,
+          cost: 1,
+          attempt: attempt + 1,
+        });
+        if (!reservation.accepted) return false;
+        consumeQuota(context.quota, 'bilibili', reservation.reservation_id, 'sent');
+        return true;
+      });
+      const routeItems = parseFeed(xml)
+        .slice(0, context.config.collection.bilibili_max_per_route)
+        .map(item => normalizeRssItem(item, source, route.type, context.fetchedAt));
+      items.push(...routeItems);
+      routeCoverage[route.key] = { status: 'success', items: routeItems.length };
+    } catch (error) {
+      routeCoverage[route.key] = { status: 'degraded', items: 0, reason: error.code || error.name || 'request_failed' };
+    }
+  }
+  return { items, routeCoverage };
+}
 
 /**
  * 将 RSSHub 返回的条目标准化为 candidate 列表。
@@ -144,4 +203,4 @@ async function collectBilibiliLayerStep(options) {
   };
 }
 
-module.exports = { classifyVisibleEntries, requestRssHubRoute, collectBilibiliLayerStep };
+module.exports = { classifyVisibleEntries, requestRssHubRoute, collectBilibiliLayerStep, probeBilibiliProvider, collectBilibili };
