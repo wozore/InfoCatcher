@@ -80,7 +80,7 @@
     "review_enabled": true,
     "review_max_items_per_run": 30,
     "review_timeout_ms": 15000,
-    "review_auto_apply": false,
+    "review_auto_apply": true,
     "review_auto_min_confidence": 0.9,
     "localize_enabled": false,
     "localize_max_items_per_run": 30,
