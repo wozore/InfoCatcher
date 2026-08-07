@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "schedule": {
+    "youtube_cron": "30 23 */3 * *",
+    "youtube_tz": "Asia/Shanghai",
+    "youtube_window_days": 3,
+    "x_cron_first": "0 14 * * *",
+    "x_cron_second": "0 0 * * *",
+    "x_tz": "Asia/Shanghai"
+  },
+  "collection": {
+    "youtube_search_max_per_run": 100,
+    "youtube_search_cost_units": 1,
+    "youtube_daily_quota_units": 10000,
+    "youtube_videos_batch_size": 50,
+    "youtube_comments_top_n": 10,
+    "x_credits_per_run": 3750,
+    "x_credits_per_tweet": 15,
+    "x_credits_per_article": 100,
+    "max_output_items_daily": 5,
+    "min_output_items_daily": 3,
+    "max_output_with_youtube": 8,
+    "review_top_pure_x": 10,
+    "review_top_with_youtube": 15,
+    "content_window_days": 3,
+    "concurrency": 5,
+    "request_timeout_ms": 15000,
+    "max_retries": 2,
+    "retry_base_ms": 750,
+    "twitter_api_base_url": "https://api.twitterapi.io"
+  },
+  "long_term_quality": {
+    "observation_period_count": 3,
+    "observation_score_range": [20, 60],
+    "window_n": 10,
+    "window_months_youtube": 6,
+    "window_months_x": 2,
+    "min_samples": 5,
+    "neutral_score": 50
+  },
+  "interaction_metrics": {
+    "use_ratios": true
+  },
+  "review": {
+    "l1_enabled": true,
+    "l1_input_include_comments": true,
+    "l1_comments_top_n": 10,
+    "l1_confidence_auto_discard": 0.9,
+    "l2_enabled": true
+  },
+  "keywords": {
+    "ai_keywords": ["ai", "人工智能", "llm", "大模型", "gpt", "claude", "gemini", "deepseek", "openai", "anthropic", "多模态", "agent", "智能体", "copilot", "rag", "推理模型", "生成式", "aigc", "diffusion", "机器人"],
+    "refine_enabled": true,
+    "refine_frequency": "daily",
+    "refine_max_keywords": 50,
+    "refine_high_frequency_top_n": 5,
+    "refine_emerging_requires_ai": true
+  },
+  "x_accounts": [
+    "OpenAI",
+    "AnthropicAI",
+    "GoogleDeepMind",
+    "AIatMeta",
+    "xai",
+    "MistralAI",
+    "cohere",
+    "huggingface",
+    "MicrosoftAI",
+    "NVIDIAAI",
+    "StabilityAI",
+    "deepseek_ai",
+    "karpathy",
+    "ylecun",
+    "AndrewYNg",
+    "demishassabis",
+    "JeffDean",
+    "drfeifei",
+    "fchollet",
+    "lilianweng",
+    "TechCrunch",
+    "WIRED",
+    "Kyle_L_Wiggers",
+    "llama_index",
+    "vllm_project",
+    "ollama",
+    "lmstudio",
+    "gdb",
+    "jackclarkSF",
+    "natolambert",
+    "rasbt"
+  ],
+  "feedback": {
+    "enabled": true,
+    "frequency": "daily",
+    "source": "approved_summary",
+    "tool_feedback": true,
+    "concept_feedback": true
+  },
+  "transcripts": {
+    "notify_enabled": true,
+    "notify_count": "3to5",
+    "separate": true
+  },
+  "scoring": {
+    "weights": {
+      "long_term_quality": 0.20,
+      "recent_timeliness": 0.15,
+      "light_user_experience": 0.05,
+      "source_reliability": 0.15,
+      "interaction_quality": 0.15,
+      "type_preference": 0.30
+    },
+    "type_preference_score": {
+      "ai_tool": 90,
+      "ai_product": 90,
+      "ai_concept": 60,
+      "ai_industry": 60,
+      "ai_technology": 40,
+      "other": 50,
+      "unclassified": 50
+    },
+    "neutral_score": 50
+  },
+  "manual_folder": "data/manual"
+}

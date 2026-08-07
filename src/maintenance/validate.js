@@ -56,6 +56,10 @@ const validatedTools = catalog.validateCatalog();
 // news 域（news-sources → hotspots）
 news.validateNews();
 
+// 热点管线 v2 候选层（min-candidates.json，单状态轴；文件不存在优雅跳过）
+// 失败经 news.failed 计入聚合退出码，与 validate-news 域一致。
+news.validateMinNews();
+
 // index.html（DOM 契约校验函数在 catalog 域模块中）
 try {
   const html = fs.readFileSync(`${SRC_DIR}/web/index.html`, 'utf8');

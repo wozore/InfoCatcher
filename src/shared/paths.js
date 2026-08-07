@@ -48,6 +48,7 @@ const CATALOG_FILES = Object.freeze({
 
 const NEWS_FILES = Object.freeze({
   config: path.join(NEWS_CONFIG_DIR, 'news-config.json'),
+  configV2: path.join(NEWS_CONFIG_DIR, 'news-config-v2.json'), // 热点管线 v2：采集/评分/审核/收尾配置
   sources: path.join(NEWS_SOURCES_DIR, 'news-sources.json'),
   manualItems: path.join(NEWS_MANUAL_DIR, 'news-manual-items.json'),
   state: path.join(NEWS_RUNTIME_DIR, 'news-state.json'),
@@ -56,7 +57,9 @@ const NEWS_FILES = Object.freeze({
   quota: path.join(NEWS_RUNTIME_DIR, 'news-quota.json'),
   authorizations: path.join(NEWS_RUNTIME_DIR, 'pending-authorizations.json'),
   candidates: path.join(NEWS_RUNTIME_DIR, 'hotspot-candidates.json'), // B16 决策 49：内部候选层，不发布到 dist/
+  minCandidates: path.join(NEWS_RUNTIME_DIR, 'min-candidates.json'),  // 热点管线 v2：单状态轴候选层，不发布到 dist/
   reviewEvents: path.join(NEWS_RUNTIME_DIR, 'review-events.json'),    // B16 决策 70：追加式审核事件日志，不发布到 dist/
+  sourceHistory: path.join(NEWS_RUNTIME_DIR, 'source-history.json'),  // 评分 v2：来源长期质量历史库，不发布到 dist/
 
   adminAudit: path.join(NEWS_RUNTIME_DIR, 'news-admin-audit.json'),
   lock: path.join(NEWS_RUNTIME_DIR, '.news-build.lock'),

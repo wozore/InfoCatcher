@@ -13,6 +13,14 @@ on:
         options:
           - all
           - bilibili-only
+      pipeline:
+        description: '管线选择：min = 热点管线 v2（手动验证阶段）；old = 现有流程（默认）'
+        required: false
+        default: old
+        type: choice
+        options:
+          - old
+          - min
 
 permissions:
   contents: write
@@ -48,7 +56,14 @@ jobs:
           X_API_KEY: ${{ secrets.X_API_KEY }}
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           NEWS_PLATFORM_SCOPE: ${{ github.event.inputs.platform_scope || 'all' }}
-        run: node scripts/build-news.js
+        run: |
+          # min 管线先手动验证，稳定后再切 cron；
+          # pipeline 缺省 old 走现有流程（行为不变），仅 pipeline == 'min' 时替换为 v2 构建命令。
+          if [[ "${{ github.event.inputs.pipeline }}" == "min" ]]; then
+            node scripts/build-news.js --min
+          else
+            node scripts/build-news.js
+          fi
 
       - name: Test generated data
         run: |

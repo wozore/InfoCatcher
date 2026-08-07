@@ -557,3 +557,89 @@ collect-news.yml 构建 → review 分支 + 审核 PR（附状态分布摘要）
 20. **翻译不覆盖原文顶层字段**：翻译只写 `localizations[locale]`，原文顶层 `title`/`description` 保留作溯源核验基线 + 未来其他语言的翻译源。勿在本地化时覆盖顶层字段。
 21. **localize CLI 默认 dry-run 是成本预览**：存量迁移前先 `localize candidates --dry-run` 看将翻译条数（无 `localizations[locale]` 的候选），再非 dry-run 执行，避免一次性翻译全部候选产生意外 API 成本。前端**内容**中文化依赖数据侧翻译（`localizations.zh`），**UI 文案**中文化走 i18n 框架（`t()` 读 `zh.js` 字典）——两层独立，勿混淆。
 
+
+---
+
+# 十六、最小管线（v2）—— 新建并行管线
+
+> v2 是热点采集的新形态（`--min` 入口），与上文 v1 旧重架构**并行共存**：v1 代码暂留、CI 旧测试继续绿，v2 稳定后再清理。本节只描述 v2。
+
+## 16.1 数据流（单状态轴）
+
+```
+外部平台（YouTube Data API v3 / TwitterAPI.io）
+   │              ← X 博主名单（resources/source-lists/热点信息源清单.md X 部分）
+   │              ← ai_keywords 关键词（初始 AI+开发者，每日数据总结后提纯）
+   ▼
+采集 v2  src/news/collectors/
+   ├─ collector-youtube-v2.js —— search.list 关键词搜索（近3日窗口）→ 发现 videoId
+   │        videos.list（statistics+contentDetails+snippet）→ 标题/摘要/播放量/点赞/评论数/时长/标签
+   │        videoCategories.list → 分类名；commentThreads.list → 点赞最高10条评论
+   ├─ collector-x-v2.js —— 博主名单时间窗（14:00 抓今0-14点；0:00 抓昨14点-今0点）
+   │        + advanced_search 关键词 + article 读取（100 credits/篇）
+   └─ 统一内容模型（platform:native_id 去重）
+   │
+   ▼
+去重/过滤  dedupeItems + L0 硬审核（review-v2.js l0HardFilter）
+   │        缺字段/非AI/广告 → 直接丢弃（记 coverage.l0_dropped）
+   ▼
+分类  classifyCandidate（content-classifier）→ content_type（完全自动，无待审态）
+   ▼
+评分  scoring-v2.js assessItemV2 —— 实用>技术（类型偏好 0.30 最高）
+   │    + 长期专业质量（history-store 观察期→滑动窗口 N=10，YouTube 6月/X 2月，样本<5 中性）
+   │    + 互动三率（c 综合参与率主 + d 赞评比修正 + a 点赞率最小加分）
+   │    + 时效降权 + 来源可靠性（X 看认证 / YouTube 并入长期）
+   ▼
+审核 L1  review-v2.js l1AiReview —— AI 判 discard/approve/hold
+   │        输入含点赞最高10条评论（AI 过滤无关/吵架后总结）
+   │        discard + confidence≥0.9 → 自动落 discarded；approve/hold → pending 等人工
+   ▼
+候选层  data/news/runtime/min-candidates.json（单状态轴 pending/approved/discarded）
+   ▼
+总结/本地化  summarizeCandidate → summary + key_points；localizeCandidate → localizations.zh
+   ▼
+审核 L2  人工 review set/batch --status approved（唯一进公开通道；每日审 top10/纯X 或 top15/有YT）
+   ▼
+公开门禁   approved + 每日 top 3~5（有 YouTube 日 3~8）+ 时间窗口 + 字段完整
+   ▼
+公开投影  data/news/output/hotspots.json（复用 enrichHotspotProjection + filterProjectionByWindow）→ 前端 / RSS
+   │
+   ├─ 字幕通知（transcript-notify.js）——候选池有 YouTube 取评分最高 3~5 → 链接清单 → 维护者 yt-dlp，完全分离
+   ├─ 关键词提纯（keyword-refine.js）——每日一次，高频+新兴 → 上限50汰换 → 人工确认
+   └─ 工具/概念反哺（tool-feedback.js）——每日一次紧跟总结，approved summary 提工具/概念 → 查库/建卡
+```
+
+## 16.2 单状态轴语义
+
+| 状态 | 含义 | 进公开? |
+|---|---|---|
+| `pending` | 新采集 / L1 判 approve 或 hold（待人工细看） | 否 |
+| `approved` | 人工 `review set/batch --status approved` | 是（唯一通道） |
+| `discarded` | L0/L1 自动落，或人工设置；可撤销 | 否 |
+
+对比 v1：砍掉 `ai_processing_status`（双轴）、`held`、`content_type_status`、字幕主链、历史回溯调度、额度账本、授权任务、审核事件日志（简化）。
+
+## 16.3 新增文件清单
+
+| 模块 | 文件 | 导出 |
+|---|---|---|
+| 采集 | `collectors/collector-youtube-v2.js` | `collectYouTubeV2` |
+| 采集 | `collectors/collector-x-v2.js` | `collectXV2` |
+| 编排 | `min/pipeline-min.js` | `runMin` |
+| 候选 | `min/min-store.js` | `readMinStore`/`mergeCandidatesMin`/`setReviewStatusMin`/`toPublicItemMin` |
+| 历史库 | `min/history-store.js` | `evaluateLongTermQuality` |
+| 评分 | `pipeline/scoring-v2.js` | `assessItemV2` |
+| 审核 | `min/review-v2.js` | `l0HardFilter`/`applyL1Verdicts` |
+| 投影 | `min/daily-projection.js` | `buildDailyProjection` |
+| 字幕 | `transcripts/transcript-notify.js` | `notifyTranscripts` |
+| 反哺 | `feedback/tool-feedback.js` | `feedbackFromSummaries` |
+| 提纯 | `min/keyword-refine.js` | `refineKeywords` |
+| CLI | `cli/cmd-min.js` | `min-review` 命令组 |
+
+## 16.4 入口
+
+- 构建：`node scripts/build-news.js --min`（旧入口不带 --min 不变）
+- 发布：`node scripts/publish-news.js --min`
+- 运维：`node scripts/news-cli.js min-review list|set|batch|transcripts|feedback|refine`
+- 配置：`data/news/config/news-config-v2.json`（全部业务开关可配）
+- 人工文件夹：`data/manual/`（字幕清单/审核清单/提纯候选/待补工具卡，固定格式）

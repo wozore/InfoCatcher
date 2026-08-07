@@ -43,6 +43,9 @@ $RECYCLE.BIN/
 *.swo
 *~
 
+# ===== docs文档 =====
+docs/
+
 # ===== 第三方 Skills 插件缓存 =====
 # mattpocock-skills 等第三方 skill 含配置文件，不入库
 .claude/skills/

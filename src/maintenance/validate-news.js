@@ -14,6 +14,8 @@
 
 const fs = require('fs');
 const { NEWS_FILES } = require('../shared/paths');
+// 热点管线 v2 单状态轴候选层：只读其枚举常量，避免与 min-store 的状态轴语义漂移。
+const { MIN_REVIEW_STATUSES } = require('../news/min/min-store');
 
 let failed = false;
 
@@ -355,6 +357,108 @@ function validateHotspots(data) {
 }
 
 // ═══════════════════════════════════════════════════════════════
+// 热点管线 v2 候选层（min-candidates.json，单状态轴）校验
+//
+// v2 与旧候选层解耦：无 ai_processing_status 轴，review_status 只取
+// pending/approved/discarded（MIN_REVIEW_STATUSES，读自 min-store）。
+// 文件不存在 → 优雅跳过（v2 管线未首跑，不阻塞）；空候选 → 通过。
+// 硬错误走 fail()（计入本模块 failed，由 validate.js 聚合退出码）；
+// approved 缺公开字段（title/url/published_at）只告警不阻塞。
+// ═══════════════════════════════════════════════════════════════
+function validateMinNews() {
+  const file = NEWS_FILES.minCandidates;
+  const errors = [];
+  const warnings = [];
+
+  let data;
+  try {
+    data = JSON.parse(fs.readFileSync(file, 'utf8'));
+  } catch (error) {
+    if (error && error.code === 'ENOENT') {
+      console.log('  min-candidates.json: 文件不存在（v2 管线未首跑），优雅跳过');
+      return { valid: true, errors, warnings };
+    }
+    const message = `min-candidates.json 解析失败：${error.message}`;
+    errors.push(message);
+    fail(message);
+    return { valid: false, errors, warnings };
+  }
+
+  if (!data || typeof data !== 'object' || Array.isArray(data)) {
+    const message = 'min-candidates.json 顶层应为对象';
+    errors.push(message);
+    fail(message);
+    return { valid: false, errors, warnings };
+  }
+
+  // 顶层 schema：schema_version 为缺省 1；缺失仅告警（createMinStore 容缺省），
+  // 存在但非法（非正整数）则报错。
+  if (data.schema_version !== undefined
+    && (!Number.isInteger(data.schema_version) || data.schema_version < 1)) {
+    const message = 'min-candidates.json.schema_version 应为正整数';
+    errors.push(message);
+    fail(message);
+  } else if (data.schema_version === undefined) {
+    warnings.push('min-candidates.json 缺少 schema_version（缺省按 1 处理）');
+    console.warn('⚠️  min-candidates.json 缺少 schema_version（缺省按 1 处理）');
+  }
+
+  if (!Array.isArray(data.candidates)) {
+    const message = 'min-candidates.json.candidates 应为数组';
+    errors.push(message);
+    fail(message);
+    return { valid: false, errors, warnings };
+  }
+
+  const ids = new Set();
+  for (let i = 0; i < data.candidates.length; i++) {
+    const candidate = data.candidates[i];
+    const tag = `min-candidates.json.candidates[${i}] (${(candidate && candidate.title) || '未知'})`;
+    if (!candidate || typeof candidate !== 'object') {
+      const message = `${tag} 应为对象`;
+      errors.push(message);
+      fail(message);
+      continue;
+    }
+    // v2 单状态轴候选：id 非空且唯一
+    if (!candidate.id || ids.has(candidate.id)) {
+      const message = `${tag}.id 缺失或重复: ${candidate.id}`;
+      errors.push(message);
+      fail(message);
+    }
+    ids.add(candidate.id);
+    // review_status 必须 ∈ MIN_REVIEW_STATUSES（pending/approved/discarded）
+    if (!MIN_REVIEW_STATUSES.includes(candidate.review_status)) {
+      const message = `${tag}.review_status 无效（合法值：${MIN_REVIEW_STATUSES.join(' / ')}）`;
+      errors.push(message);
+      fail(message);
+    }
+    // platform 必须合法（youtube / x / bilibili）
+    if (!NEWS_PLATFORMS.includes(candidate.platform)) {
+      const message = `${tag}.platform 不支持: ${candidate.platform}`;
+      errors.push(message);
+      fail(message);
+    }
+    // 公开字段完整性：approved 候选必须有 title/url/published_at（不全告警，不阻塞）
+    if (candidate.review_status === 'approved') {
+      for (const field of ['title', 'url', 'published_at']) {
+        const value = candidate[field];
+        if (value === undefined || value === null || value === '') {
+          const message = `${tag} 已 approved 但缺少公开字段 ${field}`;
+          warnings.push(message);
+          console.warn(`⚠️  ${message}`);
+        }
+      }
+    }
+  }
+
+  if (errors.length === 0) {
+    console.log(`  min-candidates.json: ${data.candidates.length} 条候选（v2 单状态轴），通过`);
+  }
+  return { valid: errors.length === 0, errors, warnings };
+}
+
+// ═══════════════════════════════════════════════════════════════
 // news 域入口：按顺序校验所有新闻配置、人工内容和运行时数据
 //
 // 每个文件独立 try/catch —— 一个文件的 JSON 解析失败
@@ -393,4 +497,4 @@ function validateNews() {
   }
 }
 
-module.exports = { validateNews, get failed() { return failed; } };
+module.exports = { validateNews, validateMinNews, get failed() { return failed; } };

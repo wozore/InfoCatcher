@@ -81,6 +81,18 @@
  *       导入后通过 review set/batch --status approved 逐条/批量审核，
  *       再运行 publish-news.js 重建公开投影，决策 64/59）
  *
+ *   min-review —— 热点管线 v2 单状态轴候选层运维（操作 min-candidates.json，不触碰旧候选层）
+ *     min-review list        [--status pending|approved|discarded] [--platform ...] [--limit N]
+ *     min-review set         --id <id> --status pending|approved|discarded
+ *     min-review batch       --ids <id1,id2,...> --status approved
+ *     min-review transcripts
+ *     min-review feedback
+ *     min-review refine
+ *     （list 列出 v2 候选含 review_status / final_score；set/batch 写回 min-store；
+ *       transcripts/feedback/refine 分别调 v2 收尾模块，把清单/待补卡/提纯候选
+ *       写到 config.manual_folder 的固定格式文件，交人工确认；
+ *       --store min 为显式标注 v2 数据通道，缺省即 min）
+ *
  * 安全约束：
  *   - 不接受 --api-key 等凭据参数；API Key 只能由 GitHub Secrets 注入。
  *   - 校验 external_id 格式：YouTube → UC 开头、B站 → 纯数字 UID、X → 有效用户名。
@@ -103,6 +115,7 @@ const {
 const { contentCommand, classifyCommand, transcriptCommand, localizeCommand } = require('./cmd-content');
 const { authorizationCommand, quotaCommand, lockCommand, optionalNumber } = require('./cmd-ops');
 const { registryCommand, reviewCommand, legacyCommand } = require('./cmd-registry');
+const { minReviewCommand } = require('./cmd-min');
 
 // ── CLI 参数解析 ──────────────────────────────────────────
 
@@ -139,11 +152,12 @@ async function main(argv = process.argv.slice(2)) {
   else if (group === 'lock') result = lockCommand(action, flags);
   else if (group === 'registry') result = registryCommand(action, flags);
   else if (group === 'review') result = reviewCommand(action, flags);
+  else if (group === 'min-review') { await minReviewCommand(action, flags); return; } // 自打印人友好输出
   else if (group === 'classify') result = await classifyCommand(action, flags);
   else if (group === 'transcript') result = await transcriptCommand(action, flags);
   else if (group === 'localize') result = await localizeCommand(action, flags);
   else if (group === 'legacy') result = legacyCommand(action, flags);
-  else throw new Error('用法: news-cli.js source|content|authorization|quota|lock|registry|review|classify|transcript|localize|legacy <action> [options]');
+  else throw new Error('用法: news-cli.js source|content|authorization|quota|lock|registry|review|min-review|classify|transcript|localize|legacy <action> [options]');
   console.log(JSON.stringify(result, null, 2));
   return result;
 }
@@ -157,5 +171,5 @@ if (require.main === module) {
 
 module.exports = {
   parseArgs, normalizeTags, validateSource, importSources, optionalNumber,
-  contentCommand, reviewCommand, transcriptCommand, legacyCommand, main, FILES,
+  contentCommand, reviewCommand, minReviewCommand, transcriptCommand, legacyCommand, main, FILES,
 };
