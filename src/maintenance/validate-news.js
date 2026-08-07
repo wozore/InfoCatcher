@@ -144,6 +144,62 @@ function validateNewsCandidates(data) {
         fail(`${tag}.transcript.chars 应为非负整数`);
       }
     }
+    // content-summarizer：总结字段（存在时校验格式；summary_key_points 为字符串数组，
+    // summarizer 为内部痕迹，summary_generated_at 应为有效时间）
+    if (candidate.summary !== undefined && candidate.summary !== null && typeof candidate.summary !== 'string') {
+      fail(`${tag}.summary 应为字符串或 null`);
+    }
+    if (candidate.summary_key_points !== undefined) {
+      if (!Array.isArray(candidate.summary_key_points)) fail(`${tag}.summary_key_points 应为数组`);
+      else for (const point of candidate.summary_key_points) {
+        if (typeof point !== 'string') fail(`${tag}.summary_key_points 元素应为字符串`);
+      }
+    }
+    if (candidate.summary_generated_at !== undefined && Number.isNaN(new Date(candidate.summary_generated_at).getTime())) {
+      fail(`${tag}.summary_generated_at 不是有效时间`);
+    }
+    // content-reviewer：AI 审核建议（存在时校验形状；verdict 三枚举、reasons 字符串数组、
+    // confidence 0-1、generated_at 有效时间。ai_review 是内部字段，不进公开投影）
+    if (candidate.ai_review !== undefined) {
+      if (!candidate.ai_review || typeof candidate.ai_review !== 'object') {
+        fail(`${tag}.ai_review 应为对象`);
+      } else {
+        if (!['approve', 'hold', 'discard'].includes(candidate.ai_review.verdict)) {
+          fail(`${tag}.ai_review.verdict 无效（合法值：approve / hold / discard）`);
+        }
+        if (candidate.ai_review.reasons !== undefined) {
+          if (!Array.isArray(candidate.ai_review.reasons)) fail(`${tag}.ai_review.reasons 应为数组`);
+          else for (const reason of candidate.ai_review.reasons) {
+            if (typeof reason !== 'string') fail(`${tag}.ai_review.reasons 元素应为字符串`);
+          }
+        }
+        if (candidate.ai_review.confidence !== undefined) {
+          if (typeof candidate.ai_review.confidence !== 'number' || !Number.isFinite(candidate.ai_review.confidence)
+            || candidate.ai_review.confidence < 0 || candidate.ai_review.confidence > 1) {
+            fail(`${tag}.ai_review.confidence 应为 0-1 数字`);
+          }
+        }
+        if (candidate.ai_review.generated_at !== undefined && Number.isNaN(new Date(candidate.ai_review.generated_at).getTime())) {
+          fail(`${tag}.ai_review.generated_at 不是有效时间`);
+        }
+      }
+    }
+    // content-localizer：内容本地化（存在时校验形状；localizations[locale] 的 title/description
+    // 为字符串。localizations 是公开字段进投影；localizations_meta 是内部痕迹）
+    if (candidate.localizations !== undefined) {
+      if (!candidate.localizations || typeof candidate.localizations !== 'object') {
+        fail(`${tag}.localizations 应为对象`);
+      } else {
+        for (const [locale, localized] of Object.entries(candidate.localizations)) {
+          if (!localized || typeof localized !== 'object') {
+            fail(`${tag}.localizations.${locale} 应为对象`);
+            continue;
+          }
+          if (localized.title !== undefined && typeof localized.title !== 'string') fail(`${tag}.localizations.${locale}.title 应为字符串`);
+          if (localized.description !== undefined && typeof localized.description !== 'string') fail(`${tag}.localizations.${locale}.description 应为字符串`);
+        }
+      }
+    }
   }
   console.log(`  hotspot-candidates.json: ${data.candidates.length} 条候选，通过`);
 }
@@ -234,6 +290,16 @@ function validateHotspots(data) {
     if (item.evidence_excerpt !== undefined && item.evidence_excerpt !== null && typeof item.evidence_excerpt !== 'string') {
       fail(`${tag}.evidence_excerpt 应为字符串或 null`);
     }
+    // content-summarizer：公开 summary 字段（存在时校验格式；仅经人工审核 approved 的候选才会带）
+    if (item.summary !== undefined && item.summary !== null && typeof item.summary !== 'string') {
+      fail(`${tag}.summary 应为字符串或 null`);
+    }
+    if (item.summary_key_points !== undefined) {
+      if (!Array.isArray(item.summary_key_points)) fail(`${tag}.summary_key_points 应为数组`);
+      else for (const point of item.summary_key_points) {
+        if (typeof point !== 'string') fail(`${tag}.summary_key_points 元素应为字符串`);
+      }
+    }
     if (item.related_resources !== undefined) {
       if (!Array.isArray(item.related_resources)) fail(`${tag}.related_resources 应为数组`);
       else for (const [resourceIndex, resource] of item.related_resources.entries()) {
@@ -243,6 +309,23 @@ function validateHotspots(data) {
         if (!resource.id || typeof resource.id !== 'string') fail(`${resourceTag}.id 应为非空字符串`);
       }
     }
+    // content-localizer：公开 localizations 字段（存在时校验形状；与候选层同规则。
+    // 内部痕迹 localizations_meta 已由 INTERNAL_FIELDS 剔除，不应出现在公开投影）
+    if (item.localizations !== undefined) {
+      if (!item.localizations || typeof item.localizations !== 'object') {
+        fail(`${tag}.localizations 应为对象`);
+      } else {
+        for (const [locale, localized] of Object.entries(item.localizations)) {
+          if (!localized || typeof localized !== 'object') {
+            fail(`${tag}.localizations.${locale} 应为对象`);
+            continue;
+          }
+          if (localized.title !== undefined && typeof localized.title !== 'string') fail(`${tag}.localizations.${locale}.title 应为字符串`);
+          if (localized.description !== undefined && typeof localized.description !== 'string') fail(`${tag}.localizations.${locale}.description 应为字符串`);
+        }
+      }
+    }
+    if (item.localizations_meta !== undefined) fail(`${tag}.localizations_meta 是内部字段，不应出现在公开投影`);
   }
   if (data.heat_definition !== undefined && typeof data.heat_definition !== 'string') {
     fail('hotspots.json.heat_definition 应为字符串');

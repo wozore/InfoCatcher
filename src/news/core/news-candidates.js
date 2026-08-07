@@ -118,6 +118,28 @@ function mergeCandidates(existingStore, incomingCandidates, updatedAt) {
         if (prev.content_type_reviewer !== undefined) incoming.content_type_reviewer = prev.content_type_reviewer;
         if (prev.reviewed_content_type_at !== undefined) incoming.reviewed_content_type_at = prev.reviewed_content_type_at;
       }
+      // 总结（content-summarizer）：既有候选保留已生成的总结（公开产物与内部痕迹），
+      // 避免重新采集时丢失总结；本轮新总结（incoming.summary 已生成）优先保留新的。
+      if (prev.summary) {
+        incoming.summary = incoming.summary || prev.summary;
+        incoming.summary_key_points = incoming.summary_key_points || prev.summary_key_points;
+        if (incoming.summarizer === undefined && prev.summarizer !== undefined) incoming.summarizer = prev.summarizer;
+        if (incoming.summary_generated_at === undefined && prev.summary_generated_at !== undefined) incoming.summary_generated_at = prev.summary_generated_at;
+        if (incoming.summary_input_chars === undefined && prev.summary_input_chars !== undefined) incoming.summary_input_chars = prev.summary_input_chars;
+        if (incoming.summary_llm_error === undefined && prev.summary_llm_error !== undefined) incoming.summary_llm_error = prev.summary_llm_error;
+      }
+      // AI 审核建议（content-reviewer）：既有候选保留已生成的 ai_review 建议，
+      // 避免重新采集时重复审核（不重复花钱）；本轮新建议（incoming.ai_review 已生成）优先。
+      if (prev.ai_review) {
+        incoming.ai_review = incoming.ai_review || prev.ai_review;
+        if (incoming.ai_review_llm_error === undefined && prev.ai_review_llm_error !== undefined) incoming.ai_review_llm_error = prev.ai_review_llm_error;
+      }
+      // 内容本地化（content-localizer）：既有候选保留已生成的 localizations（多语言翻译），
+      // 避免重新采集时重复翻译（不重复花钱）；本轮新翻译（incoming.localizations 已生成）优先。
+      if (prev.localizations) {
+        incoming.localizations = incoming.localizations || prev.localizations;
+        if (incoming.localizations_meta === undefined && prev.localizations_meta !== undefined) incoming.localizations_meta = prev.localizations_meta;
+      }
     }
     byId.set(incoming.id, incoming);
   }
@@ -146,6 +168,15 @@ function selectPublicEligible(candidates) {
  * 决策 80：分类元数据——content_type_status / classifier / ai_confidence /
  * classify_reasons / reviewed_content_type_at / content_type_reviewer——
  * 均为内部审核痕迹，不进公开投影。content_type 本体保留，供前端内容类型筛选）。
+ *
+ * 总结字段（content-summarizer）：summary / summary_key_points 为公开产物
+ * （随 review_status 门禁进公开），但 summarizer / summary_generated_at /
+ * summary_input_chars / summary_llm_error 是内部痕迹，不进公开投影。
+ * AI 审核建议（content-reviewer）：ai_review / ai_review_llm_error 是内部建议
+ * （verdict/reasons/confidence），仅供审核侧使用，不进公开投影。
+ * 内容本地化（content-localizer）：localizations 是公开字段（用户拍板：中文形式
+ * 存储，前端按语言读取），**不在本列表**；localizations_meta（翻译元数据/错误痕迹）
+ * 是内部字段，不进公开投影。
  */
 const INTERNAL_FIELDS = Object.freeze([
   'review_status', 'ai_processing_status',
@@ -155,6 +186,9 @@ const INTERNAL_FIELDS = Object.freeze([
   'transcript', 'transcript_status', 'transcript_evidence', 'transcript_updated_at',
   'content_type_status', 'classifier', 'ai_confidence',
   'classify_reasons', 'reviewed_content_type_at', 'content_type_reviewer',
+  'summarizer', 'summary_generated_at', 'summary_input_chars', 'summary_llm_error',
+  'ai_review', 'ai_review_llm_error',
+  'localizations_meta',
 ]);
 
 function toPublicItem(candidate) {

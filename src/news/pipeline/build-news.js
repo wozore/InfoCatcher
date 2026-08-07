@@ -115,6 +115,9 @@ const {
   attachProjectionSnapshot, DEFAULT_REVIEW_STATUS,
 } = require('../core/news-candidates');
 const { classifyCandidates } = require('../classify/content-classifier');
+const { enrichCandidateSummaries } = require('../classify/content-summarizer');
+const { enrichCandidateReviews } = require('../classify/content-reviewer');
+const { enrichCandidateLocalizations } = require('../classify/content-localizer');
 const { isWithinPublicWindow, markAnomalousTimeCandidates, filterProjectionByWindow } = require('../core/news-public-gate');
 const { recordReviewTransition } = require('../core/news-review-events');
 const { NEWS_FILES, DIRS } = require('../../shared/paths');
@@ -721,6 +724,67 @@ async function runCollection(options = {}) {
       }
     }
   }
+  // 内容总结 enrichment（content-summarizer，默认关闭）：对本轮候选做 AI 总结。
+  // 必须在字幕 enrichment（上方）之后调用——候选有 transcript 时总结用字幕，无字幕
+  // 时自动只用 title+desc。总结是候选上的 AI 建议字段（summary / summary_key_points），
+  // 不引入独立审核态，随 review_status 门禁进公开（approved 才公开）；任何 LLM 失败
+  // 降级为 summary=null，前端回退 description，不阻塞采集管线。
+  // 成本控制：summary_enabled 默认关 + maxItems 上限 + 只总结无 summary 的候选。
+  await enrichCandidateSummaries(candidateStore, items.map(item => item.id), {
+    enabled: config.collection.summary_enabled === true,
+    fetchImpl: context.fetchImpl,
+    maxItems: config.collection.summary_max_items_per_run,
+    maxTranscriptChars: config.collection.summary_max_transcript_chars,
+    timeoutMs: config.collection.summary_timeout_ms,
+    concurrency: config.collection.concurrency,
+    now: fetchedAt,
+  });
+  // AI 审核建议 enrichment（content-reviewer，默认关闭）：对本轮候选做 AI 初步审核，
+  // 输出 ai_review 建议（verdict: discard/hold/approve + reasons + confidence）。
+  // 必须在总结 enrichment（上方）之后调用——审核输入含候选 summary，无总结时自动只用
+  // title+desc+字幕。ai_review 是内部建议字段，不进公开投影（前端零改动）。
+  // 自动化：review_auto_apply=true 且 confidence≥review_auto_min_confidence 时，
+  // discard/hold 由 AI 自动落 review_status（reviewer='ai_review'，可恢复、进审核日志）；
+  // approve 永不自动落——通过必须由人 review set/batch。
+  // 成本控制：review_enabled 默认关 + maxItems 上限 + 只审核无 ai_review 且 pending 的候选。
+  const reviewResult = await enrichCandidateReviews(candidateStore, items.map(item => item.id), {
+    enabled: config.collection.review_enabled === true,
+    fetchImpl: context.fetchImpl,
+    maxItems: config.collection.review_max_items_per_run,
+    timeoutMs: config.collection.review_timeout_ms,
+    concurrency: config.collection.concurrency,
+    autoApply: config.collection.review_auto_apply === true,
+    autoMinConfidence: config.collection.review_auto_min_confidence,
+    now: fetchedAt,
+  });
+  // B16 决策 70：AI 审核自动应用导致的状态变化（reviewer='ai_review'）也追加到
+  // 只追加审核事件日志，保证历史状态可追溯；与上方字幕 auto-hold 的记录方式一致。
+  if (!options.noWrite && reviewResult.autoApplied.length) {
+    for (const applied of reviewResult.autoApplied) {
+      const candidate = statusById.get(applied.id);
+      if (candidate) {
+        recordReviewTransition(candidate, {
+          action: applied.to === 'discarded' ? 'ai_review_auto_discard' : 'ai_review_auto_hold',
+          reason: applied.reasons && applied.reasons.length ? applied.reasons.join('；') : null,
+          reviewer: 'ai_review',
+          now: fetchedAt,
+        });
+      }
+    }
+  }
+  // 内容本地化 enrichment（content-localizer，默认关闭）：对本轮候选做多语言翻译，
+  // 输出 localizations[locale]（当前 zh）—— 前端按语言读取，原文 title/description 保留
+  // 顶层作溯源核验基线。只消费原文 title/desc，与总结/审核无依赖，放 review 之后、投影之前。
+  // 成本控制：localize_enabled 默认关 + maxItems 上限 + 只翻译无 localizations[locale] 的候选。
+  await enrichCandidateLocalizations(candidateStore, items.map(item => item.id), {
+    enabled: config.collection.localize_enabled === true,
+    fetchImpl: context.fetchImpl,
+    maxItems: config.collection.localize_max_items_per_run,
+    locale: config.collection.localize_target_locale || 'zh',
+    timeoutMs: config.collection.localize_timeout_ms,
+    concurrency: config.collection.concurrency,
+    now: fetchedAt,
+  });
   // 仅取本轮 items 对应的候选：公开窗口/排序/上限仍由上方 items 逻辑决定，
   // 门禁只剔除未通过人工审核的候选，历史积累不会回流公开。
   let output = buildPublicProjection({

@@ -449,18 +449,18 @@
   <!-- AI 热点视图 -->
   <section id="view-trending" class="view trending-view" aria-labelledby="trendingViewTitle">
     <header class="page-header trending-header">
-      <span class="eyebrow">公开内容流</span>
-      <h1 class="page-title" id="trendingViewTitle">浏览已收录的 AI 热点</h1>
-      <p class="page-lead">按公开内容类型与发布时间阅读已收录的热点内容；平台、时间与依据在来源中核验，描述与互动字段缺失时会明确标注。</p>
+      <span class="eyebrow" data-i18n="trending.eyebrow">公开内容流</span>
+      <h1 class="page-title" id="trendingViewTitle" data-i18n="trending.viewTitle">浏览已收录的 AI 热点</h1>
+      <p class="page-lead" data-i18n="trending.viewLead">按公开内容类型与发布时间阅读已收录的热点内容；平台、时间与依据在来源中核验，描述与互动字段缺失时会明确标注。</p>
     </header>
 
     <section class="trending-overview panel" aria-labelledby="trendingOverviewTitle">
       <div class="trending-overview-heading">
         <div>
-          <h2 class="section-title" id="trendingOverviewTitle">公开数据状态</h2>
-          <p class="muted">这里只显示浏览器可读取的公开热点投影；采集覆盖或更新时间不足时会明确提示。</p>
+          <h2 class="section-title" id="trendingOverviewTitle" data-i18n="trending.overviewTitle">公开数据状态</h2>
+          <p class="muted" data-i18n="trending.overviewLead">这里只显示浏览器可读取的公开热点投影；采集覆盖或更新时间不足时会明确提示。</p>
         </div>
-        <div class="trending-summary" aria-live="polite"><span id="trendingCount">0</span> 条内容 · <span id="trendingGenerated">尚未采集</span></div>
+        <div class="trending-summary" aria-live="polite"><span id="trendingCount">0</span> <span data-i18n="trending.countSuffix">条内容</span> · <span id="trendingGenerated">尚未采集</span></div>
       </div>
       <div class="trending-status" id="trendingStatus"></div>
     </section>
@@ -468,27 +468,27 @@
     <section class="trending-directory section-rule" aria-labelledby="trendingDirectoryTitle">
       <div class="directory-heading">
         <div>
-          <span class="eyebrow">热点目录</span>
-          <h2 class="section-title" id="trendingDirectoryTitle">按内容类型与时间阅读</h2>
+          <span class="eyebrow" data-i18n="trending.directoryEyebrow">热点目录</span>
+          <h2 class="section-title" id="trendingDirectoryTitle" data-i18n="trending.directoryTitle">按内容类型与时间阅读</h2>
         </div>
-        <p class="faint">类型来自公开 <code>content_type</code>；平台、时间与依据在来源中核验，不展示内部评分明细、候选溯源或审核状态。</p>
+        <p class="faint" data-i18n="trending.directoryLead">类型来自公开 <code>content_type</code>；平台、时间与依据在来源中核验，不展示内部评分明细、候选溯源或审核状态。</p>
       </div>
-      <div class="trending-controls" aria-label="热点筛选与排序">
+      <div class="trending-controls" aria-label="热点筛选与排序" data-i18n-aria="trending.controlsAria">
         <div class="trending-filter-sets">
           <div class="trending-filter-set">
-            <span class="filter-label">内容类型</span>
-            <div class="trending-tabs" id="trendingTypeTabs" aria-label="公开内容类型">
-              <button class="filter-chip active" type="button" data-content-type="all" aria-pressed="true">全部类型</button>
+            <span class="filter-label" data-i18n="trending.filterTypeLabel">内容类型</span>
+            <div class="trending-tabs" id="trendingTypeTabs" aria-label="公开内容类型" data-i18n-aria="trending.filterTypeAria">
+              <button class="filter-chip active" type="button" data-content-type="all" aria-pressed="true" data-i18n="trending.filter.allTypes">全部类型</button>
             </div>
           </div>
         </div>
-        <div class="trending-sort-controls" role="group" aria-label="热点排序方式">
-          <span class="filter-label">排序</span>
-          <div class="trending-sort-tabs" id="trendingSortTabs" aria-label="热点排序方式">
-            <button class="filter-chip active" type="button" data-trending-sort="recent" aria-pressed="true">最近</button>
-            <button class="filter-chip" type="button" data-trending-sort="hot" aria-pressed="false">热度</button>
+        <div class="trending-sort-controls" role="group" aria-label="热点排序方式" data-i18n-aria="trending.sortAria">
+          <span class="filter-label" data-i18n="trending.sortLabel">排序</span>
+          <div class="trending-sort-tabs" id="trendingSortTabs" aria-label="热点排序方式" data-i18n-aria="trending.sortAria">
+            <button class="filter-chip active" type="button" data-trending-sort="recent" aria-pressed="true" data-i18n="trending.sort.recent">最近</button>
+            <button class="filter-chip" type="button" data-trending-sort="hot" aria-pressed="false" data-i18n="trending.sort.hot">热度</button>
           </div>
-          <button class="trending-sort-help" id="trendingSortHelpToggle" type="button" aria-expanded="false" aria-controls="trendingSortHelp">热度说明</button>
+          <button class="trending-sort-help" id="trendingSortHelpToggle" type="button" aria-expanded="false" aria-controls="trendingSortHelp" data-i18n="trending.sort.helpToggle">热度说明</button>
         </div>
       </div>
       <p class="trending-sort-help-text" id="trendingSortHelp" role="note" hidden></p>

@@ -40,18 +40,22 @@
  *       的 registry_retention_days=270，与采集回溯窗口一致）；
  *       build-news 每轮结束也会自动执行同等裁剪）
  *
- *   review —— 热点审核状态管理（B16 决策 46/48/50/55/56/57/69/70）
- *     review list    [--status pending|approved|held|discarded] [--platform ...] [--limit N]
+ *   review —— 热点审核状态管理（B16 决策 46/48/50/55/56/57/69/70；content-reviewer 决策见 §7.4）
+ *     review list    [--status pending|approved|held|discarded] [--ai-verdict approve|hold|discard] [--platform ...] [--limit N]
  *     review summary
  *     review set     --id <id> --status pending|approved|held|discarded [--reason ...] [--reviewer ...]
  *     review batch   --ids <id1,id2,...> --status approved [--reason ...] [--reviewer ...]
+ *     review apply-ai [--verdicts discard,hold] [--min-confidence N] [--dry-run]
  *     review log     [--candidate-id <id>] [--action ...] [--limit N]
  *     （set 单条设置审核状态；batch 只处理显式列出的 ids，不支持隐式「全部」；
  *       ai_processing_status 未 completed 时禁止设为 approved；
  *       每次流转写入 reviewer / reviewed_at / from_status / candidate_version，决策 70；
  *       每次流转同时追加到追加式审核事件日志 review-events.json（决策 70：只追加、不改写历史），
  *       review log 用于查看历史流转记录；
- *       --reviewer 缺省回退到 GITHUB_ACTOR / USER / cli）
+ *       --reviewer 缺省回退到 GITHUB_ACTOR / USER / cli；
+ *       --ai-verdict 按 AI 审核建议（ai_review.verdict）筛选待审队列；
+ *       apply-ai 批量应用候选上已生成的 AI 建议（discard/hold，永不 approve；
+ *       confidence 低于 --min-confidence 或候选非 pending 的跳过），默认 dry-run 只预览）
  *
  *   transcript —— 视频字幕/文字稿处理（B16 决策 51/52/54/61/67）
  *     transcript status --id <id>
@@ -59,6 +63,14 @@
  *     （fetch 尝试获取 YouTube 自动字幕：缺失/过短 → held，技术失败 → error；
  *       成功且此前因字幕原因 held 的候选重置为 pending 等待复审，决策 52；
  *       完整字幕写入 data/news/runtime/transcripts/，不进 PR）
+ *
+ *   localize —— 热点内容本地化（多语言翻译，content-localizer）
+ *     localize preview     --title <t> [--description <d>] [--locale zh]
+ *     localize candidates  [--locale zh] [--limit N] [--dry-run]
+ *     （把候选 title/description 翻译成目标语言存 localizations[locale]，
+ *       原文保留顶层作溯源基线；只处理无 localizations[locale] 的候选，不重复花钱；
+ *       默认 --dry-run 只预览将翻译条数，非 dry-run 才写回候选层，
+ *       再运行 publish-news.js 重建公开投影即前端中文化）
  *
  *   legacy —— 旧热点数据迁移（B16 决策 64）
  *     legacy import   [--dry-run]
@@ -88,7 +100,7 @@
 const {
   sourceCommand, normalizeTags, validateSource, importSources, FILES,
 } = require('./cmd-sources');
-const { contentCommand, classifyCommand, transcriptCommand } = require('./cmd-content');
+const { contentCommand, classifyCommand, transcriptCommand, localizeCommand } = require('./cmd-content');
 const { authorizationCommand, quotaCommand, lockCommand, optionalNumber } = require('./cmd-ops');
 const { registryCommand, reviewCommand, legacyCommand } = require('./cmd-registry');
 
@@ -129,8 +141,9 @@ async function main(argv = process.argv.slice(2)) {
   else if (group === 'review') result = reviewCommand(action, flags);
   else if (group === 'classify') result = await classifyCommand(action, flags);
   else if (group === 'transcript') result = await transcriptCommand(action, flags);
+  else if (group === 'localize') result = await localizeCommand(action, flags);
   else if (group === 'legacy') result = legacyCommand(action, flags);
-  else throw new Error('用法: news-cli.js source|content|authorization|quota|lock|registry|review|classify|transcript|legacy <action> [options]');
+  else throw new Error('用法: news-cli.js source|content|authorization|quota|lock|registry|review|classify|transcript|localize|legacy <action> [options]');
   console.log(JSON.stringify(result, null, 2));
   return result;
 }

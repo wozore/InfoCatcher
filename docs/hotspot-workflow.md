@@ -27,23 +27,31 @@
    └─ projection.js        —— hot_score / evidence_excerpt / related_resources / 溯源 / 主题聚合 / 去重
    │
    ▼
-AI 分类  src/news/classify/
+AI 加工  src/news/classify/
    ├─ content-classifier.js —— L0 规则式兜底 + L1 DeepSeek，产出内容类型建议（ai_suggested）
-   └─ llm-provider.js       —— DeepSeek API 封装（失败自动降级回 L0）
+   ├─ content-summarizer.js —— 内容总结（标题+描述+字幕），产出 summary + key_points（无独立审核态）
+   ├─ content-reviewer.js   —— AI 审核建议（标题+描述+字幕+总结），产出 ai_review 建议（verdict discard/hold/approve + reasons + confidence）
+   ├─ content-localizer.js  —— 内容本地化（标题+描述 → 目标语言），产出 localizations[locale]（当前 zh）
+   └─ llm-provider.js       —— DeepSeek API 封装（分类/总结/审核/本地化共用，失败自动降级）
    │
    ▼
 内部候选层  data/news/runtime/hotspot-candidates.json（双状态轴，不发布到 dist/）
    │        ai_processing_status（系统状态）× review_status（人工结论）
+   │        + content_type 建议 + summary 总结字段（随候选 review_status 门禁公开）
+   │        + ai_review 审核建议（内部，不进公开；高置信 discard/hold 自动落 review_status）
+   │        + localizations 本地化内容（公开，前端按语言读取；原文保留顶层作溯源基线）
    ▼
 公开资格门禁  src/news/core/news-public-gate.js
    │         审核门禁（completed + approved）+ 近期时间窗口 + 公开字段完整
    ▼
 公开投影  data/news/output/hotspots.json  →  前端热点视图 / RSS（public/feed.xml）
+   ▼
+前端  src/web/（i18n 框架：UI 文案 t() 读字典 + 内容 getLocalizedField 读 localizations）
 ```
 
 **关键位置**：
 - 唯一构建入口：`scripts/build-news.js` → `src/news/pipeline/build-news.js` 的 `main()` / `runCollection()`。
-- 运维入口：`scripts/news-cli.js` → `src/news/cli/news-cli.js` 的 `main()`（十组命令）。
+- 运维入口：`scripts/news-cli.js` → `src/news/cli/news-cli.js` 的 `main()`（十一组命令）。
 - 发布入口：`scripts/publish-news.js`（从候选层重建公开投影，决策 59）。
 
 ---
@@ -83,7 +91,7 @@ node scripts/news-cli.js source disable --id ...
 
 - `scoring.weights`：`long_term_quality 0.30 / recent_timeliness 0.25 / light_user_experience 0.10 / source_reliability 0.20 / interaction_quality 0.15`；`neutral_score 50`；`half_life_days` 按标签半衰期。
 - `time_layers`：五层连续 UTC 半开区间 `recent-1d [0,1) / recent-7d [1,7) / recent-30d [7,30) / recent-90d [30,90) / recent-270d [90,270)`。
-- `collection`：`max_output_items 100`、`output_retention_days 30`、`registry_retention_days 270`、`analysis_version "rules-v1"`、`concurrency 5`、`youtube_quota_units_per_run 1000`、`bilibili_rsshub_requests_per_run 300`、`x_max_sources_per_run 15`、`transcript_enabled false` 等。
+- `collection`：`max_output_items 100`、`output_retention_days 30`、`registry_retention_days 270`、`analysis_version "rules-v1"`、`concurrency 5`、`youtube_quota_units_per_run 1000`、`bilibili_rsshub_requests_per_run 300`、`x_max_sources_per_run 15`、`transcript_enabled false`、`summary_enabled false`、`summary_max_items_per_run 30`、`summary_timeout_ms 15000`、`summary_max_transcript_chars 3000`、`review_enabled false`、`review_max_items_per_run 30`、`review_timeout_ms 15000`、`review_auto_apply false`、`review_auto_min_confidence 0.9`、`localize_enabled false`、`localize_max_items_per_run 30`、`localize_timeout_ms 15000`、`localize_target_locale "zh"` 等。
 - `anomaly`：`min_samples 30 / method "mad" / mad_threshold 3.5 / confirmed_adjustment 0`。
 - `ai_keywords`：AI 关键词过滤（`matchesAi`）。
 - `topic_entities`：主题聚合实体词表（`buildEvents`）。
@@ -131,6 +139,14 @@ node scripts/news-cli.js source disable --id ...
 6. `assessItem` 逐条评分 → `applyAnomalyDetection` MAD 异常 → `buildEvents` 主题聚合 → `buildProvenance` 溯源。
 7. 汇总 `coverage.time_layers`（统计口径：未来归 recent-1d、超窗归 older、无效归 older，见 `TIME_LAYER_STATS_OPTS`）。
 
+**候选落地后的 AI 加工（顺序有严格依赖）**：`mergeCandidates` 把本轮 items 写入内部候选层后，依次执行——
+`classifyCandidates`（内容分类建议，候选创建前）→ `mergeCandidates`（候选落地）→
+`markAnomalousTimeCandidates`（时间异常 held）→ `enrichYouTubeTranscripts`（字幕 enrichment，配置开关默认关）→
+**`enrichCandidateSummaries`（内容总结，须在字幕之后——总结输入含字幕，无字幕自动回退 title+desc）** →
+**`enrichCandidateReviews`（AI 审核建议，须在总结之后——审核输入含 summary，无总结自动只用其余素材）** →
+**`enrichCandidateLocalizations`（内容本地化，只消费原文 title/desc，与总结/审核无依赖，放最后）** →
+`buildPublicProjection`（经公开资格门禁派生公开投影）。字幕、总结、审核建议、本地化都只处理本轮 activeIds 内的候选。
+
 ### Phase 5：持久化（严格顺序）
 见「九、持久化与原子写」。
 
@@ -173,6 +189,7 @@ node scripts/news-cli.js source disable --id ...
   - 技术获取失败 → `markAiError`（`ai_processing_status='error'` + `error_type`/`retryable`）。
   - 成功且此前因字幕原因 held → 重置为 `pending`（`transcript_recovery`）由管理者再审。
 - 完整字幕写入 `data/news/runtime/transcripts/<id>.json`（内部、不发布、不进 PR）；候选只带元数据 + 短证据片段。
+- **字幕同时是内容总结（§7.3）的可选输入素材**：候选有 `transcript` 时总结拼入字幕，无则自动只用标题+描述。因此 `enrichCandidateSummaries` 必须排在 `enrichYouTubeTranscripts` 之后、公开投影之前调用（见 §3 Phase 4）。
 
 ---
 
@@ -257,7 +274,7 @@ node scripts/news-cli.js source disable --id ...
 
 ---
 
-## 七、AI 内容分类（`src/news/classify/`）
+## 七、AI 内容分类/总结/审核/本地化（`src/news/classify/`）
 
 ### 7.1 两级分类（content-classifier.js，决策 65/66/79）
 - **L0 规则式基线**：零依赖、零成本、可离线。六类正则 + catalog 词典（tools/glossary）命中，优先级：
@@ -279,6 +296,39 @@ node scripts/news-cli.js source disable --id ...
 - 失败语义：任何错误 resolve `{ ok: false }` 降级对象，绝不 reject。
 - `ai_confidence`：DeepSeek 无 token 概率，固定经验值 0.85 仅表示"调用成功"，不作为审核依据（审核以人工 reviewed 为准）。
 
+### 7.3 内容总结（content-summarizer.js）
+- 对候选做内容总结，输出 `summary`（单段中文摘要）+ `key_points`（要点列表）。输入 = 标题 + 描述 + 字幕（候选有 transcript 才拼入，无则自动只用 title+desc）。摘要与要点长度/数量由 LLM 根据内容信息量自主决定，不固定字数（视频质量/时长不同）。
+- **模块归属 vs 执行时机**：模块放 `src/news/classify/`（与分类器对称），但在 build-news.js 的 **Phase 4 候选落地后、字幕 enrichment 之后**调用（§3）——总结输入含字幕，必须排在字幕后、公开投影前；字幕默认关时自动只用 title+desc，不改字幕管线。
+- **失败语义**：任何 LLM 失败（缺 key/网络/超时/输出无法解析）resolve 降级、`summary` 置 null，前端回退 description，不阻塞采集管线（与分类器一致）。
+- **公开语义（用户拍板）**：总结是候选上的 AI 建议字段，**不引入独立审核状态机、不改审核模块**；随候选 `review_status` 门禁进公开——候选 approved 时总结一起公开，pending 时不公开。
+- **成本控制**：默认关闭（`summary_enabled: false`）、每轮上限（`summary_max_items_per_run`，默认 30）、只总结没有 summary 的候选（不重复花钱）、并发池限流（复用采集 `concurrency`）。
+- 数据契约：候选新增公开字段 `summary` / `summary_key_points`；内部痕迹 `summarizer` / `summary_generated_at` / `summary_input_chars` / `summary_llm_error` 进 `INTERNAL_FIELDS`，不进公开投影（§8）。`mergeCandidates` 保留既有总结，避免重复采集丢失。
+
+### 7.4 AI 审核建议（content-reviewer.js）
+- 对候选做 AI 初步审核，输出内部建议 `ai_review` = `{ verdict: approve|hold|discard, reasons, confidence, reviewer, generated_at }`。输入 = 标题 + 描述 + 字幕 + 内容总结（候选有 transcript / summary 才拼入，无则自动只用其余素材）。
+- **判定标准（prompt 契约）**：
+  - `discard`：明显无关（非 AI 主题 / 广告垃圾 / 纯标题党 / 低质量搬运），必须给具体排除理由；
+  - `hold`：存疑或信息不足（信息不全 / 疑似搬运 / 需人工细看）——映射现有 `held` + `hold_reason`；
+  - `approve`：与 AI 主题相关 + 有实质信息量，建议通过。
+  - `confidence`：模型自评 0–1（DeepSeek 无 token 概率，由模型自述）；缺省/非法置 0 = 永不触发自动应用的安全默认。
+- **模块归属 vs 执行时机**：模块放 `src/news/classify/`（与分类器/总结器对称），但在 build-news.js 的 **Phase 4 候选落地后、总结 enrichment 之后**调用（§3）——审核输入含 summary，必须排在总结后、公开投影前；总结默认关时自动只用其余素材，不改总结/字幕管线。
+- **失败语义**：任何 LLM 失败 resolve 降级、verdict 置 null、不写 `ai_review`（不误杀），候选保持 pending，人工照常审核，不阻塞采集管线。
+- **自动化档位（用户拍板）**：`review_auto_apply=true` 且 `confidence ≥ review_auto_min_confidence`（默认 0.9）时，`discard/hold` 由 AI 自动落 `review_status`（`reviewer='ai_review'`，经 `setBatchReviewStatus` 写完整审计字段并追加到只追加审核事件日志）；**`approve` 永不自动落**——通过必须由人 `review set/batch --status approved`。自动落只针对 `review_status='pending'` 的候选，已有人工结论的不被覆盖；可 `review set --status pending` 一键撤销 AI 误杀（discarded 是软状态，候选记录保留）。
+- **公开语义**：`ai_review` / `ai_review_llm_error` 是内部建议字段，经 `INTERNAL_FIELDS` 剔除**不进公开投影**，仅供审核侧使用，前端零改动（§8）。
+- **成本控制**：默认关闭（`review_enabled: false`）、每轮上限（`review_max_items_per_run`，默认 30）、只审核无 `ai_review` 且 `review_status='pending'` 的候选（不重复花钱）、并发池限流（复用采集 `concurrency`）。LLM 失败未写 ai_review 的候选下一轮会重试。
+- **CLI 配套**（§10）：`review list --ai-verdict <approve|hold|discard>` 按建议分拣待审队列；`review apply-ai [--verdicts ...] [--min-confidence N] [--dry-run]` 批量应用 AI 建议（默认 dry-run 只预览）。
+- 数据契约：候选新增内部字段 `ai_review`（对象）与 `ai_review_llm_error`（字符串|null）。`mergeCandidates` 保留既有 `ai_review`，避免重复审核（§8.3）。
+
+### 7.5 内容本地化（content-localizer.js，多语言）
+- 对候选做多语言翻译，输出公开字段 `localizations[locale] = { title, description }`（当前唯一 locale `zh`）。输入 = 原文标题 + 描述；**原文 title/description 保留在候选顶层**（溯源核验基线 + 未来其他语言的翻译源）。
+- **prompt 契约**：翻译成简体中文；品牌名/产品名/专有名词（DeepSeek、Ollama、Claude 等）、URL、代码、数字、版本号保持原文不译；忠实翻译不增删信息。
+- **模块归属 vs 执行时机**：模块放 `src/news/classify/`（与分类器/总结器/审核器对称），在 build-news.js 的 **Phase 4 审核 enrichment 之后、公开投影之前**调用（§3）——只消费原文 title/desc，与总结/审核无依赖，放最后避免影响审核用原文素材。
+- **失败语义**：任何 LLM 失败 resolve 降级、不写 `localizations[locale]`，前端回退原文显示，不阻塞采集管线。
+- **公开语义（用户拍板）**：`localizations` 是公开字段，经 `toPublicItem` **进公开投影**（不在 `INTERNAL_FIELDS`）——中文以数据文件形式存储，前端按语言读取，非前端运行时翻译；内部痕迹 `localizations_meta`（localizer/generated_at/input_chars/llm_error）进 `INTERNAL_FIELDS`，不进公开投影（§8）。
+- **成本控制**：默认关闭（`localize_enabled: false`）、每轮上限（`localize_max_items_per_run`，默认 30）、只翻译无 `localizations[locale]` 的候选（不重复花钱）、并发池限流（复用采集 `concurrency`）。LLM 失败未写翻译的候选下一轮会重试。
+- **存量迁移**：`content localize candidates --dry-run` 预览 → 非 dry-run 批量翻译候选层 → `publish-news.js` 重建公开投影即前端中文化（§10.2）。
+- 数据契约：候选新增公开字段 `localizations`（对象，locale → { title, description }）。`mergeCandidates` 保留既有 `localizations`，避免重新采集重复翻译（§8.3）。
+
 ---
 
 ## 八、内部候选层与双状态轴（`src/news/core/news-candidates.js`）
@@ -297,10 +347,30 @@ node scripts/news-cli.js source disable --id ...
 | `ai_processing_status` | AI 处理流程是否成功完成（系统状态） | `not_requested / queued / processing / completed / error` |
 | `review_status` | 人工审核结论（人的决定） | `pending / approved / held / discarded` |
 
+**总结字段（content-summarizer，§7.3）**：候选可带公开字段 `summary`（单段中文摘要）与
+`summary_key_points`（要点列表，不限条数），**随候选 review_status 门禁进公开**——候选 approved
+时总结一起公开，pending 时不公开；不引入独立审核态。内部痕迹 `summarizer` /
+`summary_generated_at` / `summary_input_chars` / `summary_llm_error` 经 `INTERNAL_FIELDS`
+剔除，不进公开投影。`mergeCandidates` 保留既有总结（§8.3），避免重新采集丢失已生成总结。
+
+**AI 审核建议字段（content-reviewer，§7.4）**：候选可带内部字段 `ai_review`（对象：
+`verdict approve|hold|discard` + `reasons` + `confidence` + `reviewer` + `generated_at`）与
+`ai_review_llm_error`。**`ai_review` 不进公开投影**（经 `INTERNAL_FIELDS` 剔除），仅供审核侧
+使用，前端零改动。高置信 `discard/hold` 在 `review_auto_apply=true` 时由 AI 自动落
+`review_status`（`reviewer='ai_review'`），`approve` 永不自动落（§7.4）。`mergeCandidates`
+保留既有 `ai_review`（§8.3），避免重复审核。
+
+**内容本地化字段（content-localizer，§7.5）**：候选可带公开字段 `localizations`（对象：
+`locale → { title, description }`，当前唯一 locale `zh`）。**`localizations` 进公开投影**
+（不在 `INTERNAL_FIELDS`）——中文以数据文件形式存储，前端按语言读取，非前端运行时翻译；
+原文顶层 `title`/`description` 保留作溯源基线。内部痕迹 `localizations_meta`（localizer /
+generated_at / input_chars / llm_error）经 `INTERNAL_FIELDS` 剔除，不进公开投影。
+`mergeCandidates` 保留既有 `localizations`（§8.3），避免重复翻译。
+
 **公开资格门禁（决策 69）**：仅当 `ai_processing_status === 'completed'` **且** `review_status === 'approved'` 时候选才进入公开 hotspots.json。系统失败（error）与人工决定（discarded）分属不同轴，互不覆盖。
 
 ### 8.3 候选合并与审计
-- `mergeCandidates`：新候选按 id 覆盖内容字段；已存在候选**保留既有** `review_status` / `ai_processing_status` / `candidate_version` / `batch_id`，避免重新采集重置人工结论；人工确认的内容类型（`content_type_status='reviewed'`）同样保留。
+- `mergeCandidates`：新候选按 id 覆盖内容字段；已存在候选**保留既有** `review_status` / `ai_processing_status` / `candidate_version` / `batch_id`，避免重新采集重置人工结论；人工确认的内容类型（`content_type_status='reviewed'`）与已生成的总结（`summary` / `summary_key_points` 及内部痕迹）、已生成的 `ai_review`（§7.4）、已生成的 `localizations`（§7.5）同样保留，避免重新采集丢失已生成总结/重复审核/重复翻译。
 - 采集时打上 `batch_id`（`batch_<YYYYMMDD>`）与初版 `candidate_version`（决策 70）。
 - 新候选默认 `review_status='pending'`，`ai_processing_status='completed'`（L0 规则式/既有处理产物）。
 - `setReviewStatus` / `setBatchReviewStatus`：校验状态合法；`approved` 需先 `assertCanApprove`（AI 未完成禁止批准）；每次流转写完整审计字段 `reviewer / reviewed_at / from_status / candidate_version`（+ `review_reason`）。
@@ -310,7 +380,7 @@ node scripts/news-cli.js source disable --id ...
 
 ### 8.4 审核事件日志（news-review-events.js，决策 70 的另一半）
 - `review-events.json`：**只追加、不改写历史**的追加式日志，完整保留每次审核状态流转（candidate_id / action / from_status / review_status / review_reason / reviewer / reviewed_at / candidate_version / batch_id / logged_at）。
-- 系统驱动的状态变化（如字幕 enrichment 自动 held）同样记录，`reviewer='system'`。
+- 系统驱动的状态变化（如字幕 enrichment 自动 held）同样记录，`reviewer='system'`；AI 审核自动应用（content-reviewer §7.4）的流转记录 `reviewer='ai_review'`，action 为 `ai_review_auto_discard` / `ai_review_auto_hold`。
 - 候选主记录只保存当前状态与最近一次流转；历史状态从日志追溯。
 
 ---
@@ -346,10 +416,11 @@ node scripts/news-cli.js source disable --id ...
 
 ### 10.1 CLI 审核命令（`review` 组，src/news/cli/cmd-registry.js）
 ```bash
-node scripts/news-cli.js review list    [--status pending|approved|held|discarded] [--platform ...] [--limit N]
+node scripts/news-cli.js review list    [--status pending|approved|held|discarded] [--ai-verdict approve|hold|discard] [--platform ...] [--limit N]
 node scripts/news-cli.js review summary
 node scripts/news-cli.js review set     --id <id> --status <s> [--reason ...] [--reviewer ...] [--content-type <t>]
 node scripts/news-cli.js review batch   --ids <id1,id2,...> --status approved [--reason ...] [--reviewer ...]
+node scripts/news-cli.js review apply-ai [--verdicts discard,hold] [--min-confidence N] [--dry-run]
 node scripts/news-cli.js review log     [--candidate-id <id>] [--action ...] [--limit N]
 ```
 - `set` 单条设置；`batch` 只处理**显式列出**的 ids，不支持隐式"全部"（决策 56）。
@@ -357,11 +428,14 @@ node scripts/news-cli.js review log     [--candidate-id <id>] [--action ...] [--
 - 每条流转写审计字段并追加到只追加审核事件日志（决策 70）。
 - `--reviewer` 缺省回退 `GITHUB_ACTOR → USER → USERNAME → 'cli'`。
 - `--content-type`：审核时可同时确认内容类型（`ai_suggested → reviewed`）。
+- `--ai-verdict`（content-reviewer §7.4）：按 `ai_review.verdict` 筛选待审队列（如 `review list --ai-verdict approve` 看 AI 建议通过的内容，人再 `review batch --status approved` 最终决定）。
+- `review apply-ai`：把候选上已生成的 AI 建议批量应用到 `review_status`（`discard/hold`，**永不 approve**；confidence 低于 `--min-confidence` 或候选非 pending 的跳过）；**默认 dry-run 只预览**，不加 `--dry-run` 才实际落盘并逐条写审核日志（`reviewer='ai_review'`）。
 
 ### 10.2 其他人工相关命令
 - `legacy import / status`：旧热点数据迁移（决策 64）；导入后 `review set/batch --status approved` 逐条/批量审核，再 `publish-news.js` 重建公开投影。
 - `transcript status/fetch`：单条字幕处理（决策 52）。
 - `classify preview/candidates/hotspots/confirm`：分类建议与人工确认。
+- `localize preview / candidates`（content-localizer §7.5）：热点内容多语言翻译。`localize candidates [--locale zh] [--limit N] [--dry-run]` 对候选层批量翻译（只处理无 `localizations[locale]` 的候选，不重复花钱）；**默认 `--dry-run` 只预览将翻译条数**（成本预览），非 dry-run 写回候选层后运行 `publish-news.js` 重建公开投影即前端中文化。需 `DEEPSEEK_API_KEY`。
 - `content add/import/list`：B 站人工条目；重复校验同时查 payload 与 Registry（`content add` 走构建锁）。
 
 ---
@@ -400,7 +474,7 @@ collect-news.yml 构建 → review 分支 + 审核 PR（附状态分布摘要）
 | 构建编排入口 | [build-news.js](../src/news/pipeline/build-news.js) | `runCollection`、`main`、`classifyTimeLayer`、汇总 re-export 31 个 |
 | CLI 分发 | [news-cli.js](../src/news/cli/news-cli.js) | `parseArgs`、`main`、各 command |
 | 来源管理 | [cmd-sources.js](../src/news/cli/cmd-sources.js) | `sourceCommand`、`validateSource`、`importSources` |
-| 内容/分类/字幕 | [cmd-content.js](../src/news/cli/cmd-content.js) | `contentCommand`、`classifyCommand`、`transcriptCommand` |
+| 内容/分类/字幕/本地化 | [cmd-content.js](../src/news/cli/cmd-content.js) | `contentCommand`、`classifyCommand`、`transcriptCommand`、`localizeCommand` |
 | 授权/额度/锁 | [cmd-ops.js](../src/news/cli/cmd-ops.js) | `authorizationCommand`、`quotaCommand`、`lockCommand` |
 | registry/review/legacy | [cmd-registry.js](../src/news/cli/cmd-registry.js) | `registryCommand`、`reviewCommand`、`legacyCommand` |
 | 存储与锁 | [news-storage.js](../src/news/core/news-storage.js) | `readJson`、`writeJsonAtomic`、`acquireLock` |
@@ -419,7 +493,10 @@ collect-news.yml 构建 → review 分支 + 审核 PR（附状态分布摘要）
 | 评分 | [scoring.js](../src/news/pipeline/scoring.js) | `assessItem`、`applyAnomalyDetection`、`HEAT_DEFINITION` |
 | 投影 | [projection.js](../src/news/pipeline/projection.js) | `enrichHotspotProjection`、`buildProvenance`、`buildEvents` |
 | AI 分类 | [content-classifier.js](../src/news/classify/content-classifier.js) | `classifyRuleBased`、`classifyCandidates`、`confirmContentType` |
-| LLM | [llm-provider.js](../src/news/classify/llm-provider.js) | `classifyWithDeepSeek` |
+| AI 总结 | [content-summarizer.js](../src/news/classify/content-summarizer.js) | `summarizeCandidate`、`summarizeCandidates`、`enrichCandidateSummaries` |
+| AI 审核 | [content-reviewer.js](../src/news/classify/content-reviewer.js) | `reviewCandidate`、`reviewCandidates`、`applyAiReviewVerdicts`、`enrichCandidateReviews` |
+| AI 本地化 | [content-localizer.js](../src/news/classify/content-localizer.js) | `collectLocalizeSource`、`localizeCandidate`、`localizeCandidates`、`enrichCandidateLocalizations` |
+| LLM | [llm-provider.js](../src/news/classify/llm-provider.js) | `classifyWithDeepSeek`、`summarizeWithDeepSeek`、`reviewWithDeepSeek`、`localizeWithDeepSeek` |
 | 人工条目 | [news-manual.js](../src/content/news-manual.js) | `normalizeManualItem`、`importManualItems` |
 | RSS | [generate-rss.js](../src/content/generate-rss.js) | `getFeedItems`、`generateRss` |
 | 路径 | [paths.js](../src/shared/paths.js) | `DIRS`、`NEWS_FILES` |
@@ -438,7 +515,7 @@ collect-news.yml 构建 → review 分支 + 审核 PR（附状态分布摘要）
 | `runtime/news-registry-pruned.json` | Registry 裁剪归档（可回滚） | 否 |
 | `runtime/news-quota.json` | 平台额度账本 | 否 |
 | `runtime/pending-authorizations.json` | 待授权任务 | 否 |
-| `runtime/hotspot-candidates.json` | **内部候选层（双状态轴）** | 否 |
+| `runtime/hotspot-candidates.json` | **内部候选层（双状态轴 + content_type/summary 建议 + ai_review 审核建议 + localizations 本地化内容）** | 否 |
 | `runtime/review-events.json` | 追加式审核事件日志 | 否 |
 | `runtime/transcripts/` | 完整字幕（内部） | 否 |
 | `runtime/news-admin-audit.json` | 强制解锁等审计 | 否 |
@@ -452,7 +529,7 @@ collect-news.yml 构建 → review 分支 + 审核 PR（附状态分布摘要）
 
 - `scripts/validate.js` → `src/maintenance/validate.js`：catalog + news 数据 + 开发原则门禁聚合校验，`process.exit(0/1)`；CI 三处工作流依赖。
 - `node scripts/build-news.js --fixture`：本地 fixture 确定性测试（`tests/fixtures/`），不请求 API、不消费额度、不写持久文件（`noWrite`）；用于验证标准化→过滤→评分→溯源的确定性行为。
-- 测试文件：`tests/news/` 下的 news-tests / news-foundation / news-candidates / news-review-events / news-public-gate / news-transcripts / news-audit / news-rss 等。
+- 测试文件：`tests/news/` 下的 news-tests / news-foundation / news-candidates / news-review-events / news-public-gate / news-transcripts / news-summarizer / news-reviewer / news-localizer / news-audit / news-rss 等。
 
 ---
 
@@ -468,3 +545,15 @@ collect-news.yml 构建 → review 分支 + 审核 PR（附状态分布摘要）
 8. **构建锁从不自动过期**：并发安全由"锁永久有效 + 人工 force-unlock 带理由"保证，config 无任何锁过期字段。
 9. **Registry 裁剪用 `last_seen_at` 而非 `published_at`**：回溯收集的历史视频 published_at 旧但 last_seen_at 新，按发布时间裁剪会误删仍在处理的回溯记录。
 10. **X 请求实际不纳入 quota ledger（注释与实现不符）**：news-x.js 顶部注释声称"每次请求经 `requestText` 的 `beforeAttempt` 计入 quota"，但 `collectX` 未传 `beforeAttempt` 回调，`createQuotaLedger` 也只建 youtube/bilibili 两平台账本。若预期 X 也应计费，需在 `collectX` 增加 beforeAttempt 回调并在 ledger 增加 x 平台；目前 X 成本仅靠来源轮转与 `x_max_pages_per_source=1` 约束。**此差异为阅读代码时发现，建议开发者核实是否有意为之。**
+11. **总结必须在字幕 enrichment 之后调用**：content-summarizer 的输入含字幕（候选 `transcript`），若在字幕前调用则候选无 transcript、总结退化为只用 title+desc，丢字幕素材。build-news.js 中 `enrichCandidateSummaries` 排在 `enrichYouTubeTranscripts` 之后、`buildPublicProjection` 之前（§3 Phase 4 候选落地后的 AI 加工顺序）。
+12. **总结无独立审核态，随候选门禁走**：总结不新增 `summary_status`，审核 CLI / 审核日志 / 公开门禁都不为总结单独改动——候选 `approved` 时总结一起公开，`pending` 时不公开；前端有总结显示总结、无则回退 description。勿为总结引入独立审核状态机。
+13. **`mergeCandidates` 保留既有总结**：重新采集时 incoming 候选无 summary 字段，若不保留则已生成总结丢失；合并逻辑保留 `summary` / `summary_key_points` 及内部痕迹，本轮新总结（incoming 已带 summary）优先。
+14. **AI 审核必须在总结 enrichment 之后调用**：content-reviewer 的输入含总结（候选 `summary`），若在总结前调用则候选无 summary、审核退化为只用 title+desc+字幕，丢总结素材。build-news.js 中 `enrichCandidateReviews` 排在 `enrichCandidateSummaries` 之后、`buildPublicProjection` 之前（§3 Phase 4 候选落地后的 AI 加工顺序）。
+15. **AI 审核永不自动 approved，且只动 pending 候选**：`applyAiReviewVerdicts` 只处理 `discard/hold` 且 `confidence ≥ minConfidence` 且 `review_status='pending'` 的候选——已有人工结论（approved/held/discarded）的不被自动覆盖，approve 永远留给人工 `review set/batch`。勿让 AI 建议覆盖人工结论。
+16. **ai_review 是内部字段，不进公开投影**：`ai_review` / `ai_review_llm_error` 经 `INTERNAL_FIELDS` 剔除，前端零改动。勿把它当作公开内容类型（content_type 本体保留）或总结（summary 公开）那样透传。
+17. **AI 自动丢弃是软状态，可恢复**：AI 自动落 `discarded/held` 只改 `review_status`（候选记录保留、进审核日志），`review set --status pending` 可一键撤销误杀。勿误以为 AI 丢弃等于删除数据。
+18. **本地化放最后执行（模块归属 ≠ 执行时机）**：content-localizer 模块放 classify/，但 build-news.js Phase 4 中在审核 enrichment **之后**、投影之前调用——只消费原文 title/desc，放最后避免影响审核用原文素材（§3）。
+19. **localizations 是公开字段，localizations_meta 是内部字段**：`localizations` 进公开投影（用户拍板：中文以数据文件形式存储，前端按语言读取）；`localizations_meta`（翻译元数据/错误痕迹）经 `INTERNAL_FIELDS` 剔除。勿把两者混为一谈。
+20. **翻译不覆盖原文顶层字段**：翻译只写 `localizations[locale]`，原文顶层 `title`/`description` 保留作溯源核验基线 + 未来其他语言的翻译源。勿在本地化时覆盖顶层字段。
+21. **localize CLI 默认 dry-run 是成本预览**：存量迁移前先 `localize candidates --dry-run` 看将翻译条数（无 `localizations[locale]` 的候选），再非 dry-run 执行，避免一次性翻译全部候选产生意外 API 成本。前端**内容**中文化依赖数据侧翻译（`localizations.zh`），**UI 文案**中文化走 i18n 框架（`t()` 读 `zh.js` 字典）——两层独立，勿混淆。
+

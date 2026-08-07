@@ -110,6 +110,7 @@ import {
   openHotspotDetail,
 } from './trending.js';
 import { renderGlossary, openGlossaryConcept, setActiveGlossaryId } from './glossary.js';
+import { applyStaticTranslations } from './i18n.js';
 import {
   renderFeatured,
   activeEditorCat,
@@ -289,6 +290,9 @@ window.toggleSceneToolCard = toggleSceneToolCard;
 // EXTENSION POINT: 新视图的事件监听在此区域追加
 // ═══════════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', async () => {
+  // i18n 框架：先替换 index.html 静态文案（data-i18n 属性），早于各视图 render
+  // （render 内文案用 t()，语言切换时重新 applyStaticTranslations + 重渲染即可）。
+  applyStaticTranslations();
   renderSkeletons();
   await loadData();
   renderTools();

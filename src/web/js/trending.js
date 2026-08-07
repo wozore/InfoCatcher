@@ -43,6 +43,7 @@ import {
   ICON_EXTERNAL,
 } from './data.js';
 import { showModal, closeModal, setModalScrollPosition } from './tools.js';
+import { t, getLocalizedField } from './i18n.js';
 
 // ═══════════════════════════════════════════════════════════════
 // 筛选、排序与状态
@@ -57,7 +58,7 @@ function renderTrendingTypeFilters() {
   const filterSet = container.closest('.trending-filter-set');
   if (filterSet) filterSet.hidden = types.length === 0;
   if (activeTrendingType !== 'all' && !types.includes(activeTrendingType)) setActiveTrendingType('all');
-  container.innerHTML = '<button class="filter-chip' + (activeTrendingType === 'all' ? ' active' : '') + '" type="button" data-content-type="all" aria-pressed="' + (activeTrendingType === 'all') + '">全部类型</button>' +
+  container.innerHTML = '<button class="filter-chip' + (activeTrendingType === 'all' ? ' active' : '') + '" type="button" data-content-type="all" aria-pressed="' + (activeTrendingType === 'all') + '" data-i18n="trending.filter.allTypes">' + t('trending.filter.allTypes') + '</button>' +
     types.map(type => '<button class="filter-chip' + (activeTrendingType === type ? ' active' : '') + '" type="button" data-content-type="' + escapeHtml(type) + '" aria-pressed="' + (activeTrendingType === type) + '">' + escapeHtml(contentTypeLabels[type] || type) + '</button>').join('');
 }
 
@@ -65,39 +66,39 @@ function renderTrendingStatus() {
   const status = document.getElementById('trendingStatus');
   const coverage = hotspots.coverage;
   if (dataLoadFailures.has('hotspots')) {
-    status.innerHTML = '<div class="status-note status-error" role="alert"><strong>加载失败：</strong>公开热点数据暂时无法读取。请刷新页面重试；其他资料视图仍可使用。</div>';
+    status.innerHTML = '<div class="status-note status-error" role="alert"><strong>' + t('trending.status.loadFailed') + '</strong></div>';
     return;
   }
   if (!(hotspots.items || []).length && !hotspots.generated_at && (!coverage || coverage.status === 'not_run')) {
-    status.innerHTML = '<div class="status-note status-neutral" role="status"><strong>公开投影建设中：</strong>尚未生成可供浏览器读取的热点内容，请等待公开构建完成。</div>';
+    status.innerHTML = '<div class="status-note status-neutral" role="status"><strong>' + t('trending.status.building') + '</strong></div>';
     return;
   }
   if (!(hotspots.items || []).length) {
-    status.innerHTML = '<div class="status-note status-neutral" role="status"><strong>暂无公开热点：</strong>公开投影已生成，但当前没有可展示内容。</div>';
+    status.innerHTML = '<div class="status-note status-neutral" role="status"><strong>' + t('trending.status.empty') + '</strong></div>';
     return;
   }
   if (!coverage || coverage.status === 'not_run') {
-    status.innerHTML = '<div class="status-note status-neutral" role="status"><strong>覆盖信息暂不可用：</strong>继续展示已生成的公开内容，不能据此推断全部来源的近期状态。</div>';
+    status.innerHTML = '<div class="status-note status-neutral" role="status"><strong>' + t('trending.status.coverageUnavailable') + '</strong></div>';
     return;
   }
   const notes = [];
   const bilibili = coverage.platforms?.bilibili;
   if (bilibili?.status === 'manual_curated') {
-    notes.push('<div class="status-note status-neutral" role="status"><strong>人工收录：</strong>B站当前采用人工精选收录，自动订阅已暂停；已有内容仍保留原始链接，未收录不代表来源近期没有更新。</div>');
+    notes.push('<div class="status-note status-neutral" role="status"><strong>' + t('trending.status.bilibiliManual') + '</strong></div>');
   } else if (bilibili?.reason === 'rsshub_provider_blocked') {
-    notes.push('<div class="status-note status-warn" role="status"><strong>部分不可用：</strong>B站自动订阅入口被服务提供方拦截，本轮已快速停止后续请求；页面继续展示上一版及人工精选内容。</div>');
+    notes.push('<div class="status-note status-warn" role="status"><strong>' + t('trending.status.bilibiliBlocked') + '</strong></div>');
   }
   const degraded = [];
   for (const [platform, info] of Object.entries(coverage.platforms || {})) {
     if (info.status === 'degraded' || info.status === 'partial') degraded.push(platform);
   }
-  if (coverage.platforms?.bilibili?.dynamic?.status === 'degraded') degraded.push('B站动态');
+  if (coverage.platforms?.bilibili?.dynamic?.status === 'degraded') degraded.push(t('trending.status.bilibiliDynamic'));
   if (degraded.length) {
-    notes.push('<div class="status-note status-warn" role="status"><strong>部分数据降级：</strong>' + escapeHtml([...new Set(degraded)].join('、')) + '。缺失会降低判断置信度，不代表来源质量下降。</div>');
+    notes.push('<div class="status-note status-warn" role="status"><strong>' + t('trending.status.degraded', { platforms: escapeHtml([...new Set(degraded)].join('、')) }) + '</strong></div>');
   }
   status.innerHTML = notes.length
     ? notes.join('')
-    : '<div class="status-note status-ok" role="status"><strong>采集完成：</strong>本轮自动来源采集已完成。</div>';
+    : '<div class="status-note status-ok" role="status"><strong>' + t('trending.status.collectComplete') + '</strong></div>';
 }
 
 // B16 决策 85：热度说明通过低权重信息提示查看；默认不展示热度数值或排名。
@@ -106,8 +107,8 @@ function renderTrendingSortHelp() {
   if (!help) return;
   const hasHeat = (hotspots.items || []).some(item => getHotspotHeat(item) !== null);
   help.textContent = hasHeat
-    ? '热度排序按公开投影中的热度字段倒序，只改变阅读顺序，不改变内容类型、来源与审核状态；热度数值默认不展示。'
-    : '当前公开投影暂未提供可比较的热度字段，选择“热度”时仍按最近时间倒序；该字段由数据契约补充后自动生效，不会伪造排序。';
+    ? t('trending.sort.helpWithHeat')
+    : t('trending.sort.helpWithoutHeat');
 }
 
 // 决策 80：筛选无匹配时“清除筛选”，重置内容类型筛选（平台已非列表级筛选维度），保留排序选择。
@@ -116,7 +117,7 @@ function clearTrendingFilters() {
   setActiveTrendingType('all');
   setRegionBusy(document.getElementById('trendingGrid'), true);
   renderTrending();
-  if (changed) announceStatus('已清除热点筛选');
+  if (changed) announceStatus(t('trending.filter.cleared'));
 }
 
 // 决策 80：热点数据加载失败时“重新加载”，重新拉取公开投影；失败时保留上一版数据并保持失败状态。
@@ -124,16 +125,16 @@ async function reloadHotspots() {
   const grid = document.getElementById('trendingGrid');
   const status = document.getElementById('trendingStatus');
   setRegionBusy(grid, true);
-  if (status) status.innerHTML = '<div class="status-note status-neutral" role="status"><strong>正在重新加载：</strong>正在读取公开热点数据。</div>';
+  if (status) status.innerHTML = '<div class="status-note status-neutral" role="status"><strong>' + t('trending.status.reloading') + '</strong></div>';
   try {
     const resp = await fetch('data/news/output/hotspots.json');
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
     setHotspots(await resp.json());
     dataLoadFailures.delete('hotspots');
-    announceStatus('热点数据已重新加载');
+    announceStatus(t('trending.status.reloaded'));
   } catch (error) {
     dataLoadFailures.add('hotspots');
-    announceStatus('热点数据重新加载失败');
+    announceStatus(t('trending.status.reloadFailed'));
   }
   renderTrending();
 }
@@ -144,7 +145,7 @@ async function reloadHotspots() {
 
 function renderHotspotMetrics(item) {
   if (!item.metrics) return [];
-  return [['views', '浏览'], ['likes', '点赞'], ['comments', '评论'], ['reposts', '转发'], ['replies', '回复']]
+  return [['views', t('trending.metric.views')], ['likes', t('trending.metric.likes')], ['comments', t('trending.metric.comments')], ['reposts', t('trending.metric.reposts')], ['replies', t('trending.metric.replies')]]
     .map(([key, label]) => {
       const value = formatMetric(item.metrics[key]);
       return value === null ? null : { label, value };
@@ -152,7 +153,7 @@ function renderHotspotMetrics(item) {
     .filter(Boolean);
 }
 
-function formatHotspotDate(value, fallback = '时间未知') {
+function formatHotspotDate(value, fallback = t('timeAgo.unknown')) {
   const date = new Date(value);
   return Number.isFinite(date.getTime())
     ? date.toLocaleString('zh-CN', { dateStyle: 'medium', timeStyle: 'short' })
@@ -162,50 +163,53 @@ function formatHotspotDate(value, fallback = '时间未知') {
 // 决策 78：按热点实体唯一内容发布时间轻量分组（今天/昨天/近 7 天/更早；无效时间归“时间未知”）
 function getTrendingGroupLabel(item) {
   const time = new Date(item.published_at).getTime();
-  if (!Number.isFinite(time)) return '时间未知';
+  if (!Number.isFinite(time)) return t('labels.group.unknown');
   const diff = Date.now() - time;
   const day = 86400000;
-  if (diff < 0 || diff < day) return '今天';
-  if (diff < 2 * day) return '昨天';
-  if (diff < 7 * day) return '近 7 天';
-  return '更早';
+  if (diff < 0 || diff < day) return t('labels.group.today');
+  if (diff < 2 * day) return t('labels.group.yesterday');
+  if (diff < 7 * day) return t('labels.group.last7d');
+  return t('labels.group.earlier');
 }
 
 // 决策 74/77/87：卡片默认只显示内容类型、标题、短摘要、时间线索与低权重详情入口；
 // 平台、作者、互动、来源标签移入详情对话框，不占卡片默认区。
 function renderTrendingCard(item) {
-  const typeLabel = contentTypeLabels[item.content_type] || item.content_type || '类型未知';
-  const published = Number.isFinite(new Date(item.published_at).getTime()) ? timeAgo(item.published_at) : '发布时间未知';
-  const preview = item.description || '来源描述暂不可用';
+  const typeLabel = contentTypeLabels[item.content_type] || item.content_type || t('labels.fallback.type');
+  const published = Number.isFinite(new Date(item.published_at).getTime()) ? timeAgo(item.published_at) : t('labels.fallback.published');
+  // 内容本地化：摘要优先（AI 总结已中文）；无总结用本地化描述（localizations.zh），再回退原文描述
+  const preview = item.summary || getLocalizedField(item, 'description') || item.description || t('labels.fallback.preview');
   const sourceDetailId = 'trending-source-detail-' + String(item.id).replace(/[^a-zA-Z0-9_-]/g, '-');
-  const meta = platformMeta[item.platform] || { label: item.platform || '平台未知' };
+  const meta = platformMeta[item.platform] || { label: item.platform || t('labels.fallback.platform') };
   const sourceUrl = item.url ? safeExternalUrl(item.url) : '#';
-  const sourceName = item.author_name || item.source_id || '来源信息待补充';
-  const sourceTypeLabel = SOURCE_TYPE_LABELS[item.source_type] || item.source_type || '来源类型未知';
-  const sourceEvidence = item.evidence_excerpt || item.source_excerpt || '暂无可展示的直接依据。当前公开投影未提供可定位的审核依据片段。';
+  const sourceName = item.author_name || item.source_id || t('labels.fallback.author');
+  const sourceTypeLabel = SOURCE_TYPE_LABELS[item.source_type] || item.source_type || t('labels.fallback.sourceType');
+  const sourceEvidence = item.evidence_excerpt || item.source_excerpt || t('labels.fallback.evidence');
+  const localizedTitle = getLocalizedField(item, 'title') || item.title || t('labels.fallback.title');
+  const localizedDescription = getLocalizedField(item, 'description') || item.description;
   return '<article class="trending-card" data-hotspot-id="' + escapeHtml(item.id) + '" aria-labelledby="trending-title-' + escapeHtml(item.id) + '">' +
     '<div class="trending-card-head"><span class="tag scene">' + escapeHtml(typeLabel) + '</span><span>' + escapeHtml(published) + '</span></div>' +
-    '<h3 id="trending-title-' + escapeHtml(item.id) + '"><span class="trending-title">' + escapeHtml(item.title || '标题暂不可用') + '</span></h3>' +
+    '<h3 id="trending-title-' + escapeHtml(item.id) + '"><span class="trending-title">' + escapeHtml(localizedTitle) + '</span></h3>' +
     '<div class="trending-preview-wrap">' +
-      '<p class="trending-description' + (item.description ? '' : ' is-missing') + '">' + escapeHtml(preview) + '</p>' +
+      '<p class="trending-description' + (item.description || getLocalizedField(item, 'description') ? '' : ' is-missing') + '">' + escapeHtml(preview) + '</p>' +
       (item.description
-        ? '<div class="trending-secondary-preview" aria-hidden="true"><span>' + escapeHtml(item.description) + '</span></div>'
+        ? '<div class="trending-secondary-preview" aria-hidden="true"><span>' + escapeHtml(localizedDescription || item.description) + '</span></div>'
         : '') +
     '</div>' +
     '<div class="trending-card-actions">' +
-      '<button class="btn-link trending-source-toggle" type="button" data-hotspot-card-source-toggle aria-expanded="false" aria-controls="' + escapeHtml(sourceDetailId) + '">查看来源</button>' +
-      '<button class="btn-link trending-open-hint" type="button" data-hotspot-open>打开详情</button>' +
+      '<button class="btn-link trending-source-toggle" type="button" data-hotspot-card-source-toggle aria-expanded="false" aria-controls="' + escapeHtml(sourceDetailId) + '">' + t('trending.card.viewSource') + '</button>' +
+      '<button class="btn-link trending-open-hint" type="button" data-hotspot-open>' + t('trending.card.openDetail') + '</button>' +
     '</div>' +
     '<div class="trending-card-source-detail" id="' + escapeHtml(sourceDetailId) + '" data-hotspot-card-source hidden>' +
       '<dl class="trending-source-meta">' +
-        '<div><dt>来源平台</dt><dd>' + escapeHtml(meta.label) + '</dd></div>' +
-        '<div><dt>来源类型</dt><dd>' + escapeHtml(sourceTypeLabel) + '</dd></div>' +
-        '<div><dt>来源名称</dt><dd>' + escapeHtml(sourceName) + '</dd></div>' +
-        '<div><dt>内容时间</dt><dd>' + escapeHtml(formatHotspotDate(item.published_at)) + '</dd></div>' +
-        '<div><dt>数据更新于</dt><dd>' + escapeHtml(formatHotspotDate(item.fetched_at)) + '</dd></div>' +
+        '<div><dt>' + t('trending.card.sourcePlatform') + '</dt><dd>' + escapeHtml(meta.label) + '</dd></div>' +
+        '<div><dt>' + t('trending.card.sourceType') + '</dt><dd>' + escapeHtml(sourceTypeLabel) + '</dd></div>' +
+        '<div><dt>' + t('trending.card.sourceName') + '</dt><dd>' + escapeHtml(sourceName) + '</dd></div>' +
+        '<div><dt>' + t('trending.card.contentTime') + '</dt><dd>' + escapeHtml(formatHotspotDate(item.published_at)) + '</dd></div>' +
+        '<div><dt>' + t('trending.card.updatedAt') + '</dt><dd>' + escapeHtml(formatHotspotDate(item.fetched_at)) + '</dd></div>' +
       '</dl>' +
-      '<p class="trending-source-evidence"><strong>依据片段：</strong>' + escapeHtml(sourceEvidence) + '</p>' +
-      (sourceUrl !== '#' ? '<a class="btn-link trending-source-link" href="' + escapeHtml(sourceUrl) + '" target="_blank" rel="noopener noreferrer">打开原始来源（将离开当前页面） ' + ICON_EXTERNAL + '</a>' : '<p class="trending-source-unavailable">原始来源链接暂不可用。</p>') +
+      '<p class="trending-source-evidence"><strong>' + t('trending.card.evidence') + '</strong>' + escapeHtml(sourceEvidence) + '</p>' +
+      (sourceUrl !== '#' ? '<a class="btn-link trending-source-link" href="' + escapeHtml(sourceUrl) + '" target="_blank" rel="noopener noreferrer">' + t('trending.card.openOriginal') + ' ' + ICON_EXTERNAL + '</a>' : '<p class="trending-source-unavailable">' + t('labels.fallback.sourceLink') + '</p>') +
     '</div>' +
   '</article>';
 }
@@ -219,8 +223,8 @@ function renderTrending() {
   setRegionBusy(grid, false);
   document.getElementById('trendingCount').textContent = items.length;
   document.getElementById('trendingGenerated').textContent = hotspots.generated_at
-    ? '生成于 ' + timeAgo(hotspots.generated_at)
-    : '尚未采集';
+    ? t('trending.generated', { time: timeAgo(hotspots.generated_at) })
+    : t('trending.notCollected');
 
   if (!items.length) {
     const hasPublicItems = (hotspots.items || []).length > 0;
@@ -228,43 +232,44 @@ function renderTrending() {
     // 没有公开热点/审核建设中可了解规则或返回其他视图；加载失败可重新加载。
     const state = dataLoadFailures.has('hotspots')
       ? renderState({
-          icon: '⚠️', title: '热点数据加载失败',
-          message: '公开热点数据暂时无法读取。采集失败不会用空结果覆盖上一版数据。',
+          icon: '⚠️', title: t('trending.empty.loadFailedTitle'),
+          message: t('trending.empty.loadFailedMsg'),
           type: 'error',
-          actions: [{ label: '重新加载', dataKey: 'trending-action', dataValue: 'reload', primary: true }]
+          actions: [{ label: t('common.reload'), dataKey: 'trending-action', dataValue: 'reload', primary: true }]
         })
       : hasPublicItems
         ? renderState({
-            icon: '⌕', title: '当前筛选没有匹配内容',
-            message: '当前内容类型下没有可展示的热点，可清除筛选后查看全部。',
+            icon: '⌕', title: t('trending.empty.noMatchTitle'),
+            message: t('trending.empty.noMatchMsg'),
             type: 'no-match',
-            actions: [{ label: '清除筛选', dataKey: 'trending-action', dataValue: 'clear-filters', primary: true }]
+            actions: [{ label: t('trending.empty.clearFilters'), dataKey: 'trending-action', dataValue: 'clear-filters', primary: true }]
           })
         : hotspots.generated_at
           ? renderState({
-              icon: '○', title: '暂无公开热点',
-              message: '公开投影已生成，但当前没有可展示内容。候选内容需经 AI 处理与人工审核后才会公开。',
+              icon: '○', title: t('trending.empty.noPublicTitle'),
+              message: t('trending.empty.noPublicMsg'),
               type: 'unavailable',
               actions: [
-                { label: '了解审核与来源规则', dataKey: 'trending-action', dataValue: 'goto-about' },
-                { label: '返回工具库', dataKey: 'trending-action', dataValue: 'goto-tools' }
+                { label: t('trending.empty.gotoAbout'), dataKey: 'trending-action', dataValue: 'goto-about' },
+                { label: t('trending.empty.gotoTools'), dataKey: 'trending-action', dataValue: 'goto-tools' }
               ]
             })
           : renderState({
-              icon: '○', title: '公开投影建设中',
-              message: '热点资料正在建立中：旧资料与新采集内容正在整理与审核，通过后逐步公开。',
+              icon: '○', title: t('trending.empty.buildingTitle'),
+              message: t('trending.empty.buildingMsg'),
               type: 'unavailable',
               actions: [
-                { label: '了解审核与来源规则', dataKey: 'trending-action', dataValue: 'goto-about' },
-                { label: '返回工具库', dataKey: 'trending-action', dataValue: 'goto-tools' }
+                { label: t('trending.empty.gotoAbout'), dataKey: 'trending-action', dataValue: 'goto-about' },
+                { label: t('trending.empty.gotoTools'), dataKey: 'trending-action', dataValue: 'goto-tools' }
               ]
             });
     grid.innerHTML = state;
     return;
   }
 
-  // 决策 78：按唯一内容发布时间分组渲染（只显示有内容的分组）
-  const groupOrder = ['今天', '昨天', '近 7 天', '更早', '时间未知'];
+  // 决策 78：按唯一内容发布时间分组渲染（只显示有内容的分组；分组标签须与
+  // getTrendingGroupLabel 同源——都经 t() 取当前语言，语言切换时保持一致）
+  const groupOrder = [t('labels.group.today'), t('labels.group.yesterday'), t('labels.group.last7d'), t('labels.group.earlier'), t('labels.group.unknown')];
   const groups = new Map();
   items.forEach(item => {
     const label = getTrendingGroupLabel(item);
@@ -319,13 +324,13 @@ function getHotspotRelatedResources(item) {
 function renderHotspotRelatedResources(item) {
   const resources = getHotspotRelatedResources(item);
   if (!resources.length) {
-    return '<p class="hotspot-detail-unavailable"><strong>关联资料暂不可用。</strong>当前公开投影没有稳定的工具、概念或场景关联 ID。</p>';
+    return '<p class="hotspot-detail-unavailable"><strong>' + t('labels.fallback.related') + '</strong></p>';
   }
 
   const groups = [
-    { key: 'tools', label: '工具' },
-    { key: 'concepts', label: '概念' },
-    { key: 'scenes', label: '场景' },
+    { key: 'tools', label: t('trending.detail.tools') },
+    { key: 'concepts', label: t('trending.detail.concepts') },
+    { key: 'scenes', label: t('trending.detail.scenes') },
   ];
   const grouped = groups.map(group => ({
     ...group,
@@ -335,53 +340,70 @@ function renderHotspotRelatedResources(item) {
   return grouped.map(group => '<div class="hotspot-related-group"><h4>' + escapeHtml(group.label) + '</h4>' +
     group.items.slice(0, 3).map(resource => resource.available
       ? '<button class="hotspot-related-item" type="button" data-hotspot-related-type="' + escapeHtml(resource.type) + '" data-hotspot-related-id="' + escapeHtml(resource.id) + '"' + (resource.itemId ? ' data-hotspot-related-item="' + escapeHtml(resource.itemId) + '"' : '') + '>' + escapeHtml(resource.label) + ' →</button>'
-      : '<span class="hotspot-related-item hotspot-related-unavailable">' + escapeHtml(resource.label) + '：资料暂不可用</span>'
+      : '<span class="hotspot-related-item hotspot-related-unavailable">' + escapeHtml(resource.label) + '：' + t('trending.detail.resourceUnavailable') + '</span>'
     ).join('') + '</div>').join('');
+}
+
+// content-summarizer：摘要区渲染——优先 AI 总结（summary + 可选要点列表），
+// 无 AI 总结时回退原始描述。所有文本经 escapeHtml 转义（沿用安全边界）。
+function renderHotspotSummary(item) {
+  const summary = item && typeof item.summary === 'string' && item.summary.trim() ? item.summary.trim() : null;
+  if (summary) {
+    const keyPoints = Array.isArray(item.summary_key_points) && item.summary_key_points.length
+      ? item.summary_key_points.filter(point => typeof point === 'string' && point.trim())
+      : [];
+    return '<p class="hotspot-detail-description">' + escapeHtml(summary) + '</p>' +
+      (keyPoints.length
+        ? '<ul class="hotspot-detail-key-points">' + keyPoints.map(point => '<li>' + escapeHtml(point) + '</li>').join('') + '</ul>'
+        : '');
+  }
+  return '<p class="hotspot-detail-description">' + escapeHtml(getLocalizedField(item, 'description') || item.description || t('labels.fallback.summary')) + '</p>';
 }
 
 function openHotspotDetail(id, trigger = null) {
   const item = (hotspots.items || []).find(entry => entry.id === id);
   const content = document.getElementById('modalContent');
   if (!item || !content) return;
-  const meta = platformMeta[item.platform] || { label: item.platform || '平台未知', icon: '📰' };
-  const typeLabel = contentTypeLabels[item.content_type] || item.content_type || '类型未知';
-  const sourceTypeLabel = SOURCE_TYPE_LABELS[item.source_type] || item.source_type || '来源类型未知';
+  const meta = platformMeta[item.platform] || { label: item.platform || t('labels.fallback.platform'), icon: '📰' };
+  const typeLabel = contentTypeLabels[item.content_type] || item.content_type || t('labels.fallback.type');
+  const sourceTypeLabel = SOURCE_TYPE_LABELS[item.source_type] || item.source_type || t('labels.fallback.sourceType');
   const url = safeExternalUrl(item.url);
   const hasUrl = url !== '#';
   const sourceDetailId = 'hotspot-source-detail-' + String(item.id).replace(/[^a-zA-Z0-9_-]/g, '-');
+  const localizedTitle = getLocalizedField(item, 'title') || item.title || t('labels.fallback.title');
   setModalScrollPosition(window.scrollY);
-  content.innerHTML = '<button class="modal-close" type="button" aria-label="关闭热点详情" onclick="closeModal()">' + ICON_CLOSE + '</button>' +
+  content.innerHTML = '<button class="modal-close" type="button" aria-label="' + t('trending.detail.close') + '" onclick="closeModal()">' + ICON_CLOSE + '</button>' +
     '<article class="hotspot-detail" data-hotspot-detail="' + escapeHtml(item.id) + '">' +
       '<span class="eyebrow">' + escapeHtml(typeLabel) + '</span>' +
-      '<h2>' + escapeHtml(item.title || '标题暂不可用') + '</h2>' +
+      '<h2>' + escapeHtml(localizedTitle) + '</h2>' +
       '<section class="hotspot-detail-section hotspot-detail-summary" aria-labelledby="hotspotSummaryTitle">' +
-        '<h3 id="hotspotSummaryTitle">内容摘要</h3>' +
-        '<p class="hotspot-detail-description">' + escapeHtml(item.description || '内容摘要暂不可用。') + '</p>' +
+        '<h3 id="hotspotSummaryTitle">' + t('trending.detail.summary') + '</h3>' +
+        renderHotspotSummary(item) +
         '<dl class="hotspot-detail-meta">' +
-          '<div><dt>内容时间</dt><dd>' + escapeHtml(formatHotspotDate(item.published_at)) + '</dd></div>' +
-          '<div><dt>来源作者</dt><dd>' + escapeHtml(item.author_name || '来源信息待补充') + '</dd></div>' +
+          '<div><dt>' + t('trending.card.contentTime') + '</dt><dd>' + escapeHtml(formatHotspotDate(item.published_at)) + '</dd></div>' +
+          '<div><dt>' + t('trending.detail.author') + '</dt><dd>' + escapeHtml(item.author_name || t('labels.fallback.author')) + '</dd></div>' +
         '</dl>' +
       '</section>' +
       '<section class="hotspot-detail-section hotspot-detail-sources" aria-labelledby="hotspotSourcesTitle">' +
-        '<div class="hotspot-detail-section-heading"><h3 id="hotspotSourcesTitle">来源核验</h3>' +
-          '<button class="btn-link hotspot-source-toggle" type="button" data-hotspot-source-toggle aria-expanded="false" aria-controls="' + escapeHtml(sourceDetailId) + '">查看来源</button>' +
+        '<div class="hotspot-detail-section-heading"><h3 id="hotspotSourcesTitle">' + t('trending.detail.sources') + '</h3>' +
+          '<button class="btn-link hotspot-source-toggle" type="button" data-hotspot-source-toggle aria-expanded="false" aria-controls="' + escapeHtml(sourceDetailId) + '">' + t('trending.card.viewSource') + '</button>' +
         '</div>' +
         '<div class="hotspot-source-detail" id="' + escapeHtml(sourceDetailId) + '" hidden>' +
           '<dl class="hotspot-source-meta">' +
-            '<div><dt>来源平台</dt><dd>' + escapeHtml(meta.label) + '</dd></div>' +
-            '<div><dt>来源类型</dt><dd>' + escapeHtml(sourceTypeLabel) + '</dd></div>' +
-            '<div><dt>内容时间</dt><dd>' + escapeHtml(formatHotspotDate(item.published_at)) + '</dd></div>' +
-            '<div><dt>数据更新于</dt><dd>' + escapeHtml(formatHotspotDate(item.fetched_at)) + '</dd></div>' +
-            '<div><dt>来源名称</dt><dd>' + escapeHtml(item.author_name || item.source_id || '来源信息待补充') + '</dd></div>' +
+            '<div><dt>' + t('trending.card.sourcePlatform') + '</dt><dd>' + escapeHtml(meta.label) + '</dd></div>' +
+            '<div><dt>' + t('trending.card.sourceType') + '</dt><dd>' + escapeHtml(sourceTypeLabel) + '</dd></div>' +
+            '<div><dt>' + t('trending.card.contentTime') + '</dt><dd>' + escapeHtml(formatHotspotDate(item.published_at)) + '</dd></div>' +
+            '<div><dt>' + t('trending.card.updatedAt') + '</dt><dd>' + escapeHtml(formatHotspotDate(item.fetched_at)) + '</dd></div>' +
+            '<div><dt>' + t('trending.card.sourceName') + '</dt><dd>' + escapeHtml(item.author_name || item.source_id || t('labels.fallback.author')) + '</dd></div>' +
           '</dl>' +
-          '<p class="hotspot-source-evidence"><strong>依据片段：</strong>暂无可展示的直接依据。当前公开投影未提供可定位的审核依据片段。</p>' +
+          '<p class="hotspot-source-evidence"><strong>' + t('trending.card.evidence') + '</strong>' + t('labels.fallback.evidence') + '</p>' +
           (hasUrl
-            ? '<a class="btn-link hotspot-source-link" href="' + escapeHtml(url) + '" target="_blank" rel="noopener noreferrer">打开原始来源（将离开当前页面） ' + ICON_EXTERNAL + '</a>'
-            : '<p class="hotspot-detail-unavailable">原始来源链接暂不可用。</p>') +
+            ? '<a class="btn-link hotspot-source-link" href="' + escapeHtml(url) + '" target="_blank" rel="noopener noreferrer">' + t('trending.card.openOriginal') + ' ' + ICON_EXTERNAL + '</a>'
+            : '<p class="hotspot-detail-unavailable">' + t('labels.fallback.sourceLink') + '</p>') +
         '</div>' +
       '</section>' +
       '<section class="hotspot-detail-section hotspot-detail-related" aria-labelledby="hotspotRelatedTitle">' +
-        '<h3 id="hotspotRelatedTitle">关联资料</h3>' +
+        '<h3 id="hotspotRelatedTitle">' + t('trending.detail.related') + '</h3>' +
         renderHotspotRelatedResources(item) +
       '</section>' +
     '</article>';
@@ -400,6 +422,7 @@ export {
   formatHotspotDate,
   getHotspotRelatedResources,
   renderHotspotRelatedResources,
+  renderHotspotSummary,
   openHotspotDetail,
   getTrendingGroupLabel,
 };

@@ -8,17 +8,22 @@
  *       的 registry_retention_days=270，与采集回溯窗口一致）；
  *       build-news 每轮结束也会自动执行同等裁剪）
  *
- *   review list    [--status pending|approved|held|discarded] [--platform ...] [--limit N]
+ *   review list    [--status pending|approved|held|discarded] [--ai-verdict approve|hold|discard] [--platform ...] [--limit N]
  *   review summary
  *   review set     --id <id> --status pending|approved|held|discarded [--reason ...] [--reviewer ...]
  *   review batch   --ids <id1,id2,...> --status approved [--reason ...] [--reviewer ...]
+ *   review apply-ai [--verdicts discard,hold] [--min-confidence N] [--dry-run]
  *   review log     [--candidate-id <id>] [--action ...] [--limit N]
  *     （set 单条设置审核状态；batch 只处理显式列出的 ids，不支持隐式「全部」；
  *       ai_processing_status 未 completed 时禁止设为 approved；
  *       每次流转写入 reviewer / reviewed_at / from_status / candidate_version，决策 70；
  *       每次流转同时追加到追加式审核事件日志 review-events.json（决策 70：只追加、不改写历史），
  *       review log 用于查看历史流转记录；
- *       --reviewer 缺省回退到 GITHUB_ACTOR / USER / cli）
+ *       --reviewer 缺省回退到 GITHUB_ACTOR / USER / cli；
+ *       --ai-verdict 按 AI 审核建议（content-reviewer 的 ai_review.verdict）筛选待审队列；
+ *       apply-ai 把候选上已生成的 AI 建议应用到 review_status（discard/hold，永不 approve；
+ *       confidence 低于 --min-confidence 或候选非 pending 的跳过），默认 dry-run 只预览；
+ *       非 dry-run 才实际落盘并逐条写审核日志，reviewer='ai_review'）
  *
  *   legacy import   [--dry-run]
  *   legacy status
@@ -53,6 +58,7 @@ const {
   writeReviewEventLog,
 } = require('../core/news-review-events');
 const { confirmContentType } = require('../classify/content-classifier');
+const { applyAiReviewVerdicts } = require('../classify/content-reviewer');
 const { NEWS_FILES } = require('../../shared/paths');
 const { FILES, save } = require('./cmd-sources');
 const { optionalNumber, resolveReviewer } = require('./cmd-ops');
@@ -113,6 +119,13 @@ function reviewCommand(action, flags) {
       if (!REVIEW_STATUSES.includes(flags.status)) throw new Error(`非法审核状态：${flags.status}`);
       candidates = candidates.filter(candidate => candidate.review_status === flags.status);
     }
+    // content-reviewer：按 AI 审核建议（ai_review.verdict）筛选待审队列
+    if (flags.ai_verdict) {
+      if (!['approve', 'hold', 'discard'].includes(flags.ai_verdict)) {
+        throw new Error(`非法 AI 审核建议：${flags.ai_verdict}。合法值：approve / hold / discard`);
+      }
+      candidates = candidates.filter(candidate => candidate.ai_review?.verdict === flags.ai_verdict);
+    }
     if (flags.platform) candidates = candidates.filter(candidate => candidate.platform === flags.platform);
     const limit = optionalNumber(flags, 'limit');
     if (limit !== undefined && limit > 0) candidates = candidates.slice(0, limit);
@@ -135,6 +148,7 @@ function reviewCommand(action, flags) {
         candidate_version: candidate.candidate_version || 1,
         batch_id: candidate.batch_id || null,
         transcript_status: candidate.transcript_status || null,
+        ai_review: candidate.ai_review || null,
       })),
     };
   }
@@ -192,6 +206,42 @@ function reviewCommand(action, flags) {
       }
     }
     return { status: flags.status, reviewer, ...result, updated_at: result.store.updated_at };
+  }
+
+  if (action === 'apply-ai') {
+    // content-reviewer：把候选上已生成的 AI 建议应用到 review_status（discard/hold，永不 approve）。
+    // 默认 dry-run 只预览；非 dry-run 才实际落盘并逐条写审核日志（reviewer='ai_review'）。
+    const verdicts = flags.verdicts ? String(flags.verdicts).split(',').map(v => v.trim()).filter(Boolean) : undefined;
+    const minConfidence = optionalNumber(flags, 'min_confidence');
+    const dryRun = flags.dry_run === undefined ? true : Boolean(flags.dry_run);
+    const result = applyAiReviewVerdicts(store, store.candidates.map(candidate => candidate.id), {
+      minConfidence,
+      verdicts,
+      dryRun,
+      reviewer: 'ai_review',
+    });
+    if (!dryRun && result.applied.length) {
+      writeCandidateStore(result.store, `review-apply-ai-${Date.now()}`);
+      // 决策 70：每条应用独立追加到只追加审核事件日志
+      for (const applied of result.applied) {
+        const candidate = result.store.candidates.find(item => item.id === applied.id);
+        if (candidate) {
+          recordReviewTransition(candidate, {
+            action: applied.to === 'discarded' ? 'ai_review_discard' : 'ai_review_hold',
+            reason: applied.reasons && applied.reasons.length ? applied.reasons.join('；') : null,
+            reviewer: 'ai_review',
+          });
+        }
+      }
+    }
+    return {
+      dry_run: dryRun,
+      verdicts: verdicts || ['discard', 'hold'],
+      min_confidence: minConfidence ?? 0.9,
+      applied: result.applied,
+      skipped: result.skipped,
+      updated_at: result.store?.updated_at || store.updated_at,
+    };
   }
 
   if (action === 'log') {

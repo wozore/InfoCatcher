@@ -1,16 +1,21 @@
 /**
- * llm-provider.js —— L1 AI 内容分类的模型提供方封装（B16 路径 A）
+ * llm-provider.js —— AI 内容加工的模型提供方封装（B16 路径 A + content-summarizer + content-reviewer + content-localizer）
  *
- * 当前实现：DeepSeek API（OpenAI 兼容 chat completions）。
+ * 当前实现：DeepSeek API（OpenAI 兼容 chat completions），提供四类调用：
+ *   - classifyWithDeepSeek      —— L1 内容类型分类（content-classifier.js 用）
+ *   - summarizeWithDeepSeek     —— 内容总结（content-summarizer.js 用）
+ *   - reviewWithDeepSeek        —— AI 审核建议（content-reviewer.js 用）
+ *   - localizeWithDeepSeek      —— 内容本地化翻译（content-localizer.js 用）
  * 与项目采集器一致使用 fetch 注入模式（options.fetchImpl 可在测试中替换为 mock），
  * 运行环境无 fetch 时通过 process.env.DEEPSEEK_API_KEY 读取密钥。
  *
- * 失败语义：任何错误（缺 key / 无 fetch / 网络超时 / 非 200 / 输出无法映射到六类）
- * 都 resolve 一个 { ok: false } 降级对象，绝不 reject、不抛错 —— 调用方（content-classifier）
- * 据此回退 L0 规则式基线，保证采集管线不被 LLM 故障阻塞（b16-task-status.md 第 4 项成本/可靠性提醒）。
+ * 失败语义：任何错误（缺 key / 无 fetch / 网络超时 / 非 200 / 输出无法解析）
+ * 都 resolve 一个 { ok: false } 降级对象，绝不 reject、不抛错 —— 调用方（content-classifier /
+ * content-summarizer）据此回退规则式基线或置 null，保证采集管线不被 LLM 故障阻塞
+ * （b16-task-status.md 第 4 项成本/可靠性提醒）。
  *
- * 成本控制：单条输入裁剪（标题 ≤200 字符、描述 ≤600 字符，复用采集链路截断量级），
- * 批量并发由调用方（classifyCandidates）用并发池限制。
+ * 成本控制：单条输入裁剪（标题 ≤200 字符、描述 ≤600 字符、字幕截断前 3000 字符，
+ * 复用采集链路截断量级），批量并发由调用方用并发池限制。
  */
 
 'use strict';
@@ -55,6 +60,109 @@ const LABEL_MAP = {
   'AI 行业事件': 'ai_industry', '行业': 'ai_industry',
   '其他': 'other',
 };
+
+// ═══════════════════════════════════════════════════════════════
+// 总结相关常量（content-summarizer.js 使用）
+// ═══════════════════════════════════════════════════════════════
+
+// 总结输出上限（token）：摘要 + 要点列表可能较长，给足空间；temperature 0 保证确定。
+const SUMMARY_MAX_TOKENS = 800;
+
+// 字幕输入截断（字符）：控 token 成本，足够覆盖一条视频的核心内容。
+const SUMMARY_MAX_TRANSCRIPT_CHARS = 3000;
+
+// 系统提示：强制输出 JSON，禁止解释/多余文字。
+const SUMMARY_SYSTEM_PROMPT = '你是 AI 资讯编辑。根据给定的热点资讯内容（标题、描述、视频字幕）生成内容总结。只输出一个 JSON 对象，不要输出任何其他文字、代码块标记或 JSON 外的内容。';
+
+const SUMMARY_USER_PROMPT_TEMPLATE = `请为下面这条 AI 资讯生成内容总结，严格输出 JSON：
+{
+  "summary": "一段中文摘要",
+  "key_points": ["要点1", "要点2", ...]
+}
+
+要求：
+1. 忠实于原文，只提炼原文确实提到的信息，不添加原文没有的内容，不推测作者动机。
+2. summary 是连贯的一段中文摘要，概括内容核心与观点。
+3. key_points 是精炼的中文要点列表。
+4. 摘要与要点的长度和数量根据内容的信息量自主决定，不固定字数或条数——信息量大可以更长更多，信息量小可以更短更少。
+5. 如果内容不完整或不足以总结，summary 输出原文能确定的部分即可，不要编造。
+
+标题：{title}
+描述：{description}
+字幕：{transcript}
+
+只输出 JSON：`;
+
+// ═══════════════════════════════════════════════════════════════
+// 审核建议相关常量（content-reviewer.js 使用）
+// ═══════════════════════════════════════════════════════════════
+
+// 审核输出上限（token）：verdict + reasons + confidence，短于总结。
+const REVIEW_MAX_TOKENS = 200;
+
+// 总结输入截断（字符）：作为审核输入素材之一，控 token 成本。
+const REVIEW_MAX_SUMMARY_CHARS = 800;
+
+// 合法判定集合（与 content-reviewer.js 的 VERDICTS 一致）
+const VALID_VERDICTS = new Set(['approve', 'hold', 'discard']);
+
+// 中文判定 → 枚举（模型偶尔输出中文时的兜底映射）
+const VERDICT_LABEL_MAP = {
+  '通过': 'approve', '建议通过': 'approve',
+  '挂起': 'hold', '暂缓': 'hold', '需人工审核': 'hold',
+  '丢弃': 'discard', '排除': 'discard', '无关': 'discard',
+};
+
+// 系统提示：强制输出 JSON，禁止解释/多余文字。
+const REVIEW_SYSTEM_PROMPT = '你是 AI 资讯内容审核编辑。根据给定的热点资讯（标题、描述、字幕、内容总结）做初步审核。只输出一个 JSON 对象，不要输出任何其他文字、代码块标记或 JSON 外的内容。';
+
+const REVIEW_USER_PROMPT_TEMPLATE = `请为下面这条 AI 资讯做初步审核，严格输出 JSON：
+{
+  "verdict": "discard | hold | approve",
+  "reasons": ["理由1", "理由2"],
+  "confidence": 0.0
+}
+
+判定标准：
+- discard：明显无关的内容（非 AI 主题、广告/垃圾、纯标题党、低质量搬运等）。必须给出具体排除理由。
+- hold：存疑或信息不足（信息不全、疑似搬运、无法判断相关性等），需要人工细看。
+- approve：与 AI 主题明确相关且有实质信息量，建议通过。
+- confidence：你对判定的自信程度，0.0 到 1.0 之间的数字。越有把握越高；不确定时给出低值。
+
+标题：{title}
+描述：{description}
+字幕：{transcript}
+内容总结：{summary}
+
+只输出 JSON：`;
+
+// ═══════════════════════════════════════════════════════════════
+// 内容本地化（翻译）相关常量（content-localizer.js 使用）
+// ═══════════════════════════════════════════════════════════════
+
+// 翻译输出上限（token）：标题 + 描述翻译，中量。
+const LOCALIZE_MAX_TOKENS = 400;
+
+// 系统提示：强制输出 JSON，禁止解释/多余文字。
+const LOCALIZE_SYSTEM_PROMPT = '你是资深 AI 资讯翻译。把给定的热点资讯标题与描述翻译成简体中文。只输出一个 JSON 对象，不要输出任何其他文字、代码块标记或 JSON 外的内容。';
+
+const LOCALIZE_USER_PROMPT_TEMPLATE = `请把下面这条 AI 资讯的标题与描述翻译成简体中文，严格输出 JSON：
+{
+  "title": "翻译后的标题",
+  "description": "翻译后的描述"
+}
+
+要求：
+1. 忠实翻译，不增删信息，不改变语义。
+2. 品牌名、产品名、专有名词（如 DeepSeek、Ollama、Claude、OpenAI 等）保持原文不译。
+3. URL、代码、命令、数字、版本号保持原文。
+4. description 保留原文的换行结构。
+5. 标题本身是专有名词时保持原文。
+
+标题：{title}
+描述：{description}
+
+只输出 JSON：`;
 
 // ═══════════════════════════════════════════════════════════════
 // 纯函数
@@ -176,6 +284,383 @@ async function classifyWithDeepSeek(item, options = {}) {
   }
 }
 
+// ═══════════════════════════════════════════════════════════════
+// DeepSeek 总结调用
+// ═══════════════════════════════════════════════════════════════
+
+/**
+ * 构建 DeepSeek 总结 chat 请求体（纯函数，便于测试）。
+ * 输入：title + description + transcript（存在才拼入，否则该段留空）。
+ * @param {{title?: string, description?: string, transcript?: string}} item
+ * @param {string} [model]
+ * @returns {object} chat completions payload
+ */
+function buildSummaryPayload(item, model = DEFAULT_MODEL) {
+  const title = String(item.title || '').slice(0, TITLE_MAX);
+  const description = String(item.description || '').slice(0, DESC_MAX);
+  const transcript = String(item.transcript || '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, SUMMARY_MAX_TRANSCRIPT_CHARS);
+  const prompt = SUMMARY_USER_PROMPT_TEMPLATE
+    .replace('{title}', title || '（无标题）')
+    .replace('{description}', description || '（无描述）')
+    .replace('{transcript}', transcript || '（无字幕）');
+  return {
+    model,
+    messages: [
+      { role: 'system', content: SUMMARY_SYSTEM_PROMPT },
+      { role: 'user', content: prompt },
+    ],
+    temperature: 0,
+    max_tokens: SUMMARY_MAX_TOKENS,
+    stream: false,
+  };
+}
+
+/**
+ * 把模型输出解析为 { summary, key_points }。
+ * 容忍：首尾空格、JSON 代码块包裹、前后多余解释文字、key_points 缺失/非数组。
+ * 解析失败返回 null（调用方置降级）。
+ * @param {string} raw
+ * @returns {{summary: string, key_points: string[]}|null}
+ */
+function normalizeSummary(raw) {
+  if (!raw) return null;
+  let cleaned = String(raw).trim();
+  // 剥离 ```json ... ``` 代码块包裹
+  const fence = cleaned.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/i);
+  if (fence) cleaned = fence[1].trim();
+  // 从首个 { 到最后一个 } 截取，容忍前后多余文字
+  const start = cleaned.indexOf('{');
+  const end = cleaned.lastIndexOf('}');
+  if (start === -1 || end === -1 || end <= start) return null;
+  cleaned = cleaned.slice(start, end + 1);
+  let data;
+  try { data = JSON.parse(cleaned); }
+  catch { return null; }
+  const summary = typeof data?.summary === 'string' ? data.summary.trim() : '';
+  if (!summary) return null;
+  const keyPoints = Array.isArray(data?.key_points)
+    ? data.key_points.filter(point => typeof point === 'string' && point.trim()).map(point => point.trim())
+    : [];
+  return { summary, key_points: keyPoints };
+}
+
+/**
+ * 对单条候选做 DeepSeek 内容总结。
+ * @param {{title?: string, description?: string, transcript?: string}} item
+ * @param {{apiKey?: string, model?: string, fetchImpl?: Function, timeoutMs?: number,
+ *          maxTranscriptChars?: number}} [options]
+ * @returns {Promise<{ ok: true, summary: string, key_points: string[], raw: string } |
+ *                    { ok: false, error: string, code: string }>}
+ *   失败时 resolve 降级对象（不 reject），调用方据 summary 缺失回退 description。
+ */
+async function summarizeWithDeepSeek(item, options = {}) {
+  const apiKey = options.apiKey ?? process.env.DEEPSEEK_API_KEY;
+  const fetchImpl = options.fetchImpl || (typeof fetch === 'function' ? fetch : null);
+  const timeoutMs = options.timeoutMs ?? 15_000;
+
+  if (!apiKey) {
+    return { ok: false, error: '缺少 DEEPSEEK_API_KEY', code: 'missing_api_key' };
+  }
+  if (!fetchImpl) {
+    return { ok: false, error: '当前运行环境无 fetch', code: 'no_fetch' };
+  }
+
+  let payload;
+  try {
+    payload = buildSummaryPayload(item, options.model);
+  } catch (err) {
+    return { ok: false, error: err.message, code: 'payload_error' };
+  }
+
+  try {
+    const response = await fetchImpl(API_BASE, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+
+    if (!response.ok) {
+      let detail = '';
+      try {
+        const text = await response.text();
+        detail = (text || '').slice(0, 200);
+      } catch { /* 读取错误体失败不影响降级返回 */ }
+      return { ok: false, error: `DeepSeek HTTP ${response.status}${detail ? `: ${detail}` : ''}`, code: `http_${response.status}` };
+    }
+
+    const data = await response.json();
+    const content = data?.choices?.[0]?.message?.content;
+    if (typeof content !== 'string' || !content.trim()) {
+      return { ok: false, error: 'DeepSeek 返回空内容', code: 'empty_content' };
+    }
+    const parsed = normalizeSummary(content);
+    if (!parsed) {
+      return { ok: false, error: `DeepSeek 输出无法解析为 JSON 总结：${content.slice(0, 60)}`, code: 'invalid_summary' };
+    }
+    return { ok: true, summary: parsed.summary, key_points: parsed.key_points, raw: content };
+  } catch (err) {
+    const code = err?.name === 'TimeoutError' || err?.code === 'ETIMEDOUT' ? 'timeout' : 'network_error';
+    return { ok: false, error: err?.message || String(err), code };
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DeepSeek 审核建议调用
+// ═══════════════════════════════════════════════════════════════
+
+/**
+ * 构建 DeepSeek 审核建议 chat 请求体（纯函数，便于测试）。
+ * 输入：title + description + transcript + summary（存在才拼入，否则该段填空）。
+ * @param {{title?: string, description?: string, transcript?: string, summary?: string}} item
+ * @param {string} [model]
+ * @returns {object} chat completions payload
+ */
+function buildReviewPayload(item, model = DEFAULT_MODEL) {
+  const title = String(item.title || '').slice(0, TITLE_MAX);
+  const description = String(item.description || '').slice(0, DESC_MAX);
+  const transcript = String(item.transcript || '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, SUMMARY_MAX_TRANSCRIPT_CHARS);
+  const summary = String(item.summary || '').trim().slice(0, REVIEW_MAX_SUMMARY_CHARS);
+  const prompt = REVIEW_USER_PROMPT_TEMPLATE
+    .replace('{title}', title || '（无标题）')
+    .replace('{description}', description || '（无描述）')
+    .replace('{transcript}', transcript || '（无字幕）')
+    .replace('{summary}', summary || '（无总结）');
+  return {
+    model,
+    messages: [
+      { role: 'system', content: REVIEW_SYSTEM_PROMPT },
+      { role: 'user', content: prompt },
+    ],
+    temperature: 0,
+    max_tokens: REVIEW_MAX_TOKENS,
+    stream: false,
+  };
+}
+
+/**
+ * 把模型输出解析为 { verdict, reasons, confidence }。
+ * 容忍：首尾空格、JSON 代码块包裹、前后多余解释文字、中文 verdict、reasons 缺失/非数组。
+ * 解析失败返回 null（调用方置降级）。confidence 缺省/非法置 0（安全默认：永不触发自动应用）。
+ * @param {string} raw
+ * @returns {{verdict: string, reasons: string[], confidence: number}|null}
+ */
+function normalizeReview(raw) {
+  if (!raw) return null;
+  let cleaned = String(raw).trim();
+  // 剥离 ```json ... ``` 代码块包裹
+  const fence = cleaned.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/i);
+  if (fence) cleaned = fence[1].trim();
+  // 从首个 { 到最后一个 } 截取，容忍前后多余文字
+  const start = cleaned.indexOf('{');
+  const end = cleaned.lastIndexOf('}');
+  if (start === -1 || end === -1 || end <= start) return null;
+  cleaned = cleaned.slice(start, end + 1);
+  let data;
+  try { data = JSON.parse(cleaned); }
+  catch { return null; }
+  const rawVerdict = typeof data?.verdict === 'string' ? data.verdict.trim().toLowerCase() : '';
+  const verdict = VALID_VERDICTS.has(rawVerdict) ? rawVerdict : (VERDICT_LABEL_MAP[rawVerdict] || null);
+  if (!verdict) return null;
+  const reasons = Array.isArray(data?.reasons)
+    ? data.reasons.filter(reason => typeof reason === 'string' && reason.trim()).map(reason => reason.trim())
+    : [];
+  const parsedConfidence = Number(data?.confidence);
+  const confidence = Number.isFinite(parsedConfidence) ? Math.max(0, Math.min(1, parsedConfidence)) : 0;
+  return { verdict, reasons, confidence };
+}
+
+/**
+ * 对单条候选做 DeepSeek 审核建议（verdict + reasons + confidence）。
+ * @param {{title?: string, description?: string, transcript?: string, summary?: string}} item
+ * @param {{apiKey?: string, model?: string, fetchImpl?: Function, timeoutMs?: number}} [options]
+ * @returns {Promise<{ ok: true, verdict: string, reasons: string[], confidence: number, raw: string } |
+ *                    { ok: false, error: string, code: string }>}
+ *   失败时 resolve 降级对象（不 reject），调用方据此置 verdict null（不误杀）。
+ */
+async function reviewWithDeepSeek(item, options = {}) {
+  const apiKey = options.apiKey ?? process.env.DEEPSEEK_API_KEY;
+  const fetchImpl = options.fetchImpl || (typeof fetch === 'function' ? fetch : null);
+  const timeoutMs = options.timeoutMs ?? 15_000;
+
+  if (!apiKey) {
+    return { ok: false, error: '缺少 DEEPSEEK_API_KEY', code: 'missing_api_key' };
+  }
+  if (!fetchImpl) {
+    return { ok: false, error: '当前运行环境无 fetch', code: 'no_fetch' };
+  }
+
+  let payload;
+  try {
+    payload = buildReviewPayload(item, options.model);
+  } catch (err) {
+    return { ok: false, error: err.message, code: 'payload_error' };
+  }
+
+  try {
+    const response = await fetchImpl(API_BASE, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+
+    if (!response.ok) {
+      let detail = '';
+      try {
+        const text = await response.text();
+        detail = (text || '').slice(0, 200);
+      } catch { /* 读取错误体失败不影响降级返回 */ }
+      return { ok: false, error: `DeepSeek HTTP ${response.status}${detail ? `: ${detail}` : ''}`, code: `http_${response.status}` };
+    }
+
+    const data = await response.json();
+    const content = data?.choices?.[0]?.message?.content;
+    if (typeof content !== 'string' || !content.trim()) {
+      return { ok: false, error: 'DeepSeek 返回空内容', code: 'empty_content' };
+    }
+    const parsed = normalizeReview(content);
+    if (!parsed) {
+      return { ok: false, error: `DeepSeek 输出无法解析为审核建议：${content.slice(0, 60)}`, code: 'invalid_review' };
+    }
+    return { ok: true, verdict: parsed.verdict, reasons: parsed.reasons, confidence: parsed.confidence, raw: content };
+  } catch (err) {
+    const code = err?.name === 'TimeoutError' || err?.code === 'ETIMEDOUT' ? 'timeout' : 'network_error';
+    return { ok: false, error: err?.message || String(err), code };
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DeepSeek 内容本地化（翻译）调用
+// ═══════════════════════════════════════════════════════════════
+
+/**
+ * 构建 DeepSeek 内容翻译 chat 请求体（纯函数，便于测试）。
+ * 输入：title + description（原文）。
+ * @param {{title?: string, description?: string}} item
+ * @param {string} [model]
+ * @returns {object} chat completions payload
+ */
+function buildLocalizePayload(item, model = DEFAULT_MODEL) {
+  const title = String(item.title || '').slice(0, TITLE_MAX);
+  const description = String(item.description || '').slice(0, DESC_MAX);
+  const prompt = LOCALIZE_USER_PROMPT_TEMPLATE
+    .replace('{title}', title || '（无标题）')
+    .replace('{description}', description || '（无描述）');
+  return {
+    model,
+    messages: [
+      { role: 'system', content: LOCALIZE_SYSTEM_PROMPT },
+      { role: 'user', content: prompt },
+    ],
+    temperature: 0,
+    max_tokens: LOCALIZE_MAX_TOKENS,
+    stream: false,
+  };
+}
+
+/**
+ * 把模型输出解析为 { title, description }。
+ * 容忍：首尾空格、JSON 代码块包裹、前后多余解释文字、字段缺失。
+ * 解析失败或 title/description 均为空返回 null（调用方置降级）。
+ * @param {string} raw
+ * @returns {{title: string, description: string}|null}
+ */
+function normalizeLocalization(raw) {
+  if (!raw) return null;
+  let cleaned = String(raw).trim();
+  // 剥离 ```json ... ``` 代码块包裹
+  const fence = cleaned.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/i);
+  if (fence) cleaned = fence[1].trim();
+  // 从首个 { 到最后一个 } 截取，容忍前后多余文字
+  const start = cleaned.indexOf('{');
+  const end = cleaned.lastIndexOf('}');
+  if (start === -1 || end === -1 || end <= start) return null;
+  cleaned = cleaned.slice(start, end + 1);
+  let data;
+  try { data = JSON.parse(cleaned); }
+  catch { return null; }
+  const title = typeof data?.title === 'string' ? data.title.trim() : '';
+  const description = typeof data?.description === 'string' ? data.description.trim() : '';
+  if (!title && !description) return null;
+  return { title, description };
+}
+
+/**
+ * 对单条候选做 DeepSeek 内容翻译（title + description → 目标语言）。
+ * @param {{title?: string, description?: string}} item
+ * @param {{apiKey?: string, model?: string, fetchImpl?: Function, timeoutMs?: number}} [options]
+ * @returns {Promise<{ ok: true, title: string, description: string, raw: string } |
+ *                    { ok: false, error: string, code: string }>}
+ *   失败时 resolve 降级对象（不 reject），调用方据此不写 localizations（回退原文）。
+ */
+async function localizeWithDeepSeek(item, options = {}) {
+  const apiKey = options.apiKey ?? process.env.DEEPSEEK_API_KEY;
+  const fetchImpl = options.fetchImpl || (typeof fetch === 'function' ? fetch : null);
+  const timeoutMs = options.timeoutMs ?? 15_000;
+
+  if (!apiKey) {
+    return { ok: false, error: '缺少 DEEPSEEK_API_KEY', code: 'missing_api_key' };
+  }
+  if (!fetchImpl) {
+    return { ok: false, error: '当前运行环境无 fetch', code: 'no_fetch' };
+  }
+
+  let payload;
+  try {
+    payload = buildLocalizePayload(item, options.model);
+  } catch (err) {
+    return { ok: false, error: err.message, code: 'payload_error' };
+  }
+
+  try {
+    const response = await fetchImpl(API_BASE, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+
+    if (!response.ok) {
+      let detail = '';
+      try {
+        const text = await response.text();
+        detail = (text || '').slice(0, 200);
+      } catch { /* 读取错误体失败不影响降级返回 */ }
+      return { ok: false, error: `DeepSeek HTTP ${response.status}${detail ? `: ${detail}` : ''}`, code: `http_${response.status}` };
+    }
+
+    const data = await response.json();
+    const content = data?.choices?.[0]?.message?.content;
+    if (typeof content !== 'string' || !content.trim()) {
+      return { ok: false, error: 'DeepSeek 返回空内容', code: 'empty_content' };
+    }
+    const parsed = normalizeLocalization(content);
+    if (!parsed) {
+      return { ok: false, error: `DeepSeek 输出无法解析为翻译：${content.slice(0, 60)}`, code: 'invalid_translation' };
+    }
+    return { ok: true, title: parsed.title, description: parsed.description, raw: content };
+  } catch (err) {
+    const code = err?.name === 'TimeoutError' || err?.code === 'ETIMEDOUT' ? 'timeout' : 'network_error';
+    return { ok: false, error: err?.message || String(err), code };
+  }
+}
+
 module.exports = {
   DEFAULT_MODEL,
   API_BASE,
@@ -183,4 +668,19 @@ module.exports = {
   normalizeLabel,
   classifyWithDeepSeek,
   VALID_TYPES,
+  SUMMARY_MAX_TOKENS,
+  SUMMARY_MAX_TRANSCRIPT_CHARS,
+  buildSummaryPayload,
+  normalizeSummary,
+  summarizeWithDeepSeek,
+  REVIEW_MAX_TOKENS,
+  REVIEW_MAX_SUMMARY_CHARS,
+  VALID_VERDICTS,
+  buildReviewPayload,
+  normalizeReview,
+  reviewWithDeepSeek,
+  LOCALIZE_MAX_TOKENS,
+  buildLocalizePayload,
+  normalizeLocalization,
+  localizeWithDeepSeek,
 };

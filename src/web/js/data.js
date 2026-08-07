@@ -18,6 +18,8 @@
 // ═══════════════════════════════════════════════════════════════
 // 共享数据状态 —— tools.json / tool-intelligence / glossary / scenes / hotspots / featured
 // ═══════════════════════════════════════════════════════════════
+import { t } from './i18n.js';
+
 let tools = [];               // tools.json 的完整内容
 let toolIntelligence = { collections: [] }; // 具体模型、变体、套餐与可追溯来源
 let toolIntelligenceById = new Map();        // tool_id → 集合情报
@@ -148,24 +150,24 @@ function safeExternalUrl(value) {
   } catch (e) { return '#'; }
 }
 
-/** 相对时间显示：X分钟前 / X小时前 / X天前 / 具体日期 */
+/** 相对时间显示：X分钟前 / X小时前 / X天前 / 具体日期（文案走 i18n 字典） */
 function timeAgo(value) {
-  if (!value) return '时间未知';
+  if (!value) return t('timeAgo.unknown');
   const diff = Date.now() - new Date(value).getTime();
-  if (!Number.isFinite(diff)) return '时间未知';
+  if (!Number.isFinite(diff)) return t('timeAgo.unknown');
   const minutes = Math.max(0, Math.floor(diff / 60000));
-  if (minutes < 1) return '刚刚';
-  if (minutes < 60) return minutes + '分钟前';
+  if (minutes < 1) return t('timeAgo.justNow');
+  if (minutes < 60) return t('timeAgo.minutes', { n: minutes });
   const hours = Math.floor(minutes / 60);
-  if (hours < 24) return hours + '小时前';
+  if (hours < 24) return t('timeAgo.hours', { n: hours });
   const days = Math.floor(hours / 24);
-  return days < 30 ? days + '天前' : new Date(value).toLocaleDateString('zh-CN');
+  return days < 30 ? t('timeAgo.days', { n: days }) : new Date(value).toLocaleDateString('zh-CN');
 }
 
 function formatMetric(value) {
   if (value == null) return null;
-  if (value >= 10000) return (value / 10000).toFixed(1) + '万';
-  if (value >= 1000) return (value / 1000).toFixed(1) + '千';
+  if (value >= 10000) return t('metric.tenThousand', { n: (value / 10000).toFixed(1) });
+  if (value >= 1000) return t('metric.thousand', { n: (value / 1000).toFixed(1) });
   return String(value);
 }
 
@@ -445,30 +447,31 @@ function getFilteredTrending() {
 // 平台元数据 —— 标签名、图标、CSS class 与内容类型映射
 // ═══════════════════════════════════════════════════════════════
 const platformMeta = {
-  youtube: { label: 'YouTube', icon: '▶️' },
-  x: { label: 'X', icon: '𝕏' },
-  bilibili: { label: 'B站', icon: '📺' },
+  youtube: { label: t('labels.platform.youtube'), icon: '▶️' },
+  x: { label: t('labels.platform.x'), icon: '𝕏' },
+  bilibili: { label: t('labels.platform.bilibili'), icon: '📺' },
 };
 // B16 决策 65/79：内容类型（热点视图主分类维度）。来源媒体类型由 source_type 表达，
 // 只出现在来源核验层，不作为列表级筛选。unclassified 为 AI 分类+审核确认上线前的占位。
+// 文案来自 i18n 字典（labels.contentType）；当前固定 zh，未来多语言切换时统一改函数式读取。
 const contentTypeLabels = {
-  ai_tool: 'AI 工具',
-  ai_product: 'AI 产品',
-  ai_concept: 'AI 概念',
-  ai_technology: 'AI 技术动态',
-  ai_industry: 'AI 行业事件',
-  other: '其他',
-  unclassified: '类型待确认'
+  ai_tool: t('labels.contentType.ai_tool'),
+  ai_product: t('labels.contentType.ai_product'),
+  ai_concept: t('labels.contentType.ai_concept'),
+  ai_technology: t('labels.contentType.ai_technology'),
+  ai_industry: t('labels.contentType.ai_industry'),
+  other: t('labels.contentType.other'),
+  unclassified: t('labels.contentType.unclassified')
 };
 const SOURCE_TYPE_LABELS = {
-  youtube_video: 'YouTube 视频',
-  x_post: 'X 帖子',
-  bilibili_video: 'B站视频',
-  bilibili_dynamic_video: 'B站视频',
-  bilibili_dynamic_repost: 'B站转发动态',
-  bilibili_dynamic_text: 'B站动态',
-  bilibili_article: 'B站专栏',
-  unknown: '来源类型未知'
+  youtube_video: t('labels.sourceType.youtube_video'),
+  x_post: t('labels.sourceType.x_post'),
+  bilibili_video: t('labels.sourceType.bilibili_video'),
+  bilibili_dynamic_video: t('labels.sourceType.bilibili_dynamic_video'),
+  bilibili_dynamic_repost: t('labels.sourceType.bilibili_dynamic_repost'),
+  bilibili_dynamic_text: t('labels.sourceType.bilibili_dynamic_text'),
+  bilibili_article: t('labels.sourceType.bilibili_article'),
+  unknown: t('labels.sourceType.unknown')
 };
 
 // ═══════════════════════════════════════════════════════════════

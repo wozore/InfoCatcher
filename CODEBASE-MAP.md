@@ -7,16 +7,18 @@
 - [paths.js](src/shared/paths.js) — 目录与数据文件路径常量（全仓唯一数据登记点）。导出: `DIRS, CATALOG_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH`
 
 ## src/web/ — 前端静态站（原生 ES module，无打包器；build-dist.js 原样复制到 dist/）
-- [index.html](src/web/index.html) — 8 视图 DOM + 导航骨架，入口 `<script type="module" src="js/main.js">`
+- [index.html](src/web/index.html) — 8 视图 DOM + 导航骨架，入口 `<script type="module" src="js/main.js">`（trending 视图静态文案已 data-i18n 化）
 - [css/style.css](src/web/css/style.css) — 全站样式
-- [js/main.js](src/web/js/main.js) — 入口：共享状态、导航 switchView、全部事件绑定。导出: `currentView, switchView`
-- [js/data.js](src/web/js/data.js) — 数据加载(fetch JSON) + 过滤 + 平台元数据 + 通用工具。导出: 各数据状态与 setter、escapeHtml/timeAgo/formatPrice 等
+- [i18n/zh.js](src/web/i18n/zh.js) — 语言字典（试点：trending 视图 + 共享工具；未来加 en.js 等）。导出: `messages`
+- [js/i18n.js](src/web/js/i18n.js) — **前端 i18n 框架核心**（两层：UI 文案 t() + 内容数据 getLocalizedField）。导出: `t, setLang, getCurrentLang, getLocalizedField, applyStaticTranslations`
+- [js/main.js](src/web/js/main.js) — 入口：共享状态、导航 switchView、全部事件绑定（DOMContentLoaded 先 applyStaticTranslations）。导出: `currentView, switchView`
+- [js/data.js](src/web/js/data.js) — 数据加载(fetch JSON) + 过滤 + 平台元数据 + 通用工具（timeAgo/formatMetric/标签已接入 i18n 字典）。导出: 各数据状态与 setter、escapeHtml/timeAgo/formatPrice 等
 - [js/search.js](src/web/js/search.js) — AI 搜索全链路（首页/结果/处理/概念标记）。导出: `searchState, submitSearchHome, renderSearchResults...`
 - [js/tools.js](src/web/js/tools.js) — 工具库视图 + 筛选 + 详情弹窗。导出: `openDetail, closeModal, showModal, renderTools...`
 - [js/compare.js](src/web/js/compare.js) — 对比模式。导出: `compareList, toggleCompareRef, quickCompare, renderCompare...`
 - [js/featured.js](src/web/js/featured.js) — 推荐视图（精选/编辑推荐/热榜）。导出: `renderFeatured, renderFeaturedTabs...`
 - [js/glossary.js](src/web/js/glossary.js) — AI 概念视图。导出: `activeGlossaryId, openGlossaryConcept, renderGlossary...`
-- [js/trending.js](src/web/js/trending.js) — AI 热点视图。导出: `renderTrending, openHotspotDetail, reloadHotspots...`
+- [js/trending.js](src/web/js/trending.js) — AI 热点视图（文案走 t()、内容走 getLocalizedField，试点）。导出: `renderTrending, openHotspotDetail, reloadHotspots...`
 - [js/scenes.js](src/web/js/scenes.js) — 场景模式视图。导出: `activeSceneId, renderScenes, renderSceneDetail...`
 
 ## src/news/ — 新闻采集管线（CommonJS）
@@ -36,9 +38,12 @@
 - [news-x.js](src/news/collectors/news-x.js) — X(Twitter) 采集。导出: `collectX, normalizeTweet`
 - [news-transcripts.js](src/news/collectors/news-transcripts.js) — 视频字幕获取/存储。导出: `fetchYouTubeTranscript, storeTranscript, enrichYouTubeTranscripts`
 
-### classify/ — AI 内容分类
+### classify/ — AI 内容分类/总结/审核建议/本地化
 - [content-classifier.js](src/news/classify/content-classifier.js) — L0 规则 + L1 AI 分类编排。导出: `classifyRuleBased, classifyCandidate, classifyCandidates, confirmContentType`
-- [llm-provider.js](src/news/classify/llm-provider.js) — DeepSeek 请求封装（失败降级）。导出: `classifyWithDeepSeek, buildDeepSeekPayload`
+- [content-summarizer.js](src/news/classify/content-summarizer.js) — 候选内容总结（标题+描述+字幕 → summary/key_points）。导出: `summarizeCandidate, summarizeCandidates, enrichCandidateSummaries`
+- [content-reviewer.js](src/news/classify/content-reviewer.js) — AI 审核建议（标题+描述+字幕+总结 → ai_review verdict/reasons/confidence + 高置信自动应用）。导出: `reviewCandidate, reviewCandidates, applyAiReviewVerdicts, enrichCandidateReviews`
+- [content-localizer.js](src/news/classify/content-localizer.js) — 候选内容本地化（标题+描述 → localizations[locale]，原文保留顶层）。导出: `collectLocalizeSource, localizeCandidate, localizeCandidates, enrichCandidateLocalizations`
+- [llm-provider.js](src/news/classify/llm-provider.js) — DeepSeek 请求封装（分类/总结/审核/本地化，失败降级）。导出: `classifyWithDeepSeek, summarizeWithDeepSeek, reviewWithDeepSeek, localizeWithDeepSeek, buildDeepSeekPayload, buildSummaryPayload, buildReviewPayload, buildLocalizePayload`
 
 ### pipeline/ — 管线与投影
 - [feed-parser.js](src/news/pipeline/feed-parser.js) — RSS/XML/推文解析规范化。导出: `decodeXml, parseFeed, normalizeRssItem, normalizeTweet, requestText`
@@ -49,9 +54,9 @@
 ### cli/ — 命令行
 - [news-cli.js](src/news/cli/news-cli.js) — **CLI 分发器 + 入口（汇总 re-export 11 个）**。导出: `parseArgs, main, FILES, 各 command`
 - [cmd-sources.js](src/news/cli/cmd-sources.js) — `sources` 子命令。导出: `sourceCommand, normalizeTags, validateSource, importSources`
-- [cmd-content.js](src/news/cli/cmd-content.js) — `content/classify/transcript` 子命令。导出: `contentCommand, classifyCommand, transcriptCommand`
+- [cmd-content.js](src/news/cli/cmd-content.js) — `content/classify/transcript/localize` 子命令。导出: `contentCommand, classifyCommand, transcriptCommand, localizeCommand`
 - [cmd-ops.js](src/news/cli/cmd-ops.js) — `authorization/quota/lock` 子命令。导出: `authorizationCommand, quotaCommand, lockCommand, optionalNumber`
-- [cmd-registry.js](src/news/cli/cmd-registry.js) — `registry/review` 子命令。导出: `registryCommand, reviewCommand, legacyCommand`
+- [cmd-registry.js](src/news/cli/cmd-registry.js) — `registry/review` 子命令（review 含 --ai-verdict 筛选 / apply-ai 批量应用）。导出: `registryCommand, reviewCommand, legacyCommand`
 
 ## src/content/ — 内容产物
 - [generate-rss.js](src/content/generate-rss.js) — RSS 生成。导出: `getFeedItems, generateRss`

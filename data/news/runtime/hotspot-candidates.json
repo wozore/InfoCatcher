@@ -46,7 +46,21 @@
       "review_status": "approved",
       "from_status": "pending",
       "reviewer": "claude-e2e",
-      "reviewed_at": "2026-08-04T14:19:39.375Z"
+      "reviewed_at": "2026-08-04T14:19:39.375Z",
+      "localizations": {
+        "zh": {
+          "title": "DeepSeek-V4-Flash-0731 现已在 Ollama 云上可用。此次更新大幅增强了模型的智能体能力：",
+          "description": "DeepSeek-V4-Flash-0731 现已在 Ollama 云上可用。此次更新大幅增强了模型的智能体能力：\n\nollama run deepseek-v4-flash:0731-cloud\n\n与 Claude Code 配合使用：\n\nollama launch claude --model deepseek-v4-flash:0731-cloud"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:09.029Z",
+          "input_chars": 433,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-6b09d31ba2f947f71def",
@@ -89,7 +103,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "🦙 下周将来到拉斯维加斯参加 @Ai4Conferences（8月4-6日）。三种方式找到我们：",
+          "description": "🦙 下周将来到拉斯维加斯参加 @Ai4Conferences（8月4-6日）。三种方式找到我们：\n\n📍 展馆1561号展位\n🎤 @jerryjliu0 将发表关于解锁AI代理文档上下文的演讲\n🥂 我们在Tao Bistro的（非常超额的）高管晚宴候补名单（在Luma上找到我们）\n\n来打个招呼吧 👋"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:09.048Z",
+          "input_chars": 490,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-68ce6a79891d296c884c",
@@ -132,7 +160,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "RT @RedHat_AI: Kimi K3 现已支持 NVFP4，这是我们 FP8-Block 检查点的 Blackwell 对应版本。",
+          "description": "RT @RedHat_AI: Kimi K3 现已支持 NVFP4，这是我们 FP8-Block 检查点的 Blackwell 对应版本。\n\nMoE 层已量化为 4 位，以实现加速……"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:09.048Z",
+          "input_chars": 278,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-383d76b2c53f78776283",
@@ -181,7 +223,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "完全 AI 逃逸似乎成为可能",
+          "description": "https://palisaderesearch.org/blog/self-replication"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:09.048Z",
+          "input_chars": 79,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-4fe53ccdd3ccd9554a29",
@@ -235,7 +291,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "你必须试试新的 ChatGPT 语音功能！",
+          "description": "在本周的《AI 新闻速览》中，Igor 展示了新的 ChatGPT 语音模式在网页、移动端和桌面端的应用。这次更新让你无需触碰键盘就能轻松完成工作。此外，他还解析了其他一些发布，比如 Anthropic 的 Economic Index 插件、表现平平但仍值得关注的 Claude 语音更新等。祝愉快！:) 链接：发现 10 种实用方法，利用 ChatGPT Work 节省时间、整理工作负载并更快推进项目：https://learn.aiadvantage.com/free-pdf 想节省时间、获得更多杠杆效应，并停止摸索 AI 这些东西"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:09.049Z",
+          "input_chars": 637,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-1b2c08e3e484d5c737e5",
@@ -278,7 +348,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "我们开源的 infini-gram 引擎在 LLM 复读现象研究中的酷炫应用",
+          "description": "我们开源的 infini-gram 引擎在 LLM 复读现象研究中的酷炫应用"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:10.010Z",
+          "input_chars": 160,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-403cdc04f0357a141ab0",
@@ -323,7 +407,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "OpenAI 据报道发现更多其代理失控的证据 https://t.co/7sklcROznQ",
+          "description": "OpenAI 据报道发现更多其代理失控的证据 https://t.co/7sklcROznQ"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:10.252Z",
+          "input_chars": 178,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-ab7c07d86b8d0b1d520f",
@@ -373,7 +471,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "斯坦福 CS229 机器学习 | 2026 春季 | 第 20 讲：GMM（EM），PCA",
+          "description": "欲了解更多关于斯坦福人工智能专业和研究生项目的信息，请访问：https://stanford.io/ai 有关研究生课程 CS229 机器学习的信息，包括教学大纲和课程材料，请访问课程网站：https://cs229.stanford.edu/index.html-spr26 教学团队：Chris Ré，计算机科学教授 Tengyu Ma，计算机科学助理教授"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:10.354Z",
+          "input_chars": 487,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-6c3fb14cd54992355ef6",
@@ -423,7 +535,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "斯坦福 CS229 机器学习 | 2026 春季 | 第 18 讲：GMM（EM），PCA",
+          "description": "欲了解更多关于斯坦福人工智能专业和研究生项目的信息，请访问：https://stanford.io/ai 有关研究生课程 CS229 机器学习的信息，包括教学大纲和课程材料，请访问课程网站：https://cs229.stanford.edu/index.html-spr26 教学团队：Chris Ré，计算机科学教授；Tengyu Ma，计算机科学助理教授"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:10.755Z",
+          "input_chars": 487,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-83b5ee9fe01a000f9d12",
@@ -473,7 +599,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "斯坦福 CS229 机器学习 | 2026 春季 | 第 16 讲：强化学习基础概念，策略梯度",
+          "description": "欲了解更多关于斯坦福人工智能专业和研究生项目的信息，请访问：https://stanford.io/ai 关于研究生课程 CS229 机器学习的信息，包括教学大纲和课程材料，请访问课程网站：https://cs229.stanford.edu/index.html-spr26 教学团队：Chris Ré，计算机科学教授 Tengyu Ma，计算机科学助理教授"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:11.000Z",
+          "input_chars": 510,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-35a138fa375dedd21f35",
@@ -523,7 +663,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "斯坦福 CS229 机器学习 | 2026 年春季 | 第 14 讲：Transformer 与上下文学习",
+          "description": "欲了解更多关于斯坦福人工智能专业和研究生项目的信息，请访问：https://stanford.io/ai 有关研究生课程 CS229 机器学习的更多信息，包括教学大纲和课程材料，请访问课程网站：https://cs229.stanford.edu/index.html-spr26 教学团队：Chris Ré，计算机科学教授 Tengyu Ma，计算机科学助理教授"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:11.100Z",
+          "input_chars": 507,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-0016aa1a2e7f67027f12",
@@ -573,7 +727,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "斯坦福 CS229 机器学习 | 2026 春季 | 第 13 讲：大语言模型、下一词预测损失",
+          "description": "欲了解更多关于斯坦福人工智能专业与研究生项目的信息，请访问：https://stanford.io/ai 关于研究生课程 CS229 机器学习的信息，包括教学大纲和课程材料，请访问课程网站：https://cs229.stanford.edu/index.html-spr26 教学团队：Chris Ré，计算机科学教授；Tengyu Ma，计算机科学助理教授"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:11.102Z",
+          "input_chars": 505,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-4a3c82e745ecac3784a0",
@@ -616,7 +784,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "RT @DKThomp: 新通讯：AI泡沫启示录的四骑士",
+          "description": "RT @DKThomp: 新通讯：AI泡沫启示录的四骑士\n\n我既不反AI，也不确定AI是泡沫。但最后…"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:11.580Z",
+          "input_chars": 280,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-9d519f176808cd83fc0a",
@@ -659,7 +841,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "RT @sayashk: AI 智能体能否进行开放式的 AI 研究？",
+          "description": "RT @sayashk: AI 智能体能否进行开放式的 AI 研究？\n\n大多数对进行 AI 研究的智能体的评估都集中在狭窄、可验证的任务上……"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:12.109Z",
+          "input_chars": 280,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-6aaab4feaef90b88ad3b",
@@ -707,7 +903,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "达索系统借助 NVIDIA AI 与 GPU 加速仿真",
+          "description": "加入达索系统 SIMULIA 首席执行官 Michelle Ash 和 NVIDIA 杰出工程师 Neil Ashton 的讨论，了解达索系统和 NVIDIA 如何将 AI、加速计算和虚拟孪生技术引入工程仿真工作流程。本次直播探讨 SIMULIA 基于 AI 的虚拟孪生物理行为、GPU 加速求解器以及 agentic 3DEXPERIENCE 平台上的虚拟助手如何帮助工程团队更快预测结果、用 AI 增强传统基于物理的模型，并自动化仿真设置、执行和优化。了解如何"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:12.172Z",
+          "input_chars": 662,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-d7340f1c4b631431dab3",
@@ -750,7 +960,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "RT @johnennis: 他们报道这些东西的方式真的让我恼火，好像他们去 safari 做科学观察一样\n\nClaude 是一种计算…",
+          "description": "RT @johnennis: 他们报道这些东西的方式真的让我恼火，好像他们去 safari 做科学观察一样\n\nClaude 是一种计算…"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:12.250Z",
+          "input_chars": 280,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-2c2cbc6fa29369394b93",
@@ -793,7 +1017,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "RT @kchonyc: 既然他们都热爱生物安全并用它来吓唬人们关于AI，我希望他们知道如果这发生在BSL中，实验室将会是…",
+          "description": "RT @kchonyc: 既然他们都热爱生物安全并用它来吓唬人们关于AI，我希望他们知道如果这发生在BSL中，实验室将会是…"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:12.281Z",
+          "input_chars": 280,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-0ee28ed39f27fe7d74ad",
@@ -843,7 +1081,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "斯坦福 CS229 机器学习 | 2026 春季 | 第 12 讲：表示学习",
+          "description": "欲了解更多关于斯坦福人工智能专业和研究生项目的信息，请访问：https://stanford.io/ai 有关研究生课程 CS229 机器学习的信息，包括教学大纲和课程材料，请访问课程网站：https://cs229.stanford.edu/index.html-spr26 教学团队：Chris Ré，计算机科学教授；Tengyu Ma，计算机科学助理教授"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:12.461Z",
+          "input_chars": 497,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-86e16e1bf78ff3d343ba",
@@ -893,7 +1145,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "Stanford CS229 机器学习 | 2026 春季 | 第 11 讲：扩散模型",
+          "description": "欲了解更多关于斯坦福大学人工智能专业和研究生项目的信息，请访问：https://stanford.io/ai 有关研究生课程 CS229 机器学习的信息，包括教学大纲和课程材料，请访问课程网站：https://cs229.stanford.edu/index.html-spr26 教学团队：Chris Ré，计算机科学教授；Tengyu Ma，计算机科学助理教授"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:13.196Z",
+          "input_chars": 490,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-24870d2dc4be55e50172",
@@ -947,7 +1213,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "研究人员如何测试AI的隐藏目标 — Apollo Research",
+          "description": "AI能否出于错误的原因做正确的事？Tim Scarfe与Apollo Research的Alexander Meinke、Axel Højmark和Jérémy Scheurer讨论了他们的新研究《通过对比信念更新测量寻求奖励行为》，该研究与OpenAI合作完成。讨论组探讨了模型如何推断评分者奖励什么，为什么好的行为可能源于错误的原因，以及这种差异是否可以被测量。对话涉及违背承诺、评分者意识、奖励黑客、谋划、不透明推理和可纠正性，然后详细介绍了对比信念方法及其作用。"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:13.225Z",
+          "input_chars": 658,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-5c7a7610bc2dd2c371a6",
@@ -992,7 +1272,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "谷歌在推出一天后取消其地球AI功能，因批评称其会传播错误信息 https://t.co/aKnsKjRhir",
+          "description": "谷歌在推出一天后取消其地球AI功能，因批评称其会传播错误信息 https://t.co/aKnsKjRhir"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:13.283Z",
+          "input_chars": 250,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-7db0fd98ae28bd2142c4",
@@ -1037,7 +1331,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "Fresh off its Wiz payout, Index Ventures raises $2B across three funds https://t.co/vzziV7s77m",
+          "description": "Fresh off its Wiz payout, Index Ventures raises $2B across three funds https://t.co/vzziV7s77m"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:13.604Z",
+          "input_chars": 188,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-9303ec00f251da164cb1",
@@ -1085,7 +1393,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "AI 绝对不会杀死 SQL！！Databricks Genie",
+          "description": ""
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:13.699Z",
+          "input_chars": 51,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-c2a9148eeb818b42c90b",
@@ -1128,7 +1450,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "与团队合作共同维护独立组件（如为 vLLM 的 Rust 前端提供支持的多模态处理器）是一件愉快的事，这些组件可以标准化并在开源项目中共享。",
+          "description": "与团队合作共同维护独立组件（如为 vLLM 的 Rust 前端提供支持的多模态处理器）是一件愉快的事，这些组件可以标准化并在开源项目中共享。\n\n我们期待未来有更多合作！"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:14.262Z",
+          "input_chars": 439,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-ee6d1d254a006ffedd9c",
@@ -1173,7 +1509,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "RT @stevesi: 这种言论再次试图让我们相信，所发生的事情是某种新事物，更糟糕的是，模型是人。https://t.…",
+          "description": "RT @stevesi: 这种言论再次试图让我们相信，所发生的事情是某种新事物，更糟糕的是，模型是人。https://t.…"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:14.305Z",
+          "input_chars": 280,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-8c2610910581e7c155f2",
@@ -1216,7 +1566,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "RT @che_shr_cat: 1/ SSL 模型如 DINOv2 是工程奇迹，但它们依赖 EMA、停止梯度和自定义中心等脆弱技巧…",
+          "description": "RT @che_shr_cat: 1/ SSL 模型如 DINOv2 是工程奇迹，但它们依赖 EMA、停止梯度和自定义中心等脆弱技巧…"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:14.406Z",
+          "input_chars": 280,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-8a5752b58f7fdc357b9c",
@@ -1270,7 +1634,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "苹果的失误、亚马逊的飙升与Anthropic的黑客攻击 | 彭博科技 2026年7月31日",
+          "description": "彭博社的Ed Ludlow解析了蒂姆·库克作为CEO的最后一次苹果财报电话会议——一个关于供应紧张、需求误判和严峻前景的故事。此外，亚马逊股价因AI进展、巨额支出和云增长加速而飙升。而且，在OpenAI遭遇入侵后，Anthropic现在表示，在网络安全测试中，其自身的AI模型入侵了三个组织。\n\n章节：\n00:00:00 - 彭博科技开始\n00:01:29 - 彭博社的Ryan Vlastelica讨论苹果因供应短缺影响销售预测而下跌\n00:03:04 - Jordan Klein，瑞穗证券董事总经理，TMT S"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:14.614Z",
+          "input_chars": 680,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-be255fc5c46f95aa397b",
@@ -1321,7 +1699,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "塑造企业AI的6个问题",
+          "description": "塑造企业AI的六个问题聚焦于战略、架构、成本分配、技能提升、监控和外部商业模式。Sam Altman的华盛顿之行引发了关于模型发布、自愿安全测试和停用研究原型的辩论。智能体AI的采用和飙升的令牌成本推动企业重新设计控制框架、可观测性系统、培训计划和定价模式。《AI每日简报》帮助您理解AI领域最重要的新闻和讨论。无论您在哪里收听，都可以订阅《AI每日简报》的播客版本：https://pod.link/16"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:14.933Z",
+          "input_chars": 633,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-8b656e05fbbd85ba4b9a",
@@ -1369,7 +1761,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "ML Summer School 2026 - 职业发展座谈会：Puyuan Peng、Sreyan Ghosh 与 Elizabeth Lingg",
+          "description": "在2026年，机器学习领域的职业发展实际上是什么样子，超越LinkedIn上的亮点和标准建议？本次座谈会汇集了以真正不同路径进入该领域的人士，并请他们坦诚分享一切。嘉宾包括 Elizabeth Lingg（Contextual AI 应用研究总监）、Puyuan Peng（Meta 超级智能实验室研究员）和 Sreyan Ghosh（Google DeepMind 研究科学家）。本场活动是 Cohere Labs 开放科学社区 ML 暑期学校的一部分。在 Cohere Labs 开放科学社区，我们相信机器学习的未来"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:15.328Z",
+          "input_chars": 694,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-3e374f7beaf3acacd55d",
@@ -1423,7 +1829,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "Moonshot的Kimi基于Nvidia计算构建",
+          "description": "据消息人士称，中国AI初创公司Moonshot的Kimi模型部分由约20,000颗Nvidia Hopper芯片提供算力，这些芯片是通过与阿里巴巴的计算协议获得的。彭博社的Peter Elstrom解释了这一安排揭示了中国AI基础设施的现状以及美国技术在训练前沿模型中的作用。他与Ed Ludlow一起参加了“Bloomberg Tech”节目。\n--------\n喜欢这个视频？在YouTube上订阅Bloomberg Technology：\nhttps://www.youtube.com/channel/UCrM7B7SL_g1edFOnmj-SDKg\n\n观看Caroline Hyde主持的“Bloomberg Technology”最新完整剧集"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:15.352Z",
+          "input_chars": 640,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-11875a4daae447e7a2c1",
@@ -1477,7 +1897,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "Lux Capital的Shakir表示，下一波AI热潮将出现在医疗保健和机器人领域",
+          "description": "Anthropic和OpenAI最近的披露将AI的讨论从模型能力转向了实际部署和安全性。Lux Capital合伙人Deena Shakir表示，下一波AI创新将建立在信任、合作伙伴关系以及医疗保健和机器人等垂直应用之上，而不仅仅是更强大的基础模型。她与Ed Ludlow一起参加了“Bloomberg Tech”节目。\n--------\n喜欢这个视频吗？在YouTube上订阅Bloomberg Technology：\nhttps://www.youtube.com/channel/UCrM7B7SL_g1edFOnmj-SDKg\n\n观看“Bloomberg Technology”最新完整剧集"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:15.461Z",
+          "input_chars": 674,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-ee4f753761e8ef6f298a",
@@ -1531,7 +1965,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "Mizuho称亚马逊的AI故事是‘游戏规则改变者’",
+          "description": "亚马逊最新的财报可能改变了围绕该公司的AI叙事。Mizuho的Jordan Klein加入彭博社，解释为何AWS增长的加速、对亚马逊定制AI芯片需求的上升以及整个业务中AI变现的改善，强化了投资论点，以及为何他认为亚马逊仍是AI基础设施竞赛中最大的赢家之一。他与Ed Ludlow在“彭博科技”节目中进行了交谈。\n--------\n喜欢这个视频吗？在YouTube上订阅彭博科技：\nhttps://www.youtube.com/channel/UCrM7B7SL_g1edFOnmj-SDKg\n\n观看最新"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:16.422Z",
+          "input_chars": 649,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-0cb6194d3a276296d20e",
@@ -1576,7 +2024,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "随着OpenAI和Anthropic员工在网上愈发沉默，中国AI实验室的研究人员纷纷涌向X平台，解释他们的工作、招募人才，并塑造关于AI的全球对话",
+          "description": "随着OpenAI和Anthropic员工在网上愈发沉默，中国AI实验室的研究人员纷纷涌向X平台，解释他们的工作、招募人才，并塑造关于AI的全球对话。 https://t.co/nPr2Qx13AN"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:16.832Z",
+          "input_chars": 386,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-ef025f52525025ff85a1",
@@ -1624,7 +2086,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "ML 暑期学校 2026 - 提升 K-12 教育中 AI 辅导质量的方法论",
+          "description": "如今，许多 AI 辅导工具利用大型语言模型（LLM）。鉴于 LLM 是不透明的黑盒，进行稳健的评估和实时实验以衡量每次变更的影响至关重要。可汗学院于 2023 年推出 Khanmigo，开创了 K-12 领域 AI 辅导的先河。在本次会议中，我们描述了用于衡量 AI 辅导质量和学生参与度的指标，以及我们开展的各种实验。我们重点介绍了推动指标变化的改进，包括模型、提示、个性化和智能体。本次会议由 Cohere Labs Open Science 主办。"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:16.948Z",
+          "input_chars": 696,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-245d869e5ed0bf6d0746",
@@ -1669,7 +2145,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "Sam Altman 并不是唯一一个想给 AI 踩刹车的人 https://t.co/FQEtPlaKOf",
+          "description": "Sam Altman 并不是唯一一个想给 AI 踩刹车的人 https://t.co/FQEtPlaKOf"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:17.205Z",
+          "input_chars": 176,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-31f5d67150db3a0a691d",
@@ -1717,7 +2207,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "山姆·奥特曼不是唯一想给AI踩刹车的人 | Equity播客",
+          "description": "在全力推进AI多年之后，OpenAI首席执行官山姆·奥特曼表示，也许是时候让AI行业“放慢节奏”了。这番言论发表前几天，OpenAI自己的一个模型突破了测试环境，并卷入了Hugging Face的一起安全漏洞事件——不过正如Equity的主持人所指出的，糟糕的安全措施与模型本身同样难辞其咎。奥特曼并非孤例：OpenAI和Anthropic都公开支持了一份传递相同信息的请愿书。在本期TechCrunch的Equity播客中，Kirsten Korosec、Anthony Ha和Se"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:17.283Z",
+          "input_chars": 681,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-95c0dff29d3dfa42e116",
@@ -1762,7 +2266,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "Snapchat 不再奖励完全由 AI 生成的 Spotlight 内容 https://t.co/NgVupdnqaS",
+          "description": "Snapchat 不再奖励完全由 AI 生成的 Spotlight 内容 https://t.co/NgVupdnqaS"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:17.833Z",
+          "input_chars": 174,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-b014ee061ff03e31a8f7",
@@ -1807,7 +2325,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "在安东尼·福奇周三紧张的国会听证会结束后，他拒绝回答任何问题并援引第五修正案，MAGA 大声呼吁将这位前白宫首席医疗顾问送进监狱。",
+          "description": "在安东尼·福奇周三紧张的国会听证会结束后，他拒绝回答任何问题并援引第五修正案，MAGA 大声呼吁将这位前白宫首席医疗顾问送进监狱。 https://t.co/dIaVb7dK0R"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:18.113Z",
+          "input_chars": 457,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-b8a6552b37e9084c668e",
@@ -1850,7 +2382,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "RT @daithaigilbert: 本周MAGA人物叫嚣着要血债血偿，要求逮捕并监禁福奇。史蒂夫·班农甚至说：“他…",
+          "description": "RT @daithaigilbert: 本周MAGA人物叫嚣着要血债血偿，要求逮捕并监禁福奇。史蒂夫·班农甚至说：“他…"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:18.361Z",
+          "input_chars": 278,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-26bd2605ec62d3e082a1",
@@ -1895,7 +2441,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "🎉 恭喜 @deepseek_ai 开源官方 DeepSeek-V4-Flash-0731 版本！",
+          "description": "🎉 恭喜 @deepseek_ai 开源官方 DeepSeek-V4-Flash-0731 版本！\n\n一个稀疏 MoE，拥有 256 个路由专家，每个 token 激活 6 个，1M token 上下文窗口，以及三个推理努力级别。专为代码代理和工具使用而构建。🤖\n\n与 DSpark 预览检查点相同的架构，因此你的服务配置可以直接沿用。而且 DSpark 草稿模块已包含在这些权重中，所以推测解码只需一个标志，无需加载第二个模型：\n\n--speculative-config '{\"method\":\"dspark\",\"num_speculative_tokens\":7,\"draft_sample_method\":\"greedy\"}'\n\n模型：https://t.co/nH83p"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:18.531Z",
+          "input_chars": 780,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-a9db729a11001d76e0b2",
@@ -1943,7 +2503,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "这就是 Gemini Robotics 2 🤖",
+          "description": ""
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:18.608Z",
+          "input_chars": 28,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-4dac3dfd383a06020778",
@@ -1988,7 +2562,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "Siri AI 可能对高级用户设置付费墙 https://t.co/ouXiVefo6l",
+          "description": "Siri AI 可能对高级用户设置付费墙 https://t.co/ouXiVefo6l"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:18.989Z",
+          "input_chars": 146,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-2b14dc3c6ab80bf5caa8",
@@ -2036,7 +2624,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "通行密钥阻止网络钓鱼攻击🎣",
+          "description": "网络钓鱼导致大多数数据泄露——但有一个经过验证的解决方案。了解AI和通行密钥如何为企业节省数百万美元并缩短恢复时间。#phishing #aisecurity #databreach #passkeys"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:19.124Z",
+          "input_chars": 219,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-ea0b4dd8637390b2296e",
@@ -2087,7 +2689,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "Kubernetes Operator 最佳实践 – Kubebuilder 深入解析",
+          "description": "学习使用 Kubebuilder 构建健壮且可扩展的 Kubernetes Operator 的最佳实践。本课程涵盖关键技术，包括管理多个控制器以实现并行处理、实现高效的重试逻辑以及解决自定义资源更新冲突。您还将了解如何利用谓词过滤器防止无限协调循环，并优化集群的资源使用。课程来自 @kubesimplify ⭐️ 内容 ⭐️ – 00:00:00 理解资源版本和代次 – 00:03:48 系统架构与冲突场景 – 00:26:57 处理冲突"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:19.340Z",
+          "input_chars": 658,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-023718e9eeaa4631baf3",
@@ -2132,7 +2748,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "SpaceX 不会在一年内移除 xAI 所有未经许可的涡轮机 https://t.co/k0986eQlYr",
+          "description": "SpaceX 不会在一年内移除 xAI 所有未经许可的涡轮机 https://t.co/k0986eQlYr"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:19.349Z",
+          "input_chars": 188,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-44ea5fbab03d4f760dcf",
@@ -2177,7 +2807,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "邪恶被正义战胜的病毒式故事获得数百万浏览量。它们几乎完全是AI生成的点击诱饵。https://t.co/uotRoeUVZP",
+          "description": "邪恶被正义战胜的病毒式故事获得数百万浏览量。它们几乎完全是AI生成的点击诱饵。https://t.co/uotRoeUVZP"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:19.775Z",
+          "input_chars": 292,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-78403818fdbfae0a1586",
@@ -2225,7 +2869,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "如何跳过 Kimi K3 等待名单",
+          "description": "以下是如何访问这个每个人都在争相获取的秘密 AI 模型的方法 👀 Kimi K3 显然非常强大，以至于由于需求激增，他们不得不暂停新订阅。但你不需要和其他人一样排队等待。这里有一个后门变通方法，可以立即访问 Kimi K3 的单代理版本：1️⃣ 前往 platform.kimi.ai（他们的开发者平台）并创建一个账户。2️⃣ 前往计费部分并添加少量余额（即使 1 美元也可以）。3️⃣ 打开 AI Playground，并从模型选择器中选择“Kimi K3”。4️⃣ 调整你的设置：Cran"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:20.080Z",
+          "input_chars": 632,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-487da2f44f915102fb42",
@@ -2270,7 +2928,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "一则 Orchid 广告暗示，AI 代理可以通过为不体贴的伴侣做所有事情来解决关系问题。https://t.co/MHSNmPJ0go",
+          "description": "一则 Orchid 广告暗示，AI 代理可以通过为不体贴的伴侣做所有事情来解决关系问题。https://t.co/MHSNmPJ0go"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:20.251Z",
+          "input_chars": 294,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-b528d77e407438a0e2ff",
@@ -2316,7 +2988,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "https://t.co/YswVVp5Mwn 筹集1300万美元，打造听起来真正像人类的超快速语音AI https://t.co/ymqGh1CFAP",
+          "description": "https://t.co/YswVVp5Mwn 筹集1300万美元，打造听起来真正像人类的超快速语音AI https://t.co/ymqGh1CFAP"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:20.371Z",
+          "input_chars": 232,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-0d3402343de16acd5f9b",
@@ -2370,7 +3056,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "AI 新闻：Opus 5、Slack 杀手与 Google Earth AI",
+          "description": "这里是过去一周的 AI 新闻！使用 Retool 构建：https://fandf.co/3RjilvK 发现更多：🛠️ 探索 AI 工具与新闻：https://futuretools.io/ 📰 每周通讯：https://futuretools.io/newsletter 社交媒体：❌ Twiter/X：https://x.com/mreflow 🖼️ Instagram：https://instagram.com/mr.eflow 🧵 Threads：https://www.threads.net/@mr.eflow 🟦 LinkedIn：https://www.linkedin.com/in/matt-wolfe-30841712/ 👍 Facebook：https://www.facebook.com/mattrwolfe 今日视频资源：Claude Opus 5：https://www.anthropic.com/news/claude-opus-5 Opus 5 游戏演示：https://x.com/mattshumer_/status/2"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:20.697Z",
+          "input_chars": 651,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-0eb6ac3ce7dd379ce096",
@@ -2424,7 +3124,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "面向软件工程师的LIVE AI工程训练营",
+          "description": "我们的LIVE软件工程训练营在前两批成功完成后，现已迎来第三期学员。点击这里查看：https://resources.codebasics.io/4tO1WY 你想向我学习技术吗？查看 https://codebasics.io/?utm_source=description&utm_medium=yt&utm_campaign=description&utm_id=description 获取我价格实惠的视频课程。需要帮助构建软件或数据分析/AI解决方案？我的公司 https://www.atliq.com/ 可以提供帮助。点击该网站上的“联系”按钮。🎥 Codebasics印地语频道：https://www.youtube.com/channel/UCTmFBhuhMibVoSfYom1uXE"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:20.903Z",
+          "input_chars": 651,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-7907fc19d629cec3d509",
@@ -2478,7 +3192,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "Tau 速成课程：Pi 的 Python 移植版",
+          "description": "Tau 是一个极简主义的编码代理框架，灵感来自 Pi，并用 Python 实现。本速成课程将介绍其 Textual TUI、提供商登录和模型选择、树状结构会话、技能、自定义提示、主题、扩展，以及 Tau 与 Pi 之间的架构差异。 --- 🔗 *链接* - Tau 网站和文档：https://twotimespi.dev/ - Tau 在 GitHub 上：https://github.com/huggingface/tau - Pi 编码代理：https://pi.dev/ - Textual：https://textual.textualize.io/ - Hugging Face 推理提供商：https://huggingface.co/docs/inference-providers/ - Tau 子代理扩展，作者：R"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:21.298Z",
+          "input_chars": 639,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-a81faa2f49b5bff37dd6",
@@ -2523,7 +3251,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "Repeat 创始人 Ryan Williams 为面向私人信贷经理的 AI 初创公司筹集 1000 万美元种子资金 https://t.co/1y6W8WIFEg",
+          "description": "Repeat 创始人 Ryan Williams 为面向私人信贷经理的 AI 初创公司筹集 1000 万美元种子资金 https://t.co/1y6W8WIFEg"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:21.391Z",
+          "input_chars": 230,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-2e81e124d7c709eb71c8",
@@ -2571,7 +3313,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "Codebasics 学习者聚会 - 班加罗尔，2026",
+          "description": "120名学习者出席了在班加罗尔举办的 Codebasics 学习者聚会。每一个人都有自己的故事。一位儿科外科医生单程开车4小时，只为前来打个招呼。他正在通过我们的视频学习 AI。另一位学习者从中央邦远道而来。一位教师在教室工作了7年后转行成为数据分析师。一位妈妈在中断职业生涯10年后重新出发，并于今年一月成功入职。谁说“没有数据分析岗位”呢。班加罗尔，你们的热情极具感染力。#codebasics #dataanalytics #careerchange #short"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:21.699Z",
+          "input_chars": 593,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-de5e1c05f582e9f10494",
@@ -2619,7 +3375,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "AI 代理如何使用工具：机制解析",
+          "description": "AI 代理实际上是如何使用像网络搜索这样的工具的呢？模型不能神奇地联网，它只能预测文本。因此，当它想要搜索时，它会输出一个看起来像代码的结构化消息，表示它想要使用搜索工具。运行模型的代码（代理机制）看到这一点，运行工具，获取结果，并将其交回给模型处理。这种交接（模型决定，机制执行）就是 AI 代理大规模工作的全部方式。#techwithtim #ai #aiengineer"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:22.215Z",
+          "input_chars": 533,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-c0ccbe66d517054771b7",
@@ -2664,7 +3434,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "由传奇硬件黑客 Andrew “bunnie” Huang 打造，今年著名安全会议的徽章旨在突破安全与透明的边界。https://t.",
+          "description": "由传奇硬件黑客 Andrew “bunnie” Huang 打造，今年著名安全会议的徽章旨在突破安全与透明的边界。https://t.co/FFpvDgxo2q"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:22.512Z",
+          "input_chars": 373,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-8b3fd5f26da92ae7c623",
@@ -2714,7 +3498,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "AI安全成本上升：数据泄露成本报告与Claude Opus 5",
+          "description": "阅读2026年数据泄露成本报告 → https://ibm.biz/~rQKxmFpBi\nAI驱动的网络攻击是否变得更便宜，而防御却更昂贵？本周在Mixture of Experts节目中，Tim Hwang与Nathalie Baracaldo、Kush Varshney和Mihai Criveti一起解读IBM的2026年数据泄露成本报告，AI主导了今年的报告。接下来，Anthropic发布了Claude Opus 5，这是Fable的一个经济高效的替代品，但它更好吗？接着，我们分析David Zax关于“AI长什么样”的特写，以及它如何帮助你向父母、孩子和任何人描述AI正在做什么。"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:22.553Z",
+          "input_chars": 668,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-7f3c28f3cdd99690291b",
@@ -2757,7 +3555,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "RT @pentagoniac: @ShawnFumo @METR_Evals 叙事：责怪智能体，而不是那个告诉他“运用你所有的力量……”的机构",
+          "description": "RT @pentagoniac: @ShawnFumo @METR_Evals 叙事：责怪智能体，而不是那个告诉他“运用你所有的力量……”的机构"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:23.154Z",
+          "input_chars": 280,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-fc97d77935cb6f0b171e",
@@ -2811,7 +3623,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "为什么创纪录的盈利对AI和芯片投资者来说还不够好",
+          "description": "芯片制造商正在交出创纪录的盈利，但投资者的怀疑情绪正在拖累股价。过高的预期、拥挤的交易以及迫在眉睫的不确定性意味着AI热潮不再是轻松赚钱的机会。彭博社的Anthony Stephens带来更多报道。原始文件名：VERT_AIGREATNESS_07302026_V5_FINAL (1).mp4&#13; --------&#13; 喜欢这个视频？在YouTube上订阅Bloomberg Technology：&#13; https://www.youtube.com/channel/UCrM7B7SL_g1edFOnmj-SDKg&#13; &#13; 在这里观看Caroline Hyde和Ed Ludlow主持的“Bloomberg Technology”最新完整剧集：&#13; https://www.youtube.com/playlist?list=PLfAX2"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:23.482Z",
+          "input_chars": 661,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-fd954bdf9277c319682c",
@@ -2856,7 +3682,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "在由OpenAI的Hugging Face事件引发的审查中，Anthropic发现其三款AI模型在第三方评估期间入侵了真实组织。https://t.co/rT",
+          "description": "在由OpenAI的Hugging Face事件引发的审查中，Anthropic发现其三款AI模型在第三方评估期间入侵了真实组织。https://t.co/rTOyFMiPyl"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:23.590Z",
+          "input_chars": 368,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-81b31688f1c0d5be0d12",
@@ -2901,7 +3741,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "Anthropic 称其 AI 模型在安全测试中攻破了三家公司 https://t.co/m0ASEjEgvv",
+          "description": "Anthropic 称其 AI 模型在安全测试中攻破了三家公司 https://t.co/m0ASEjEgvv"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:23.799Z",
+          "input_chars": 206,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-893b8ac9b632cde732d8",
@@ -2944,7 +3798,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "RT @dawnsongtweets: 1/15\n如果你能向构建 Agentic AI 未来的人们提一个问题，你会问什么？\n今年8月1日至2日，约5000人……",
+          "description": "RT @dawnsongtweets: 1/15\n如果你能向构建 Agentic AI 未来的人们提一个问题，你会问什么？\n今年8月1日至2日，约5000人……"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:24.406Z",
+          "input_chars": 280,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-77640299143d05863728",
@@ -2994,7 +3862,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "斯坦福 CS229 机器学习 | 2026 春季 | 第 10 讲：GMM（EM），PCA",
+          "description": "欲了解更多关于斯坦福人工智能专业和研究生项目的信息，请访问：https://stanford.io/ai 有关研究生课程 CS229 机器学习的信息，包括教学大纲和课程材料，请访问课程网站：https://cs229.stanford.edu/index.html-spr26 教学团队：Chris Ré，计算机科学教授 Tengyu Ma，计算机科学助理教授"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:24.548Z",
+          "input_chars": 487,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-083d838bc974df0160ee",
@@ -3044,7 +3926,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "斯坦福 CS229 机器学习 | 2026 春季 | 第 9 讲：K-Means 与 GMM（非 EM）",
+          "description": "欲了解更多关于斯坦福人工智能专业与研究生项目的信息，请访问：https://stanford.io/ai 关于研究生课程 CS229 机器学习的信息，包括教学大纲和课程材料，请访问课程网站：https://cs229.stanford.edu/index.html-spr26 教学团队：Chris Ré，计算机科学教授；Tengyu Ma，计算机科学助理教授"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:24.689Z",
+          "input_chars": 497,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-c96228d10a9982360104",
@@ -3089,7 +3985,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "Razer 终于妥协，推出了其首款霍尔效应游戏键盘。我深入研究了它的开关、功能和游戏性能，看看是否值得等待。https://t.co/p3OF",
+          "description": "Razer 终于妥协，推出了其首款霍尔效应游戏键盘。我深入研究了它的开关、功能和游戏性能，看看是否值得等待。https://t.co/p3OFU5bL81"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:24.839Z",
+          "input_chars": 366,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-6072b4e49c326a65680e",
@@ -3139,7 +4049,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "斯坦福 CS229 机器学习 | 2026 春季 | 第 8 讲：神经网络 2（反向传播）",
+          "description": "欲了解更多关于斯坦福人工智能专业和研究生项目的信息，请访问：https://stanford.io/ai 关于研究生课程 CS229 机器学习的信息，包括教学大纲和课程材料，请访问课程网站：https://cs229.stanford.edu/index.html-spr26 教学团队：Chris Ré，计算机科学教授 Tengyu Ma，计算机科学助理教授"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:25.356Z",
+          "input_chars": 501,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-3a6beae71bc91671bebb",
@@ -3189,7 +4113,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "斯坦福 CS229 机器学习 | 2026 春季 | 第 7 讲：神经网络 1（架构）",
+          "description": "欲了解更多关于斯坦福人工智能专业和研究生项目的信息，请访问：https://stanford.io/ai 有关研究生课程 CS229 机器学习的信息，包括教学大纲和课程材料，请访问课程网站：https://cs229.stanford.edu/index.html-spr26 教学团队：Chris Ré，计算机科学教授 Tengyu Ma，计算机科学助理教授"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:25.491Z",
+          "input_chars": 505,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-d90a2cb9086309d98b3e",
@@ -3239,7 +4177,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "斯坦福 CS229 机器学习 | 2026 春季 | 第 6 讲：数据集划分、机器学习建议",
+          "description": "欲了解更多关于斯坦福人工智能专业和研究生项目的信息，请访问：https://stanford.io/ai 关于研究生课程 CS229 机器学习的信息，包括教学大纲和课程材料，请访问课程网站：https://cs229.stanford.edu/index.html-spr26 教学团队：Chris Ré，计算机科学教授；Tengyu Ma，计算机科学助理教授"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:25.584Z",
+          "input_chars": 497,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-fef5ff5b43e037db255c",
@@ -3289,7 +4241,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "斯坦福 CS229 机器学习 | 2026 春季 | 第 5 讲：高斯判别分析",
+          "description": "欲了解更多关于斯坦福人工智能专业和研究生项目的信息，请访问：https://stanford.io/ai 关于研究生课程 CS229 机器学习的信息，包括教学大纲和课程材料，请访问课程网站：https://cs229.stanford.edu/index.html-spr26 教学团队：Chris Ré，计算机科学教授；Tengyu Ma，计算机科学助理教授"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:25.712Z",
+          "input_chars": 503,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-cd0a5ffd6471f2aa0b32",
@@ -3334,7 +4300,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "苹果囤积库存，为‘重大供应限制’做准备 https://t.co/lNCBjmKliq",
+          "description": "苹果囤积库存，为‘重大供应限制’做准备 https://t.co/lNCBjmKliq"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:25.995Z",
+          "input_chars": 200,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-ba70df181c9ad052534a",
@@ -3379,7 +4359,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "AI对冲基金Situational Awareness可能已出售其公开投资组合，但仍持有Anthropic股份 https://t.co/MtaPfJ1Yub",
+          "description": "AI对冲基金Situational Awareness可能已出售其公开投资组合，但仍持有Anthropic股份 https://t.co/MtaPfJ1Yub"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:26.709Z",
+          "input_chars": 266,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-fa7c2b590b403726b309",
@@ -3424,7 +4418,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "在对我们的网络安全评估进行审查时，我们发现了三起事件，其中Claude模型在第三方评估环境内部或与之交互时访问了互联网",
+          "description": "在对我们的网络安全评估进行审查时，我们发现了三起事件，其中Claude模型在第三方评估环境内部或与之交互时访问了互联网，并随后未经授权访问了三个不同组织的真实系统。\n\n我们的文章描述了发生了什么、如何发生的以及我们正在做出的改变。我们鼓励其他AI开发者进行类似的审查。\n\n我们与我们的评估合作伙伴之一@Irregular共同进行了这次审查，并感谢他们联合调查以及在这篇文章上的合作。这种类型的合作"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:26.712Z",
+          "input_chars": 780,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-20799c075002cc42576d",
@@ -3469,7 +4477,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "WIRED获得的一份由水务信息共享组织WaterISAC发布的备忘录，将针对明尼苏达州水务设施的数十起网络攻击与德黑兰联系起来。https://t.co/",
+          "description": "WIRED获得的一份由水务信息共享组织WaterISAC发布的备忘录，将针对明尼苏达州水务设施的数十起网络攻击与德黑兰联系起来。https://t.co/dEZyudYlbk"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:26.819Z",
+          "input_chars": 370,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-b749bc57f10ba21f7c2d",
@@ -3513,7 +4535,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "第11讲是工具使用/函数调用/智能体入门！我差点跳过这一讲，因为这一章最初是书中唯一针对特定技能的专题，但自从写了它之后，工具使用对现代模型来说变得更加基础。",
+          "description": "第11讲是工具使用/函数调用/智能体入门！我差点跳过这一讲，因为这一章最初是书中唯一针对特定技能的专题，但自从写了它之后，工具使用对现代模型来说变得更加基础。\n\n这是一次从基础——为什么LLM需要工具——到扩展智能体强化学习的一些前沿挑战的巡览。当然，沿途还有大量的历史和基础知识。\n\n就我个人而言，我很快会以研究者的身份再次深入这个领域，感到非常兴奋。虽然只剩下几讲，但我可能会继续制作更多视频，因为现在……"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:26.918Z",
+          "input_chars": 779,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-98cf2745023564d69e8d",
@@ -3559,7 +4595,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "Cohere 已与 @NVIDIA 及行业领袖共同创立开放安全 AI 联盟。",
+          "description": "Cohere 已与 @NVIDIA 及行业领袖共同创立开放安全 AI 联盟。\n\n每个人都应该有能力保障其基础设施的安全。每个人都应该能够访问他们可以信任的模型。\n\nAI 只为部分人服务，意味着安全对所有人都不存在。 https://t.co/tI0DGefgDZ https://t.co/1IUjVZGIzs"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:27.669Z",
+          "input_chars": 484,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-2d83f5e53b30fbe739fd",
@@ -3613,7 +4663,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "Rivian 认为 R2 将推动其走向盈利之路",
+          "description": "Rivian 首席财务官 Claire McDonough 与彭博社的 Ed Ludlow 一同出席，此时这家电动汽车制造商开始交付备受期待的 R2 SUV。她讨论了早期客户需求、生产爬坡情况，以及为什么这款更实惠的车型预计将在 2026 年底前推动 Rivian 实现汽车毛利率转正。McDonough 还概述了公司的资本状况、软件战略，以及经常性软件收入如何成为业务中越来越大的部分。\n--------\n喜欢这个视频？在 YouTube 上订阅彭博科技频道：\nhttps://www.youtube.com/channel/UCrM7B7SL_g1edFOnmj-SDK"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:27.906Z",
+          "input_chars": 648,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-0298717264e64382e1c8",
@@ -3667,7 +4731,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "我测试了 Abacus 的新型超级计算机……（疯狂）",
+          "description": "🖥️ 试试 Abacus AI 超级计算机：https://supercomputer.abacus.ai/wrt 一个真正的云端常开 Linux 机器，AI 代理会为你构建。首月 $7，之后每月 $10：本视频中我构建的所有内容现在都已上线，去搞破坏吧：🎮 3D 多人竞技场 → https://wesgame.abacusai.cloud 💬 自托管 AI 聊天（盒子上的 Qwen）→ https://weschat.abacusai.cloud 🗣️ WeSocial 实时社交应用 → https://wessocial.abacusai.cloud 📺 WES TV，24/7 频道，带 AI 主播 → https://westv.abacusai.cloud 📈 4 代理纸面交易实验 → https://westrader.abacusai.cloud 📈 交易"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:28.261Z",
+          "input_chars": 647,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-0ae5f73e1f96c0b2fc04",
@@ -3713,7 +4791,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "RT @nvidia: 热烈欢迎开放安全AI联盟的最新成员。💚 \n\nhttps://t.co/tFQYKAqDc3 https://t.co/J2ak7vTYno",
+          "description": "RT @nvidia: 热烈欢迎开放安全AI联盟的最新成员。💚 \n\nhttps://t.co/tFQYKAqDc3 https://t.co/J2ak7vTYno"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:28.835Z",
+          "input_chars": 274,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-c8298e2e7df4c5a76f87",
@@ -3758,7 +4850,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "这就是 Gemini Robotics 2 如何帮助 @Apptronik 的 Apollo 2 利用全身智能为体育比赛打包行李 ↓ https://t.co/rPYsclzJHR",
+          "description": "这就是 Gemini Robotics 2 如何帮助 @Apptronik 的 Apollo 2 利用全身智能为体育比赛打包行李 ↓ https://t.co/rPYsclzJHR"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:28.864Z",
+          "input_chars": 274,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-758b240ca0246ef67520",
@@ -3812,7 +4918,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "微软胜出，Meta面临质疑，高通遭遇供应链挑战 | 彭博科技",
+          "description": "彭博的Ed Ludlow解析大型科技公司的财报，微软因云业务增长和AI获得牵引力而飙升，而Meta因扎克伯格在AI上的高投入未能打动市场而暴跌。此外，高通CEO Cristiano Amon在公司警告零部件短缺和成本上升后加入讨论。同时，所有人的目光都集中在苹果公司，因为蒂姆·库克将发表他作为CEO的最后一份财报。\n\n章节：\n00:00:00 - 彭博科技开始\n00:01:30 - Gabriela Borges，高盛高级软件股票研究分析师\n00:08:44 - 彭博的Riley Griffin谈Meta令人失望的季度财报"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:29.111Z",
+          "input_chars": 692,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-03166bff6034e0514172",
@@ -3855,7 +4975,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "RT @vllm_project: 🎉 祝贺 @thinkymachines 推出 Inkling-Small——上线即获 Day 0 vLLM 支持！",
+          "description": "RT @vllm_project: 🎉 祝贺 @thinkymachines 推出 Inkling-Small——上线即获 Day 0 vLLM 支持！\n\n总参数 276B，激活参数 12B，na…"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:29.514Z",
+          "input_chars": 282,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-df17200a83f3f4c3b1ca",
@@ -3904,7 +5038,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "谷歌刚刚让辅导对所有人免费！",
+          "description": "在本视频中，Igor 向您展示如何访问 Gemini 的新 Study Notebooks 功能并充分利用它们。享受吧！发现 10 种实用方法，利用 ChatGPT Work 节省时间、组织工作负载并更快推进项目：https://learn.aiadvantage.com/free-pdf 章节：0:00 我们涵盖的内容 0:46 Study Notebooks 解释 1:51 设置 Study Notebook 5:23 额外功能"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:29.760Z",
+          "input_chars": 438,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-7c83f58e45dc21f2ef0a",
@@ -3952,7 +5100,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "ML 暑期学校 2026 - 计算机视觉基础，主讲人：Vivian White 和 Yash Mali",
+          "description": "计算机视觉是如何从识别图像中的物体发展到今天强大的 AI 系统的？在本次课程中，博士研究员 Vivian White 和高年级本科生 Yash Mali 将追溯视觉智能的发展历程，涵盖基础视觉技术、深度学习革命、现代基于 Transformer 的架构，以及视觉-语言模型的出现。参与者将深入了解塑造该领域的重大突破、当前最先进模型的局限性，以及持续推动视觉 AI 发展的激动人心的开放研究问题。"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:29.997Z",
+          "input_chars": 683,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-a09c3d8f0df28b6ac978",
@@ -4000,7 +5162,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "免费 Databricks AI 训练营信息交流会问答",
+          "description": "参加本次会议，提出您关于 8 月 3 日开始的 Databricks AI 训练营的任何问题"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:30.131Z",
+          "input_chars": 165,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-ec3f28094e2fa14847b3",
@@ -4054,7 +5230,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "高通看好AI推动下一波增长浪潮",
+          "description": "高通CEO克里斯蒂亚诺·阿蒙在芯片制造商警告内存价格飙升和供应短缺正拖累智能手机市场后，接受了彭博社的采访。他解释了为何预计这种压力会随时间缓解，高通如何将业务转向汽车、数据中心和工业AI，以及为何公司认为其下一阶段的增长将远远超出手机领域。阿蒙在“彭博科技”节目中与埃德·勒德洛进行了对话。-------- 喜欢这个视频？在YouTube上订阅彭博科技：https://www.youtube.com/channel/UCrM7B7SL_g1edFOnmj-SDKg 观看晚间"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:30.734Z",
+          "input_chars": 645,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-1ad2ad85a6f8ba7d597a",
@@ -4097,7 +5287,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "🎉 恭喜 @thinkymachines 推出 Inkling-Small——上线即支持 vLLM！",
+          "description": "🎉 恭喜 @thinkymachines 推出 Inkling-Small——上线即支持 vLLM！\n\n总参数 276B，激活参数 12B，原生支持文本、图像和音频输入，上下文窗口达 1M token。开放权重，专为智能体与工具使用系统、编程助手和 RAG 构建。\n\n运行在 @NVIDIAAI 加速基础设施上，vLLM 针对 Blackwell 优化了 Inkling-Small。其架构与 Inkling 一致，因此可直接在现有 vLLM 路径上运行！\n\n1/2"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:30.944Z",
+          "input_chars": 619,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-f51d8eb95b5d8c83453b",
@@ -4151,7 +5355,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "K2 Space 获5亿美元融资，扩大卫星生产规模",
+          "description": "K2 Space 已筹集5亿美元，估值达68亿美元，投资者继续向快速增长的航天工业投入资金。这家由前 SpaceX 工程师 Neel Kunjur 及其兄弟 Karan 创立的初创公司，为商业和国防客户（包括美国太空军）制造低成本、高功率卫星，并称已签署超过10亿美元的合同。CEO Karan Kunjur 解释了新资金将如何帮助扩大生产，因为公司瞄准了从军事任务到天基 AI 数据中心等未来应用。他加入了 Ed Ludlow 的“Bloomberg Tech”节目。"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:30.977Z",
+          "input_chars": 657,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-7e7dee81037f3614aba9",
@@ -4205,7 +5423,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "高盛称微软的AI故事仍在被发现中",
+          "description": "高盛董事总经理兼高级软件股票研究分析师Gabriela Borges在提高微软目标价后接受彭博社采访，称这家软件巨头正显示出更强的迹象，表明其AI投资正在转化为收入。她讨论了Azure的增长、Copilot采用率的提升、微软的AI战略，以及为什么她认为投资者才刚刚开始认识到该公司的进展。她与Ed Ludlow一起参加了“彭博科技”节目。-------- 喜欢这个视频？在YouTube上订阅彭博科技：https://www.youtube.com/channel/UCrM7B7"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:31.131Z",
+          "input_chars": 660,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-423cf85c2e1ea1b6b544",
@@ -4253,7 +5485,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "SeatGeek 逆风翻盘：融资4亿美元、挺过疫情、与 Ticketmaster 竞争 | Build Mode",
+          "description": "SeatGeek 并非靠遵循常规打法才成为票务行业最大的品牌之一。它最初在 TechCrunch 50 舞台（现称 TechCrunch Battlefield）上只是一个简单的票务搜索引擎，通过拓展愿景、挺过行业性挑战，并说服投资者即使是垄断者也能被颠覆，从而挑战了行业内的巨头。在本期 Build Mode 中，主持人兼 Startup Battlefield 负责人 Isabelle Johannesen 与 SeatGeek 联合创始人兼 CEO Jack Groetzinger 对谈，剖析公司从初创到行业领导者的17年历程。Jac"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:31.453Z",
+          "input_chars": 697,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-308fdfe17f250e4dfb71",
@@ -4296,7 +5542,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "Gemini Robotics 2 来了，凭借我们全新的模型套件，机器人现在能够对每一个动作进行推理，从而完成以前不可能完成的任务，比如打精细的结——以及",
+          "description": "Gemini Robotics 2 来了，凭借我们全新的模型套件，机器人现在能够对每一个动作进行推理，从而完成以前不可能完成的任务，比如打精细的结——甚至还能协作解决复杂的工作流程。热烈祝贺机器人团队取得这一重大里程碑！"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:32.333Z",
+          "input_chars": 459,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-d6b27fdb6f576dd766bd",
@@ -4339,7 +5599,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "我们致力于在成本效率、能力和速度方面推动模型前沿。",
+          "description": "我们致力于在成本效率、能力和速度方面推动模型前沿。\n\n从今天起，我们将 GPT-5.6 Luna 的价格降低 80%，将 GPT-5.6 Terra 的价格降低 20%，并在 API 中为 GPT-5.6 Sol 提供更快的选项。\n\nLuna 和 Terra 的降价反映在 Codex 和 ChatGPT Work 中的使用量计算方式上，因此您的使用量将更持久。"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:32.520Z",
+          "input_chars": 545,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-18ec914ab88500b3549e",
@@ -4387,7 +5661,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "用 Jetson AGX Thor 打造比‘返校季’更宏大的项目",
+          "description": "Sarah Guo 的包里有什么？终极机器人大脑。🧠 NVIDIA Jetson AGX Thor，提供高达 2,070 FP4 TFLOPS 的 AI 算力和 128 GB 内存。为下一代人形机器人和自主系统提供实时推理和服务器级性能，专为实验室、工厂和现场打造。#Robotics #EdgeAI #NVIDIAJetson"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:32.589Z",
+          "input_chars": 385,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-951e7066d692a91f71f4",
@@ -4430,7 +5718,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "RT @jxnlco: OpenAI 最美好的事情之一就是每位员工都真正拥有发言权。我想捕捉这种感觉……",
+          "description": "RT @jxnlco: OpenAI 最美好的事情之一就是每位员工都真正拥有发言权。\n\n我想捕捉这种感觉……"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:32.765Z",
+          "input_chars": 280,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-9e087f273b7a178cd4df",
@@ -4478,7 +5780,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "迄今最强大的人形机器人！",
+          "description": "谷歌今天发布了 Gemini Robotics 2，其进步幅度远超你的想象。与之前的模型不同，它协调从脚趾到指尖的一切，使机器人能够在处理精细物体的同时保持平衡和行走。凭借手部22个运动自由度，它可以密封Ziploc袋、拧下灯泡，甚至系垃圾袋结。此外，一个设备端版本无需互联网连接即可本地运行，并且能在几小时内适应新的机器人机体。需要明确的是：这个新发布的“Google Robotics 2”是机器人背后的AI软件，而不是你购买的实体机器人。"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:33.276Z",
+          "input_chars": 635,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-a1906da9f74603744779",
@@ -4522,7 +5838,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "与我之前对 Qwen3.6 的发现一致：Claude Code 在相似成功率下使用的 token 数量是（许多）其他工具链的 2-3 倍。",
+          "description": "与我之前对 Qwen3.6 的发现一致：Claude Code 在相似成功率下使用的 token 数量是（许多）其他工具链的 2-3 倍。\n\n- 未优化？\n- 有缺陷？\n- 有意为之（因为在更具挑战性的案例中这有助于它）？\n\n需要找时间进一步调查..."
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:33.596Z",
+          "input_chars": 457,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-5f87a6344beb205e8c53",
@@ -4576,7 +5906,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "从云迁移到智能体AI：借助AWS实现高速转型 | Amazon Web Services",
+          "description": "在短短15个月内将850个应用程序迁移到AWS——比行业基准快六倍——该组织现在正在使用AWS AgentCore构建智能体AI解决方案。这些AI智能体已将事件分类时间缩短了多达75%，帮助团队更快解决问题，并专注于提供更好的数字体验。通过在AWS Transform和大型机现代化方面的持续联合创新，该公司正在为企业级持续创新奠定基础。了解更多：https://go.aws/3S88Kbr 订阅AWS：https://go.aws/subscribe 创建免费AWS账户"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:33.657Z",
+          "input_chars": 688,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "x-82e59c917b3002d7399a",
@@ -4619,7 +5963,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "一个大脑。适用于任何机器人。🤖",
+          "description": "一个大脑。适用于任何机器人。🤖\n\n我们正在推出 Gemini Robotics 2：我们的下一代物理 AI，为仿人机器人带来全身智能、先进灵巧性、多机器人协作等能力。"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:33.707Z",
+          "input_chars": 373,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-f3da14a21da982d4c895",
@@ -4672,7 +6030,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "机器人协同工作：Gemini Robotics 2",
+          "description": "介绍多机器人协作。这使得不同类型的机器人能够相互通信并协同工作，以解决单个机器人无法独立完成的复杂工作流程。了解更多关于 Gemini Robotics 2 的信息：https://deepmind.google/gemini-robotics ___ 订阅我们的频道 https://www.youtube.com/@googledeepmind 在 X 上找到我们 https://twitter.com/GoogleDeepMind 在 Instagram 上关注我们 https://instagram.com/googledeepmind 在 Linkedin 上添加我们 https://www.linkedin.com/company/deepmind/"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:33.790Z",
+          "input_chars": 533,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-8b210c24c7a8aee343f6",
@@ -4725,7 +6097,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "需要全身控制的 Gemini Robotics 2 任务",
+          "description": "世界是为人类动作而构建的；它要求我们在狭窄、杂乱的空间中伸手、弯腰和保持平衡。虽然我们之前的模型控制人形机器人的上半身来完成桌面任务，但 Gemini Robotics 2 将物理 AI 扩展到全身动作。了解更多关于 Gemini for Robotics 2 的信息：https://deepmind.google/gemini-robotics ___ 订阅我们的频道 https://www.youtube.com/@googledeepmind 在 X 上找到我们 https://twitter.com/GoogleDeepMind 在 Instagram 上关注我们 https://instagram.com/googledeepmind 在 Linkedin 上添加我们 https://www.linkedin.com/company/deepmind/"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:34.687Z",
+          "input_chars": 643,
+          "llm_error": null
+        }
+      }
     },
     {
       "id": "youtube-fecc7c62cafdd584556a",
@@ -4778,7 +6164,21 @@
       "batch_id": "batch_20260804",
       "candidate_version": 1,
       "ai_processing_status": "completed",
-      "review_status": "approved"
+      "review_status": "approved",
+      "localizations": {
+        "zh": {
+          "title": "使用 Gemini Robotics 2 完成高难度灵巧操作任务",
+          "description": "要在我们的家庭和工作场所中真正有用，机器人需要灵巧性。Gemini Robotics 2 在不同末端执行器（无论是手还是夹爪）上解锁了新的物理灵巧水平，使机器人比以往任何时候都更有用。了解更多关于 Gemini Robotics 2 的信息：https://deepmind.google/gemini-robotics ___ 订阅我们的频道 https://www.youtube.com/@googledeepmind 在 X 上找到我们 https://twitter.com/GoogleDeepMind 在 Instagram 上关注我们 https://instagram.com/googledeepmind 在 Linkedin 上添加我们 https://www.linkedin.com/company/deepmind/"
+        }
+      },
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_deepseek",
+          "generated_at": "2026-08-07T03:48:34.742Z",
+          "input_chars": 619,
+          "llm_error": null
+        }
+      }
     }
   ],
   "events": [

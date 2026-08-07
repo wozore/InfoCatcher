@@ -19,6 +19,12 @@
  *       成功且此前因字幕原因 held 的候选重置为 pending 等待复审，决策 52；
  *       完整字幕写入 data/news/runtime/transcripts/，不进 PR）
  *
+ *   localize preview     --title <t> [--description <d>] [--locale zh]   预览单条翻译（不写入）
+ *   localize candidates  [--locale zh] [--limit N] [--dry-run]           对候选层批量翻译（存量迁移）
+ *     （把候选 title/description 翻译成目标语言存 localizations[locale]；
+ *       只处理无 localizations[locale] 的候选；默认 --dry-run 预览条数（成本预览），
+ *       非 dry-run 写回候选层后运行 publish-news.js 重建投影即前端中文化）
+ *
  * 完整 CLI 帮助见 news-cli.js 顶部。
  */
 
@@ -45,9 +51,10 @@ const {
 } = require('../collectors/news-transcripts');
 const { readCandidateStore, writeCandidateStore } = require('../core/news-candidates');
 const { recordReviewTransition, readReviewEventLog } = require('../core/news-review-events');
+const { localizeCandidate, localizeCandidates } = require('../classify/content-localizer');
 const { NEWS_FILES } = require('../../shared/paths');
 const { FILES, save } = require('./cmd-sources');
-const { resolveReviewer } = require('./cmd-ops');
+const { resolveReviewer, optionalNumber } = require('./cmd-ops');
 
 // ── 命令实现 ──────────────────────────────────────────────
 
@@ -247,6 +254,56 @@ async function transcriptCommand(action, flags) {
   throw new Error(`未知 transcript 命令: ${action}`);
 }
 
+// ── localize 命令组：热点内容本地化（多语言翻译）─────
+//
+//   localize preview     --title <t> [--description <d>] [--locale zh]   预览单条翻译（不写入）
+//   localize candidates  [--locale zh] [--limit N] [--dry-run]           对候选层批量翻译（存量迁移主路径）
+//     （把候选的 title/description 翻译成目标语言存 localizations[locale]；
+//       只处理候选层中尚无 localizations[locale] 的候选，不重复花钱；
+//       默认 --dry-run 只预览将翻译条数（成本预览），非 dry-run 才写回候选层；
+//       写回后运行 node scripts/publish-news.js 重建公开投影即前端中文化。
+//       需环境变量 DEEPSEEK_API_KEY，缺 key 时自动降级不写翻译，不阻塞。）
+
+async function localizeCommand(action, flags) {
+  const locale = flags.locale || 'zh';
+
+  if (action === 'preview') {
+    const title = flags.title || '';
+    const description = flags.description || '';
+    if (!title && !description) throw new Error('localize preview 需要 --title 或 --description');
+    return localizeCandidate({ title, description }, { locale, model: flags.model });
+  }
+
+  if (action === 'candidates') {
+    const store = readCandidateStore();
+    const candidates = (store.candidates || []).filter(candidate => !candidate.localizations?.[locale]);
+    const limit = optionalNumber(flags, 'limit');
+    const targets = limit !== undefined && limit > 0 ? candidates.slice(0, limit) : candidates;
+    const dryRun = Boolean(flags.dry_run);
+    if (dryRun) {
+      return {
+        dry_run: true, locale,
+        will_localize: targets.length,
+        skipped: (store.candidates || []).length - targets.length,
+        total: (store.candidates || []).length,
+      };
+    }
+    const result = await localizeCandidates(targets, {
+      locale,
+      model: flags.model,
+      concurrency: optionalNumber(flags, 'concurrency') ?? 5,
+    });
+    // localizeCandidates 原地修改了 targets 上的候选对象（store.candidates 共享引用同步生效），
+    // 直接写回整个 store 即可，不需重建数组。
+    if (result.localized > 0) {
+      writeCandidateStore(store, `localize-candidates-${Date.now()}`);
+    }
+    return { dry_run: false, locale, localized: result.localized, skipped: result.skipped, total: (store.candidates || []).length };
+  }
+
+  throw new Error(`未知 localize 命令: ${action}`);
+}
+
 module.exports = {
-  contentCommand, classifyCommand, transcriptCommand,
+  contentCommand, classifyCommand, transcriptCommand, localizeCommand,
 };

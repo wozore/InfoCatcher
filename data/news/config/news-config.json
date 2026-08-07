@@ -72,7 +72,20 @@
     "transcript_languages": ["zh-Hans", "zh-Hant", "zh", "en"],
     "transcript_min_chars": 80,
     "transcript_timeout_ms": 10000,
-    "transcript_max_items_per_run": 30
+    "transcript_max_items_per_run": 30,
+    "summary_enabled": true,
+    "summary_max_items_per_run": 30,
+    "summary_timeout_ms": 15000,
+    "summary_max_transcript_chars": 3000,
+    "review_enabled": true,
+    "review_max_items_per_run": 30,
+    "review_timeout_ms": 15000,
+    "review_auto_apply": false,
+    "review_auto_min_confidence": 0.9,
+    "localize_enabled": false,
+    "localize_max_items_per_run": 30,
+    "localize_timeout_ms": 15000,
+    "localize_target_locale": "zh"
   },
   "low_frequency_backfill": {
     "enabled": true,
