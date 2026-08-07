@@ -44,7 +44,12 @@ $RECYCLE.BIN/
 *~
 
 # ===== docs文档 =====
-docs/
+# 工程文档（架构/需求/运维/归档/原型等）整体不入库；
+# 只允许用户说明类 md 入库，约定放在 docs/manual/ 下
+docs/*
+!docs/manual/
+docs/manual/**
+!docs/manual/**/*.md
 
 # ===== 第三方 Skills 插件缓存 =====
 # mattpocock-skills 等第三方 skill 含配置文件，不入库
@@ -82,7 +87,6 @@ service-account.json
 
 # ===== 调查原始数据（含受访者个人信息，不入库） =====
 # 已脱敏的编码 CSV、问卷 PDF 和分析脚本在 resources/survey/ 下受版本控制
-docs/research/
 # ===== MVP 独立仓库（避免嵌套 .git 冲突） =====
 # mvp/ 源码仍由工程仓库追踪（属于 06.编码与单元测试 的交付物），
 # 仅排除内层 .git 目录，防止两个 git 仓库交叉管理

@@ -10,10 +10,12 @@ The role of this file is to describe common mistakes and confusion points that a
 
 ## Agent skills
 
+> **docs 目录入库边界**：工程文档不入库，仅 `docs/manual/**/*.md`（用户说明类）入库（见 `.gitignore`）。下述约定文档（`docs/agents/`、`docs/adr/`）均属工程文档，不在版本控制内；当前磁盘上尚未创建，未来创建时也不入库，仅作本地参考。
+
 ### Issue tracker
 
-Issues live in GitHub Issues owned by `wozore/InfoCatcher-Engineering`. See `docs/agents/issue-tracker.md`.
+Issues live in GitHub Issues owned by `wozore/InfoCatcher-Engineering`. See `docs/agents/issue-tracker.md`（工程约定文档，不入库，本地参考）。
 
 ### Domain docs
 
-Single-context repo — `CONTEXT.md` and `docs/adr/` at repo root (currently absent; created lazily by `/domain-modeling`). See `docs/agents/domain.md`.
+Single-context repo — `CONTEXT.md` and `docs/adr/` at repo root (currently absent; created lazily by `/domain-modeling`). See `docs/agents/domain.md`（工程约定文档，不入库，本地参考）。
