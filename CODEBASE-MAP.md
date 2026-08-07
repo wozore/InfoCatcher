@@ -51,7 +51,7 @@
 ### classify/ — AI 内容分类/总结/审核建议/本地化
 - [content-classifier.js](src/news/classify/content-classifier.js) — L0 规则 + L1 AI 分类编排。导出: `classifyRuleBased, classifyCandidate, classifyCandidates, confirmContentType`
 - [content-summarizer.js](src/news/classify/content-summarizer.js) — 候选内容总结（标题+描述+字幕 → summary/key_points）。导出: `summarizeCandidate, summarizeCandidates, enrichCandidateSummaries`
-- [content-reviewer.js](src/news/classify/content-reviewer.js) — AI 审核建议（标题+描述+字幕+总结 → ai_review verdict/reasons/confidence + 高置信自动应用）。导出: `reviewCandidate, reviewCandidates, applyAiReviewVerdicts, enrichCandidateReviews`
+- [content-reviewer.js](src/news/classify/content-reviewer.js) — AI 审核建议（标题+描述+字幕+总结 → ai_review verdict/reasons/confidence + 高置信自动应用；runPool 为分类/审核并发池，供 pipeline-min 复用）。导出: `reviewCandidate, reviewCandidates, applyAiReviewVerdicts, enrichCandidateReviews, runPool`
 - [content-localizer.js](src/news/classify/content-localizer.js) — 候选内容本地化（标题+描述 → localizations[locale]，原文保留顶层）。导出: `collectLocalizeSource, localizeCandidate, localizeCandidates, enrichCandidateLocalizations`
 - [llm-provider.js](src/news/classify/llm-provider.js) — DeepSeek 请求封装（分类/总结/审核/本地化，失败降级）。导出: `classifyWithDeepSeek, summarizeWithDeepSeek, reviewWithDeepSeek, localizeWithDeepSeek, buildDeepSeekPayload, buildSummaryPayload, buildReviewPayload, buildLocalizePayload`
 
@@ -68,7 +68,7 @@
 - [cmd-content.js](src/news/cli/cmd-content.js) — `content/classify/transcript/localize` 子命令。导出: `contentCommand, classifyCommand, transcriptCommand, localizeCommand`
 - [cmd-ops.js](src/news/cli/cmd-ops.js) — `authorization/quota/lock` 子命令。导出: `authorizationCommand, quotaCommand, lockCommand, optionalNumber`
 - [cmd-registry.js](src/news/cli/cmd-registry.js) — `registry/review` 子命令（review 含 --ai-verdict 筛选 / apply-ai 批量应用）。导出: `registryCommand, reviewCommand, legacyCommand`
-- [cmd-min.js](src/news/cli/cmd-min.js) — **v2 `min-review` 命令组**（操作 min-candidates.json，不触碰旧候选层）。导出: `minReviewCommand, scoreOf, loadV2Config, assertStoreFlag`
+- [cmd-min.js](src/news/cli/cmd-min.js) — **v2 `min-review` 命令组**（操作 min-candidates.json，不触碰旧候选层；list 支持 `--top N` 按评分取前 N 供人工审，缺省读 review_top_pure_x / review_top_with_youtube）。导出: `minReviewCommand, scoreOf, loadV2Config, assertStoreFlag`
 
 ### transcripts/ — 收尾环节：字幕人工获取通知（独立于主链，只写清单文件）
 - [transcript-notify.js](src/news/transcripts/transcript-notify.js) — 每日"待人工获取字幕"清单（min 候选层挑评分最高 notify_count 个 YouTube，写 transcript-requests-<YYYYMMDD>.json 交人工，不碰主链/不调采集总结）。导出: `notifyTranscripts, parseNotifyCount, scoreOf`

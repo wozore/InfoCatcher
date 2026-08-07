@@ -46,6 +46,7 @@ const DEFAULT_CONFIG = Object.freeze({
     youtube_daily_quota_units: 10000,
     youtube_videos_batch_size: 50,
     youtube_comments_top_n: 10,
+    youtube_fallback_enabled: true, // search 桶耗尽时自动改用 videos.list mostPopular（合并桶计费）
     request_timeout_ms: 15000,
     max_retries: 2,
     retry_base_ms: 750,
@@ -103,6 +104,42 @@ function parseDuration(iso) {
 /** 错误标签：防御 requestText 可能抛 undefined 的边界情况。 */
 function errorLabel(error) {
   return (error && (error.code || error.message)) || 'api_error';
+}
+
+/**
+ * 判断错误是否为「配额耗尽」（区别于普通限流）。
+ * requestText 附了响应体 error.body（含 API 的 error.code），
+ * 精确匹配 Google 配额耗尽类错误码（quotaExceeded / dailyLimitExceeded 等）。
+ * @returns {boolean}
+ */
+function isQuotaExceeded(error) {
+  if (!error) return false;
+  const body = error.body;
+  if (!body) return false;
+  try {
+    const code = JSON.parse(body).error?.code;
+    return typeof code === 'string' && /quota.*exceed|dailylimit|rateLimitExceeded/i.test(code);
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * 固定并发池：按 concurrency 并行执行 worker，保持输入顺序。
+ * 与 content-classifier.js 的 runPool 同构（本地实现，避免跨模块耦合）。
+ */
+async function runPool(items, concurrency, worker) {
+  const results = new Array(items.length);
+  let next = 0;
+  const limit = Math.max(1, Math.min(concurrency, items.length));
+  const runners = Array.from({ length: limit }, async () => {
+    while (next < items.length) {
+      const index = next++;
+      results[index] = await worker(items[index]);
+    }
+  });
+  await Promise.all(runners);
+  return results;
 }
 
 /**
@@ -197,7 +234,12 @@ async function collectYouTubeV2(options = {}) {
   const failures = [];
   const canSpend = () => usedQuota < dailyQuota;
 
-  /** 执行一次计入配额的 API 调用；失败向上抛，由调用方记录并降级。 */
+  /**
+   * 执行一次计入配额的 API 调用；失败向上抛，由调用方记录并降级。
+   * 保留 YouTube API 的错误码（error.code，如 quotaExceeded），供配额耗尽判定：
+   * HTTP 429/403 时请求本身可能超限（限流或配额），解析响应体中的
+   * error.code 优先于 HTTP 状态码，用于区分「限流（429）」与「配额耗尽（quotaExceeded）」。
+   */
   const callApi = async (resource, params) => {
     const url = new URL(`${YOUTUBE_API}/${resource}`);
     url.searchParams.set('key', apiKey);
@@ -212,6 +254,7 @@ async function collectYouTubeV2(options = {}) {
   const discovered = new Map(); // videoId -> { id, publishedAt }
   const publishedAfter = new Date(now.getTime() - windowDays * 86400000).toISOString();
   const publishedBefore = now.toISOString();
+  let searchQuotaExhausted = false; // search 独立桶耗尽标记（触发热门榜降级）
 
   for (const keyword of keywords) {
     if (searchCalls >= searchMax) { failures.push('search_max_per_run_reached'); break; }
@@ -239,6 +282,54 @@ async function collectYouTubeV2(options = {}) {
       usedQuota += searchCost;
       searchCalls += 1;
       failures.push(`search:${errorLabel(error)}`);
+      // search 独立桶配额耗尽（Quota exceeded for 'Search Queries per day'）：
+      // 停止继续 search（再试也 429），标记触发热门榜降级。
+      if (isQuotaExceeded(error)) { searchQuotaExhausted = true; break; }
+    }
+  }
+
+  // ── 1b. 降级：search 独立桶耗尽 → videos.list mostPopular（合并桶 1 单位/次） ──
+  //      Google 2026-06 后 search 绑定独立桶（100 次/天），耗尽不会自动切合并桶；
+  //      本降级用热门榜继续发现（合并桶计费），保证 search 桶用尽后 YouTube 仍能出数据。
+  if (searchQuotaExhausted && collection.youtube_fallback_enabled !== false) {
+    let popularSearch = 0;
+    let popularPageToken = ''; // 热门榜翻页游标
+    const popularLimit = Number(collection.youtube_fallback_popular_pages) || 2; // 2 页最多 ~100 条
+    for (let page = 0; page < popularLimit; page++) {
+      if (!canSpend()) { failures.push('daily_quota_reached'); break; }
+      try {
+        const data = await callApi('videos', {
+          part: 'snippet',
+          chart: 'mostPopular',
+          maxResults: 50,
+          pageToken: page > 0 ? popularPageToken : '',
+        });
+        quota.videos_calls += 1;
+        usedQuota += 1;
+        const pageToken = data.nextPageToken;
+        popularPageToken = pageToken || '';
+        for (const video of data.items || []) {
+          if (video.id && !discovered.has(video.id)) {
+            discovered.set(video.id, { id: video.id, publishedAt: video.snippet?.publishedAt || null });
+          }
+        }
+        popularSearch += 1;
+        if (!pageToken) break; // 没有下一页
+      } catch (error) {
+        quota.videos_calls += 1;
+        usedQuota += 1;
+        failures.push(`popular:${errorLabel(error)}`);
+        break;
+      }
+    }
+    if (popularSearch > 0) {
+      // 降级成功：search 桶耗尽已被热门榜降级覆盖，不算真正失败。
+      // 从 failures 中移除 search 的 quota 失败项，只保留降级标记（reason 优先显示它）。
+      const kept = [];
+      for (const f of failures) if (!f.startsWith('search:')) kept.push(f);
+      failures.length = 0;
+      for (const f of kept) failures.push(f);
+      failures.push(`search_quota_exhausted_fallback_popular(${popularSearch}页)`);
     }
   }
 
@@ -280,10 +371,14 @@ async function collectYouTubeV2(options = {}) {
     failures.push('daily_quota_reached');
   }
 
-  // ── 4. commentThreads.list 取评论（每条视频 1 次，top N） ──
+  // ── 4. commentThreads.list 取评论（每条视频 1 次，top N；并发池限流） ──
+  // 每个视频一次请求，几百个候选串行会占采集大头；按 config.collection.concurrency
+  // 并发抓取显著提速。注意：comments 计数在 runPool 内并发更新，回调为同步短路，无竞态。
   const commentsByVideo = new Map();
-  for (const videoId of detailsById.keys()) {
-    if (!canSpend()) { failures.push('daily_quota_reached'); break; }
+  const commentConcurrency = Math.max(1, Number(collection.concurrency) || 5);
+  const commentVideoIds = [...detailsById.keys()];
+  await runPool(commentVideoIds, commentConcurrency, async videoId => {
+    if (!canSpend()) { failures.push('daily_quota_reached'); return; }
     try {
       const data = await callApi('commentThreads', {
         part: 'snippet',
@@ -305,7 +400,7 @@ async function collectYouTubeV2(options = {}) {
       usedQuota += 1;
       failures.push(`comments:${errorLabel(error)}`);
     }
-  }
+  });
 
   // ── 5. 组装统一内容模型 ──
   const items = [...detailsById.values()].map(detail =>

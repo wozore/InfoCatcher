@@ -110,6 +110,16 @@ function buildMinFixtureOptions() {
     }
     return { localized };
   };
+
+  // 内存存根：fixture 全链验证用，绝不对真实运行时文件落盘
+  // （min-candidates.json / source-history.json 保持未被污染的状态）。
+  // 签名对齐 pipeline-min 注入点：historyIn()/historyOut(store,runId)/
+  // minStoreIn()/minStoreOut(store,runId)。
+  const memHistory = () => ({ sources: {} });
+  const memHistoryOut = () => {};
+  const memMin = () => ({ schema_version: 1, updated_at: null, candidates: [] });
+  const memMinOut = () => {};
+
   return {
     now,
     collectors: { youtube: fixtureCollector(youtubeItems), x: fixtureCollector(xItems) },
@@ -117,6 +127,10 @@ function buildMinFixtureOptions() {
     review,
     summarize,
     localize,
+    historyIn: memHistory,
+    historyOut: memHistoryOut,
+    minStoreIn: memMin,
+    minStoreOut: memMinOut,
   };
 }
 

@@ -17,7 +17,6 @@
  * 配置（news-config-v2.json keywords）：
  *   - ai_keywords                   现有关键词表（剔除 + 比对基准）
  *   - refine_high_frequency_top_n   高频候选取前 N（缺省 5）
- *   - refine_emerging_requires_ai   新兴候选是否要求 AI 语义判断（仅提示，不强制执行）
  *
  * 数据文件（manual_folder/）：
  *   keyword-refine-<YYYYMMDD>.json  关键词提纯候选清单（含来源/频率/为何值得收）

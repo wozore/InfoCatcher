@@ -32,7 +32,7 @@
 
 'use strict';
 
-const { reviewCandidate } = require('../classify/content-reviewer');
+const { reviewCandidate, runPool } = require('../classify/content-reviewer');
 
 // ═══════════════════════════════════════════════════════════════
 // 常量与默认值
@@ -186,6 +186,10 @@ async function l2AiAdvice(item, options = {}) {
 /**
  * 批量审核入口：L0 硬审 → L1 AI 审 → 保留项附 L2 建议。输出单状态轴。
  *
+ * L1/L2 按 config.collection.concurrency（缺省 5）并发执行，保持输入顺序；
+ * 单条结果写入 result[index] 后由 runPool 保证与 items 同序返回。
+ * 每条内部顺序：L1 AI 审 → L2 建议（逐条串行，仅同一条内；不同条并发）。
+ *
  * @param {Array<object>} items - 统一内容模型条目数组
  * @param {object} config - news-config-v2.json（读 review / keywords 段）
  * @param {object} [options] - 透传 reviewCandidate 选项 + options.reviewCandidate 注入 mock
@@ -202,25 +206,27 @@ async function applyL1Verdicts(items, config, options = {}) {
   const autoDiscardConfidence = Number(config && config.review && config.review.l1_confidence_auto_discard)
     || DEFAULT_AUTO_DISCARD_CONFIDENCE;
   const l2Enabled = !(config && config.review && config.review.l2_enabled === false);
+  const concurrency = Number(config && config.collection && config.collection.concurrency) || 5;
 
-  const kept = [];
-  const discarded = [];
+  const result = new Array(source.length); // result[index] = { kept } | { discarded } | null
 
-  for (const item of source) {
-    if (!item || typeof item !== 'object') continue;
+  await runPool(source, concurrency, async (item, index) => {
+    if (!item || typeof item !== 'object') return; // 跳过，留 null
 
     // ── L0 规则硬审 ──
     const hard = l0HardFilter(item, config);
     if (!hard.pass) {
-      discarded.push({
-        ...item,
-        review_status: 'discarded',
-        discard_reason: hard.reason,
-        discard_stage: 'l0',
-        l1_review: null,
-        ai_advice: null,
-      });
-      continue;
+      result[index] = {
+        discarded: {
+          ...item,
+          review_status: 'discarded',
+          discard_reason: hard.reason,
+          discard_stage: 'l0',
+          l1_review: null,
+          ai_advice: null,
+        },
+      };
+      return;
     }
 
     // ── L1 AI 审（评论注入按 config.review 决定）──
@@ -233,27 +239,39 @@ async function applyL1Verdicts(items, config, options = {}) {
     };
     const autoDiscard = l1.verdict === 'discard' && l1.confidence >= autoDiscardConfidence;
     if (autoDiscard) {
-      discarded.push({
-        ...item,
-        review_status: 'discarded',
-        discard_reason: 'ai_discard',
-        discard_stage: 'l1',
-        l1_review: l1Review,
-        ai_advice: null,
-      });
-      continue;
+      result[index] = {
+        discarded: {
+          ...item,
+          review_status: 'discarded',
+          discard_reason: 'ai_discard',
+          discard_stage: 'l1',
+          l1_review: l1Review,
+          ai_advice: null,
+        },
+      };
+      return;
     }
 
     // ── kept：approve / hold / LLM 失败 → pending，附 L2 建议供人工参考 ──
     const advice = l2Enabled
       ? await l2AiAdvice(item, { ...options, config })
       : null;
-    kept.push({
-      ...item,
-      review_status: 'pending',
-      l1_review: l1Review,
-      ai_advice: advice,
-    });
+    result[index] = {
+      kept: {
+        ...item,
+        review_status: 'pending',
+        l1_review: l1Review,
+        ai_advice: advice,
+      },
+    };
+  });
+
+  const kept = [];
+  const discarded = [];
+  for (const entry of result) {
+    if (!entry) continue;
+    if (entry.kept) kept.push(entry.kept);
+    else if (entry.discarded) discarded.push(entry.discarded);
   }
 
   return { kept, discarded, advice: kept.map(item => item.ai_advice) };

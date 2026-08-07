@@ -50,7 +50,7 @@ async function runPool(items, concurrency, worker) {
   const runners = Array.from({ length: limit }, async () => {
     while (next < items.length) {
       const index = next++;
-      results[index] = await worker(items[index]);
+      results[index] = await worker(items[index], index);
     }
   });
   await Promise.all(runners);

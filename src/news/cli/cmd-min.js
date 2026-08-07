@@ -4,7 +4,7 @@
  * 在热点管线 v2 中的位置：与 cmd-registry 的 review 命令平行，但操作的是
  * v2 单状态轴候选层（data/news/runtime/min-candidates.json，min-store）。
  *
- *   min-review list    [--status pending|approved|discarded] [--platform ...] [--limit N] [--store min]
+ *   min-review list    [--status pending|approved|discarded] [--platform ...] [--limit N] [--top N] [--store min]
  *   min-review set     --id <id> --status pending|approved|discarded [--store min]
  *   min-review batch   --ids <id1,id2,...> --status approved [--store min]
  *   min-review transcripts [--store min]
@@ -12,6 +12,8 @@
  *   min-review refine       [--store min]
  *
  *     - list：列出 v2 候选（含 review_status / final_score），人友好表格输出。
+ *       --top N：按评分倒序取前 N 供人工审（R7 审核范围；缺省读 config.collection.
+ *       review_top_pure_x / review_top_with_youtube，有 YouTube 候选时用后者）。
  *     - set/batch：单条/批量设置审核状态，写入 min-candidates.json（reviewed_at 由
  *       min-store 写入，不覆盖既有状态）；状态轴只允许 pending/approved/discarded。
  *     - transcripts：调 transcript-notify.notifyTranscripts 生成「待人工获取字幕」清单，
@@ -75,6 +77,23 @@ async function minReviewCommand(action, flags = {}) {
     if (flags.platform) candidates = candidates.filter(candidate => candidate.platform === flags.platform);
     const limit = Number(flags.limit);
     if (Number.isFinite(limit) && limit > 0) candidates = candidates.slice(0, limit);
+
+    // ── top 一批筛选（R7 人工审核范围）：按评分倒序取前 N 供人工审 ──
+    //     `--top N` 显式指定；缺省读 config.collection.review_top_pure_x /
+    //     review_top_with_youtube（有 YouTube 候选时用后者）。只对 pending 有意义。
+    if (flags.top) {
+      const topN = Number(flags.top);
+      if (!Number.isFinite(topN) || topN <= 0) throw new Error(`min-review list --top 需为正整数，收到：${flags.top}`);
+      const collection = config.collection || {};
+      const hasYouTube = candidates.some(c => c.platform === 'youtube');
+      const defaultTop = hasYouTube
+        ? Number(collection.review_top_with_youtube) || 15
+        : Number(collection.review_top_pure_x) || 10;
+      const n = Math.min(topN, defaultTop);
+      candidates = candidates
+        .sort((a, b) => (scoreOf(b) ?? -Infinity) - (scoreOf(a) ?? -Infinity))
+        .slice(0, n);
+    }
 
     const rows = candidates.map(candidate => ({
       id: candidate.id,

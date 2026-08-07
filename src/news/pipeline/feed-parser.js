@@ -158,7 +158,13 @@ async function requestText(url, options, config, beforeAttempt = null) {
       if (!response.ok) {
         const body = await response.text();
         const cloudflare = response.status === 403 && (/cloudflare/i.test(response.headers?.get?.('server') || '') || /just a moment/i.test(body));
-        throw Object.assign(new Error(`HTTP ${response.status}`), { code: cloudflare ? 'cloudflare_challenge' : `http_${response.status}` });
+        // 附上响应体，供调用方区分「限流」与「配额耗尽」：
+        // 配额耗尽类错误（如 YouTube quotaExceeded / X rate_limit_exhausted）在
+        // 响应体 error.code 里给出精确原因，仅靠 HTTP 429/403 无法区分。
+        const error = new Error(`HTTP ${response.status}`);
+        error.code = cloudflare ? 'cloudflare_challenge' : `http_${response.status}`;
+        error.body = body;
+        throw error;
       }
       return await response.text();
     } catch (error) {

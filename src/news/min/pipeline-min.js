@@ -27,6 +27,14 @@
  *   options.now                                  采集/评分/投影参考时间（Date 或 ISO 字符串）
  *   options.xWindow = { since, until }           覆盖 X 时间窗；缺省用「今天 0 点 → now」
  *   options.runId                                写入临时文件名标识（可选）
+ *   options.minStoreIn / options.minStoreOut     覆盖候选层读写（fixture 注入内存存根，避免污染运行时文件）
+ *   options.historyIn / options.historyOut       覆盖历史库读写（同上；缺省回落真实文件）
+ *                                                签名：minStoreIn()→store，minStoreOut(store,runId)；
+ *                                                historyIn()→store，historyOut(store,runId)
+ *
+ * 并发语义：分类与审核（applyL1Verdicts）都按 config.collection.concurrency
+ * 并发执行（DeepSeek 逐条串行会卡十几分钟，实测见 2026-08-08 基准）；
+ * 总结/本地化走 summarizeCandidates / localizeCandidates 自带批量并发。
  *
  * 数据文件：
  *   - 候选层  data/news/runtime/min-candidates.json（writeMinStore）
@@ -46,6 +54,7 @@ const { buildDailyProjection } = require('./daily-projection');
 const { classifyCandidate } = require('../classify/content-classifier');
 const { summarizeCandidates } = require('../classify/content-summarizer');
 const { localizeCandidates } = require('../classify/content-localizer');
+const { runPool } = require('../classify/content-reviewer');
 const { dedupeItems, enrichHotspotProjection } = require('../pipeline/projection');
 const { filterProjectionByWindow } = require('../core/news-public-gate');
 const { readJson, writeJsonAtomic } = require('../core/news-storage');
@@ -223,11 +232,13 @@ async function runMin(options = {}) {
   coverage.l0_dropped = l0Failed.length;
 
   // ═══════════════════════════════════════════════════════════════
-  // 4. 分类：对过 L0 的每条填 content_type（失败留 unclassified，不阻塞）
+  // 4. 分类：对过 L0 的每条填 content_type（失败留 unclassified，不阻塞）。
+  //    DeepSeek 分类按 config.collection.concurrency 并发执行（串行逐条会卡几分钟）。
   // ═══════════════════════════════════════════════════════════════
   const classifyFn = options.classify || classifyCandidate;
   const classifyOptions = { ...options, config };
-  for (const item of l0Passed) {
+  const classifyConcurrency = Math.max(1, Number(config.collection?.concurrency) || 5);
+  await runPool(l0Passed, classifyConcurrency, async item => {
     try {
       const suggestion = await classifyFn(item, classifyOptions);
       if (suggestion && suggestion.content_type) {
@@ -240,7 +251,7 @@ async function runMin(options = {}) {
     } catch (error) {
       noteError('classify', error);
     }
-  }
+  });
 
   // ═══════════════════════════════════════════════════════════════
   // 5. 评分：先持久化本轮 metrics 到历史库，再对每条 assessItemV2。
@@ -249,13 +260,14 @@ async function runMin(options = {}) {
   // ═══════════════════════════════════════════════════════════════
   let historyStore = { sources: {} };
   try {
-    historyStore = readHistoryStore();
+    historyStore = options.historyIn ? options.historyIn() : readHistoryStore();
   } catch (error) {
     noteError('history_read', error);
   }
   try {
     appendSamples(historyStore, l0Passed);
-    writeHistoryStore(historyStore, runId);
+    if (options.historyOut) options.historyOut(historyStore, runId);
+    else writeHistoryStore(historyStore, runId);
   } catch (error) {
     noteError('history_write', error);
   }
@@ -299,7 +311,7 @@ async function runMin(options = {}) {
   // ═══════════════════════════════════════════════════════════════
   let minStore;
   try {
-    minStore = readMinStore();
+    minStore = options.minStoreIn ? options.minStoreIn() : readMinStore();
   } catch (error) {
     noteError('min_read', error);
     minStore = { schema_version: 1, updated_at: null, candidates: [] };
@@ -335,7 +347,8 @@ async function runMin(options = {}) {
     noteError('localize', error);
   }
   try {
-    writeMinStore(merged, runId);
+    if (options.minStoreOut) options.minStoreOut(merged, runId);
+    else writeMinStore(merged, runId);
   } catch (error) {
     noteError('min_write', error);
   }
