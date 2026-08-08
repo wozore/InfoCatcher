@@ -10,6 +10,7 @@
  *   min-review transcripts [--store min]
  *   min-review feedback     [--store min]
  *   min-review refine       [--store min]
+ *   min-review refine-apply --file <keyword-refine-清单.json> [--store min]
  *   min-review ai-top       [--store min]
  *   min-review top-selected --ids <id1,id2,...> [--store min]
  *   min-review top-apply    --file <top-清单.json> [--store min]
@@ -31,8 +32,11 @@
  *     - feedback：调 tool-feedback.feedbackFromSummaries，从 approved summary 提取
  *       疑似 AI 工具/概念名，与知识库比对 → 待补卡草案，写 manual_folder/
  *       tool-cards-pending-<YYYYMMDD>.json / concept-cards-pending-<YYYYMMDD>.json。
- *     - refine：调 keyword-refine.refineKeywords 生成关键词提纯候选清单（交人工确认，
- *       不直接改 ai_keywords），写 manual_folder/keyword-refine-<YYYYMMDD>.json。
+ *     - refine：调 keyword-refine.refineKeywords 生成经过 DeepSeek 跨语言归并的关键词提纯候选
+ *       清单（仅 approved 原文，交人工填写 adopted_keywords，不直接改 ai_keywords），写
+ *       manual_folder/keyword-refine-<YYYYMMDD>.json。
+ *     - refine-apply：读取关键词清单中维护者确认的 adopted_keywords，校验必须属于
+ *       candidates 后幂等追加到 news-config-v2.json 的 keywords.ai_keywords；不发布、不建 dist。
  *     - ai-top：第二阶段，AI 从 approved 候选提供 top 待选项（纯 X 10 / 有 YouTube 15，
  *       按**最后一次采集记录** last-run.json 判定是否"有 YouTube"：youtube 平台实际采到
  *       内容 items>0 → 15，否则 10），写 manual_folder/top-<YYYYMMDD>.json 供维护者筛选；
@@ -59,7 +63,7 @@ const { notifyTranscripts } = require('../transcripts/transcript-notify');
 const { feedbackFromSummaries } = require('../feedback/tool-feedback');
 const { refineKeywords } = require('../min/keyword-refine');
 const { buildReviewList, loadReviewList, applyReviewList, scoreOf, suggestReview } = require('../min/review-list');
-const { readJson } = require('../core/news-storage');
+const { readJson, writeJsonAtomic } = require('../core/news-storage');
 const { NEWS_FILES } = require('../../shared/paths');
 
 /** 读 news-config-v2.json；缺失时给最小兜底（manual_folder 等字段缺省值内置于各 v2 模块）。 */
@@ -148,6 +152,58 @@ function applyTopSelectedList(store, list) {
   }
   const result = setTopSelectedMin(store, selectedIds, true);
   return { store: result.store, applied: result.updated, selectedIds, missing: result.missing, changed: result.updated };
+}
+
+/**
+ * 验证关键词候选清单并把人工确认词幂等追加至内存配置（纯逻辑，无 I/O）。
+ * 未知采纳词或清单结构异常均在返回新配置前抛错，调用层因此不会写盘。
+ */
+function applyRefineKeywords(config, list) {
+  if (!list || list.kind !== 'keyword_refine_candidates' || !Array.isArray(list.candidates) || !Array.isArray(list.adopted_keywords)) {
+    throw new Error('非法关键词清单：需要 kind=\'keyword_refine_candidates\'，且含 candidates 与 adopted_keywords 数组');
+  }
+  const candidateWords = new Set();
+  for (const candidate of list.candidates) {
+    if (!candidate || typeof candidate.word !== 'string' || !candidate.word.trim() || typeof candidate.category !== 'string' || !candidate.category.trim() || !['repeated', 'emerging'].includes(candidate.candidate_type) || !Number.isInteger(candidate.count) || candidate.count < 1) {
+      throw new Error('关键词清单含非法 candidates 条目（需 word、category、candidate_type、count 四字段）');
+    }
+    const key = candidate.word.trim().toLowerCase();
+    if (candidateWords.has(key)) throw new Error(`关键词清单含重复候选词：${candidate.word.trim()}`);
+    candidateWords.add(key);
+  }
+
+  const adopted = [];
+  const adoptedKeys = new Set();
+  let duplicates = 0;
+  for (const raw of list.adopted_keywords) {
+    if (typeof raw !== 'string' || !raw.trim()) throw new Error('adopted_keywords 只能包含非空字符串');
+    const word = raw.trim();
+    const key = word.toLowerCase();
+    if (!candidateWords.has(key)) throw new Error(`adopted_keywords 含不在 candidates 中的词：${word}`);
+    if (adoptedKeys.has(key)) {
+      duplicates += 1;
+      continue;
+    }
+    adoptedKeys.add(key);
+    adopted.push(word);
+  }
+
+  const nextConfig = { ...(config || {}), keywords: { ...((config && config.keywords) || {}) } };
+  const existing = Array.isArray(nextConfig.keywords.ai_keywords) ? nextConfig.keywords.ai_keywords.slice() : [];
+  const existingKeys = new Set(existing.map(word => String(word).trim().toLowerCase()));
+  const added = [];
+  const alreadyExists = [];
+  for (const word of adopted) {
+    if (existingKeys.has(word.toLowerCase())) {
+      alreadyExists.push(word);
+      continue;
+    }
+    existing.push(word);
+    existingKeys.add(word.toLowerCase());
+    added.push(word);
+  }
+  nextConfig.keywords.ai_keywords = existing;
+  return { config: nextConfig, added, already_exists: alreadyExists, duplicates, changed: added.length > 0 };
 }
 
 async function minReviewCommand(action, flags = {}) {
@@ -294,13 +350,20 @@ async function minReviewCommand(action, flags = {}) {
 
   if (action === 'refine') {
     const result = await refineKeywords(undefined, config);
-    console.log(`✅ 关键词提纯候选：高频 ${result.highFreqCandidates.length} 条、新兴 ${result.emergingCandidates.length} 条 → ${result.file}`);
-    for (const candidate of result.highFreqCandidates) {
-      console.log(`  [高频] ${candidate.word}（原文出现 ${candidate.frequency} 次 / ${candidate.source_count} 条候选）`);
+    console.log(`✅ 关键词提纯候选：approved 原文 ${result.approvedCount} 条 → AI 归并 ${result.candidates.length} 个关键词 → ${result.file}`);
+    for (const candidate of result.candidates) {
+      console.log(`  [${candidate.candidate_type}] ${candidate.word}（${candidate.category}，${candidate.count} 次）`);
     }
-    for (const candidate of result.emergingCandidates) {
-      console.log(`  [新兴] ${candidate.word}`);
-    }
+    return result;
+  }
+
+  if (action === 'refine-apply') {
+    if (!flags.file) throw new Error('min-review refine-apply 缺少 --file（关键词清单路径，如 data/manual/keyword-refine-20260808.json）');
+    const list = readJson(flags.file, null);
+    const result = applyRefineKeywords(config, list);
+    if (result.changed) writeJsonAtomic(NEWS_FILES.configV2, result.config, `min-review-refine-apply-${Date.now()}`);
+    console.log(`✅ 已应用关键词清单 → news-config-v2.json：新增 ${result.added.length} / 已存在 ${result.already_exists.length} / 重复采纳 ${result.duplicates}`);
+    if (!result.changed) console.log('   （无新关键词需要写回；未执行配置写入）');
     return result;
   }
 
@@ -465,7 +528,17 @@ async function minReviewCommand(action, flags = {}) {
     return result;
   }
 
-  throw new Error(`未知 min-review 命令: ${action}。支持：list | set | batch | transcripts | feedback | refine | ai-top | top-selected | top-apply | apply`);
+  throw new Error(`未知 min-review 命令: ${action}。支持：list | set | batch | transcripts | feedback | refine | refine-apply | ai-top | top-selected | top-apply | apply`);
 }
 
-module.exports = { minReviewCommand, scoreOf, suggestReview, loadV2Config, assertStoreFlag, hasYouTubeInLastRun, resolveAiTopConfig, applyTopSelectedList };
+module.exports = {
+  minReviewCommand,
+  scoreOf,
+  suggestReview,
+  loadV2Config,
+  assertStoreFlag,
+  hasYouTubeInLastRun,
+  resolveAiTopConfig,
+  applyTopSelectedList,
+  applyRefineKeywords,
+};

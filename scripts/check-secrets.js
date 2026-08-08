@@ -77,6 +77,7 @@ function scanRepo() {
   for (const file of listFiles()) {
     const rel = path.relative(PROJECT_DIR, file);
     if (!fs.existsSync(file)) continue;
+    if (!fs.statSync(file).isFile()) continue;
 
     const buf = fs.readFileSync(file);
     if (buf.includes(0)) continue; // 二进制跳过

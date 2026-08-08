@@ -31,9 +31,9 @@
 - [review-v2.js](src/news/min/review-v2.js) — 热点管线 v2 审核层（L0 规则硬审 → L1 AI 审 → L2 AI 建议+人工；单状态轴 pending/discarded，不依赖旧双轴；复用 content-reviewer.reviewCandidate）。导出: `l0HardFilter, l1AiReview, l2AiAdvice, applyL1Verdicts, DEFAULT_COMMENTS_TOP_N, DEFAULT_AUTO_DISCARD_CONFIDENCE`
 - [min-store.js](src/news/min/min-store.js) — v2 单状态轴候选层读写（min-candidates.json，人工结论不因重新采集重置；仅供 pipeline-min 等编排使用）。导出: `readMinStore, writeMinStore, mergeCandidatesMin, setReviewStatusMin, setBatchReviewStatusMin, isMinPublicEligible, toPublicItemMin`
 - [daily-projection.js](src/news/min/daily-projection.js) — v2 每日 top N 公开投影（approved 按天分组取前 N：含 YouTube 取 8 / 纯 X 取 5，纯逻辑不调 enrich/filter 两步）。导出: `buildDailyProjection`
-- [keyword-refine.js](src/news/min/keyword-refine.js) — 关键词提纯候选（收尾环节，每天一次：非 discarded 原文词频 + 新兴候选，输出候选清单交人工确认，**不直接改 ai_keywords**）。导出: `refineKeywords, tokenize, buildWordFreq, emergingByHistory`
+- [keyword-refine.js](src/news/min/keyword-refine.js) — 人工首次审核后关键词提纯（只读 approved 顶层原文，规则召回 + DeepSeek 跨语言归并为 English 四字段清单，维护者填 adopted_keywords；不直接改配置）。导出: `refineKeywords, collectApprovedOriginals, buildRuleCandidates`
 - [pipeline-min.js](src/news/min/pipeline-min.js) — **热点管线 v2 总指挥（runMin 编排）**：采集(默认 YouTube+X 并行，`options.platforms` 支持分时单平台) → 去重 → L0 硬过滤 → 分类 → 评分(历史库) → L1/L2 审核 → 候选落地 → 总结/本地化 → 自动生成待审清单（review-list，`options.autoReviewList=false` 可关）→ 每日公开投影写 hotspots.json → 写采集运行记录 last-run.json（ai-top 判定 hasYouTube 用）。每步失败降级记 coverage 不抛错。导出: `runMin, loadV2Config, normalizeNow, resolveXWindow`
-- [review-list.js](src/news/min/review-list.js) — 人工审核清单：自动生成待审清单 review-<date>.json（带 id、只含 pending、评分倒序、覆盖保护）+ 应用人工结论批量写回候选层（apply；pending 跳过、无 id 旧格式拒绝）。维护者一键入口：bat/apply-review.bat（应用后自动生成 top 名单）。导出: `scoreOf, suggestReview, buildReviewList, loadReviewList, applyReviewList`
+- [review-list.js](src/news/min/review-list.js) — 人工审核清单：自动生成待审清单 review-<date>.json（带 id、只含 pending、评分倒序、覆盖保护）+ 应用人工结论批量写回候选层（apply；pending 跳过、无 id 旧格式拒绝）。维护者入口：bat/after-first-review.bat。导出: `scoreOf, suggestReview, buildReviewList, loadReviewList, applyReviewList`
 
 ### collectors/ — 各平台采集（会发网络请求）
 - [collector-youtube-v2.js](src/news/collectors/collector-youtube-v2.js) — 热点管线 v2 的 YouTube 采集器（search.list 关键词发现，不依赖旧 quota/registry/scheduler）。导出: `collectYouTubeV2, buildItem, parseDuration, loadV2Config`
@@ -44,7 +44,7 @@
 - [content-summarizer.js](src/news/classify/content-summarizer.js) — 候选内容总结（标题+描述+字幕 → summary/key_points）。导出: `summarizeCandidate, summarizeCandidates, enrichCandidateSummaries`
 - [content-reviewer.js](src/news/classify/content-reviewer.js) — AI 审核建议（标题+描述+字幕+总结 → ai_review verdict/reasons/confidence；runPool 为分类/审核并发池，供 pipeline-min 复用）。导出: `reviewCandidate, reviewCandidates, runPool`
 - [content-localizer.js](src/news/classify/content-localizer.js) — 候选内容本地化（标题+描述 → localizations[locale]，原文保留顶层）。导出: `collectLocalizeSource, localizeCandidate, localizeCandidates, enrichCandidateLocalizations`
-- [llm-provider.js](src/news/classify/llm-provider.js) — DeepSeek 请求封装（分类/总结/审核/本地化，失败降级）。导出: `classifyWithDeepSeek, summarizeWithDeepSeek, reviewWithDeepSeek, localizeWithDeepSeek, buildDeepSeekPayload, buildSummaryPayload, buildReviewPayload, buildLocalizePayload`
+- [llm-provider.js](src/news/classify/llm-provider.js) — DeepSeek 请求封装（分类/总结/审核/本地化/关键词提纯；关键词提纯失败由调用层显式阻断）。导出: `classifyWithDeepSeek, summarizeWithDeepSeek, reviewWithDeepSeek, localizeWithDeepSeek, refineKeywordsWithDeepSeek, buildKeywordRefinePayload`
 
 ### pipeline/ — 管线与投影
 - [feed-parser.js](src/news/pipeline/feed-parser.js) — 网络请求 + URL/标识规范化。导出: `normalizeUrl, hash, numberOrNull, requestText, extractTweetArray`
@@ -54,7 +54,7 @@
 ### cli/ — 命令行
 - [news-cli.js](src/news/cli/news-cli.js) — **CLI 分发器 + 入口**（仅保留 v2 命令组）。导出: `parseArgs, main, minReviewCommand`
 - [cmd-content.js](src/news/cli/cmd-content.js) — `classify/localize preview` 子命令（纯函数预览；批量分类/本地化已由 v2 管线内建）。导出: `classifyCommand, localizeCommand`
-- [cmd-min.js](src/news/cli/cmd-min.js) — **v2 `min-review` 命令组**（操作 min-candidates.json，不触碰旧候选层；list 支持 `--top N` 按评分取前 N 供人工审，缺省读 review_top_pure_x / review_top_with_youtube；`ai-top` 从 approved 调 AI 挑 top 待选项（**产物带 id**），有 YouTube 判定按 **last-run.json 实际采到内容 items>0**（15）否则 10，失败一律抛错；`apply` 从待审清单批量应用人工结论；`top-apply` 从 top 清单应用 top_selected=true。维护者一键入口：bat/apply-review.bat（apply + ai-top 两步）、bat/apply-top.bat（top-apply + publish 两步）。导出: `minReviewCommand, scoreOf, loadV2Config, assertStoreFlag, hasYouTubeInLastRun, resolveAiTopConfig, applyTopSelectedList`
+- [cmd-min.js](src/news/cli/cmd-min.js) — **v2 `min-review` 命令组**（操作 min-candidates.json；`refine` 从 approved 原文调 DeepSeek 生成关键词清单，`refine-apply` 校验 adopted_keywords 后原子幂等追加配置；`ai-top` 产物带 id；`top-apply` 应用 top_selected=true；`apply` 写回首审结论）。维护者入口：bat/after-first-review.bat（apply 后安全并行 refine + ai-top）、bat/apply-keywords.bat、bat/apply-top.bat。导出: `minReviewCommand, applyRefineKeywords, applyTopSelectedList, resolveAiTopConfig`
 
 ### transcripts/ — 收尾环节：字幕人工获取通知（独立于主链，只写清单文件）
 - [transcript-notify.js](src/news/transcripts/transcript-notify.js) — 每日"待人工获取字幕"清单（min 候选层挑评分最高 notify_count 个 YouTube，写 transcript-requests-<YYYYMMDD>.json 交人工，不碰主链/不调采集总结）。导出: `notifyTranscripts, parseNotifyCount, scoreOf`
@@ -83,5 +83,12 @@
 - [validate.js](scripts/validate.js) — 校验聚合入口
 - [build-dist.js](scripts/build-dist.js) — src/web + public + data → dist/（维护者入口：bat/build-dist.bat）
 - [publish-news.js](scripts/publish-news.js) — 候选 → 公开投影 + RSS 发布（**默认走 v2：min-candidates approved 按每日 top 重建 hotspots.json**；`--min` 兼容 no-op）
+- [run-after-first-review.js](scripts/run-after-first-review.js) — 首次审核结论落地后安全并行 `refine` 与 `ai-top`；任一失败仅终止本次记录子进程并整体失败。导出: `runAfterFirstReview`
 - [check-secrets.js](scripts/check-secrets.js) — 密钥/高熵扫描（validate.js 反向依赖）
 - [generate-og-image.js](scripts/generate-og-image.js) — OG 图生成入口
+
+## bat/ — Windows 维护者入口
+- [after-first-review.bat](bat/after-first-review.bat) — 首次人工审核后：应用 review 清单，再安全并行生成关键词提纯与 AI top 清单。
+- [apply-keywords.bat](bat/apply-keywords.bat) — 应用维护者填写的 keyword-refine 清单；仅更新后续采集关键词，不发布或构建。
+- [apply-top.bat](bat/apply-top.bat) — 应用 top_selected 并发布公开投影。
+- [build-dist.bat](bat/build-dist.bat) — 重建静态 dist。

@@ -20,7 +20,12 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { hasYouTubeInLastRun, resolveAiTopConfig, applyTopSelectedList } = require('../../src/news/cli/cmd-min');
+const {
+  hasYouTubeInLastRun,
+  resolveAiTopConfig,
+  applyTopSelectedList,
+  applyRefineKeywords,
+} = require('../../src/news/cli/cmd-min');
 
 // 固定配置（不依赖真实配置文件，保证 topN 断言确定性）
 const CONFIG = { collection: { review_top_with_youtube: 15, review_top_pure_x: 10 } };
@@ -123,4 +128,45 @@ test('applyTopSelectedList：无 top_selected=true → changed 0；未命中 id 
   const r2 = applyTopSelectedList(store, listGhost);
   assert.equal(r2.applied, 0);
   assert.deepEqual(r2.missing, ['x-ghost']);
+});
+
+// ── applyRefineKeywords：纯内存配置更新，不触碰正式配置文件 ──
+
+const KEYWORD_LIST = {
+  kind: 'keyword_refine_candidates',
+  candidates: [
+    { word: 'DeepSeek', category: 'tool', candidate_type: 'repeated', count: 6 },
+    { word: 'Multimodal', category: 'concept', candidate_type: 'emerging', count: 2 },
+  ],
+  adopted_keywords: ['DeepSeek', 'DeepSeek', 'Multimodal'],
+};
+
+test('applyRefineKeywords：去重采纳并跳过既有关键词', () => {
+  const config = { keywords: { ai_keywords: ['deepseek', 'Claude'] } };
+  const result = applyRefineKeywords(config, KEYWORD_LIST);
+  assert.deepEqual(result.added, ['Multimodal']);
+  assert.deepEqual(result.already_exists, ['DeepSeek']);
+  assert.equal(result.duplicates, 1);
+  assert.deepEqual(result.config.keywords.ai_keywords, ['deepseek', 'Claude', 'Multimodal']);
+  assert.deepEqual(config.keywords.ai_keywords, ['deepseek', 'Claude'], '不修改输入配置');
+  assert.equal(applyRefineKeywords(result.config, KEYWORD_LIST).changed, false, '重复应用幂等');
+});
+
+test('applyRefineKeywords：未知采纳词或结构非法时整批拒绝', () => {
+  const config = { keywords: { ai_keywords: [] } };
+  assert.throws(() => applyRefineKeywords(config, { ...KEYWORD_LIST, adopted_keywords: ['Unknown'] }), /不在 candidates/);
+  assert.throws(() => applyRefineKeywords(config, { ...KEYWORD_LIST, adopted_keywords: null }), /非法关键词清单/);
+  assert.throws(() => applyRefineKeywords(config, {
+    ...KEYWORD_LIST,
+    candidates: [{ word: 'Broken', category: '', candidate_type: 'repeated', count: 1 }],
+    adopted_keywords: [],
+  }), /非法 candidates/);
+  assert.deepEqual(config.keywords.ai_keywords, [], '拒绝不改变输入配置');
+});
+
+test('applyRefineKeywords：空采纳列表成功且不要求写回', () => {
+  const result = applyRefineKeywords({ keywords: { ai_keywords: ['Claude'] } }, { ...KEYWORD_LIST, adopted_keywords: [] });
+  assert.equal(result.changed, false);
+  assert.deepEqual(result.added, []);
+  assert.deepEqual(result.config.keywords.ai_keywords, ['Claude']);
 });
