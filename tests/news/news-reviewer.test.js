@@ -8,10 +8,7 @@
  *     3. reviewWithDeepSeek 成功/缺 key/网络失败/输出无法解析降级；
  *     4. reviewCandidate 成功（含字幕/总结）/失败降级/无素材；
  *     5. reviewCandidates 批量、跳过已有 ai_review；
- *     6. applyAiReviewVerdicts 高置信自动应用（discard/hold）、低置信不落、approve 永不自动落、
- *        非 pending 不覆盖、dry-run 只预览；
- *     7. enrichCandidateReviews 管线钩子按开关与条件过滤、autoApply 生效、maxItems 截断；
- *     8. mergeCandidates 保留既有 ai_review（重新采集不丢建议）。
+ *     6. mergeCandidatesMin 保留既有审核结论（重新采集不重置人工结论）。
  *
  * 运行方式：node --test tests/news/news-reviewer.test.js
  */
@@ -29,10 +26,8 @@ const {
   collectReviewSource,
   reviewCandidate,
   reviewCandidates,
-  applyAiReviewVerdicts,
-  enrichCandidateReviews,
 } = require('../../src/news/classify/content-reviewer');
-const { mergeCandidates } = require('../../src/news/core/news-candidates');
+const { mergeCandidatesMin } = require('../../src/news/min/min-store');
 
 /** 构造一个 DeepSeek 成功响应（content 为模型输出文本）。 */
 function deepSeekOk(content) {
@@ -235,147 +230,14 @@ test('reviewCandidates：LLM 全失败时 reviewed=0 且不写 ai_review（不�
   assert.ok(items[0].ai_review_llm_error);                // 留错误痕迹便于排查
 });
 
-// ── 第 5 组：applyAiReviewVerdicts 状态应用 ───────────────
+// ── 第 5 组：mergeCandidatesMin 保留既有审核结论 ────────────────────
 
-function applyStore(candidates) {
-  return { schema_version: 1, updated_at: null, candidates };
-}
-
-/** 构造带 ai_review 建议的 pending 候选（fixture）。 */
-function candidateWithReview(cid, verdict, confidence, reasons = ['AI 理由']) {
-  return {
-    id: cid, platform: 'youtube', title: `标题 ${cid}`, native_id: cid,
-    ai_processing_status: 'completed', review_status: 'pending',
-    ai_review: { verdict, reasons, confidence, reviewer: 'llm_deepseek', generated_at: '2026-08-07T00:00:00Z' },
-  };
-}
-
-test('高置信 discard 自动落 discarded，hold 落 held + hold_reason', () => {
-  const store = applyStore([
-    candidateWithReview('a', 'discard', 0.95),
-    candidateWithReview('b', 'hold', 0.92),
-  ]);
-  const result = applyAiReviewVerdicts(store, ['a', 'b'], { dryRun: false });
-  assert.equal(result.applied.length, 2);
-  assert.equal(store.candidates.find(c => c.id === 'a').review_status, 'discarded');
-  const b = store.candidates.find(c => c.id === 'b');
-  assert.equal(b.review_status, 'held');
-  assert.equal(b.hold_reason, 'AI 理由');                 // 决策 50：held 也记录 hold_reason
-  assert.equal(b.reviewer, 'ai_review');
-});
-
-test('低置信 discard 不自动应用，保持 pending', () => {
-  const store = applyStore([candidateWithReview('a', 'discard', 0.5)]);
-  const result = applyAiReviewVerdicts(store, ['a'], { dryRun: false, minConfidence: 0.9 });
-  assert.equal(result.applied.length, 0);
-  assert.equal(store.candidates[0].review_status, 'pending');
-});
-
-test('approve 永不自动应用', () => {
-  const store = applyStore([candidateWithReview('a', 'approve', 0.99)]);
-  const result = applyAiReviewVerdicts(store, ['a'], { dryRun: false, minConfidence: 0.1 });
-  assert.equal(result.applied.length, 0);
-  assert.equal(store.candidates[0].review_status, 'pending');
-});
-
-test('非 pending 候选不被自动覆盖（人工结论优先）', () => {
-  const store = applyStore([
-    { ...candidateWithReview('a', 'discard', 0.95), review_status: 'approved', reviewer: 'human' },
-  ]);
-  const result = applyAiReviewVerdicts(store, ['a'], { dryRun: false, minConfidence: 0.1 });
-  assert.equal(result.applied.length, 0);
-  assert.equal(store.candidates[0].review_status, 'approved');
-});
-
-test('dry-run 只预览不落盘', () => {
-  const store = applyStore([candidateWithReview('a', 'discard', 0.95)]);
-  const result = applyAiReviewVerdicts(store, ['a'], { dryRun: true });
-  assert.equal(result.applied.length, 1);
-  assert.equal(store.candidates[0].review_status, 'pending');
-});
-
-// ── 第 6 组：enrichCandidateReviews 管线钩子 ───────────────
-
-function enrichStore(candidates) {
-  return { schema_version: 1, updated_at: null, candidates };
-}
-
-test('开关关闭：不发起任何 LLM 调用，返回零计数', async () => {
-  let calls = 0;
-  const store = enrichStore([candidateWithReview('a', 'approve', 0.9)]);
-  const counts = await enrichCandidateReviews(store, ['a'], {
-    enabled: false,
-    fetchImpl: mockFetch(() => { calls += 1; return deepSeekOk('{}'); }),
-  });
-  assert.deepEqual(counts, { enabled: false, reviewed: 0, skipped: 0, autoApplied: [] });
-  assert.equal(calls, 0);
-});
-
-test('开启：只处理 activeIds 内无 ai_review 的 pending 候选', async () => {
-  const store = enrichStore([
-    { id: 'a', title: 'A', ai_processing_status: 'completed', review_status: 'pending' },
-    { id: 'has', title: 'B', ai_processing_status: 'completed', review_status: 'pending', ai_review: { verdict: 'hold' } },
-    { id: 'approved', title: 'C', ai_processing_status: 'completed', review_status: 'approved' },
-    { id: 'outside', title: 'D', ai_processing_status: 'completed', review_status: 'pending' },
-  ]);
-  const counts = await enrichCandidateReviews(store, ['a', 'has', 'approved'], {
-    enabled: true,
-    apiKey: 'test-key',
-    fetchImpl: mockFetch(() => deepSeekOk('{"verdict":"approve","confidence":0.9}')),
-  });
-  assert.equal(counts.reviewed, 1);       // 只有 a 通过条件
-  assert.equal(store.candidates.find(c => c.id === 'a').ai_review.verdict, 'approve');
-  assert.equal(store.candidates.find(c => c.id === 'has').ai_review.verdict, 'hold');     // 保留既有
-  assert.equal(store.candidates.find(c => c.id === 'approved').ai_review, undefined);     // 非 pending 不处理
-  assert.equal(store.candidates.find(c => c.id === 'outside').ai_review, undefined);      // 不在 activeIds
-});
-
-test('开启 + autoApply：高置信 discard 自动落状态，approve 保持 pending', async () => {
-  const store = enrichStore([
-    { id: 'a', title: 'A', ai_processing_status: 'completed', review_status: 'pending' },
-    { id: 'b', title: 'B', ai_processing_status: 'completed', review_status: 'pending' },
-  ]);
-  const counts = await enrichCandidateReviews(store, ['a', 'b'], {
-    enabled: true,
-    autoApply: true,
-    autoMinConfidence: 0.9,
-    apiKey: 'test-key',
-    fetchImpl: mockFetch(() => deepSeekOk('{"verdict":"discard","reasons":["广告"],"confidence":0.95}')),
-  });
-  assert.equal(counts.reviewed, 2);
-  assert.equal(counts.autoApplied.length, 2);
-  assert.equal(store.candidates.find(c => c.id === 'a').review_status, 'discarded');
-  assert.equal(store.candidates.find(c => c.id === 'b').review_status, 'discarded');
-});
-
-test('受 maxItems 截断', async () => {
-  const store = enrichStore([
-    { id: 'a', title: 'A', ai_processing_status: 'completed', review_status: 'pending' },
-    { id: 'b', title: 'B', ai_processing_status: 'completed', review_status: 'pending' },
-    { id: 'c', title: 'C', ai_processing_status: 'completed', review_status: 'pending' },
-  ]);
-  const counts = await enrichCandidateReviews(store, ['a', 'b', 'c'], {
-    enabled: true,
-    maxItems: 2,
-    apiKey: 'test-key',
-    fetchImpl: mockFetch(() => deepSeekOk('{"verdict":"approve","confidence":0.9}')),
-  });
-  assert.equal(counts.reviewed, 2);
-  const reviewedCount = store.candidates.filter(c => c.ai_review).length;
-  assert.equal(reviewedCount, 2);
-});
-
-// ── 第 7 组：mergeCandidates 保留既有 ai_review ────────────────────
-
-test('mergeCandidates 保留既有 ai_review，新建议优先', () => {
-  const prev = { schema_version: 1, candidates: [
-    { id: 'a', title: '旧', review_status: 'pending', ai_review: { verdict: 'hold', reasons: ['旧理由'], confidence: 0.8, reviewer: 'llm_deepseek', generated_at: '2026-08-01T00:00:00Z' } },
+test('mergeCandidatesMin 保留既有 review_status，重新采集不重置人工结论', () => {
+  const prev = { schema_version: 1, updated_at: null, candidates: [
+    { id: 'a', title: '旧', review_status: 'approved', top_selected: true, ai_advice: { verdict: 'approve', reasons: ['人工确认'] } },
   ] };
-  // 下一轮 incoming 无 ai_review（本轮未重新审核）→ 保留既有
-  const store1 = mergeCandidates(prev, [{ id: 'a', title: '新标题' }], '2026-08-02T00:00:00Z');
-  assert.equal(store1.candidates[0].ai_review.verdict, 'hold');
-  assert.equal(store1.candidates[0].ai_review.generated_at, '2026-08-01T00:00:00Z');
-  // incoming 带新建议 → 新建议优先
-  const store2 = mergeCandidates(prev, [{ id: 'a', title: '新', ai_review: { verdict: 'discard', reasons: ['新理由'], confidence: 0.95 } }], '2026-08-02T00:00:00Z');
-  assert.equal(store2.candidates[0].ai_review.verdict, 'discard');
+  // 下一轮 incoming 无 review_status（本轮未重新审核）→ 保留既有 approved
+  const store1 = mergeCandidatesMin(prev, [{ id: 'a', title: '新标题' }]);
+  assert.equal(store1.candidates[0].review_status, 'approved');
+  assert.equal(store1.candidates[0].top_selected, true);
 });

@@ -16,10 +16,28 @@
 const fs = require('fs');
 const { readJson, writeJsonAtomic } = require('../core/news-storage');
 const { normalizeUrl, hash } = require('./feed-parser');
-const { interactionValue, HEAT_DEFINITION } = require('./scoring');
 const { NEWS_FILES, CATALOG_FILES } = require('../../shared/paths');
 
 const OUTPUT_PATH = NEWS_FILES.hotspots; // 前端热点投影（就地升级/迁移的目标文件）
+
+// ── 互动量级换算（自 v1 scoring.js 内联，v2 保留给 computeHotScores 使用）──
+/** 互动量级：对公开互动数据（浏览/点赞/评论/转发/回复）加权后取对数；无任何互动数据返回 null。 */
+function interactionValue(item) {
+  const metrics = item.metrics || {};
+  const weights = { views: 0.02, likes: 1, comments: 2, reposts: 2, replies: 2 };
+  let total = 0;
+  let available = false;
+  for (const [key, weight] of Object.entries(weights)) {
+    if (Number.isFinite(metrics[key])) {
+      available = true;
+      total += metrics[key] * weight;
+    }
+  }
+  return available ? Math.log10(total + 1) : null;
+}
+
+/** 热度定义文案（随 hotspots.json schema 记录，前端解释 hot_score 口径）。 */
+const HEAT_DEFINITION = 'hot_score 表示条目在其来源平台内的相对互动量级（0–100），由公开互动数据（浏览/点赞/评论/转发）的加权对数指数按平台归一化得到；仅在平台内可比，跨平台不构成权威综合热度。无互动数据时为 null，前端按"最近"时间回退排序。';
 
 // ═══════════════════════════════════════════════════════════════
 // 公开热点数据契约补充（B16 决策 74/77/78/85/88/89）
@@ -323,106 +341,17 @@ function migrateContentTypeProjection() {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// 溯源关系、事件聚合与去重
+// 内容去重
 //
-// 溯源（provenance）：识别重复观察、转载、评论、翻译和引用关系，
-//   每条记录通过 content_id 关联到内容条目。
-// 事件聚合（events）：按确定性关键词、显式 URL 关联或人工 topic_key
-//   将多条内容归入同一事件/主题，保留各自观点而不合并为单一结论。
 // 去重（dedupeItems）：按 platform:native_id 去重（与 registry 主键一致，N-P6 确认，
-//   2026-08-05）。跨平台重复观察由 buildProvenance 以 duplicate_observation/repost 溯源保留，
-//   不在此合并（B16 决策 46/47：保留各自观点）。保留先出现的条目。
+//   2026-08-05）。跨平台重复观察由 v1 buildProvenance 以 duplicate_observation/repost
+//   溯源保留，不在此合并（B16 决策 46/47：保留各自观点）；v2 主链（pipeline-min）
+//   只调用 dedupeItems，不构建溯源/事件聚合（热点视图 v2 schema 不再消费 provenance/events）。
+//   保留先出现的条目。
 //   历史：此处注释曾宣称「按 url + title 组合去重」，与实现不符且语义错误——
 //   url+title 会误合并跨平台同标题内容与同平台同标题不同视频。真实数据（候选层/registry）
 //   两种键零差异，故保留实现、修正注释。
 // ═══════════════════════════════════════════════════════════════
-
-function topicKey(item, config) {
-  const text = `${item.title} ${item.description}`.toLowerCase();
-  const entities = config.topic_entities.filter(entity => text.includes(entity.toLowerCase())).sort();
-  if (entities.length) return entities.slice(0, 3).join('+');
-  const words = text.match(/[a-z][a-z0-9-]{3,}|[一-鿿]{2,6}/g) || [];
-  return words.slice(0, 3).join('+') || hash(item.title);
-}
-
-function buildProvenance(items) {
-  const byNative = new Map();
-  const byUrl = new Map(items.map(item => [normalizeUrl(item.url), item]));
-  const observedUrls = new Map();
-  const provenance = [];
-  for (const item of items) {
-    const nativeKey = `${item.platform}:${item.native_id}`;
-    const urlKey = normalizeUrl(item.url);
-    const duplicate = byNative.get(nativeKey) || observedUrls.get(urlKey);
-    if (duplicate) {
-      provenance.push({
-        content_id: item.id,
-        canonical_content_id: duplicate.id,
-        origin_status: 'confirmed',
-        relation: 'duplicate_observation',
-        detected_by: 'platform_id_or_url',
-        confidence: 1,
-        evidence: [{ type: 'matching_platform_id_or_url', source_url: item.url }],
-        checked_at: item.fetched_at,
-      });
-      continue;
-    }
-    byNative.set(nativeKey, item);
-    observedUrls.set(urlKey, item);
-    const external = item.explicit_links.find(link => link && normalizeUrl(link) !== urlKey);
-    const linkedOriginal = external ? byUrl.get(normalizeUrl(external)) : null;
-    provenance.push({
-      content_id: item.id,
-      canonical_content_id: linkedOriginal?.id || (external ? null : item.id),
-      origin_status: linkedOriginal ? 'candidate' : external ? 'candidate' : 'unknown',
-      relation: item.source_type === 'bilibili_dynamic_repost' ? 'repost' : external ? 'citation' : 'original',
-      detected_by: linkedOriginal ? 'explicit_link_to_collected_content' : external ? 'explicit_link' : 'self_observation',
-      confidence: linkedOriginal ? 0.85 : external ? 0.65 : 0.35,
-      evidence: external ? [{ type: 'explicit_link', source_url: external }] : [],
-      checked_at: item.fetched_at,
-    });
-  }
-  return provenance;
-}
-
-function buildEvents(items, assessments, config) {
-  const groups = new Map();
-  const assessmentsByContentId = new Map();
-  for (const assessment of assessments) {
-    if (!assessmentsByContentId.has(assessment.content_id)) assessmentsByContentId.set(assessment.content_id, []);
-    assessmentsByContentId.get(assessment.content_id).push(assessment);
-  }
-  for (const item of items) {
-    const key = topicKey(item, config);
-    if (!groups.has(key)) groups.set(key, []);
-    groups.get(key).push(item);
-  }
-  return [...groups.entries()].map(([key, group]) => {
-    const id = `event-${hash(key)}`;
-    let firstSeenAt = group[0].published_at;
-    let updatedAt = group[0].published_at;
-    for (const item of group) {
-      for (const assessment of assessmentsByContentId.get(item.id) || []) assessment.event_id = id;
-      if (item.published_at < firstSeenAt) firstSeenAt = item.published_at;
-      if (item.published_at > updatedAt) updatedAt = item.published_at;
-    }
-    return {
-      id,
-      topic_key: key,
-      title: group[0].title,
-      first_seen_at: firstSeenAt,
-      updated_at: updatedAt,
-      content_ids: group.map(item => item.id),
-      viewpoints: group.map(item => ({
-        content_id: item.id,
-        position: 'unclassified',
-        summary: item.description || item.title,
-        evidence_level: 'source_content',
-      })),
-      official_verification: { status: group.some(item => item.source_tags.includes('官方来源')) ? 'official_source_present' : 'not_checked', evidence: [] },
-    };
-  });
-}
 
 function dedupeItems(items) {
   const seen = new Set();
@@ -447,8 +376,6 @@ module.exports = {
   upgradeHotspotsProjection,
   migrateContentTypeProjection,
   dedupeItems,
-  buildProvenance,
-  buildEvents,
   getRelatedLexicon,
   getToolUrlIndex,
 };

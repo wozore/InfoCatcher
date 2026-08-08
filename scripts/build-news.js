@@ -1,14 +1,16 @@
 /**
- * scripts/build-news.js — 热点构建管线 CLI 入口（薄包装）
+ * scripts/build-news.js — 热点构建管线 CLI 入口（热点管线 v2 为默认）
  *
  * 双重角色：直接运行时为 CLI（node scripts/build-news.js）；被 require 时
- * 透传 re-export src/news/pipeline/build-news 的全部导出，供 publish-news.js、
- * benchmark-news.js 复用同一份实现。
+ * 导出 v2 入口（main / mainMin / buildMinFixtureOptions）。
  *
  * 用法：
- *   node scripts/build-news.js               # 旧流程（v1，现状不动）
- *   node scripts/build-news.js --min         # 热点管线 v2（调 runMin；缺 API key 各平台降级不崩）
- *   node scripts/build-news.js --min --fixture  # v2 注入 mock 采集器跑通全链（无网络、确定性）
+ *   node scripts/build-news.js                        # 热点管线 v2（默认；调 runMin；缺 API key 各平台降级不崩）
+ *   node scripts/build-news.js --platforms youtube    # 分时采集：仅跑 YouTube（R1：每 3 天 22:00）
+ *   node scripts/build-news.js --platforms x          # 分时采集：仅跑 X（R1：每日 14:00 / 0:00）
+ *   node scripts/build-news.js --platforms youtube,x  # 双平台采集（默认同缺省）
+ *   node scripts/build-news.js --fixture              # 注入 mock 采集器跑通全链（无网络、确定性）
+ *   node scripts/build-news.js --min                  # 兼容 no-op（v2 已是默认，接受并忽略）
  */
 'use strict';
 
@@ -17,27 +19,44 @@
 const { loadDotEnv } = require('../src/shared/env');
 loadDotEnv();
 
-const implementation = require('../src/news/pipeline/build-news');
-
-// ── 热点管线 v2 CLI 入口（--min / --min --fixture）────────────────
+// ── 热点管线 v2 CLI 入口（默认 / --min 兼容 / --platforms 分时）────────────────
 // 只做接线：调 runMin 编排，不重写任何 v2 模块。
 // 无 API key 时 YouTube/X 采集器各自降级返回空（coverage.status='failed'），
 // AI 步骤（分类/审核/总结/本地化）缺 DEEPSEEK_API_KEY 即时降级，管线不抛错。
-async function mainMin() {
+async function mainMin(platforms) {
   const { runMin } = require('../src/news/min/pipeline-min');
   const fixture = process.argv.includes('--fixture');
   const options = fixture ? buildMinFixtureOptions() : {};
+  if (Array.isArray(platforms) && platforms.length) options.platforms = platforms;
   const { coverage, minCandidates, publicItems } = await runMin(options);
   const youtube = coverage.collectors && coverage.collectors.youtube;
   const x = coverage.collectors && coverage.collectors.x;
-  console.log(`ℹ️ v2 覆盖：${coverage.status}（youtube=${youtube ? `${youtube.status}/${youtube.items || 0} 条` : '未运行'}，x=${x ? `${x.status}/${x.items || 0} 条` : '未运行'}）`);
+  const fmt = slot => slot ? (slot.status === 'not_run' ? '未运行' : `${slot.status}/${slot.items || 0} 条`) : '未运行';
+  console.log(`ℹ️ v2 覆盖：${coverage.status}（youtube=${fmt(youtube)}，x=${fmt(x)}）`);
   if (coverage.status === 'failed') {
     const reasons = [youtube && youtube.reason, x && x.reason].filter(Boolean).join('；');
-    console.log(`   ⚠️ 双采集均失败${reasons ? `（${reasons}）` : ''}——通常因缺 API key，管线已降级不崩`);
+    console.log(`   ⚠️ 启用平台采集均失败${reasons ? `（${reasons}）` : ''}——通常因缺 API key，管线已降级不崩`);
   }
   if (fixture) console.log('   注：--fixture 为 mock 采集，覆盖状态仅用于验证 v2 管线贯通');
   console.log(`✅ v2 构建完成：minCandidates=${minCandidates}，publicItems=${publicItems}`);
   return { coverage, minCandidates, publicItems };
+}
+
+/**
+ * 解析 --platforms youtube|x[,x]（逗号分隔可选；也接受 --platforms=...）。
+ * 缺省返回 undefined（runMin 按双平台缺省处理）。--min 兼容 no-op，不影响本解析。
+ * @returns {string[]|undefined}
+ */
+function parsePlatforms() {
+  const idx = process.argv.indexOf('--platforms');
+  let raw = null;
+  if (idx !== -1) raw = process.argv[idx + 1];
+  else {
+    const eq = process.argv.find(arg => arg.startsWith('--platforms='));
+    if (eq) raw = eq.slice('--platforms='.length);
+  }
+  if (!raw || raw.startsWith('--')) return undefined;
+  return raw.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
 }
 
 /** --min --fixture 注入：mock 采集器 + 纯规则 AI 步骤（无网络、确定性、可复现）。 */
@@ -135,18 +154,12 @@ function buildMinFixtureOptions() {
 }
 
 // require.main === module：仅作为主入口直接执行时才跑管线；被 require（复用实现）时不产生副作用。
+// 热点管线 v2 为默认；--min 为兼容 no-op（接受但忽略，行为不变）。
 if (require.main === module) {
-  if (process.argv.includes('--min')) {
-    mainMin().catch(error => {
-      console.error(`❌ 热点构建 v2 失败：${error.message}`);
-      process.exit(1);
-    });
-  } else {
-    implementation.main().catch(error => {
-      console.error(`❌ 热点构建失败：${error.message}`);
-      process.exit(1);
-    });
-  }
+  mainMin(parsePlatforms()).catch(error => {
+    console.error(`❌ 热点构建 v2 失败：${error.message}`);
+    process.exit(1);
+  });
 }
 
-module.exports = implementation;
+module.exports = { main: mainMin, mainMin, buildMinFixtureOptions };

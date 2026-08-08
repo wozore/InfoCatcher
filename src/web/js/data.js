@@ -449,7 +449,6 @@ function getFilteredTrending() {
 const platformMeta = {
   youtube: { label: t('labels.platform.youtube'), icon: '▶️' },
   x: { label: t('labels.platform.x'), icon: '𝕏' },
-  bilibili: { label: t('labels.platform.bilibili'), icon: '📺' },
 };
 // B16 决策 65/79：内容类型（热点视图主分类维度）。来源媒体类型由 source_type 表达，
 // 只出现在来源核验层，不作为列表级筛选。unclassified 为 AI 分类+审核确认上线前的占位。
@@ -466,11 +465,6 @@ const contentTypeLabels = {
 const SOURCE_TYPE_LABELS = {
   youtube_video: t('labels.sourceType.youtube_video'),
   x_post: t('labels.sourceType.x_post'),
-  bilibili_video: t('labels.sourceType.bilibili_video'),
-  bilibili_dynamic_video: t('labels.sourceType.bilibili_dynamic_video'),
-  bilibili_dynamic_repost: t('labels.sourceType.bilibili_dynamic_repost'),
-  bilibili_dynamic_text: t('labels.sourceType.bilibili_dynamic_text'),
-  bilibili_article: t('labels.sourceType.bilibili_article'),
   unknown: t('labels.sourceType.unknown')
 };
 

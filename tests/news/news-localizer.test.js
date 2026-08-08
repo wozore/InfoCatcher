@@ -9,8 +9,8 @@
  *     4. localizeCandidate 无素材不调 LLM/成功/失败降级；
  *     5. localizeCandidates 批量、跳过已有 localizations[locale]；
  *     6. enrichCandidateLocalizations 管线钩子按开关与条件过滤、maxItems 截断；
- *     7. mergeCandidates 保留既有 localizations（重新采集不重复翻译）；
- *     8. buildProjectionFromStore / toPublicItem 透传 localizations、
+ *     7. mergeCandidatesMin 保留既有 review_status（重新采集不重置人工结论）；
+ *     8. toPublicItemMin / buildDailyProjection 透传 localizations、
  *        剔除内部痕迹 localizations_meta。
  *
  * 运行方式：node --test tests/news/news-localizer.test.js
@@ -32,10 +32,10 @@ const {
   enrichCandidateLocalizations,
 } = require('../../src/news/classify/content-localizer');
 const {
-  mergeCandidates,
-  buildProjectionFromStore,
-  toPublicItem,
-} = require('../../src/news/core/news-candidates');
+  mergeCandidatesMin,
+  toPublicItemMin,
+} = require('../../src/news/min/min-store');
+const { buildDailyProjection } = require('../../src/news/min/daily-projection');
 
 /** 构造一个 DeepSeek 成功响应（content 为模型输出文本）。 */
 function deepSeekOk(content) {
@@ -268,24 +268,22 @@ test('受 maxItems 截断', async () => {
   assert.equal(localizedCount, 2);
 });
 
-// ── 第 7 组：mergeCandidates 保留既有 localizations ──
+// ── 第 7 组：mergeCandidatesMin 保留既有审核结论（重新采集不重置）──
 
-test('mergeCandidates 保留既有 localizations，新翻译优先', () => {
-  const prev = { schema_version: 1, candidates: [
-    { id: 'a', title: '旧', localizations: { zh: { title: '旧中文', description: '旧描述' } } },
+test('mergeCandidatesMin 保留既有 review_status，重新采集不重置人工结论', () => {
+  const prev = { schema_version: 1, updated_at: null, candidates: [
+    { id: 'a', title: '旧', review_status: 'approved', top_selected: true, localizations: { zh: { title: '旧中文', description: '旧描述' } } },
   ] };
-  // 下一轮 incoming 无 localizations（本轮未重新翻译）→ 保留既有
-  const store1 = mergeCandidates(prev, [{ id: 'a', title: '新标题' }], '2026-08-02T00:00:00Z');
-  assert.deepEqual(store1.candidates[0].localizations.zh, { title: '旧中文', description: '旧描述' });
-  // incoming 带新翻译 → 新翻译优先
-  const store2 = mergeCandidates(prev, [{ id: 'a', title: '新', localizations: { zh: { title: '新中文' } } }], '2026-08-02T00:00:00Z');
-  assert.equal(store2.candidates[0].localizations.zh.title, '新中文');
+  // 下一轮 incoming 无 review_status（本轮未重新审核）→ 保留既有 approved
+  const store1 = mergeCandidatesMin(prev, [{ id: 'a', title: '新标题' }]);
+  assert.equal(store1.candidates[0].review_status, 'approved');
+  assert.equal(store1.candidates[0].top_selected, true);
 });
 
-// ── 第 8 组：buildProjectionFromStore / toPublicItem 透传 ──
+// ── 第 8 组：toPublicItemMin / buildDailyProjection 透传 ──
 
-test('toPublicItem 保留 localizations、剔除 localizations_meta', () => {
-  const publicItem = toPublicItem({
+test('toPublicItemMin 保留 localizations、剔除 localizations_meta', () => {
+  const publicItem = toPublicItemMin({
     id: 'a', title: '原文', review_status: 'approved',
     localizations: { zh: { title: '中文' } },
     localizations_meta: { zh: { localizer: 'llm_deepseek' } },
@@ -295,23 +293,22 @@ test('toPublicItem 保留 localizations、剔除 localizations_meta', () => {
   assert.equal(publicItem.review_status, undefined);            // 内部状态仍剔除
 });
 
-test('buildProjectionFromStore 透传 localizations 到公开投影', () => {
+test('buildDailyProjection 透传 localizations 到公开投影', () => {
   const store = {
-    schema_version: 3,
+    schema_version: 1,
     updated_at: '2026-08-02T00:00:00Z',
     candidates: [
       {
         id: 'a', platform: 'x', native_id: 'n', source_type: 'x_post',
         title: '英文', description: 'English', url: 'https://x.com/a',
         published_at: '2026-08-01T00:00:00Z', source_id: 'src', metrics: {},
-        ai_processing_status: 'completed', review_status: 'approved',
+        review_status: 'approved', top_selected: true,
         localizations: { zh: { title: '中文标题', description: '中文描述' } },
         localizations_meta: { zh: { localizer: 'llm_deepseek' } },
       },
     ],
-    events: [], provenance: [], assessments: [],
   };
-  const projection = buildProjectionFromStore(store, { generatedAt: '2026-08-02T00:00:00Z' });
+  const projection = buildDailyProjection(store, {}, { now: '2026-08-02T00:00:00Z' });
   assert.equal(projection.items.length, 1);
   assert.deepEqual(projection.items[0].localizations, { zh: { title: '中文标题', description: '中文描述' } });
   assert.equal(projection.items[0].localizations_meta, undefined);

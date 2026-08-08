@@ -2,24 +2,26 @@ name: Collect AI News
 
 on:
   schedule:
-    - cron: '0 2 */3 * *'
+    - cron: '0 22 */3 * *'
+    - cron: '0 14 * * *'
+    - cron: '0 0 * * *'
   workflow_dispatch:
     inputs:
-      platform_scope:
-        description: '本次采集范围（诊断 B站时选择 bilibili-only）'
-        required: true
-        default: all
-        type: choice
-        options:
-          - all
-          - bilibili-only
-      pipeline:
-        description: '管线选择：min = 热点管线 v2（手动验证阶段）；old = 现有流程（默认）'
+      platforms:
+        description: '本次采集平台：both / youtube / x（缺省 both）'
         required: false
-        default: old
+        default: both
         type: choice
         options:
-          - old
+          - both
+          - youtube
+          - x
+      pipeline:
+        description: '管线：min = 热点管线 v2（v2 已为默认，当前唯一选项）'
+        required: false
+        default: min
+        type: choice
+        options:
           - min
 
 permissions:
@@ -50,37 +52,45 @@ jobs:
       - name: Secret scan guard
         run: node scripts/check-secrets.js
 
+      - name: Resolve platforms
+        id: platforms
+        env:
+          PLATFORMS_INPUT: ${{ github.event.inputs.platforms }}
+          SCHEDULE: ${{ github.event.schedule }}
+        run: |
+          # schedule 触发无 inputs：按 cron 模式映射（R1：YouTube 每 3 天 22:00 /
+          # X 每日 14:00 / 0:00）；workflow_dispatch 的 platforms 输入优先覆盖。
+          # runMin 只认平台名数组，'both' 译为双平台，勿把 'both' 直接传给 --platforms。
+          if [[ -n "$PLATFORMS_INPUT" ]]; then
+            if [[ "$PLATFORMS_INPUT" == "both" ]]; then
+              echo "NEWS_PLATFORMS=youtube,x" >> "$GITHUB_ENV"
+            else
+              echo "NEWS_PLATFORMS=$PLATFORMS_INPUT" >> "$GITHUB_ENV"
+            fi
+          elif [[ "$SCHEDULE" == "0 22 */3 * *" ]]; then
+            echo "NEWS_PLATFORMS=youtube" >> "$GITHUB_ENV"
+          else
+            echo "NEWS_PLATFORMS=x" >> "$GITHUB_ENV"
+          fi
+
       - name: Collect and build news
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           X_API_KEY: ${{ secrets.X_API_KEY }}
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-          NEWS_PLATFORM_SCOPE: ${{ github.event.inputs.platform_scope || 'all' }}
-        run: |
-          # min 管线先手动验证，稳定后再切 cron；
-          # pipeline 缺省 old 走现有流程（行为不变），仅 pipeline == 'min' 时替换为 v2 构建命令。
-          if [[ "${{ github.event.inputs.pipeline }}" == "min" ]]; then
-            node scripts/build-news.js --min
-          else
-            node scripts/build-news.js
-          fi
+        run: node scripts/build-news.js --platforms "$NEWS_PLATFORMS"
 
       - name: Test generated data
         run: |
-          node --test tests/news/news-tests.test.js tests/news/news-foundation.test.js tests/news/news-candidates.test.js tests/news/news-review-events.test.js tests/news/news-public-gate.test.js tests/news/news-transcripts.test.js tests/news/news-audit.test.js tests/news/news-rss.test.js
+          node --test tests/news/news-pipeline-min.test.js tests/news/news-rss.test.js tests/news/news-public-gate.test.js tests/news/news-reviewer.test.js tests/news/news-summarizer.test.js tests/news/news-localizer.test.js tests/news/content-classifier-llm.test.js
           node scripts/validate.js
 
       - name: Create review branch with internal candidate data
         id: review
         run: |
-          # B16 决策 46/58/59：采集只产生内部候选层与运行状态（不发布）；
+          # v2：采集只产生内部候选层 min-candidates.json（不发布）；
           # 公开投影在审核 PR 合并后由 publish-news.yml 重建，不在此直接提交 main。
-          if git diff --quiet -- \
-            data/news/runtime/hotspot-candidates.json \
-            data/news/runtime/news-state.json \
-            data/news/runtime/news-registry.json \
-            data/news/runtime/news-quota.json \
-            data/news/runtime/pending-authorizations.json; then
+          if git diff --quiet -- data/news/runtime/min-candidates.json; then
             echo "No candidate changes"
             exit 0
           fi
@@ -92,12 +102,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -b "${branch}"
-          git add data/news/runtime/hotspot-candidates.json \
-                  data/news/runtime/news-state.json \
-                  data/news/runtime/news-registry.json \
-                  data/news/runtime/news-quota.json \
-                  data/news/runtime/pending-authorizations.json
-          git commit -m "chore(data): update hotspot candidates (${batch})"
+          git add data/news/runtime/min-candidates.json
+          git commit -m "chore(data): update min candidates (${batch})"
           git push origin "${branch}"
 
       - name: Open review PR
@@ -107,34 +113,36 @@ jobs:
           BATCH: ${{ steps.review.outputs.batch }}
           BRANCH: ${{ steps.review.outputs.branch }}
         run: |
-          node scripts/news-cli.js review summary > /tmp/review-summary.json
+          node scripts/news-cli.js min-review list --status pending --top 15 --json > /tmp/min-review-list.json
           node -e '
             const fs = require("fs");
-            const summary = JSON.parse(fs.readFileSync("/tmp/review-summary.json", "utf8"));
-            const review = Object.entries(summary.by_review_status || {})
-              .map(([k, v]) => `- ${k}: ${v}`).join("\n") || "（无）";
-            const ai = Object.entries(summary.by_ai_processing_status || {})
+            const list = JSON.parse(fs.readFileSync("/tmp/min-review-list.json", "utf8"));
+            const review = Object.entries(list.by_review_status || {})
               .map(([k, v]) => `- ${k}: ${v}`).join("\n") || "（无）";
             const body = [
               `## 批次：${process.env.BATCH}`,
               "",
-              `候选总数：${summary.total}`,
+              `候选总数：${list.total}`,
               "",
               "### 审核状态分布（review_status）",
               review,
               "",
-              "### AI 处理状态分布（ai_processing_status）",
-              ai,
-              "",
               "## 如何审核",
-              "1. 查看本 PR 中 `data/news/runtime/hotspot-candidates.json` 的候选记录。",
-              "2. 逐条设置 `review_status`：`pending` 待审核 / `approved` 通过 / `held` 暂缓复审 / `discarded` 丢弃。",
-              "3. 也可在本地用 `node scripts/news-cli.js review set --id <id> --status <status>`，或 `review batch --ids <id1,id2> --status approved` 批量通过明确选中的候选，再推送本分支。",
-              "4. `ai_processing_status != completed` 的候选不能设为 `approved`。",
-              "5. **合并本 PR 后**，GitHub Actions 会从候选层自动重建公开 hotspots.json 与 RSS，部署到热点视图。",
+              "1. 查看本 PR 中 `data/news/runtime/min-candidates.json` 的候选记录（v2 单状态轴：pending / approved / discarded）。",
+              "2. 逐条设置 `review_status`：`pending` 待审核 / `approved` 通过 / `discarded` 丢弃。",
+              "3. 也可在本地用 `node scripts/news-cli.js min-review set --id <id> --status <status>`，或 `min-review batch --ids <id1,id2> --status approved` 批量通过明确选中的候选，再推送本分支。",
+              "4. **合并本 PR 后**，GitHub Actions 会从候选层自动重建公开 hotspots.json 与 RSS，部署到热点视图。",
             ].join("\n");
             fs.writeFileSync("/tmp/pr-body.md", body);
           '
           gh pr create --base main --head "${BRANCH}" \
             --title "热点审核：批次 ${BATCH}" \
             --body-file /tmp/pr-body.md
+
+      # ── 收尾（v2 转正后启用自动挡；当前先手动执行，见开发计划）──
+      # - name: Finishing (transcripts)
+      #   run: node scripts/news-cli.js min-review transcripts --store min
+      # - name: Finishing (feedback)
+      #   run: node scripts/news-cli.js min-review feedback --store min
+      # - name: Finishing (refine)
+      #   run: node scripts/news-cli.js min-review refine --store min

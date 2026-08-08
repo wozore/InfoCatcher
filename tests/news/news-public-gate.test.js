@@ -26,9 +26,7 @@ const {
   hasCompletePublicFields,
   filterPublicItems,
   filterProjectionByWindow,
-  markAnomalousTimeCandidates,
 } = require('../../src/news/core/news-public-gate');
-const { createCandidateStore } = require('../../src/news/core/news-candidates');
 
 const NOW = Date.parse('2026-08-03T08:00:00Z');
 const DAY = 86400000;
@@ -136,34 +134,3 @@ test('filterProjectionByWindow 全在窗口内时返回原对象（不重建）'
   assert.equal(filtered, output);
 });
 
-// ── 第 5 组：时间异常候选标记（决策 63：held/error 路径）────
-
-function storeWith(candidates) {
-  const store = createCandidateStore(null);
-  store.candidates = candidates;
-  return store;
-}
-
-test('markAnomalousTimeCandidates 将未来异常与缺失时间候选标记为 held', () => {
-  const store = storeWith([
-    { id: 'normal', review_status: 'approved', published_at: new Date(NOW - 1 * DAY).toISOString() },
-    { id: 'future', review_status: 'approved', published_at: new Date(NOW + 12 * 3600 * 1000).toISOString() },
-    { id: 'missing', review_status: 'approved', published_at: '' },
-  ]);
-  const changed = markAnomalousTimeCandidates(store, { config: null, now: NOW });
-  assert.deepEqual(changed.map(entry => entry.id).sort(), ['future', 'missing']);
-  assert.equal(store.candidates.find(item => item.id === 'future').review_status, 'held');
-  assert.equal(store.candidates.find(item => item.id === 'missing').review_status, 'held');
-  assert.equal(store.candidates.find(item => item.id === 'normal').review_status, 'approved'); // 正常候选不受影响
-  assert.match(store.candidates.find(item => item.id === 'future').hold_reason, /未来时间/);
-  assert.match(store.candidates.find(item => item.id === 'missing').hold_reason, /发布时间缺失/);
-});
-
-test('markAnomalousTimeCandidates 跳过已 held 候选，不重复标记', () => {
-  const store = storeWith([
-    { id: 'already-held', review_status: 'held', published_at: new Date(NOW + 12 * 3600 * 1000).toISOString(), candidate_version: 2 },
-  ]);
-  const changed = markAnomalousTimeCandidates(store, { config: null, now: NOW });
-  assert.deepEqual(changed, []);
-  assert.equal(store.candidates[0].candidate_version, 2, '已 held 候选版本号不应再递增');
-});

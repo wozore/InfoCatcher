@@ -24,13 +24,7 @@
 ## src/news/ — 新闻采集管线（CommonJS）
 ### core/ — 数据层（无网络副作用）
 - [news-storage.js](src/news/core/news-storage.js) — JSON 读写 + 原子写 + 并发锁。导出: `readJson, writeJsonAtomic, acquireLock, releaseLock, inspectLock, forceUnlock`
-- [news-registry.js](src/news/core/news-registry.js) — 来源记录注册表。导出: `createRegistry, bulkDiscover, updateLifecycle, needsExpensiveProcessing, finalizeRegistry, pruneRegistry`
-- [news-candidates.js](src/news/core/news-candidates.js) — 候选热点 store（最大 core 模块）。导出: `createCandidateStore, buildProjectionFromStore, markHeld, markAiError, reviewSummary...`
-- [news-quota.js](src/news/core/news-quota.js) — 平台额度账本。导出: `createQuotaLedger, reserveQuota, consumeQuota, withQuota`
-- [news-scheduler.js](src/news/core/news-scheduler.js) — 批次/时间层调度。导出: `classifyTimeLayer, validateTimeLayers, createSchedulerState, advanceLayer`
-- [news-public-gate.js](src/news/core/news-public-gate.js) — 公开展示过滤。导出: `filterPublicItems, filterProjectionByWindow, isWithinPublicWindow, markAnomalousTimeCandidates`
-- [news-authorization.js](src/news/core/news-authorization.js) — 待授权任务。导出: `createAuthorizationStore, createAuthorizationTask, decideAuthorization`
-- [news-review-events.js](src/news/core/news-review-events.js) — 审核事件审计。导出: `createReviewEventLog, appendReviewEvent, recordReviewTransition`
+- [news-public-gate.js](src/news/core/news-public-gate.js) — 公开展示过滤。导出: `filterPublicItems, filterProjectionByWindow, isWithinPublicWindow, hasCompletePublicFields`
 
 ### min/ — 热点管线 v2 数据层（单状态轴审核/候选/投影 + 长期质量历史库）
 - [history-store.js](src/news/min/history-store.js) — 来源长期质量历史库（source-history.json 持久化 + 三率加权长期质量分，纯本地无 API）。导出: `readHistoryStore, writeHistoryStore, appendSamples, evaluateLongTermQuality, computeThreeRateScore, sourceKeyOf, perSampleRates`
@@ -38,36 +32,27 @@
 - [min-store.js](src/news/min/min-store.js) — v2 单状态轴候选层读写（min-candidates.json，人工结论不因重新采集重置；仅供 pipeline-min 等编排使用）。导出: `readMinStore, writeMinStore, mergeCandidatesMin, setReviewStatusMin, setBatchReviewStatusMin, isMinPublicEligible, toPublicItemMin`
 - [daily-projection.js](src/news/min/daily-projection.js) — v2 每日 top N 公开投影（approved 按天分组取前 N：含 YouTube 取 8 / 纯 X 取 5，纯逻辑不调 enrich/filter 两步）。导出: `buildDailyProjection`
 - [keyword-refine.js](src/news/min/keyword-refine.js) — 关键词提纯候选（收尾环节，每天一次：非 discarded 原文词频 + 新兴候选，输出候选清单交人工确认，**不直接改 ai_keywords**）。导出: `refineKeywords, tokenize, buildWordFreq, emergingByHistory`
-- [pipeline-min.js](src/news/min/pipeline-min.js) — **热点管线 v2 总指挥（runMin 编排）**：采集(YouTube+X 并行) → 去重 → L0 硬过滤 → 分类 → 评分(历史库) → L1/L2 审核 → 候选落地 → 总结/本地化 → 每日公开投影写 hotspots.json。每步失败降级记 coverage 不抛错。导出: `runMin, loadV2Config, normalizeNow, resolveXWindow`
+- [pipeline-min.js](src/news/min/pipeline-min.js) — **热点管线 v2 总指挥（runMin 编排）**：采集(默认 YouTube+X 并行，`options.platforms` 支持分时单平台) → 去重 → L0 硬过滤 → 分类 → 评分(历史库) → L1/L2 审核 → 候选落地 → 总结/本地化 → 每日公开投影写 hotspots.json。每步失败降级记 coverage 不抛错。导出: `runMin, loadV2Config, normalizeNow, resolveXWindow`
 
 ### collectors/ — 各平台采集（会发网络请求）
-- [news-youtube.js](src/news/collectors/news-youtube.js) — YouTube 采集（旧版：RSS/playlist + quota/registry）。导出: `collectYouTubeLayerStep, collectYouTube, enrichYouTubeStatistics`
 - [collector-youtube-v2.js](src/news/collectors/collector-youtube-v2.js) — 热点管线 v2 的 YouTube 采集器（search.list 关键词发现，不依赖旧 quota/registry/scheduler）。导出: `collectYouTubeV2, buildItem, parseDuration, loadV2Config`
-- [news-bilibili.js](src/news/collectors/news-bilibili.js) — B 站采集。导出: `collectBilibiliLayerStep, collectBilibili, probeBilibiliProvider`
-- [news-x.js](src/news/collectors/news-x.js) — X(Twitter) 采集。导出: `collectX, normalizeTweet`
 - [collector-x-v2.js](src/news/collectors/collector-x-v2.js) — 热点管线 v2 的 X(TwitterAPI.io) 采集器（博主时间窗 last_tweets + 关键词 advanced_search + 长文 article 补读，独立 credits 计数，不依赖旧 quota/registry/scheduler）。导出: `collectXV2, normalizeXV2Tweet, extractArticleText, hasArticleSignal, resolveConfig, loadV2Config`
-- [news-transcripts.js](src/news/collectors/news-transcripts.js) — 视频字幕获取/存储。导出: `fetchYouTubeTranscript, storeTranscript, enrichYouTubeTranscripts`
 
 ### classify/ — AI 内容分类/总结/审核建议/本地化
 - [content-classifier.js](src/news/classify/content-classifier.js) — L0 规则 + L1 AI 分类编排。导出: `classifyRuleBased, classifyCandidate, classifyCandidates, confirmContentType`
 - [content-summarizer.js](src/news/classify/content-summarizer.js) — 候选内容总结（标题+描述+字幕 → summary/key_points）。导出: `summarizeCandidate, summarizeCandidates, enrichCandidateSummaries`
-- [content-reviewer.js](src/news/classify/content-reviewer.js) — AI 审核建议（标题+描述+字幕+总结 → ai_review verdict/reasons/confidence + 高置信自动应用；runPool 为分类/审核并发池，供 pipeline-min 复用）。导出: `reviewCandidate, reviewCandidates, applyAiReviewVerdicts, enrichCandidateReviews, runPool`
+- [content-reviewer.js](src/news/classify/content-reviewer.js) — AI 审核建议（标题+描述+字幕+总结 → ai_review verdict/reasons/confidence；runPool 为分类/审核并发池，供 pipeline-min 复用）。导出: `reviewCandidate, reviewCandidates, runPool`
 - [content-localizer.js](src/news/classify/content-localizer.js) — 候选内容本地化（标题+描述 → localizations[locale]，原文保留顶层）。导出: `collectLocalizeSource, localizeCandidate, localizeCandidates, enrichCandidateLocalizations`
 - [llm-provider.js](src/news/classify/llm-provider.js) — DeepSeek 请求封装（分类/总结/审核/本地化，失败降级）。导出: `classifyWithDeepSeek, summarizeWithDeepSeek, reviewWithDeepSeek, localizeWithDeepSeek, buildDeepSeekPayload, buildSummaryPayload, buildReviewPayload, buildLocalizePayload`
 
 ### pipeline/ — 管线与投影
-- [feed-parser.js](src/news/pipeline/feed-parser.js) — RSS/XML/推文解析规范化。导出: `decodeXml, parseFeed, normalizeRssItem, normalizeTweet, requestText`
-- [scoring.js](src/news/pipeline/scoring.js) — 评分/异常检测。导出: `scoreTimeliness, assessItem, applyAnomalyDetection, computeHotScores, HEAT_DEFINITION`
+- [feed-parser.js](src/news/pipeline/feed-parser.js) — 网络请求 + URL/标识规范化。导出: `normalizeUrl, hash, numberOrNull, requestText, extractTweetArray`
 - [scoring-v2.js](src/news/pipeline/scoring-v2.js) — 热点管线 v2 评分层（6 权重加权，长期质量来自 history-store，互动用真实三率）。导出: `assessItemV2, scoreTimelinessV2, detectLightExperienceV2, scoreSourceReliability, scoreTypePreference`
-- [projection.js](src/news/pipeline/projection.js) — 热点投影/关联词库。导出: `enrichHotspotProjection, buildProvenance, buildRelatedTitleLexicon, buildToolUrlIndex`
-- [build-news.js](src/news/pipeline/build-news.js) — **管线入口（编排 + 汇总 re-export 31 个）**。scripts/build-news.js、publish-news.js、benchmark-news.js 依赖其导出
+- [projection.js](src/news/pipeline/projection.js) — 公开热点投影补充（hot_score/evidence_excerpt/related_resources + 内容去重）。导出: `enrichHotspotProjection, buildRelatedTitleLexicon, dedupeItems, buildToolUrlIndex`
 
 ### cli/ — 命令行
-- [news-cli.js](src/news/cli/news-cli.js) — **CLI 分发器 + 入口（汇总 re-export）**。导出: `parseArgs, main, FILES, 各 command（含 minReviewCommand）`
-- [cmd-sources.js](src/news/cli/cmd-sources.js) — `sources` 子命令。导出: `sourceCommand, normalizeTags, validateSource, importSources`
-- [cmd-content.js](src/news/cli/cmd-content.js) — `content/classify/transcript/localize` 子命令。导出: `contentCommand, classifyCommand, transcriptCommand, localizeCommand`
-- [cmd-ops.js](src/news/cli/cmd-ops.js) — `authorization/quota/lock` 子命令。导出: `authorizationCommand, quotaCommand, lockCommand, optionalNumber`
-- [cmd-registry.js](src/news/cli/cmd-registry.js) — `registry/review` 子命令（review 含 --ai-verdict 筛选 / apply-ai 批量应用）。导出: `registryCommand, reviewCommand, legacyCommand`
+- [news-cli.js](src/news/cli/news-cli.js) — **CLI 分发器 + 入口**（仅保留 v2 命令组）。导出: `parseArgs, main, minReviewCommand`
+- [cmd-content.js](src/news/cli/cmd-content.js) — `classify/localize preview` 子命令（纯函数预览；批量分类/本地化已由 v2 管线内建）。导出: `classifyCommand, localizeCommand`
 - [cmd-min.js](src/news/cli/cmd-min.js) — **v2 `min-review` 命令组**（操作 min-candidates.json，不触碰旧候选层；list 支持 `--top N` 按评分取前 N 供人工审，缺省读 review_top_pure_x / review_top_with_youtube）。导出: `minReviewCommand, scoreOf, loadV2Config, assertStoreFlag`
 
 ### transcripts/ — 收尾环节：字幕人工获取通知（独立于主链，只写清单文件）
@@ -79,7 +64,6 @@
 ## src/content/ — 内容产物
 - [generate-rss.js](src/content/generate-rss.js) — RSS 生成。导出: `getFeedItems, generateRss`
 - [generate-og-image.js](src/content/generate-og-image.js) — OG 图生成。导出: `generateOgImage`
-- [news-manual.js](src/content/news-manual.js) — B 站人工条目规范化/导入。导出: `parseBilibiliUrl, normalizeManualItem, importManualItems`
 
 ## src/acquisition/ — 工具情报采集
 - [fetch-intel-http.js](src/acquisition/fetch-intel-http.js) — HTTP 抓取层。导出: `requestText, fetchToolIntel`
@@ -90,17 +74,13 @@
 ## src/maintenance/ — 维护校验
 - [validate.js](src/maintenance/validate.js) — **校验聚合入口（require 即运行 + process.exit 0/1）**。scripts/validate.js 直接引用，CI 三处工作流依赖
 - [validate-catalog.js](src/maintenance/validate-catalog.js) — catalog 数据校验。导出: `validateCatalog, validateHtml`
-- [validate-news.js](src/maintenance/validate-news.js) — news 数据校验。导出: `validateNews`
-- [sync-news-sources.js](src/maintenance/sync-news-sources.js) — 热点源清单 → sources.json 同步。导出: `parseMarkdown, tagsFrom, main`
+- [validate-news.js](src/maintenance/validate-news.js) — news 数据校验（hotspots + v2 候选层 min-candidates）。导出: `validateNews`
 
 ## scripts/ — 命令入口（薄包装；src/ 为纯逻辑）
-- [build-news.js](scripts/build-news.js) — 热点构建 CLI（**支持 `--min` 走 v2 runMin；`--min --fixture` 注入 mock 采集跑通全链**；其余 re-export src/news/pipeline/build-news 对应入口）
+- [build-news.js](scripts/build-news.js) — 热点构建 CLI（**默认走 v2 runMin**；`--platforms youtube|x` 分时采集；`--fixture` 注入 mock 采集跑通全链；`--min` 兼容 no-op；导出 `{ main: mainMin, mainMin, buildMinFixtureOptions }`）
 - [news-cli.js](scripts/news-cli.js) — CLI 分发入口（透传 src/news/cli/news-cli，含 **`min-review` 命令组**）
-- [sync-news-sources.js](scripts/sync-news-sources.js) — 热点源清单 → sources.json 同步
 - [validate.js](scripts/validate.js) — 校验聚合入口
 - [build-dist.js](scripts/build-dist.js) — src/web + public + data → dist/
-- [publish-news.js](scripts/publish-news.js) — 候选 → 公开投影 + RSS 发布（**`--min` 走 v2：min-candidates approved 按每日 top 重建 hotspots.json**）
-- [benchmark-news.js](scripts/benchmark-news.js) — 管线性能基准
+- [publish-news.js](scripts/publish-news.js) — 候选 → 公开投影 + RSS 发布（**默认走 v2：min-candidates approved 按每日 top 重建 hotspots.json**；`--min` 兼容 no-op）
 - [check-secrets.js](scripts/check-secrets.js) — 密钥/高熵扫描（validate.js 反向依赖）
 - [generate-og-image.js](scripts/generate-og-image.js) — OG 图生成入口
-- [np6-analysis.js](scripts/np6-analysis.js) — 一次性运行时数据分析脚本

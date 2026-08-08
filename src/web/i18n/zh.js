@@ -28,17 +28,11 @@ export const messages = {
     sourceType: {
       youtube_video: 'YouTube 视频',
       x_post: 'X 帖子',
-      bilibili_video: 'B站视频',
-      bilibili_dynamic_video: 'B站视频',
-      bilibili_dynamic_repost: 'B站转发动态',
-      bilibili_dynamic_text: 'B站动态',
-      bilibili_article: 'B站专栏',
       unknown: '来源类型未知',
     },
     platform: {
       youtube: 'YouTube',
       x: 'X',
-      bilibili: 'B站',
     },
     // 热点按唯一内容发布时间分组标签（trending.js getTrendingGroupLabel）
     group: {
@@ -113,11 +107,8 @@ export const messages = {
       building: '公开投影建设中：尚未生成可供浏览器读取的热点内容，请等待公开构建完成。',
       empty: '暂无公开热点：公开投影已生成，但当前没有可展示内容。',
       coverageUnavailable: '覆盖信息暂不可用：继续展示已生成的公开内容，不能据此推断全部来源的近期状态。',
-      bilibiliManual: '人工收录：B站当前采用人工精选收录，自动订阅已暂停；已有内容仍保留原始链接，未收录不代表来源近期没有更新。',
-      bilibiliBlocked: '部分不可用：B站自动订阅入口被服务提供方拦截，本轮已快速停止后续请求；页面继续展示上一版及人工精选内容。',
       degraded: '部分数据降级：{platforms}。缺失会降低判断置信度，不代表来源质量下降。',
       collectComplete: '采集完成：本轮自动来源采集已完成。',
-      bilibiliDynamic: 'B站动态',
       reloading: '正在重新加载：正在读取公开热点数据。',
       reloaded: '热点数据已重新加载',
       reloadFailed: '热点数据重新加载失败',

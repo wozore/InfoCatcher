@@ -27,8 +27,6 @@
 
 'use strict';
 
-const { markHeld } = require('./news-candidates');
-
 const DEFAULT_PUBLIC_WINDOW_DAYS = 30;               // 决策 63：默认 30 天近期窗口
 const DEFAULT_FUTURE_TOLERANCE_MS = 6 * 3600 * 1000; // 未来时间容错（默认 6 小时，容忍时钟偏差）
 
@@ -111,35 +109,6 @@ function filterProjectionByWindow(output, opts = {}) {
   };
 }
 
-/**
- * 决策 63：发布时间缺失或未来超容错的候选标记为 held（异常待复审），
- * 从而不会通过审核门禁进入公开数据。仅就地修改候选层，返回变更清单。
- * 调用方应把变更记录到追加式审核事件日志（决策 70）。
- */
-function markAnomalousTimeCandidates(store, opts = {}) {
-  if (!store) throw new Error('候选层不存在');
-  const { now } = resolvePublicWindow(opts.config, opts.now);
-  const changed = [];
-  for (const candidate of store.candidates || []) {
-    if (candidate.review_status === 'held') continue; // 已 held：已被审核门禁排除，不重复标记
-    const status = classifyPublicTime(candidate, opts);
-    if (status === 'future') {
-      markHeld(candidate, {
-        reason: '发布时间超出容错范围（未来时间），标记为异常待复审',
-        now,
-      });
-      changed.push({ id: candidate.id, time_status: status });
-    } else if (status === 'missing') {
-      markHeld(candidate, {
-        reason: '发布时间缺失，无法确认近期性，暂不公开',
-        now,
-      });
-      changed.push({ id: candidate.id, time_status: status });
-    }
-  }
-  return changed;
-}
-
 module.exports = {
   DEFAULT_PUBLIC_WINDOW_DAYS,
   DEFAULT_FUTURE_TOLERANCE_MS,
@@ -149,5 +118,4 @@ module.exports = {
   hasCompletePublicFields,
   filterPublicItems,
   filterProjectionByWindow,
-  markAnomalousTimeCandidates,
 };

@@ -8,7 +8,7 @@
  *     3. summarizeCandidate 成功（含字幕）/失败降级/无素材；
  *     4. summarizeCandidates 批量、跳过已有 summary、并发限流；
  *     5. enrichCandidateSummaries 管线钩子按开关与条件过滤；
- *     6. mergeCandidates 保留既有总结（重新采集不丢总结）。
+ *     6. mergeCandidatesMin 保留既有审核结论（重新采集不重置人工结论）。
  *
  * 运行方式：node --test tests/news/news-summarizer.test.js
  */
@@ -28,7 +28,7 @@ const {
   summarizeCandidates,
   enrichCandidateSummaries,
 } = require('../../src/news/classify/content-summarizer');
-const { mergeCandidates } = require('../../src/news/core/news-candidates');
+const { mergeCandidatesMin } = require('../../src/news/min/min-store');
 
 /** 构造一个 DeepSeek 成功响应（content 为模型输出文本）。 */
 function deepSeekOk(content) {
@@ -265,19 +265,14 @@ test('enrichCandidateSummaries 受 maxItems 截断', async () => {
   assert.equal(summarizedCount, 2);
 });
 
-// ── 第 6 组：mergeCandidates 保留既有总结 ────────────────────
+// ── 第 6 组：mergeCandidatesMin 保留既有审核结论（重新采集不重置）──
 
-test('mergeCandidates 保留既有总结，新总结优先', () => {
-  const prev = { schema_version: 1, candidates: [
-    { id: 'a', title: '旧', summary: '旧总结', summary_key_points: ['旧要点'], summarizer: 'llm_deepseek', summary_generated_at: '2026-01-01T00:00:00Z', review_status: 'pending' },
+test('mergeCandidatesMin 保留既有 review_status，重新采集不重置人工结论', () => {
+  const prev = { schema_version: 1, updated_at: null, candidates: [
+    { id: 'a', title: '旧', summary: '旧总结', review_status: 'approved', top_selected: true },
   ] };
-  // 下一轮 incoming 无 summary（本轮未重新总结）→ 保留既有
-  const store1 = mergeCandidates(prev, [{ id: 'a', title: '新标题' }], '2026-02-01T00:00:00Z');
-  assert.equal(store1.candidates[0].summary, '旧总结');
-  assert.deepEqual(store1.candidates[0].summary_key_points, ['旧要点']);
-  assert.equal(store1.candidates[0].summarizer, 'llm_deepseek');
-  assert.equal(store1.candidates[0].summary_generated_at, '2026-01-01T00:00:00Z');
-  // incoming 带新总结 → 新总结优先
-  const store2 = mergeCandidates(prev, [{ id: 'a', title: '新', summary: '新总结' }], '2026-02-01T00:00:00Z');
-  assert.equal(store2.candidates[0].summary, '新总结');
+  // 下一轮 incoming 无 review_status（本轮未重新审核）→ 保留既有 approved
+  const store1 = mergeCandidatesMin(prev, [{ id: 'a', title: '新标题' }]);
+  assert.equal(store1.candidates[0].review_status, 'approved');
+  assert.equal(store1.candidates[0].top_selected, true);
 });

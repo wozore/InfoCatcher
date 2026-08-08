@@ -1,7 +1,7 @@
 /**
  * content-reviewer.js —— 热点 AI 审核建议器
  *
- * 在热点管线中的位置：候选层（hotspot-candidates.json）落地后、公开投影前的
+ * 在热点管线 v2 中的位置：候选层（min-candidates.json）落地后、公开投影前的
  * AI 加工步骤。与 content-classifier.js（内容类型分类）、content-summarizer.js
  * （内容总结）平级，同属 AI 加工层 src/news/classify/，复用 llm-provider.js 的
  * DeepSeek 封装。
@@ -17,7 +17,7 @@
  *   - 输入素材自适应：候选有 transcript / summary 才拼入，无则自动只用其余部分。
  *
  * 公开语义（用户拍板）：ai_review 是候选上的内部建议字段，**不进公开投影**
- * （经 news-candidates.js 的 INTERNAL_FIELDS 剔除），仅供审核侧使用，前端零改动。
+ * （min-store 的 MIN_INTERNAL_FIELDS 剔除），仅供审核侧使用，前端零改动。
  *
  * 自动化档位（用户拍板）：review_auto_apply=true 且 confidence ≥ autoMinConfidence
  * 时，discard/hold 由 AI 自动落 review_status（reviewer='ai_review'，审计可追溯、
@@ -30,7 +30,6 @@
 'use strict';
 
 const { reviewWithDeepSeek } = require('./llm-provider');
-const { setBatchReviewStatus } = require('../core/news-candidates');
 
 // 合法判定集合（与 llm-provider.js 的 VALID_VERDICTS 一致）
 const VERDICTS = Object.freeze(['approve', 'hold', 'discard']);
@@ -180,112 +179,6 @@ async function reviewCandidates(items, options = {}) {
   return { reviewed, skipped, items: out };
 }
 
-// ═══════════════════════════════════════════════════════════════
-// 状态应用（review_auto_apply / CLI apply-ai 共用）
-// ═══════════════════════════════════════════════════════════════
-
-/**
- * 把候选上已有的 AI 建议应用到 review_status（discard/hold，永不 approve）。
- * 筛选条件：候选处于 pending（已有人工结论的不再自动改）、ai_review.verdict ∈
- * AUTO_APPLY_VERDICTS 且 confidence ≥ minConfidence。
- * dryRun 时只返回将应用的清单，不落盘。
- *
- * @param {object} store - 候选 store（可含候选带 ai_review）
- * @param {Array<string>} ids - 候选 id 范围（通常为本轮 activeIds）
- * @param {{minConfidence?: number, verdicts?: string[], dryRun?: boolean,
- *          reviewer?: string, reasonPrefix?: string, now?: string}} [options]
- * @returns {{ applied: Array<{id: string, from: string, to: string, verdict: string, confidence: number, reasons: string[]}>, skipped: number }}
- */
-function applyAiReviewVerdicts(store, ids, options = {}) {
-  const minConfidence = options.minConfidence ?? 0.9;
-  const allowedVerdicts = new Set(options.verdicts || AUTO_APPLY_VERDICTS);
-  const idSet = new Set(ids || []);
-  const candidates = (store?.candidates || [])
-    .filter(candidate => idSet.has(candidate.id))
-    .filter(candidate => candidate.review_status === 'pending')   // 已有人工结论的不再自动改
-    .filter(candidate => candidate.ai_review);
-
-  const planned = candidates
-    .filter(candidate => candidate.ai_review)
-    .filter(candidate => allowedVerdicts.has(candidate.ai_review.verdict))
-    .filter(candidate => Number(candidate.ai_review.confidence) >= minConfidence)
-    .map(candidate => ({
-      id: candidate.id,
-      from: candidate.review_status,
-      to: candidate.ai_review.verdict === 'discard' ? 'discarded' : 'held',
-      verdict: candidate.ai_review.verdict,
-      confidence: Number(candidate.ai_review.confidence),
-      reasons: candidate.ai_review.reasons || [],
-    }));
-
-  if (options.dryRun !== false) {
-    return { applied: planned, skipped: candidates.length - planned.length };
-  }
-
-  let next = store;
-  const applied = [];
-  for (const target of planned) {
-    const reason = options.reasonPrefix
-      ? `${options.reasonPrefix}${target.reasons.length ? '：' + target.reasons.join('；') : ''}`
-      : (target.reasons.length ? target.reasons.join('；') : null);
-    const result = setBatchReviewStatus(next, [target.id], target.to, {
-      reason,
-      reviewer: options.reviewer ?? 'ai_review',
-      now: options.now,
-    });
-    next = result.store;
-    if (result.updated === 1) applied.push(target);
-  }
-  return { applied, skipped: planned.length - applied.length, store: next };
-}
-
-// ═══════════════════════════════════════════════════════════════
-// 管线钩子：候选层审核 enrichment（build-news.js Phase 4 用）
-// ═══════════════════════════════════════════════════════════════
-
-/**
- * 管线钩子：对本轮候选做 AI 审核 enrichment，并可选择自动应用高置信 discard/hold。
- * 只处理 activeIds 内、无 ai_review 且 review_status==='pending' 的候选
- * （已有人工结论或已 AI 建议的不重复花钱）；逐条写建议字段。
- * 必须在总结 enrichment（enrichCandidateSummaries）之后调用 —— 候选有 summary
- * 时审核用总结，无时自动只用 title+desc+字幕。
- *
- * @returns {{ enabled: boolean, reviewed: number, skipped: number, autoApplied: Array }}
- */
-async function enrichCandidateReviews(store, activeIds, options = {}) {
-  const enabled = options.enabled === true;
-  if (!enabled || !store) return { enabled: false, reviewed: 0, skipped: 0, autoApplied: [] };
-
-  const ids = new Set(activeIds || []);
-  const targets = (store.candidates || [])
-    .filter(candidate => ids.has(candidate.id) && !candidate.ai_review && candidate.review_status === 'pending')
-    .slice(0, options.maxItems ?? 30);
-
-  const result = await reviewCandidates(targets, {
-    provider: options.provider || 'deepseek',
-    model: options.model,
-    apiKey: options.apiKey,
-    fetchImpl: options.fetchImpl,
-    concurrency: options.concurrency ?? 5,
-    timeoutMs: options.timeoutMs,
-    now: options.now,
-  });
-  // reviewCandidates 原地修改了 targets 上的候选对象，store 同步生效
-
-  let autoApplied = [];
-  if (options.autoApply === true && result.reviewed > 0) {
-    const applyResult = applyAiReviewVerdicts(store, ids, {
-      minConfidence: options.autoMinConfidence ?? 0.9,
-      dryRun: false,
-      reviewer: 'ai_review',
-      now: options.now,
-    });
-    autoApplied = applyResult.applied;
-  }
-
-  return { enabled: true, reviewed: result.reviewed, skipped: result.skipped, autoApplied };
-}
-
 module.exports = {
   VERDICTS,
   AUTO_APPLY_VERDICTS,
@@ -293,6 +186,4 @@ module.exports = {
   collectReviewSource,
   reviewCandidate,
   reviewCandidates,
-  applyAiReviewVerdicts,
-  enrichCandidateReviews,
 };

@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'data/news/runtime/hotspot-candidates.json'
+      - 'data/news/runtime/min-candidates.json'
 
 permissions:
   contents: write
@@ -31,7 +31,7 @@ jobs:
       - name: Validate generated data
         run: |
           node scripts/validate.js
-          node --test tests/news/news-tests.test.js tests/news/news-foundation.test.js tests/news/news-candidates.test.js tests/news/news-review-events.test.js tests/news/news-public-gate.test.js tests/news/news-transcripts.test.js tests/news/news-audit.test.js tests/news/news-rss.test.js
+          node --test tests/news/news-pipeline-min.test.js tests/news/news-rss.test.js tests/news/news-public-gate.test.js tests/news/news-reviewer.test.js tests/news/news-summarizer.test.js tests/news/news-localizer.test.js tests/news/content-classifier-llm.test.js
 
       - name: Commit public projection
         run: |

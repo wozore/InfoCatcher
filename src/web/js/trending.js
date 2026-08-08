@@ -3,7 +3,7 @@
  * 内容类型筛选 + 最近/热度排序, 按唯一内容发布时间分组
  *
  * 安全设计：
- *   所有来自外部平台（YouTube/X/Bilibili）的文本字段（标题、描述、
+ *   所有来自外部平台（YouTube/X）的文本字段（标题、描述、
  *   作者名、来源名）在渲染前都通过 escapeHtml() 转义，防止 XSS。
  *   所有外部链接通过 safeExternalUrl() 校验协议，只允许 http/https。
  *   这两个函数是安全边界——如果去掉，恶意内容可注入 <script> 或
@@ -82,17 +82,16 @@ function renderTrendingStatus() {
     return;
   }
   const notes = [];
-  const bilibili = coverage.platforms?.bilibili;
-  if (bilibili?.status === 'manual_curated') {
-    notes.push('<div class="status-note status-neutral" role="status"><strong>' + t('trending.status.bilibiliManual') + '</strong></div>');
-  } else if (bilibili?.reason === 'rsshub_provider_blocked') {
-    notes.push('<div class="status-note status-warn" role="status"><strong>' + t('trending.status.bilibiliBlocked') + '</strong></div>');
-  }
   const degraded = [];
-  for (const [platform, info] of Object.entries(coverage.platforms || {})) {
-    if (info.status === 'degraded' || info.status === 'partial') degraded.push(platform);
+  // v1 结构 coverage.platforms；v2 结构 coverage.collectors.{youtube,x}。
+  // 双兼容：collectors 优先，缺省回退 platforms；两者皆无（如 publish-news --min 写入的
+  // coverage.status='published_min'，无平台明细）→ degraded 为空，落到中性「采集完成」。
+  const sources = coverage.collectors || coverage.platforms || {};
+  for (const [platform, info] of Object.entries(sources)) {
+    if (info && (info.status === 'partial' || info.status === 'failed' || info.status === 'degraded')) {
+      degraded.push(platform);
+    }
   }
-  if (coverage.platforms?.bilibili?.dynamic?.status === 'degraded') degraded.push(t('trending.status.bilibiliDynamic'));
   if (degraded.length) {
     notes.push('<div class="status-note status-warn" role="status"><strong>' + t('trending.status.degraded', { platforms: escapeHtml([...new Set(degraded)].join('、')) }) + '</strong></div>');
   }

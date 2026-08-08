@@ -181,8 +181,17 @@ try {
       e.isDirectory() ? walk(path.join(d, e.name)) : e.name.endsWith('.json') && dataJson.push(path.resolve(path.join(d, e.name)));
   })(DIRS.data);
 
+  // 文件被覆盖判定：精确匹配登记路径，或位于已登记的目录之下
+  // （paths.js 登记的目录 = 该目录结构已声明，其下运行时产物（如 data/news/manual/
+  //   的 review-<date>.json / top-<date>.json 等动态文件）视为归该目录管理，不需逐一登记）。
+  const isCovered = j => [...registered].some(r => {
+    if (j === r) return true;
+    let isDir = false;
+    try { isDir = fs.statSync(r).isDirectory(); } catch { /* 路径不存在按文件处理 */ }
+    return isDir && j.startsWith(r + path.sep);
+  });
   for (const j of dataJson)
-    if (!registered.has(j)) fail(`原则5: ${path.relative(DIRS.src, j)} 未在 paths.js 登记`);
+    if (!isCovered(j)) fail(`原则5: ${path.relative(DIRS.src, j)} 未在 paths.js 登记`);
 
   console.log(`  原则5 路径登记: ${dataJson.length} 个 JSON 全部覆盖，通过`);
 } catch (e) { fail(`原则5 检查异常: ${e.message}`); }
