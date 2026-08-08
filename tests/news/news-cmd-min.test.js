@@ -7,6 +7,8 @@
  *   2. resolveAiTopConfig：ai-top 的 YouTube 判定 + top N 解析——无 approved → no_approved、
  *      last-run 缺失 → no_last_run（命令层据此抛错，供 bat/apply-review.bat errorlevel
  *      判定）；last-run 有/无 YouTube 内容分别解析出 topN 15/10。
+ *   3. applyTopSelectedList：读 top 清单应用 top_selected=true 写回候选层——false/未标跳过、
+ *      无 id 旧产物抛错、未命中报告 missing（供 bat/apply-top.bat 第 1 步）。
  *
  * 纯函数测试，不写真实数据文件（min-candidates.json 由 news-pipeline-min.test.js 独占，
  * 避免 node --test 并行 worker 的 Windows rename 冲突）。
@@ -18,7 +20,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { hasYouTubeInLastRun, resolveAiTopConfig } = require('../../src/news/cli/cmd-min');
+const { hasYouTubeInLastRun, resolveAiTopConfig, applyTopSelectedList } = require('../../src/news/cli/cmd-min');
 
 // 固定配置（不依赖真实配置文件，保证 topN 断言确定性）
 const CONFIG = { collection: { review_top_with_youtube: 15, review_top_pure_x: 10 } };
@@ -79,4 +81,46 @@ test('resolveAiTopConfig：配置缺字段 → 回退默认 15/10', () => {
   const withoutYt = { collectors: { youtube: { items: 0 } } };
   assert.equal(resolveAiTopConfig(APPROVED, withYt, cfg).topN, 15);
   assert.equal(resolveAiTopConfig(APPROVED, withoutYt, cfg).topN, 10);
+});
+
+// ── applyTopSelectedList：top 清单 top_selected=true → 写回候选层 ──
+
+test('applyTopSelectedList：top_selected=true 批量应用，false 跳过，幂等保留既有', () => {
+  const store = {
+    schema_version: 1, updated_at: null,
+    candidates: [
+      { id: 'x-1', top_selected: false },
+      { id: 'x-2', top_selected: false },
+      { id: 'x-3', top_selected: true },
+    ],
+  };
+  const list = {
+    kind: 'ai_top_candidates',
+    candidates: [
+      { id: 'x-1', top_selected: true },
+      { id: 'x-2', top_selected: false },
+    ],
+  };
+  const result = applyTopSelectedList(store, list);
+  assert.equal(result.applied, 1);
+  assert.deepEqual(result.selectedIds, ['x-1']);
+  assert.equal(result.store.candidates.find(c => c.id === 'x-1').top_selected, true);
+  assert.equal(result.store.candidates.find(c => c.id === 'x-2').top_selected, false, 'false 不动作');
+  assert.equal(result.store.candidates.find(c => c.id === 'x-3').top_selected, true, '既有 true 保留');
+});
+
+test('applyTopSelectedList：top_selected=true 但无 id → 抛错拒绝旧产物', () => {
+  const store = { schema_version: 1, updated_at: null, candidates: [] };
+  const list = { kind: 'ai_top_candidates', candidates: [{ summary: '旧产物无 id', top_selected: true }] };
+  assert.throws(() => applyTopSelectedList(store, list), /无 id 的条目/);
+});
+
+test('applyTopSelectedList：无 top_selected=true → changed 0；未命中 id 报告 missing', () => {
+  const store = { schema_version: 1, updated_at: null, candidates: [{ id: 'x-1', top_selected: false }] };
+  const listNone = { kind: 'ai_top_candidates', candidates: [{ id: 'x-1', top_selected: false }] };
+  assert.equal(applyTopSelectedList(store, listNone).changed, 0, '无 true 条目不写回');
+  const listGhost = { kind: 'ai_top_candidates', candidates: [{ id: 'x-ghost', top_selected: true }] };
+  const r2 = applyTopSelectedList(store, listGhost);
+  assert.equal(r2.applied, 0);
+  assert.deepEqual(r2.missing, ['x-ghost']);
 });

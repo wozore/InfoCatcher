@@ -12,6 +12,7 @@
  *   min-review refine       [--store min]
  *   min-review ai-top       [--store min]
  *   min-review top-selected --ids <id1,id2,...> [--store min]
+ *   min-review top-apply    --file <top-清单.json> [--store min]
  *   min-review apply        --file <review-清单.json> [--store min]
  *
  *     - list：列出 v2 候选（含 review_status / final_score），人友好表格输出；
@@ -39,6 +40,10 @@
  *       缺失 / AI 挑选失败——供 bat 一键入口用 errorlevel 判定，不静默成功。
  *     - top-selected：维护者从 ai-top 待选项确认最终显示 → top_selected 置 true；
  *       公开投影（publish）只取 approved && top_selected 的候选。
+ *     - top-apply：读取 --file top 清单里 **top_selected=true** 的条目（ai-top 产物已带 id），
+ *       批量置候选层 top_selected=true；false/未标不动作（对齐 pending 跳过语义），
+ *       无 id 条目报错拒绝（旧产物格式）。维护者一键入口：bat/apply-top.bat
+ *       （应用后自动接着跑 publish-news.js 重建前端）。
  *     - apply：读取 --file 待审清单里 approved/discarded 结论，批量写回候选层
  *       min-candidates.json（pending 跳过；条目无 id 报错拒绝旧格式）。
  *       维护者一键入口：bat/apply-review.bat（应用结论后自动接着跑 ai-top 生成 top 名单）。
@@ -110,6 +115,39 @@ function resolveAiTopConfig(approved, lastRun, config) {
     ? Number(collection.review_top_with_youtube) || 15
     : Number(collection.review_top_pure_x) || 10;
   return { ok: true, hasYouTube, topN };
+}
+
+/**
+ * 应用 top 清单的人工选择结论（第二阶段收尾，纯逻辑，无 I/O）：
+ * 读 top-<date>.json（ai-top 产物，candidates 带 id），把 **top_selected=true** 的条目
+ * 批量置候选层 top_selected=true；false/未标不动作（对齐 review 清单 pending 跳过语义，
+ * 幂等）。返回新 store，写盘由命令层决定。
+ * @param {object} store 候选层 store（经 setTopSelectedMin 拷贝容器；候选对象浅拷贝共享，
+ *                        与 review-list.applyReviewList 语义一致）
+ * @param {object} list top 清单对象（kind='ai_top_candidates'，含 candidates 数组）
+ * @returns {{ store, applied: number, selectedIds: string[], missing: string[], changed: number }}
+ *   无 true 条目时 changed=0（不写回）；top_selected=true 但无 id → 抛错（旧产物格式）
+ */
+function applyTopSelectedList(store, list) {
+  const candidates = (list && Array.isArray(list.candidates)) ? list.candidates : [];
+  const selectedIds = [];
+  const noIdSummaries = [];
+  for (const entry of candidates) {
+    if (!entry || entry.top_selected !== true) continue; // 只应用 true，未选中不动作
+    if (entry.id == null || String(entry.id).trim() === '') {
+      noIdSummaries.push(String(entry.summary || '(无摘要)').slice(0, 30));
+      continue;
+    }
+    selectedIds.push(String(entry.id));
+  }
+  if (noIdSummaries.length) {
+    throw new Error(`top 清单含 top_selected=true 但无 id 的条目：${noIdSummaries.join('、')}——旧产物格式，请用 min-review ai-top 重新生成带 id 的 top 清单`);
+  }
+  if (selectedIds.length === 0) {
+    return { store, applied: 0, selectedIds, missing: [], changed: 0 };
+  }
+  const result = setTopSelectedMin(store, selectedIds, true);
+  return { store: result.store, applied: result.updated, selectedIds, missing: result.missing, changed: result.updated };
 }
 
 async function minReviewCommand(action, flags = {}) {
@@ -316,6 +354,7 @@ async function minReviewCommand(action, flags = {}) {
         const originalText = String(c.description || '').trim();
         const isChinese = /[一-鿿]/.test(originalText);
         return {
+          id: c.id,   // 候选层 id：供 bat/apply-top.bat 用 top-apply 直连定位（对齐 review 清单带 id 模式）
           score: scoreOf(c),
           summary: String(c.summary || c.title || '(无标题)').trim(),
           suggestion: suggestReview(c),
@@ -340,8 +379,8 @@ async function minReviewCommand(action, flags = {}) {
       target_top_n: topN,
       ai_selected_count: selected.length,
       note: 'AI 从人工 approved 候选中挑选的 top 待选项（按最后一次采集记录判定：有 YouTube 内容 15 / 纯 X 10），供维护者筛选。' +
-            '请从下面选出要显示在前端的 3~5（有 YouTube 日 3~8）条；' +
-            '确认后这些条目 review_status 已为 approved，publish 即可重建公开投影。',
+            '请把要显示在前端的 3~5（有 YouTube 日 3~8）条 top_selected 置为 true；' +
+            '确认后双击 bat/apply-top.bat（应用选择 + 重建公开投影，显示到前端）。',
       candidates: selected,
       human_lines: selected.map(c =>
         `[${c.score === null ? '-' : c.score}] ${c.summary}\n` +
@@ -378,6 +417,30 @@ async function minReviewCommand(action, flags = {}) {
     return { status: 'top_selected', ...result, updated_at: result.store.updated_at };
   }
 
+  // ── top-apply：读 top 清单里 top_selected=true → 批量置候选层 top_selected=true ──
+  //    第二阶段收尾：维护者在 ai-top 产物（top-<date>.json）标 top_selected=true 后，
+  //    bat/apply-top.bat 调用本命令应用选择，接着跑 publish-news.js 重建前端。
+  //    对齐 apply 语义：只应用 true（false/未标不动作，幂等）；无 id 条目报错拒绝旧产物。
+  if (action === 'top-apply') {
+    if (!flags.file) throw new Error('min-review top-apply 缺少 --file（top 清单路径，如 data/manual/top-20260808.json）');
+    const store = readMinStore();
+    const list = readJson(flags.file, null);
+    if (!list || list.kind !== 'ai_top_candidates' || !Array.isArray(list.candidates)) {
+      throw new Error(`非法 top 清单：${flags.file}（需要 kind='ai_top_candidates' 且含 candidates 数组）`);
+    }
+    const result = applyTopSelectedList(store, list);
+    if (result.changed > 0) writeMinStore(result.store, `min-review-top-apply-${Date.now()}`);
+    console.log(`✅ 已应用 top 清单 → min-candidates.json：${result.applied} 条 top_selected=true`);
+    if (result.missing && result.missing.length) {
+      console.log(`   ⚠️ 未命中候选 ${result.missing.length} 条：${result.missing.join('、')}`);
+    }
+    if (result.changed === 0) {
+      console.log('   （清单中无 top_selected=true 条目，无需写回）');
+    }
+    console.log('   下一步：node scripts/publish-news.js 重建公开投影（bat/apply-top.bat 已自动执行）');
+    return result;
+  }
+
   // ── apply：应用人工审核结论（待审清单 → 候选层）──
   //    维护者编辑 review-<date>.json 的 review_status 后，读取 approved/discarded
   //    批量写回 min-candidates.json（pending 跳过；无 id 条目报错拒绝旧格式）。
@@ -402,7 +465,7 @@ async function minReviewCommand(action, flags = {}) {
     return result;
   }
 
-  throw new Error(`未知 min-review 命令: ${action}。支持：list | set | batch | transcripts | feedback | refine | ai-top | top-selected | apply`);
+  throw new Error(`未知 min-review 命令: ${action}。支持：list | set | batch | transcripts | feedback | refine | ai-top | top-selected | top-apply | apply`);
 }
 
-module.exports = { minReviewCommand, scoreOf, suggestReview, loadV2Config, assertStoreFlag, hasYouTubeInLastRun, resolveAiTopConfig };
+module.exports = { minReviewCommand, scoreOf, suggestReview, loadV2Config, assertStoreFlag, hasYouTubeInLastRun, resolveAiTopConfig, applyTopSelectedList };

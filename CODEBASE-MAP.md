@@ -54,7 +54,7 @@
 ### cli/ — 命令行
 - [news-cli.js](src/news/cli/news-cli.js) — **CLI 分发器 + 入口**（仅保留 v2 命令组）。导出: `parseArgs, main, minReviewCommand`
 - [cmd-content.js](src/news/cli/cmd-content.js) — `classify/localize preview` 子命令（纯函数预览；批量分类/本地化已由 v2 管线内建）。导出: `classifyCommand, localizeCommand`
-- [cmd-min.js](src/news/cli/cmd-min.js) — **v2 `min-review` 命令组**（操作 min-candidates.json，不触碰旧候选层；list 支持 `--top N` 按评分取前 N 供人工审，缺省读 review_top_pure_x / review_top_with_youtube；`ai-top` 从 approved 调 AI 挑 top 待选项，有 YouTube 判定按 **last-run.json 实际采到内容 items>0**（15）否则 10，失败一律抛错；`apply` 从待审清单批量应用人工结论。维护者一键入口：bat/apply-review.bat（应用结论 + 自动生成 top 名单两步连续）。导出: `minReviewCommand, scoreOf, loadV2Config, assertStoreFlag, hasYouTubeInLastRun, resolveAiTopConfig`
+- [cmd-min.js](src/news/cli/cmd-min.js) — **v2 `min-review` 命令组**（操作 min-candidates.json，不触碰旧候选层；list 支持 `--top N` 按评分取前 N 供人工审，缺省读 review_top_pure_x / review_top_with_youtube；`ai-top` 从 approved 调 AI 挑 top 待选项（**产物带 id**），有 YouTube 判定按 **last-run.json 实际采到内容 items>0**（15）否则 10，失败一律抛错；`apply` 从待审清单批量应用人工结论；`top-apply` 从 top 清单应用 top_selected=true。维护者一键入口：bat/apply-review.bat（apply + ai-top 两步）、bat/apply-top.bat（top-apply + publish 两步）。导出: `minReviewCommand, scoreOf, loadV2Config, assertStoreFlag, hasYouTubeInLastRun, resolveAiTopConfig, applyTopSelectedList`
 
 ### transcripts/ — 收尾环节：字幕人工获取通知（独立于主链，只写清单文件）
 - [transcript-notify.js](src/news/transcripts/transcript-notify.js) — 每日"待人工获取字幕"清单（min 候选层挑评分最高 notify_count 个 YouTube，写 transcript-requests-<YYYYMMDD>.json 交人工，不碰主链/不调采集总结）。导出: `notifyTranscripts, parseNotifyCount, scoreOf`
@@ -81,7 +81,7 @@
 - [build-news.js](scripts/build-news.js) — 热点构建 CLI（**默认走 v2 runMin**；`--platforms youtube|x` 分时采集；`--fixture` 注入 mock 采集跑通全链；`--min` 兼容 no-op；导出 `{ main: mainMin, mainMin, buildMinFixtureOptions }`）
 - [news-cli.js](scripts/news-cli.js) — CLI 分发入口（透传 src/news/cli/news-cli，含 **`min-review` 命令组**）
 - [validate.js](scripts/validate.js) — 校验聚合入口
-- [build-dist.js](scripts/build-dist.js) — src/web + public + data → dist/
+- [build-dist.js](scripts/build-dist.js) — src/web + public + data → dist/（维护者入口：bat/build-dist.bat）
 - [publish-news.js](scripts/publish-news.js) — 候选 → 公开投影 + RSS 发布（**默认走 v2：min-candidates approved 按每日 top 重建 hotspots.json**；`--min` 兼容 no-op）
 - [check-secrets.js](scripts/check-secrets.js) — 密钥/高熵扫描（validate.js 反向依赖）
 - [generate-og-image.js](scripts/generate-og-image.js) — OG 图生成入口
