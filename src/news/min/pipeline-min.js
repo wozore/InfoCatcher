@@ -29,7 +29,8 @@
  *   options.xWindow = { since, until }           覆盖 X 时间窗；缺省用「今天 0 点 → now」
  *   options.runId                                写入临时文件名标识（可选）
  *   options.minStoreIn / options.minStoreOut     覆盖候选层读写（fixture 注入内存存根，避免污染运行时文件）
- *   options.historyIn / options.historyOut       覆盖历史库读写（同上；缺省回落真实文件）
+ *   options.minHistoryIn / options.minHistoryOut 覆盖轻量历史读写（fixture 注入内存存根）
+ *   options.historyIn / options.historyOut       覆盖来源质量历史库读写（同上；缺省回落真实文件）
  *                                                签名：minStoreIn()→store，minStoreOut(store,runId)；
  *                                                historyIn()→store，historyOut(store,runId)
  *   options.lastRunOut                           覆盖采集运行记录写盘（签名 lastRunOut(record, runId)，
@@ -59,6 +60,7 @@ const { readHistoryStore, writeHistoryStore, appendSamples, sourceKeyOf } = requ
 const { assessItemV2 } = require('../pipeline/scoring-v2');
 const { l0HardFilter, applyL1Verdicts } = require('./review-v2');
 const { readMinStore, writeMinStore, mergeCandidatesMin } = require('./min-store');
+const { readMinHistory, writeMinHistory, appendMinHistory } = require('./min-history');
 const { buildDailyProjection } = require('./daily-projection');
 const { classifyCandidate } = require('../classify/content-classifier');
 const { summarizeCandidates } = require('../classify/content-summarizer');
@@ -154,6 +156,36 @@ async function runMin(options = {}) {
     coverage[`${step}_error`] = message;
     errors.push(`${step}:${message}`);
   };
+
+  // ═══════════════════════════════════════════════════════════════
+  // 0. 批次切换：先保存上一批轻量历史，再清空当前候选层。
+  //    历史写入或清空失败时不启动采集，避免旧候选无记录丢失。
+  // ═══════════════════════════════════════════════════════════════
+  let batchReady = true;
+  let currentMinStore = { schema_version: 1, updated_at: null, candidates: [] };
+  try {
+    const previousMinStore = options.minStoreIn ? options.minStoreIn() : readMinStore();
+    const previousCandidates = previousMinStore && Array.isArray(previousMinStore.candidates)
+      ? previousMinStore.candidates
+      : [];
+    if (previousCandidates.length > 0) {
+      const history = options.minHistoryIn ? options.minHistoryIn() : readMinHistory();
+      const nextHistory = appendMinHistory(history, previousCandidates, now);
+      if (options.minHistoryOut) options.minHistoryOut(nextHistory, runId);
+      else writeMinHistory(nextHistory, runId);
+    }
+    if (options.minStoreOut) options.minStoreOut(currentMinStore, runId);
+    else writeMinStore(currentMinStore, runId);
+  } catch (error) {
+    batchReady = false;
+    noteError('batch_reset', error);
+  }
+
+  if (!batchReady) {
+    // 保留旧候选文件，不再继续采集或在末尾覆盖它。
+    coverage.status = 'partial';
+    return { coverage, minCandidates: 0, publicItems: 0 };
+  }
 
   // ═══════════════════════════════════════════════════════════════
   // 1. 采集：默认并行 YouTube + X（各平台失败降级返回空，不抛错）。
@@ -331,7 +363,7 @@ async function runMin(options = {}) {
   // ═══════════════════════════════════════════════════════════════
   let minStore;
   try {
-    minStore = options.minStoreIn ? options.minStoreIn() : readMinStore();
+    minStore = currentMinStore;
   } catch (error) {
     noteError('min_read', error);
     minStore = { schema_version: 1, updated_at: null, candidates: [] };

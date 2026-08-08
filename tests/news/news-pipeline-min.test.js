@@ -27,6 +27,7 @@ const { readJson, writeJsonAtomic } = require('../../src/news/core/news-storage'
 const CONFIG = require('../../data/news/config/news-config-v2.json');
 
 const MIN_PATH = NEWS_FILES.minCandidates;
+const MIN_HISTORY_PATH = NEWS_FILES.minCandidatesHistory;
 const HISTORY_PATH = NEWS_FILES.sourceHistory;
 const HOTSPOTS_PATH = NEWS_FILES.hotspots;
 const LAST_RUN_PATH = NEWS_FILES.lastRun;
@@ -34,7 +35,7 @@ const LAST_RUN_PATH = NEWS_FILES.lastRun;
 /** 备份/恢复真实数据文件，测试不污染仓库。 */
 const backups = {};
 function backupAll() {
-  for (const file of [MIN_PATH, HISTORY_PATH, HOTSPOTS_PATH, LAST_RUN_PATH]) {
+  for (const file of [MIN_PATH, MIN_HISTORY_PATH, HISTORY_PATH, HOTSPOTS_PATH, LAST_RUN_PATH]) {
     try { backups[file] = fs.readFileSync(file, 'utf8'); }
     catch { backups[file] = null; }
   }
@@ -120,6 +121,23 @@ const seed = {
   ai_advice: { verdict: 'approve', reasons: ['人工确认'] },
 };
 
+const previousPublicItem = {
+  id: seed.id,
+  platform: seed.platform,
+  native_id: seed.native_id,
+  content_type: seed.content_type,
+  url: seed.url,
+  title: seed.title,
+  description: seed.description,
+  published_at: seed.published_at,
+  summary: seed.summary,
+  summary_key_points: seed.summary_key_points,
+  localizations: seed.localizations,
+  hot_score: 80,
+  evidence_excerpt: seed.description,
+  related_resources: [],
+};
+
 // ── mock 注入 ──
 const collectors = {
   youtube: async () => ({ items: [ytItem1, ytItem2], quota: {}, coverage: { status: 'success' } }),
@@ -158,9 +176,10 @@ const localize = async items => {
 
 test('pipeline-min 全链：L0 丢弃 → 分类 → 评分 → 审核 → 候选 → 投影', async () => {
   backupAll();
-  // 预置已 approved 候选
-  writeJsonAtomic(MIN_PATH, { schema_version: 1, updated_at: NOW.toISOString(), candidates: [seed] }, 'test-seed');
-
+  // 预置上一批公开投影：本批清理后不进入候选层，但空投影时应继续保留。
+  writeJsonAtomic(HOTSPOTS_PATH, { schema_version: 1, generated_at: NOW.toISOString(), items: [previousPublicItem], events: [], provenance: [], assessments: [] }, 'test-hotspots-seed');
+  let capturedMinStore = null;
+  let capturedHistory = null;
   let result;
   try {
     result = await runMin({
@@ -170,6 +189,10 @@ test('pipeline-min 全链：L0 丢弃 → 分类 → 评分 → 审核 → 候�
       review,
       summarize,
       localize,
+      minStoreIn: () => ({ schema_version: 1, updated_at: NOW.toISOString(), candidates: [seed] }),
+      minStoreOut: store => { capturedMinStore = store; },
+      minHistoryIn: () => ({ schema_version: 1, batches: [] }),
+      minHistoryOut: history => { capturedHistory = history; },
       runId: 'test-min',
       autoReviewList: false, // 关闭自动生成待审清单，避免污染 data/manual/（清单生成有独立测试）
     });
@@ -179,9 +202,13 @@ test('pipeline-min 全链：L0 丢弃 → 分类 → 评分 → 审核 → 候�
   }
 
   try {
+    assert.ok(capturedHistory, '应捕获上一批轻量历史');
+    assert.deepEqual(capturedHistory.batches[0].items, [{ id: seed.id, title: seed.title }]);
+    assert.deepEqual(Object.keys(capturedHistory.batches[0].items[0]).sort(), ['id', 'title']);
+
     // ── 返回统计 ──
-    assert.equal(result.minCandidates, 5, '候选层总数 = 预置 1 + kept 1 + L1 discarded 1 + L0 dropped 2');
-    assert.equal(result.publicItems, 1, '公开投影仅含预置 approved 候选');
+    assert.equal(result.minCandidates, 4, '当前候选层只保留本批次过 L0 的 2 条和 L0 丢弃的 2 条');
+    assert.equal(result.publicItems, 0, '上一批 approved 不再进入当前批次公开投影');
     assert.equal(result.coverage.status, 'complete');
     assert.equal(result.coverage.collected_total, 4);
     assert.equal(result.coverage.after_dedupe, 4);
@@ -194,10 +221,10 @@ test('pipeline-min 全链：L0 丢弃 → 分类 → 评分 → 审核 → 候�
     assert.equal(result.coverage.localized, 1, '仅 pending 的 kept 被本地化');
 
     // ── 候选层：单状态轴齐全 ──
-    const minStore = readJson(MIN_PATH, null);
-    assert.equal(minStore.candidates.length, 5);
+    const minStore = capturedMinStore;
+    assert.ok(minStore, '应捕获当前批次候选层');
+    assert.equal(minStore.candidates.length, 4);
     const byId = new Map(minStore.candidates.map(c => [c.id, c]));
-    assert.ok(byId.has('x-mock-seed-approved'));
     for (const candidate of minStore.candidates) {
       assert.ok(['pending', 'approved', 'discarded'].includes(candidate.review_status), `${candidate.id} 有合法 review_status`);
     }
@@ -218,7 +245,7 @@ test('pipeline-min 全链：L0 丢弃 → 分类 → 评分 → 审核 → 候�
     const hotspots = readJson(HOTSPOTS_PATH, null);
     assert.equal(hotspots.items.length, 1);
     const publicItem = hotspots.items[0];
-    assert.equal(publicItem.id, seed.id, '仅预置 approved 候选进公开投影');
+    assert.equal(publicItem.id, seed.id, '当前批次无 approved 时保留上一版公开投影');
     const internalFields = ['review_status', 'reviewed_at', 'ai_advice', 'l1_review', 'discard_stage', 'discard_reason', 'final_score', 'score_breakdown'];
     for (const field of internalFields) {
       assert.equal(publicItem[field], undefined, `公开条目不含内部字段 ${field}`);
@@ -249,6 +276,7 @@ test('pipeline-min 全链：L0 丢弃 → 分类 → 评分 → 审核 → 候�
 
 test('pipeline-min 审核失败降级：全部保留为 pending，不抛错', async () => {
   backupAll();
+  let capturedMinStore = null;
   let result;
   try {
     result = await runMin({
@@ -258,6 +286,10 @@ test('pipeline-min 审核失败降级：全部保留为 pending，不抛错', as
       summarize,
       localize,
       review: async () => { throw new Error('llm outage'); },
+      // 该测试只验证本次审核失败产生的候选，使用空的内存候选层，
+      // 避免把仓库中已有的历史候选计入 pending 数量。
+      minStoreIn: () => ({ schema_version: 1, updated_at: null, candidates: [] }),
+      minStoreOut: store => { capturedMinStore = store; },
       runId: 'test-min-degrade',
       autoReviewList: false, // 关闭自动生成待审清单，避免污染 data/manual/（清单生成有独立测试）
     });
@@ -270,8 +302,8 @@ test('pipeline-min 审核失败降级：全部保留为 pending，不抛错', as
     assert.ok(result.coverage.review_error.includes('llm outage'));
     assert.equal(result.coverage.kept, 2, '审核失败降级：过 L0 的两条全部保留');
     assert.equal(result.coverage.discarded, 0);
-    const minStore = readJson(MIN_PATH, null);
-    const keptCount = minStore.candidates.filter(c => c.review_status === 'pending').length;
+    assert.ok(capturedMinStore, '审核失败测试应捕获内存候选层');
+    const keptCount = capturedMinStore.candidates.filter(c => c.review_status === 'pending').length;
     assert.equal(keptCount, 2, '降级保留的候选均为 pending');
     const hotspots = readJson(HOTSPOTS_PATH, null);
     assert.equal(result.coverage.public_projection, 'empty_skipped_write', '无 approved 候选 → 空投影不写盘');
