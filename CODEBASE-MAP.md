@@ -4,7 +4,7 @@
 
 ## src/shared/ — 底层公共
 - [env.js](src/shared/env.js) — dotenv 子集解析 + 项目根目录。导出: `loadDotEnv, PROJECT_DIR`
-- [paths.js](src/shared/paths.js) — 目录与数据文件路径常量（全仓唯一数据登记点，含 `NEWS_FILES.configV2`）。导出: `DIRS, CATALOG_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH`
+- [paths.js](src/shared/paths.js) — 目录与数据文件路径常量（全仓唯一数据登记点，含 `NEWS_FILES.configV2`/`lastRun`）。导出: `DIRS, CATALOG_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH`
 
 ## src/web/ — 前端静态站（原生 ES module，无打包器；build-dist.js 原样复制到 dist/）
 - [index.html](src/web/index.html) — 8 视图 DOM + 导航骨架，入口 `<script type="module" src="js/main.js">`（trending 视图静态文案已 data-i18n 化）
@@ -32,7 +32,8 @@
 - [min-store.js](src/news/min/min-store.js) — v2 单状态轴候选层读写（min-candidates.json，人工结论不因重新采集重置；仅供 pipeline-min 等编排使用）。导出: `readMinStore, writeMinStore, mergeCandidatesMin, setReviewStatusMin, setBatchReviewStatusMin, isMinPublicEligible, toPublicItemMin`
 - [daily-projection.js](src/news/min/daily-projection.js) — v2 每日 top N 公开投影（approved 按天分组取前 N：含 YouTube 取 8 / 纯 X 取 5，纯逻辑不调 enrich/filter 两步）。导出: `buildDailyProjection`
 - [keyword-refine.js](src/news/min/keyword-refine.js) — 关键词提纯候选（收尾环节，每天一次：非 discarded 原文词频 + 新兴候选，输出候选清单交人工确认，**不直接改 ai_keywords**）。导出: `refineKeywords, tokenize, buildWordFreq, emergingByHistory`
-- [pipeline-min.js](src/news/min/pipeline-min.js) — **热点管线 v2 总指挥（runMin 编排）**：采集(默认 YouTube+X 并行，`options.platforms` 支持分时单平台) → 去重 → L0 硬过滤 → 分类 → 评分(历史库) → L1/L2 审核 → 候选落地 → 总结/本地化 → 每日公开投影写 hotspots.json。每步失败降级记 coverage 不抛错。导出: `runMin, loadV2Config, normalizeNow, resolveXWindow`
+- [pipeline-min.js](src/news/min/pipeline-min.js) — **热点管线 v2 总指挥（runMin 编排）**：采集(默认 YouTube+X 并行，`options.platforms` 支持分时单平台) → 去重 → L0 硬过滤 → 分类 → 评分(历史库) → L1/L2 审核 → 候选落地 → 总结/本地化 → 自动生成待审清单（review-list，`options.autoReviewList=false` 可关）→ 每日公开投影写 hotspots.json → 写采集运行记录 last-run.json（ai-top 判定 hasYouTube 用）。每步失败降级记 coverage 不抛错。导出: `runMin, loadV2Config, normalizeNow, resolveXWindow`
+- [review-list.js](src/news/min/review-list.js) — 人工审核清单：自动生成待审清单 review-<date>.json（带 id、只含 pending、评分倒序、覆盖保护）+ 应用人工结论批量写回候选层（apply；pending 跳过、无 id 旧格式拒绝）。维护者一键入口：bat/apply-review.bat（应用后自动生成 top 名单）。导出: `scoreOf, suggestReview, buildReviewList, loadReviewList, applyReviewList`
 
 ### collectors/ — 各平台采集（会发网络请求）
 - [collector-youtube-v2.js](src/news/collectors/collector-youtube-v2.js) — 热点管线 v2 的 YouTube 采集器（search.list 关键词发现，不依赖旧 quota/registry/scheduler）。导出: `collectYouTubeV2, buildItem, parseDuration, loadV2Config`
@@ -53,7 +54,7 @@
 ### cli/ — 命令行
 - [news-cli.js](src/news/cli/news-cli.js) — **CLI 分发器 + 入口**（仅保留 v2 命令组）。导出: `parseArgs, main, minReviewCommand`
 - [cmd-content.js](src/news/cli/cmd-content.js) — `classify/localize preview` 子命令（纯函数预览；批量分类/本地化已由 v2 管线内建）。导出: `classifyCommand, localizeCommand`
-- [cmd-min.js](src/news/cli/cmd-min.js) — **v2 `min-review` 命令组**（操作 min-candidates.json，不触碰旧候选层；list 支持 `--top N` 按评分取前 N 供人工审，缺省读 review_top_pure_x / review_top_with_youtube）。导出: `minReviewCommand, scoreOf, loadV2Config, assertStoreFlag`
+- [cmd-min.js](src/news/cli/cmd-min.js) — **v2 `min-review` 命令组**（操作 min-candidates.json，不触碰旧候选层；list 支持 `--top N` 按评分取前 N 供人工审，缺省读 review_top_pure_x / review_top_with_youtube；`ai-top` 从 approved 调 AI 挑 top 待选项，有 YouTube 判定按 **last-run.json 实际采到内容 items>0**（15）否则 10，失败一律抛错；`apply` 从待审清单批量应用人工结论。维护者一键入口：bat/apply-review.bat（应用结论 + 自动生成 top 名单两步连续）。导出: `minReviewCommand, scoreOf, loadV2Config, assertStoreFlag, hasYouTubeInLastRun, resolveAiTopConfig`
 
 ### transcripts/ — 收尾环节：字幕人工获取通知（独立于主链，只写清单文件）
 - [transcript-notify.js](src/news/transcripts/transcript-notify.js) — 每日"待人工获取字幕"清单（min 候选层挑评分最高 notify_count 个 YouTube，写 transcript-requests-<YYYYMMDD>.json 交人工，不碰主链/不调采集总结）。导出: `notifyTranscripts, parseNotifyCount, scoreOf`

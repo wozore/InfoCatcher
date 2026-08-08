@@ -32,6 +32,8 @@
  *   options.historyIn / options.historyOut       覆盖历史库读写（同上；缺省回落真实文件）
  *                                                签名：minStoreIn()→store，minStoreOut(store,runId)；
  *                                                historyIn()→store，historyOut(store,runId)
+ *   options.lastRunOut                           覆盖采集运行记录写盘（签名 lastRunOut(record, runId)，
+ *                                                缺省原子写 data/news/runtime/last-run.json；fixture 注入存根）
  *
  * 加平台 = platforms 数组枚举 + options.collectors 注入点：
  *   新增采集平台时，在 platforms 缺省数组枚举该平台，并在 options.collectors 提供对应采集器；
@@ -44,6 +46,8 @@
  * 数据文件：
  *   - 候选层  data/news/runtime/min-candidates.json（writeMinStore）
  *   - 历史库  data/news/runtime/source-history.json（writeHistoryStore）
+ *   - 采集记录 data/news/runtime/last-run.json（每次采集结束写；ai-top 据此判定
+ *     "最后一次采集是否有 YouTube"来决定 top N，见 cmd-min.js hasYouTubeInLastRun）
  *   - 主输出  data/news/output/hotspots.json（writeJsonAtomic）
  */
 
@@ -371,6 +375,25 @@ async function runMin(options = {}) {
   coverage.min_candidates = merged.candidates.length;
 
   // ═══════════════════════════════════════════════════════════════
+  // 9.5 人工审核清单（自动生成）：候选落地后、公开投影前，把 pending 候选
+  //     写 data/manual/review-<date>.json（带 id、评分倒序）供维护者打开编辑
+  //     review_status，编辑后用 min-review apply（或 bat/apply-review.bat，应用后自动生成 top 名单）写回。
+  //     覆盖保护：目标清单已含人工结论时不覆盖；失败仅降级记 coverage，不阻塞管线。
+  //     测试注入 options.autoReviewList=false 可关闭（避免污染 data/manual/）。
+  // ═══════════════════════════════════════════════════════════════
+  if (options.autoReviewList !== false) {
+    try {
+      const { buildReviewList } = require('./review-list');
+      const reviewList = buildReviewList(merged, config, { now });
+      coverage.review_list = reviewList.skipped ? 'skipped_existing' : reviewList.total_pending;
+    } catch (error) {
+      coverage.review_list_error = errorLabel(error);
+    }
+  } else {
+    coverage.review_list = 'disabled';
+  }
+
+  // ═══════════════════════════════════════════════════════════════
   // 10. 每日公开投影：approved 候选按天取 top N → 公开契约补充
   //     （hot_score/evidence_excerpt/related_resources）→ 近期窗口一致过滤 → 写 hotspots.json。
   //     events/provenance/assessments 沿用旧文件已有值（本管线不构建），
@@ -418,6 +441,40 @@ async function runMin(options = {}) {
       : errors.length > 0
         ? 'partial'
         : 'complete';
+
+  // ═══════════════════════════════════════════════════════════════
+  // 10.5 采集运行记录：每次采集结束写 data/news/runtime/last-run.json。
+  //     这是"最后一次采集记录"的唯一权威来源（hotspots coverage 会被 publish 覆盖），
+  //     供 ai-top 判定"最后一次采集是否有 YouTube"来决定 top N（cmd-min.hasYouTubeInLastRun）。
+  //     记录 platforms 与各平台 status/items；写失败仅降级记 coverage，不阻塞管线。
+  //     测试注入 options.lastRunOut 覆盖写盘，避免污染运行时文件。
+  // ═══════════════════════════════════════════════════════════════
+  try {
+    const lastRun = {
+      schema_version: 1,
+      run_id: runId,
+      collected_at: now.toISOString(),
+      platforms: enabledRunPlatforms,
+      collectors: {
+        youtube: {
+          status: coverage.collectors.youtube.status,
+          items: coverage.collectors.youtube.items,
+          error: coverage.collectors.youtube.error,
+          reason: coverage.collectors.youtube.reason || null,
+        },
+        x: {
+          status: coverage.collectors.x.status,
+          items: coverage.collectors.x.items,
+          error: coverage.collectors.x.error,
+          reason: coverage.collectors.x.reason || null,
+        },
+      },
+    };
+    if (options.lastRunOut) options.lastRunOut(lastRun, runId);
+    else writeJsonAtomic(NEWS_FILES.lastRun, lastRun, runId);
+  } catch (error) {
+    noteError('last_run', error);
+  }
 
   return { coverage, minCandidates: coverage.min_candidates, publicItems };
 }

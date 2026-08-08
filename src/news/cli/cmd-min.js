@@ -4,7 +4,7 @@
  * 在热点管线 v2 中的位置：v2 唯一审核命令组（v1 review 命令已随 v1 删除），
  * 操作 v2 单状态轴候选层（data/news/runtime/min-candidates.json，min-store）。
  *
- *   min-review list    [--status pending|approved|discarded] [--platform ...] [--limit N] [--top N] [--store min] [--json] [--manual]
+ *   min-review list    [--status pending|approved|discarded] [--platform ...] [--limit N] [--top N] [--store min] [--json] [--manual [--force]]
  *   min-review set     --id <id> --status pending|approved|discarded [--store min]
  *   min-review batch   --ids <id1,id2,...> --status approved [--store min]
  *   min-review transcripts [--store min]
@@ -12,13 +12,15 @@
  *   min-review refine       [--store min]
  *   min-review ai-top       [--store min]
  *   min-review top-selected --ids <id1,id2,...> [--store min]
+ *   min-review apply        --file <review-清单.json> [--store min]
  *
  *     - list：列出 v2 候选（含 review_status / final_score），人友好表格输出；
  *       --json 时改为输出机器可读 JSON（候选总数 / by_review_status 分布 /
  *       各候选 id/status/final_score/title），CI 审核 PR 正文聚合用。
- *       --manual 时生成"待人工审核 top 清单"到 data/manual/review-<YYYYMMDD>.json
- *       （固定格式，供人工打开文件夹逐条审核；pending 按评分倒序取 top N，缺省
- *       读 review_top_pure_x / review_top_with_youtube）。
+ *       --manual 时生成"待人工审核清单"到 data/manual/review-<YYYYMMDD>.json
+ *       （固定格式，供人工打开文件夹逐条审核；只含 pending、评分倒序、每条带 id）。
+ *       管线 runMin 收尾也会自动生成同一清单；此处提供手动/强制入口，
+ *       --force 覆盖已含人工结论的清单。
  *       --top N：按评分倒序取前 N 供人工审（R7 审核范围；缺省读 config.collection.
  *       review_top_pure_x / review_top_with_youtube，有 YouTube 候选时用后者）。
  *     - set/batch：单条/批量设置审核状态，写入 min-candidates.json（reviewed_at 由
@@ -30,10 +32,16 @@
  *       tool-cards-pending-<YYYYMMDD>.json / concept-cards-pending-<YYYYMMDD>.json。
  *     - refine：调 keyword-refine.refineKeywords 生成关键词提纯候选清单（交人工确认，
  *       不直接改 ai_keywords），写 manual_folder/keyword-refine-<YYYYMMDD>.json。
- *     - ai-top：第二阶段，AI 从 approved 候选提供 top 待选项（纯 X 10 / 有 YouTube 15），
- *       写 manual_folder/top-<YYYYMMDD>.json 供维护者筛选；每条 top_selected 默认 false。
+ *     - ai-top：第二阶段，AI 从 approved 候选提供 top 待选项（纯 X 10 / 有 YouTube 15，
+ *       按**最后一次采集记录** last-run.json 判定是否"有 YouTube"：youtube 平台实际采到
+ *       内容 items>0 → 15，否则 10），写 manual_folder/top-<YYYYMMDD>.json 供维护者筛选；
+ *       每条 top_selected 默认 false。**失败一律抛错（exit 1）**：无 approved / last-run
+ *       缺失 / AI 挑选失败——供 bat 一键入口用 errorlevel 判定，不静默成功。
  *     - top-selected：维护者从 ai-top 待选项确认最终显示 → top_selected 置 true；
  *       公开投影（publish）只取 approved && top_selected 的候选。
+ *     - apply：读取 --file 待审清单里 approved/discarded 结论，批量写回候选层
+ *       min-candidates.json（pending 跳过；条目无 id 报错拒绝旧格式）。
+ *       维护者一键入口：bat/apply-review.bat（应用结论后自动接着跑 ai-top 生成 top 名单）。
  *
  * 本组不触碰旧版候选层（hotspot-candidates.json）与旧 review 命令。
  * --store min 为显式标注 v2 数据通道（缺省即 min）；其它值报错。
@@ -45,60 +53,9 @@ const { readMinStore, writeMinStore, setReviewStatusMin, setBatchReviewStatusMin
 const { notifyTranscripts } = require('../transcripts/transcript-notify');
 const { feedbackFromSummaries } = require('../feedback/tool-feedback');
 const { refineKeywords } = require('../min/keyword-refine');
+const { buildReviewList, loadReviewList, applyReviewList, scoreOf, suggestReview } = require('../min/review-list');
 const { readJson } = require('../core/news-storage');
 const { NEWS_FILES } = require('../../shared/paths');
-
-/** 排序/展示分数：final_score 优先，其次 hot_score；皆无 → null。 */
-function scoreOf(candidate) {
-  if (candidate == null) return null;
-  if (Number.isFinite(candidate.final_score)) return candidate.final_score;
-  if (Number.isFinite(candidate.hot_score)) return candidate.hot_score;
-  return null;
-}
-
-/**
- * 给维护者的审核建议（每条具体判断，参考性质，不替代人工确认）。
- * 基于 content_type + 标题特征规则：学习打卡/个人日志 → discarded；
- * AI 产品发布/工具评测 → approved；内容截断的「/1」「Folks」开头的推文线程
- * 需展开看（标记 see_more）；其余给中性建议。用于 --manual 待审清单。
- * @param {object} candidate 统一内容模型条目
- * @returns {string} 建议文案
- */
-function suggestReview(candidate) {
-  const title = String(candidate.title || '').trim().replace(/\s+/g, ' ');
-  const ct = candidate.content_type || 'unclassified';
-  // 学习打卡 / 个人开发日志 / 进度记录（价值低，建议 discarded）
-  if (/#(100DaysOfCode|100daysofcode|LearnInPublic|BuildInPublic)/i.test(title)
-      || /Day\s*\d+\/100|Day\s*\d+\s*of|day\d+/i.test(title)) {
-    return '学习打卡/个人日志，建议 discarded';
-  }
-  // 个人使用体验/成本心得（价值低，建议 discarded）
-  if (/cost me|costs? me|only cost|\$|dollars?|试了|试过|体验心得|my setup|setup better|here's my/i.test(title)) {
-    return '个人使用/成本体验，建议 discarded';
-  }
-  // 非 AI 核心或明显偏离（NFT/股票/无关讨论）
-  if (/nft|solana|crypto|bitcoin|price|股票|炒股/i.test(title)) {
-    return '偏离 AI 核心（金融/NFT），建议 discarded';
-  }
-  // 推文线程（1/ ...）——内容可能被截断，建议展开看正文再定
-  if (/^\d+\/\s/.test(title) || /^Folks,/.test(title)) {
-    return '推文线程（内容可能截断），建议展开正文核验后定';
-  }
-  // 类型倾向
-  if (ct === 'ai_product' || ct === 'ai_tool') {
-    return 'AI 产品/工具，建议 approved';
-  }
-  if (ct === 'ai_technology') {
-    return 'AI 技术/研究，建议 approved（如无重大争议）';
-  }
-  if (ct === 'ai_industry') {
-    return 'AI 行业事件，建议 approved';
-  }
-  if (ct === 'ai_concept') {
-    return 'AI 概念，建议看内容后定（学习类多为日志）';
-  }
-  return '人工判断：是否值得收录';
-}
 
 /** 读 news-config-v2.json；缺失时给最小兜底（manual_folder 等字段缺省值内置于各 v2 模块）。 */
 function loadV2Config() {
@@ -114,6 +71,45 @@ function assertStoreFlag(flags) {
   if (flags.store !== undefined && flags.store !== 'min') {
     throw new Error(`未知 --store：${flags.store}。min-review 只支持 --store min（v2 候选层 min-candidates.json）`);
   }
+}
+
+/**
+ * 判定"最后一次采集是否有 YouTube 内容"（ai-top 选 top N 用）。
+ * 依据采集运行记录 last-run.json（pipeline-min runMin 末尾写）的 youtube 平台
+ * 实际采到内容数（items > 0）。用户拍板语义：**YouTube 实际采到内容才算有**；
+ * not_run / failed / items=0 均视为无。分时采集下 X 日 top10、YouTube+X 日 top15，
+ * 避免 approved 层残留的历史 YouTube 候选误触发 top15。
+ * @param {object|null} lastRun readJson(NEWS_FILES.lastRun, null) 的结果
+ * @returns {boolean} youtube 实际采到内容 → true
+ */
+function hasYouTubeInLastRun(lastRun) {
+  if (!lastRun || !lastRun.collectors || !lastRun.collectors.youtube) return false;
+  return Number(lastRun.collectors.youtube.items) > 0;
+}
+
+/**
+ * 解析 ai-top 的 YouTube 判定与 top 数量（纯逻辑，无 I/O，便于测试）。
+ * 命令层在 no_approved / no_last_run 时抛错拒绝（供 bat/apply-review.bat errorlevel
+ * 判定），本函数只返回判定结果，不 throw。
+ * @param {Array} approved 候选层中 review_status==='approved' 的候选
+ * @param {object|null} lastRun readJson(NEWS_FILES.lastRun, null) 的结果
+ * @param {object} config v2 配置（读 collection.review_top_with_youtube / review_top_pure_x）
+ * @returns {{ ok: true, hasYouTube: boolean, topN: number } |
+ *            { ok: false, reason: 'no_approved'|'no_last_run' }}
+ */
+function resolveAiTopConfig(approved, lastRun, config) {
+  if (!Array.isArray(approved) || approved.length === 0) {
+    return { ok: false, reason: 'no_approved' };
+  }
+  if (!lastRun) {
+    return { ok: false, reason: 'no_last_run' };
+  }
+  const hasYouTube = hasYouTubeInLastRun(lastRun);
+  const collection = (config && config.collection) || {};
+  const topN = hasYouTube
+    ? Number(collection.review_top_with_youtube) || 15
+    : Number(collection.review_top_pure_x) || 10;
+  return { ok: true, hasYouTube, topN };
 }
 
 async function minReviewCommand(action, flags = {}) {
@@ -167,59 +163,21 @@ async function minReviewCommand(action, flags = {}) {
       byReviewStatus[status] = (byReviewStatus[status] || 0) + 1;
     }
 
-    // ── --manual：生成"待人工审核 top 清单"到 data/manual/review-<date>.json ──
+    // ── --manual：生成"待人工审核清单"到 data/manual/review-<date>.json ──
     //    人友好接口（R6/R8）：不只在命令行滚动，落盘固定格式供人工打开文件夹审核。
-    //    与 transcripts/refine 清单一致，含每条候选的审核建议入口。
+    //    与管线 runMin 收尾自动生成同一实现（review-list.buildReviewList，带 id、
+    //    只含 pending、评分倒序），这里保留手动/强制入口（--force 覆盖已含人工结论的清单）。
     if (flags.manual) {
-      const path = require('path');
-      const fs = require('fs');
-      const { writeJsonAtomic } = require('../core/news-storage');
-      const { toPublicItemMin } = require('../min/min-store');
-      const dateKey = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-      const manualFolder = (config && config.manual_folder) || 'data/manual';
-      const file = path.join(manualFolder, `review-${dateKey}.json`);
-      // 待审候选：全部 pending（按评分倒序排列，供维护者逐条审核）
-      // 第一阶段字段精简：只给评分 / 内容概要 / 建议三项（description/original 在第二阶段才有）
-      const reviewList = store.candidates
-        .filter(c => c && c.review_status === 'pending')
-        .sort((a, b) => (scoreOf(b) ?? -Infinity) - (scoreOf(a) ?? -Infinity))
-        .map(c => {
-          // 内容概要：优先 AI 中文摘要（c.summary），其次汉化标题（localizations.zh.title），
-          // 再兜底原文标题——维护者要中文（汉化在前置阶段已完成）
-          const zhTitle = (c.localizations && c.localizations.zh && c.localizations.zh.title) || '';
-          const summaryText = String(c.summary || zhTitle || c.title || '(无标题)')
-            .trim().replace(/\s+/g, ' ').slice(0, 80);
-          const suggestion = suggestReview(c);
-          return {
-            score: scoreOf(c),
-            summary: summaryText,
-            suggestion,
-            // 当前审核状态（第一阶段：维护者据此判断 pending 待审 / approved 已通过）
-            review_status: c.review_status || 'pending',
-          };
-        });
-      const payload = {
-        schema_version: 1,
-        kind: 'review_candidates',
-        generated_at: new Date().toISOString(),
-        date: dateKey,
-        total_pending: byReviewStatus.pending || 0,
-        note: '待人工审核清单：请逐条设置 review_status（pending/approved/discarded）。' +
-              '批准：node scripts/news-cli.js min-review batch --ids <id1,id2> --status approved；' +
-              '剔除：--status discarded。approved 才进公开投影。',
-        candidates: reviewList,
-        // 人友好：每行一条，供人工扫描
-        human_lines: reviewList.map(c =>
-          `[${c.score === null ? '-' : c.score}] ${c.summary}\n    建议：${c.suggestion}`
-        ),
-      };
-      fs.mkdirSync(path.dirname(file), { recursive: true });
-      writeJsonAtomic(file, payload, 'min-review-manual');
-      console.log(`✅ 待审清单：${reviewList.length} 条 pending → ${file}`);
-      for (const c of reviewList) {
+      const result = buildReviewList(store, config, { force: Boolean(flags.force) });
+      if (result.skipped) {
+        console.log(`ℹ️ 待审清单已含人工审核结论（${result.file}），未覆盖。确需重新生成请加 --force。`);
+        return result;
+      }
+      console.log(`✅ 待审清单：${result.total_pending} 条 pending → ${result.file}`);
+      for (const c of result.candidates) {
         console.log(`  [${c.score === null ? '-' : c.score}] ${c.summary}`);
       }
-      return { file, total_pending: payload.total_pending, candidates: reviewList };
+      return result;
     }
 
     if (flags.json) {
@@ -313,6 +271,10 @@ async function minReviewCommand(action, flags = {}) {
   //    top 10（纯 X）/ 15（有 YouTube）条作为**待选项**（R7 人工审 top 量），
   //    写 data/manual/top-<date>.json 供维护者从中选出最终公开的 3~5/3~8 条。
   //    AI 提供的是候选池，不是最终结论；最终条数由维护者从待选项中挑。
+  //    "有 YouTube"按**最后一次采集记录**（last-run.json）判定：youtube 平台实际
+  //    采到内容（items > 0）→ top15；否则 top10（分时采集下 X 日 top10，避免
+  //    approved 层残留的历史 YouTube 候选误触发 top15）。last-run 缺失报错拒绝、
+  //    不静默回退——异常状态显式暴露（用户拍板）。
   if (action === 'ai-top') {
     const path = require('path');
     const fs = require('fs');
@@ -320,24 +282,23 @@ async function minReviewCommand(action, flags = {}) {
     const { selectTopWithDeepSeek } = require('../classify/llm-provider');
     const store = readMinStore();
     const approved = store.candidates.filter(c => c && c.review_status === 'approved');
-    if (!approved.length) {
-      console.log('⚠️ 无 approved 候选（维护者尚未审核）。先运行 min-review list --manual 审核，用 min-review batch/set 标记 approved。');
-      return { ok: false, reason: 'no_approved' };
+    // 判定"有 YouTube"：读最后一次采集记录（runMin 末尾写）。解析出 no_approved /
+    // no_last_run 时抛错拒绝（不静默回退 approved 层判断，供 bat errorlevel 判定）。
+    const lastRun = readJson(NEWS_FILES.lastRun, null);
+    const resolved = resolveAiTopConfig(approved, lastRun, config);
+    if (!resolved.ok) {
+      throw new Error(resolved.reason === 'no_approved'
+        ? '无 approved 候选（维护者尚未审核）。先运行 min-review list --manual 审核，用 min-review batch/set 标记 approved。'
+        : '缺少 last-run.json（最后一次采集记录）。请先运行 node scripts/build-news.js 产生采集记录后再试。');
     }
-    // 待选项数量（R7 人工审 top 量）：纯 X → review_top_pure_x（10）；有 YouTube → review_top_with_youtube（15）
-    const collection = config.collection || {};
-    const hasYouTube = approved.some(c => c.platform === 'youtube');
-    const topN = hasYouTube
-      ? Number(collection.review_top_with_youtube) || 15
-      : Number(collection.review_top_pure_x) || 10;
+    const { hasYouTube, topN } = resolved;
     // 喂给 AI 的输入：id + score + summary（精简，控制 token 成本）
     const aiInput = approved
       .map(c => ({ id: c.id, score: scoreOf(c), summary: String(c.summary || c.title || '(无标题)').trim().slice(0, 120) }))
       .sort((a, b) => (b.score ?? -Infinity) - (a.score ?? -Infinity));
     const result = await selectTopWithDeepSeek(aiInput, { min: Math.min(topN, approved.length), max: Math.min(topN, approved.length) });
     if (!result.ok) {
-      console.log(`⚠️ AI 挑选失败：${result.error}（${result.code}）。可稍后重试或改纯评分排序。`);
-      return { ok: false, reason: result.code, error: result.error };
+      throw new Error(`AI 挑选失败：${result.error}（${result.code}）。可稍后重试。`);
     }
     // 按 AI 返回的 ids 提取完整 approved 候选，按 AI 顺序输出；
     // AI 可能少给（漏 id / 输出截断），不足 topN 时从剩余 approved 按评分倒序补齐到 topN，
@@ -378,7 +339,7 @@ async function minReviewCommand(action, flags = {}) {
       approved_count: approved.length,
       target_top_n: topN,
       ai_selected_count: selected.length,
-      note: 'AI 从人工 approved 候选中挑选的 top 待选项（纯 X 10 / 有 YouTube 15），供维护者筛选。' +
+      note: 'AI 从人工 approved 候选中挑选的 top 待选项（按最后一次采集记录判定：有 YouTube 内容 15 / 纯 X 10），供维护者筛选。' +
             '请从下面选出要显示在前端的 3~5（有 YouTube 日 3~8）条；' +
             '确认后这些条目 review_status 已为 approved，publish 即可重建公开投影。',
       candidates: selected,
@@ -417,7 +378,31 @@ async function minReviewCommand(action, flags = {}) {
     return { status: 'top_selected', ...result, updated_at: result.store.updated_at };
   }
 
-  throw new Error(`未知 min-review 命令: ${action}。支持：list | set | batch | transcripts | feedback | refine | ai-top | top-selected`);
+  // ── apply：应用人工审核结论（待审清单 → 候选层）──
+  //    维护者编辑 review-<date>.json 的 review_status 后，读取 approved/discarded
+  //    批量写回 min-candidates.json（pending 跳过；无 id 条目报错拒绝旧格式）。
+  //    一键入口：bat/apply-review.bat（自动定位最新清单）。
+  if (action === 'apply') {
+    if (!flags.file) throw new Error('min-review apply 缺少 --file（待审清单路径，如 data/manual/review-20260808.json）');
+    const store = readMinStore();
+    const list = loadReviewList(flags.file);
+    const result = applyReviewList(store, list);
+    if (result.changed > 0) writeMinStore(result.store, `min-review-apply-${Date.now()}`);
+    console.log(`✅ 已应用人工审核结论 → min-candidates.json：approved ${result.applied.approved} / discarded ${result.applied.discarded}`);
+    console.log(`   跳过 pending ${result.skipped} 条${result.noop ? `，状态未变化 ${result.noop} 条` : ''}`);
+    if (result.invalid) {
+      console.log(`   ⚠️ 非法审核状态 ${result.invalid} 条：${result.invalidIds.join('、')}`);
+    }
+    if (result.missing.length) {
+      console.log(`   ⚠️ 未命中候选 ${result.missing.length} 条：${result.missing.join('、')}`);
+    }
+    if (result.changed === 0) {
+      console.log('   （无新结论需要写回）');
+    }
+    return result;
+  }
+
+  throw new Error(`未知 min-review 命令: ${action}。支持：list | set | batch | transcripts | feedback | refine | ai-top | top-selected | apply`);
 }
 
-module.exports = { minReviewCommand, scoreOf, suggestReview, loadV2Config, assertStoreFlag };
+module.exports = { minReviewCommand, scoreOf, suggestReview, loadV2Config, assertStoreFlag, hasYouTubeInLastRun, resolveAiTopConfig };

@@ -29,11 +29,12 @@ const CONFIG = require('../../data/news/config/news-config-v2.json');
 const MIN_PATH = NEWS_FILES.minCandidates;
 const HISTORY_PATH = NEWS_FILES.sourceHistory;
 const HOTSPOTS_PATH = NEWS_FILES.hotspots;
+const LAST_RUN_PATH = NEWS_FILES.lastRun;
 
 /** 备份/恢复真实数据文件，测试不污染仓库。 */
 const backups = {};
 function backupAll() {
-  for (const file of [MIN_PATH, HISTORY_PATH, HOTSPOTS_PATH]) {
+  for (const file of [MIN_PATH, HISTORY_PATH, HOTSPOTS_PATH, LAST_RUN_PATH]) {
     try { backups[file] = fs.readFileSync(file, 'utf8'); }
     catch { backups[file] = null; }
   }
@@ -170,6 +171,7 @@ test('pipeline-min 全链：L0 丢弃 → 分类 → 评分 → 审核 → 候�
       summarize,
       localize,
       runId: 'test-min',
+      autoReviewList: false, // 关闭自动生成待审清单，避免污染 data/manual/（清单生成有独立测试）
     });
   } catch (error) {
     restoreAll();
@@ -229,6 +231,17 @@ test('pipeline-min 全链：L0 丢弃 → 分类 → 评分 → 审核 → 候�
     assert.ok(Array.isArray(publicItem.summary_key_points), '公开条目保留总结要点');
     assert.ok(publicItem.localizations && publicItem.localizations.zh, '公开条目保留本地化中文');
     assert.equal(hotspots.items.some(item => item.id === ytItem1.id), false, 'discarded 候选不进公开投影');
+
+    // ── 采集运行记录 last-run.json：每次采集结束写入，供 ai-top 判定 hasYouTube ──
+    const lastRun = readJson(LAST_RUN_PATH, null);
+    assert.ok(lastRun, 'last-run.json 已写入');
+    assert.equal(lastRun.run_id, 'test-min', 'last-run 记录 run_id');
+    assert.equal(lastRun.collected_at, NOW.toISOString(), 'last-run 记录采集时间');
+    assert.deepEqual(lastRun.platforms, ['youtube', 'x'], 'last-run 记录启用平台');
+    assert.equal(lastRun.collectors.youtube.status, 'success');
+    assert.equal(lastRun.collectors.youtube.items, 2, 'YouTube 实际采到 2 条');
+    assert.equal(lastRun.collectors.x.status, 'success');
+    assert.equal(lastRun.collectors.x.items, 2, 'X 实际采到 2 条');
   } finally {
     restoreAll();
   }
@@ -246,6 +259,7 @@ test('pipeline-min 审核失败降级：全部保留为 pending，不抛错', as
       localize,
       review: async () => { throw new Error('llm outage'); },
       runId: 'test-min-degrade',
+      autoReviewList: false, // 关闭自动生成待审清单，避免污染 data/manual/（清单生成有独立测试）
     });
   } catch (error) {
     restoreAll();

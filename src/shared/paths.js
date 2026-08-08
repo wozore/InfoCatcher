@@ -60,6 +60,7 @@ const NEWS_FILES = Object.freeze({
   minCandidates: path.join(NEWS_RUNTIME_DIR, 'min-candidates.json'),  // 热点管线 v2：单状态轴候选层，不发布到 dist/
   reviewEvents: path.join(NEWS_RUNTIME_DIR, 'review-events.json'),    // B16 决策 70：追加式审核事件日志，不发布到 dist/
   sourceHistory: path.join(NEWS_RUNTIME_DIR, 'source-history.json'),  // 评分 v2：来源长期质量历史库，不发布到 dist/
+  lastRun: path.join(NEWS_RUNTIME_DIR, 'last-run.json'),              // 热点管线 v2：最后一次采集运行记录（ai-top 判定 hasYouTube 用），不发布到 dist/
 
   adminAudit: path.join(NEWS_RUNTIME_DIR, 'news-admin-audit.json'),
   lock: path.join(NEWS_RUNTIME_DIR, '.news-build.lock'),
