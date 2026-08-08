@@ -18,6 +18,7 @@
  *
  * 注入点（测试 mock 用，缺省回落真实实现）：
  *   options.collectors = { youtube, x }          覆盖 collectYouTubeV2 / collectXV2
+ *   options.platforms = ['youtube','x']          采集平台范围（缺省双跑；分时采集传单平台，如 ['youtube']）
  *   options.classify                             覆盖 classifyCandidate（接受单条，同步/异步均可）
  *   options.review                               覆盖 applyL1Verdicts（返回 { kept, discarded }）
  *   options.summarize                            覆盖 summarizeCandidates（批量签名 (items, options)）
@@ -31,6 +32,10 @@
  *   options.historyIn / options.historyOut       覆盖历史库读写（同上；缺省回落真实文件）
  *                                                签名：minStoreIn()→store，minStoreOut(store,runId)；
  *                                                historyIn()→store，historyOut(store,runId)
+ *
+ * 加平台 = platforms 数组枚举 + options.collectors 注入点：
+ *   新增采集平台时，在 platforms 缺省数组枚举该平台，并在 options.collectors 提供对应采集器；
+ *   未启用平台的 coverage.collectors[platform] 保持 { status:'not_run', items:0, error:null }。
  *
  * 并发语义：分类与审核（applyL1Verdicts）都按 config.collection.concurrency
  * 并发执行（DeepSeek 逐条串行会卡十几分钟，实测见 2026-08-08 基准）；
@@ -147,50 +152,61 @@ async function runMin(options = {}) {
   };
 
   // ═══════════════════════════════════════════════════════════════
-  // 1. 采集：并行 YouTube + X（各平台失败降级返回空，不抛错）
+  // 1. 采集：默认并行 YouTube + X（各平台失败降级返回空，不抛错）。
+  //    options.platforms 支持分时采集（如 R1：YouTube 每 3 天 22:00、X 每日 14:00/0:00 分开跑）：
+  //    只启动 platforms 列表内平台的采集 Task；未启用平台的 coverage.collectors[platform]
+  //    保持初始 { status:'not_run', items:0, error:null }。后续去重/评分/审核/合并/投影
+  //    仍跑全链——mergeCandidatesMin 读全量 min-candidates.json，单平台跑也产出完整每日投影。
   // ═══════════════════════════════════════════════════════════════
+  const platforms = Array.isArray(options.platforms) && options.platforms.length
+    ? options.platforms
+    : ['youtube', 'x'];
   const youtubeCollector = (options.collectors && options.collectors.youtube) || collectYouTubeV2;
   const xCollector = (options.collectors && options.collectors.x) || collectXV2;
   const xWindow = resolveXWindow(options, now);
 
-  const youtubeTask = (async () => {
-    const slot = coverage.collectors.youtube;
-    try {
-      const result = await youtubeCollector({ config, now, apiKey: options.youtubeApiKey, fetchImpl: options.fetchImpl });
-      const collected = result && Array.isArray(result.items) ? result.items : [];
-      slot.items = collected.length;
-      slot.status = (result && result.coverage && result.coverage.status) || 'success';
-      slot.reason = (result && result.coverage && result.coverage.reason) || null;
-      return collected;
-    } catch (error) {
-      slot.status = 'failed';
-      slot.error = errorLabel(error);
-      return [];
-    }
-  })();
+  const collectTasks = [];
+  if (platforms.includes('youtube')) {
+    collectTasks.push((async () => {
+      const slot = coverage.collectors.youtube;
+      try {
+        const result = await youtubeCollector({ config, now, apiKey: options.youtubeApiKey, fetchImpl: options.fetchImpl });
+        const collected = result && Array.isArray(result.items) ? result.items : [];
+        slot.items = collected.length;
+        slot.status = (result && result.coverage && result.coverage.status) || 'success';
+        slot.reason = (result && result.coverage && result.coverage.reason) || null;
+        return collected;
+      } catch (error) {
+        slot.status = 'failed';
+        slot.error = errorLabel(error);
+        return [];
+      }
+    })());
+  }
+  if (platforms.includes('x')) {
+    collectTasks.push((async () => {
+      const slot = coverage.collectors.x;
+      try {
+        const result = await xCollector({
+          config, now,
+          sinceIso: xWindow.sinceIso, untilIso: xWindow.untilIso,
+          xApiKey: options.xApiKey, fetchImpl: options.fetchImpl,
+        });
+        const collected = result && Array.isArray(result.items) ? result.items : [];
+        slot.items = collected.length;
+        slot.status = (result && result.coverage && result.coverage.status) || 'success';
+        slot.reason = (result && result.coverage && result.coverage.reason) || null;
+        return collected;
+      } catch (error) {
+        slot.status = 'failed';
+        slot.error = errorLabel(error);
+        return [];
+      }
+    })());
+  }
 
-  const xTask = (async () => {
-    const slot = coverage.collectors.x;
-    try {
-      const result = await xCollector({
-        config, now,
-        sinceIso: xWindow.sinceIso, untilIso: xWindow.untilIso,
-        xApiKey: options.xApiKey, fetchImpl: options.fetchImpl,
-      });
-      const collected = result && Array.isArray(result.items) ? result.items : [];
-      slot.items = collected.length;
-      slot.status = (result && result.coverage && result.coverage.status) || 'success';
-      slot.reason = (result && result.coverage && result.coverage.reason) || null;
-      return collected;
-    } catch (error) {
-      slot.status = 'failed';
-      slot.error = errorLabel(error);
-      return [];
-    }
-  })();
-
-  const [youtubeItems, xItems] = await Promise.all([youtubeTask, xTask]);
-  const mergedRaw = [...youtubeItems, ...xItems];
+  const collectedArrays = await Promise.all(collectTasks);
+  const mergedRaw = collectedArrays.flat();
   coverage.collected_total = mergedRaw.length;
 
   // ═══════════════════════════════════════════════════════════════
@@ -390,10 +406,14 @@ async function runMin(options = {}) {
   coverage.public_items = publicItems;
 
   // ═══════════════════════════════════════════════════════════════
-  // 状态汇总：双采集全失败 → failed；任一步降级 → partial；否则 complete。
+  // 状态汇总：本轮启用的采集平台（platforms 内 youtube/x）全失败 → failed；
+  // 任一步降级 → partial；否则 complete。缺省双平台时语义与旧版一致（双采集全失败 → failed）。
   // ═══════════════════════════════════════════════════════════════
+  const enabledRunPlatforms = platforms.filter(p => p === 'youtube' || p === 'x');
+  const enabledCollectFailed = enabledRunPlatforms.length > 0
+    && enabledRunPlatforms.every(p => coverage.collectors[p] && coverage.collectors[p].status === 'failed');
   coverage.status =
-    coverage.collectors.youtube.status === 'failed' && coverage.collectors.x.status === 'failed'
+    enabledCollectFailed
       ? 'failed'
       : errors.length > 0
         ? 'partial'

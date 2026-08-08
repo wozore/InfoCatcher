@@ -12119,11 +12119,29 @@
           "comments": null,
           "reposts": 3,
           "replies": 5
+        },
+        {
+          "published_at": "2026-08-07T17:47:54.000Z",
+          "views": 5740,
+          "likes": 90,
+          "comments": null,
+          "reposts": 16,
+          "replies": 7
+        },
+        {
+          "published_at": "2026-08-07T16:00:48.000Z",
+          "views": 7502,
+          "likes": 25,
+          "comments": null,
+          "reposts": 6,
+          "replies": 7
         }
       ],
       "seen_native_ids": [
         "2085695365697712537",
-        "2085693227827367982"
+        "2085693227827367982",
+        "2085785015854444744",
+        "2085758063471120848"
       ]
     },
     "x:97195d2a8377b1621835": {
@@ -12238,6 +12256,22 @@
           "comments": null,
           "reposts": 88,
           "replies": 71
+        },
+        {
+          "published_at": "2026-08-07T18:34:26.000Z",
+          "views": 3275,
+          "likes": 28,
+          "comments": null,
+          "reposts": 3,
+          "replies": 4
+        },
+        {
+          "published_at": "2026-08-07T17:33:59.000Z",
+          "views": 6328,
+          "likes": 37,
+          "comments": null,
+          "reposts": 3,
+          "replies": 7
         }
       ],
       "seen_native_ids": [
@@ -12246,7 +12280,9 @@
         "2085471158887923728",
         "2085459327767171542",
         "2085453401874477556",
-        "2085416724266983682"
+        "2085416724266983682",
+        "2085796727362052241",
+        "2085781512213889478"
       ]
     },
     "x:2afb6efcf1c160cc1a45": {
@@ -12314,6 +12350,38 @@
           "comments": null,
           "reposts": 8,
           "replies": 5
+        },
+        {
+          "published_at": "2026-08-07T17:33:00.000Z",
+          "views": 13453,
+          "likes": 8,
+          "comments": null,
+          "reposts": 7,
+          "replies": 5
+        },
+        {
+          "published_at": "2026-08-07T16:21:05.000Z",
+          "views": 19272,
+          "likes": 29,
+          "comments": null,
+          "reposts": 6,
+          "replies": 7
+        },
+        {
+          "published_at": "2026-08-07T16:09:09.000Z",
+          "views": 17627,
+          "likes": 10,
+          "comments": null,
+          "reposts": 2,
+          "replies": 5
+        },
+        {
+          "published_at": "2026-08-07T16:07:00.000Z",
+          "views": 18129,
+          "likes": 10,
+          "comments": null,
+          "reposts": 1,
+          "replies": 3
         }
       ],
       "seen_native_ids": [
@@ -12324,7 +12392,11 @@
         "2085497415600148973",
         "2085486575052263700",
         "2085425717374820476",
-        "2085419403735175533"
+        "2085419403735175533",
+        "2085781266872353124",
+        "2085763167884357680",
+        "2085760165530173662",
+        "2085759622510494083"
       ]
     },
     "x:db73b12c224991bd8a20": {
@@ -12527,6 +12599,14 @@
           "comments": null,
           "reposts": 3,
           "replies": 10
+        },
+        {
+          "published_at": "2026-08-07T18:18:00.000Z",
+          "views": 1114,
+          "likes": 13,
+          "comments": null,
+          "reposts": 0,
+          "replies": 2
         }
       ],
       "seen_native_ids": [
@@ -12534,7 +12614,8 @@
         "2085726242314346760",
         "2085556943075340640",
         "2085552232574144570",
-        "2085451883322466306"
+        "2085451883322466306",
+        "2085792591585419708"
       ]
     },
     "x:5119767e06fe79770f96": {
@@ -12795,10 +12876,19 @@
           "comments": null,
           "reposts": 0,
           "replies": 2
+        },
+        {
+          "published_at": "2026-08-07T17:59:23.000Z",
+          "views": 73,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
         }
       ],
       "seen_native_ids": [
-        "2085725025127289322"
+        "2085725025127289322",
+        "2085787906720014397"
       ]
     },
     "x:35830329bc61af865b2a": {
@@ -13533,10 +13623,19 @@
           "comments": null,
           "reposts": 0,
           "replies": 0
+        },
+        {
+          "published_at": "2026-08-07T18:42:09.000Z",
+          "views": 33,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
         }
       ],
       "seen_native_ids": [
-        "2085745607814303803"
+        "2085745607814303803",
+        "2085798667236381177"
       ]
     },
     "x:91989901306f730d6605": {
@@ -14046,10 +14145,19 @@
           "comments": null,
           "reposts": 0,
           "replies": 1
+        },
+        {
+          "published_at": "2026-08-07T17:35:07.000Z",
+          "views": 423,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
         }
       ],
       "seen_native_ids": [
-        "2085740245241495847"
+        "2085740245241495847",
+        "2085781798210949425"
       ]
     },
     "x:b77344b34b8b1bf6be84": {
@@ -14076,10 +14184,19 @@
           "comments": null,
           "reposts": 0,
           "replies": 0
+        },
+        {
+          "published_at": "2026-08-07T16:11:52.000Z",
+          "views": 18,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
         }
       ],
       "seen_native_ids": [
-        "2085743593436930436"
+        "2085743593436930436",
+        "2085760848098992348"
       ]
     },
     "x:cf15827bda62c2bd886b": {
@@ -14521,6 +14638,2655 @@
       "seen_native_ids": [
         "tweet-111",
         "tweet-222"
+      ]
+    },
+    "x:cedf83f632364642b3bd": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:10:19.000Z",
+          "views": 9784,
+          "likes": 97,
+          "comments": null,
+          "reposts": 13,
+          "replies": 5
+        }
+      ],
+      "seen_native_ids": [
+        "2085790659433074889"
+      ]
+    },
+    "x:c18361932b9089dbe540": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:30:35.000Z",
+          "views": 18,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085795757127540932"
+      ]
+    },
+    "x:4a17c520e0293c2fcdf3": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:21:50.000Z",
+          "views": 14,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        },
+        {
+          "published_at": "2026-08-07T17:48:50.000Z",
+          "views": 17,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085793555776442766",
+        "2085785249896890712"
+      ]
+    },
+    "x:7ef708762203eb12f329": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:14:30.000Z",
+          "views": 333,
+          "likes": 4,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085791710396002413"
+      ]
+    },
+    "x:777553f7afcdb137c481": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:13:59.000Z",
+          "views": 6,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085791580653506604"
+      ]
+    },
+    "x:8bed7a3ed14b04fc32b2": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:05:21.000Z",
+          "views": 35,
+          "likes": 1,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085789405751730317"
+      ]
+    },
+    "x:d63bf99e156c22dd3c3d": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T17:33:39.000Z",
+          "views": 18,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085781430672781812"
+      ]
+    },
+    "x:a5b929d01859d7af3761": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T17:31:46.000Z",
+          "views": 38,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085780956527685990"
+      ]
+    },
+    "x:795655ca816fac2377a2": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T17:29:30.000Z",
+          "views": 9,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085780384114188359"
+      ]
+    },
+    "x:27d87ce87f3ccf134383": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T17:09:51.000Z",
+          "views": 33,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085775442120933585"
+      ]
+    },
+    "x:f4811d2e423838faa413": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T17:02:22.000Z",
+          "views": 23,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        },
+        {
+          "published_at": "2026-08-07T17:01:55.000Z",
+          "views": 18,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        },
+        {
+          "published_at": "2026-08-07T16:31:44.000Z",
+          "views": 29,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        },
+        {
+          "published_at": "2026-08-07T16:31:10.000Z",
+          "views": 26,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085773557448274044",
+        "2085773443862245477",
+        "2085765848552370386",
+        "2085765705438523559"
+      ]
+    },
+    "x:5716f208d948b48574d5": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T16:28:11.000Z",
+          "views": 76,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 2
+        }
+      ],
+      "seen_native_ids": [
+        "2085764956650402278"
+      ]
+    },
+    "x:51ba60c34a3f81cbe11e": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T16:02:45.000Z",
+          "views": 589,
+          "likes": 4,
+          "comments": null,
+          "reposts": 3,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085758554049331235"
+      ]
+    },
+    "x:59a54b6501955098bde9": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:43:30.000Z",
+          "views": 3,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085799009080447298"
+      ]
+    },
+    "x:481833c869cf49282224": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:43:01.000Z",
+          "views": 582,
+          "likes": 2,
+          "comments": null,
+          "reposts": 1,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798885302407177"
+      ]
+    },
+    "x:eac9767ce3282b9c2dcd": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:42:40.000Z",
+          "views": 2,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798800497516580"
+      ]
+    },
+    "x:bba83fcc2a849742498f": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:42:36.000Z",
+          "views": 0,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798781887357160"
+      ]
+    },
+    "x:a58e478578c76f43d798": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:41:59.000Z",
+          "views": 0,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798624911347761"
+      ]
+    },
+    "x:d65206dea1a0e0c4eb98": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:41:32.000Z",
+          "views": 6,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798511925506372"
+      ]
+    },
+    "x:300b5885ade8918e4b24": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:41:03.000Z",
+          "views": 2,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798391859298414"
+      ]
+    },
+    "x:63791af0e73cae9002b2": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:40:28.000Z",
+          "views": 1,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        },
+        {
+          "published_at": "2026-08-07T18:39:06.000Z",
+          "views": 11,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085798244857102619",
+        "2085797900102041621"
+      ]
+    },
+    "x:dd43883c1998fecffff0": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:40:13.000Z",
+          "views": 2,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798180814209380"
+      ]
+    },
+    "x:d30a84e186d0bf3abf4a": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:39:20.000Z",
+          "views": 94,
+          "likes": 3,
+          "comments": null,
+          "reposts": 0,
+          "replies": 2
+        }
+      ],
+      "seen_native_ids": [
+        "2085797960659751312"
+      ]
+    },
+    "x:01f3e247f861efbd41f4": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:39:16.000Z",
+          "views": 3,
+          "likes": 1,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085797942707847495"
+      ]
+    },
+    "x:c443295eb141b99afddb": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:39:14.000Z",
+          "views": 42,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085797933677424705"
+      ]
+    },
+    "x:5afe691fbea97d072967": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:37:20.000Z",
+          "views": 10,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085797455703286253"
+      ]
+    },
+    "x:200b023ff1098a80252a": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:33:00.000Z",
+          "views": 20,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085796364911309310"
+      ]
+    },
+    "x:e67eef4075034e667aa6": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:32:56.000Z",
+          "views": 13,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        },
+        {
+          "published_at": "2026-08-07T18:42:49.000Z",
+          "views": 2,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        },
+        {
+          "published_at": "2026-08-07T18:05:25.000Z",
+          "views": 242,
+          "likes": 4,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085796349090664672",
+        "2085798835121795543",
+        "2085789425045582109"
+      ]
+    },
+    "x:34102e1e732bee81ecef": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:32:33.000Z",
+          "views": 53,
+          "likes": 2,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085796254026752335"
+      ]
+    },
+    "x:a6e6fa9629c8820d1f9d": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:29:24.000Z",
+          "views": 21,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085795458203656551"
+      ]
+    },
+    "x:b17aebbaeed1c72c59b9": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:27:55.000Z",
+          "views": 54,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085795086047097269"
+      ]
+    },
+    "x:cf2a3cd1624b8b3218ec": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:26:18.000Z",
+          "views": 5,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085794680961110105"
+      ]
+    },
+    "x:6ad82f8e3284f49b703c": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:14:30.000Z",
+          "views": 76,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085791709284438362"
+      ]
+    },
+    "x:f95985e3b1735cabc92b": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:06:25.000Z",
+          "views": 166,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085789677525889372"
+      ]
+    },
+    "x:f444cdc043352e5e198c": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:02:26.000Z",
+          "views": 32,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085788673870872893"
+      ]
+    },
+    "x:b5d513dcbdd22f2f3073": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:02:12.000Z",
+          "views": 48,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        },
+        {
+          "published_at": "2026-08-07T18:01:35.000Z",
+          "views": 27,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085788615624528188",
+        "2085788457704800361"
+      ]
+    },
+    "x:746481ab8b8b03ff4cda": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:02:01.000Z",
+          "views": 361,
+          "likes": 1,
+          "comments": null,
+          "reposts": 0,
+          "replies": 2
+        }
+      ],
+      "seen_native_ids": [
+        "2085788568719708461"
+      ]
+    },
+    "x:b3c1b8d2f2de971f2a42": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:00:43.000Z",
+          "views": 16,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085788241542926424"
+      ]
+    },
+    "x:2d50bb19fc8c65817045": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:43:23.000Z",
+          "views": 3,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798978658922866"
+      ]
+    },
+    "x:7b6f6477526f4bb8359f": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:43:18.000Z",
+          "views": 0,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798959478452723"
+      ]
+    },
+    "x:f06db368f14f150c9b53": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:43:17.000Z",
+          "views": 3,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085798955544465682"
+      ]
+    },
+    "x:5e0d25c104a329d3e67f": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:43:10.000Z",
+          "views": 1,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798926016467307"
+      ]
+    },
+    "x:7d9214a278232e811565": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:43:07.000Z",
+          "views": 3,
+          "likes": 1,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798913177743814"
+      ]
+    },
+    "x:2efec42a817a6710f987": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:43:04.000Z",
+          "views": 1,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798898933682217"
+      ]
+    },
+    "x:13b4e3f1223eaa3b8a0b": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:42:59.000Z",
+          "views": 5,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798876737577066"
+      ]
+    },
+    "x:678a15b894ef27239dc8": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:42:51.000Z",
+          "views": 1,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798844931936339"
+      ]
+    },
+    "x:8f7a4ef4ae458db00236": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:42:39.000Z",
+          "views": 6,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798795950858708"
+      ]
+    },
+    "x:9eae8aff5d183ce5d8c7": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:42:25.000Z",
+          "views": 14,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798735066644754"
+      ]
+    },
+    "x:2b3ac0414539982801b8": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:42:16.000Z",
+          "views": 3,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798696495509722"
+      ]
+    },
+    "x:e747cbab7483cafc9021": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:43:32.000Z",
+          "views": 2,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085799017745973468"
+      ]
+    },
+    "x:1a8c1457d56e1e5e90d7": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:43:28.000Z",
+          "views": 3,
+          "likes": 1,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798999651455018"
+      ]
+    },
+    "x:da1be871c8f469d128a0": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:43:27.000Z",
+          "views": 316,
+          "likes": 5,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798995952120270"
+      ]
+    },
+    "x:3c540003ee01c404412b": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:43:24.000Z",
+          "views": 3,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798985009123836"
+      ]
+    },
+    "x:de4ba7222c35e3c27e6b": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:43:18.000Z",
+          "views": 2,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798958660559033"
+      ]
+    },
+    "x:79d4df322a7af0bb0958": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:43:14.000Z",
+          "views": 8,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798941527085449"
+      ]
+    },
+    "x:d1e1d77f74294b02b20b": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:43:07.000Z",
+          "views": 4,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798913718522254"
+      ]
+    },
+    "x:3f095da02dc527bd63b5": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:43:02.000Z",
+          "views": 7,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798890000060881"
+      ]
+    },
+    "x:b4035a9c36a289aa44a4": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:42:47.000Z",
+          "views": 3,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798826938335613"
+      ]
+    },
+    "x:46fd95a42a0b6f8961f9": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:42:34.000Z",
+          "views": 4,
+          "likes": 1,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085798771447734517"
+      ]
+    },
+    "x:739486ddf1c44ea1975c": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:42:23.000Z",
+          "views": 1,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798725809475689"
+      ]
+    },
+    "x:baa8bb2909148cde0583": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:42:09.000Z",
+          "views": 18,
+          "likes": 1,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798667739361738"
+      ]
+    },
+    "x:633fd87e34ec8997348b": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:41:24.000Z",
+          "views": 2,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798481596162068"
+      ]
+    },
+    "x:f10cf2948085377bdd59": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:40:07.000Z",
+          "views": 5,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798158626627850"
+      ]
+    },
+    "x:4b3a58c76bc62b365068": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:39:36.000Z",
+          "views": 11,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798026224996722"
+      ]
+    },
+    "x:fb3f55b679f3971dae84": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:37:34.000Z",
+          "views": 8,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085797515308523985"
+      ]
+    },
+    "x:3768f2fac0afcfbec7ed": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:37:00.000Z",
+          "views": 6,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085797374102773900"
+      ]
+    },
+    "x:bb195eb6e015234105dc": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:36:37.000Z",
+          "views": 11,
+          "likes": 1,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085797277151666491"
+      ]
+    },
+    "x:b4ca11c6a9d31aa3016e": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:35:54.000Z",
+          "views": 5,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085797097480028336"
+      ]
+    },
+    "x:55372eefb15de2dbe1e3": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:35:29.000Z",
+          "views": 329,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085796992379502776"
+      ]
+    },
+    "x:488d943a7d05d4b025c1": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:33:25.000Z",
+          "views": 14,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085796472059281593"
+      ]
+    },
+    "x:9b7235f226f6b89ca2c0": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:32:39.000Z",
+          "views": 14,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        },
+        {
+          "published_at": "2026-08-07T18:32:38.000Z",
+          "views": 15,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        },
+        {
+          "published_at": "2026-08-07T18:32:37.000Z",
+          "views": 15,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085796278655709589",
+        "2085796274708615311",
+        "2085796268501094523"
+      ]
+    },
+    "x:d7e474ab5683df41c0a5": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:31:41.000Z",
+          "views": 176,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085796034995958119"
+      ]
+    },
+    "x:58586b751ddd1e70ec84": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:31:34.000Z",
+          "views": 13,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085796004607975710"
+      ]
+    },
+    "x:82a6a06e87b127cb3374": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:30:51.000Z",
+          "views": 11,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085795823132999692"
+      ]
+    },
+    "x:d502c50e4faee41a668f": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:29:48.000Z",
+          "views": 16,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085795558900527263"
+      ]
+    },
+    "x:ef02b73f62399cdd5368": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:43:26.000Z",
+          "views": 5,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798990671471032"
+      ]
+    },
+    "x:4d39e936fb316ffa946d": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:43:20.000Z",
+          "views": 5,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798966482838011"
+      ]
+    },
+    "x:cf5504c53501f9c16119": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:43:14.000Z",
+          "views": 39,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085798942663692450"
+      ]
+    },
+    "x:15e66dce80696596dc8c": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:43:04.000Z",
+          "views": 277,
+          "likes": 0,
+          "comments": null,
+          "reposts": 1,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085798897406857545"
+      ]
+    },
+    "x:1397f79de51d73a58321": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:42:49.000Z",
+          "views": 5,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798835704541220"
+      ]
+    },
+    "x:921929f9de4c0e3db921": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:42:19.000Z",
+          "views": 271,
+          "likes": 5,
+          "comments": null,
+          "reposts": 1,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085798709523058773"
+      ]
+    },
+    "x:a2bbfe2b749200bbfd75": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:43:28.000Z",
+          "views": 2,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085799000205140468"
+      ]
+    },
+    "x:faf144ee33171cb71836": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:43:12.000Z",
+          "views": 16,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798934228681168"
+      ]
+    },
+    "x:ee18e957ab2f584b0b11": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:43:12.000Z",
+          "views": 5,
+          "likes": 1,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798931053617231"
+      ]
+    },
+    "x:972975fccc56a6d928b5": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:42:26.000Z",
+          "views": 23,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798738824450092"
+      ]
+    },
+    "x:78b92440cfb538eb74c0": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:42:20.000Z",
+          "views": 1,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798715797758078"
+      ]
+    },
+    "x:85d974f23908481a1a30": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:41:54.000Z",
+          "views": 3,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798605902745694"
+      ]
+    },
+    "x:978677aa5bfe35b9ef91": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:41:35.000Z",
+          "views": 12,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085798525837726033"
+      ]
+    },
+    "x:691ecb1a5f827ae6089a": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:40:33.000Z",
+          "views": 4,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798267032387705"
+      ]
+    },
+    "x:4e49606b0f045788fd21": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:40:30.000Z",
+          "views": 7,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798254969511980"
+      ]
+    },
+    "x:cacbdc0f6ed1f69deedb": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:40:15.000Z",
+          "views": 52,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798189634908523"
+      ]
+    },
+    "x:f14258e6b55bd77d43b0": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:40:07.000Z",
+          "views": 4,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798157665919272"
+      ]
+    },
+    "x:8b53656a6e58f3f8486c": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:40:06.000Z",
+          "views": 754,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798153899446684"
+      ]
+    },
+    "x:288e529fbad8c28b7ea2": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:39:57.000Z",
+          "views": 7,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798114867188183"
+      ]
+    },
+    "x:17e1ec74125b618957c3": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:39:41.000Z",
+          "views": 16,
+          "likes": 1,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798049394426236"
+      ]
+    },
+    "x:106fbbcb5c00d579c3c5": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:28:09.000Z",
+          "views": 10,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085795143568019508"
+      ]
+    },
+    "x:f7945f53a362b6b55ac4": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T17:48:44.000Z",
+          "views": 9,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085785225989382536"
+      ]
+    },
+    "x:3e0d15321d4a8e4f5e51": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T17:43:27.000Z",
+          "views": 7,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085783897896554754"
+      ]
+    },
+    "x:d8743fc2a0ab7caa9210": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T17:33:42.000Z",
+          "views": 16,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085781442412544374"
+      ]
+    },
+    "x:334599effb653451afd7": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T17:21:00.000Z",
+          "views": 90,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 2
+        }
+      ],
+      "seen_native_ids": [
+        "2085778245513846826"
+      ]
+    },
+    "x:4a247e5feace9add95f0": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T17:06:03.000Z",
+          "views": 1440,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085774482682073299"
+      ]
+    },
+    "x:b7373517e3ebe91cde53": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:41:45.000Z",
+          "views": 21,
+          "likes": 1,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798567139303828"
+      ]
+    },
+    "x:cd8ba8292e4280454d79": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:07:25.000Z",
+          "views": 25,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        },
+        {
+          "published_at": "2026-08-07T16:01:10.000Z",
+          "views": 81,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085789929418944915",
+        "2085758154311442772"
+      ]
+    },
+    "x:a6fa3f879981724e6763": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T17:47:36.000Z",
+          "views": 18,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085784938503450780"
+      ]
+    },
+    "x:db0e430935db6c7ca211": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T17:44:43.000Z",
+          "views": 12,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085784212985028895"
+      ]
+    },
+    "x:871c2e4a7e3801ef5c53": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T17:34:55.000Z",
+          "views": 24,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085781748135374927"
+      ]
+    },
+    "x:6551e7f81901f65a4680": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T17:31:09.000Z",
+          "views": 34,
+          "likes": 1,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        },
+        {
+          "published_at": "2026-08-07T17:29:45.000Z",
+          "views": 33,
+          "likes": 1,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085780802428690861",
+        "2085780449939329507"
+      ]
+    },
+    "x:11e2cff1014439cca9ed": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T16:12:41.000Z",
+          "views": 13,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085761053854765444"
+      ]
+    },
+    "x:ce03ed7b1a5c656cddae": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T16:06:00.000Z",
+          "views": 35,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085759371175473589"
+      ]
+    },
+    "x:9c414f86d052cce3172b": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:43:30.000Z",
+          "views": 2,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085799009361318380"
+      ]
+    },
+    "x:b35620a6c0e8db303562": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:41:11.000Z",
+          "views": 2,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798427275759960"
+      ]
+    },
+    "x:dc9211f4428a1574456a": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:39:42.000Z",
+          "views": 2,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798052451791352"
+      ]
+    },
+    "x:2873485d9256ee186f34": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:36:55.000Z",
+          "views": 1,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085797351512555524"
+      ]
+    },
+    "x:5c4ffbb024daaef7cc84": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:36:22.000Z",
+          "views": 4,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085797212953715180"
+      ]
+    },
+    "x:b7ec469b8b0f0a5df176": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:34:58.000Z",
+          "views": 143,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085796860279783617"
+      ]
+    },
+    "x:cc77e10454174b95e7fe": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:34:26.000Z",
+          "views": 11,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085796725927633288"
+      ]
+    },
+    "x:e8eee964251d05bc99d4": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:33:44.000Z",
+          "views": 2,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085796550245220438"
+      ]
+    },
+    "x:21455e06b2845fa836fa": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:33:26.000Z",
+          "views": 2,
+          "likes": 1,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085796476370751811"
+      ]
+    },
+    "x:e65822103fed0252e812": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:31:05.000Z",
+          "views": 1,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        },
+        {
+          "published_at": "2026-08-07T18:31:04.000Z",
+          "views": 0,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        },
+        {
+          "published_at": "2026-08-07T18:31:04.000Z",
+          "views": 0,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        },
+        {
+          "published_at": "2026-08-07T18:31:03.000Z",
+          "views": 9,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085795883224863124",
+        "2085795879907176776",
+        "2085795878447559097",
+        "2085795874987196791"
+      ]
+    },
+    "x:cb925515633b20508436": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:30:56.000Z",
+          "views": 7,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085795847216803968"
+      ]
+    },
+    "x:8159f09e9959f3813a8b": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:27:27.000Z",
+          "views": 4,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085794967369248918"
+      ]
+    },
+    "x:e626fb7f4901d9d3b7a9": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:27:26.000Z",
+          "views": 19,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085794966580920605"
+      ]
+    },
+    "x:389043f01a3f83e8e6f3": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:18:10.000Z",
+          "views": 12,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085792633730007456"
+      ]
+    },
+    "x:c3f9678e33d6ec10fef7": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:17:17.000Z",
+          "views": 3,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085792409699733898"
+      ]
+    },
+    "x:b82cb587fca379533b17": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:43:29.000Z",
+          "views": 0,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085799005410197562"
+      ]
+    },
+    "x:a8ab5c1c86111ec3e1ac": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:42:45.000Z",
+          "views": 1,
+          "likes": 1,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798819778736422"
+      ]
+    },
+    "x:d3f448c0bc6bd1bff646": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:42:03.000Z",
+          "views": 6,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798642519023761"
+      ]
+    },
+    "x:61e6f4f65b8a24fafd6b": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:41:44.000Z",
+          "views": 0,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798562009354731"
+      ]
+    },
+    "x:36a2c267091b2f48c8a9": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:41:10.000Z",
+          "views": 4,
+          "likes": 1,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798422842614110"
+      ]
+    },
+    "x:940746be78ca22008f5b": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:40:28.000Z",
+          "views": 5,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798245209391500"
+      ]
+    },
+    "x:412a6d09d9bbc8484a9d": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:39:43.000Z",
+          "views": 1,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798057451340121"
+      ]
+    },
+    "x:7ecb755ffc9e6f687991": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:39:36.000Z",
+          "views": 1,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798028040876530"
+      ]
+    },
+    "x:338e0b52a4c82dab9bbb": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:38:53.000Z",
+          "views": 47,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085797844884337105"
+      ]
+    },
+    "x:4f1cdebafc8b1701dce3": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:38:50.000Z",
+          "views": 3,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085797832552837182"
+      ]
+    },
+    "x:6d8b626988d7c07f6485": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:37:52.000Z",
+          "views": 4,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085797589102813337"
+      ]
+    },
+    "x:e1d5fe4eb11e525efa07": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:37:00.000Z",
+          "views": 1,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085797371896615022"
+      ]
+    },
+    "x:573fd288dbed0863c312": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:36:16.000Z",
+          "views": 4,
+          "likes": 1,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085797189972877649"
+      ]
+    },
+    "x:1ca93f5c5965902eb7b2": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:01:19.000Z",
+          "views": 3,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085788392709861682"
+      ]
+    },
+    "x:588687563042d50894c2": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T16:57:05.000Z",
+          "views": 3205,
+          "likes": 14,
+          "comments": null,
+          "reposts": 0,
+          "replies": 6
+        }
+      ],
+      "seen_native_ids": [
+        "2085772226473992600"
+      ]
+    },
+    "x:249aacb01baecfcac401": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T16:50:11.000Z",
+          "views": 1857,
+          "likes": 8,
+          "comments": null,
+          "reposts": 0,
+          "replies": 2
+        }
+      ],
+      "seen_native_ids": [
+        "2085770492124725677"
+      ]
+    },
+    "x:239c68fed6acf5d7f222": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T16:34:45.000Z",
+          "views": 39,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085766608421544264"
+      ]
+    },
+    "x:5af31dd767b1b38eddd9": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T16:32:25.000Z",
+          "views": 230,
+          "likes": 2,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085766021848428630"
+      ]
+    },
+    "x:e8df326ff0c44bc6abb4": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T16:20:59.000Z",
+          "views": 261,
+          "likes": 6,
+          "comments": null,
+          "reposts": 0,
+          "replies": 11
+        }
+      ],
+      "seen_native_ids": [
+        "2085763143360561186"
+      ]
+    },
+    "x:7807b9d6b27f0b9ae201": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T16:13:49.000Z",
+          "views": 82,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085761337326731753"
+      ]
+    },
+    "x:41d4c7a9b78e099135f7": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T16:01:38.000Z",
+          "views": 1224,
+          "likes": 16,
+          "comments": null,
+          "reposts": 0,
+          "replies": 21
+        }
+      ],
+      "seen_native_ids": [
+        "2085758273236697162"
+      ]
+    },
+    "x:f407727eb34116154e0b": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T16:39:18.000Z",
+          "views": 28,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085767752279613463"
+      ]
+    },
+    "x:7490139b256653816c43": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T16:28:34.000Z",
+          "views": 64,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085765049449377896"
+      ]
+    },
+    "x:49fa3f3d6414f89fd7b9": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T16:27:31.000Z",
+          "views": 60,
+          "likes": 1,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085764785728319841"
+      ]
+    },
+    "x:09ebf1c3c046e13f7986": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T17:03:41.000Z",
+          "views": 64,
+          "likes": 2,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085773888340754872"
+      ]
+    },
+    "x:65ccb44ce77bb06d4f15": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T16:26:58.000Z",
+          "views": 293,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085764646573895862"
+      ]
+    },
+    "x:97ce1bfc0740e9f01d66": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:41:25.000Z",
+          "views": 11,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085798484024926300"
+      ]
+    },
+    "x:74bf2741aecfa9c3e752": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:40:50.000Z",
+          "views": 1123,
+          "likes": 5,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085798336070553605"
+      ]
+    },
+    "x:512b55920a17c1b58f46": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:35:26.000Z",
+          "views": 30,
+          "likes": 2,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085796979356139781"
+      ]
+    },
+    "x:97219d71c2c4d60abaeb": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:35:04.000Z",
+          "views": 10,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085796885101437246"
+      ]
+    },
+    "x:a6fe60279cde69a28978": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:34:10.000Z",
+          "views": 2,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085796659095572860"
+      ]
+    },
+    "x:a359fb2b8ea15cfcd697": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:28:55.000Z",
+          "views": 37,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        },
+        {
+          "published_at": "2026-08-07T18:28:50.000Z",
+          "views": 39,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085795339643326864",
+        "2085795316738166885"
+      ]
+    },
+    "x:6d6638f248441745f3db": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:26:10.000Z",
+          "views": 11,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085794645062348937"
+      ]
+    },
+    "x:f007b485f96d846979be": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:24:01.000Z",
+          "views": 28,
+          "likes": 1,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085794104202391807"
+      ]
+    },
+    "x:b2149dc974f8d22a8b95": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:17:47.000Z",
+          "views": 23,
+          "likes": 1,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085792536405090526"
+      ]
+    },
+    "x:d021b689cfbf5dae84fb": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:16:56.000Z",
+          "views": 6,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085792324303339681"
+      ]
+    },
+    "x:0c7fcf1042794b233331": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:16:44.000Z",
+          "views": 108,
+          "likes": 1,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085792273858527597"
+      ]
+    },
+    "x:8ec287b983648d0cdb30": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:14:18.000Z",
+          "views": 14,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085791658537255401"
+      ]
+    },
+    "x:dc70d999cdf311fadf83": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:08:59.000Z",
+          "views": 3,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 1
+        }
+      ],
+      "seen_native_ids": [
+        "2085790321749762449"
+      ]
+    },
+    "x:c7b21da13fa8fd72819e": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:01:22.000Z",
+          "views": 6,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085788403971531042"
+      ]
+    },
+    "x:1e0f141e4bd36d91737a": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:00:18.000Z",
+          "views": 43,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085788134931939778"
+      ]
+    },
+    "x:38514345d7fbd8e97a14": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T17:52:38.000Z",
+          "views": 2,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085786206550343893"
+      ]
+    },
+    "x:770ca95e7055eb6b4bc0": {
+      "samples": [
+        {
+          "published_at": "2026-08-07T18:39:26.000Z",
+          "views": 3,
+          "likes": 0,
+          "comments": null,
+          "reposts": 0,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2085797983384207444"
       ]
     }
   }

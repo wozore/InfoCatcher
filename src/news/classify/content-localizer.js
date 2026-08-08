@@ -1,7 +1,7 @@
 /**
  * content-localizer.js —— 热点内容本地化（多语言翻译）器
  *
- * 在热点管线中的位置：候选层（hotspot-candidates.json）落地后、公开投影前的
+ * 在热点管线 v2 中的位置：候选层（min-candidates.json）落地后、公开投影前的
  * AI 加工步骤。与 content-classifier.js（内容类型分类）、content-summarizer.js
  * （内容总结）、content-reviewer.js（AI 审核建议）平级，同属 AI 加工层
  * src/news/classify/，复用 llm-provider.js 的 DeepSeek 封装。
@@ -14,12 +14,13 @@
  *   - 原文 title / description 保留在候选顶层（溯源核验基线 + 未来多语言翻译源）；
  *   - 任何 LLM 失败（缺 key/网络/超时/输出无法解析）resolve 降级对象、
  *     title/description 置 null，绝不 reject —— 前端回退显示原文，不阻塞采集管线；
- *   - 品牌名/专有名词/URL/代码保持原文不译（prompt 约束），忠实翻译不增删信息。
+ *   - 品牌名/专有名词/URL/代码保持原文不译（prompt 约束），忠实翻译不增删信息；
+ *   - 原文已是中文时标题做精炼（去 # 标签/emoji/情绪化开场），非逐字翻译。
  *
  * 公开语义（用户拍板）：localizations 是候选上的公开字段，**进公开投影**
- * （不在 news-candidates.js 的 INTERNAL_FIELDS），前端按语言读取；中文是当前
+ * （min-store 的 MIN_PUBLIC_FIELDS 白名单保留），前端按语言读取；中文是当前
  * 唯一语言（后续加语言即加 localizations 的 key）。localizations_meta 是内部
- * 翻译痕迹，不进公开投影（INTERNAL_FIELDS 剔除）。
+ * 翻译痕迹，不进公开投影（MIN_INTERNAL_FIELDS 剔除）。
  *
  * 成本控制：默认关闭（localize_enabled）、每轮上限（localize_max_items_per_run）、
  * 只翻译没有 localizations[locale] 的候选（不重复花钱）、并发池限流（复用采集 concurrency）。

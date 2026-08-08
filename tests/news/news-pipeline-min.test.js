@@ -108,7 +108,14 @@ const seed = {
   language: 'en', source_tags: [], thumbnail: null,
   metrics: { views: 800, likes: 120, comments: null, reposts: 10, replies: 0 },
   explicit_links: ['https://anthropic.com'], content_type: 'ai_product',
+  // 模拟真实"已总结/本地化再获批"的候选：summary/summary_key_points/localizations 为
+  // 人工审核通过前经 summarize/localize 写入的公开字段，须经白名单存活到公开投影。
+  summary: '摘要：Anthropic Claude update already approved',
+  summary_key_points: ['要点一', '要点二'],
+  localizations: { zh: { title: '中文标题：Anthropic Claude update already approved', description: 'This item was approved by human reviewer earlier.' } },
   review_status: 'approved', reviewed_at: hoursAgo(4),
+  // 模拟维护者已从 AI 待选项确认显示（第二阶段）→ 可进公开投影
+  top_selected: true,
   ai_advice: { verdict: 'approve', reasons: ['人工确认'] },
 };
 
@@ -217,6 +224,10 @@ test('pipeline-min 全链：L0 丢弃 → 分类 → 评分 → 审核 → 候�
     assert.ok('hot_score' in publicItem, '公开条目补充 hot_score');
     assert.ok('evidence_excerpt' in publicItem, '公开条目补充 evidence_excerpt');
     assert.ok(Array.isArray(publicItem.related_resources), '公开条目补充 related_resources');
+    // 白名单回归防护：approved 候选已总结/本地化的公开字段须存活到公开投影
+    assert.equal(publicItem.summary, `摘要：${seed.title}`, '公开条目保留 AI 总结');
+    assert.ok(Array.isArray(publicItem.summary_key_points), '公开条目保留总结要点');
+    assert.ok(publicItem.localizations && publicItem.localizations.zh, '公开条目保留本地化中文');
     assert.equal(hotspots.items.some(item => item.id === ytItem1.id), false, 'discarded 候选不进公开投影');
   } finally {
     restoreAll();

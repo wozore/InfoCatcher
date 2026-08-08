@@ -1,5 +1,9 @@
 {
   "schema_version": 1,
+  "platforms_supported": [
+    "youtube",
+    "x"
+  ],
   "schedule": {
     "youtube_cron": "0 22 */3 * *",
     "youtube_tz": "Asia/Shanghai",

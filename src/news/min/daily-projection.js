@@ -21,7 +21,7 @@
 
 'use strict';
 
-const { isMinPublicEligible, toPublicItemMin } = require('./min-store');
+const { isMinDisplayEligible, toPublicItemMin } = require('./min-store');
 
 /** 组内排序分数：final_score 优先，其次 hot_score；皆无则排最末。 */
 function sortScoreOf(item) {
@@ -64,7 +64,7 @@ function buildDailyProjection(store, config, options = {}) {
   const maxDaily = Number(collection.max_output_items_daily) || 5;
 
   const approved = (store && Array.isArray(store.candidates) ? store.candidates : [])
-    .filter(isMinPublicEligible);
+    .filter(isMinDisplayEligible);
 
   // 按 published_at 所在自然日分组；发布时间缺失/非法 → 无法归属自然日，不进投影
   const byDay = new Map();

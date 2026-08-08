@@ -1,7 +1,7 @@
 /**
  * content-summarizer.js —— 热点内容总结器
  *
- * 在热点管线中的位置：候选层（hotspot-candidates.json）落地后、公开投影前的
+ * 在热点管线 v2 中的位置：候选层（min-candidates.json）落地后、公开投影前的
  * AI 加工步骤。与 content-classifier.js（内容类型分类）平级，同属 AI 加工层
  * src/news/classify/，复用 llm-provider.js 的 DeepSeek 封装。
  *

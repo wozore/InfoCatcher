@@ -36,6 +36,7 @@ const DEFAULT_REVIEW_STATUS = 'pending';
 // 候选层中绝不进入公开投影的内部字段（审核痕迹 / AI 建议 / 剔除原因）。
 const MIN_INTERNAL_FIELDS = Object.freeze([
   'review_status', 'reviewed_at', 'ai_advice', 'l1_review', 'discard_stage', 'discard_reason',
+  'localizations_meta',
 ]);
 
 // 公开条目保留的字段（v2 公开契约）：final_score / score_breakdown 是内部评分
@@ -46,6 +47,7 @@ const MIN_PUBLIC_FIELDS = Object.freeze([
   'published_at', 'fetched_at', 'author_id', 'author_name', 'source_id',
   'language', 'source_tags', 'thumbnail', 'metrics', 'explicit_links',
   'hot_score', 'evidence_excerpt', 'related_resources', 'source_type', 'category', 'comments',
+  'summary', 'summary_key_points', 'localizations',
 ]);
 
 const EMPTY_STORE = Object.freeze({ schema_version: 1, updated_at: null, candidates: [] });
@@ -95,6 +97,8 @@ function mergeCandidatesMin(store, items) {
     if (prev) {
       // 已存在条目：人工审核结论不被重新采集覆盖。
       if (prev.review_status !== undefined) incoming.review_status = prev.review_status;
+      // top_selected（第二阶段：维护者从 AI 待选项确认显示）不被重新采集重置。
+      if (prev.top_selected !== undefined) incoming.top_selected = prev.top_selected;
       // reviewed_at 由人工审核写入，重新采集不携带 → 保留既有值。
       if (prev.reviewed_at !== undefined && incoming.reviewed_at === undefined) {
         incoming.reviewed_at = prev.reviewed_at;
@@ -103,8 +107,9 @@ function mergeCandidatesMin(store, items) {
       if (prev.ai_advice && incoming.ai_advice === undefined) incoming.ai_advice = prev.ai_advice;
       if (prev.l1_review && incoming.l1_review === undefined) incoming.l1_review = prev.l1_review;
     } else {
-      // 新条目缺省以 pending 进入待审核。
+      // 新条目缺省以 pending 进入待审核；top_selected 默认 false（尚未被选中显示）。
       if (incoming.review_status === undefined) incoming.review_status = DEFAULT_REVIEW_STATUS;
+      if (incoming.top_selected === undefined) incoming.top_selected = false;
     }
     byId.set(incoming.id, incoming);
     changed += 1;
@@ -157,6 +162,34 @@ function isMinPublicEligible(candidate) {
 }
 
 /**
+ * 批量设置"被选中显示"标记（第二阶段：维护者从 AI 待选项里确认最终前端显示）。
+ * 只处理显式列出的 ids；未命中 id 汇入 missing（不抛错）。top_selected 默认 false，
+ * 维护者从 ai-top 待选项确认后置 true → 公开投影只取 approved && top_selected。
+ * @returns {{ store, updated, missing }}
+ */
+function setTopSelectedMin(store, ids, selected) {
+  const next = createMinStore(store);
+  const missing = [];
+  let updated = 0;
+  for (const id of ids || []) {
+    const candidate = next.candidates.find(item => item.id === id);
+    if (!candidate) { missing.push(id); continue; }
+    candidate.top_selected = selected === true;
+    updated += 1;
+  }
+  return { store: next, updated, missing };
+}
+
+/**
+ * 公开资格门禁（公开投影用）：仅 approved 且 top_selected（维护者最终选中显示）。
+ * 第二阶段语义：review_status=approved 表示审核通过（进待选项池），
+ * top_selected=true 表示被选中显示在前端（每日 3~5/3~8）。
+ */
+function isMinDisplayEligible(candidate) {
+  return Boolean(candidate && candidate.review_status === 'approved' && candidate.top_selected === true);
+}
+
+/**
  * 公开投影剔除内部字段（审核痕迹 / AI 建议 / 剔除原因不进公开）。
  * 按 MIN_PUBLIC_FIELDS 白名单保留公开契约字段（final_score 等内部评分不进公开），
  * 并对 MIN_INTERNAL_FIELDS 做防御性二次剔除。
@@ -184,6 +217,8 @@ module.exports = {
   mergeCandidatesMin,
   setReviewStatusMin,
   setBatchReviewStatusMin,
+  setTopSelectedMin,
   isMinPublicEligible,
+  isMinDisplayEligible,
   toPublicItemMin,
 };

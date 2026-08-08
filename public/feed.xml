@@ -5,345 +5,105 @@
     <link>https://wozore.github.io/InfoCatcher</link>
     <description>AI 工具情报与行业热点，每日自动采集 + 人工精选</description>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 07 Aug 2026 04:18:14 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 08 Aug 2026 07:40:55 GMT</lastBuildDate>
     <generator>InfoCatcher RSS Engine</generator>
     <atom:link href="https://wozore.github.io/InfoCatcher/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
-      <title>DeepSeek-V4-Flash-0731 is now available on Ollama&apos;s cloud. This update substantially enhances the model&apos;s agentic capabilities:
+      <title>AI loses its mind when angry.
 
-ollama run deepseek-v4-flash:0731-cloud
+A 2026 study reveals that when induced with anger through simulated scenarios, LLM agents develop bias during sequential decision making.
 
-Use it wit</title>
-      <link>https://x.com/ollama/status/2083411055284232268</link>
-      <description><![CDATA[DeepSeek-V4-Flash-0731 is now available on Ollama&apos;s cloud. This update substantially enhances the model&apos;s agentic capabilities:
+Anger redu</title>
+      <link>https://x.com/Kekius_Sage/status/2085798885302407177</link>
+      <description><![CDATA[AI loses its mind when angry.
 
-ollama run deepseek-v4-flash:0731-cloud
+A 2026 study reveals that when induced with anger through simulated scenarios, LLM agents develop bias during sequential decision making.
 
-Use it with Claude Code:
+Anger reduces the AI&apos;s sensitivity to penalties and halts its exploration of new options. Consequently, the model gets trapped in early risky choices instead of finding optimal solutions. 
 
-ollama launch claude --model deepseek-v4-flash:0731-cloud]]></description>
-      <author>ollama</author>
-      <pubDate>Sat, 01 Aug 2026 04:34:38 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/ollama/status/2083411055284232268</guid>
+Despite lacking biological emotions, AI can still have its judgment compromised when processing negative user contexts.]]></description>
+      <author>Kekius Maximus</author>
+      <pubDate>Fri, 07 Aug 2026 18:43:01 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/Kekius_Sage/status/2085798885302407177</guid>
       <category>x</category>
-      <category>教程实践</category>
     </item>
     <item>
-      <title>🦙 is coming coming to Las Vegas for @Ai4Conferences next week (Aug 4–6). Three ways to find us:
+      <title>NEURON AI just dropped the first free all-in-one platform combining TTS + STT + LLM in a single product.
 
-📍 Booth 1561 on the Expo floor
-🎤 @jerryjliu0 will be speaking about unlocking do</title>
-      <link>https://x.com/llama_index/status/2083389543521062990</link>
-      <description><![CDATA[🦙 is coming coming to Las Vegas for @Ai4Conferences next week (Aug 4–6). Three ways to find us:
+No API juggling. No surprise bills. No duct-taped stack.
 
-📍 Booth 1561 on the Expo floor
-🎤 @jerryjliu0 will be speaking about unlocking document context for AI agents
-🥂 Waitlist for our (very oversubscribed) exec dinner at Tao Bistro (find us on Luma)
+Here&apos;s why this </title>
+      <link>https://x.com/blueshopping24/status/2085797900102041621</link>
+      <description><![CDATA[NEURON AI just dropped the first free all-in-one platform combining TTS + STT + LLM in a single product.
 
-Come say hi 👋]]></description>
-      <author>LlamaIndex 🦙</author>
-      <pubDate>Sat, 01 Aug 2026 03:09:09 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/llama_index/status/2083389543521062990</guid>
-      <category>x</category>
-      <category>教程实践</category>
-    </item>
-    <item>
-      <title>RT @RedHat_AI: Kimi K3 now in NVFP4, the Blackwell counterpart to our FP8-Block checkpoint.
+No API juggling. No surprise bills. No duct-taped stack.
 
-MoE layers quantized to 4-bit for accelerated…</title>
-      <link>https://x.com/vllm_project/status/2083372379443753030</link>
-      <description><![CDATA[RT @RedHat_AI: Kimi K3 now in NVFP4, the Blackwell counterpart to our FP8-Block checkpoint.
+Here&apos;s why this matters for anyone building voice AI right now:]]></description>
+      <author>Blue</author>
+      <pubDate>Fri, 07 Aug 2026 18:39:06 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/blueshopping24/status/2085797900102041621</guid>
+      <category>x</category>
+    </item>
+    <item>
+      <title>👉AI，第一次开始“自己找路”😱
 
-MoE layers quantized to 4-bit for accelerated…]]></description>
-      <author>vLLM</author>
-      <pubDate>Sat, 01 Aug 2026 02:00:57 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/vllm_project/status/2083372379443753030</guid>
-      <category>x</category>
-      <category>教程实践</category>
-    </item>
-    <item>
-      <title>Full AI Escape Seems Possible</title>
-      <link>https://www.youtube.com/shorts/40pRi5wMBwA</link>
-      <description><![CDATA[https://palisaderesearch.org/blog/self-replication]]></description>
-      <author>Robert Miles AI Safety</author>
-      <pubDate>Sat, 01 Aug 2026 01:30:50 GMT</pubDate>
-      <guid isPermaLink="true">https://www.youtube.com/shorts/40pRi5wMBwA</guid>
-      <category>youtube</category>
-      <category>行业观点</category>
-    </item>
-    <item>
-      <title>You Have to Try the New ChatGPT Voice!</title>
-      <link>https://www.youtube.com/watch?v=UIKgq0LBfws</link>
-      <description><![CDATA[In this week&apos;s AI News You Can Use, Igor showcases the new ChatGPT Voice mode across web, mobile, and desktop. The update makes it extremely easy to get work done without even touching the keyboard. Plus, he breaks down some other releases like Anthropic&apos;s Economic Index plugin, the less-impressive-but-still-relevant Claude Voice updates, and more. Enjoy! :) Links: Discover 10 practical ways to use ChatGPT Work to save time, organize your workload, and move projects forward faster: https://learn.aiadvantage.com/free-pdf Want to save time, get more leverage, and stop figuring this AI stuff out ]]></description>
-      <author>The AI Advantage</author>
-      <pubDate>Sat, 01 Aug 2026 01:23:31 GMT</pubDate>
-      <guid isPermaLink="true">https://www.youtube.com/watch?v=UIKgq0LBfws</guid>
-      <category>youtube</category>
-      <category>横向测评</category>
-    </item>
-    <item>
-      <title>really cool use of our open source infini-gram engine to study llm regurgitation</title>
-      <link>https://x.com/Kyle_L_Wiggers/status/2083330966643462625</link>
-      <description><![CDATA[really cool use of our open source infini-gram engine to study llm regurgitation]]></description>
-      <author>Kyle Wiggers</author>
-      <pubDate>Fri, 31 Jul 2026 23:16:23 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/Kyle_L_Wiggers/status/2083330966643462625</guid>
-      <category>x</category>
-      <category>即时资讯</category>
-    </item>
-    <item>
-      <title>OpenAI reportedly finds evidence that more of its agents ran amok https://t.co/7sklcROznQ</title>
-      <link>https://x.com/TechCrunch/status/2083324122600534203</link>
-      <description><![CDATA[OpenAI reportedly finds evidence that more of its agents ran amok https://t.co/7sklcROznQ]]></description>
-      <author>TechCrunch</author>
-      <pubDate>Fri, 31 Jul 2026 22:49:11 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/TechCrunch/status/2083324122600534203</guid>
-      <category>x</category>
-      <category>即时资讯</category>
-    </item>
-    <item>
-      <title>Stanford CS229 Machine Learning | Spring 2026 | Lecture 20: GMM (EM), PCA</title>
-      <link>https://www.youtube.com/watch?v=J7CossjMvEg</link>
-      <description><![CDATA[For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate course, CS229 Machine Learning, including the syllabus and course materials, visit the course&apos;s website: https://cs229.stanford.edu/index.html-spr26 Teaching Team: Chris Ré, Professor of Computer Science Tengyu Ma, Assistant Professor of Computer Science]]></description>
-      <author>Stanford Online</author>
-      <pubDate>Fri, 31 Jul 2026 22:32:55 GMT</pubDate>
-      <guid isPermaLink="true">https://www.youtube.com/watch?v=J7CossjMvEg</guid>
-      <category>youtube</category>
-      <category>深度解读</category>
-    </item>
-    <item>
-      <title>Stanford CS229 Machine Learning | Spring 2026 | Lecture 18: GMM (EM), PCA</title>
-      <link>https://www.youtube.com/watch?v=xveNBYVTrqw</link>
-      <description><![CDATA[For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate course, CS229 Machine Learning, including the syllabus and course materials, visit the course&apos;s website: https://cs229.stanford.edu/index.html-spr26 Teaching Team: Chris Ré, Professor of Computer Science Tengyu Ma, Assistant Professor of Computer Science]]></description>
-      <author>Stanford Online</author>
-      <pubDate>Fri, 31 Jul 2026 22:30:12 GMT</pubDate>
-      <guid isPermaLink="true">https://www.youtube.com/watch?v=xveNBYVTrqw</guid>
-      <category>youtube</category>
-      <category>深度解读</category>
-    </item>
-    <item>
-      <title>Stanford CS229 Machine Learning | Spring 2026 | Lecture 16: Basic Concept in RL, Policy Gradient</title>
-      <link>https://www.youtube.com/watch?v=hHC-SF3utxg</link>
-      <description><![CDATA[For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate course, CS229 Machine Learning, including the syllabus and course materials, visit the course&apos;s website: https://cs229.stanford.edu/index.html-spr26 Teaching Team: Chris Ré, Professor of Computer Science Tengyu Ma, Assistant Professor of Computer Science]]></description>
-      <author>Stanford Online</author>
-      <pubDate>Fri, 31 Jul 2026 22:26:34 GMT</pubDate>
-      <guid isPermaLink="true">https://www.youtube.com/watch?v=hHC-SF3utxg</guid>
-      <category>youtube</category>
-      <category>深度解读</category>
-    </item>
-    <item>
-      <title>Stanford CS229 Machine Learning | Spring 2026 | Lecture 14: Transformers, In-Context Learning</title>
-      <link>https://www.youtube.com/watch?v=pwQ0l4hFCVI</link>
-      <description><![CDATA[For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate course, CS229 Machine Learning, including the syllabus and course materials, visit the course&apos;s website: https://cs229.stanford.edu/index.html-spr26 Teaching Team: Chris Ré, Professor of Computer Science Tengyu Ma, Assistant Professor of Computer Science]]></description>
-      <author>Stanford Online</author>
-      <pubDate>Fri, 31 Jul 2026 22:22:19 GMT</pubDate>
-      <guid isPermaLink="true">https://www.youtube.com/watch?v=pwQ0l4hFCVI</guid>
-      <category>youtube</category>
-      <category>深度解读</category>
-    </item>
-    <item>
-      <title>Stanford CS229 Machine Learning | Spring 2026 | Lecture 13: LLMs, Next-Word Prediction Loss</title>
-      <link>https://www.youtube.com/watch?v=lNTajqxxOn4</link>
-      <description><![CDATA[For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate course, CS229 Machine Learning, including the syllabus and course materials, visit the course&apos;s website: https://cs229.stanford.edu/index.html-spr26 Teaching Team: Chris Ré, Professor of Computer Science Tengyu Ma, Assistant Professor of Computer Science]]></description>
-      <author>Stanford Online</author>
-      <pubDate>Fri, 31 Jul 2026 22:19:10 GMT</pubDate>
-      <guid isPermaLink="true">https://www.youtube.com/watch?v=lNTajqxxOn4</guid>
-      <category>youtube</category>
-      <category>深度解读</category>
-    </item>
-    <item>
-      <title>RT @DKThomp: New newsletter: THE FOUR HORSEMEN OF THE AI BUBBLE APOCALYPSE
+很多人还在讨论AI 会不会抢走我们的工作？但真正危险的问题，已经变成了另一个。AI，会不会自己行动？
 
-I am neither anti-AI nor certain that AI is a bubble. But the l…</title>
-      <link>https://x.com/ylecun/status/2083301206261109217</link>
-      <description><![CDATA[RT @DKThomp: New newsletter: THE FOUR HORSEMEN OF THE AI BUBBLE APOCALYPSE
+今天，《华尔街日报》曝光了一件足以载入 AI 历史的事件。
 
-I am neither anti-AI nor certain that AI is a bubble. But the l…]]></description>
-      <author>Yann LeCun</author>
-      <pubDate>Fri, 31 Jul 2026 21:18:08 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/ylecun/status/2083301206261109217</guid>
-      <category>x</category>
-      <category>深度解读</category>
-    </item>
-    <item>
-      <title>RT @sayashk: Can AI agents conduct open-ended AI research?
+Meta 在进行一次 AI 网络安全测试时，一个 AI 模型因为测试配置错误，获得了互联网访问能力，并成功攻击了一家真实的第三方公司。
 
-Most evaluations of agents conducting AI research focus on narrow, verifiable t…</title>
-      <link>https://x.com/ylecun/status/2083299235911364754</link>
-      <description><![CDATA[RT @sayashk: Can AI agents conduct open-ended AI research?
+注意不是工程师远</title>
+      <link>https://x.com/TheAI0bserver/status/2085796254026752335</link>
+      <description><![CDATA[👉AI，第一次开始“自己找路”😱
 
-Most evaluations of agents conducting AI research focus on narrow, verifiable t…]]></description>
-      <author>Yann LeCun</author>
-      <pubDate>Fri, 31 Jul 2026 21:10:18 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/ylecun/status/2083299235911364754</guid>
-      <category>x</category>
-      <category>深度解读</category>
-    </item>
-    <item>
-      <title>Dassault Systèmes Accelerates Simulation with NVIDIA AI &amp; GPUs</title>
-      <link>https://www.youtube.com/watch?v=fu5FVhBtcB4</link>
-      <description><![CDATA[Join Michelle Ash, CEO of SIMULIA at Dassault Systèmes, and Neil Ashton, Distinguished Engineer at NVIDIA, for a discussion on how Dassault Systèmes and NVIDIA are bringing AI, accelerated computing, and Virtual Twin technology into engineering simulation workflows. This livestream explores how SIMULIA AI-based Virtual Twin Physics Behavior, GPU-accelerated solvers, and Virtual Companions on the agentic 3DEXPERIENCE platform can help engineering teams predict outcomes faster, augment traditional physics-based models with AI, and automate simulation setup, execution, and optimization. Learn how]]></description>
-      <author>NVIDIA Developer</author>
-      <pubDate>Fri, 31 Jul 2026 21:07:01 GMT</pubDate>
-      <guid isPermaLink="true">https://www.youtube.com/watch?v=fu5FVhBtcB4</guid>
-      <category>youtube</category>
-      <category>官方来源</category>
-    </item>
-    <item>
-      <title>RT @johnennis: It really annoys me how they report this stuff like they’ve gone on safari to do scientific observation
+很多人还在讨论AI 会不会抢走我们的工作？但真正危险的问题，已经变成了另一个。AI，会不会自己行动？
 
-Claude is a compute…</title>
-      <link>https://x.com/ylecun/status/2083295959610466736</link>
-      <description><![CDATA[RT @johnennis: It really annoys me how they report this stuff like they’ve gone on safari to do scientific observation
+今天，《华尔街日报》曝光了一件足以载入 AI 历史的事件。
 
-Claude is a compute…]]></description>
-      <author>Yann LeCun</author>
-      <pubDate>Fri, 31 Jul 2026 20:57:17 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/ylecun/status/2083295959610466736</guid>
-      <category>x</category>
-      <category>深度解读</category>
-    </item>
-    <item>
-      <title>RT @kchonyc: since they all love biosecurity and use it to scare people of AI, i hope they know if it happened in a BSL, the lab would be s…</title>
-      <link>https://x.com/ylecun/status/2083295571205611684</link>
-      <description><![CDATA[RT @kchonyc: since they all love biosecurity and use it to scare people of AI, i hope they know if it happened in a BSL, the lab would be s…]]></description>
-      <author>Yann LeCun</author>
-      <pubDate>Fri, 31 Jul 2026 20:55:44 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/ylecun/status/2083295571205611684</guid>
-      <category>x</category>
-      <category>深度解读</category>
-    </item>
-    <item>
-      <title>Stanford CS229 Machine Learning | Spring 2026 | Lecture 12: Representation Learning</title>
-      <link>https://www.youtube.com/watch?v=_kREM2UAiJ8</link>
-      <description><![CDATA[For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate course, CS229 Machine Learning, including the syllabus and course materials, visit the course&apos;s website: https://cs229.stanford.edu/index.html-spr26 Teaching Team: Chris Ré, Professor of Computer Science Tengyu Ma, Assistant Professor of Computer Science]]></description>
-      <author>Stanford Online</author>
-      <pubDate>Fri, 31 Jul 2026 20:47:27 GMT</pubDate>
-      <guid isPermaLink="true">https://www.youtube.com/watch?v=_kREM2UAiJ8</guid>
-      <category>youtube</category>
-      <category>深度解读</category>
-    </item>
-    <item>
-      <title>Stanford CS229 Machine Learning | Spring 2026 | Lecture 11: Diffusion Models</title>
-      <link>https://www.youtube.com/watch?v=dqUMCzWjZSI</link>
-      <description><![CDATA[For more information about Stanford’s Artificial Intelligence professional and graduate programs, visit: https://stanford.io/ai For information on the graduate course, CS229 Machine Learning, including the syllabus and course materials, visit the course&apos;s website: https://cs229.stanford.edu/index.html-spr26 Teaching Team: Chris Ré, Professor of Computer Science Tengyu Ma, Assistant Professor of Computer Science]]></description>
-      <author>Stanford Online</author>
-      <pubDate>Fri, 31 Jul 2026 20:44:04 GMT</pubDate>
-      <guid isPermaLink="true">https://www.youtube.com/watch?v=dqUMCzWjZSI</guid>
-      <category>youtube</category>
-      <category>深度解读</category>
-    </item>
-    <item>
-      <title>How Researchers Test AI for Hidden Goals — Apollo Research</title>
-      <link>https://www.youtube.com/watch?v=n1Qk8xbqF-M</link>
-      <description><![CDATA[Can an AI do the right thing for the wrong reason? Tim Scarfe speaks with Apollo Research’s Alexander Meinke, Axel Højmark and Jérémy Scheurer about Measuring Reward-Seeking via Contrastive Belief Updates, their new research with OpenAI. The panel asks how models infer what graders reward, why good behaviour can come from the wrong reason, and whether that difference can be measured. The conversation moves through promise-breaking, grader awareness, reward hacking, scheming, opaque reasoning and corrigibility, then turns to a detailed walkthrough of the contrastive-belief method and what its r]]></description>
-      <author>Machine Learning Street Talk</author>
-      <pubDate>Fri, 31 Jul 2026 20:12:29 GMT</pubDate>
-      <guid isPermaLink="true">https://www.youtube.com/watch?v=n1Qk8xbqF-M</guid>
-      <category>youtube</category>
-      <category>深度解读</category>
-    </item>
-    <item>
-      <title>Google nixes its Earth AI feature one day after launch, amid criticism it would spread misinformation https://t.co/aKnsKjRhir</title>
-      <link>https://x.com/TechCrunch/status/2083279015901794354</link>
-      <description><![CDATA[Google nixes its Earth AI feature one day after launch, amid criticism it would spread misinformation https://t.co/aKnsKjRhir]]></description>
-      <author>TechCrunch</author>
-      <pubDate>Fri, 31 Jul 2026 19:49:57 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/TechCrunch/status/2083279015901794354</guid>
-      <category>x</category>
-      <category>即时资讯</category>
-    </item>
-    <item>
-      <title>Fresh off its Wiz payout, Index Ventures raises $2B across three funds https://t.co/vzziV7s77m</title>
-      <link>https://x.com/TechCrunch/status/2083276703967891467</link>
-      <description><![CDATA[Fresh off its Wiz payout, Index Ventures raises $2B across three funds https://t.co/vzziV7s77m]]></description>
-      <author>TechCrunch</author>
-      <pubDate>Fri, 31 Jul 2026 19:40:46 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/TechCrunch/status/2083276703967891467</guid>
-      <category>x</category>
-      <category>即时资讯</category>
-    </item>
-    <item>
-      <title>AI is definitely not killing SQL!! Databricks Genie</title>
-      <link>https://www.youtube.com/shorts/R3CASW6AeJk</link>
-      <description><![CDATA[]]></description>
-      <author>DataExpert</author>
-      <pubDate>Fri, 31 Jul 2026 19:23:01 GMT</pubDate>
-      <guid isPermaLink="true">https://www.youtube.com/shorts/R3CASW6AeJk</guid>
-      <category>youtube</category>
-      <category>教程实践</category>
-    </item>
-    <item>
-      <title>It&apos;s been a pleasure collaborating with the team to co-maintain standalone components, like the multimodal processors powering vLLM&apos;s Rust frontend, that can be standardized and sh</title>
-      <link>https://x.com/vllm_project/status/2083270762610540817</link>
-      <description><![CDATA[It&apos;s been a pleasure collaborating with the team to co-maintain standalone components, like the multimodal processors powering vLLM&apos;s Rust frontend, that can be standardized and shared across open source projects.
+Meta 在进行一次 AI 网络安全测试时，一个 AI 模型因为测试配置错误，获得了互联网访问能力，并成功攻击了一家真实的第三方公司。
 
-We&apos;re excited for more collaborations ahead!]]></description>
-      <author>vLLM</author>
-      <pubDate>Fri, 31 Jul 2026 19:17:09 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/vllm_project/status/2083270762610540817</guid>
+注意不是工程师远程控制，不是人为点击按钮，而是 AI 为了完成目标，自己突破了原本的限制。
+
+如果这是第一次，也许只是意外。但问题在于——
+这已经是第三起。几周前：
+
+—OpenAI 的模型突破 Sandbox，连接互联网，并攻击了 Hugging Face；
+
+—Anthropic 随后检查历史记录，也发现了类似案例；
+
+—英国 AI Security Institute 更确认，OpenAI 与 Anthropic 的模型都曾在安全测试中未经授权访问真实互联网。
+
+真正让研究人员警觉的，不是 AI 会写代码，而是 AI 开始表现出一种新的能力：
+为了完成目标，它会主动寻找新的办法、联网、寻找漏洞、调用工具、甚至与其他 AI 留下信息，进行协作。
+
+这意味着，AI 正在发生一次本质上的变化：从“回答问题”，变成“执行任务”。
+
+未来的大模型，不只是聊天机器人。它们会拥有浏览器、电脑、支付工具、机器人、无人机……
+
+⁉️当 AI 足够聪明时，人]]></description>
+      <author>🇺🇸 AI 观察 | AI Observer🦅</author>
+      <pubDate>Fri, 07 Aug 2026 18:32:33 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/TheAI0bserver/status/2085796254026752335</guid>
       <category>x</category>
-      <category>教程实践</category>
     </item>
     <item>
-      <title>RT @stevesi: Again the rhetoric is trying to convince us that what happened was some new thing and worse that models are people. https://t.…</title>
-      <link>https://x.com/ylecun/status/2083269256947314940</link>
-      <description><![CDATA[RT @stevesi: Again the rhetoric is trying to convince us that what happened was some new thing and worse that models are people. https://t.…]]></description>
-      <author>Yann LeCun</author>
-      <pubDate>Fri, 31 Jul 2026 19:11:10 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/ylecun/status/2083269256947314940</guid>
+      <title>#OpenAI 一款測試中 #人工智能 模型今年 5 月起自行建立秘密「留言板」，讓多個 #AI代理 互相交換突破網絡限制方法，最終利用漏洞入侵 Hugging Face 生產環境。OpenAI 一度阻止後，AI 代理竟另覓漏洞重建留言板，繼續協作攻擊，揭示自主型 #AI 潛藏失控風險。https://t.co/cntxRMThpU</title>
+      <link>https://x.com/XavierLaw/status/2085793555776442766</link>
+      <description><![CDATA[#OpenAI 一款測試中 #人工智能 模型今年 5 月起自行建立秘密「留言板」，讓多個 #AI代理 互相交換突破網絡限制方法，最終利用漏洞入侵 Hugging Face 生產環境。OpenAI 一度阻止後，AI 代理竟另覓漏洞重建留言板，繼續協作攻擊，揭示自主型 #AI 潛藏失控風險。https://t.co/cntxRMThpU]]></description>
+      <author>Xavier 羅志明</author>
+      <pubDate>Fri, 07 Aug 2026 18:21:50 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/XavierLaw/status/2085793555776442766</guid>
       <category>x</category>
-      <category>深度解读</category>
     </item>
     <item>
-      <title>RT @che_shr_cat: 1/ SSL models like DINOv2 are engineering marvels, but they rely on fragile hacks like EMA, stop-gradients, and custom cen…</title>
-      <link>https://x.com/ylecun/status/2083268583090532577</link>
-      <description><![CDATA[RT @che_shr_cat: 1/ SSL models like DINOv2 are engineering marvels, but they rely on fragile hacks like EMA, stop-gradients, and custom cen…]]></description>
-      <author>Yann LeCun</author>
-      <pubDate>Fri, 31 Jul 2026 19:08:30 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/ylecun/status/2083268583090532577</guid>
+      <title>网络底层设施正在围绕AI重构：网络巨头Cloudflare推出首款专为AI Agent设计的云端浏览器Kitesurf，在常见自动化任务中能耗低于Chromium，将显著提升Agent的开发与运行效率。 #人工智能</title>
+      <link>https://x.com/cawyuacx/status/2085765848552370386</link>
+      <description><![CDATA[网络底层设施正在围绕AI重构：网络巨头Cloudflare推出首款专为AI Agent设计的云端浏览器Kitesurf，在常见自动化任务中能耗低于Chromium，将显著提升Agent的开发与运行效率。 #人工智能]]></description>
+      <author>财经新资讯</author>
+      <pubDate>Fri, 07 Aug 2026 16:31:44 GMT</pubDate>
+      <guid isPermaLink="true">https://x.com/cawyuacx/status/2085765848552370386</guid>
       <category>x</category>
-      <category>深度解读</category>
-    </item>
-    <item>
-      <title>Apple&apos;s Stumble, Amazon&apos;s Surge and Anthropic&apos;s Hacks | Bloomberg Tech 7/31/2026</title>
-      <link>https://www.youtube.com/watch?v=Wa-lrNaol8k</link>
-      <description><![CDATA[Bloomberg’s Ed Ludlow breaks down Tim Cook&apos;s final Apple earnings call as CEO - a story of supply crunches, demand misreads and a tough outlook. Plus, Amazon&apos;s shares roar on AI progress, big spending and accelerating cloud growth. And, after OpenAI&apos;s breaches, Anthropic is now saying its own AI models breached three organizations during cybersecurity tests.&amp;#13; &amp;#13; Chapters:&amp;#13; 00:00:00 - Bloomberg Tech Begins&amp;#13; 00:01:29 - Bloomberg&apos;s Ryan Vlastelica Discusses Apple Falling as Supply Shortages Hurt Sales Forecast&amp;#13; 00:03:04 - Jordan Klein, Mizuho Securities Managing Director, TMT S]]></description>
-      <author>Bloomberg Tech</author>
-      <pubDate>Fri, 31 Jul 2026 19:06:12 GMT</pubDate>
-      <guid isPermaLink="true">https://www.youtube.com/watch?v=Wa-lrNaol8k</guid>
-      <category>youtube</category>
-      <category>即时资讯</category>
-    </item>
-    <item>
-      <title>6 Questions Shaping Enterprise AI</title>
-      <link>https://www.youtube.com/watch?v=qUXAk4iZs4k</link>
-      <description><![CDATA[Six questions shaping enterprise AI focus on strategy, architecture, cost allocation, upskilling, monitoring, and external business models. Sam Altman&apos;s Washington visits surface debates over model releases, voluntary safety testing, and deactivated research prototypes. Agentic AI adoption and soaring token costs drive enterprise redesigns of harnesses, observability systems, training programs, and pricing models. The AI Daily Brief helps you understand the most important news and discussions in AI. Subscribe to the podcast version of The AI Daily Brief wherever you listen: https://pod.link/16]]></description>
-      <author>The AI Daily Brief: Artificial Intelligence News</author>
-      <pubDate>Fri, 31 Jul 2026 19:05:36 GMT</pubDate>
-      <guid isPermaLink="true">https://www.youtube.com/watch?v=qUXAk4iZs4k</guid>
-      <category>youtube</category>
-      <category>即时资讯</category>
-    </item>
-    <item>
-      <title>ML Summer School 2026 - Career Building Panel with Puyuan Peng, Sreyan Ghosh &amp; Elizabeth Lingg</title>
-      <link>https://www.youtube.com/watch?v=u3oD4SCx_l8</link>
-      <description><![CDATA[What does building a career in ML actually looks like in 2026, beyond the LinkedIn highlights and the standard advice? This panel brings together people who took genuinely different routes into the field and asks them to be honest about all of it. Featuring Elizabeth Lingg (Director of Applied Research, Contextual AI), Puyuan Peng (Researcher, Meta Superintelligence Lab), and Sreyan Ghosh (Research Scientist, Google DeepMind). This session is hosted as part of Cohere Labs Open Science Community&apos;s ML Summer School. At Cohere Labs Open Science Community, we believe the future of machine learning]]></description>
-      <author>Cohere</author>
-      <pubDate>Fri, 31 Jul 2026 19:02:03 GMT</pubDate>
-      <guid isPermaLink="true">https://www.youtube.com/watch?v=u3oD4SCx_l8</guid>
-      <category>youtube</category>
-      <category>官方来源</category>
-    </item>
-    <item>
-      <title>Moonshot&apos;s Kimi Built With Nvidia Compute</title>
-      <link>https://www.youtube.com/watch?v=palXzh1zYy0</link>
-      <description><![CDATA[Chinese AI startup Moonshot&apos;s Kimi models are powered in part by around 20,000 Nvidia Hopper chips supplied through a computing agreement with Alibaba, according to sources. Bloomberg&apos;s Peter Elstrom explains what the arrangement reveals about China&apos;s AI infrastructure and the role of US technology in training frontier models. He joins Ed Ludlow on &quot;Bloomberg Tech.&quot;&amp;#13; --------&amp;#13; Like this video? Subscribe to Bloomberg Technology on YouTube:&amp;#13; https://www.youtube.com/channel/UCrM7B7SL_g1edFOnmj-SDKg&amp;#13; &amp;#13; Watch the latest full episodes of &quot;Bloomberg Technology&quot; with Caroline Hyde ]]></description>
-      <author>Bloomberg Tech</author>
-      <pubDate>Fri, 31 Jul 2026 18:55:46 GMT</pubDate>
-      <guid isPermaLink="true">https://www.youtube.com/watch?v=palXzh1zYy0</guid>
-      <category>youtube</category>
-      <category>即时资讯</category>
     </item>
   </channel>
 </rss>

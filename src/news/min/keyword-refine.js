@@ -42,15 +42,49 @@ const EN_STOPWORDS = new Set([
   'news', 'video', 'tools', 'tool', 'open', 'used', 'use', 'using', 'like', 'make',
   'made', 'model', 'models', 'recent', 'still', 'over', 'also', 'very', 'just',
   'than', 'then', 'how', 'why', 'who', 'whom', 'what', 'via', 'out', 'all', 'its',
+  // URL 与网络噪声（2026-08-08 真实数据暴露：推文里的 https/co 等被当单词切出）
+  'https', 'http', 'www', 'com', 'co', 'org', 'net', 'io', 'ai', 'tco', 'bit',
+  'the', 'rt', 'amp', 'via', 'gif', 'jpg', 'png', 'webp',
+  // 高频虚词（真实数据暴露：can/one 等无提纯价值）
+  'can', 'one', 'get', 'got', 'new', 'now', 'may', 'much', 'many', 'well', 'way',
+  'also', 'even', 'first', 'last', 'next', 'best', 'good', 'like', 'will', 'would',
+]);
+
+// 中文停用词（2026-08-08 真实数据暴露：重叠子串切出大量无意义虚词）
+const ZH_STOPWORDS = new Set([
+  '一个', '一种', '一些', '这个', '那个', '这些', '那些', '我们', '你们', '他们', '它们',
+  '以及', '或者', '但是', '因为', '所以', '如果', '虽然', '然后', '而且', '还有', '其中',
+  '就是', '可以', '可能', '已经', '现在', '今天', '昨天', '明天', '目前', '进行', '什么',
+  '怎么', '如何', '这样', '那样', '觉得', '感觉', '看到', '知道', '想要', '需要', '应该',
+  '能够', '都会', '也有', '没有', '不是', '但是', '什么', '这么', '真的', '特别', '非常',
+  '这个', '时候', '东西', '事情', '大家', '地方', '情况', '问题', '方法', '方面', '因为',
 ]);
 
 // 中文 2 字以上片段提取：遍历连续中文字符串，取所有长度 ≥2 的连续子串
 // （去重后加入，避免同一词重复计数）。
 const CJK_RE = /[一-鿿]+/g;
 
+// 已知中文 AI 术语词表（tokenize 的中文匹配基准）：
+// 无分词器时无法可靠确定中文词边界，重叠子串会产生碎片/整句噪声；
+// 改为只在词表中做子串匹配。词表 = 常见 AI 术语，超出词表的中文新词
+// 由新兴候选的 AI 语义判断（refineEmerging / llmRefine）兜底。
+const ZH_TERM_LEXICON = Object.freeze([
+  // 模型/技术
+  '大模型', '模型', '人工智能', '机器学习', '深度学习', '神经网络', '推理', '推理能力',
+  '多模态', '生成式', '大语言模型', '扩散模型', '强化学习', '训练', '微调', '量化',
+  // 产品/工具
+  '智能体', '聊天机器人', '代码生成', '图像生成', '语音识别', '语义理解', '对话系统',
+  // 行业/概念
+  '开源', '算力', '芯片', '数据', '算法', '架构', '上下文', '参数', '机器人',
+  '自动驾驶', '数字人', '内容生成', '自动化', '效率', '成本', '产业', '应用场景',
+]);
+
 /**
  * 把一段原文切成候选词（英文单词小写 + 中文 2 字以上片段），**保留重复出现次数**，
  * 供词频统计累计（单条内反复出现的词也能体现高频）。
+ * 过滤：URL 协议词（https/http/www）与英文/中文停用词剔除，降低噪声候选。
+ * 中文：只从**已知词表**（ai_keywords + 常见 AI 术语）中做子串匹配，避免重叠子串
+ * 把整句当词、产生碎片（无分词器时无法确定词边界，字面重叠不可靠）。
  * @param {string} text
  * @returns {string[]}
  */
@@ -62,16 +96,10 @@ function tokenize(text) {
     const word = match[0];
     if (!EN_STOPWORDS.has(word)) tokens.push(word);
   }
-  // 中文 2 字以上连续片段（取全部重叠子串，简单实现）
+  // 中文：已知词表子串匹配（ai_keywords + 常见 AI 术语，去重）
   const cjkText = String(text || '');
-  let m;
-  while ((m = CJK_RE.exec(cjkText)) !== null) {
-    const run = m[0];
-    for (let i = 0; i < run.length; i++) {
-      for (let len = 2; i + len <= run.length; len++) {
-        tokens.push(run.slice(i, i + len));
-      }
-    }
+  for (const term of ZH_TERM_LEXICON) {
+    if (cjkText.includes(term)) tokens.push(term);
   }
   return tokens;
 }

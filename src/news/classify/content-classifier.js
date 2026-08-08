@@ -1,7 +1,7 @@
 /**
  * content-classifier.js —— 热点内容类型分类器（B16 路径 A）
  *
- * 在热点管线中的位置：候选层（hotspot-candidates.json）→ 本模块 → 审核 → 公开 hotspots.json。
+ * 在热点管线 v2 中的位置：候选层（min-candidates.json）→ 本模块 → 审核 → 公开 hotspots.json。
  *
  * ═══════════════════════════════════════════════════════════════
  * 两级分类（决策 65/66/79）：

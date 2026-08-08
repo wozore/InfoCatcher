@@ -158,6 +158,10 @@ const LOCALIZE_USER_PROMPT_TEMPLATE = `请把下面这条 AI 资讯的标题与�
 3. URL、代码、命令、数字、版本号保持原文。
 4. description 保留原文的换行结构。
 5. 标题本身是专有名词时保持原文。
+6. 若原文已是中文（含繁体）：标题不做逐字翻译，改为精炼为简洁新闻标题——
+   去除 # 话题标签、emoji/表情符号、情绪化/夸张开场（如"👉""😱"）、个人口吻，
+   提炼核心事实（谁/做了什么），控制在 20~40 字；描述保留核心信息并同样去除
+   标签与表情符号噪声。
 
 标题：{title}
 描述：{description}
@@ -661,6 +665,116 @@ async function localizeWithDeepSeek(item, options = {}) {
   }
 }
 
+// ═══════════════════════════════════════════════════════════════
+// DeepSeek 从 approved 候选挑选 top 调用（第二阶段：AI 语义判断选每日热点）
+// ═══════════════════════════════════════════════════════════════
+
+/** 选 top 输出 token 上限（top 数 + 排序理由，量级不大） */
+const SELECT_TOP_MAX_TOKENS = 600;
+
+/**
+ * 构建"从候选列表选 top N 待选项"的 chat 请求体（纯函数，便于测试）。
+ * 输入一批候选（含 id/score/summary），AI 按语义判断选 topN 条（提供待选项，
+ * 最终公开条数由维护者从待选项中挑选），返回 JSON。
+ * @param {Array<{id:string, score:number, summary:string}>} candidates
+ * @param {number} minCount 最少条数（= 待选项数量，纯 X 10 / 有 YouTube 15）
+ * @param {number} maxCount 最多条数（同上，固定待选项数量）
+ * @param {string} [model]
+ * @returns {object} chat completions payload
+ */
+function buildSelectTopPayload(candidates, minCount, maxCount, model = DEFAULT_MODEL) {
+  const list = (candidates || []).map((c, i) =>
+    `${i + 1}. [${c.id}] (评分 ${c.score ?? '-'}) ${String(c.summary || '').slice(0, 120)}`
+  ).join('\n');
+  const system = '你是 AI 热点编辑。从用户给出的一批候选资讯中，按"实用价值 > 技术深度、贴近读者、AI 相关"原则，挑选最值得维护者进一步筛选的 top 候选。只输出 JSON，格式：{"count": n, "ids": ["id1","id2",...]}。';
+  const user = `请从下面候选里选 ${minCount}~${maxCount} 条作为每日热点待选项（维护者会从中再选最终公开的少数条）。候选已按评分排序，但你要结合内容语义判断，不要只看评分。\n\n候选列表：\n${list}\n\n只输出 JSON，count 在 ${minCount}~${maxCount} 之间，ids 是选中的候选 id。`;
+  return {
+    model,
+    messages: [
+      { role: 'system', content: system },
+      { role: 'user', content: user },
+    ],
+    max_tokens: SELECT_TOP_MAX_TOKENS,
+    temperature: 0.3,
+  };
+}
+
+/**
+ * 解析选 top 的 DeepSeek 输出为 { count, ids }。
+ * 容错：剥离 JSON 外多余文字（markdown 代码块/解释），解析失败返回 null。
+ * @param {string} content
+ * @returns {{count: number, ids: string[]}|null}
+ */
+function normalizeSelectTop(content) {
+  if (!content) return null;
+  const cleaned = String(content).trim()
+    .replace(/^```(?:json)?/i, '').replace(/```$/, '')
+    .trim();
+  const match = cleaned.match(/\{[\s\S]*\}/);
+  if (!match) return null;
+  try {
+    const parsed = JSON.parse(match[0]);
+    const ids = Array.isArray(parsed.ids) ? parsed.ids.map(String) : [];
+    const count = Number(parsed.count);
+    if (!ids.length || !Number.isFinite(count)) return null;
+    return { count: Math.max(1, Math.floor(count)), ids };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * DeepSeek 从一批 approved 候选中挑选 top N（AI 语义判断，N 在区间内由 AI 定）。
+ * 复用 fetch 注入 + 降级语义：失败 resolve { ok:false }，绝不 reject。
+ * @param {Array<{id:string, score:number, summary:string}>} candidates
+ * @param {{min?: number, max?: number, apiKey?: string, fetchImpl?: Function, model?: string, timeoutMs?: number}} options
+ * @returns {Promise<{ok: boolean, count?: number, ids?: string[], raw?: string, error?: string, code?: string}>}
+ */
+async function selectTopWithDeepSeek(candidates, options = {}) {
+  const apiKey = options.apiKey ?? process.env.DEEPSEEK_API_KEY;
+  const fetchImpl = options.fetchImpl || (typeof fetch === 'function' ? fetch : null);
+  const timeoutMs = options.timeoutMs ?? 15_000;
+  if (!apiKey) return { ok: false, error: '缺少 DEEPSEEK_API_KEY', code: 'missing_api_key' };
+  if (!fetchImpl) return { ok: false, error: '当前运行环境无 fetch', code: 'no_fetch' };
+  if (!Array.isArray(candidates) || !candidates.length) {
+    return { ok: false, error: '无 approved 候选可供挑选', code: 'empty_candidates' };
+  }
+
+  let payload;
+  try {
+    payload = buildSelectTopPayload(candidates, options.min ?? 3, options.max ?? 5, options.model);
+  } catch (err) {
+    return { ok: false, error: err.message, code: 'payload_error' };
+  }
+
+  try {
+    const response = await fetchImpl(API_BASE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+    if (!response.ok) {
+      let detail = '';
+      try { const text = await response.text(); detail = (text || '').slice(0, 200); } catch { /* ignore */ }
+      return { ok: false, error: `DeepSeek HTTP ${response.status}${detail ? `: ${detail}` : ''}`, code: `http_${response.status}` };
+    }
+    const data = await response.json();
+    const content = data?.choices?.[0]?.message?.content;
+    if (typeof content !== 'string' || !content.trim()) {
+      return { ok: false, error: 'DeepSeek 返回空内容', code: 'empty_content' };
+    }
+    const parsed = normalizeSelectTop(content);
+    if (!parsed) {
+      return { ok: false, error: `DeepSeek 输出无法解析为 top 选择：${content.slice(0, 60)}`, code: 'invalid_select_top' };
+    }
+    return { ok: true, count: parsed.count, ids: parsed.ids, raw: content };
+  } catch (err) {
+    const code = err?.name === 'TimeoutError' || err?.code === 'ETIMEDOUT' ? 'timeout' : 'network_error';
+    return { ok: false, error: err?.message || String(err), code };
+  }
+}
+
 module.exports = {
   DEFAULT_MODEL,
   API_BASE,
@@ -683,4 +797,8 @@ module.exports = {
   buildLocalizePayload,
   normalizeLocalization,
   localizeWithDeepSeek,
+  SELECT_TOP_MAX_TOKENS,
+  buildSelectTopPayload,
+  normalizeSelectTop,
+  selectTopWithDeepSeek,
 };
