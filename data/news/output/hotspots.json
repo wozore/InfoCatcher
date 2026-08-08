@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-08T07:40:55.861Z",
+  "generated_at": "2026-08-08T09:02:24.610Z",
   "items": [
     {
       "id": "x-1d697f87f16237907b96",
@@ -243,6 +243,6 @@
   "coverage": {
     "status": "published_min",
     "source": "min-candidates.json",
-    "generated_at": "2026-08-08T07:40:55.861Z"
+    "generated_at": "2026-08-08T09:02:24.610Z"
   }
 }
