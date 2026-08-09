@@ -135,7 +135,6 @@ test('applyTopSelectedList：无 top_selected=true → changed 0；未命中 id 
   assert.deepEqual(r2.missing, ['x-ghost']);
 });
 
-// ── applyRefineKeywords：纯内存配置更新，不触碰正式配置文件 ──
 
 const { archiveMinStore } = require('../../src/news/min/min-history');
 

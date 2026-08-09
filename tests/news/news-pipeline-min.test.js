@@ -223,8 +223,8 @@ test('pipeline-min 全链：L0 丢弃 → 分类 → 评分 → 审核 → 候�
     assert.equal(xKept.review_status, 'pending');
     assert.equal(xKept.content_type, 'ai_technology', 'X 项已分类');
     assert.equal(typeof xKept.final_score, 'number', 'X 项已评分');
-    assert.equal(xKept.summary, `摘要：${xItem1.title}`, 'X 项已总结');
-    assert.ok(xKept.localizations && xKept.localizations.zh, 'X 项已本地化');
+    assert.equal(xKept.summary, `摘要：${xItem1.title}`, 'pending 项已总结');
+    assert.ok(xKept.localizations && xKept.localizations.zh, 'pending 项已本地化');
     const ytDiscarded = byId.get(ytItem1.id);
     assert.equal(ytDiscarded.review_status, 'discarded');
     assert.equal(ytDiscarded.discard_stage, 'l1');

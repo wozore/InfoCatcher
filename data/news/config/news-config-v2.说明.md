@@ -93,10 +93,10 @@ X 采集窗口由管线 `resolveXWindow` 决定：缺省「北京时间今天 0 
 | 字段 | 默认值 | 说明 |
 |---|---|---|
 | `weights.long_term_quality` | `0.20` | 长期专业质量权重 |
-| `weights.recent_timeliness` | `0.15` | 时效权重（指数衰减） |
+| `weights.recent_timeliness` | `0.10` | 时效权重（指数衰减） |
 | `weights.light_user_experience` | `0.05` | 轻度用户体验权重（实测/上手等信号词） |
 | `weights.source_reliability` | `0.15` | 来源可靠性权重（仅 X，看认证；YouTube 并入长期质量） |
-| `weights.interaction_quality` | `0.15` | 互动质量权重（三率：综合参与率主 + 赞评比修正 + 点赞率最小加分） |
+| `weights.interaction_quality` | `0.20` | 互动质量权重（三率：综合参与率主 + 赞评比修正 + 点赞率最小加分） |
 | `weights.type_preference` | `0.30` | 类型偏好权重（实用 > 技术，最高项） |
 | `type_preference_score.*` | 见下表 | 各内容类型的类型分 |
 | `neutral_score` | `50` | 评分中性兜底值 |

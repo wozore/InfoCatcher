@@ -251,6 +251,10 @@ async function runMin(options = {}) {
   }
   coverage.l0_dropped = l0Failed.length;
 
+  // L0 失败通常保留为 discarded 审计记录；明确 AI 生成披露的内容按硬排除语义
+  // 不进入候选层，避免它出现在 review.json 或后续人工审核清单。
+  const l0PersistedFailed = l0Failed.filter(item => item.discard_reason !== 'ai_generated_disclosure');
+
   // ═══════════════════════════════════════════════════════════════
   // 4. 分类：对过 L0 的每条填 content_type（失败留 unclassified，不阻塞）。
   //    DeepSeek 分类按 config.collection.concurrency 并发执行（串行逐条会卡几分钟）。
@@ -338,18 +342,16 @@ async function runMin(options = {}) {
   }
   let merged;
   try {
-    merged = mergeCandidatesMin(minStore, [...kept, ...discarded, ...l0Failed]);
+    merged = mergeCandidatesMin(minStore, [...kept, ...discarded, ...l0PersistedFailed]);
   } catch (error) {
     noteError('merge', error);
     merged = minStore;
   }
 
   // ═══════════════════════════════════════════════════════════════
-  // 8/9. 总结 + 本地化：只处理 kept 中仍 pending 的候选。
-  //      注入的 summarize/localize 为批量签名 (items, options)；
-  //      LLM 失败降级（summary/localizations 不写，前端回退原文），不阻塞。
-  //      summarize/localize 原地修改的正是合并后候选层对象（同引用），
-  //      故写完后再统一写盘，避免中间态落盘。
+  // 8/9. 总结 + 本地化：只处理 L1 分流后仍需人工审核的 pending 候选。
+  //      自动 approved/discarded 不进入这里，避免为确定性结果消费 token。
+  //      失败降级不阻塞，review.json 仍保留 pending 供人工处理。
   // ═══════════════════════════════════════════════════════════════
   const pendingKept = kept.filter(item => item.review_status === 'pending');
   const summarizeFn = options.summarize || summarizeCandidates;

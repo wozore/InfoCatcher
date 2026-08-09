@@ -23,7 +23,7 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const { buildReviewList, loadReviewList, applyReviewList } = require('../../src/news/min/review-list');
+const { buildReviewList, loadReviewList, applyReviewList, suggestReview } = require('../../src/news/min/review-list');
 
 /** 临时 manual 目录（buildReviewList 写盘目标），每测试独立，避免污染 data/manual/。 */
 function tmpManual() {
@@ -177,6 +177,15 @@ test('applyReviewList：未命中 id 报告 + 状态相同跳过（幂等）', (
   assert.equal(result.noop, 1);
   assert.deepEqual(result.missing, ['a9']);
   assert.equal(result.changed, 1);
+});
+
+test('suggestReview：不再按娱乐/二创关键词硬编码 discarded', () => {
+  // L0 硬排除现由 YouTube 简介 AI 披露模板负责；review-list 不再猜测内容是否为娱乐。
+  const suggestion = suggestReview({
+    title: '【三角洲行动】AI剧情二创视频',
+    content_type: 'ai_product',
+  });
+  assert.match(suggestion, /approved/);
 });
 
 test('applyReviewList：非法 review_status 计入 invalid，不写回', () => {

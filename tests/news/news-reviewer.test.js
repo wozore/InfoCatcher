@@ -28,6 +28,7 @@ const {
   reviewCandidates,
 } = require('../../src/news/classify/content-reviewer');
 const { mergeCandidatesMin } = require('../../src/news/min/min-store');
+const { applyL1Verdicts } = require('../../src/news/min/review-v2');
 
 /** 构造一个 DeepSeek 成功响应（content 为模型输出文本）。 */
 function deepSeekOk(content) {
@@ -230,7 +231,30 @@ test('reviewCandidates：LLM 全失败时 reviewed=0 且不写 ai_review（不�
   assert.ok(items[0].ai_review_llm_error);                // 留错误痕迹便于排查
 });
 
-// ── 第 5 组：mergeCandidatesMin 保留既有审核结论 ────────────────────
+test('L1 高置信 approve/discard 自动分流，自动项不调用 L2 且不保留 reasons', async () => {
+  let calls = 0;
+  const items = [
+    { id: 'approve', title: 'AI 产品发布', url: 'https://example.com/a', published_at: '2026-08-09T00:00:00Z', description: 'AI tool release' },
+    { id: 'discard', title: 'AI 内容', url: 'https://example.com/d', published_at: '2026-08-09T00:00:00Z', description: 'AI topic is unrelated to the product' },
+    { id: 'hold', title: 'AI 存疑内容', url: 'https://example.com/h', published_at: '2026-08-09T00:00:00Z', description: 'AI topic unclear' },
+  ];
+  const verdicts = { approve: { verdict: 'approve', confidence: 0.9, reasons: ['不应保留'] }, discard: { verdict: 'discard', confidence: 0.95, reasons: ['不应保留'] }, hold: { verdict: 'hold', confidence: 0.6, reasons: ['需要人工确认'] } };
+  const result = await applyL1Verdicts(items, {
+    keywords: { ai_keywords: ['ai'] },
+    collection: { concurrency: 1 },
+    review: { l1_confidence_auto_approve: 0.85, l1_confidence_auto_discard: 0.9, l2_enabled: true },
+  }, {
+    reviewCandidate: async item => { calls += 1; return verdicts[item.id]; },
+  });
+  const byId = new Map([...result.kept, ...result.discarded].map(item => [item.id, item]));
+  assert.equal(byId.get('approve').review_status, 'approved');
+  assert.equal(byId.get('discard').review_status, 'discarded');
+  assert.equal(byId.get('hold').review_status, 'pending');
+  assert.deepEqual(byId.get('approve').l1_review.reasons, []);
+  assert.deepEqual(byId.get('discard').l1_review.reasons, []);
+  assert.equal(calls, 4, 'L1 3 次 + pending 的 L2 1 次');
+});
+
 
 test('mergeCandidatesMin 保留既有 review_status，重新采集不重置人工结论', () => {
   const prev = { schema_version: 1, updated_at: null, candidates: [

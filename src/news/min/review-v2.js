@@ -15,13 +15,11 @@
  *                       非 AI 主题（未命中 config.keywords.ai_keywords）、明显广告/推广
  *                       词 → 直接剔除（discarded，带 discard_reason）。
  *   L1 l1AiReview   —— AI 初步审核（复用 content-reviewer.reviewCandidate → DeepSeek）。
+ *                       approve/discard 达到置信度门槛时自动分流；hold、低置信度与失败留给人工。
  *                       可选把点赞最高的 topN 条评论（item.comments，YouTube v2 已采集
- *                       { text, likeCount }）追加进审核输入（TOP_COMMENTS 段），让 AI
- *                       判断哪些评论有用、过滤无关/吵架。仅当 verdict=discard 且
- *                       confidence ≥ config.review.l1_confidence_auto_discard 时自动落
- *                       discarded —— approve/hold/LLM 失败（verdict null）永不自动剔除。
+ *                       { text, likeCount }）追加进审核输入（TOP_COMMENTS 段）。
  *   L2 l2AiAdvice   —— AI 辅助建议（给人工看的），复用 reviewCandidate，**不自动改状态**，
- *                       最终是否通过由人工决定。
+ *                       最终是否通过由人工决定。仅对需要人工处理的 L1 结果调用。
  *
  * 失败语义（沿用 v1 content-reviewer）：LLM 失败 → verdict null，条目保持 pending，
  * 绝不 reject、绝不误杀。本模块自身为纯逻辑 + reviewCandidate 复用，不发起额外网络。
@@ -40,10 +38,19 @@ const { reviewCandidate, runPool } = require('../classify/content-reviewer');
 
 // L1 评论输入：点赞最高 N 条（config.review.l1_comments_top_n 缺省）
 const DEFAULT_COMMENTS_TOP_N = 10;
+// L1 自动通过置信度门槛（config.review.l1_confidence_auto_approve 缺省）
+const DEFAULT_AUTO_APPROVE_CONFIDENCE = 0.85;
 // L1 自动剔除置信度门槛（config.review.l1_confidence_auto_discard 缺省）
 const DEFAULT_AUTO_DISCARD_CONFIDENCE = 0.9;
 // L0 广告/推广信号词（英文大小写不敏感，中文直接子串匹配）
 const ADVERTISING_RE = /sponsored|advertisement|推广|广告|affiliate|佣金/i;
+// YouTube 简介中的明确 AI 生成/合成内容披露模板。
+// 只匹配结构化披露语句，不把普通标题/描述中的「AI-generated」当作硬排除。
+const AI_DISCLOSURE_PATTERNS = Object.freeze([
+  /内容制作方式[\s\S]{0,120}由\s*AI\s*生成[\s\S]{0,100}(?:声音或影像内容经过加工|完全由\s*AI\s*生成)/i,
+  /AI使用披露[\s\S]{0,180}(?:画面由\s*AI\s*生成式工具制作|由\s*AI\s*生成式工具制作)/i,
+  /AI\s*Disclosure[\s\S]{0,180}visuals?\s+in\s+this\s+video\s+were\s+generated\s+using\s+AI\s+tools/i,
+]);
 // 评论拼进 L1 输入的段标记
 const TOP_COMMENTS_LABEL = '[TOP_COMMENTS]';
 
@@ -59,6 +66,7 @@ const TOP_COMMENTS_LABEL = '[TOP_COMMENTS]';
  *   pass=false 的 reason：'incomplete'（缺 title/url/published_at）
  *                       | 'not_ai'（title+description 未命中任何 ai_keywords）
  *                       | 'advertising'（命中明显广告/推广词）
+ *                       | 'ai_generated_disclosure'（简介命中明确 AI 生成披露模板）
  */
 function l0HardFilter(item, config) {
   const title = String(item && item.title || '').trim();
@@ -70,6 +78,12 @@ function l0HardFilter(item, config) {
 
   // AI 关键词命中（与旧 scoring.js 的 matchesAi 同款大小写不敏感子串匹配）
   const text = `${title} ${String(item.description || '')}`.toLowerCase();
+
+  if (item && item.platform === 'youtube'
+      && AI_DISCLOSURE_PATTERNS.some(pattern => pattern.test(String(item.description || '')))) {
+    return { pass: false, reason: 'ai_generated_disclosure' };
+  }
+
   const keywords = Array.isArray(config && config.keywords && config.keywords.ai_keywords)
     ? config.keywords.ai_keywords
     : [];
@@ -184,25 +198,25 @@ async function l2AiAdvice(item, options = {}) {
 // ═══════════════════════════════════════════════════════════════
 
 /**
- * 批量审核入口：L0 硬审 → L1 AI 审 → 保留项附 L2 建议。输出单状态轴。
+ * 批量审核入口：L0 硬审 → L1 AI 审 → 自动分流 / pending 项附 L2 建议。输出单状态轴。
  *
  * L1/L2 按 config.collection.concurrency（缺省 5）并发执行，保持输入顺序；
  * 单条结果写入 result[index] 后由 runPool 保证与 items 同序返回。
- * 每条内部顺序：L1 AI 审 → L2 建议（逐条串行，仅同一条内；不同条并发）。
+ * 自动 approve/discard 不调用 L2；只有 pending 项调用 L2。
  *
  * @param {Array<object>} items - 统一内容模型条目数组
  * @param {object} config - news-config-v2.json（读 review / keywords 段）
  * @param {object} [options] - 透传 reviewCandidate 选项 + options.reviewCandidate 注入 mock
  * @returns {Promise<{ kept: Array, discarded: Array, advice: Array }>}
- *   - kept:      通过项（approve / hold / L1 verdict null），每条
- *                { ...item, review_status: 'pending', l1_review, ai_advice }
- *   - discarded: 剔除项（L0 硬审不过 / L1 discard+高置信），每条
- *                { ...item, review_status: 'discarded', discard_reason, discard_stage, l1_review, ai_advice: null }
- *   - advice:    kept 项对应的 l2AiAdvice 建议对象列表（供人工审核面板取用，与 kept 同序；
- *                l2_enabled=false 或 L2 LLM 失败时为 null）
+ *   - kept:      需要人工处理的项（hold / 低置信度 / L1 失败），以及高置信度
+ *                approve 的自动 approved 项；前者为 pending，后者为 approved。
+ *   - discarded: L0 硬审不过或 L1 高置信 discard 的项。
+ *   - advice:    pending 项对应的 l2AiAdvice 建议对象列表；自动分流项不调用 L2。
  */
 async function applyL1Verdicts(items, config, options = {}) {
   const source = Array.isArray(items) ? items : [];
+  const autoApproveConfidence = Number(config && config.review && config.review.l1_confidence_auto_approve)
+    || DEFAULT_AUTO_APPROVE_CONFIDENCE;
   const autoDiscardConfidence = Number(config && config.review && config.review.l1_confidence_auto_discard)
     || DEFAULT_AUTO_DISCARD_CONFIDENCE;
   const l2Enabled = !(config && config.review && config.review.l2_enabled === false);
@@ -237,22 +251,34 @@ async function applyL1Verdicts(items, config, options = {}) {
       confidence: l1.confidence || 0,
       llm_error: l1.llm_error || null,
     };
-    const autoDiscard = l1.verdict === 'discard' && l1.confidence >= autoDiscardConfidence;
-    if (autoDiscard) {
+    const highConfidenceApprove = l1.verdict === 'approve' && l1.confidence >= autoApproveConfidence;
+    const highConfidenceDiscard = l1.verdict === 'discard' && l1.confidence >= autoDiscardConfidence;
+    if (highConfidenceApprove) {
+      result[index] = {
+        kept: {
+          ...item,
+          review_status: 'approved',
+          l1_review: { ...l1Review, reasons: [] },
+          ai_advice: null,
+        },
+      };
+      return;
+    }
+    if (highConfidenceDiscard) {
       result[index] = {
         discarded: {
           ...item,
           review_status: 'discarded',
           discard_reason: 'ai_discard',
           discard_stage: 'l1',
-          l1_review: l1Review,
+          l1_review: { ...l1Review, reasons: [] },
           ai_advice: null,
         },
       };
       return;
     }
 
-    // ── kept：approve / hold / LLM 失败 → pending，附 L2 建议供人工参考 ──
+    // ── pending：hold / 低置信度 / LLM 失败 → 附 L2 建议供人工参考 ──
     const advice = l2Enabled
       ? await l2AiAdvice(item, { ...options, config })
       : null;
@@ -282,6 +308,8 @@ module.exports = {
   l1AiReview,
   l2AiAdvice,
   applyL1Verdicts,
+  AI_DISCLOSURE_PATTERNS,
   DEFAULT_COMMENTS_TOP_N,
+  DEFAULT_AUTO_APPROVE_CONFIDENCE,
   DEFAULT_AUTO_DISCARD_CONFIDENCE,
 };

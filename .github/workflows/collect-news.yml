@@ -91,9 +91,9 @@ jobs:
       - name: Create review branch with internal candidate data
         id: review
         run: |
-          # v2：采集只产生内部候选层 min-candidates.json（不发布）；
+          # v2：采集只产生内部候选层 min-candidates.json + 待审清单 review.json（不发布）；
           # 公开投影在审核 PR 合并后由 publish-news.yml 重建，不在此直接提交 main。
-          if git diff --quiet -- data/news/runtime/min-candidates.json; then
+          if git diff --quiet -- data/news/runtime/min-candidates.json data/manual/review.json; then
             echo "No candidate changes"
             exit 0
           fi
@@ -105,8 +105,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -b "${branch}"
-          git add data/news/runtime/min-candidates.json
-          git commit -m "chore(data): update min candidates (${batch})"
+          git add data/news/runtime/min-candidates.json data/manual/review.json
+          git commit -m "chore(data): update min candidates + review list (${batch})"
           git push origin "${branch}"
 
       - name: Open review PR

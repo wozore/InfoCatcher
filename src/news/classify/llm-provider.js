@@ -124,10 +124,13 @@ const REVIEW_USER_PROMPT_TEMPLATE = `请为下面这条 AI 资讯做初步审核
 }
 
 判定标准：
-- discard：明显无关的内容（非 AI 主题、广告/垃圾、纯标题党、低质量搬运等）。必须给出具体排除理由。
-- hold：存疑或信息不足（信息不全、疑似搬运、无法判断相关性等），需要人工细看。
+- discard：明显无关的内容（非 AI 主题、广告/垃圾、纯标题党、低质量搬运等）。
+- hold：存疑或信息不足（信息不全、疑似搬运、无法判断相关性等），需要人工细看，并给出 1~2 条具体理由。
 - approve：与 AI 主题明确相关且有实质信息量，建议通过。
 - confidence：你对判定的自信程度，0.0 到 1.0 之间的数字。越有把握越高；不确定时给出低值。
+- 自动分流阈值：approve 达到 0.85、discard 达到 0.90 才会自动处理。
+- 如果 approve 的 confidence >= 0.85 或 discard 的 confidence >= 0.90，只输出 verdict 和 confidence，不要输出 reasons。
+- 如果是 hold 或 approve/discard 的 confidence 低于对应阈值，必须输出 1~2 条简短、具体的 reasons。
 
 标题：{title}
 描述：{description}

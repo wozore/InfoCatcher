@@ -47,6 +47,7 @@
   "review": {
     "l1_input_include_comments": true,
     "l1_comments_top_n": 10,
+    "l1_confidence_auto_approve": 0.85,
     "l1_confidence_auto_discard": 0.9,
     "l2_enabled": true
   },
@@ -129,11 +130,11 @@
     "type_preference_score": {
       "ai_tool": 90,
       "ai_product": 90,
-      "ai_concept": 60,
+      "ai_concept": 70,
       "ai_industry": 60,
-      "ai_technology": 40,
-      "other": 50,
-      "unclassified": 50
+      "ai_technology": 50,
+      "other": 30,
+      "unclassified": 30
     },
     "neutral_score": 50
   },
