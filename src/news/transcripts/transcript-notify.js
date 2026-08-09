@@ -24,6 +24,7 @@ const path = require('path');
 const fs = require('fs');
 const { writeJsonAtomic } = require('../core/news-storage');
 const { readMinStore, toPublicItemMin } = require('../min/min-store');
+const { beijingDateKey } = require('../../shared/beijing-time');
 
 /**
  * 解析 notify_count：数值原样取；"3to5"/"3~5"/"3-5" 区间取低值（保守）；
@@ -55,13 +56,9 @@ function scoreOf(item) {
   return -Infinity;
 }
 
-/** 清单文件名日期键（本地时区 YYYYMMDD），来自 options.now 或当天。 */
+/** 清单日期键（北京时间 YYYYMMDD），来自 options.now 或当天。 */
 function dateKeyOf(input) {
-  const d = input == null || !Number.isFinite(new Date(input).getTime()) ? new Date() : new Date(input);
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${y}${m}${day}`;
+  return beijingDateKey(input);
 }
 
 /**

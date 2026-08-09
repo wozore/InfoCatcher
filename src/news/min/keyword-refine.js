@@ -15,6 +15,7 @@ const fs = require('fs');
 const { writeJsonAtomic } = require('../core/news-storage');
 const { readMinStore } = require('./min-store');
 const { refineKeywordsWithDeepSeek } = require('../classify/llm-provider');
+const { beijingDateKey } = require('../../shared/beijing-time');
 
 const EN_STOPWORDS = new Set([
   'the', 'and', 'for', 'with', 'this', 'that', 'from', 'have', 'has', 'are', 'was',
@@ -109,10 +110,9 @@ function collectApprovedOriginals(store) {
     }));
 }
 
-/** 文件名日期键（本地时区 YYYYMMDD）。 */
+/** 清单日期键（北京时间 YYYYMMDD）。 */
 function dateKeyOf(input) {
-  const d = input == null || !Number.isFinite(new Date(input).getTime()) ? new Date() : new Date(input);
-  return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
+  return beijingDateKey(input);
 }
 
 /**

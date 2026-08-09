@@ -22,6 +22,7 @@
 'use strict';
 
 const { isMinDisplayEligible, toPublicItemMin } = require('./min-store');
+const { beijingDayKey } = require('../../shared/beijing-time');
 
 /** 组内排序分数：final_score 优先，其次 hot_score；皆无则排最末。 */
 function sortScoreOf(item) {
@@ -30,14 +31,11 @@ function sortScoreOf(item) {
   return -Infinity;
 }
 
-/** published_at 所在自然日键（本地时区 YYYY-MM-DD）；缺失/非法返回 null。 */
+/** published_at 所在自然日键（北京时间 YYYY-MM-DD）；缺失/非法返回 null。 */
 function dayKeyOf(publishedAt) {
   const d = new Date(publishedAt);
   if (!Number.isFinite(d.getTime())) return null;
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${y}-${m}-${day}`;
+  return beijingDayKey(d);
 }
 
 function resolveGeneratedAt(options) {

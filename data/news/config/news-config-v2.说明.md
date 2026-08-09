@@ -5,14 +5,18 @@
 
 ## schedule —— 抓取周期与时刻
 
+> 注意：`*_cron` 值是 **UTC**（GitHub Actions 的 `schedule` cron 固定按 UTC 执行，不支持指定时区）；`*_tz` 表示意图时区（北京时间）。下表同时列出意图的北京时间时刻。此段为声明性记录，实际调度在 `.github/workflows/collect-news.yml`（cron 与此处保持一致）。
+
 | 字段 | 默认值 | 说明 |
 |---|---|---|
-| `youtube_cron` | `"0 22 */3 * *"` | YouTube 抓取 cron（北京时间）。`0 22 */3 * *` = 每 3 天 22:00 一次。采集窗口 = 本次 22:00 → 3 天前 22:00 |
-| `youtube_tz` | `"Asia/Shanghai"` | YouTube 抓取时区 |
+| `youtube_cron` | `"0 12 */3 * *"` | YouTube 抓取 cron（UTC 值；意图北京时间每 3 天 20:00 = UTC 12:00）。采集窗口 = 北京当天 0 点 → now |
+| `youtube_tz` | `"Asia/Shanghai"` | YouTube 抓取意图时区（北京时间） |
 | `youtube_window_days` | `3` | YouTube 采集窗口天数（回看 N 天内的新视频） |
-| `x_cron_first` | `"0 14 * * *"` | X 第一次抓取（北京时间 14:00，抓当天 0:00–14:00 博主内容） |
-| `x_cron_second` | `"0 0 * * *"` | X 第二次抓取（北京时间 0:00，抓昨天 14:00–今天 0:00 博主内容） |
-| `x_tz` | `"Asia/Shanghai"` | X 抓取时区 |
+| `x_cron_first` | `"0 5 * * *"` | X 第一次抓取 cron（UTC 值；意图北京时间每天 13:00 = UTC 05:00） |
+| `x_cron_second` | `"0 14 * * *"` | X 第二次抓取 cron（UTC 值；意图北京时间每天 22:00 = UTC 14:00） |
+| `x_tz` | `"Asia/Shanghai"` | X 抓取意图时区（北京时间） |
+
+X 采集窗口由管线 `resolveXWindow` 决定：缺省「北京时间今天 0 点 → now」，两次采集（13:00 / 22:00 北京）均从北京当天 0 点起，去重后合并进候选层。
 
 ## collection —— 配额上限 / 公开数量 / 审核量 / 网络
 

@@ -26,7 +26,7 @@
  *   options.score                                覆盖 assessItemV2（可选）
  *   options.config                               覆盖 news-config-v2.json
  *   options.now                                  采集/评分/投影参考时间（Date 或 ISO 字符串）
- *   options.xWindow = { since, until }           覆盖 X 时间窗；缺省用「今天 0 点 → now」
+ *   options.xWindow = { since, until }           覆盖 X 时间窗；缺省用「北京时间今天 0 点 → now」
  *   options.runId                                写入临时文件名标识（可选）
  *   options.minStoreIn / options.minStoreOut     覆盖候选层读写（fixture 注入内存存根，避免污染运行时文件）
  *   options.historyIn / options.historyOut       覆盖来源质量历史库读写（同上；缺省回落真实文件）
@@ -60,6 +60,7 @@ const { assessItemV2 } = require('../pipeline/scoring-v2');
 const { l0HardFilter, applyL1Verdicts } = require('./review-v2');
 const { readMinStore, writeMinStore, mergeCandidatesMin } = require('./min-store');
 const { buildDailyProjection } = require('./daily-projection');
+const { beijingMidnightIso } = require('../../shared/beijing-time');
 const { classifyCandidate } = require('../classify/content-classifier');
 const { summarizeCandidates } = require('../classify/content-summarizer');
 const { localizeCandidates } = require('../classify/content-localizer');
@@ -99,7 +100,7 @@ function errorLabel(error) {
 /**
  * 解析 X 采集时间窗。
  * options.xWindow = { since, until } 注入时用之（since/until 可为 Date 或 ISO 字符串）；
- * 缺省用「今天 0 点（本地时区）→ now」。
+ * 缺省用「北京时间今天 0 点 → now」（统一北京时间，不依赖 runner 系统时区）。
  * @returns {{ sinceIso: string|null, untilIso: string|null }}
  */
 function resolveXWindow(options, now) {
@@ -109,8 +110,7 @@ function resolveXWindow(options, now) {
       untilIso: options.xWindow.until != null ? new Date(options.xWindow.until).toISOString() : null,
     };
   }
-  const start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  return { sinceIso: start.toISOString(), untilIso: now.toISOString() };
+  return { sinceIso: beijingMidnightIso(now), untilIso: normalizeNow(now).toISOString() };
 }
 
 /**

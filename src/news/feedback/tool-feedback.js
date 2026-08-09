@@ -26,6 +26,7 @@ const fs = require('fs');
 const { readJson, writeJsonAtomic } = require('../core/news-storage');
 const { readMinStore } = require('../min/min-store');
 const { CATALOG_FILES } = require('../../shared/paths');
+const { beijingDateKey } = require('../../shared/beijing-time');
 
 // ═══════════════════════════════════════════════════════════════
 // 默认实体提取（正则）
@@ -126,13 +127,9 @@ function placeholderId(name) {
 // 主函数
 // ═══════════════════════════════════════════════════════════════
 
-/** 文件名日期键（本地时区 YYYYMMDD）。 */
+/** 清单日期键（北京时间 YYYYMMDD）。 */
 function dateKeyOf(input) {
-  const d = input == null || !Number.isFinite(new Date(input).getTime()) ? new Date() : new Date(input);
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${y}${m}${day}`;
+  return beijingDateKey(input);
 }
 
 /**

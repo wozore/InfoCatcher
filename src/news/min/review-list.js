@@ -28,6 +28,7 @@ const fs = require('fs');
 const path = require('path');
 const { readJson, writeJsonAtomic } = require('../core/news-storage');
 const { createMinStore, setBatchReviewStatusMin } = require('./min-store');
+const { beijingDateKey } = require('../../shared/beijing-time');
 
 /** 排序/展示分数：final_score 优先，其次 hot_score；皆无 → null。 */
 function scoreOf(candidate) {
@@ -145,7 +146,7 @@ function mergeReviewCandidates(existingCandidates, freshCandidates) {
  */
 function buildReviewList(store, config, options = {}) {
   const now = options.now || new Date();
-  const dateKey = now.toISOString().slice(0, 10).replace(/-/g, '');
+  const dateKey = beijingDateKey(now);
   const manualFolder = (config && config.manual_folder) || 'data/manual';
   const file = path.join(manualFolder, 'review.json');
 

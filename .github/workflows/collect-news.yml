@@ -2,9 +2,12 @@ name: Collect AI News
 
 on:
   schedule:
-    - cron: '0 22 */3 * *'
+    # GitHub Actions cron 固定按 UTC；此处统一按「北京时间」换算（UTC = 北京 - 8h）：
+    #   YouTube：每 3 天北京 20:00 → UTC 12:00
+    #   X：每天北京 13:00 → UTC 05:00；每天北京 22:00 → UTC 14:00
+    - cron: '0 12 */3 * *'
+    - cron: '0 5 * * *'
     - cron: '0 14 * * *'
-    - cron: '0 0 * * *'
   workflow_dispatch:
     inputs:
       platforms:
@@ -58,8 +61,8 @@ jobs:
           PLATFORMS_INPUT: ${{ github.event.inputs.platforms }}
           SCHEDULE: ${{ github.event.schedule }}
         run: |
-          # schedule 触发无 inputs：按 cron 模式映射（R1：YouTube 每 3 天 22:00 /
-          # X 每日 14:00 / 0:00）；workflow_dispatch 的 platforms 输入优先覆盖。
+          # schedule 触发无 inputs：按 cron 模式映射（R1：YouTube 每 3 天北京 20:00 /
+          # X 每日北京 13:00 / 22:00，cron 为 UTC 值）；workflow_dispatch 的 platforms 输入优先覆盖。
           # runMin 只认平台名数组，'both' 译为双平台，勿把 'both' 直接传给 --platforms。
           if [[ -n "$PLATFORMS_INPUT" ]]; then
             if [[ "$PLATFORMS_INPUT" == "both" ]]; then
@@ -67,7 +70,7 @@ jobs:
             else
               echo "NEWS_PLATFORMS=$PLATFORMS_INPUT" >> "$GITHUB_ENV"
             fi
-          elif [[ "$SCHEDULE" == "0 22 */3 * *" ]]; then
+          elif [[ "$SCHEDULE" == "0 12 */3 * *" ]]; then
             echo "NEWS_PLATFORMS=youtube" >> "$GITHUB_ENV"
           else
             echo "NEWS_PLATFORMS=x" >> "$GITHUB_ENV"
