@@ -504,6 +504,7 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 .search-back-button .icon { width: 14px; height: 14px; }
 .remove-chip .icon { width: 14px; height: 14px; }
 .back-panel-button .icon { width: 14px; height: 14px; }
+.model-index-back .icon { width: 28px; height: 28px; stroke-width: 2.4; }
 .vendor a .icon { width: 12px; height: 12px; vertical-align: -0.08em; }
 
 .chip-row { display: flex; flex-wrap: wrap; gap: 7px; }
@@ -1219,6 +1220,46 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 .back-panel-button:hover { border-color: var(--primary); color: var(--primary); }
 
 /* OpenAI 独立节点页：仅 chatgpt 集合使用，避免改变其他厂商树。 */
+.openai-detail { position: relative; }
+.model-index-page { position: relative; }
+.model-index-back {
+  position: absolute;
+  top: -15px;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+  z-index: 1;
+  transition: color var(--transition), background-color var(--transition), transform var(--transition);
+}
+.model-index-back:hover { color: var(--primary); background: var(--accent-light); transform: translateX(-2px); }
+.model-index-overview { padding-top: 6px; }
+.model-index-overview h2 {
+  padding-right: 60px;
+  padding-left: 60px;
+  text-align: center;
+  transform: translateY(-20px);
+}
+.model-index-overview .vendor {
+  padding-right: 60px;
+  padding-left: 60px;
+  text-align: center;
+  margin-top: 6px;
+  transform: translate(10px, -20px);
+}
+.model-index-divider { margin: 30px 0 18px; border-top: 1px solid var(--border); }
+.model-index-page > .model-tool-panel { margin-top: 0; padding-top: 0; border-top: 0; }
+.model-index-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 18px; }
+.model-index-actions > div { display: flex; align-items: center; }
+.model-index-actions .intelligence-status { flex: none; }
 .openai-detail h2 { padding-right: 40px; }
 .openai-detail .model-breadcrumb { margin: 10px 0 18px; gap: 8px; font-size: 16px; line-height: 1.6; }
 .openai-detail .model-breadcrumb button { padding: 3px 2px; }
@@ -1228,7 +1269,7 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 .openai-root > .vendor-features { margin-top: 28px; }
 .openai-detail .node-overview { margin-bottom: 6px; }
 .openai-detail .node-overview h2 { margin-bottom: 4px; }
-.openai-detail .node-description { margin: 14px 0 18px; color: var(--text-secondary); font-size: 16px; line-height: 1.7; }
+.openai-detail .node-description { margin: 14px 0 18px; color: var(--text-secondary); font-size: 16px; line-height: 1.7; margin-top: -20px;}
 .openai-detail .model-tool-panel { margin-top: 20px; }
 .openai-detail .model-tree-actions { display: flex; justify-content: flex-end; margin: 0 0 12px; }
 .openai-detail .model-leaf-panel { margin-top: 6px; }
