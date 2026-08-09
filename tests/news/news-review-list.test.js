@@ -2,9 +2,10 @@
  * news-review-list.test.js — 人工审核清单（review-list）测试
  *
  * 覆盖：
- *   buildReviewList（待审清单生成）：
+ *   buildReviewList（待审清单生成，文件名固定 review.json）：
  *     1. 只含 pending、每条带 id、评分倒序、写盘结构完整；
- *     2. 覆盖保护：目标清单已含人工结论不覆盖；--force 强制覆盖。
+ *     2. 追加合并：清单已存在时保留人工结论并追加新 pending（按 id 去重），
+ *        无新 pending 跳过不写盘；--force 强制重建。
  *   loadReviewList：读取 + 校验 kind/candidates 格式。
  *   applyReviewList（审核结论应用）：
  *     3. pending 跳过，approved/discarded 批量写回（reviewed_at 刷新）；
@@ -55,8 +56,8 @@ test('buildReviewList：只含 pending、带 id、评分倒序、写盘结构完
   assert.equal(result.candidates[0].id, 'a1');
   // 每条带 id（新格式，apply 直连定位）
   assert.ok(result.candidates.every(c => typeof c.id === 'string' && c.id.length > 0));
-  // 文件名含日期
-  assert.ok(result.file.endsWith('review-20260808.json'));
+  // 文件名固定 review.json（去掉日期后缀）
+  assert.ok(result.file.endsWith('review.json'));
   // 写盘可读、结构完整（kind / total_pending / candidates / human_lines）
   const written = JSON.parse(fs.readFileSync(result.file, 'utf8'));
   assert.equal(written.kind, 'review_candidates');
@@ -66,27 +67,47 @@ test('buildReviewList：只含 pending、带 id、评分倒序、写盘结构完
   fs.rmSync(dir, { recursive: true, force: true });
 });
 
-test('buildReviewList 覆盖保护：已含人工结论不覆盖；--force 强制覆盖', () => {
+test('buildReviewList 追加合并：已存在清单保留人工结论并追加新 pending；无新则跳过；--force 强制重建', () => {
   const dir = tmpManual();
-  const file = path.join(dir, 'review-20260808.json');
-  // 模拟维护者已编辑：清单里已有 approved 结论
+  const file = path.join(dir, 'review.json');
+  // 模拟维护者已审核第一批：a1 approved、a2 pending
   fs.writeFileSync(file, JSON.stringify({
     schema_version: 1,
     kind: 'review_candidates',
     date: '20260808',
     total_pending: 1,
-    candidates: [{ id: 'a1', review_status: 'approved', score: 70, summary: '摘要 A', suggestion: 'AI 产品/工具，建议 approved' }],
+    candidates: [
+      { id: 'a1', review_status: 'approved', score: 70, summary: '摘要 A', suggestion: 'AI 产品/工具，建议 approved' },
+      { id: 'a2', review_status: 'pending', score: 30, summary: '摘要 B', suggestion: 'AI 概念，建议看内容后定' },
+    ],
     human_lines: [],
   }));
-  // 不传 force → 跳过不覆盖（保留人工结论）
-  const skipped = buildReviewList(makeStore(), { manual_folder: dir }, { now: NOW });
-  assert.equal(skipped.skipped, true);
-  assert.equal(skipped.reason, 'existing_reviewed');
-  const kept = JSON.parse(fs.readFileSync(file, 'utf8'));
-  assert.equal(kept.candidates[0].review_status, 'approved');
-  // force → 覆盖为最新 pending 清单
-  const forced = buildReviewList(makeStore(), { manual_folder: dir }, { now: NOW, force: true });
+  // 第二次采集：候选层 a1 已 approved、a2 pending、新增 a3 pending
+  const store2 = {
+    schema_version: 1, updated_at: null,
+    candidates: [
+      { id: 'a1', title: 'AI 产品 A 发布', summary: '摘要 A', final_score: 70, review_status: 'approved', content_type: 'ai_product' },
+      { id: 'a2', title: 'Day 5/100 学习打卡', summary: '摘要 B', final_score: 30, review_status: 'pending', content_type: 'ai_concept' },
+      { id: 'a3', title: '新采集候选', summary: '摘要 C', final_score: 60, review_status: 'pending', content_type: 'ai_product' },
+    ],
+  };
+  // 追加合并：保留 a1 approved、a2 已在清单，追加新 a3
+  const merged = buildReviewList(store2, { manual_folder: dir }, { now: NOW });
+  assert.equal(merged.skipped, false);
+  assert.equal(merged.appended, 1);
+  const written = JSON.parse(fs.readFileSync(file, 'utf8'));
+  assert.deepEqual(written.candidates.map(c => c.id), ['a1', 'a2', 'a3']);
+  assert.equal(written.candidates[0].review_status, 'approved', '保留已有人工结论');
+  assert.equal(written.candidates[2].review_status, 'pending', '新 pending 追加到尾部');
+  assert.equal(written.total_pending, 2);
+  // 清单无变化（再次运行同一候选层）→ 跳过不写盘
+  const noNew = buildReviewList(store2, { manual_folder: dir }, { now: NOW });
+  assert.equal(noNew.skipped, true);
+  assert.equal(noNew.reason, 'no_new_pending');
+  // force → 强制重建为最新 pending 清单
+  const forced = buildReviewList(store2, { manual_folder: dir }, { now: NOW, force: true });
   assert.equal(forced.skipped, false);
+  assert.equal(forced.replaced, true);
   const overwritten = JSON.parse(fs.readFileSync(file, 'utf8'));
   assert.equal(overwritten.total_pending, 2);
   assert.ok(overwritten.candidates.every(c => c.review_status === 'pending'));
@@ -95,7 +116,7 @@ test('buildReviewList 覆盖保护：已含人工结论不覆盖；--force 强�
 
 test('loadReviewList：读取并校验清单格式', () => {
   const dir = tmpManual();
-  const file = path.join(dir, 'review-20260808.json');
+  const file = path.join(dir, 'review.json');
   fs.writeFileSync(file, JSON.stringify({ schema_version: 1, kind: 'review_candidates', candidates: [{ id: 'a1' }] }));
   const list = loadReviewList(file);
   assert.equal(list.kind, 'review_candidates');

@@ -5,8 +5,8 @@ rem ============================================================
 rem  after-first-review.bat —— 第一次人工审核后应用结论并生成后续清单
 rem
 rem  用法：
-rem   1. 双击本文件          → 自动找 data\manual\ 下最新的 review-*.json 并应用
-rem   2. 把 review-*.json 拖到本文件图标上 → 应用该清单
+rem   1. 双击本文件          → 自动找 data\manual\ 下的 review.json 并应用
+rem   2. 把 review.json 拖到本文件图标上 → 应用该清单
 rem
 rem  内部执行：
 rem   第 1 步 串行应用第一次人工审核结论
@@ -21,11 +21,11 @@ if not defined REVIEW_FILE goto :find_latest
 goto :run_apply
 
 :find_latest
-for /f "delims=" %%f in ('dir /b /o-d "%ROOT%\data\manual\review-*.json" 2^>nul') do (
-  set "REVIEW_FILE=%ROOT%\data\manual\%%f"
+if exist "%ROOT%\data\manual\review.json" (
+  set "REVIEW_FILE=%ROOT%\data\manual\review.json"
   goto :run_apply
 )
-echo [错误] 未在 data\manual\ 找到 review-*.json 清单。
+echo [错误] 未在 data\manual\ 找到 review.json 清单。
 echo        请先运行采集管线（node scripts\build-news.js）自动生成待审清单。
 goto :end
 
@@ -55,8 +55,8 @@ if errorlevel 1 (
 
 echo.
 echo   全部完成。下一步：
-echo   1. 编辑 data\manual\keyword-refine-*.json 的 adopted_keywords 后，运行 bat\apply-keywords.bat
-echo   2. 编辑 data\manual\top-*.json 的 top_selected 后，运行 bat\apply-top.bat
+echo   1. 编辑 data\manual\keyword-refine.json 的 adopted_keywords 后，运行 bat\apply-keywords.bat
+echo   2. 编辑 data\manual\top.json 的 top_selected 后，运行 bat\apply-top.bat
 echo   按任意键关闭窗口。
 pause >nul
 exit /b 0

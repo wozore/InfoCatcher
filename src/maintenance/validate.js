@@ -182,8 +182,8 @@ try {
   })(DIRS.data);
 
   // 文件被覆盖判定：精确匹配登记路径，或位于已登记的目录之下
-  // （paths.js 登记的目录 = 该目录结构已声明，其下运行时产物（如 data/news/manual/
-  //   的 review-<date>.json / top-<date>.json 等动态文件）视为归该目录管理，不需逐一登记）。
+  // （paths.js 登记的目录 = 该目录结构已声明，其下运行时产物（如 data/manual/
+  //   的 review.json / top.json 等固定名动态文件）视为归该目录管理，不需逐一登记）。
   const isCovered = j => [...registered].some(r => {
     if (j === r) return true;
     let isDir = false;

@@ -20,7 +20,7 @@
  *     - list：列出 v2 候选（含 review_status / final_score），人友好表格输出；
  *       --json 时改为输出机器可读 JSON（候选总数 / by_review_status 分布 /
  *       各候选 id/status/final_score/title），CI 审核 PR 正文聚合用。
- *       --manual 时生成"待人工审核清单"到 data/manual/review-<YYYYMMDD>.json
+ *       --manual 时生成"待人工审核清单"到 data/manual/review.json
  *       （固定格式，供人工打开文件夹逐条审核；只含 pending、评分倒序、每条带 id）。
  *       管线 runMin 收尾也会自动生成同一清单；此处提供手动/强制入口，
  *       --force 覆盖已含人工结论的清单。
@@ -29,18 +29,18 @@
  *     - set/batch：单条/批量设置审核状态，写入 min-candidates.json（reviewed_at 由
  *       min-store 写入，不覆盖既有状态）；状态轴只允许 pending/approved/discarded。
  *     - transcripts：调 transcript-notify.notifyTranscripts 生成「待人工获取字幕」清单，
- *       写 config.manual_folder/transcript-requests-<YYYYMMDD>.json（固定格式）。
+ *       写 config.manual_folder/transcript-requests.json（固定格式，文件名去掉日期后缀）。
  *     - feedback：调 tool-feedback.feedbackFromSummaries，从 approved summary 提取
  *       疑似 AI 工具/概念名，与知识库比对 → 待补卡草案，写 manual_folder/
- *       tool-cards-pending-<YYYYMMDD>.json / concept-cards-pending-<YYYYMMDD>.json。
+ *       tool-cards-pending.json / concept-cards-pending.json（文件名去掉日期后缀）。
  *     - refine：调 keyword-refine.refineKeywords 生成经过 DeepSeek 跨语言归并的关键词提纯候选
  *       清单（仅 approved 原文，交人工填写 adopted_keywords，不直接改 ai_keywords），写
- *       manual_folder/keyword-refine-<YYYYMMDD>.json。
+ *       manual_folder/keyword-refine.json（文件名去掉日期后缀）。
  *     - refine-apply：读取关键词清单中维护者确认的 adopted_keywords，校验必须属于
  *       candidates 后幂等追加到 news-config-v2.json 的 keywords.ai_keywords；不发布、不建 dist。
  *     - ai-top：第二阶段，AI 从 approved 候选提供 top 待选项（纯 X 10 / 有 YouTube 15，
  *       按**最后一次采集记录** last-run.json 判定是否"有 YouTube"：youtube 平台实际采到
- *       内容 items>0 → 15，否则 10），写 manual_folder/top-<YYYYMMDD>.json 供维护者筛选；
+ *       内容 items>0 → 15，否则 10），写 manual_folder/top.json 供维护者筛选；
  *       每条 top_selected 默认 false。**失败一律抛错（exit 1）**：无 approved / last-run
  *       缺失 / AI 挑选失败——供 bat 一键入口用 errorlevel 判定，不静默成功。
  *     - top-selected：维护者从 ai-top 待选项确认最终显示 → top_selected 置 true；
@@ -59,6 +59,8 @@
 
 'use strict';
 
+const fs = require('fs');
+const path = require('path');
 const { readMinStore, writeMinStore, setReviewStatusMin, setBatchReviewStatusMin, setTopSelectedMin, MIN_REVIEW_STATUSES } = require('../min/min-store');
 const { readMinHistory, writeMinHistory } = require('../min/min-history');
 const { archiveMinStore } = require('../min/min-history');
@@ -76,6 +78,34 @@ function loadV2Config() {
   } catch {
     return {};
   }
+}
+
+/** 每日收尾归档后重置的 data/manual 清单（文件名固定，去掉日期后缀）。 */
+const MANUAL_LIST_FILES = [
+  'review.json',
+  'transcript-requests.json',
+  'keyword-refine.json',
+  'top.json',
+  'tool-cards-pending.json',
+  'concept-cards-pending.json',
+];
+
+/** 删除当日人工清单（白名单内已存在的文件）。归档成功后才调用；任一删除失败整体抛错。 */
+function removeManualLists(config) {
+  const folder = (config && config.manual_folder) || 'data/manual';
+  const removed = [];
+  for (const name of MANUAL_LIST_FILES) {
+    const file = path.join(folder, name);
+    try {
+      if (fs.existsSync(file)) {
+        fs.unlinkSync(file);
+        removed.push(name);
+      }
+    } catch (err) {
+      throw new Error(`删除人工清单失败：${file}（${err.message}）`);
+    }
+  }
+  return removed;
 }
 
 /** --store 只接受 min（v2 候选层）；缺省即 min。 */
@@ -260,14 +290,14 @@ async function minReviewCommand(action, flags = {}) {
       byReviewStatus[status] = (byReviewStatus[status] || 0) + 1;
     }
 
-    // ── --manual：生成"待人工审核清单"到 data/manual/review-<date>.json ──
+    // ── --manual：生成"待人工审核清单"到 data/manual/review.json ──
     //    人友好接口（R6/R8）：不只在命令行滚动，落盘固定格式供人工打开文件夹审核。
     //    与管线 runMin 收尾自动生成同一实现（review-list.buildReviewList，带 id、
     //    只含 pending、评分倒序），这里保留手动/强制入口（--force 覆盖已含人工结论的清单）。
     if (flags.manual) {
       const result = buildReviewList(store, config, { force: Boolean(flags.force) });
       if (result.skipped) {
-        console.log(`ℹ️ 待审清单已含人工审核结论（${result.file}），未覆盖。确需重新生成请加 --force。`);
+        console.log(`ℹ️ 待审清单已存在且无新 pending（${result.file}），未覆盖。确需重建请加 --force。`);
         return result;
       }
       console.log(`✅ 待审清单：${result.total_pending} 条 pending → ${result.file}`);
@@ -361,7 +391,7 @@ async function minReviewCommand(action, flags = {}) {
   }
 
   if (action === 'refine-apply') {
-    if (!flags.file) throw new Error('min-review refine-apply 缺少 --file（关键词清单路径，如 data/manual/keyword-refine-20260808.json）');
+    if (!flags.file) throw new Error('min-review refine-apply 缺少 --file（关键词清单路径，如 data/manual/keyword-refine.json）');
     const list = readJson(flags.file, null);
     const result = applyRefineKeywords(config, list);
     if (result.changed) writeJsonAtomic(NEWS_FILES.configV2, result.config, `min-review-refine-apply-${Date.now()}`);
@@ -373,7 +403,7 @@ async function minReviewCommand(action, flags = {}) {
   // ── ai-top：第二阶段，AI 从 approved 候选提供 top 待选项给维护者 ──
   //    人工审核（第一阶段）后，approved 候选喂给 DeepSeek 语义挑选最值得公开的
   //    top 10（纯 X）/ 15（有 YouTube）条作为**待选项**（R7 人工审 top 量），
-  //    写 data/manual/top-<date>.json 供维护者从中选出最终公开的 3~5/3~8 条。
+  //    写 data/manual/top.json 供维护者从中选出最终公开的 3~5/3~8 条。
   //    AI 提供的是候选池，不是最终结论；最终条数由维护者从待选项中挑。
   //    "有 YouTube"按**最后一次采集记录**（last-run.json）判定：youtube 平台实际
   //    采到内容（items > 0）→ top15；否则 top10（分时采集下 X 日 top10，避免
@@ -435,7 +465,7 @@ async function minReviewCommand(action, flags = {}) {
       });
     const dateKey = new Date().toISOString().slice(0, 10).replace(/-/g, '');
     const manualFolder = (config && config.manual_folder) || 'data/manual';
-    const file = path.join(manualFolder, `top-${dateKey}.json`);
+    const file = path.join(manualFolder, 'top.json');
     const payload = {
       schema_version: 1,
       kind: 'ai_top_candidates',
@@ -484,11 +514,11 @@ async function minReviewCommand(action, flags = {}) {
   }
 
   // ── top-apply：读 top 清单里 top_selected=true → 批量置候选层 top_selected=true ──
-  //    第二阶段收尾：维护者在 ai-top 产物（top-<date>.json）标 top_selected=true 后，
+  //    第二阶段收尾：维护者在 ai-top 产物（top.json）标 top_selected=true 后，
   //    bat/apply-top.bat 调用本命令应用选择，接着跑 publish-news.js 重建前端。
   //    对齐 apply 语义：只应用 true（false/未标不动作，幂等）；无 id 条目报错拒绝旧产物。
   if (action === 'top-apply') {
-    if (!flags.file) throw new Error('min-review top-apply 缺少 --file（top 清单路径，如 data/manual/top-20260808.json）');
+    if (!flags.file) throw new Error('min-review top-apply 缺少 --file（top 清单路径，如 data/manual/top.json）');
     const store = readMinStore();
     const list = readJson(flags.file, null);
     if (!list || list.kind !== 'ai_top_candidates' || !Array.isArray(list.candidates)) {
@@ -507,35 +537,44 @@ async function minReviewCommand(action, flags = {}) {
     return result;
   }
 
-  // ── archive：维护者确认当日审核/收尾完成后，归档并清空当前候选 ──
+  // ── archive：维护者确认当日审核/收尾完成后，归档、清空候选并重置当日人工清单 ──
+  //    唯一入口：bat/archive-min.bat（带人工确认）。执行顺序：先写轻量历史、再清空候选，
+  //    都成功后才删除 data/manual/ 下的当日人工清单（每天收尾重置一次；候选为空时也重置清单）。
   if (action === 'archive') {
     const store = readMinStore();
     const candidates = Array.isArray(store.candidates) ? store.candidates : [];
-    if (candidates.length === 0) {
+    let archived = 0;
+    let batchAt = null;
+    if (candidates.length > 0) {
+      const history = readMinHistory();
+      const result = archiveMinStore(store, history, new Date());
+      if (!result.skipped) {
+        const runId = `min-review-archive-${Date.now()}`;
+        writeMinHistory(result.history, runId);
+        writeMinStore(result.store, runId);
+        archived = result.archived;
+        batchAt = result.batch_at;
+        console.log(`✅ 已归档 ${result.archived} 条候选：${result.batch_at}`);
+        console.log(`   历史批次：${result.history.batches.length} / 30`);
+        console.log('   当前候选层已清空。');
+      }
+    } else {
       console.log('ℹ️ 当前候选层为空，无需归档。');
-      return { archived: 0, skipped: true };
     }
-    const history = readMinHistory();
-    const result = archiveMinStore(store, history, new Date());
-    if (result.skipped) {
-      console.log('ℹ️ 当前候选层为空，无需归档。');
-      return result;
-    }
-    const runId = `min-review-archive-${Date.now()}`;
-    writeMinHistory(result.history, runId);
-    writeMinStore(result.store, runId);
-    console.log(`✅ 已归档 ${result.archived} 条候选：${result.batch_at}`);
-    console.log(`   历史批次：${result.history.batches.length} / 30`);
-    console.log('   当前候选层已清空。');
-    return { ...result, cleared: true };
+    // 归档/清空成功后重置当日人工清单（历史写入或候选清空失败会抛错，不会走到这里）。
+    const removed = removeManualLists(config);
+    console.log(removed.length
+      ? `   已重置当日人工清单 ${removed.length} 个：${removed.join('、')}`
+      : '   无待重置的人工清单。');
+    return { archived, batch_at: batchAt, cleared: archived > 0, removed, skipped: archived === 0 };
   }
 
 
-  //    维护者编辑 review-<date>.json 的 review_status 后，读取 approved/discarded
+  //    维护者编辑 review.json 的 review_status 后，读取 approved/discarded
   //    批量写回 min-candidates.json（pending 跳过；无 id 条目报错拒绝旧格式）。
   //    一键入口：bat/apply-review.bat（自动定位最新清单）。
   if (action === 'apply') {
-    if (!flags.file) throw new Error('min-review apply 缺少 --file（待审清单路径，如 data/manual/review-20260808.json）');
+    if (!flags.file) throw new Error('min-review apply 缺少 --file（待审清单路径，如 data/manual/review.json）');
     const store = readMinStore();
     const list = loadReviewList(flags.file);
     const result = applyReviewList(store, list);
@@ -567,4 +606,6 @@ module.exports = {
   resolveAiTopConfig,
   applyTopSelectedList,
   applyRefineKeywords,
+  MANUAL_LIST_FILES,
+  removeManualLists,
 };

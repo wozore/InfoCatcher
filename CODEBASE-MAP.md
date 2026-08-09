@@ -34,7 +34,7 @@
 - [daily-projection.js](src/news/min/daily-projection.js) — v2 每日 top N 公开投影（approved 按天分组取前 N：含 YouTube 取 8 / 纯 X 取 5，纯逻辑不调 enrich/filter 两步）。导出: `buildDailyProjection`
 - [keyword-refine.js](src/news/min/keyword-refine.js) — 人工首次审核后关键词提纯（只读 approved 顶层原文，规则召回 + DeepSeek 跨语言归并为 English 四字段清单，维护者填 adopted_keywords；不直接改配置）。导出: `refineKeywords, collectApprovedOriginals, buildRuleCandidates`
 - [pipeline-min.js](src/news/min/pipeline-min.js) — **热点管线 v2 总指挥（runMin 编排）**：采集（默认 YouTube+X 并行，`options.platforms` 支持分时单平台）→ 去重 → L0 硬过滤 → 分类 → 评分（历史库）→ L1/L2 审核 → 候选落地 → 总结/本地化 → 自动生成待审清单（review-list，`options.autoReviewList=false` 可关）→ 每日公开投影写 hotspots.json → 写采集运行记录 last-run.json（ai-top 判定 hasYouTube 用）。每步失败降级记 coverage 不抛错。导出: `runMin, loadV2Config, normalizeNow, resolveXWindow`
-- [review-list.js](src/news/min/review-list.js) — 人工审核清单：自动生成待审清单 review-<date>.json（带 id、只含 pending、评分倒序、覆盖保护）+ 应用人工结论批量写回候选层（apply；pending 跳过、无 id 旧格式拒绝）。维护者入口：bat/after-first-review.bat。导出: `scoreOf, suggestReview, buildReviewList, loadReviewList, applyReviewList`
+- [review-list.js](src/news/min/review-list.js) — 人工审核清单：自动生成待审清单 review.json（文件名固定去掉日期后缀，带 id、只含 pending、评分倒序；已存在时追加新 pending、保留人工结论、--force 强制重建）+ 应用人工结论批量写回候选层（apply；pending 跳过、无 id 旧格式拒绝）。维护者入口：bat/after-first-review.bat、bat/archive-min.bat（归档时重置当日人工清单）。导出: `scoreOf, suggestReview, buildReviewList, mergeReviewCandidates, loadReviewList, applyReviewList`
 
 ### collectors/ — 各平台采集（会发网络请求）
 - [collector-youtube-v2.js](src/news/collectors/collector-youtube-v2.js) — 热点管线 v2 的 YouTube 采集器（search.list 关键词发现，不依赖旧 quota/registry/scheduler）。导出: `collectYouTubeV2, buildItem, parseDuration, loadV2Config`
@@ -55,13 +55,13 @@
 ### cli/ — 命令行
 - [news-cli.js](src/news/cli/news-cli.js) — **CLI 分发器 + 入口**（仅保留 v2 命令组）。导出: `parseArgs, main, minReviewCommand`
 - [cmd-content.js](src/news/cli/cmd-content.js) — `classify/localize preview` 子命令（纯函数预览；批量分类/本地化已由 v2 管线内建）。导出: `classifyCommand, localizeCommand`
-- [cmd-min.js](src/news/cli/cmd-min.js) — **v2 `min-review` 命令组**（操作 min-candidates.json；`refine` 从 approved 原文调 DeepSeek 生成关键词清单，`refine-apply` 校验 adopted_keywords 后原子幂等追加配置；`ai-top` 产物带 id；`top-apply` 应用 top_selected=true；`apply` 写回首审结论；`archive` 由维护者确认后把当前候选压缩为轻量历史并清空候选层）。维护者入口：bat/after-first-review.bat、bat/archive-min.bat。导出: `minReviewCommand, applyRefineKeywords, applyTopSelectedList, resolveAiTopConfig`
+- [cmd-min.js](src/news/cli/cmd-min.js) — **v2 `min-review` 命令组**（操作 min-candidates.json；`refine` 从 approved 原文调 DeepSeek 生成关键词清单，`refine-apply` 校验 adopted_keywords 后原子幂等追加配置；`ai-top` 产物带 id；`top-apply` 应用 top_selected=true；`apply` 写回首审结论；`archive` 由维护者确认后把当前候选压缩为轻量历史、清空候选层，并重置 data/manual 当日人工清单）。维护者入口：bat/after-first-review.bat、bat/archive-min.bat。导出: `minReviewCommand, applyRefineKeywords, applyTopSelectedList, resolveAiTopConfig, removeManualLists, MANUAL_LIST_FILES`
 
 ### transcripts/ — 收尾环节：字幕人工获取通知（独立于主链，只写清单文件）
-- [transcript-notify.js](src/news/transcripts/transcript-notify.js) — 每日"待人工获取字幕"清单（min 候选层挑评分最高 notify_count 个 YouTube，写 transcript-requests-<YYYYMMDD>.json 交人工，不碰主链/不调采集总结）。导出: `notifyTranscripts, parseNotifyCount, scoreOf`
+- [transcript-notify.js](src/news/transcripts/transcript-notify.js) — 每日"待人工获取字幕"清单（min 候选层挑评分最高 notify_count 个 YouTube，写 transcript-requests.json 交人工，文件名固定去掉日期后缀；不碰主链/不调采集总结）。导出: `notifyTranscripts, parseNotifyCount, scoreOf`
 
 ### feedback/ — 收尾环节：工具库/概念库反哺（独立于主链，只写待补卡文件）
-- [tool-feedback.js](src/news/feedback/tool-feedback.js) — 从 approved summary 提取 AI 工具/概念名（缺省正则 / options.llmExtract 注入），与 tools.json/glossary.json 比对，缺失写 tool-cards-pending / concept-cards-pending-<YYYYMMDD>.json 待补卡，不直接改知识库。导出: `feedbackFromSummaries, extractEntities, toolExists, conceptExists`
+- [tool-feedback.js](src/news/feedback/tool-feedback.js) — 从 approved summary 提取 AI 工具/概念名（缺省正则 / options.llmExtract 注入），与 tools.json/glossary.json 比对，缺失写 tool-cards-pending.json / concept-cards-pending.json 待补卡（文件名固定去掉日期后缀），不直接改知识库。导出: `feedbackFromSummaries, extractEntities, toolExists, conceptExists`
 
 ## src/content/ — 内容产物
 - [generate-rss.js](src/content/generate-rss.js) — RSS 生成。导出: `getFeedItems, generateRss`

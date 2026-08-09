@@ -14,7 +14,7 @@
  *   - manual_folder              清单输出目录（缺省 data/manual）
  *
  * 数据文件（manual_folder/）：
- *   transcript-requests-<YYYYMMDD>.json
+ *   transcript-requests.json      待人工获取字幕清单（文件名固定，去掉日期后缀）
  *     含结构化 requested（title/url/score）+ 每行一条的 human_lines（人友好扫描用）
  */
 
@@ -103,7 +103,7 @@ function notifyTranscripts(store, config, options = {}) {
 
   const dateKey = dateKeyOf(options && options.now);
   const manualFolder = (config && config.manual_folder) || 'data/manual';
-  const file = path.join(manualFolder, `transcript-requests-${dateKey}.json`);
+  const file = path.join(manualFolder, 'transcript-requests.json');
 
   const payload = {
     schema_version: 1,

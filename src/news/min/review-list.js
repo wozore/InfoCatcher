@@ -3,8 +3,9 @@
  *
  * 在热点管线 v2 中的位置：
  *   - 候选层落地（pipeline-min runMin）后、维护者人工审核前 → buildReviewList 自动
- *     生成待审清单 review-<date>.json（**带 id**，只含 pending），供维护者打开编辑
- *     review_status；CLI 的 `min-review list --manual` 也复用同一实现。
+ *     生成待审清单 review.json（**带 id**，只含 pending；文件已存在时追加新 pending，
+ *     不覆盖已有人工结论），供维护者打开编辑 review_status；CLI 的
+ *     `min-review list --manual` 也复用同一实现。
  *   - 维护者编辑完成后 → applyReviewList 把 approved/discarded 结论批量写回候选层
  *     （min-candidates.json），pending 跳过；approved 进入后续 ai-top/publish 流程。
  *     维护者入口：`min-review apply --file <清单>` 或bat/apply-review.bat。
@@ -14,8 +15,9 @@
  *     （已审结论不重列），apply 只应用清单里的明确结论，不替维护者判断。
  *   - 只支持新格式：清单条目必须带 id（2026-08-08 前旧格式无 id），apply 对无 id
  *     条目直接抛错拒绝并提示重新生成（不静默错配）。
- *   - 覆盖保护：buildReviewList 遇到目标清单已含非 pending 结论（维护者已编辑）
- *     时不覆盖，保留人工结论；`--force` 显式强制重新生成。
+ *   - 追加合并：清单文件名固定 review.json（去掉日期后缀，便于每日多次采集追加）；
+ *     buildReviewList 遇到清单已存在时把本次新 pending 追加到尾部（按 id 去重，
+ *     保留已有人工结论，不覆盖）；本次无新 pending 时跳过不写盘；`--force` 强制重建。
  *
  * 本模块纯逻辑 + 文件读写，不发起网络请求、不消费额度。
  */
@@ -79,32 +81,73 @@ function suggestReview(candidate) {
   return '人工判断：是否值得收录';
 }
 
+/** 组装待审清单 JSON（kind='review_candidates'；human_lines 只列 pending 供人工扫描）。 */
+function buildReviewPayload(candidates, now, dateKey) {
+  const pending = (candidates || []).filter(c => c && c.review_status === 'pending');
+  return {
+    schema_version: 1,
+    kind: 'review_candidates',
+    generated_at: now.toISOString(),
+    date: dateKey,
+    total_pending: pending.length,
+    note: '待人工审核清单：请逐条设置 review_status（pending/approved/discarded）。' +
+          '应用结论：双击 bat/apply-review.bat（或 node scripts/news-cli.js min-review apply --file 本文件），' +
+          '应用后自动生成 top 名单（ai-top）供二次审核；approved 才进后续 top-selected/publish。',
+    candidates: candidates || [],
+    // 人友好：每行一条，供人工扫描
+    human_lines: pending.map(c =>
+      `[${c.score === null ? '-' : c.score}] ${c.summary}\n    建议：${c.suggestion}`
+    ),
+  };
+}
+
 /**
- * 生成待审清单 review-<date>.json（带 id，只含 pending，评分倒序）。
+ * 追加合并两份候选清单：保留已有条目（含人工结论与顺序），
+ * 把 fresh 中不在已有集合的条目追加到尾部（按 id 去重）。
+ * @param {Array} [existingCandidates]
+ * @param {Array} [freshCandidates]
+ * @returns {{ merged: Array, appended: number }}
+ */
+function mergeReviewCandidates(existingCandidates, freshCandidates) {
+  const merged = [];
+  const seen = new Set();
+  for (const c of Array.isArray(existingCandidates) ? existingCandidates : []) {
+    merged.push(c);
+    if (c && c.id != null) seen.add(String(c.id));
+  }
+  let appended = 0;
+  for (const c of Array.isArray(freshCandidates) ? freshCandidates : []) {
+    if (c && c.id != null && !seen.has(String(c.id))) {
+      seen.add(String(c.id));
+      merged.push(c);
+      appended++;
+    }
+  }
+  return { merged, appended };
+}
+
+/**
+ * 生成待审清单 review.json（带 id，只含 pending，评分倒序）。
+ * 文件名固定 review.json（去掉日期后缀，便于每日多次采集追加）：
+ *   - 文件不存在 → 全新生成；
+ *   - 文件已存在 → 追加本次新 pending（按 id 去重、保留已有人工结论与顺序），
+ *     无新 pending 时跳过不写盘；--force 强制重建为最新 pending 清单。
  * 供维护者打开编辑 review_status；与 `min-review list --manual` 同实现。
  *
  * @param {object} store - 候选层（min-candidates.json 的 store 结构）
  * @param {object} [config] - v2 配置（取 manual_folder，缺省 data/manual）
  * @param {{now?: Date, force?: boolean}} [options]
  *   - now：清单日期基准（缺省当前时间；注入便于测试确定性）
- *   - force：目标清单已含人工结论时仍强制重新生成（缺省 false = 覆盖保护）
+ *   - force：已存在时强制重建为最新 pending 清单（缺省 false = 追加合并）
  * @returns {{ file: string, total_pending: number, candidates: Array,
- *              skipped: boolean, reason?: string }}
- *   - skipped=true 时未写盘（reason='existing_reviewed'，目标清单已有非 pending 结论）
+ *              skipped: boolean, reason?: string, appended?: number, replaced?: boolean }}
+ *   - skipped=true 时未写盘（reason='no_new_pending'，清单已存在且本次无新 pending）
  */
 function buildReviewList(store, config, options = {}) {
   const now = options.now || new Date();
   const dateKey = now.toISOString().slice(0, 10).replace(/-/g, '');
   const manualFolder = (config && config.manual_folder) || 'data/manual';
-  const file = path.join(manualFolder, `review-${dateKey}.json`);
-
-  // 覆盖保护：目标清单已含非 pending 结论（维护者已编辑）→ 不覆盖，保留人工结论。
-  const existing = readJson(file, null);
-  const hasReviewed = existing && Array.isArray(existing.candidates)
-    && existing.candidates.some(c => c && c.review_status && c.review_status !== 'pending');
-  if (hasReviewed && !options.force) {
-    return { skipped: true, file, total_pending: existing.total_pending || 0, reason: 'existing_reviewed' };
-  }
+  const file = path.join(manualFolder, 'review.json');
 
   // 待审候选：全部 pending（评分倒序，供维护者逐条审核）
   const reviewList = (store.candidates || [])
@@ -125,30 +168,34 @@ function buildReviewList(store, config, options = {}) {
       };
     });
 
-  const payload = {
-    schema_version: 1,
-    kind: 'review_candidates',
-    generated_at: now.toISOString(),
-    date: dateKey,
-    total_pending: reviewList.length,
-    note: '待人工审核清单：请逐条设置 review_status（pending/approved/discarded）。' +
-          '应用结论：双击 bat/apply-review.bat（或 node scripts/news-cli.js min-review apply --file 本文件），' +
-          '应用后自动生成 top 名单（ai-top）供二次审核；approved 才进后续 top-selected/publish。',
-    candidates: reviewList,
-    // 人友好：每行一条，供人工扫描
-    human_lines: reviewList.map(c =>
-      `[${c.score === null ? '-' : c.score}] ${c.summary}\n    建议：${c.suggestion}`
-    ),
-  };
+  const existing = readJson(file, null);
+  if (existing && Array.isArray(existing.candidates)) {
+    if (options.force) {
+      const payload = buildReviewPayload(reviewList, now, dateKey);
+      fs.mkdirSync(path.dirname(file), { recursive: true });
+      writeJsonAtomic(file, payload, 'min-review-manual');
+      return { file, total_pending: reviewList.length, candidates: reviewList, appended: 0, replaced: true, skipped: false };
+    }
+    const { merged, appended } = mergeReviewCandidates(existing.candidates, reviewList);
+    const totalPending = merged.filter(c => c && c.review_status === 'pending').length;
+    if (appended === 0) {
+      return { skipped: true, file, total_pending: totalPending, reason: 'no_new_pending', candidates: merged };
+    }
+    const payload = buildReviewPayload(merged, now, dateKey);
+    fs.mkdirSync(path.dirname(file), { recursive: true });
+    writeJsonAtomic(file, payload, 'min-review-manual');
+    return { file, total_pending: totalPending, candidates: merged, appended, replaced: false, skipped: false };
+  }
 
+  const payload = buildReviewPayload(reviewList, now, dateKey);
   fs.mkdirSync(path.dirname(file), { recursive: true });
   writeJsonAtomic(file, payload, 'min-review-manual');
-  return { file, total_pending: reviewList.length, candidates: reviewList, skipped: false };
+  return { file, total_pending: reviewList.length, candidates: reviewList, appended: reviewList.length, replaced: false, skipped: false };
 }
 
 /**
  * 读取并校验待审清单（kind='review_candidates' 且含 candidates 数组）。
- * @param {string} filePath - 清单路径（如 data/manual/review-20260808.json）
+ * @param {string} filePath - 清单路径（如 data/manual/review.json）
  * @returns {object} 解析后的清单对象（含 candidates 数组）
  */
 function loadReviewList(filePath) {
@@ -231,6 +278,8 @@ function applyReviewList(store, list) {
 module.exports = {
   scoreOf,
   suggestReview,
+  buildReviewPayload,
+  mergeReviewCandidates,
   buildReviewList,
   loadReviewList,
   applyReviewList,

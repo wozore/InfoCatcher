@@ -12,7 +12,9 @@ set "ROOT=%~dp0.."
 cd /d "%ROOT%"
 
 echo ============================================================
-echo   警告：此操作会归档并清空当前 min-candidates.json
+echo   警告：此操作会归档并清空当前 min-candidates.json，
+echo   并删除 data/manual/ 下的当日人工清单（review / transcript /
+echo   keyword-refine / top / 待补卡）。
 echo   请确认当天审核、关键词提纯、AI top 和必要发布动作均已完成。
 echo   历史只保留每条信息的 id 和 title，不能恢复完整内容。
 echo ============================================================

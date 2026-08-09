@@ -5,8 +5,8 @@ rem ============================================================
 rem  apply-keywords.bat —— 应用维护者确认的关键词提纯清单
 rem
 rem  用法：
-rem   1. 双击本文件 → 自动找 data\manual\ 下最新 keyword-refine-*.json
-rem   2. 把 keyword-refine-*.json 拖到本文件图标上 → 应用该清单
+rem   1. 双击本文件 → 自动找 data\manual\ 下的 keyword-refine.json
+rem   2. 把 keyword-refine.json 拖到本文件图标上 → 应用该清单
 rem
 rem  仅幂等追加 adopted_keywords 到 news-config-v2.json；不发布、不构建 dist。
 rem ============================================================
@@ -19,11 +19,11 @@ if not defined KEYWORD_FILE goto :find_latest
 goto :run_apply
 
 :find_latest
-for /f "delims=" %%f in ('dir /b /o-d "%ROOT%\data\manual\keyword-refine-*.json" 2^>nul') do (
-  set "KEYWORD_FILE=%ROOT%\data\manual\%%f"
+if exist "%ROOT%\data\manual\keyword-refine.json" (
+  set "KEYWORD_FILE=%ROOT%\data\manual\keyword-refine.json"
   goto :run_apply
 )
-echo [错误] 未在 data\manual\ 找到 keyword-refine-*.json 清单。
+echo [错误] 未在 data\manual\ 找到 keyword-refine.json 清单。
 echo        请先完成第一次审核并运行 bat\after-first-review.bat。
 goto :end
 

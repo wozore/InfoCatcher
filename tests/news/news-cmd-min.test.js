@@ -20,11 +20,16 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
 const {
   hasYouTubeInLastRun,
   resolveAiTopConfig,
   applyTopSelectedList,
   applyRefineKeywords,
+  removeManualLists,
+  MANUAL_LIST_FILES,
 } = require('../../src/news/cli/cmd-min');
 
 // 固定配置（不依赖真实配置文件，保证 topN 断言确定性）
@@ -150,6 +155,26 @@ test('archiveMinStore：空候选不新增历史批次', () => {
   const result = archiveMinStore({ candidates: [] }, { schema_version: 1, batches: [] }, '2026-08-09T00:00:00Z');
   assert.equal(result.skipped, true);
   assert.deepEqual(result.history.batches, []);
+});
+
+test('removeManualLists：只删除白名单内已存在的人工清单，保留其他文件', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cmd-min-manual-'));
+  for (const name of ['review.json', 'top.json', 'unrelated.txt']) {
+    fs.writeFileSync(path.join(dir, name), '{}');
+  }
+  const removed = removeManualLists({ manual_folder: dir });
+  assert.deepEqual(removed, ['review.json', 'top.json']);
+  assert.equal(fs.existsSync(path.join(dir, 'review.json')), false);
+  assert.equal(fs.existsSync(path.join(dir, 'top.json')), false);
+  assert.equal(fs.existsSync(path.join(dir, 'unrelated.txt')), true, '非白名单文件保留');
+  // 重复执行：无文件可删 → 空数组
+  assert.deepEqual(removeManualLists({ manual_folder: dir }), []);
+  fs.rmSync(dir, { recursive: true, force: true });
+});
+
+test('removeManualLists：manual_folder 缺省回退 data/manual 且不报错', () => {
+  const removed = removeManualLists({});
+  assert.ok(Array.isArray(removed));
 });
 const KEYWORD_LIST = {
   kind: 'keyword_refine_candidates',

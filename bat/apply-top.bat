@@ -5,8 +5,8 @@ rem ============================================================
 rem  apply-top.bat —— 一键应用 top 清单 + 重建前端（维护者入口）
 rem
 rem  用法：
-rem   1. 双击本文件          → 自动找 data\manual\ 下最新的 top-*.json 并应用
-rem   2. 把 top-*.json 拖到本文件图标上 → 应用该清单
+rem   1. 双击本文件          → 自动找 data\manual\ 下的 top.json 并应用
+rem   2. 把 top.json 拖到本文件图标上 → 应用该清单
 rem
 rem  内部执行（两步连续，均失败即停）：
 rem   第 1 步 node scripts\news-cli.js min-review top-apply --file <清单>
@@ -19,18 +19,18 @@ rem 定位项目根目录：本文件在 bat\ 子目录，%~dp0 为 bat\，上�
 set "ROOT=%~dp0.."
 cd /d "%ROOT%"
 
-rem 拖拽清单到图标 → %~1 为文件路径；无参数 → 找 data\manual\ 最新 top-*.json
+rem 拖拽清单到图标 → %~1 为文件路径；无参数 → 找 data\manual\ 下的 top.json
 set "TOP_FILE=%~1"
 if not defined TOP_FILE goto :find_latest
 goto :run_apply
 
 :find_latest
-for /f "delims=" %%f in ('dir /b /o-d "%ROOT%\data\manual\top-*.json" 2^>nul') do (
-  set "TOP_FILE=%ROOT%\data\manual\%%f"
+if exist "%ROOT%\data\manual\top.json" (
+  set "TOP_FILE=%ROOT%\data\manual\top.json"
   goto :run_apply
 )
-echo [错误] 未在 data\manual\ 找到 top-*.json 清单。
-echo        请先运行 min-review ai-top（或 bat\apply-review.bat 第 2 步）生成 top 清单。
+echo [错误] 未在 data\manual\ 找到 top.json 清单。
+echo        请先运行 min-review ai-top（或 bat\after-first-review.bat 第 2 步）生成 top 清单。
 goto :end
 
 :run_apply

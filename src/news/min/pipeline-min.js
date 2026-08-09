@@ -376,9 +376,10 @@ async function runMin(options = {}) {
 
   // ═══════════════════════════════════════════════════════════════
   // 9.5 人工审核清单（自动生成）：候选落地后、公开投影前，把 pending 候选
-  //     写 data/manual/review-<date>.json（带 id、评分倒序）供维护者打开编辑
-  //     review_status，编辑后用 min-review apply（或 bat/apply-review.bat，应用后自动生成 top 名单）写回。
-  //     覆盖保护：目标清单已含人工结论时不覆盖；失败仅降级记 coverage，不阻塞管线。
+  //     写 data/manual/review.json（带 id、评分倒序；文件已存在时追加新 pending、
+  //     不覆盖已有人工结论）供维护者打开编辑 review_status，编辑后用 min-review apply
+  //     （或 bat/apply-review.bat，应用后自动生成 top 名单）写回。
+  //     失败仅降级记 coverage，不阻塞管线。
   //     测试注入 options.autoReviewList=false 可关闭（避免污染 data/manual/）。
   // ═══════════════════════════════════════════════════════════════
   if (options.autoReviewList !== false) {

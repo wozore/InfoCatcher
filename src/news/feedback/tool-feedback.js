@@ -14,9 +14,9 @@
  * 提取方式：默认用正则匹配大写品牌名/知名模型名（DeepSeek/Ollama/Claude/GPT…）；
  * 需要更智能的语义提取时由调用方注入 options.llmExtract（LLM 提取函数）。
  *
- * 数据文件（manual_folder/）：
- *   tool-cards-pending-<YYYYMMDD>.json      待补工具卡草案
- *   concept-cards-pending-<YYYYMMDD>.json   待补概念卡草案
+ * 数据文件（manual_folder/，文件名固定去掉日期后缀）：
+ *   tool-cards-pending.json      待补工具卡草案
+ *   concept-cards-pending.json   待补概念卡草案
  */
 
 'use strict';
@@ -211,7 +211,7 @@ async function feedbackFromSummaries(store, config, options = {}) {
 
   fs.mkdirSync(manualFolder, { recursive: true });
   if (toolsPending.length > 0) {
-    const toolFile = path.join(manualFolder, `tool-cards-pending-${dateKey}.json`);
+    const toolFile = path.join(manualFolder, 'tool-cards-pending.json');
     writeJsonAtomic(toolFile, {
       schema_version: 1,
       kind: 'tool_cards_pending',
@@ -222,7 +222,7 @@ async function feedbackFromSummaries(store, config, options = {}) {
     }, 'tool-feedback');
   }
   if (conceptsPending.length > 0) {
-    const conceptFile = path.join(manualFolder, `concept-cards-pending-${dateKey}.json`);
+    const conceptFile = path.join(manualFolder, 'concept-cards-pending.json');
     writeJsonAtomic(conceptFile, {
       schema_version: 1,
       kind: 'concept_cards_pending',

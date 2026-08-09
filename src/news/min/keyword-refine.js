@@ -4,6 +4,8 @@
  * 仅从候选层中 review_status === 'approved' 的原始 title、description、comments
  * 提取跨语言初始候选，再由 DeepSeek 批量完成语义筛选、同义归并和 English 规范化。
  * 产物只供维护者填写 adopted_keywords；本模块绝不直接修改 keywords.ai_keywords。
+ * 清单文件名固定 keyword-refine.json（去掉日期后缀）；文件已存在时抛错拒绝覆盖，
+ * 保留维护者的 adopted_keywords。
  */
 
 'use strict';
@@ -141,7 +143,7 @@ async function refineKeywords(store, config, options = {}) {
   }
 
   const date = dateKeyOf(options.now);
-  const file = path.join(manualFolder, `keyword-refine-${date}.json`);
+  const file = path.join(manualFolder, 'keyword-refine.json');
   if (fs.existsSync(file)) {
     throw new Error(`关键词提纯清单已存在：${file}。为保留维护者的 adopted_keywords，拒绝覆盖；请先处理现有清单。`);
   }
