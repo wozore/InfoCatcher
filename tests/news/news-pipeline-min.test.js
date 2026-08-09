@@ -27,7 +27,6 @@ const { readJson, writeJsonAtomic } = require('../../src/news/core/news-storage'
 const CONFIG = require('../../data/news/config/news-config-v2.json');
 
 const MIN_PATH = NEWS_FILES.minCandidates;
-const MIN_HISTORY_PATH = NEWS_FILES.minCandidatesHistory;
 const HISTORY_PATH = NEWS_FILES.sourceHistory;
 const HOTSPOTS_PATH = NEWS_FILES.hotspots;
 const LAST_RUN_PATH = NEWS_FILES.lastRun;
@@ -35,7 +34,7 @@ const LAST_RUN_PATH = NEWS_FILES.lastRun;
 /** 备份/恢复真实数据文件，测试不污染仓库。 */
 const backups = {};
 function backupAll() {
-  for (const file of [MIN_PATH, MIN_HISTORY_PATH, HISTORY_PATH, HOTSPOTS_PATH, LAST_RUN_PATH]) {
+  for (const file of [MIN_PATH, HISTORY_PATH, HOTSPOTS_PATH, LAST_RUN_PATH]) {
     try { backups[file] = fs.readFileSync(file, 'utf8'); }
     catch { backups[file] = null; }
   }
@@ -176,10 +175,9 @@ const localize = async items => {
 
 test('pipeline-min 全链：L0 丢弃 → 分类 → 评分 → 审核 → 候选 → 投影', async () => {
   backupAll();
-  // 预置上一批公开投影：本批清理后不进入候选层，但空投影时应继续保留。
-  writeJsonAtomic(HOTSPOTS_PATH, { schema_version: 1, generated_at: NOW.toISOString(), items: [previousPublicItem], events: [], provenance: [], assessments: [] }, 'test-hotspots-seed');
-  let capturedMinStore = null;
-  let capturedHistory = null;
+  // 预置已 approved 候选
+  writeJsonAtomic(MIN_PATH, { schema_version: 1, updated_at: NOW.toISOString(), candidates: [seed] }, 'test-seed');
+
   let result;
   try {
     result = await runMin({
@@ -190,9 +188,6 @@ test('pipeline-min 全链：L0 丢弃 → 分类 → 评分 → 审核 → 候�
       summarize,
       localize,
       minStoreIn: () => ({ schema_version: 1, updated_at: NOW.toISOString(), candidates: [seed] }),
-      minStoreOut: store => { capturedMinStore = store; },
-      minHistoryIn: () => ({ schema_version: 1, batches: [] }),
-      minHistoryOut: history => { capturedHistory = history; },
       runId: 'test-min',
       autoReviewList: false, // 关闭自动生成待审清单，避免污染 data/manual/（清单生成有独立测试）
     });
@@ -202,13 +197,9 @@ test('pipeline-min 全链：L0 丢弃 → 分类 → 评分 → 审核 → 候�
   }
 
   try {
-    assert.ok(capturedHistory, '应捕获上一批轻量历史');
-    assert.deepEqual(capturedHistory.batches[0].items, [{ id: seed.id, title: seed.title }]);
-    assert.deepEqual(Object.keys(capturedHistory.batches[0].items[0]).sort(), ['id', 'title']);
-
     // ── 返回统计 ──
-    assert.equal(result.minCandidates, 4, '当前候选层只保留本批次过 L0 的 2 条和 L0 丢弃的 2 条');
-    assert.equal(result.publicItems, 0, '上一批 approved 不再进入当前批次公开投影');
+    assert.equal(result.minCandidates, 5, '候选层总数 = 预置 1 + kept 1 + L1 discarded 1 + L0 dropped 2');
+    assert.equal(result.publicItems, 1, '公开投影仅含预置 approved 候选');
     assert.equal(result.coverage.status, 'complete');
     assert.equal(result.coverage.collected_total, 4);
     assert.equal(result.coverage.after_dedupe, 4);
@@ -221,10 +212,10 @@ test('pipeline-min 全链：L0 丢弃 → 分类 → 评分 → 审核 → 候�
     assert.equal(result.coverage.localized, 1, '仅 pending 的 kept 被本地化');
 
     // ── 候选层：单状态轴齐全 ──
-    const minStore = capturedMinStore;
-    assert.ok(minStore, '应捕获当前批次候选层');
-    assert.equal(minStore.candidates.length, 4);
+    const minStore = readJson(MIN_PATH, null);
+    assert.equal(minStore.candidates.length, 5);
     const byId = new Map(minStore.candidates.map(c => [c.id, c]));
+    assert.ok(byId.has('x-mock-seed-approved'));
     for (const candidate of minStore.candidates) {
       assert.ok(['pending', 'approved', 'discarded'].includes(candidate.review_status), `${candidate.id} 有合法 review_status`);
     }

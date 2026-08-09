@@ -15,6 +15,7 @@
  *   min-review top-selected --ids <id1,id2,...> [--store min]
  *   min-review top-apply    --file <top-清单.json> [--store min]
  *   min-review apply        --file <review-清单.json> [--store min]
+ *   min-review archive      [--store min]
  *
  *     - list：列出 v2 候选（含 review_status / final_score），人友好表格输出；
  *       --json 时改为输出机器可读 JSON（候选总数 / by_review_status 分布 /
@@ -59,6 +60,8 @@
 'use strict';
 
 const { readMinStore, writeMinStore, setReviewStatusMin, setBatchReviewStatusMin, setTopSelectedMin, MIN_REVIEW_STATUSES } = require('../min/min-store');
+const { readMinHistory, writeMinHistory } = require('../min/min-history');
+const { archiveMinStore } = require('../min/min-history');
 const { notifyTranscripts } = require('../transcripts/transcript-notify');
 const { feedbackFromSummaries } = require('../feedback/tool-feedback');
 const { refineKeywords } = require('../min/keyword-refine');
@@ -504,7 +507,30 @@ async function minReviewCommand(action, flags = {}) {
     return result;
   }
 
-  // ── apply：应用人工审核结论（待审清单 → 候选层）──
+  // ── archive：维护者确认当日审核/收尾完成后，归档并清空当前候选 ──
+  if (action === 'archive') {
+    const store = readMinStore();
+    const candidates = Array.isArray(store.candidates) ? store.candidates : [];
+    if (candidates.length === 0) {
+      console.log('ℹ️ 当前候选层为空，无需归档。');
+      return { archived: 0, skipped: true };
+    }
+    const history = readMinHistory();
+    const result = archiveMinStore(store, history, new Date());
+    if (result.skipped) {
+      console.log('ℹ️ 当前候选层为空，无需归档。');
+      return result;
+    }
+    const runId = `min-review-archive-${Date.now()}`;
+    writeMinHistory(result.history, runId);
+    writeMinStore(result.store, runId);
+    console.log(`✅ 已归档 ${result.archived} 条候选：${result.batch_at}`);
+    console.log(`   历史批次：${result.history.batches.length} / 30`);
+    console.log('   当前候选层已清空。');
+    return { ...result, cleared: true };
+  }
+
+
   //    维护者编辑 review-<date>.json 的 review_status 后，读取 approved/discarded
   //    批量写回 min-candidates.json（pending 跳过；无 id 条目报错拒绝旧格式）。
   //    一键入口：bat/apply-review.bat（自动定位最新清单）。
@@ -528,7 +554,7 @@ async function minReviewCommand(action, flags = {}) {
     return result;
   }
 
-  throw new Error(`未知 min-review 命令: ${action}。支持：list | set | batch | transcripts | feedback | refine | refine-apply | ai-top | top-selected | top-apply | apply`);
+  throw new Error(`未知 min-review 命令: ${action}。支持：list | set | batch | transcripts | feedback | refine | refine-apply | ai-top | top-selected | top-apply | apply | archive`);
 }
 
 module.exports = {

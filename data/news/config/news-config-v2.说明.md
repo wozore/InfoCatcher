@@ -103,11 +103,11 @@
 |---|---|---|
 | `ai_tool` | 90 | AI 工具（实用，最高） |
 | `ai_product` | 90 | AI 产品（实用，最高） |
-| `ai_concept` | 60 | AI 概念 |
+| `ai_concept` | 70 | AI 概念 |
 | `ai_industry` | 60 | AI 行业事件 |
-| `ai_technology` | 40 | AI 技术/论文（实用度低，最低） |
-| `other` | 50 | 其他 |
-| `unclassified` | 50 | 未分类 |
+| `ai_technology` | 50 | AI 技术/论文（实用度低，最低） |
+| `other` | 40 | 其他 |
+| `unclassified` | 40 | 未分类 |
 
 ## manual_folder —— 人工维护文件夹
 

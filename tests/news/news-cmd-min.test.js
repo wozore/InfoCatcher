@@ -132,6 +132,25 @@ test('applyTopSelectedList：无 top_selected=true → changed 0；未命中 id 
 
 // ── applyRefineKeywords：纯内存配置更新，不触碰正式配置文件 ──
 
+const { archiveMinStore } = require('../../src/news/min/min-history');
+
+test('archiveMinStore：先生成轻量历史，再返回空候选层', () => {
+  const store = {
+    schema_version: 1,
+    updated_at: null,
+    candidates: [{ id: 'x-1', title: '标题', description: '不归档' }],
+  };
+  const result = archiveMinStore(store, { schema_version: 1, batches: [] }, '2026-08-09T00:00:00Z');
+  assert.equal(result.archived, 1);
+  assert.deepEqual(result.history.batches[0].items, [{ id: 'x-1', title: '标题' }]);
+  assert.deepEqual(result.store.candidates, []);
+});
+
+test('archiveMinStore：空候选不新增历史批次', () => {
+  const result = archiveMinStore({ candidates: [] }, { schema_version: 1, batches: [] }, '2026-08-09T00:00:00Z');
+  assert.equal(result.skipped, true);
+  assert.deepEqual(result.history.batches, []);
+});
 const KEYWORD_LIST = {
   kind: 'keyword_refine_candidates',
   candidates: [

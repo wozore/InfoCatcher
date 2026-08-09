@@ -28,12 +28,12 @@
 
 ### min/ — 热点管线 v2 数据层（单状态轴审核/候选/投影 + 长期质量历史库）
 - [history-store.js](src/news/min/history-store.js) — 来源长期质量历史库（source-history.json 持久化 + 三率加权长期质量分，纯本地无 API）。导出: `readHistoryStore, writeHistoryStore, appendSamples, evaluateLongTermQuality, computeThreeRateScore, sourceKeyOf, perSampleRates`
-- [min-history.js](src/news/min/min-history.js) — 热点候选轻量历史（最近 30 批，每条仅保存 id/title，批次时间为北京时间 `YYYY-MM-DD-HH:MM:SS`）。导出: `readMinHistory, writeMinHistory, appendMinHistory, compactCandidates, formatBatchAt`
+- [min-history.js](src/news/min/min-history.js) — 热点候选轻量历史（维护者手动归档；最近 30 批，每条仅保存 id/title，批次时间为北京时间 `YYYY-MM-DD-HH:MM:SS`）。导出: `readMinHistory, writeMinHistory, appendMinHistory, compactCandidates, formatBatchAt, archiveMinStore`
 - [review-v2.js](src/news/min/review-v2.js) — 热点管线 v2 审核层（L0 规则硬审 → L1 AI 审 → L2 AI 建议+人工；单状态轴 pending/discarded，不依赖旧双轴；复用 content-reviewer.reviewCandidate）。导出: `l0HardFilter, l1AiReview, l2AiAdvice, applyL1Verdicts, DEFAULT_COMMENTS_TOP_N, DEFAULT_AUTO_DISCARD_CONFIDENCE`
-- [min-store.js](src/news/min/min-store.js) — v2 单状态轴候选层读写（min-candidates.json；采集批次切换时由 pipeline-min 先归档上一批轻量摘要并清空当前层；人工结论不因同批次重新采集重置）。导出: `readMinStore, writeMinStore, mergeCandidatesMin, setReviewStatusMin, setBatchReviewStatusMin, isMinPublicEligible, toPublicItemMin`
+- [min-store.js](src/news/min/min-store.js) — v2 单状态轴候选层读写（min-candidates.json；自动采集继续合并候选，维护者手动归档后才清空；人工结论不因重新采集重置）。导出: `readMinStore, writeMinStore, mergeCandidatesMin, setReviewStatusMin, setBatchReviewStatusMin, isMinPublicEligible, toPublicItemMin`
 - [daily-projection.js](src/news/min/daily-projection.js) — v2 每日 top N 公开投影（approved 按天分组取前 N：含 YouTube 取 8 / 纯 X 取 5，纯逻辑不调 enrich/filter 两步）。导出: `buildDailyProjection`
 - [keyword-refine.js](src/news/min/keyword-refine.js) — 人工首次审核后关键词提纯（只读 approved 顶层原文，规则召回 + DeepSeek 跨语言归并为 English 四字段清单，维护者填 adopted_keywords；不直接改配置）。导出: `refineKeywords, collectApprovedOriginals, buildRuleCandidates`
-- [pipeline-min.js](src/news/min/pipeline-min.js) — **热点管线 v2 总指挥（runMin 编排）**：每次采集前把上一批候选压缩写入最近 30 批轻量历史并清空当前候选；采集(默认 YouTube+X 并行，`options.platforms` 支持分时单平台) → 去重 → L0 硬过滤 → 分类 → 评分(历史库) → L1/L2 审核 → 候选落地 → 总结/本地化 → 自动生成待审清单（review-list，`options.autoReviewList=false` 可关）→ 每日公开投影写 hotspots.json → 写采集运行记录 last-run.json（ai-top 判定 hasYouTube 用）。每步失败降级记 coverage 不抛错。导出: `runMin, loadV2Config, normalizeNow, resolveXWindow`
+- [pipeline-min.js](src/news/min/pipeline-min.js) — **热点管线 v2 总指挥（runMin 编排）**：采集（默认 YouTube+X 并行，`options.platforms` 支持分时单平台）→ 去重 → L0 硬过滤 → 分类 → 评分（历史库）→ L1/L2 审核 → 候选落地 → 总结/本地化 → 自动生成待审清单（review-list，`options.autoReviewList=false` 可关）→ 每日公开投影写 hotspots.json → 写采集运行记录 last-run.json（ai-top 判定 hasYouTube 用）。每步失败降级记 coverage 不抛错。导出: `runMin, loadV2Config, normalizeNow, resolveXWindow`
 - [review-list.js](src/news/min/review-list.js) — 人工审核清单：自动生成待审清单 review-<date>.json（带 id、只含 pending、评分倒序、覆盖保护）+ 应用人工结论批量写回候选层（apply；pending 跳过、无 id 旧格式拒绝）。维护者入口：bat/after-first-review.bat。导出: `scoreOf, suggestReview, buildReviewList, loadReviewList, applyReviewList`
 
 ### collectors/ — 各平台采集（会发网络请求）
@@ -55,7 +55,7 @@
 ### cli/ — 命令行
 - [news-cli.js](src/news/cli/news-cli.js) — **CLI 分发器 + 入口**（仅保留 v2 命令组）。导出: `parseArgs, main, minReviewCommand`
 - [cmd-content.js](src/news/cli/cmd-content.js) — `classify/localize preview` 子命令（纯函数预览；批量分类/本地化已由 v2 管线内建）。导出: `classifyCommand, localizeCommand`
-- [cmd-min.js](src/news/cli/cmd-min.js) — **v2 `min-review` 命令组**（操作 min-candidates.json；`refine` 从 approved 原文调 DeepSeek 生成关键词清单，`refine-apply` 校验 adopted_keywords 后原子幂等追加配置；`ai-top` 产物带 id；`top-apply` 应用 top_selected=true；`apply` 写回首审结论）。维护者入口：bat/after-first-review.bat（apply 后安全并行 refine + ai-top）、bat/apply-keywords.bat、bat/apply-top.bat。导出: `minReviewCommand, applyRefineKeywords, applyTopSelectedList, resolveAiTopConfig`
+- [cmd-min.js](src/news/cli/cmd-min.js) — **v2 `min-review` 命令组**（操作 min-candidates.json；`refine` 从 approved 原文调 DeepSeek 生成关键词清单，`refine-apply` 校验 adopted_keywords 后原子幂等追加配置；`ai-top` 产物带 id；`top-apply` 应用 top_selected=true；`apply` 写回首审结论；`archive` 由维护者确认后把当前候选压缩为轻量历史并清空候选层）。维护者入口：bat/after-first-review.bat、bat/archive-min.bat。导出: `minReviewCommand, applyRefineKeywords, applyTopSelectedList, resolveAiTopConfig`
 
 ### transcripts/ — 收尾环节：字幕人工获取通知（独立于主链，只写清单文件）
 - [transcript-notify.js](src/news/transcripts/transcript-notify.js) — 每日"待人工获取字幕"清单（min 候选层挑评分最高 notify_count 个 YouTube，写 transcript-requests-<YYYYMMDD>.json 交人工，不碰主链/不调采集总结）。导出: `notifyTranscripts, parseNotifyCount, scoreOf`

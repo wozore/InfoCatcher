@@ -52,6 +52,27 @@ function appendMinHistory(existing, candidates, batchAt) {
   return { schema_version: 1, batches: batches.slice(-MAX_BATCHES) };
 }
 
+function archiveMinStore(store, history, batchAt) {
+  const candidates = store && Array.isArray(store.candidates) ? store.candidates : [];
+  if (candidates.length === 0) {
+    return {
+      history: createMinHistory(history),
+      store: { schema_version: 1, updated_at: null, candidates: [] },
+      archived: 0,
+      skipped: true,
+    };
+  }
+  const nextHistory = appendMinHistory(history, candidates, batchAt);
+  const batch = nextHistory.batches[nextHistory.batches.length - 1];
+  return {
+    history: nextHistory,
+    store: { schema_version: 1, updated_at: null, candidates: [] },
+    archived: batch.items.length,
+    batch_at: batch.batch_at,
+    skipped: false,
+  };
+}
+
 function readMinHistory() {
   return createMinHistory(readJson(MIN_HISTORY_PATH, EMPTY_HISTORY));
 }
@@ -67,6 +88,7 @@ module.exports = {
   formatBatchAt,
   compactCandidates,
   appendMinHistory,
+  archiveMinStore,
   readMinHistory,
   writeMinHistory,
 };

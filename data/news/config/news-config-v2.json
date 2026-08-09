@@ -71,7 +71,10 @@
       "生成式",
       "aigc",
       "diffusion",
-      "机器人"
+      "机器人",
+      "astra",
+      "agents",
+      "模型"
     ],
     "refine_high_frequency_top_n": 5
   },
@@ -105,8 +108,7 @@
     "lmstudio",
     "gdb",
     "jackclarkSF",
-    "natolambert",
-    "rasbt"
+    "natolambert"
   ],
   "feedback": {
     "tool_feedback": true,

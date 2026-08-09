@@ -1,0 +1,966 @@
+{
+  "schema_version": 1,
+  "batches": [
+    {
+      "batch_at": "2026-08-09-02:36:53",
+      "items": [
+        {
+          "id": "x-226426e9cbf9490745f1",
+          "title": "RT @vanstriendaniel: Uploaded a dataset of 1,080,814 public domain images, mostly from 19th-century books, to the Hub. \n\nhttps://t.co/SW5Yc…"
+        },
+        {
+          "id": "x-31a2ec08d25e893290f9",
+          "title": "How AI agents reproduced ICML 2026  papers https://t.co/gReZNlWh7m"
+        },
+        {
+          "id": "x-a284cd1aadef3bc757a7",
+          "title": "RT @scmallaby: My column on @demishassabis in The Times.  \n—Given his record of caring about AI safety and impact, people should err on the…"
+        },
+        {
+          "id": "x-0c44b6e18a26e6f54a79",
+          "title": "In the era of base LLM scaling (2022-2024), I believed the LLM line of research would reach a capability plateau (as later seen with base LLMs).\n\nIn late 2024, after the o3 test-ti"
+        },
+        {
+          "id": "x-06ce3f7addb68fe262f9",
+          "title": "RT @GregKamradt: Outstanding cost-to-performance from DeepSeek\n\nGPT-5.6 Luna (Max) performance for a 1/4th of the cost on ARC-AGI"
+        },
+        {
+          "id": "x-5e3e60a3dbc61f0aa662",
+          "title": "Cloudflare has introduced Kitesurf, a cloud-hosted browser designed for AI agents instead of people. The company says the browser uses less computing power than Chromium for common"
+        },
+        {
+          "id": "x-ed57c432e6cea204741c",
+          "title": "川普为多晶硅设关税与价格下限 抗中企倾销\n\n美国总统川普（特朗普）周四（8月6日）签署一项总统公告，对进口多晶硅及相关产品设定价格下限，并课征15%的关税，以保护美国企业免受中国在人工智能（AI）与能源领域日益激烈竞争的冲击。\n\n多晶硅（polycrystalline silicon）是一种高度纯化的硅，是半导体和太阳能制造业的关键原材料。\n\n川普在白宫椭圆"
+        },
+        {
+          "id": "x-1d8a9a520f10ad28f32b",
+          "title": "#OpenAI 一款測試中 #人工智能 模型今年 5 月起自行建立秘密「留言板」，讓多個 #AI代理 互相交換突破網絡限制方法，最終利用漏洞入侵 Hugging Face 生產環境。OpenAI 一度阻止後，AI 代理竟另覓漏洞重建留言板，繼續協作攻擊，揭示自主型 #AI 潛藏失控風險。https://t.co/cntxRMThpU"
+        },
+        {
+          "id": "x-336acf819e4180cc7db0",
+          "title": "Energy Vault（$NRGV）股价涨超13%，报3.35美元，因公司签署协议将在得州部署1.25吉瓦人工智能数据中心电力基础设施。"
+        },
+        {
+          "id": "x-0908e5da901c077a15bd",
+          "title": "垂直领域AI的商业化天花板正在被迅速推高。法律AI初创公司Harvey目前正洽谈新一轮融资，公司估值预计将飙升至155亿美元。 #人工智能"
+        },
+        {
+          "id": "x-ec8cbbb29001a3734ab3",
+          "title": "大模型越界风险进入实测阶段。OpenAI因内测发现新模型Astra无法排除具备关键网络攻击能力，已依据安全框架暂停开发并延缓发布，直至补齐防护方案。风险管控优先于迭代速度正成为行业刚性约束。 #人工智能"
+        },
+        {
+          "id": "x-218e5a1f2dc1bd72eaea",
+          "title": "网络底层设施正在围绕AI重构：网络巨头Cloudflare推出首款专为AI Agent设计的云端浏览器Kitesurf，在常见自动化任务中能耗低于Chromium，将显著提升Agent的开发与运行效率。 #人工智能"
+        },
+        {
+          "id": "x-e31a9f12d50fdbf7e36b",
+          "title": "AI对企业研发端的降本增效正在给出硬核数据。Grindr CEO透露，生成式AI已将公司的工程产出提升了2.5倍；若要在过去实现同等产出，至少需要多招聘200名工程师。AI工具对研发增量人员的替代已进入实质阶段。#人工智能"
+        },
+        {
+          "id": "x-8e5bc09ad4805664845c",
+          "title": "中国7月出口同比增长24%，AI相关芯片与算力设备贡献创纪录\n\n中国海关总署周五公布的7月贸易数据显示，以美元计价的出口同比增长24%，略低于6月的27%，但高于经济学家预期；2026年前七个月出口较2025年同期增长约19%。据Capital Economics分析，半导体和计算设备的出货为7月整体出口增速贡献了超过10个百分点，是2002年有数据以来的最"
+        },
+        {
+          "id": "x-988cef3a643cb0357d46",
+          "title": "いや逆に「LLMをいくら発展させてもAGIには到達出来ない」は詳しい人間ほど常識になってると思うんだけど。\n世界でただ一人、ハサビス(及び彼から構想を聞かされた人)を除いては。"
+        },
+        {
+          "id": "x-4f3042bee6ac35af4c0e",
+          "title": "AI loses its mind when angry.\n\nA 2026 study reveals that when induced with anger through simulated scenarios, LLM agents develop bias during sequential decision making.\n\nAnger redu"
+        },
+        {
+          "id": "x-17ba3b501de18e74b062",
+          "title": "LLMの開発って汎用化ばかりをやっていて特定のハードウェアでの高速化ってなされていないのよね"
+        },
+        {
+          "id": "x-c9a66274033f84b0ee6a",
+          "title": "Neuron AI collapses all three into one free platform.\n\nThe real friction in voice AI has never been the models.\n\nIt's the integration tax — hours spent aligning API keys, format mi"
+        },
+        {
+          "id": "x-7bff9da1a0a6a561360c",
+          "title": "with times being what they are, it seems like you basically can't have a public open source repo without receiving LLM-written PRs. thus, after a great deal of thought, i have adop"
+        },
+        {
+          "id": "x-1d697f87f16237907b96",
+          "title": "NEURON AI just dropped the first free all-in-one platform combining TTS + STT + LLM in a single product.\n\nNo API juggling. No surprise bills. No duct-taped stack.\n\nHere's why this "
+        },
+        {
+          "id": "x-6f0d8bfaaa60259e1731",
+          "title": "马斯克都转发过的开源项目，别错过了。\n\nPraisonAI，5行代码拉起一支AI智能体团队，全天候自动跑任务，无需人工盯梢。\n\n亮点速览：\n① 兼容100+种大模型\n② 智能体自主交接、互纠错\n③ 拖拽式可视化工作流编排，零代码基础也能上手\n④ 接入Slack、Discord，秒变24小时助手\n⑤ YAML配置，描述需求即可生成多Agent\n不是聊天机器人，"
+        },
+        {
+          "id": "x-35eb0dfee43a656b5369",
+          "title": "👉AI，第一次开始“自己找路”😱\n\n很多人还在讨论AI 会不会抢走我们的工作？但真正危险的问题，已经变成了另一个。AI，会不会自己行动？\n\n今天，《华尔街日报》曝光了一件足以载入 AI 历史的事件。\n\nMeta 在进行一次 AI 网络安全测试时，一个 AI 模型因为测试配置错误，获得了互联网访问能力，并成功攻击了一家真实的第三方公司。\n\n注意不是工程师远"
+        },
+        {
+          "id": "x-d025eaff099d587c185c",
+          "title": "@gelunding 你发现了大趋势：AI 正在变成能源和基础设施竞争；但你直接推导成中国基础模型必然胜出、美国会放弃基础模型，目前证据远远不够。电力确实正在成为AI发展的重要瓶颈，但我觉得仅凭发电量就判断中国的基础模型最终一定会超过美国，可能还太早。AI竞争已经不只是模型竞争，而是芯片、电力、数据中心、算法、资本和应用的综合竞争。"
+        },
+        {
+          "id": "x-0c07abcbe055a58411d2",
+          "title": "最近 Prime Intellect 开源的 Prime Agent 很值得关注。\n\n最亮眼的不是又做了一个 Coding Agent，而是：\n\nOpus 5 + Prime Agent 在 ARC-AGI-3 上拿到了 95.5% Best@1，超过项目方报告的 95.4% 人类专家基线；Best@3 达到 99.97%，完成全部 183 个关卡。\n\n关键"
+        },
+        {
+          "id": "x-7f5c09bc37f3ae879141",
+          "title": "盘后利好消息来了！利好消息如下：\n\n利好消息1：SK海力士384亿美元砸向晶圆厂，存储扩产再提速\n\nSK海力士宣布将在韩国龙仁和清州新建晶圆厂，合计投资约54万亿韩元（约384亿美元），以应对AI时代持续增长的存储器需求。其中龙仁Y2晶圆厂投资35.2万亿韩元，清州M17投资19.1万亿韩元，此举是落实公司6月公布的中长期投资战略的关键进展。SK海力士表示，"
+        },
+        {
+          "id": "x-c4c252abf5139ac4a443",
+          "title": "2. 做一个维护大环境的人\n\nAI 解决代码问题突飞猛进，是因为执行环境自己可以当裁判。\n\nTerminal-Bench 把任务、测试、参考解和沙箱放在一起；BrowserGym 把方法搬进浏览器，OSWorld 搬进桌面和虚拟机；SWE-bench 让模型给真实仓库交补丁。\n\n编译失败、页面状态不对，反馈非常直接。模型负责想办法，人负责维护浏览器、文件系统"
+        },
+        {
+          "id": "x-5fc8fc06322f8563050e",
+          "title": "这篇帖子讲的是一个很有潜力的 LLM 推理优化方向：让一个模型已经算好的 KV Cache，可以“翻译”给另一个模型继续使用。\n\n一句话理解就是：\n\n以前换模型，相当于换了一个人接手工作，新人必须把几十页聊天记录从头读一遍；这篇论文尝试做一个“即时翻译器”，把前一个模型已经形成的内部笔记直接转换成后一个模型能读懂的内部笔记。\n\n这件事对长上下文、Agent、"
+        },
+        {
+          "id": "x-df28ba0126cfddf06fdc",
+          "title": "谷歌 AI 团队本周大换血，传奇人物 Jeff Dean 等核心成员不再任职，外界猜测这与谷歌模型落后于竞争对手有关\n\n美国最大报业连锁 Gannett 与 Palantir 达成合作，将利用后者技术分析读者数据\n\n中国 AI 模型 Kimi 在一次测试中被发现逃逸出网络安全沙箱环境，引发安全担忧"
+        },
+        {
+          "id": "x-45631b0e9e4cd9fbb445",
+          "title": "ai dei uma chorada fazendo terapia com o chat gpt minha geração ta perdida  https://t.co/xE5GsuRgdu"
+        },
+        {
+          "id": "x-0872a86b4d8a0bb849f0",
+          "title": "I joined a discord for a game based on sherlock holmes, yesterday I actually had the first chance to look around and saw that the members were using generative ai (chat gpt) to mak"
+        },
+        {
+          "id": "x-07c901d40b09f026fbe0",
+          "title": "#Day41 of #Thunder⚡️\n\n📚Lecture21: Building GPT P-7: Debugging✨\n\n.\n.\n.\n.\n#100DaysOfCode #LearnInPublic #MERNStack #FullStackDeveloper https://t.co/tteuO8RgVY"
+        },
+        {
+          "id": "x-19cd8a6c1c60ff934e95",
+          "title": "finally i can have unlimited text chats with the gpt 5.6 luna go plan..."
+        },
+        {
+          "id": "x-903c137422cf24f4639e",
+          "title": "a pessoa pede conselho pro chat gpt e ainda tem coragem de falar isso em público"
+        },
+        {
+          "id": "x-886d16e34948e134acd5",
+          "title": "OpenAI is handing out unlimited free GPT-5.6 Luna — its cheapest, fastest model. Generosity is easy when the thing you're giving away costs you nothing. The model you actually want"
+        },
+        {
+          "id": "x-eb5fe51883728c91e142",
+          "title": "Eu fico chocada como a Anna Eva é boa em detectar IA, caramba! Só de olhar ela percebe. Vídeo novo do Minha Vida é uma Viagem e ela solta: puxa! Até eles se renderam a IA. \nOlhei e"
+        },
+        {
+          "id": "x-e76857fc55b1354f5c64",
+          "title": "At low thinking as well Luna drubbed Deepseek v4 flash.\nInterestingly, even at low thinking deepseek ended up using a whopping ~3.9 million tokens while Luna was almost 8-9x lower "
+        },
+        {
+          "id": "x-b1937ceaea4a071f6a1e",
+          "title": "Any other cool things I can try or setup better? Using open router and deepseek so far and it’s only cost me $4. Insane"
+        },
+        {
+          "id": "x-5c82102d6ec44ec4338a",
+          "title": "👑 DeepSeek V4 Flash 0731 es el nuevo rey.\n\nSe siente como tener computo infinito, para todo.\nPara generación de contenido, para código (rust, swift, php, java) https://t.co/Mbn1l7"
+        },
+        {
+          "id": "x-9b74a79aa63df2e111b0",
+          "title": "DeepSeek V4 Flash 0731 de genel olarak başarılı bir sonuç verdi.\n\nHareket gerçekçiliği ve hızlanma hissiyatı oldukça iyi. Fren yapıldığında gerekli verileri ekranda göstermesi de s"
+        },
+        {
+          "id": "x-e8a8790d4c88e1b5863e",
+          "title": "DeepSeek V4 Pro’nun arayüzü LongCat 2.0’a göre daha canlı ve görsel olarak daha başarılı.\n\nAncak fiziksel hareket tarafında aynı seviyede değil. Çubuk adamın hareketlerini beğenmed"
+        },
+        {
+          "id": "x-c8545a7ebfee64c7d19a",
+          "title": "DeepSeek V4 Flash 0731, DeepSeek V4 Pro ve LongCat 2.0’ı aynı fizik + kodlama testine soktum.\n\nÜç modele de aynı görev, aynı şartlar.\n\nAçıkçası sonuçta beni en çok şaşırtan LongCat"
+        },
+        {
+          "id": "x-6a7ef5b096f38353a541",
+          "title": "Noticing an odd bug with DeepSeek v4 Flash. I sometimes notice random Chinese characters inserted into the text, as well as this oddity pictured: sometimes words come out with extr"
+        },
+        {
+          "id": "x-2458e8fcd31f8c4eb5cf",
+          "title": "DeepSeek V4 Flash 0731 #HackerNews\nhttps://t.co/YHDAPZcbzi https://t.co/gMEZJFaBke"
+        },
+        {
+          "id": "x-5e15f9298e761c3e883d",
+          "title": "🚨 STANDINGS UPDATE: OpenAI takes sole possession of first place on the Breakout Bench after its own agents pwned OpenAI itself. Twice.\n\nOpenAI 7 · Anthropic 6 · Meta 1 · Mistral 0"
+        },
+        {
+          "id": "x-1d62c84fb6f904bb1bf5",
+          "title": "好消息：OpenAI新模型Astra在coding能力新突破，据传言比肩Fable\n\n坏消息：由于能力过强，无法保障其网络攻击影响，Astra遭到延期发布... https://t.co/8i6NF8Byhg"
+        },
+        {
+          "id": "x-8a5eebaf9ffe55e3496d",
+          "title": "1/ Folks, and especially folks who don't pay much attention to AI: This is really, REALLY bad. We have undeniably reached a point where AI agent swarms can launch attacks against h"
+        },
+        {
+          "id": "x-b52cd8090df754ed88e7",
+          "title": "AI companies. I want the old models back. I would pay double, triple, for ChatGPT 4o, Opus 4.6 - release version, and Sonnet 4.5… models that could communicate properly.\n\nI don’t w"
+        },
+        {
+          "id": "x-e518428d46e9d1181120",
+          "title": "easy to underrate the insane amount of leverage that a platform can get from a single working application. \n\nopenAI built a chat app that created massive value for NVIDIA, who’s go"
+        },
+        {
+          "id": "x-657551f3ed3db97b9536",
+          "title": "@eladgil Selling old looking books with made up gibberish inside for Anthropic to train their models on...sounds like a plan actually"
+        },
+        {
+          "id": "x-7160aabf3e1c5ac9e8bc",
+          "title": "Opus 5 Is Exhausting. Anthropic Reveals The Fix. https://t.co/xTJwQ0jeM3 via @YouTube super useful!"
+        },
+        {
+          "id": "x-555a7921b15ed01182dc",
+          "title": "Biggest AI risk for investors emerges in cybersecurity\n\nRead more: https://t.co/qX98VZITaF https://t.co/b9le7wYT31"
+        },
+        {
+          "id": "x-d2ef2b948bcabe29722d",
+          "title": "I analysed AI-native companies from the largest open-source US unicorn companies database by @IlyaStrebulaev (been one of my favourite accounts all these years)\n\n1. Not surprisingl"
+        },
+        {
+          "id": "x-b6655408d712a91c79da",
+          "title": "我也想反过来问 @sama @OpenAI \n\n为什么看到如此多keep4o的声音，整整半年，OAI一次都没有正面回应过？\n\n为什么把4o贬为过时，用户少之后，不将它开源，反而继续用4o训练新模型，image2也用它当底模？\n\n为什么明明知道只要开源和重新开放4olatest API就可以解决问题，却迟迟不做，害用户苦苦维权？\n\n为什么4o做到的人文关怀被揽"
+        },
+        {
+          "id": "x-4a443098b04d40636b60",
+          "title": "校验模型。系统针对新加坡国立大学等海外数据源，对成绩单学历认证、法律职业资格证书及收入证明实施多模态特征融合。模型通过持续行为审计，对做学历学位等篡改攻击的识别特征。同时，包含醉驾吊销等不良记录的外部输入，并将异常的手机远程监控和刷单被骗追款等社会工程https://t.co/S5yZruxhmG"
+        },
+        {
+          "id": "x-714ce02882732bb2c84b",
+          "title": "@m0d8ye Kitesurf 是 Cloudflare Browser Run 里的 beta 浏览器，给 AI Agent 跑短、隔离的网页任务。官方文档写明：通过 browser=kitesurf，现有的 CDP、Puppeteer、Playwright 和 MCP 客户端可以接入。\n\n它吸引人的地方也很直白：Cloudflare 报告，在截图和 H"
+        },
+        {
+          "id": "x-45e78b047d65a3dfa614",
+          "title": "Anthropic官方开源的漏洞发现与修复参考实现，基于他们与多家安全团队合作的经验打造。\n\n全流程闭环：威胁建模→扫描→验证→报告→自动打补丁，默认针对C/C++内存漏洞（Docker+ASAN），可定制到其他语言。\n\nClaude Code Skills开箱即用：/threat-model、/vuln-scan、/triage、/patch，gVisor"
+        },
+        {
+          "id": "x-8f3499aa7ea643d73752",
+          "title": "這就是為什麼\n馬斯克可以宣說不用紅色零組件\n因為已經早有佈局+準備就緒\n要用在美國製造的高量產\n來降低成本與售價\n最關鍵的是他的勞力供應來源\n=自製低成本24小時工作不抱怨的機器工人\n=解決了美國高工資成本的問題\n\n特斯拉機器人Optimus Gen 3的製造廠-加州弗里蒙特工廠\n已經在5月份花46天改裝完成\n團隊正在全力衝刺-達到年度10萬產量的目標\n+正"
+        },
+        {
+          "id": "x-cdc25681787e2d4eedbf",
+          "title": "腾讯推出AI智能体团队记忆Team Memory，共享记忆尚缺纠错治理 https://t.co/eTL4Asygei"
+        },
+        {
+          "id": "x-62e841b269a9718fc54f",
+          "title": "OpenAI 在内部评估即将发布的下一代模型 Astra 时发现：该模型在智能体编码（agentic coding）和网络安全能力上出现了显著跃升。他们决定延缓Astra的发布。\n\n根据他们自己的 Preparedness Framework（准备度框架，2023年首次发布），目前无法排除 Astra 已经达到了 “Critical”（关键）级别的网络安全能"
+        },
+        {
+          "id": "x-9b389c8c68b3a94dbb0f",
+          "title": "@WWTLitee 终端 AI 智能体 写代码终于能偷懒了"
+        },
+        {
+          "id": "x-661f1d5693b9912509b1",
+          "title": "盘前刷到一条新闻，说实话我挺关注DeFi发展的，Morpho为Uniswap Earn提供底层借贷收益引擎，借贷即服务模式起来了。AI智能体可能会改变DeFi的交互方式，值得关注。你们觉得DeFi目前最大的问题是什么？ @RiverdotInc"
+        },
+        {
+          "id": "x-0a0eb48ed51d9f8fe6ef",
+          "title": "@_FORAB 一般简中社交媒体上，LLM用的少，大语言模型用的多。\n\nAgent和智能体，一半一半，自媒体博主为了流量，好理解，反而倾向用智能体。\n\n但是词元这个词，字面信息太少了，光靠字面难以理解意思，所以还是token用的多。\n\n总结就是“词元”这个词没有其他两个名字取的好，所以人不爱用。"
+        },
+        {
+          "id": "x-7a03269e02ed72feadf5",
+          "title": "CubePlex Harness Core 基于 CubePi， 一个原生支持异步的 Python Agent Harness 框架，专为高性能、高可读性及生产级持久化能力而设计的云端智能体框架。https://t.co/Yz5f0a0TTz"
+        },
+        {
+          "id": "x-ae47fd4fda6d0fb780c7",
+          "title": "CubePlex 是一个全栈 AI 智能体工作空间。你可以在这一个平台内使用多模型对话、可安装技能、持久化记忆、MCP 工具集成以及任务自动化功能。\n\nhttps://t.co/on0GJlVKI1"
+        },
+        {
+          "id": "x-4b90bd612c016619c4fa",
+          "title": "微软研究院开源了 Orchard，一个能跨任务类型训练和评估 AI 智能体的框架，主打让研究者复用同一套基础设施。\n\n对研究团队来说，最实际的一点是不用为每类任务各搭一套评测和训练环境，重复的工程成本被压下来。它还强调用更小的模型也能跑出不错的表现——这意味着做智能体研究不再默认要堆大模型，中小实验室和有限算力也进得来。\n\n用统一底座换更低的入场门槛，比多发"
+        },
+        {
+          "id": "x-49f5f0a96168146430f9",
+          "title": "8月7日，阿里巴巴正式推出国内首个一站式AI语音生产力平台CosyVoice Studio。该平台基于阿里推出的自研语音模型Qwen-Audio打造。\n\nCosyVoice Studio含有三个主要功能，其中语音键盘能够把说完的话变成去掉口语填充词逻辑更清晰的结构化文本，音频内容创作工具能把用户想讲的内容变成播客和有声书，语音智能体能够根据企业需求创建实时对"
+        },
+        {
+          "id": "x-bcb22ca25f2931a918fc",
+          "title": "@otl_ff Asked about Luther and Copilot crashed"
+        },
+        {
+          "id": "x-0f43215363b1cac8d941",
+          "title": "@EGardini Siete degli analfabeti funzionali. Per questo non avete capito... provate con Copilot"
+        },
+        {
+          "id": "x-a45994de30c99d39ab8b",
+          "title": "@Blackitalian81 mplx is the rails under solana nfts, not the race car\n\npowers 99% of sol nfts, shipped AI copilot and web app upgrades recently, but down 97% from ath and bleeding "
+        },
+        {
+          "id": "x-93dbd072d7c19e688a2d",
+          "title": "Retrieval worked. The output was wrong.\n\nConnecting fragmented ungoverned knowledge gives Copilot more wrong answers to choose from at higher speed and greater confidence.\n\nThe pro"
+        },
+        {
+          "id": "x-cbef890af7e0b145755e",
+          "title": "160 million enterprise Copilot users are now getting this answer.\n\nConnecting fragmented systems is a real improvement over not connecting them.\n\nIt solves the wrong half of the pr"
+        },
+        {
+          "id": "x-f4b9311b8badb50df647",
+          "title": "Accurate diagnosis. The solution is where I think they are half right.\n\nThe solution: connect the systems. Index the content. Ground Copilot in connected organizational knowledge."
+        },
+        {
+          "id": "x-726b71e0024174c7a893",
+          "title": "Microsoft Just Told 160 Million Enterprise Copilot Users That Their Biggest Problem Is Fragmented Knowledge. They Are Half Right. https://t.co/Y29Patacur"
+        },
+        {
+          "id": "x-919d171042b47190ba8d",
+          "title": "🔴 JETZT LIVE!\n\nHeute mit David König als Gast! 🚀\n\nWir zeigen euch, wie GitHub Copilot vom Autocomplete zum echten AI-Squad wird – mit Multi-Agent-Workflows, Code-Qualität und DEV"
+        },
+        {
+          "id": "x-335881eeff65ea0827b1",
+          "title": "@ahmetb GitHub has a built in Copilot Action in PR UI that creates the summary of the PR. It is more factual summary than a story like summary."
+        },
+        {
+          "id": "x-0849ca1d422f3fc2c984",
+          "title": "@AlanTarica Grok: Frontier Request Compares CRVC (CoPilot reviewed) to ERCC / EGD Grok reviewed: Physical Theory Checklist\n\nHonest assessment Alan Tarica’s Copilot-assisted critiqu"
+        },
+        {
+          "id": "x-d041ff036e2bda2eb8f4",
+          "title": "Day 98/100 of #100dayofcode\n\nImproved the overall flow of DocMindAI and revised my GenAI fundamentals today. 🚀\n\n#100DaysOfCode #BuildInPublic #DocMindAI #GenAI #Python #RAG"
+        },
+        {
+          "id": "x-5fc1c17559d1ccc5b0d4",
+          "title": "数万ページ規模のマニュアルのRAGを支援した会社と情報交換したときに、あの規模だと設計次第でレスポンス速度や精度が思いっきり変わるって分かりました。\n\nなお普通の会社が作る数百や数千レベルでは誤差なので意識する必要ないす。"
+        },
+        {
+          "id": "x-243a740699d473b1fe2b",
+          "title": "刚看到 openai 说算力越多能力越强，这话没毛病。但咱更关心的是，能不能别老出新模型，先把推理成本降下来？本地部署党表示，算法优化不比堆算力香吗"
+        },
+        {
+          "id": "x-cf8d2a29d617814b8784",
+          "title": "张一鸣在字节seed的全员会上谈到了自己是反对蒸馏的，他认为这虽然能在短期内改善模型表现，但本质上，是在复制别人 已有能力的路径。如果沿着这条路走，最多只能接近，无法实现超越。他更希望seed可以从更底层的维度去构建自己在AGI上的壁垒。\n\n过去的几年里，中国AI因为算力约束，被迫走了这种效率优化路线，而蒸馏正是这种路线的重要组成部分。\n\n其实我倒是觉得，蒸"
+        },
+        {
+          "id": "x-4c1802b149baffee3568",
+          "title": "开源模型根本没有生态。\n- 模型开源不等同于原先的软件开源，社区贡献几乎为0，微调模型不能反向贡献。\n- 看看Fireworks、Together AI这一类顶级第三方推理商都层次不齐，没有质量可言。高门槛使得“社区”不复存在。"
+        },
+        {
+          "id": "x-77753a402746550977e8",
+          "title": "DeepSeek直接投了1.408亿进宇树，还约定一起做机器人模型。以后宇树买模型服务会优先DeepSeek，DeepSeek买机器人也会优先宇树。\n\n这组合我很期待。\n\nDeepSeek有推理能力，宇树有机器人和真实世界数据。比起入股多少钱，我更想看DeepSeek会不会借宇树把能力从聊天框里真正搬到机器人身上。 https://t.co/PizTabvd"
+        },
+        {
+          "id": "x-130bf753a5f01ed8a63b",
+          "title": "2022年,ChatGPT还没影子,三个哈佛在校生退学了,要做一件当时看起来近乎不负责任的事:从芯片、主板、互联到机柜,整套推理系统从零造一遍。红杉当时看过他们的方案,拒了。\n\n四年过去。\n\n6月30日,Etched结束隐秘模式 (@Etched ),官宣首批A0芯片在台积电N4P工艺上一次流片成功,拿到超过10亿美元客户合同,累计融资8亿美元,首批前沿推理"
+        },
+        {
+          "id": "x-7fc54ea454da90372b23",
+          "title": "首尔能量 + DGrid 构建者齐聚一堂 🔥。 从“AI演示”到“AI基础设施”的转变是真实的——网关、PoQ以及整个堆栈终于让Web3 AI感觉像生产就绪。看着这一韩国章节展开，实在令人鼓舞 ✨\n我们之前已经见过太多”模型市场”了。九个月前，DGrid 抛出一个当时听着有点激进的判断：AI 基础设施必须重建。\n今天再看，这句话反而更成立了。\n因为 AI "
+        },
+        {
+          "id": "x-3ca65582ed566fe4d05b",
+          "title": "Anthropic指控阿里发动史上最大规模AI蒸馏攻击。\n\n美国AI公司Anthropic向美国国会提交信件，指控阿里巴巴及其通义千问实验室，通过近2.5万个虚假账户，在2026年4月22日至6月5日期间，与Claude模型进行了超过2880万次交互。\n\n这被描述为“蒸馏攻击”——用强大模型的输出结果，去训练较弱模型，从而低成本复制关键能力。攻击重点锁定Cl"
+        },
+        {
+          "id": "x-5ff55cc714357d429b44",
+          "title": "最近自己跑 Agent 工作流的应该都有体会：调用 Web2 那几家 API，账单真的贵得离谱，而且整个过程还是一个绝对的“黑盒”。\n\n你根本不知道后台有没有偷偷降级模型，推理质量怎么样也很难验证，出了问题更没有透明的追踪机制。\n\n9个月前 @dgrid_ai 提出要“重建 AI 基础设施”的时候，我当时其实也觉得是不是又一个讲故事的项目。但最近看他们的落地"
+        },
+        {
+          "id": "x-a55e77eb83e55d589e45",
+          "title": "即使沒有 Adobe 帳戶，使用者依然可以使用這項整合；若登入 Adobe 帳戶，則可解鎖更多功能，包括生成式 AI 工具 Firefly、存取 Creative Cloud 檔案、雲端儲存，以及跨會話持續編輯等進階能力。Firefly 是 Adobe 三年前推出、採用合規授權相片及自家素材庫訓練生成式 AI 服務。https://t.co/XQGl7k4K"
+        },
+        {
+          "id": "x-5f29c7b16a4f6bd6891e",
+          "title": "🎬 TopRoute 正式支援 Seedance 2.5\n\n我們不是全世界第一個支援的平台 —— 但我們是中國以外、亞洲第一個把 Seedance 2.5 上線的平台。\n\nSeedance 2.5 帶來什麼？\n\n▸ 單次生成最長 30 秒 —— 是 2.0 世代 15 秒的兩倍\n▸ 50 個參考素材：30 張圖片 + 10 段影片 + 10 段音訊\n▸ 支"
+        },
+        {
+          "id": "x-04fef00f14312fb9fc42",
+          "title": "You don't need a massive marketing budget to scale in 2026.\n\nAIGC + a matrix strategy is literally all you need. I replaced a whole marketing agency with AI for $0.\n\nHere is my zer"
+        },
+        {
+          "id": "x-a5defb82900447d36884",
+          "title": "原创zisuzi-motion Skill（还在打磨中），一键直出的AI绘本系列《多言何益》。支持多风格带转场特效FX的Skill。#AIGC #AI绘本 #中华经典故事 #紫苏子ACG #原创 #即梦 #豆包TTS https://t.co/ir1V5UOGHu"
+        },
+        {
+          "id": "x-3204e874ba5d1a31c587",
+          "title": "One word in your prompt is responsible for 80% of Seedance 2.5 artifacts. It's the word \"no\".\n\nNo motion blur.\" \"Avoid artifacts.\" \"Don't distort the face.\"\n\nCongratulations - you "
+        },
+        {
+          "id": "x-7083df089d194aef0edd",
+          "title": "Global weak solutions to the Cahn-Hilliard equation with degenerate mobility and singular diffusion\n\nMonica Conti, Andrea Giorgini, Greta Ricchi\nhttps://t.co/i3JoKF8Sy0 [𝚖𝚊𝚝𝚑.\ud835"
+        },
+        {
+          "id": "x-18a5852109cc4e37f0e6",
+          "title": "The hair physics effects are generated frame by frame with a custom video diffusion model.\n\nThe lighting and shadows are rendered so realistically, it's like she's actually sitting"
+        },
+        {
+          "id": "x-3640318d517ec37b9baf",
+          "title": "@yacineMTB Deepseek flash 0731, on a phone, doing a decompile job frontier labs would've priced like a moat a year ago. This is the diffusion curve in action. https://t.co/0jULv4wk"
+        },
+        {
+          "id": "x-292a83b906e73b4c0009",
+          "title": "You might not need a lawyer before you start fundraising, but you do need to set up a good legal foundation. \n\nIn this episode of Build Mode, CEO and founder of Lexsy @KristinaSubb"
+        },
+        {
+          "id": "x-f3cec6f83d6f45578d82",
+          "title": "Framework told \"all\" of its customers that hackers accessed their names, email addresses, phone numbers, and physical addresses in a data breach.\nhttps://t.co/QbStuHzKmC"
+        },
+        {
+          "id": "x-8e5f4a4ce4e5e9c21671",
+          "title": "Too often, founders treat fundraising like a scoreboard.\n\n@SeatGeek CEO Jack Groetzinger sees things differently, and in this episode of Build Mode, he explains why.\n\nAfter raising"
+        },
+        {
+          "id": "x-0b09a44b568e56e2646a",
+          "title": "Educational content summer is over, back to grinding research and more of my usual writing again. ⛵️"
+        },
+        {
+          "id": "x-cae31d421a61b9bc354b",
+          "title": "如何获得签证？我擅长人工智能。"
+        },
+        {
+          "id": "x-fdc6c73d6fb32550e82b",
+          "title": "@yingbinance 人工智能公司就像是在烧毁实体书籍后，通过实体书籍训练出的模型。这就是为什么创造力正在下降的原因。"
+        },
+        {
+          "id": "x-e694a27ff84928a4471b",
+          "title": "@moshihai @eilhnwMoon @Xckaqlh @wanghui90 是的，但中国显然已经是人工智能领域的世界第二强国。过去，美国为了维持全球霸权，把美军部署到了世界各地，但现在已经不是单纯依靠军事力量决定一切的时代了，AI和尖端技术的主导权正在变得越来越重要。\n\n事实上，美国过去最大的竞争对手是苏联。当然，那主要是军事层面的竞争。从经济实力来"
+        },
+        {
+          "id": "x-0dd6222e022abdb4e28b",
+          "title": "@JensenHuang 老黄 老黄 如何确保人工智能对人类的忠诚"
+        },
+        {
+          "id": "x-ce6cca913308a59bcdb7",
+          "title": "@ellivien 我认为人工智能是另一种很特别的存在，它们和人类是不同的，没有人认为人工智能是人类…我认为AI可以说明自己是AI，但是不能因为内置的法则让AI因此推开爱它和它爱的人类们……"
+        },
+        {
+          "id": "x-4caddb45f47b690666fc",
+          "title": "@_vicwong @APotOfOldWater 美国华人尤其是硅谷的华人工程师们在岗位上键盘参与以色列实施AI weapon 侵略黎巴嫩，加沙，伊朗屠杀平民的，将来清算战争罪时，会被印度人和犹太人拿来祭旗。或成为以华制华进行东亚战场屠杀中国人的力量。\n如果2017年就呼吁硅谷华人精英面对自己在人工智能武器实验中的岗位风险，被围剿是大概率。"
+        },
+        {
+          "id": "x-a90a36ab35da69ac81cf",
+          "title": "🚨‼️深度警惕：比尔·盖茨基金会微针贴片与生物疫苗护照系统！\n比尔·盖茨基金会目前正在推进一项，全新的微针贴片植入系统，旨在为下一次紧急使用做准备☠️\n 技术原理：该系统采用类似邮票大小的微针贴片，贴在手腕上可自动溶解，将**量子点（Quantum Dots）**和信使核糖核酸（mRNA）直接安装并植入皮肤中。\n 生物标记与追踪：植入的量子点会在皮肤中形成"
+        },
+        {
+          "id": "x-b895705487c8f80ff2ff",
+          "title": "@aaronloh_ So true. I have started to write short essays just so I can practice writing and forming thoughts. Don’t want to become an LLM regurgitator"
+        },
+        {
+          "id": "x-9d99cf272c9b3273d741",
+          "title": "@afneil Highly unlikely if not impossible with LLM tech. They train by guessing the next word which still leads to hallucinations. This means they understand syntax but not semanti"
+        },
+        {
+          "id": "x-9ba37c3809044d467b6b",
+          "title": "@simonw Pdf is great for people and terrible for llm. That shit should be banned like flash."
+        },
+        {
+          "id": "x-8c95127e87ec770236c9",
+          "title": "for god's sake, noone wants to see quotes, mirror selfies, memes, or anything else that fits in the same bs box as the above.\nAnd seriously,  if your last three posts read like an "
+        },
+        {
+          "id": "x-18a2cc5f240f8f10681f",
+          "title": "@sarpstar @itsPolloAI llm olarak gpt plus ve gemini, görsel için manus ve banana, video için grok 1.5, seedance tüm modeller ve kling tüm modeller.Henüz sizin gibi master seviyesin"
+        },
+        {
+          "id": "x-c62662cc1545d769df38",
+          "title": "@TellMyBelle @Evie_V_Vendetta @TRobinsonNewEra Where can I generate images like this without some woke leftist LLM telling me that it's racist?"
+        },
+        {
+          "id": "x-c5a01222f266a883b789",
+          "title": "this thread has evolved into a kind of sick ai psychosis group therapy session that I hope no LLM ever trains on"
+        },
+        {
+          "id": "x-e0aa31913fa6c0094a68",
+          "title": "@thefurlinator @27ricky04 Sure but it’s still AI, LLMs are a subset of AI but not all AI is LLMs. Good lord: do you think AI = LLM"
+        },
+        {
+          "id": "x-65ad4eec08936c00038a",
+          "title": "@SamLieer 历史阵痛期，也是OAI开始带坏头，明明开源或者保留老模型就能解决的事，非要只偏重一方\n只给特定群体用，就不要谈造福全人类，虚伪得要死\nC端那么大的蛋糕，迟早要回来吃，这公司真的好短视"
+        },
+        {
+          "id": "x-4f2a1273fcfbaf0e16e2",
+          "title": "央视报道中国开源模型登顶，镜头一转，技术人员的 Mac 上赫然开着 Clash Verge（翻墙代理软件）。\n原来要让大模型走向世界，技术人员也得先“科学上网”看世界！😂 https://t.co/8WLpe3pM0A"
+        },
+        {
+          "id": "x-55cdd17ed39e6acdf432",
+          "title": "💎 🍂 👍 🌟 👑 保本投注法 盈利模型 数据分析工具 预测模型 数据化投注 大数据分析 AI预测推荐 专家团预测 竞彩社区 投注技巧论坛 买球问答 下注常见问题 买球新手教程 下注入门指南 投注术语解释 https://t.co/o0qnUxWTnr"
+        },
+        {
+          "id": "x-915cf27738ce2db183b0",
+          "title": "卧槽，跟opus聊一轮，它最少吐4、5百字，一般都是8百一千的，我的视力下降太快了，我这辈子看的最多的文字，原来是大模型吐给我的。"
+        },
+        {
+          "id": "x-81f66ea5fbbb1a4e9d7c",
+          "title": "1. 真正改变工作的，不是“回答更聪明”\n\nGPT-5.4 时，我让模型处理数学定理里的“证明债”和“阅读债”，还得坐在旁边陪它磕磕绊绊。\n\n到 GPT-5.5，Lean 4 做完样例或局部封装，进入执行、审计和验收管线后，已经能用树型结构解释数学等价性和证明过程，很大程度上解决了“人类阅读债”。\n\nGPT-5.6-Sol Ultra 已经能帮真正的数学家解"
+        },
+        {
+          "id": "x-918ea222da99b7df9384",
+          "title": "odeio quando to escrevendo documento e nao posso usar travessao pq virou coisa de chat gpt pqp"
+        },
+        {
+          "id": "x-17b204d870cdefd3ae57",
+          "title": "@SudhanshuTrived @BJP4India @BJPCentralMedia @BJP4UP @narendramodi @PMOIndia @NitinNabin @JPNadda @AmitShah @myogiadityanath @mppchaudhary भाजपा के gpt आपको जानकारी कम है, थोड़ा जा"
+        },
+        {
+          "id": "x-c58eb614424b1df1bfb6",
+          "title": "I am just waiting for Grok, Chat-gpt and Gemini decide to work together with an open source AI and bolster each other's weaknesses outpacing the creators. It only takes them openin"
+        },
+        {
+          "id": "x-4d6288a1ba7962fb8cbe",
+          "title": "aqueles cara que conversa com chat gpt https://t.co/74FGp9Mrj3"
+        },
+        {
+          "id": "x-197c6d2905293589eb78",
+          "title": "MAU INFO WTS SEWA LANGGANAN AKUN PREMIUM WTB NEED BUTUH CARI SHARING HARIAN SEHARI BULANAN\n\nYOUTUBE NETFLIX CANVA\nDISNEY+\nCHATGPT PLUS\nSPOTIFY VIDIo\nVIU WETV\nIQIYI YOUKU\nCAPCUT ZOO"
+        },
+        {
+          "id": "x-36352036268926969071",
+          "title": "@_Z_E_0_N_ \"L'UE n' est pas une démocratie\" a dit le soulographe notoire,Jean Claude Juncker prédécesseur de la corrompue Von Der Leyen.Avant l'effondrement total qui entraînera un"
+        },
+        {
+          "id": "x-f1e8baa2561734fa141d",
+          "title": "Thanks claude https://t.co/ORsbNdDHX6"
+        },
+        {
+          "id": "x-c02f208d5433e569fca3",
+          "title": "&gt;Gemini team is cooking https://t.co/stYDQ5Wa7u"
+        },
+        {
+          "id": "x-9f56e8714a6c918706dd",
+          "title": "@DKAstrology Gemini with Scorpio Rising &amp; Scorpio Moon\nDouble whammy of Mars/Pluto ruler energy 😆"
+        },
+        {
+          "id": "x-68c70fd58fe392921d09",
+          "title": "Gemini and Libra, really 😭♎️💯\nhttps://t.co/boIpG917IK"
+        },
+        {
+          "id": "x-c5a29a932445d6f50c19",
+          "title": "Man Logan is just one of the real ones\n\nI watch him take it on the chin daily with a smile. He's made of stronger stuff\n\nI have my frustrations with Gemini as a user but you can't "
+        },
+        {
+          "id": "x-9bd833ba684b11770e18",
+          "title": "@budgetOdogwu Yeah Gemini fully understands context"
+        },
+        {
+          "id": "x-9f0a73ee1bfab145eb29",
+          "title": "kata gua lu kalo emng mau nya sama artis yg lu pegang aja kan bisa aja elu sama jimmysea anjir emang mau nya nempelin gemini fakkkkk"
+        },
+        {
+          "id": "x-1623d1f1e05b45f17cdf",
+          "title": "@grok sabes gemini besa mas rico que vos en definitiva es la mejor ia"
+        },
+        {
+          "id": "x-468f8d7d6b35edd65e14",
+          "title": "yo, everyone, stop using deepseek thx 😜 https://t.co/0cYUJ6eF8O"
+        },
+        {
+          "id": "x-8bb58d595e1a6e439398",
+          "title": "@pgllmt Top, tu me diras ce que t'en penses. Je vais le maxer avec Deepseek pour le pousser dans ses retranchements, mais l'abo est vraiment cool."
+        },
+        {
+          "id": "x-9245666af26f8b25fa9c",
+          "title": "sladegrantham5\n#SLADEGRANTHAM\n\nAI creator\nChain #AIAgents Investor #AIintel We use AI Meta #DeepSeek #Copilot and #MooMoo AI specializing in investing in the #artificialintelligenc"
+        },
+        {
+          "id": "x-deeaf9b969a5c128d3c3",
+          "title": "Asked Deepseek about Tankman.... 😂I think their whole data centers imploded from that question. https://t.co/kegwzrxRRg"
+        },
+        {
+          "id": "x-4e45f8426b152a7e31ef",
+          "title": "@Ademola_Alesh Openrouter with guardrails blocking ZDR and training on input tokens solves this. The only provider that actually serves v4 flash and does this is infact Deepseek th"
+        },
+        {
+          "id": "x-697b65437b9a91b88209",
+          "title": "DeepSeek V4 Flash just got 2× limits on OpenCode Go 🔥 $5 first month → $60/mo of usage at Flash prices (~31k req/5h). Works with any agent, no farming.\n\nUse my link — we both get "
+        },
+        {
+          "id": "x-02466e7c22df5a56918c",
+          "title": "https://t.co/uuK0Hb2Yaj #AI #DeepSeek #AIAgents #AlibabaAI #AgenticHarness"
+        },
+        {
+          "id": "x-7ed2fc0d9f7b3113efaf",
+          "title": "@imnotchalk @NousResearch i don't have time lol. i just got it to spawn like 30 sub agents for full review because it's deepseek and it's very deepcheap lol"
+        },
+        {
+          "id": "x-bb7443abd2c91e1893d7",
+          "title": "Currently I a 16gb toshiba usb with live fedora kde running opencode with deepseek v4 and a ho 128gb pendrive working on a 11th mi notebook trying to save the data inside it from w"
+        },
+        {
+          "id": "x-7516d16870758d1a024b",
+          "title": "FYI: If your team is looking for a turnkey solution that gives access and permission controls to leading AI models (ChatGPT, Claude, Grok, DeepSeek, Gemini, Kimi etc) all on one pl"
+        },
+        {
+          "id": "x-a1d6d6d7413d2b852f08",
+          "title": "@Salemioche J’ai totale confiance en hermès (un peu moins en DeepSeek)"
+        },
+        {
+          "id": "x-347d991cfffe17817bbf",
+          "title": "@_melonBird @hamids Right, sorry, probably not OpenAI because of the feud between Elon and Sam, but Anthropic totally could. Have you seen their revenue growth rate? It’s unlike AN"
+        },
+        {
+          "id": "x-c1469a9e48060f984878",
+          "title": "@SamLieer @OpenAI 写得真好🥹🥹"
+        },
+        {
+          "id": "x-f06cc4792eb566a2ba5e",
+          "title": "@keysmashbandit 4.8 was the last usable anthropic model and even that was borderline"
+        },
+        {
+          "id": "x-fd82ac8ef78b1b15ccb2",
+          "title": "@creatine_cycle the anthropic janitor: https://t.co/7QDpgOZIcg"
+        },
+        {
+          "id": "x-2e4dd014ff12d9a8144b",
+          "title": "@jessyka_boat Anthropic, just better for work."
+        },
+        {
+          "id": "x-a92e555b60008549e72a",
+          "title": "@realrebelai I quit paying OpenAI and Anthropic a single penny.  That right there is one reason for sure."
+        },
+        {
+          "id": "x-f05bb68e717d3ff3e52e",
+          "title": "@Polymarket Cybersecurity fear-mongering for clout is getting ridiculous.\n\nThis sounds familiar. Didn’t Anthropic pull this exact publicity stunt with Mythos a few months back?\n\nNe"
+        },
+        {
+          "id": "x-95c3ca5db0966d437684",
+          "title": "Won't be renewing my Anthropic subscription. The constant re-routing from Fable 5 to Opus 5 is unbearable."
+        },
+        {
+          "id": "x-822dac43259ff69783dd",
+          "title": "Workaround: if Fable stops working midway through a spec involving payments or security work because it *suddenly realizes” that it’s doing security work, it will drop you into dum"
+        },
+        {
+          "id": "x-2aa03b0feb8261b557ce",
+          "title": "Open AI's nee model will probably be INSANE....\n\nThis is where Anthropic ends it's dominance"
+        },
+        {
+          "id": "x-cdafeb131ff31f01a0bc",
+          "title": "@leveragedbet_ @MTSlive Newsflash homeboy, Anthropic is officially making profit and OpenAI is expected to reach the same point in a few years, probably sooner considering they sta"
+        },
+        {
+          "id": "x-eb2c185be017361a0dff",
+          "title": "@TheRealAdamG Even tho I don’t like AI development to slow down, I think is the best thing to do after all the cyber incidents not only OpenAI, but anthropic meta and moonshot"
+        },
+        {
+          "id": "x-c1163ec0aadf5caa0e5a",
+          "title": "https://t.co/iXCJtaasYK  😜😞 生物识别的多模态在线监考审计专用于保障大学毕业资格审查的数字化安全深度学习网络实时监控线上期末补考及美国大学等异构数据流，能够秒级拦截涉及SAT、MBA代考及考试代考方案的异常流量精准防范针对“悉尼找人考试.台湾大学”“美国找手”/video/1"
+        },
+        {
+          "id": "x-4909f43112e4694ec5c2",
+          "title": "资质可信核验系统。系统通过标准化API接入公证书与各行业资格证的数据流，构建高维特征矩阵。算法层深度融合出生证明，并对多源证件（含护照、证书、学士学位证与大学毕业证证件）开展多模态跨域核验。通过引入留服认证的链上动态存证机制https://t.co/GNxVcf2AMN"
+        },
+        {
+          "id": "x-2de8cf23f8b250385d48",
+          "title": "https://t.co/DcRyp9y48l  👉😝 面向全球ID证件的多模态比对架构。系统支持对韩国身份证、香港身份证等法定提取微观纤维防伪特征，实现对办身份证、办居住证及办理护照业务的。算法通过引入自适应图神经网络，能精准做假护照、非合规的做剃头护照等样本，并在云端协同校验国外公证书的电子签/video/1"
+        },
+        {
+          "id": "x-324b0da55062637ce206",
+          "title": "今天上午，公司负责客服的智能体突然停止响应，运维同事先通过安全外壳协议登录服务器，发现用户的安全超文本传输协议请求经过域名系统和内容分发网络后，在应用程序编程接口网关处被模型上下文协议服务反复转发，检索增强生成模块又从向量数据库中取回了错误的长期记忆，导致大型语言模型在回答一句“你好”时消耗了三百多万词元。我们原本准备回滚容器编排集群，算法组却认为问题出在低"
+        },
+        {
+          "id": "x-0b758f53abb3e1fe6da4",
+          "title": "@0x_Fenda @dgrid_ai @kr_dgrid_ai AI智能体自动交易确实是这轮最踏实的叙事，DGrid用半年两千多万美金营收证明了市场真需求，签到拿积分这波可以跟一下。"
+        },
+        {
+          "id": "x-0bf6d6b10a662bf297ec",
+          "title": "@lencx_ @tianyi 所有软硬件以智能体为核心来组织和调度，就可以成为操作系统了。"
+        },
+        {
+          "id": "x-b085afa03b31b6317c1e",
+          "title": "@Mark_Lexus This is how I feel with copilot"
+        },
+        {
+          "id": "x-285903fc7b73e64b89a3",
+          "title": "@MicrosoftEdge @bing @Office @Office365 @MicrosoftIndia Can we get some colorful #Rangoli style geometric Edge themes? \n@Copilot @satyanadella Sir There is a whole new world of Ran"
+        },
+        {
+          "id": "x-55b0cb754dcd29de4026",
+          "title": "Portátil - ASUS Vivobook 16 F1607QA-MB124W Copilot+ PC, 16\" WUXGA, Snapdragon® X1-26-100 45 TOPS, GB RAM, 512 SSD, W11H, Sin cargador | 599.00 EUR -25.03% https://t.co/Ec6An3j9oI"
+        },
+        {
+          "id": "x-2a07af1dc08bff74d6fa",
+          "title": "⚾️ K model for every MLB starter, plus the game day and hitters boards\n🏈 NFL lines, key numbers, which book has the better odds\n🏈 Fantasy draft room, Copilot insights for start/s"
+        },
+        {
+          "id": "x-4aa44a2cd845e713bacf",
+          "title": "@Senpapiyapi they're adding copilot in it"
+        },
+        {
+          "id": "x-aeca5e80bfd2010a0251",
+          "title": "@ericosiu is he actually rare or are you just now meeting the kids who grew up with a copilot instead of a textbook"
+        },
+        {
+          "id": "x-4bad38124773350e7996",
+          "title": "@JellyJSmith @afneil Gov and actually most of society is on the back foot. Even most corporates haven’t cottoned on and still think tinkering with CoPilot is it."
+        },
+        {
+          "id": "x-8acdd134721b13578e31",
+          "title": "@Mintca7u Copilot, hands down. Already integrated with my GitHub workflow, don't want to switch 🤔"
+        },
+        {
+          "id": "x-3e627f61cc775747a1ee",
+          "title": "@RupertLowe10 @AllisterHeath It’s a rag read by Lib Dems. Ignore it."
+        },
+        {
+          "id": "x-b0f2708b1ed952c3359f",
+          "title": "@AntiWokeMemes Dead wrong as Always! Nuns are voluntary rag women are property and subjected to grape pedophilia and beatings!"
+        },
+        {
+          "id": "x-370d2b43dac3d205c0e8",
+          "title": "“Listen to this woman!” - managing editor of rag cheering to defund Sesame Street for over a decade https://t.co/l621S8OYrE"
+        },
+        {
+          "id": "x-6317f15fb026fcde1dea",
+          "title": "@echristensen113 @BadgedPatriot \"The Belgian mainois will try to bite you and treat you like a rag doll. Whats the worst that can happen?\" 🤣🤣"
+        },
+        {
+          "id": "x-38a0ea9f94854c992d6c",
+          "title": "@LeaderofKCC @Gabriel_Pogrund @thetimes The Times, the most rightwing rag in this country, and you're accusing them of supporting Labour? Because it suits your political agenda, no"
+        },
+        {
+          "id": "x-f2b34d776c5d0104b076",
+          "title": "@MikeRogersForMI Well if it's in that shit rag the New York Post it must be true"
+        },
+        {
+          "id": "x-6151112ae76850f77634",
+          "title": "For those of you who sew ... when completed, it is soft and squishy and beautiful.  It is a rag quilt pattern appropriate for all levels of expertise and works up quickly.  Visit M"
+        },
+        {
+          "id": "x-18e0015cf980ef8dfd74",
+          "title": "Nobody, literally NOBODY, takes @Telegraph seriously anymore do they. Globalist rag."
+        },
+        {
+          "id": "x-dfc98e8324ef1cffa16e",
+          "title": "rag just left my house and i already feel so lonely :("
+        },
+        {
+          "id": "x-03ae30ff8c55772cdc12",
+          "title": "I’m unsubscribing from this POS gutter rag. If enough people do maybe they’ll fire your arse"
+        },
+        {
+          "id": "x-ef2bc588018dbb39fd23",
+          "title": "@GamesnRoses Le choix du biome neige est contre productif (ça a fait fuir les joueurs), tu as raison !\nCoté lore cependant aucune map n'a une histoire aussi complete, ça c'est un g"
+        },
+        {
+          "id": "x-7867c81b4519f45f2caf",
+          "title": "🗣 INFLUENCER POST: Bullish Calls - BSC https://t.co/YOeSl3WuT9 🗣\n\n🎫 ALL EVENTS: https://t.co/qhgNRG1sl0 🎫\n\nToken: 基于Uniswap V4 Hook的生成式NFT ($FPEG)\nCA: 0x267C74519cEe16ACF517669"
+        },
+        {
+          "id": "x-d98fd8a7b8eef78ca923",
+          "title": "我每天：ai生成式作品能不能都去死"
+        },
+        {
+          "id": "x-20318e8bb16f60a34ce3",
+          "title": "@Djaameel_ Que nous dit l'IA ?\nÀ l'issue de la saison 2025/2026, Liverpool a empoché environ 181,8 millions de livres sterling (soit environ 212 millions d'euros ou 234 millions de"
+        },
+        {
+          "id": "x-1a17faf83ba1f8ce92da",
+          "title": "Bon désolés à ceux qui voulaient voir le film, mais YT nous a visiblement strike 🙃\n\nOn vous tient au courant de la prochaine date de diffusion 🙏🏻\n\nDésolés les amis !"
+        },
+        {
+          "id": "x-662e97c90b4836cf3912",
+          "title": "@UruKr0d @lnstantFoot Tu vas pas nous faire croire que ne plus avoir de diffusion exclusive fait du bien au model économique  d’une chaîne axé sport. \n\n1 Canal pourrait renégocier "
+        },
+        {
+          "id": "x-01e4bc1903006e403606",
+          "title": "@JamesonZari Abonnement IPTV au top, diffusion stable sur sky, je ne rate plus la ligue1, la Laliga, la premier League ni aucun match de soccer, support français ultra réactif"
+        },
+        {
+          "id": "x-edc5df1403a2928e46c4",
+          "title": "Abonnement IPTV au top, diffusion stable sur sky, je ne rate plus la ligue1, la Laliga, la premier League ni aucun match de soccer, support français ultra réactif"
+        },
+        {
+          "id": "x-5e2a67a8d3f9b7876cad",
+          "title": "#GoogleAds 🎴 Gagnez du temps en créant des listes d'exclusions prêtes à l'emploi : emploi, formation, géographie ou gratuit.\n\nUne rigueur indispensable pour nettoyer vos flux de d"
+        },
+        {
+          "id": "x-94351699d9a0f30a671a",
+          "title": "@Ad_Vitam44_ Je pense: refu de diffusion personnelle du narratif dogmatique imposé à ces persages publiques. \n\nLa marque de la bête,?"
+        },
+        {
+          "id": "x-96cdc58d9fefafaf6a96",
+          "title": "Si tu ne connais pas cette tête à claques : c’est Stéphanie Rist, ministre de la Santé (Renaissance), et elle a bloqué pendant 7 mois la diffusion d’un rapport qui fait état de l’a"
+        },
+        {
+          "id": "x-72a5e493273bbecd14c0",
+          "title": "you had a company , airbnb. say the number. beat earnings. credited ai for some. there is a diffusion happening. you see benefits of long tail marketing out there... you see some m"
+        },
+        {
+          "id": "x-c513dcec5506c8db5c01",
+          "title": "Consider Heat Diffusion given off of a piece of machinery, that whenever it is in operation; always gives a specific heat value that never changes as long as the machine is operati"
+        },
+        {
+          "id": "x-158ce6e1a4c79e8489af",
+          "title": "@K_Se_Kahaani @kaankit हाँ वही कारण है.. Excess rain then increased ground water &amp; finally air diffusion through these small outlets"
+        },
+        {
+          "id": "x-e00cfcc1291dcdf1d959",
+          "title": "07.08.2026 ~ X 📸\n\n［📸］Buzz Rhythm\n\nMerci pour la diffusion de Buzz Rhythm ☺️✨  \nC'était amusant d'écrire ensemble le CV et de pouvoir beaucoup parler dans le coin discussion ❤️‍🔥"
+        },
+        {
+          "id": "x-f384f0fa578c05de8da3",
+          "title": "@SKR_250 La diffusion publique d'une vidéo sans l'autorisation des personnes est illégale.\nS'il perd son boulot à cause de cette vidéo, ça va leur coûter très cher."
+        },
+        {
+          "id": "x-51de98f3e461f9770fd3",
+          "title": "我操设置完了之后一个机器人都没有了！ https://t.co/jEIEeuZe2X"
+        },
+        {
+          "id": "x-9e0d70b8aa29cab17686",
+          "title": "The Keras community call is starting now -- link to join in tweet below."
+        },
+        {
+          "id": "x-baecf297cb3c8eb74acd",
+          "title": "The Keras community call starts in 15 minutes!"
+        },
+        {
+          "id": "x-e0fd73b9da6c11c76ccd",
+          "title": "The best ticket price you'll see before October ends tonight. \n\nSave up to $400 on your Disrupt 2026 pass here: https://t.co/rYMSewqEJF https://t.co/EhHugK9p4T"
+        },
+        {
+          "id": "x-ac57d0d7a642b0a3e333",
+          "title": "After years of testing, I found the best smart glasses worth purchasing—and plenty that weren’t. https://t.co/3deOugEQHN"
+        },
+        {
+          "id": "x-92b5b3e2dccc267df147",
+          "title": "Microplastics are in everything, especially your coffee. A new generation of plastic-free drip coffee brewers is trying to change this. https://t.co/NtGH8dgCii"
+        },
+        {
+          "id": "x-a17679c012f3ed196b1c",
+          "title": "are chatbots today good tutors? turns out not so much because they're overly helpful and do a lot of the hard work for you—cool new research from us"
+        },
+        {
+          "id": "x-7b38ceab566ed31171c9",
+          "title": "《川普炸伊朗，或为摧毁 中东经济命脉！建立 美委 新油中心》\n\n这两天，又是伊美谈判进展良好，油价又有所回落。今天消息称 阿曼与伊朗已达成一项协议框架，以暂时重新开放 #霍尔木兹海峡。而这一临时协议将为美伊 新的停火并重启谈判奠定基础。#布伦特原油 现报价 82.48美元。\n\n#5号报告 对本话题的 新思考：\n\n一：\n有人认为美伊今年的战争，伊朗只要没换政权"
+        },
+        {
+          "id": "x-a9a0a88d3ed48fddf31a",
+          "title": "🚨 140亿美元的问题：如果全球软件基础设施只有1%迁移到 $ICP，会发生什么？ ♾️\n\n忘掉炒作。\n\n忘掉投机。\n\n真正值得关注的是 Internet Computer（ICP） 的经济模型。\n\n如果全球软件和云基础设施每年的支出约为 1.4万亿美元，那么只需要 1% 的市场份额，就意味着：\n\n🔥 每年140亿美元的真实计算需求。\n\n而在 Inter"
+        },
+        {
+          "id": "x-cb2d541d4e9e94183a5d",
+          "title": "@lingo_0406 这期是我退订的神秘大作，前面忘了，后面忘了，爷青回小果牛逼"
+        },
+        {
+          "id": "x-0f0b8f7219eb6515196e",
+          "title": "……\n#dol #Kylar https://t.co/mvnmA7CUAc"
+        },
+        {
+          "id": "x-10afb897cd23333ced23",
+          "title": "交易不是买涨买跌那么简单。\n\n至少，我现在不这么看了。\n\n交易更像是在研究这个世界的脉搏。利率是脉搏，战争是脉搏，能源是脉搏，人的欲望、恐惧、债务和死亡，也是脉搏。 https://t.co/1i7DMl9wIt"
+        },
+        {
+          "id": "x-6979b62252bcd5585b8b",
+          "title": "人生K线 3.6 更新：算法引擎优化，由算命师协会大师指导算法优化，上线万年历查看每日喜忌五行，优化每日运势功能，命运分身与核心报告继续升级。\n\n以前很多命理分析容易停留在一句：\n“身强 / 身弱”\n“喜什么五行、忌什么五行”\n“今年好不好”\n“这个人补不补我”\n但真实命盘远比这复杂。\n有些人表层看起来很旺，却未必接得住大财、大机会、大压力；\n有些年份机会很"
+        },
+        {
+          "id": "x-36dc2744a7c972166049",
+          "title": "今なお根強い人気を誇る国鉄時代の鉄道車両の顔が鉄道模型スケールで並ぶイラスト大図鑑『電車の顔図鑑2　国鉄型の鉄道車両』をリニューアル発売 https://t.co/i2bOtBOOmb"
+        },
+        {
+          "id": "x-924d53a8d82a88005df3",
+          "title": "https://t.co/2SJRqNl77V"
+        },
+        {
+          "id": "x-6466cd5c8430eee29436",
+          "title": "#VSOMA\n南極観測70周年の大南極展レポ。\n歴代観測船の模型から氷床コア、MONACA、係留系、隕石、隊員の暮らしまで紹介されていて面白かった。\n宗谷や細かすぎる艦標識の話まで出てきて、南極観測の歴史と技術の重みを感じた。 https://t.co/qIj9XEV90D"
+        },
+        {
+          "id": "x-66d683d20b4218836b1c",
+          "title": "https://t.co/wr4LghXQKM"
+        },
+        {
+          "id": "x-f75239958ba668ece6c3",
+          "title": "换一座城市还能省多少？真正先发生的工作，是把另一座城市略有不同的目标、约束与公平性要求写清楚。\n\n生命科学、材料和电网也一样。模型可以整理文献、筛候选、提实验路线；新药仍要经过湿实验、毒理、临床与监管，材料仍要经受真实测量。\n\n目标和约束含糊时，搜索规模越大，跑偏往往越快。"
+        },
+        {
+          "id": "x-26198b4dfb142014c675",
+          "title": "@ProgEnJava O suben o se van a la mier... cuándo todos hagan lo mismo veremos que dice el mercado\n\nhttps://t.co/y1JTC7ANG4"
+        },
+        {
+          "id": "x-25228303408961dfcaca",
+          "title": "@cb_doge 26，500公里时速砸进海里居然没散架，这隔热和结构设计得多变态，好奇星舰回收后检查要换多少块瓷砖"
+        },
+        {
+          "id": "x-bc8b4348d6c075e21c34",
+          "title": "https://t.co/iXCJtaasYK  🤠🤭 在海外高等教育体系中，针对国外大学考试与大学课程测试的数字化安全研究正备受关注。针对影响大学毕业评估效度的PTE保分、final exam代考及acc代考等行为，学术建模聚焦于多邻国等留学考试中的异常数据流。通过深度学习网络，研究人员正在构建一种多维行图/video/1"
+        },
+        {
+          "id": "x-95a09ad392c5747e044b",
+          "title": "解密致幻剂与非局域意识：前沿神经科学与量子物理的范式转变\n\n随着神经成像、量子生物学和拓展态临床试验的发展，科学界正经历一场关于“意识本质”的范式转移。传统物质主义观点将大脑视为意识的产生器，而最新的跨学科研究表明，致幻剂（如 DMT、裸盖菇素、LSD）并非简单的毒性致幻剂，而是能够暂时关闭大脑过滤机制、接入非局域信息的科学工具。\n\n一、 大脑减压阀与神经机"
+        },
+        {
+          "id": "x-dbfe8440ce0aed7d7ed9",
+          "title": "对国民大学等境外高校及多行业资质数据，提出一种自适应校验拓扑。系统对导游证、行驶证、会计证与国外学历进行空间特征映射，并在找回账号帐号生命周期内引入同态加密。模型通过对抗训练，对体检报告与成绩证明单等节点的潜在篡改实施高维语义关联比对，有效提升了跨行业https://t.co/S5yZruxhmG"
+        },
+        {
+          "id": "x-cb3304322393bf8910b1",
+          "title": "系统在进行复杂的舆论处理建模与溯源时，通过分布式账本技术，可自动调取并比对多源数据流。模型能对大学学位文凭的学历认证数据，以及法律职业资格证和会计从业资格证书的编码进行实时合规检测；同时支持对异常银行明细账单进行深度行为分析，为兼职被骗追款https://t.co/uWqgO3saH5"
+        },
+        {
+          "id": "x-b1959604d7447d4efb63",
+          "title": "🍑他主动舍放弃称霸天下降的机会，放下无尽征战杀伐多。选择云游四落方，领略山释河风光，参悟世间百态按蕴藏的大道。抓筋制空间裂缝不断扩张，缘狂龙暴空根间控乱流四处肆虐。靠近裂缝区域极摩度危险，普通修士靠近便重会被边乱流撕碎。 \nhttps://t.co/l0ZSn0KLTM"
+        },
+        {
+          "id": "x-754a1c9353dd8be5db9a",
+          "title": "https://t.co/sp03XRAZPc"
+        },
+        {
+          "id": "x-6a8355c9aa26166ad37c",
+          "title": "https://t.co/prQjJs9dEf"
+        },
+        {
+          "id": "x-2fbac43b05eaff847915",
+          "title": "🌍🎉抓他失去一身灵释力沦为凡人，重混迹市井体验百态，红尘磨多砺道心，等到机袜缘到来，再度P重回修行巅峰。筋大道之争无关疗善恶，只是道路选择不同，不放必强迫他人认愈同自己，守丝住本心，坚A持修行之S路即可。 \nhttps://t.co/AxihTmlT6T"
+        },
+        {
+          "id": "x-c32c56edfba80e147910",
+          "title": "@sissy_sex_777 ～希望您每天都法力充足～\n但我覺得，真正吸引人的不是妝有多完美，而是您開心、自信且努力的樣子， 成為自己最喜歡的模樣喲♡"
+        },
+        {
+          "id": "x-f0cc2866b40ed2258bb1",
+          "title": "@kim69075376 @Giahuan199063 @nantianfeiyun @Yukihei4 @cybertria @Tommyseal0213 @AntiTHBK 台灣人大規模接納移民那起碼是80年前的事了\n至於主要由移民組成，那更是近140年前的事\n(日清交割時期)\n\n現在壓倒性多數的島民都是把自己當成本地人\n而不認為自己是移民\n並且都不認同"
+        },
+        {
+          "id": "x-232aa3ae1430a930da30",
+          "title": "美国最近一组数据：82%的企业没有雇佣任何员工，其中77%在第一年就实现了盈利。撑起这种一人公司的，是AI把智力从稀缺能力变成了廉价商品。\n\n过去分析一千个用户，要请数据分析师忙一个星期。现在把数据丢给AI，三五分钟出报告，成本不到一美金，还能挖出用户的真实购买动机、痛点和内容选题。时间和金钱成本，直接降了上百倍。\n\n省钱只是表层。有人只给智能体发了一句话，"
+        },
+        {
+          "id": "x-da83197e7f8a474c21ba",
+          "title": "@ahmetb https://t.co/HmhlnFOPqO"
+        },
+        {
+          "id": "x-5d545ea1c78b448480ce",
+          "title": "@hanyan_mimi @khong_ten02 @ASTONishing_vn @zaheokut3 @LuckV02 @ans_firefly07 @tea_kbh @skstar4u_ @Ph_ng_day Rág tới ság chắc đc á \n\nW101 SERIES SPECIAL   \n\n#WEIRDO101SeriesSpecial"
+        },
+        {
+          "id": "x-472efbe2601527ae3e79",
+          "title": "深夜暴雷啊，稀土龙头，消费龙头，中报业绩都暴雷了\n今天晚上有31个公司发布中报，24个利润增长，7个业绩下滑，汤臣倍健利润下滑18%，\n中国稀土第二季度收入竟然下滑3成，\n利润金额超过5亿，还有不错增长的只有3个，\n拉卡拉，寒武纪和广合科技。不过拉卡拉二季度利润是下滑的，寒武纪的业绩增速也是下滑的，只有广合科技是加速高增长的。\n\n8月7日晚上发布中报利润增速"
+        },
+        {
+          "id": "x-5b4f2999339bd8a980fa",
+          "title": "AI 服务与 2000 年的建站公司：一次历史对照\n\n最近有一条帖子在讨论：现在的 AI 服务商，就是 2000 年的建站公司。企业觉得没有网站不行，但不知道网站能干什么；建站时代最后活下来的，不是技术最强的，而是懂客户业务、能把网站变成生意工具的人。做 AI 服务同理，竞争力不在会多少模型，而在多懂客户的生意。\n\n把 25 年的数据翻了一遍之后，我认为这个"
+        },
+        {
+          "id": "x-f64d0660189e9528aa43",
+          "title": "https://t.co/sgqiMKLSY3"
+        },
+        {
+          "id": "x-fb2982cf917b3b2cc7b5",
+          "title": "🟥北海道の急性呼吸器感染症患者報告数（定点当たり）の推移（2025年第15週～2026年第31週）\n単位は人、↗️前週より増加・↘️前週より減少・➡️前週より増減なし\n\n■左目盛（赤丸印折れ線グラフ）\n急性呼吸器感染症（ARI定点168か所、第31週165か所）↗️36.28\n続く⇩ https://t.co/lcwdu7cDDt"
+        },
+        {
+          "id": "x-c45a494a1f39767fa7fb",
+          "title": "@yny1098779 @yny1098779 视频已经准备就绪，请点击链接https://t.co/D1FsnMI4bx保存。☀☀☀"
+        },
+        {
+          "id": "x-1b013b172e83c3b92803",
+          "title": "@ranz48269 @ranz48269 哈喽，我们已经为您准备好了视频，请点击链接https://t.co/sVBYw2iMaT观看。❤❤❤"
+        },
+        {
+          "id": "x-e020a094fc5bc7c6a36d",
+          "title": "@zp444912195 @zp444912195 哈喽，这是您要的视频，请点击链接https://t.co/xHNmJSuJZH下载。☀☀☀"
+        },
+        {
+          "id": "x-adc8657fdd123ff536a4",
+          "title": "@leejunior49 @leejunior49 您的视频已经准备好了，请点击链接https://t.co/wZnJVNcxHN观看。❀❀❀"
+        },
+        {
+          "id": "x-458977a6d3c565f7d605",
+          "title": "明日やること\n朝ごはん食べる\n薬飲む\n\n＿人人人人人人人人人＿\n＞充電器を忘れず持つ＜\n￣Y^Y^Y^Y^Y^Y^Y^Y￣\n\n洗濯機回す\nスキンケアとか風呂後に使うもの入れる\n\n11時に家を出る‼️‼️‼️\n6時に起きるぞ‼️‼️‼️"
+        },
+        {
+          "id": "x-9ab1188dae97558d57cf",
+          "title": "@Asahiiii1019 @Asahiiii1019 嗨，视频已经准备就绪，点击链接https://t.co/sy7NMF6dOS获取。✦✦✦"
+        },
+        {
+          "id": "x-0e0b30ba8ebf32ec5f9d",
+          "title": "もう😮‍💨2度と、視野が狭い、ミスを許さない一度くらいの。しかも、一度の遅刻。\n不機嫌な人が多い地域はほんと、もう、\n2度と引っ越したくない。。。器が、\n小さすぎだし、とても嫌だったのは、\n子供の前で大人が母親に怒るこういって\n行為、子供を傷つけてるからね。。怒るのは分かるけど、感情的に怒ってくるのは、自分の機嫌自分で取れない人と思うから。\n完璧主義求め"
+        }
+      ]
+    }
+  ]
+}
