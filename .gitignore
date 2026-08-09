@@ -64,6 +64,10 @@ docs/manual/**
 # 会话元数据频繁变化，不入库
 .claudian/sessions/
 
+# ===== Claude Code 临时 worktree =====
+# Claude Code 创建的嵌套 worktree 是独立 Git 工作区，不应作为主仓库 gitlink 提交
+.claude/worktrees/
+
 # ===== Obsidian =====
 # 工作区状态每次打开都会变，忽略；其余配置（插件、外观等）可共享，保留跟踪
 .obsidian/workspace.json
