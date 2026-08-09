@@ -1222,7 +1222,10 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 .openai-detail h2 { padding-right: 40px; }
 .openai-detail .model-breadcrumb { margin: 10px 0 18px; gap: 8px; font-size: 16px; line-height: 1.6; }
 .openai-detail .model-breadcrumb button { padding: 3px 2px; }
-.openai-detail .vendor-description { margin-top: 0; }
+.openai-root > .vendor { margin-top: 6px; }
+.openai-root > .vendor-description { margin: 12px 0 12px; }
+.openai-root > .model-tool-panel { margin-top: 0; }
+.openai-root > .vendor-features { margin-top: 28px; }
 .openai-detail .node-overview { margin-bottom: 6px; }
 .openai-detail .node-overview h2 { margin-bottom: 4px; }
 .openai-detail .node-description { margin: 14px 0 18px; color: var(--text-secondary); font-size: 16px; line-height: 1.7; }

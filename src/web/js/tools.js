@@ -321,13 +321,13 @@ function renderOpenAIDetailBody(toolId, nodeId = null) {
   if (!node) {
     return '<section class="openai-root">' +
       '<h2>' + escapeHtml(tool.icon + ' ' + tool.vendor + '（' + tool.name + '）') + '</h2>' +
-      '<div class="vendor">厂商总览 · <a href="' + escapeHtml(safeExternalUrl(tool.url)) + '" target="_blank" rel="noopener noreferrer">官网 ' + ICON_EXTERNAL + '</a></div>' +
-      renderModelBreadcrumb(toolId, collection, null) +
+      '<div class="vendor"><a href="' + escapeHtml(safeExternalUrl(tool.url)) + '" target="_blank" rel="noopener noreferrer">官网 ' + ICON_EXTERNAL + '</a></div>' +
       '<p class="vendor-description">' + escapeHtml(tool.overview?.description || tool.strengths) + '</p>' +
-      renderVendorFeatures(tool) +
       '<section class="model-tool-panel"><div class="intelligence-heading"><h3>模型与工具</h3><span class="intelligence-status status-' + escapeHtml(collection.status) + '">' + escapeHtml({ verified: '已核实', partial: '部分核实', conflict: '资料冲突', unavailable: '资料不可用' }[collection.status] || collection.status) + '</span></div>' +
       renderTreeChildren(toolId, collection, null, { showHeading: false }) +
-      '</section></section>';
+      '</section>' +
+      renderVendorFeatures(tool) +
+      '</section>';
   }
 
   const breadcrumbs = renderModelBreadcrumb(toolId, collection, node);
