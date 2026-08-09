@@ -176,7 +176,7 @@ function renderIntelligenceItem(item, sourceMap, selectedItemId, toolId) {
     '<div class="intelligence-item-body">' + renderLeafDetails(item, sourceMap, toolId ? { toolId } : false) + '</div></details>';
 }
 
-function renderLeafDetails(item, sourceMap, showCompare) {
+function renderLeafDetails(item, sourceMap, showCompare, options = {}) {
   const contextLabels = { native: '原生支持 1M', conditional: '特定条件支持 1M', not_supported: '不支持 1M', unknown: '1M 支持情况未知' };
   const context = item.one_m_context;
   const contextHtml = context
@@ -210,7 +210,7 @@ function renderLeafDetails(item, sourceMap, showCompare) {
   const sourcesHtml = '<div class="intelligence-sources"><b>资料来源：</b>' + sources.map(source =>
     '<a href="' + escapeHtml(safeExternalUrl(source.url)) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(source.title) + '</a>'
   ).join(' · ') + (latestQueriedAt ? '<span>查询于 ' + escapeHtml(latestQueriedAt.slice(0, 10)) + '</span>' : '') + '</div>';
-  const compareHtml = showCompare
+  const compareHtml = showCompare && !options.hideCompare
     ? '<div class="leaf-actions"><button class="compare-toggle ' + (isCompareSelected(showCompare.toolId, item.id) ? 'selected' : '') + '" onclick="toggleCompareRef(\'' + escapeHtml(showCompare.toolId) + '\',\'' + escapeHtml(item.id) + '\',this)">' + (isCompareSelected(showCompare.toolId, item.id) ? '已选' : '+对比') + '</button></div>'
     : '';
   return '<p>' + escapeHtml(item.summary || '') + '</p>' + contextHtml + pricingHtml + cacheHtml + planHtml +
@@ -264,6 +264,10 @@ function getNodePath(collection, node) {
   return path;
 }
 
+function renderModelBackButton(toolId) {
+  return '<button class="model-index-back" type="button" aria-label="返回上一级" title="返回上一级" onclick="goBackModelToolPanel(\'' + escapeHtml(toolId) + '\')">' + ICON_ARROW_LEFT + '</button>';
+}
+
 function renderModelBreadcrumb(toolId, collection, node) {
   const nodes = node ? getNodePath(collection, node) : [];
   return '<div class="model-breadcrumb"><button type="button" onclick="navigateModelToolPanel(\'' + escapeHtml(toolId) + '\',null)">模型与工具</button>' +
@@ -275,22 +279,27 @@ function getNodeStatusLabel(status) {
   return { active: '已核实', partial: '部分核实', unknown: '官方资料待核验', legacy_supported: '仍受支持', deprecated: '已弃用', retired: '已停用' }[status] || '资料状态未知';
 }
 
-function renderTreeChildren(toolId, collection, parentId, options = {}) {
-  const children = getTreeChildren(collection, parentId);
+function renderGroupCompareButton(toolId, collection, parentId) {
   const parent = parentId ? getCollectionNode(toolId, parentId) : null;
   const leaves = parent ? getLeafDescendants(collection, parent.id) : [];
   const comparableLeaves = leaves.filter(item => item.node_type === 'leaf' && ['api_model', 'subscription_plan'].includes(item.kind));
   const sameKind = comparableLeaves.length > 1 && comparableLeaves.every(item => item.kind === comparableLeaves[0].kind);
-  const groupCompare = sameKind
+  return sameKind
     ? '<button class="model-bulk-compare" type="button" onclick="compareGroupLeaves(\'' + escapeHtml(toolId) + '\',\'' + escapeHtml(parent.id) + '\')">全部' + escapeHtml(comparableLeaves[0].kind === 'api_model' ? '模型' : '套餐') + '对比（' + comparableLeaves.length + '）</button>'
     : '';
+}
+
+function renderTreeChildren(toolId, collection, parentId, options = {}) {
+  const children = getTreeChildren(collection, parentId);
+  const parent = parentId ? getCollectionNode(toolId, parentId) : null;
+  const groupCompare = renderGroupCompareButton(toolId, collection, parentId);
   if (!children.length) {
     return '<div class="intelligence-unavailable"><b>' + escapeHtml(parent?.name || '当前分类') + '</b>：' +
       (parent?.status === 'unknown' ? '官方资料待核验，暂不展示未经证实的子项、价格或权益。' : '当前没有可展示的已核实子项。') + '</div>';
   }
   const heading = options.showHeading === false ? '' :
     '<div class="model-panel-heading"><div><h4>' + escapeHtml(parent?.name || '模型与工具') + '</h4><p>' + escapeHtml(parent?.summary || '选择分类继续查看，只有最终叶节点可比较。') + '</p></div>' + groupCompare + '</div>';
-  const compareOnly = options.showHeading === false && groupCompare
+  const compareOnly = options.showHeading === false && options.showBulkCompare !== false && groupCompare
     ? '<div class="model-tree-actions">' + groupCompare + '</div>'
     : '';
   return heading + compareOnly + '<div class="model-tree-grid">' + children.map(item => {
@@ -312,6 +321,14 @@ function renderNodeOverview(tool, node) {
   '</section>';
 }
 
+function renderModelIndexOverview(node, options = {}) {
+  return '<section class="node-overview model-index-overview">' +
+    '<h2>' + escapeHtml(node.name) + '</h2>' +
+    '<div class="vendor"><a href="' + escapeHtml(safeExternalUrl(node.official_url)) + '" target="_blank" rel="noopener noreferrer">官网 ' + ICON_EXTERNAL + '</a></div>' +
+    (options.showDescription === false ? '' : '<p class="node-description">' + escapeHtml(node.summary || '暂无简短说明。') + '</p>') +
+  '</section>';
+}
+
 function renderOpenAIDetailBody(toolId, nodeId = null) {
   const tool = tools.find(item => item.id === toolId);
   const collection = getToolIntelligence(toolId);
@@ -330,19 +347,20 @@ function renderOpenAIDetailBody(toolId, nodeId = null) {
       '</section>';
   }
 
-  const breadcrumbs = renderModelBreadcrumb(toolId, collection, node);
   if (node.node_type === 'leaf') {
     const sourceMap = new Map((collection.sources || []).map(source => [source.id, source]));
     const leafBadge = renderTimelinessBadge(getItemLatestQueriedAt(collection, node));
-    return renderNodeOverview(tool, node) + breadcrumbs +
-      '<div class="model-leaf-panel"><div class="model-panel-heading"><div><span class="node-kind-badge leaf">具体' + escapeHtml(node.kind === 'api_model' ? '模型' : node.kind === 'subscription_plan' ? '套餐' : '工具') + '</span><h4>' + escapeHtml(node.name) + '</h4>' + leafBadge + '</div><button class="back-panel-button" type="button" onclick="goBackModelToolPanel(\'' + escapeHtml(toolId) + '\')">' + ICON_ARROW_LEFT + ' 返回</button></div>' +
-      '<div class="intelligence-item-body">' + renderLeafDetails(node, sourceMap, { toolId }) + '</div></div>';
+    const compareButton = '<button class="compare-toggle" onclick="toggleCompareRef(\'' + escapeHtml(toolId) + '\',\'' + escapeHtml(node.id) + '\',this)">' + (isCompareSelected(toolId, node.id) ? '已选' : '+对比') + '</button>';
+    return '<div class="model-index-page model-leaf-page">' + renderModelBackButton(toolId) + renderModelIndexOverview(node, { showDescription: false }) +
+      '<div class="model-leaf-panel"><div class="model-panel-heading"><div><span class="node-kind-badge leaf">具体' + escapeHtml(node.kind === 'api_model' ? '模型' : node.kind === 'subscription_plan' ? '套餐' : '工具') + '</span><h4>' + escapeHtml(node.name) + '</h4>' + leafBadge + '</div>' + compareButton + '</div>' +
+      '<div class="intelligence-item-body">' + renderLeafDetails(node, sourceMap, { toolId }, { hideCompare: true }) + '</div></div></div>';
   }
 
-  return renderNodeOverview(tool, node) + breadcrumbs +
-    '<section class="model-tool-panel"><div class="intelligence-heading"><h3>模型与工具</h3><span class="intelligence-status status-' + escapeHtml(node.status === 'unknown' ? 'partial' : node.status) + '">' + escapeHtml(getNodeStatusLabel(node.status)) + '</span></div>' +
-    renderTreeChildren(toolId, collection, node.id, { showHeading: false }) +
-    '</section>';
+  return '<div class="model-index-page">' + renderModelBackButton(toolId) + renderModelIndexOverview(node) +
+    '<div class="model-index-divider" aria-hidden="true"></div>' +
+    '<section class="model-tool-panel"><div class="model-index-actions"><div>' + renderGroupCompareButton(toolId, collection, node.id) + '</div><span class="intelligence-status status-' + escapeHtml(node.status === 'active' ? 'verified' : node.status === 'unknown' ? 'partial' : node.status) + '">' + escapeHtml(getNodeStatusLabel(node.status)) + '</span></div>' +
+    renderTreeChildren(toolId, collection, node.id, { showHeading: false, showBulkCompare: false }) +
+    '</section></div>';
 }
 
 function renderLeafPanel(toolId, collection, leaf) {
