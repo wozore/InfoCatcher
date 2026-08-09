@@ -122,7 +122,7 @@ function renderTools() {
       : '';
     const featurePreview = isCollection && overview?.features?.length
       ? '<div class="vendor-feature-preview">' + overview.features.map(feature =>
-          '<span class="vendor-feature ' + escapeHtml(feature.tone) + '">' + escapeHtml(feature.text) + '</span>'
+          '<div class="vendor-feature-slot"><p class="vendor-feature ' + escapeHtml(feature.tone) + '">' + escapeHtml(feature.text) + '</p></div>'
         ).join('') + '</div>'
       : '';
     const isSelected = isCompareSelected(t.id, null);
@@ -139,7 +139,7 @@ function renderTools() {
 
       <div class="tool-card-desc">${escapeHtml(description)}</div>
       ${featurePreview}
-      ${collectionSummary}
+      ${isCollection ? '' : collectionSummary}
       <div class="tool-card-tags">
         ${t.scenes.slice(0,3).map(s => '<span class="tag scene">' + escapeHtml(s) + '</span>').join('')}
         ${isCollection ? '' : (hasFree(t) ? '<span class="tag free">免费可用</span>' : '<span class="tag paid">仅付费</span>')}

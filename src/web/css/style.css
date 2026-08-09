@@ -1143,12 +1143,53 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 .intelligence-unavailable { margin-bottom: 16px; padding: 10px; background: var(--warn-light); color: var(--warn); border-radius: var(--radius-sm); font-size: 13px; }
 
 /* ═══ 厂商总览与模型树 ══════════════════════════════════════════ */
-.collection-card .tool-card-desc { margin-bottom: 10px; }
+.collection-card {
+  padding: 18px;
+}
+.collection-card .tool-card-header { margin-bottom: 8px; }
+.collection-card .tool-card-name { font-size: 18px; line-height: 1.25; }
+.collection-card .tool-card-vendor { font-size: 13px; margin-top: 0; margin-bottom: 8px; }
+.collection-card .tool-card-desc {
+  max-width: none;
+  margin: 0 0 18px;
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-line-clamp: 2;
+}
+.collection-card .collection-summary,
+.collection-card .collection-quick-list,
+.collection-card .tool-card-tags,
+.collection-card .tool-card-footer { display: none; }
+.collection-card .vendor-feature-preview { gap: 12px; margin: 0; font-size: 12px; }
+.collection-card .vendor-feature-slot {
+  height: calc(1.55em * 2);
+  overflow: hidden;
+}
+.collection-card .vendor-feature {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  max-height: calc(1.55em * 2);
+  overflow: hidden;
+  padding: 0 0 0 10px;
+  border-left-width: 3px;
+  line-height: 1.55;
+}
+.collection-card .vendor-feature.positive { color: var(--accent); border-color: var(--accent); }
+.collection-card .vendor-feature.negative { color: var(--danger); border-color: var(--danger); }
+.collection-card .vendor-feature-preview + .collection-summary { display: none; }
+.collection-card .tool-card-header + .tool-card-desc { margin-top: 0; }
+.collection-card:hover { transform: none; }
+.collection-card .tool-card-name,
+.collection-card .tool-card-vendor { color: var(--text); }
+.collection-card .tool-card-vendor { color: var(--text-secondary); }
+.collection-card .tool-card-desc { color: var(--text-secondary); }
+
 .vendor-feature-preview { display: grid; gap: 4px; margin: 0 0 12px; font-size: 12px; }
 .vendor-feature { margin: 0; padding-left: 10px; border-left: 3px solid; line-height: 1.55; }
 .vendor-feature.positive { color: var(--accent); border-color: var(--accent); }
 .vendor-feature.negative { color: var(--danger); border-color: var(--danger); }
-.vendor-description { margin: 14px 0 16px; color: var(--text-secondary); line-height: 1.7; }
+
 .vendor-features { padding: 14px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); }
 .vendor-features h4 { margin-bottom: 10px; color: var(--text-secondary); font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
 .vendor-features .vendor-feature + .vendor-feature { margin-top: 9px; }
