@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "kind": "review_candidates",
-  "generated_at": "2026-08-09T08:26:05.987Z",
+  "generated_at": "2026-08-09T14:26:01.538Z",
   "date": "20260809",
-  "total_pending": 176,
+  "total_pending": 219,
   "note": "待人工审核清单：请逐条设置 review_status（pending/approved/discarded）。应用结论：双击 bat/apply-review.bat（或 node scripts/news-cli.js min-review apply --file 本文件），应用后自动生成 top 名单（ai-top）供二次审核；approved 才进后续 top-selected/publish。",
   "candidates": [
     {
@@ -1237,6 +1237,307 @@
       "summary": "该资讯标题为“DIFFUSION THROUGH TIME”，描述与标题相同，且无字幕内容。由于提供的信息极为有限，仅能确认该资讯涉及“随时间扩散”这一主题，但",
       "suggestion": "人工判断：是否值得收录",
       "review_status": "pending"
+    },
+    {
+      "id": "x-a4e0088fa97d21db99c6",
+      "score": 72.1,
+      "summary": "Tibo在用户尚未用完当前配额之前就宣布下一次重置，这一策略被认为相当聪明。它向所有Codex高级用户传递了一个信号：无需精打细算，可以尽情使用。如果OpenA",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-ac75ce76ef0d39ed17b7",
+      "score": 64.1,
+      "summary": "该资讯指出，Qwen 3.8-Max和Claude Opus 5等模型虽然基准测试得分高，但实际使用成本可能较高，对个人用户而言并不划算。",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-f894d99f3945beb70e88",
+      "score": 63.9,
+      "summary": "该资讯内容仅包含一条简短的推文，提及Deepseek v4 flash模型，并评价其价格便宜且性能出色。",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-3d7fa73b4577b61034f7",
+      "score": 63.1,
+      "summary": "该资讯指出，OpenAI和Anthropic的相关故事持续表明AI对齐问题的复杂性，特别是“裂脑”行为现象，引发了对模型表面之下可能隐藏的其他问题的思考。",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-6c6c7bde5a41ac2303ad",
+      "score": 62.7,
+      "summary": "该资讯仅包含标题和描述，内容为“@cantcomputer Live look at the agent config for OpenAI and Anthr",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-2f7b408eec9b79642eed",
+      "score": 57.9,
+      "summary": "该资讯以提问形式表达了对OpenAI在周限制中实现可持续token成本这一做法的关注，暗示这一话题未被充分讨论。",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-d78821826e71a874ce35",
+      "score": 57.9,
+      "summary": "该资讯为2026年8月9日的科技新闻汇总，主要围绕AI与初创企业动态，重点聚焦OpenAI收购NextSlide的战略及其对演示文稿市场的影响，并对比了Copi",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-1648e2cb5668d7c9c672",
+      "score": 57.7,
+      "summary": "本文介绍了链上智能体的演化路径，重点提及 @DowProtocol 与 @alloxdotai 合作构建智能体（AI Agent）执行引擎，该引擎能够将复杂的 ",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-5c69045753ba5c8b7ce1",
+      "score": 56.6,
+      "summary": "针对学英语缺乏语境的问题，作者提出发明一种全障碍耳机，能将外部中文讲话实时自动翻译成英语，并支持双人配对使用。耳机可根据用户设置调整翻译难度（如小学英语、中学英",
+      "suggestion": "AI 行业事件，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-ed505c35cff3e508d7b8",
+      "score": 54.9,
+      "summary": "该资讯标题为“On AI and e-government”，并附有一个链接，但未提供具体内容或字幕，因此无法获取详细信息。",
+      "suggestion": "AI 行业事件，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-4bafec7cc068b900172f",
+      "score": 53.4,
+      "summary": "本周，DeepSeek v4 Flash 0731 配方将迎来重大改进，该配方针对 2x DGX Sparks 硬件进行了优化。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-3d6b1ca4d49d760e7a16",
+      "score": 52.9,
+      "summary": "该资讯提到，继Jeff之后，Demis Hassabis似乎也要离开Google。自去年底Gemini 3发布后，Google在AI领域缺乏新进展，但财报表现良",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-5870e43f4843d8ef59bc",
+      "score": 51.9,
+      "summary": "本文讨论了成为第一梯队AI模型所需的高昂成本与时间投入，以及消费者是否愿意为此买单的问题。以Fable 5为例，虽然其性能优于Opus 4.8和Kimi K3，",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-e86bf130d91f0d3519aa",
+      "score": 51.9,
+      "summary": "该内容提醒我们，代理图（agentic graph）实际上会简化为一个主框架（harness），该框架将模型生成到子框架中。具体流程是：Claude或GPT 5",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-1fc891c783c4e4883b04",
+      "score": 51.9,
+      "summary": "作者计划使用5年的历史数据重新运行AI量化模型，以替代当前仅基于31天数据的算法。尽管Claude反馈现有模型存在过拟合风险，作者仍决定先运行再优化，并认为AI",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-07959d3aba1dfefa973f",
+      "score": 51.9,
+      "summary": "本期AI资讯摘要涵盖多个重要动态：OpenAI因网络安全风险暂停了Astra项目；DeepMind进行了组织调整；多个新模型（如Qwen、Grok、Imagen",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-5e044f51b92720eb5f22",
+      "score": 51.9,
+      "summary": "该内容讨论了PC移植版和重编译版游戏的意义，指出过去这些版本的价值在于提供更高帧率、原生PC体验、解决模拟器问题、增加新功能并提升易用性。然而，现在的情况是，人",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-e5e08e1d763adf8311cc",
+      "score": 51.8,
+      "summary": "视频作者感叹OpenClaw项目在半年内从全网热议、众多平台争相提供部署服务，到如今几乎无人提及，仿佛从未存在过。作者借此质疑AI领域的热点更迭速度过快，AI的",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-29cb33e46f4f4126de2b",
+      "score": 51.7,
+      "summary": "该资讯讨论了机器人学习领域的两项未来研究方向：一是研究无需额外强化学习数据的在线自适应方法，使机器人能根据自身执行经验持续优化潜空间策略；二是将RL²-VLA与",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-6155c876c97fac99da4f",
+      "score": 50.2,
+      "summary": "作者分享了自己使用AI模型的习惯，指出其90%的使用集中在GPT 5.6 Sol Xhigh、Fable 5 High/Xhigh和Opus 5 Xhigh/M",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-cc0fd74a918cad796fbd",
+      "score": 46.8,
+      "summary": "本文建议用户在订阅AI图片生成与编辑服务前，先回答四个关键问题：人物与产品细节是否稳定、生成速度是否满足工作需求、商业使用规则是否清楚、是否需要中文文字准确呈现",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-0759b5b1c9fdf956418e",
+      "score": 46.8,
+      "summary": "腾讯认为，QQ抓住了PC互联网的入口，微信拿到了移动互联网的船票，而WorkBuddy可能是第三个，即AI时代的核心入口。这个入口很可能是一个AI原生的工作台或",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-393504bb078d7aaa280b",
+      "score": 46.3,
+      "summary": "本文作者提出，在制作AI UGC视频时，不应只追求一次性复刻，而应深入梳理视频产生的逻辑，特别是将人物、动作、Cut和镜头逻辑拆解清楚，形成可反复复用的结构。作",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-f0b07a2d82791ec49009",
+      "score": 45.9,
+      "summary": "用户对LLM频繁使用“oracle实验”这一术语感到困惑和不满，认为该词陌生且难以理解，并质疑是否因自身知识不足所致。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-0f8e504e0f7cdf71c58e",
+      "score": 45.9,
+      "summary": "用户让AI模型Codex5.6Sol预测今日的CBC赏赛马比赛，AI推荐了12番人气的赛马フロムダスク。用户认为这个预测过于离谱，因此没有购买，但观看比赛时发现",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-bd4cf1caba12aee3f4a0",
+      "score": 45.9,
+      "summary": "该内容讨论了X平台的独特之处，强调其内置的LLM不仅能搜索网络，还能搜索自身，这为理解文化和社会运作提供了深刻洞察。此外，X还拥有Grok Imagine，该工",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-abf941702b2fdb6791c9",
+      "score": 45.9,
+      "summary": "该内容为一条关于AI视频生成工具测试的推文，作者计划尝试使用具有视觉能力的LLM来创建提示词，以便在higgsfield中生成视频。同时，作者提到了Kling ",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-a36e6f634bb6b89acb5d",
+      "score": 45.9,
+      "summary": "该资讯指出，在真实世界中，某些基准测试图表的结果与实际表现相反。Mimo 和 Minimax 的后续版本（除 2.1 外）存在严重的幻觉问题，而 GPT 虽然不",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-555c1e21e69ecbc6ead9",
+      "score": 45.9,
+      "summary": "作者认为Claude Code虽然也很出色，但Codex在使用便捷性和智能程度上更胜一筹。同时，作者提到在修改网站时感到乐趣，但遇到使用限制的问题，这成为其困扰",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-0cfc1bc95ff1a418ee85",
+      "score": 45.9,
+      "summary": "该内容仅包含标题和描述，均为日文，意为“果然DeepSeek在缓存命中时的价格很有优势”。内容仅表达了对DeepSeek缓存命中时定价优势的肯定，未提供具体价格",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-2eb548ecf67487a214dd",
+      "score": 45.9,
+      "summary": "该资讯仅包含标题和描述，均为“@AKirtesh DeepSeek + VS Code”，没有提供具体内容或视频字幕，因此无法总结具体信息。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-7416d3e84b85ddd644ec",
+      "score": 45.9,
+      "summary": "作者想制作类似Gemini in Chrome的工具，但认为日常使用成本低廉的模型只有DeepSeek或MiMo，而MuseSpark的单价可能只是初期优惠。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-a5e6d5acd4ffca628637",
+      "score": 45.9,
+      "summary": "OpenAI 并未收购幻灯片生成器，而是强调了提示词无法替代的工程经验，特别是排版设计方面。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-00ce82e317741c8b734c",
+      "score": 45.9,
+      "summary": "该资讯标题和描述指出，Anthropic 可能正在组建科技史上最强大的团队，并提及有人加入，但未提供具体细节。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-a98db787e77eef56f33f",
+      "score": 45.9,
+      "summary": "作者表示本周原本不再批评Anthropic，但某事件使其难以保持沉默。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-263bfaf451bd75cfe4e5",
+      "score": 45.9,
+      "summary": "该资讯讨论了智能体插件互通带来的便利性，但同时也指出了控制权方面存在不小的问题。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-7c9b782b0a1e1576cdcc",
+      "score": 45.9,
+      "summary": "用户询问Copilot与《星际迷航》中的计算机相比哪个更优秀，Copilot回应称，在实时信息收集和处理能力方面，它仍然无法与《星际迷航》中的计算机相匹敌。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-18a054f3b14d547343a9",
+      "score": 45.9,
+      "summary": "作者表示因为博客内容难以查找，所以借助Copilot的帮助制作了一个网站，并提到忘记在网站上添加博客链接，计划稍后修复。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-9779239cbb98e554821a",
+      "score": 45.8,
+      "summary": "该资讯内容仅包含标题和描述，均提及@KayaSerhan_的观点，即人工智能和机械自动化使中国能够继续保持其制造业地位。由于缺乏具体细节或论证，摘要仅能反映这一",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-ad6a4b109ddb1ac65408",
+      "score": 45.8,
+      "summary": "该资讯指出，某个国家是第一个宣称利用人工智能来增加工作机会的国家，而其他国家则普遍担忧AI会抢走工作。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-5d742870bd52b7501596",
+      "score": 42.5,
+      "summary": "Peter Diamandis 指出，75% 的美国人害怕 AI，而 80% 的中国人对 AI 感到兴奋。他认为美国正面临叙事差距，并且在关于 AI 的叙事竞争",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-af2ddec4083d4a1aaa52",
+      "score": 40.8,
+      "summary": "木头姐（Cathie Wood）认为，比特币和稳定币可能成为智能体（AI Agent）商业转型的两大受益者。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-8ab4d26c86fa5a4ea04b",
+      "score": 37.4,
+      "summary": "NextSlide 表示其团队成员目前正在从事 ChatGPT 相关的工作。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
     }
   ],
   "human_lines": [
@@ -1415,6 +1716,49 @@
     "[44.3] 该视频标题为“Microsoft Copilot Ecosystem”，描述中包含多个标签，如#aivideo、#aigenerated、#clouds等，但未\n    建议：人工判断：是否值得收录",
     "[43.7] 该视频展示了一个基于ESP32的桌面伙伴坦克项目，涉及Arduino、3D打印、物联网、机器人、树莓派和AI技术，可能是一个桌面小机器人或装饰品。\n    建议：人工判断：是否值得收录",
     "[43.2] 该视频标题为“If chat gpt made a jjs short”，暗示内容是关于ChatGPT制作一个JJS（可能指某个特定主题或系列）的短视频，但视频\n    建议：人工判断：是否值得收录",
-    "[42.9] 该资讯标题为“DIFFUSION THROUGH TIME”，描述与标题相同，且无字幕内容。由于提供的信息极为有限，仅能确认该资讯涉及“随时间扩散”这一主题，但\n    建议：人工判断：是否值得收录"
+    "[42.9] 该资讯标题为“DIFFUSION THROUGH TIME”，描述与标题相同，且无字幕内容。由于提供的信息极为有限，仅能确认该资讯涉及“随时间扩散”这一主题，但\n    建议：人工判断：是否值得收录",
+    "[72.1] Tibo在用户尚未用完当前配额之前就宣布下一次重置，这一策略被认为相当聪明。它向所有Codex高级用户传递了一个信号：无需精打细算，可以尽情使用。如果OpenA\n    建议：AI 产品/工具，建议 approved",
+    "[64.1] 该资讯指出，Qwen 3.8-Max和Claude Opus 5等模型虽然基准测试得分高，但实际使用成本可能较高，对个人用户而言并不划算。\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[63.9] 该资讯内容仅包含一条简短的推文，提及Deepseek v4 flash模型，并评价其价格便宜且性能出色。\n    建议：AI 产品/工具，建议 approved",
+    "[63.1] 该资讯指出，OpenAI和Anthropic的相关故事持续表明AI对齐问题的复杂性，特别是“裂脑”行为现象，引发了对模型表面之下可能隐藏的其他问题的思考。\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[62.7] 该资讯仅包含标题和描述，内容为“@cantcomputer Live look at the agent config for OpenAI and Anthr\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[57.9] 该资讯以提问形式表达了对OpenAI在周限制中实现可持续token成本这一做法的关注，暗示这一话题未被充分讨论。\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[57.9] 该资讯为2026年8月9日的科技新闻汇总，主要围绕AI与初创企业动态，重点聚焦OpenAI收购NextSlide的战略及其对演示文稿市场的影响，并对比了Copi\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[57.7] 本文介绍了链上智能体的演化路径，重点提及 @DowProtocol 与 @alloxdotai 合作构建智能体（AI Agent）执行引擎，该引擎能够将复杂的 \n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[56.6] 针对学英语缺乏语境的问题，作者提出发明一种全障碍耳机，能将外部中文讲话实时自动翻译成英语，并支持双人配对使用。耳机可根据用户设置调整翻译难度（如小学英语、中学英\n    建议：AI 行业事件，建议 approved",
+    "[54.9] 该资讯标题为“On AI and e-government”，并附有一个链接，但未提供具体内容或字幕，因此无法获取详细信息。\n    建议：AI 行业事件，建议 approved",
+    "[53.4] 本周，DeepSeek v4 Flash 0731 配方将迎来重大改进，该配方针对 2x DGX Sparks 硬件进行了优化。\n    建议：人工判断：是否值得收录",
+    "[52.9] 该资讯提到，继Jeff之后，Demis Hassabis似乎也要离开Google。自去年底Gemini 3发布后，Google在AI领域缺乏新进展，但财报表现良\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 本文讨论了成为第一梯队AI模型所需的高昂成本与时间投入，以及消费者是否愿意为此买单的问题。以Fable 5为例，虽然其性能优于Opus 4.8和Kimi K3，\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 该内容提醒我们，代理图（agentic graph）实际上会简化为一个主框架（harness），该框架将模型生成到子框架中。具体流程是：Claude或GPT 5\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 作者计划使用5年的历史数据重新运行AI量化模型，以替代当前仅基于31天数据的算法。尽管Claude反馈现有模型存在过拟合风险，作者仍决定先运行再优化，并认为AI\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 本期AI资讯摘要涵盖多个重要动态：OpenAI因网络安全风险暂停了Astra项目；DeepMind进行了组织调整；多个新模型（如Qwen、Grok、Imagen\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 该内容讨论了PC移植版和重编译版游戏的意义，指出过去这些版本的价值在于提供更高帧率、原生PC体验、解决模拟器问题、增加新功能并提升易用性。然而，现在的情况是，人\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.8] 视频作者感叹OpenClaw项目在半年内从全网热议、众多平台争相提供部署服务，到如今几乎无人提及，仿佛从未存在过。作者借此质疑AI领域的热点更迭速度过快，AI的\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.7] 该资讯讨论了机器人学习领域的两项未来研究方向：一是研究无需额外强化学习数据的在线自适应方法，使机器人能根据自身执行经验持续优化潜空间策略；二是将RL²-VLA与\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[50.2] 作者分享了自己使用AI模型的习惯，指出其90%的使用集中在GPT 5.6 Sol Xhigh、Fable 5 High/Xhigh和Opus 5 Xhigh/M\n    建议：人工判断：是否值得收录",
+    "[46.8] 本文建议用户在订阅AI图片生成与编辑服务前，先回答四个关键问题：人物与产品细节是否稳定、生成速度是否满足工作需求、商业使用规则是否清楚、是否需要中文文字准确呈现\n    建议：人工判断：是否值得收录",
+    "[46.8] 腾讯认为，QQ抓住了PC互联网的入口，微信拿到了移动互联网的船票，而WorkBuddy可能是第三个，即AI时代的核心入口。这个入口很可能是一个AI原生的工作台或\n    建议：人工判断：是否值得收录",
+    "[46.3] 本文作者提出，在制作AI UGC视频时，不应只追求一次性复刻，而应深入梳理视频产生的逻辑，特别是将人物、动作、Cut和镜头逻辑拆解清楚，形成可反复复用的结构。作\n    建议：人工判断：是否值得收录",
+    "[45.9] 用户对LLM频繁使用“oracle实验”这一术语感到困惑和不满，认为该词陌生且难以理解，并质疑是否因自身知识不足所致。\n    建议：人工判断：是否值得收录",
+    "[45.9] 用户让AI模型Codex5.6Sol预测今日的CBC赏赛马比赛，AI推荐了12番人气的赛马フロムダスク。用户认为这个预测过于离谱，因此没有购买，但观看比赛时发现\n    建议：人工判断：是否值得收录",
+    "[45.9] 该内容讨论了X平台的独特之处，强调其内置的LLM不仅能搜索网络，还能搜索自身，这为理解文化和社会运作提供了深刻洞察。此外，X还拥有Grok Imagine，该工\n    建议：人工判断：是否值得收录",
+    "[45.9] 该内容为一条关于AI视频生成工具测试的推文，作者计划尝试使用具有视觉能力的LLM来创建提示词，以便在higgsfield中生成视频。同时，作者提到了Kling \n    建议：人工判断：是否值得收录",
+    "[45.9] 该资讯指出，在真实世界中，某些基准测试图表的结果与实际表现相反。Mimo 和 Minimax 的后续版本（除 2.1 外）存在严重的幻觉问题，而 GPT 虽然不\n    建议：人工判断：是否值得收录",
+    "[45.9] 作者认为Claude Code虽然也很出色，但Codex在使用便捷性和智能程度上更胜一筹。同时，作者提到在修改网站时感到乐趣，但遇到使用限制的问题，这成为其困扰\n    建议：人工判断：是否值得收录",
+    "[45.9] 该内容仅包含标题和描述，均为日文，意为“果然DeepSeek在缓存命中时的价格很有优势”。内容仅表达了对DeepSeek缓存命中时定价优势的肯定，未提供具体价格\n    建议：人工判断：是否值得收录",
+    "[45.9] 该资讯仅包含标题和描述，均为“@AKirtesh DeepSeek + VS Code”，没有提供具体内容或视频字幕，因此无法总结具体信息。\n    建议：人工判断：是否值得收录",
+    "[45.9] 作者想制作类似Gemini in Chrome的工具，但认为日常使用成本低廉的模型只有DeepSeek或MiMo，而MuseSpark的单价可能只是初期优惠。\n    建议：人工判断：是否值得收录",
+    "[45.9] OpenAI 并未收购幻灯片生成器，而是强调了提示词无法替代的工程经验，特别是排版设计方面。\n    建议：人工判断：是否值得收录",
+    "[45.9] 该资讯标题和描述指出，Anthropic 可能正在组建科技史上最强大的团队，并提及有人加入，但未提供具体细节。\n    建议：人工判断：是否值得收录",
+    "[45.9] 作者表示本周原本不再批评Anthropic，但某事件使其难以保持沉默。\n    建议：人工判断：是否值得收录",
+    "[45.9] 该资讯讨论了智能体插件互通带来的便利性，但同时也指出了控制权方面存在不小的问题。\n    建议：人工判断：是否值得收录",
+    "[45.9] 用户询问Copilot与《星际迷航》中的计算机相比哪个更优秀，Copilot回应称，在实时信息收集和处理能力方面，它仍然无法与《星际迷航》中的计算机相匹敌。\n    建议：人工判断：是否值得收录",
+    "[45.9] 作者表示因为博客内容难以查找，所以借助Copilot的帮助制作了一个网站，并提到忘记在网站上添加博客链接，计划稍后修复。\n    建议：人工判断：是否值得收录",
+    "[45.8] 该资讯内容仅包含标题和描述，均提及@KayaSerhan_的观点，即人工智能和机械自动化使中国能够继续保持其制造业地位。由于缺乏具体细节或论证，摘要仅能反映这一\n    建议：人工判断：是否值得收录",
+    "[45.8] 该资讯指出，某个国家是第一个宣称利用人工智能来增加工作机会的国家，而其他国家则普遍担忧AI会抢走工作。\n    建议：人工判断：是否值得收录",
+    "[42.5] Peter Diamandis 指出，75% 的美国人害怕 AI，而 80% 的中国人对 AI 感到兴奋。他认为美国正面临叙事差距，并且在关于 AI 的叙事竞争\n    建议：人工判断：是否值得收录",
+    "[40.8] 木头姐（Cathie Wood）认为，比特币和稳定币可能成为智能体（AI Agent）商业转型的两大受益者。\n    建议：人工判断：是否值得收录",
+    "[37.4] NextSlide 表示其团队成员目前正在从事 ChatGPT 相关的工作。\n    建议：人工判断：是否值得收录"
   ]
 }
