@@ -43,6 +43,34 @@ function setModalScrollPosition(value) { modalScrollPosition = value; }
 // 工具库 —— 筛选、卡片渲染
 // ═══════════════════════════════════════════════════════════════
 
+let toolsViewMode = 'vendor';
+
+function getToolsViewMode() {
+  return toolsViewMode;
+}
+
+function syncToolsViewControls() {
+  const toggle = document.getElementById('toolsViewToggle');
+  if (!toggle) return;
+  const isToolView = toolsViewMode === 'tool';
+  toggle.setAttribute('aria-checked', String(isToolView));
+  toggle.dataset.mode = toolsViewMode;
+  const status = document.getElementById('toolsViewToggleStatus');
+  if (status) status.textContent = '当前为' + (isToolView ? '工具' : '厂商') + '视图';
+  const directoryLead = document.getElementById('toolsDirectoryLead');
+  if (directoryLead) directoryLead.textContent = isToolView
+    ? '点击工具条目查看详情；具体工具、模型或套餐可加入对比。'
+    : '点击厂商卡片查看旗下模型与工具详情。';
+  const countLabel = document.getElementById('toolCountLabel');
+  if (countLabel) countLabel.textContent = isToolView ? '个工具' : '个厂商';
+}
+
+function toggleToolsViewMode() {
+  toolsViewMode = toolsViewMode === 'vendor' ? 'tool' : 'vendor';
+  renderTools();
+  return toolsViewMode;
+}
+
 // 决策 94：工具库已选筛选条件的低权重标签与一键清除
 function renderSelectedFilters() {
   const section = document.getElementById('toolsSelected');
@@ -83,10 +111,14 @@ function clearToolFilters() {
  */
 function renderTools() {
   const filtered = getFilteredTools();
+  const visibleTools = filtered.filter(tool => toolsViewMode === 'vendor'
+    ? tool.card_kind === 'collection'
+    : tool.card_kind !== 'collection');
   const grid = document.getElementById('toolGrid');
   setRegionBusy(grid, false);
   renderSelectedFilters();
-  document.getElementById('toolCount').textContent = filtered.length;
+  syncToolsViewControls();
+  document.getElementById('toolCount').textContent = visibleTools.length;
   document.getElementById('filteredInfo').style.display =
     (activeFilters.category !== 'all' || activeFilters.access !== 'all' || activeFilters.price !== 'all' || document.getElementById('searchInput').value)
     ? 'inline' : 'none';
@@ -96,12 +128,12 @@ function renderTools() {
     return;
   }
 
-  if (filtered.length === 0) {
-    grid.innerHTML = renderState({ icon: '⌕', title: '没有匹配的工具', message: '请调整筛选条件或更换搜索关键词。', type: 'no-match' });
+  if (visibleTools.length === 0) {
+    grid.innerHTML = renderState({ icon: '⌕', title: toolsViewMode === 'vendor' ? '没有匹配的厂商' : '没有匹配的工具', message: '请调整筛选条件或更换搜索关键词。', type: 'no-match' });
     return;
   }
 
-  grid.innerHTML = filtered.map(t => {
+  grid.innerHTML = visibleTools.map(t => {
     const intelligence = getToolIntelligence(t.id);
     const collectionItems = (intelligence?.items || []).filter(item => item.node_type !== 'group' && item.display_in_tree !== false);
     const isCollection = t.card_kind === 'collection';
@@ -509,5 +541,7 @@ export {
   closeModal,
   renderSelectedFilters,
   clearToolFilters,
+  getToolsViewMode,
+  toggleToolsViewMode,
   renderTools,
 };

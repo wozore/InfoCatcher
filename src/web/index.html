@@ -298,9 +298,19 @@
   <!-- 工具库视图 -->
   <section id="view-tools" class="view tools-view" aria-labelledby="toolsViewTitle">
     <header class="page-header tools-header">
-      <span class="eyebrow">发现工具</span>
-      <h1 class="page-title" id="toolsViewTitle">按任务与条件筛选 AI 工具</h1>
-      <p class="page-lead">从真实使用场景出发，结合访问方式、价格和具体产品层级缩小范围；每项资料保留更新时间和来源入口。</p>
+      <div class="tools-header-row">
+        <div class="tools-header-copy">
+          <span class="eyebrow">发现工具</span>
+          <h1 class="page-title" id="toolsViewTitle">按任务与条件筛选 AI 工具</h1>
+          <p class="page-lead">从真实使用场景出发，结合访问方式、价格和具体产品层级缩小范围；每项资料保留更新时间和来源入口。</p>
+        </div>
+        <button class="tools-view-toggle" id="toolsViewToggle" type="button" role="switch" aria-checked="false" aria-label="切换工具库视图" aria-describedby="toolsViewToggleStatus" aria-controls="toolGrid">
+          <span class="tools-view-toggle-label">厂商</span>
+          <span class="tools-view-toggle-track" aria-hidden="true"><span class="tools-view-toggle-thumb"></span></span>
+          <span class="tools-view-toggle-label">工具</span>
+          <span class="sr-only" id="toolsViewToggleStatus">当前为厂商视图</span>
+        </button>
+      </div>
     </header>
 
     <section class="tools-controls panel" aria-labelledby="toolsSearchTitle">
@@ -310,7 +320,7 @@
           <p class="muted">输入工具名、任务或功能，再按条件继续筛选。</p>
         </div>
         <div class="stats-bar" aria-live="polite">
-          <span id="toolCount">45</span> 个工具
+          <span id="toolCount">45</span> <span id="toolCountLabel">个工具</span>
           <span id="filteredInfo" style="display:none">（已筛选）</span>
         </div>
       </div>
@@ -370,7 +380,7 @@
           <span class="eyebrow">工具目录</span>
           <h2 class="section-title" id="toolsDirectoryTitle">当前匹配</h2>
         </div>
-        <p class="faint">点击条目查看详情；具体工具、模型或套餐可加入对比。</p>
+        <p class="faint" id="toolsDirectoryLead">点击厂商卡片查看旗下模型与工具详情。</p>
       </div>
       <div class="tool-grid" id="toolGrid"></div>
     </section>

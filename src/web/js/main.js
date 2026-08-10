@@ -86,6 +86,7 @@ import {
   openDetail,
   closeModal,
   clearToolFilters,
+  toggleToolsViewMode,
   getModalFocusableElements,
   navigateModelToolPanel,
   goBackModelToolPanel,
@@ -440,6 +441,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       submitSearchHome(example.dataset.searchExample);
     });
   }
+
+  // 工具库视图切换
+  document.getElementById('toolsViewToggle')?.addEventListener('click', function() {
+    const mode = toggleToolsViewMode();
+    announceStatus('已切换到' + (mode === 'tool' ? '工具' : '厂商') + '视图');
+  });
 
   // 搜索
   const searchInput = document.getElementById('searchInput');

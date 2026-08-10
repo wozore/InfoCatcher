@@ -612,7 +612,52 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 /* ═══ Tool Directory ═════════════════════════════════════════════
    P0.4-A：任务导语 + 筛选面板 + 低装饰双列目录。 */
 .tools-view { padding-top: 28px; }
-.tools-header { margin-bottom: 26px; }
+.tools-header { max-width: none; margin-bottom: 26px; }
+.tools-header-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 28px; }
+.tools-header-copy { max-width: 710px; min-width: 0; }
+.tools-view-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  min-height: 44px;
+  margin-top: 2px;
+  padding: 6px 10px;
+  border: 1px solid var(--primary);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 650;
+  transition: background var(--transition), color var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+.tools-view-toggle:hover { border-color: var(--primary); background: var(--primary-light); color: var(--text); }
+.tools-view-toggle[data-mode="tool"] { background: var(--primary); color: var(--on-solid); }
+.tools-view-toggle:focus-visible { outline-offset: 4px; }
+.tools-view-toggle-track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 38px;
+  height: 22px;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--line);
+  transition: background var(--transition);
+}
+.tools-view-toggle[data-mode="tool"] .tools-view-toggle-track { background: color-mix(in srgb, var(--on-solid) 42%, transparent); }
+.tools-view-toggle-thumb {
+  display: block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--on-solid);
+  box-shadow: 0 1px 3px rgba(41, 38, 33, .24);
+  transform: translateX(0);
+  transition: transform var(--transition);
+}
+.tools-view-toggle[data-mode="tool"] .tools-view-toggle-thumb { transform: translateX(16px); }
 .tools-controls {
   padding: 22px;
   border-radius: var(--radius);
@@ -1448,6 +1493,8 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
   .list-item { gap: 12px; }
   .tools-search-heading,
   .directory-heading { align-items: flex-start; flex-direction: column; gap: 8px; }
+  .tools-header-row { flex-direction: column; gap: 16px; }
+  .tools-view-toggle { align-self: flex-end; margin-top: 0; }
   .directory-heading .faint { max-width: none; text-align: left; }
   .compare-workspace-heading,
   .featured-section-heading,
@@ -1517,6 +1564,8 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
   .compare-bar-row { grid-template-columns: 1fr; gap: 8px; }
   .compare-bar-item { grid-template-columns: 84px minmax(0, 1fr) 76px; }
   .tools-controls { padding: 16px; }
+  .tools-header-row { gap: 14px; }
+  .tools-view-toggle { align-self: stretch; justify-content: center; width: 100%; }
   .tools-filters .filter-group { align-items: flex-start; padding: 10px; }
   .tools-filters .filter-label { width: 100%; flex-basis: 100%; margin-bottom: 3px; }
   .page-title { font-size: 34px; }

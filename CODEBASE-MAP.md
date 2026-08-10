@@ -15,7 +15,7 @@
 - [js/main.js](src/web/js/main.js) — 入口：共享状态、导航 switchView、全部事件绑定（DOMContentLoaded 先 applyStaticTranslations）。导出: `currentView, switchView`
 - [js/data.js](src/web/js/data.js) — 数据加载(fetch JSON) + 过滤 + 平台元数据 + 通用工具（timeAgo/formatMetric/标签已接入 i18n 字典）。导出: 各数据状态与 setter、escapeHtml/timeAgo/formatPrice 等
 - [js/search.js](src/web/js/search.js) — AI 搜索全链路（首页/结果/处理/概念标记）。导出: `searchState, submitSearchHome, renderSearchResults...`
-- [js/tools.js](src/web/js/tools.js) — 工具库视图 + 筛选 + 详情弹窗。导出: `openDetail, closeModal, showModal, renderTools...`
+- [js/tools.js](src/web/js/tools.js) — 工具库视图（厂商/工具 Toggle）+ 筛选 + 详情弹窗。导出: `openDetail, closeModal, showModal, getToolsViewMode, toggleToolsViewMode, renderTools...`
 - [js/compare.js](src/web/js/compare.js) — 对比模式。导出: `compareList, toggleCompareRef, quickCompare, renderCompare...`
 - [js/featured.js](src/web/js/featured.js) — 推荐视图（精选/编辑推荐/热榜）。导出: `renderFeatured, renderFeaturedTabs...`
 - [js/glossary.js](src/web/js/glossary.js) — AI 概念视图。导出: `activeGlossaryId, openGlossaryConcept, renderGlossary...`
