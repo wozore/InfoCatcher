@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "kind": "review_candidates",
-  "generated_at": "2026-08-09T08:26:05.987Z",
-  "date": "20260809",
-  "total_pending": 176,
+  "generated_at": "2026-08-10T14:51:38.611Z",
+  "date": "20260810",
+  "total_pending": 209,
   "note": "待人工审核清单：请逐条设置 review_status（pending/approved/discarded）。应用结论：双击 bat/apply-review.bat（或 node scripts/news-cli.js min-review apply --file 本文件），应用后自动生成 top 名单（ai-top）供二次审核；approved 才进后续 top-selected/publish。",
   "candidates": [
     {
@@ -1237,6 +1237,237 @@
       "summary": "该资讯标题为“DIFFUSION THROUGH TIME”，描述与标题相同，且无字幕内容。由于提供的信息极为有限，仅能确认该资讯涉及“随时间扩散”这一主题，但",
       "suggestion": "人工判断：是否值得收录",
       "review_status": "pending"
+    },
+    {
+      "id": "x-745307ca40cf8cb398f7",
+      "score": 66.1,
+      "summary": "大疆在2019年退出了对人形机器人公司宇树的投资，当时大疆是宇树最大的外部股东。到2026年回看，这笔投资可能价值数十亿。这一事件对普通人的启发是，人形机器人（",
+      "suggestion": "AI 行业事件，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-30a8bc4fb36422699a75",
+      "score": 63.9,
+      "summary": "该资讯将DeepSeek类比为AI行业的瑞幸咖啡，指出两者都引领了新的价格共识。",
+      "suggestion": "偏离 AI 核心（金融/NFT），建议 discarded",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-fe3d3f47167be5e3acae",
+      "score": 63.9,
+      "summary": "GitHub 的 Copilot 请求页面是针对旧版计划的，并非通用的定价指南。",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-41aadb28ae9ef7421ec5",
+      "score": 63.1,
+      "summary": "该内容为一条关于DeepSeek V4 Pro正式版上线的预告性资讯，同时提及梁文峰的蜕变之路。内容指出DeepSeek V4 Pro正式版的上线将是又一个历史",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-c2d4a57b302202b0182f",
+      "score": 58.8,
+      "summary": "OLAXBT 在 Injective Nova 计划中荣获第三名。该项目正将其多智能体交易操作系统扩展至 Injective 生态系统，并推进物理工作空间层的建",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-e04731be70b6b9e1eef5",
+      "score": 57.9,
+      "summary": "该资讯指出，智能体的定义、工具和防护栏只是构建模块，并不能证明其部署后的可靠性。",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-1f3a1cc421704f4d80f9",
+      "score": 57.9,
+      "summary": "该资讯指出，Copilot 的许可模式正从固定费用转向按使用量付费，这与市场上其他 AI 代理的趋势一致。这种转变是由用户的消费习惯所推动的。",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-98b31b22c79011c02e66",
+      "score": 52.8,
+      "summary": "该内容介绍了一位创业者筛选初创项目的标准：一是选择十年内不会被人工智能颠覆的项目，例如其初创交易平台TrustMRR，虽然技术可被提示词复刻，但两万名买家的关系",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-10d47372e09c325a619b",
+      "score": 52.8,
+      "summary": "作者认为每天消耗的 token 数量是一个不错的量化指标，因为 token 代表使用轨迹，可以用来优化 Harness。同时，人和模型的协作可以被视为一个更大的",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-17284ce1f8d3fadf0267",
+      "score": 51.9,
+      "summary": "该内容指出电影制作术语已深度嵌入大语言模型（LLM）的提示结构中，如镜头、灯光设置等。作者建议人们学习电影制作知识，并认为如果具备现场制作训练，就已经掌握了LL",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-88357c5bee35fa759697",
+      "score": 51.9,
+      "summary": "该资讯宣布 meta-models/Muse-Glimmer-30B 模型在 Arc Pro B70 上获得 Day0 支持，并配合 llm-scaler-vl",
+      "suggestion": "学习打卡/个人日志，建议 discarded",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-34587a5035fb8b8dd1f1",
+      "score": 51.9,
+      "summary": "帖子讲述了一个人从阿里离职后于2021年加入英伟达，并在GPT出现前就参与大模型推理工作。发帖者感叹，当年毕业时大多数人看不上英伟达，都涌向互联网公司，如今AI",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-d9381e24dc7dc20ccca7",
+      "score": 51.9,
+      "summary": "有传言称，原定于近日发布的Gemini 3.5 Pro因性能仅达到Claude Opus 4.5水平而被Google悄然取消。作者对此表示怀疑，并认为Gemin",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-d8d5692d2cac63ec283f",
+      "score": 51.9,
+      "summary": "DeepSeek V4 Flash 被描述为一项奇迹般的 AI 工程成果，其性能得益于后训练阶段的‘暗黑魔法’（即高度优化的后训练技术）。",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-add296c57fdacc57cec0",
+      "score": 51.9,
+      "summary": "作者在将deepseek-v4-flash-0731模型部署到多个场景后，对其表现感到震惊。该模型拥有284B参数，在缺乏世界知识的情况下，针对断网、小众、离线",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-7b800f11d6506e8e4173",
+      "score": 51.9,
+      "summary": "该资讯指出，尽管GLM-5.2和DeepSeek Flash等开放模型大幅降价（分别降低95%和90%），但Bindu Reddy指出，开放模型在生产环境中仍存",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-3c6fe522f8a7534f058c",
+      "score": 51.9,
+      "summary": "针对@jun_song的评论，作者认为RAM短缺问题短期内不会消失。他们观察到，当LLM（如新的DeepSeek V4 flash）定价低廉时，使用量会激增，因",
+      "suggestion": "偏离 AI 核心（金融/NFT），建议 discarded",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-82d74fa5e80eac8445b4",
+      "score": 51.9,
+      "summary": "作者推测Anthropic可能将模型命名层级上调了一档：Haiku变成了Sonnet，Sonnet变成了Opus，而Opus则变成了Fable。作者认为，当名称",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-9c411bbdeb0efcad2cff",
+      "score": 51.9,
+      "summary": "作者对Anthropic新发布的Claude模型（主要是Sonnet 5和Opus 5）表达了强烈不满，认为它们表现糟糕。具体而言，Sonnet 5在编码辅助方",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-15821321c02b42071a3e",
+      "score": 51,
+      "summary": "人民日报发表评论文章，强调开放共赢是人工智能发展的必由之路。文章指出，人工智能作为全球性技术，其发展需要国际社会的共同参与和合作，封闭和垄断只会阻碍技术进步和全",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-9b0bd1a54e2ec61a86a6",
+      "score": 46.2,
+      "summary": "该资讯标题为“论Codex这类智能体的成瘾机制”，并附有心理学小知识的标签，但内容仅包含标题和描述，没有提供具体正文或字幕，因此无法获取关于成瘾机制的详细论述。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-95a9cf70ae34b8f61889",
+      "score": 45.9,
+      "summary": "一位用户将大型语言模型（LLM）系统分为两个独立的部分：一个用于处理有趣且复杂的任务，另一个用于处理枯燥乏味的工作。她这样做是为了避免让第一个LLM因处理无聊任",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-d913f24f948851d1ad11",
+      "score": 45.9,
+      "summary": "根据传闻，GLM 5.3 将实现巨大飞跃，这可能对 Fable 和 Sol 构成严重威胁，更不用说 DeepSeek 了。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-ffed1721e1e18ae4aaf7",
+      "score": 45.9,
+      "summary": "该内容仅包含标题和描述，均为“@Ndonnauc Use deepseek in codex”，表明用户提及在 Codex 中使用 DeepSeek，但未提供具",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-b959c1bf7855386b2b95",
+      "score": 45.9,
+      "summary": "该资讯标题和描述均为日文，内容为“在 OpenCode Go 中使用 DeepSeek V4 Flash 确实很好……”，表达了对在 OpenCode Go 中",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-d0a6d69fa542caa152bc",
+      "score": 45.9,
+      "summary": "该资讯标题和描述均指出，OpenAI 目前非常迫切地想要尽可能多地收集数据，且不惜一切代价。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-f7b6ab981e9f97f43828",
+      "score": 45.9,
+      "summary": "该资讯指出，在Anthropic和OpenAI受到质疑的同时，由Palantir和Nvidia支持的“主权AI”成为明显赢家。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-479f7dcd02b226f89aea",
+      "score": 45.9,
+      "summary": "Found another interesting dApp on the @solanamobile dApp Store Meet Ladykiller a",
+      "suggestion": "偏离 AI 核心（金融/NFT），建议 discarded",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-180333457c86487c9bcc",
+      "score": 45.9,
+      "summary": "该资讯是关于 Microsoft 365 Copilot 的域排除功能更新，标题和描述均指向同一链接，并带有相关话题标签。由于内容仅包含标题和描述，未提供具体细",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-2fab048def2a642a37c2",
+      "score": 41.1,
+      "summary": "vLLM 项目在准备 Qwen 3.8 发布的同时，NVIDIA AI 团队主导了针对 Qwen 3.5 的 vLLM 优化工作，为后续版本奠定了坚实基础。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-c811f9caf821bbe1b10a",
+      "score": 40,
+      "summary": "Meta AI 官方账号发布推文，宣布 Muse Glimmer 模型已在 Hugging Face 平台开放下载，并提供了技术博客链接以供进一步阅读。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-718e868880edcdbe7d4b",
+      "score": 37.5,
+      "summary": "该资讯标题和描述均提及一家专注于人工智能的对冲基金仍在进行一些重大押注，但未提供具体细节。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-990672ac3c95219cb6d7",
+      "score": 37.2,
+      "summary": "TechCrunch Mobility 是一个专注于未来交通的资讯平台，现在更加关注人工智能在交通领域中的作用。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
     }
   ],
   "human_lines": [
@@ -1415,6 +1646,39 @@
     "[44.3] 该视频标题为“Microsoft Copilot Ecosystem”，描述中包含多个标签，如#aivideo、#aigenerated、#clouds等，但未\n    建议：人工判断：是否值得收录",
     "[43.7] 该视频展示了一个基于ESP32的桌面伙伴坦克项目，涉及Arduino、3D打印、物联网、机器人、树莓派和AI技术，可能是一个桌面小机器人或装饰品。\n    建议：人工判断：是否值得收录",
     "[43.2] 该视频标题为“If chat gpt made a jjs short”，暗示内容是关于ChatGPT制作一个JJS（可能指某个特定主题或系列）的短视频，但视频\n    建议：人工判断：是否值得收录",
-    "[42.9] 该资讯标题为“DIFFUSION THROUGH TIME”，描述与标题相同，且无字幕内容。由于提供的信息极为有限，仅能确认该资讯涉及“随时间扩散”这一主题，但\n    建议：人工判断：是否值得收录"
+    "[42.9] 该资讯标题为“DIFFUSION THROUGH TIME”，描述与标题相同，且无字幕内容。由于提供的信息极为有限，仅能确认该资讯涉及“随时间扩散”这一主题，但\n    建议：人工判断：是否值得收录",
+    "[66.1] 大疆在2019年退出了对人形机器人公司宇树的投资，当时大疆是宇树最大的外部股东。到2026年回看，这笔投资可能价值数十亿。这一事件对普通人的启发是，人形机器人（\n    建议：AI 行业事件，建议 approved",
+    "[63.9] 该资讯将DeepSeek类比为AI行业的瑞幸咖啡，指出两者都引领了新的价格共识。\n    建议：偏离 AI 核心（金融/NFT），建议 discarded",
+    "[63.9] GitHub 的 Copilot 请求页面是针对旧版计划的，并非通用的定价指南。\n    建议：AI 产品/工具，建议 approved",
+    "[63.1] 该内容为一条关于DeepSeek V4 Pro正式版上线的预告性资讯，同时提及梁文峰的蜕变之路。内容指出DeepSeek V4 Pro正式版的上线将是又一个历史\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[58.8] OLAXBT 在 Injective Nova 计划中荣获第三名。该项目正将其多智能体交易操作系统扩展至 Injective 生态系统，并推进物理工作空间层的建\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[57.9] 该资讯指出，智能体的定义、工具和防护栏只是构建模块，并不能证明其部署后的可靠性。\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[57.9] 该资讯指出，Copilot 的许可模式正从固定费用转向按使用量付费，这与市场上其他 AI 代理的趋势一致。这种转变是由用户的消费习惯所推动的。\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[52.8] 该内容介绍了一位创业者筛选初创项目的标准：一是选择十年内不会被人工智能颠覆的项目，例如其初创交易平台TrustMRR，虽然技术可被提示词复刻，但两万名买家的关系\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[52.8] 作者认为每天消耗的 token 数量是一个不错的量化指标，因为 token 代表使用轨迹，可以用来优化 Harness。同时，人和模型的协作可以被视为一个更大的\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 该内容指出电影制作术语已深度嵌入大语言模型（LLM）的提示结构中，如镜头、灯光设置等。作者建议人们学习电影制作知识，并认为如果具备现场制作训练，就已经掌握了LL\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 该资讯宣布 meta-models/Muse-Glimmer-30B 模型在 Arc Pro B70 上获得 Day0 支持，并配合 llm-scaler-vl\n    建议：学习打卡/个人日志，建议 discarded",
+    "[51.9] 帖子讲述了一个人从阿里离职后于2021年加入英伟达，并在GPT出现前就参与大模型推理工作。发帖者感叹，当年毕业时大多数人看不上英伟达，都涌向互联网公司，如今AI\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 有传言称，原定于近日发布的Gemini 3.5 Pro因性能仅达到Claude Opus 4.5水平而被Google悄然取消。作者对此表示怀疑，并认为Gemin\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] DeepSeek V4 Flash 被描述为一项奇迹般的 AI 工程成果，其性能得益于后训练阶段的‘暗黑魔法’（即高度优化的后训练技术）。\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 作者在将deepseek-v4-flash-0731模型部署到多个场景后，对其表现感到震惊。该模型拥有284B参数，在缺乏世界知识的情况下，针对断网、小众、离线\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 该资讯指出，尽管GLM-5.2和DeepSeek Flash等开放模型大幅降价（分别降低95%和90%），但Bindu Reddy指出，开放模型在生产环境中仍存\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 针对@jun_song的评论，作者认为RAM短缺问题短期内不会消失。他们观察到，当LLM（如新的DeepSeek V4 flash）定价低廉时，使用量会激增，因\n    建议：偏离 AI 核心（金融/NFT），建议 discarded",
+    "[51.9] 作者推测Anthropic可能将模型命名层级上调了一档：Haiku变成了Sonnet，Sonnet变成了Opus，而Opus则变成了Fable。作者认为，当名称\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 作者对Anthropic新发布的Claude模型（主要是Sonnet 5和Opus 5）表达了强烈不满，认为它们表现糟糕。具体而言，Sonnet 5在编码辅助方\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51] 人民日报发表评论文章，强调开放共赢是人工智能发展的必由之路。文章指出，人工智能作为全球性技术，其发展需要国际社会的共同参与和合作，封闭和垄断只会阻碍技术进步和全\n    建议：人工判断：是否值得收录",
+    "[46.2] 该资讯标题为“论Codex这类智能体的成瘾机制”，并附有心理学小知识的标签，但内容仅包含标题和描述，没有提供具体正文或字幕，因此无法获取关于成瘾机制的详细论述。\n    建议：人工判断：是否值得收录",
+    "[45.9] 一位用户将大型语言模型（LLM）系统分为两个独立的部分：一个用于处理有趣且复杂的任务，另一个用于处理枯燥乏味的工作。她这样做是为了避免让第一个LLM因处理无聊任\n    建议：人工判断：是否值得收录",
+    "[45.9] 根据传闻，GLM 5.3 将实现巨大飞跃，这可能对 Fable 和 Sol 构成严重威胁，更不用说 DeepSeek 了。\n    建议：人工判断：是否值得收录",
+    "[45.9] 该内容仅包含标题和描述，均为“@Ndonnauc Use deepseek in codex”，表明用户提及在 Codex 中使用 DeepSeek，但未提供具\n    建议：人工判断：是否值得收录",
+    "[45.9] 该资讯标题和描述均为日文，内容为“在 OpenCode Go 中使用 DeepSeek V4 Flash 确实很好……”，表达了对在 OpenCode Go 中\n    建议：人工判断：是否值得收录",
+    "[45.9] 该资讯标题和描述均指出，OpenAI 目前非常迫切地想要尽可能多地收集数据，且不惜一切代价。\n    建议：人工判断：是否值得收录",
+    "[45.9] 该资讯指出，在Anthropic和OpenAI受到质疑的同时，由Palantir和Nvidia支持的“主权AI”成为明显赢家。\n    建议：人工判断：是否值得收录",
+    "[45.9] Found another interesting dApp on the @solanamobile dApp Store Meet Ladykiller a\n    建议：偏离 AI 核心（金融/NFT），建议 discarded",
+    "[45.9] 该资讯是关于 Microsoft 365 Copilot 的域排除功能更新，标题和描述均指向同一链接，并带有相关话题标签。由于内容仅包含标题和描述，未提供具体细\n    建议：人工判断：是否值得收录",
+    "[41.1] vLLM 项目在准备 Qwen 3.8 发布的同时，NVIDIA AI 团队主导了针对 Qwen 3.5 的 vLLM 优化工作，为后续版本奠定了坚实基础。\n    建议：人工判断：是否值得收录",
+    "[40] Meta AI 官方账号发布推文，宣布 Muse Glimmer 模型已在 Hugging Face 平台开放下载，并提供了技术博客链接以供进一步阅读。\n    建议：人工判断：是否值得收录",
+    "[37.5] 该资讯标题和描述均提及一家专注于人工智能的对冲基金仍在进行一些重大押注，但未提供具体细节。\n    建议：人工判断：是否值得收录",
+    "[37.2] TechCrunch Mobility 是一个专注于未来交通的资讯平台，现在更加关注人工智能在交通领域中的作用。\n    建议：人工判断：是否值得收录"
   ]
 }
