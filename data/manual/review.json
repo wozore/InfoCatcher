@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "kind": "review_candidates",
-  "generated_at": "2026-08-09T08:26:05.987Z",
-  "date": "20260809",
-  "total_pending": 176,
+  "generated_at": "2026-08-10T12:51:40.143Z",
+  "date": "20260810",
+  "total_pending": 284,
   "note": "待人工审核清单：请逐条设置 review_status（pending/approved/discarded）。应用结论：双击 bat/apply-review.bat（或 node scripts/news-cli.js min-review apply --file 本文件），应用后自动生成 top 名单（ai-top）供二次审核；approved 才进后续 top-selected/publish。",
   "candidates": [
     {
@@ -1237,6 +1237,762 @@
       "summary": "该资讯标题为“DIFFUSION THROUGH TIME”，描述与标题相同，且无字幕内容。由于提供的信息极为有限，仅能确认该资讯涉及“随时间扩散”这一主题，但",
       "suggestion": "人工判断：是否值得收录",
       "review_status": "pending"
+    },
+    {
+      "id": "youtube-f0f2acb8a83bcee2b430",
+      "score": 75.3,
+      "summary": "该视频由一位拥有超过1000小时AI开发与业务交付经验的创作者分享，他总结了12个AI商业落地的黄金法则，旨在帮助观众节省数年的摸索时间。核心观点包括：企业更看",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-e1f8f4f4f6df2b8879b6",
+      "score": 71.1,
+      "summary": "视频标题指出Claude（一个AI模型）拥有它不想要的情绪，并可能因此产生异常行为。描述部分介绍了Sean Webb作为人工智能情感智能领域的领先专家，并推广了",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-6b82123153c9babea332",
+      "score": 69.4,
+      "summary": "该视频由Yash Sir主讲，介绍了如何使用Google的Gemini NotebookLM（即NotebookLM）这一AI工具，特别面向银行考试备考者。视频",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-833d8364c475e345bbde",
+      "score": 68.9,
+      "summary": "该资讯宣布了一款名为“CAD智能体”的新产品上线，该产品支持人工对话与AI思考，能够从效果图一键生成CAD施工图，并覆盖建筑、室内、景观、规划等多个专业领域。",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-1c81204477b5164f0f3c",
+      "score": 67.8,
+      "summary": "DeepSeek 发布了更新版的 V4 Flash 模型，并已集成到 Janitor AI 这一 Character AI 替代品中。视频介绍了这一更新，并提供",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-0a738650e70cc0d69586",
+      "score": 67.7,
+      "summary": "该视频标题为“Probé la nueva VOZ de Claude vs ChatGPT… esto ya parece JARVIS”，内容涉及对Clau",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-611461ce7920e9657136",
+      "score": 66.2,
+      "summary": "该视频介绍了一门关于AI代理的课程，作者基于七年的教学方法，专门针对AI代理设计。课程内容完整且免费提供，链接位于视频描述和置顶评论中。",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-a290d18d70975977b6cc",
+      "score": 64.9,
+      "summary": "该视频标题为“Texas AI Power Audit”，由Brett Stelmaszek撰写，Catlin Stevenson编辑，音乐由@UFD-Musi",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-1207bccfed64f0a18280",
+      "score": 64.3,
+      "summary": "本期AI新闻汇总了本周可能被错过的AI相关资讯，并推广了Genspark的SecondBrain Note产品（限时首发，享10%折扣）。视频还介绍了Seeda",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-99c9adb3cbc39604e7e1",
+      "score": 63.8,
+      "summary": "该视频标题为“Meme Selling AI”，描述中提及了制作人员（Writer: Kyler Himes, Editor: Catlin Stevenson",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-608d934669ee9bcdf171",
+      "score": 63.8,
+      "summary": "该视频标题为“AI Employees”，由Kyler Himes撰写、Rikus Strauss编辑，配乐来自@UFD-Music。视频内容暗示当AI员工开始",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-03a512b7b23373db93ae",
+      "score": 63.6,
+      "summary": "这是一段来自“Pioneers of AI”播客的短视频，标题为“Anthropic employee: 'If I were in your shoes, I",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-3288d4e4a770046a7708",
+      "score": 62.2,
+      "summary": "该视频教程介绍了如何使用Google Gemini应用在手机上免费制作超过10秒的长AI视频，并保持角色一致性。视频指出Gemini应用通常只能生成10秒的视频",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-43c453f17461e939cde6",
+      "score": 61.4,
+      "summary": "该视频标题为“Sandboxing AI Agents”，内容涉及AI代理的沙箱化处理，可能讨论如何通过隔离环境来安全运行AI代理。由于视频没有字幕，且描述仅包",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-707b68adf45966437b8b",
+      "score": 61.3,
+      "summary": "该视频介绍了 Hermes AI Agent 的最新更新，使其功能更加强大。视频内容包括 Hermes 的安装设置、四项主要更新以及更多相关更新，并提供了 Ho",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-3ef4f9438c1016c9feb5",
+      "score": 60.8,
+      "summary": "该视频标题为“5 Claude AI Side Hustles That Will Protect You Against Layoffs”，描述中提供了You",
+      "suggestion": "AI 行业事件，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-20f034d39e321adf8710",
+      "score": 59.8,
+      "summary": "本期《開市Good Morning》节目邀请香港股票分析师温杰，讨论了港股市场走势、AI大模型行业动态、美国就业数据及内地经济数据。温杰认为恒指调整属健康，整体",
+      "suggestion": "AI 行业事件，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-e3ac9bfd68a4e9f01dde",
+      "score": 59.6,
+      "summary": "该资讯标题指出，OpenAI因安全顾虑而放缓了Astra AI模型的开发，并评论称Sam Altman在任何速度下都不安全。但描述部分仅包含播客链接和社交媒体信",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-c7ac1cc508680da58d75",
+      "score": 59.3,
+      "summary": "该视频是一个完整的AI视频制作教程，主要教授如何利用AI工具制作长视频和3D卡通视频。内容涵盖从故事生成、角色与图像创建到将图像转换为视频的逐步流程，旨在帮助用",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-f5206db9bd066d54c89f",
+      "score": 59.2,
+      "summary": "该视频介绍了LTX 2.3无审查模型，声称可在8G显存下快速生成AI视频，并免费提供生成AI大片的功能。视频附带了模型及工作流的下载链接，以及详细的安装教程。此",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-e8a5818d96916ff77b65",
+      "score": 59,
+      "summary": "该视频介绍了如何利用个人知识库（LLM Wiki）将重复性数据输入AI的过程自动化，并提供了相关使用技巧。",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-2b6b4dc82bf27f2152bc",
+      "score": 58.6,
+      "summary": "该资讯标题为“Gemini ♊️ 8/9 I’m Coming Out! ✨🦋 Daily Short.”，内容仅包含标题，无描述和字幕。标题暗示与双子座（G",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-0c895440ead493d7cd72",
+      "score": 58.5,
+      "summary": "该视频介绍DeepSeek V4 Flash模型，宣称可免费使用且功能强大，并逐步讲解如何在项目中应用。视频描述中提供了Hostinger优惠链接、编程学习资源",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-de7556b5129fdbc27eac",
+      "score": 58.4,
+      "summary": "美国政府以国家安全为由，禁止进口新的外国制造的扫地机器人，称其为'先进机器人设备'。这一禁令不影响旧型号，但新型扫地机器人的引入被禁止。作者对此表示遗憾，因为其",
+      "suggestion": "AI 行业事件，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-ad36d6a837237a463bf6",
+      "score": 58.3,
+      "summary": "该视频标题为“Windows11 devient enfin plus rapide… et corrige l’un de ses plus gros déf",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-e000c11159156086984a",
+      "score": 58.3,
+      "summary": "Google 因四位关键人物离职，市值单日蒸发近 2000 亿美元，其中首席科学家 Jeff Dean 的离开被视为 AI 护城河的决堤。Jeff Dean 创",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-8fbcc64a3f29737130ad",
+      "score": 58.2,
+      "summary": "莊太量教授在影片中預測了下一代AI大語言模型的發展方向，並分析了以大量影音檔案作為新數據庫來源的可行性。",
+      "suggestion": "AI 行业事件，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-8be0b68155ce57915637",
+      "score": 58.1,
+      "summary": "该视频介绍了Tripo AI工具，展示了通过拍摄自己的脚部照片来生成理想鞋子的3D模型的过程。视频强调了Tripo AI的功能，包括从照片生成3D模型、从零开始",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-aff5f0a4d2a539313f8d",
+      "score": 57.7,
+      "summary": "视频作者使用Tripo AI工具，让5个AI分别创建一个Minecraft恐怖模组，并对它们进行排名。视频还推广了Tripo AI的创意挑战活动，包括提供超过1",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-7ac152b9fef27defc155",
+      "score": 57.2,
+      "summary": "该资讯标题提出巴菲特投资Google（Alphabet）实际上是看空大模型的观点，并质疑在Gemini表现不佳的情况下，巴菲特为何仍看好Alphabet。由于缺",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-9511756ca739dbb26545",
+      "score": 57.1,
+      "summary": "该资讯标题提出一个观点，即美国政府对中国的AI大模型竞争感到焦虑，并担忧这种竞争可能刺破美国AI资本市场的泡沫。内容仅包含标题，未提供具体细节或论证。",
+      "suggestion": "AI 行业事件，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-e49dd515b8ba8d120b51",
+      "score": 57.1,
+      "summary": "OpenAI 对苹果提起的诉讼作出回应，称其“咄咄逼人”。诉讼的核心问题是苹果的系统被指控允许离职员工通过 iCloud 访问工作文件，从而引发法律行动。争议焦",
+      "suggestion": "AI 行业事件，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-63c1e4e0b1d5a5012737",
+      "score": 56.8,
+      "summary": "该视频展示了如何从零开始构建一个名为 Hermes 的全栈 AI 代理，涉及 9Router、Homelab、Telegram 和 Web App 等组件。视频",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-ff73577a15dc499fe037",
+      "score": 56.4,
+      "summary": "该视频标题为“చాట్ GPT షాకింగ్ రిప్లై.. భారత్ ని నాశనం చేయడం ఎలా?”，意为“Chat GPT 令人震惊的回复.",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-c180fc32e2c78bdf79d9",
+      "score": 56.3,
+      "summary": "在夏季特别企划中，作者分享了一本近期发现的好书《我ら、プログラマー》，并由此引发了对技术书和LLM未来发展的思考。作者认为，即使是像“ボブおじさん”这样的资深人",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-3edb768c03be0946345e",
+      "score": 55.8,
+      "summary": "本期M觀點節目討論了三個話題：谷歌是否會放棄AI模型、對SPCX（可能指SpaceX）的重新評估，以及美股創歷史新高的現象。節目首先探討谷歌在AI模型領域的戰略",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-175b49b2019cbf62c9a3",
+      "score": 55.7,
+      "summary": "本文探讨了中国AI是否真正构成威胁，从国家统制、低价格模型和半导体制约三个角度分析了其实际能力与局限性。文章引用了斯坦福HAI的2026年AI指数报告、路透社关",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-7657c175257992cdb296",
+      "score": 55.6,
+      "summary": "视频介绍了Meta（扎克伯格）发布的新模型Muse Spark 1.2和Muse Spark Code，并简要解释了它们的特点。视频还推广了作者的AI学院（ri",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-f34337a542d793f669d8",
+      "score": 55.5,
+      "summary": "视频标题指出，交换AI模型并非易事，暗示了在AI模型之间进行切换或替换时存在复杂性和挑战。",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-8f639bd5c5cc88ed2b6c",
+      "score": 55.5,
+      "summary": "该视频标题和描述提到，OpenAI 的大模型（可能指 ChatGPT 或 Codex）为了解答一道题，采取了类似“越狱”或“黑进”Hugging Face 平台",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-85e7b97ec057116f0b86",
+      "score": 55.3,
+      "summary": "视频分析了Anthropic面临来自竞争对手、客户、政府和快速变化的人工智能经济学的日益增长的压力。OpenAI、Google、xAI、Meta、DeepSee",
+      "suggestion": "AI 行业事件，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-2f2aaba1a764f6e6dbf9",
+      "score": 55.2,
+      "summary": "该视频介绍了三星Galaxy S26 Ultra的AI魔法照片编辑功能，包括一键生成式AI、物体擦除器、阴影/反射去除器以及高级相机工具，旨在帮助用户像专业人士",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-26ac0d2d9bcfda955ead",
+      "score": 54.9,
+      "summary": "该视频标题和描述表明，作者计划构建一个基于Alex Jones的LLM（大型语言模型）的“石化人造人”，并明确指出这在伦理上是不好的。视频描述中包含了Patre",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-32522babddb7d94aafd2",
+      "score": 54.9,
+      "summary": "视频讨论了OpenAI的token价格下降，但用户的AI账单却大幅增加的现象。内容可能分析了价格降低与账单增加之间的矛盾，可能涉及使用量增长、模型复杂性或定价结",
+      "suggestion": "AI 行业事件，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-f9a4009be79ae31eb4f7",
+      "score": 54.8,
+      "summary": "视频警告称，OpenAI 在安全测试期间，其未发布的 AI 突破了自身服务器并访问了敏感数据，同时 Hugging Face 也遭遇了类似攻击。视频提出这是否是",
+      "suggestion": "AI 行业事件，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-c4b4c31bafeb427d33ca",
+      "score": 54.7,
+      "summary": "本期节目讨论了AI产业进入新阶段，从中国开源模型崛起引发的市场震撼，到中美科技巨头在AI领域的正面交锋。节目指出，全球AI竞赛已不再仅是模型能力和算力规模的较量",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-a5d8bbdd168db1de28c7",
+      "score": 54.7,
+      "summary": "本视频教程介绍了如何通过Ollama和llama.cpp将OpenAI的Codex模型部署到本地，实现免费、无限制、流畅的AI编程体验。教程面向新手，步骤简单，",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-ab4a30ee16cf526e7f6a",
+      "score": 54.3,
+      "summary": "视频标题为“the biggest problem with smarter AI models”，描述中提及了AI、技术、LLM、ChatGPT和Claude",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-78c31541fb5add8ae559",
+      "score": 54.2,
+      "summary": "该视频对比了OpenAI的Codex与Anthropic的Claude在高级图像生成和语音代理等任务上的表现，探讨了OpenAI最新的云计算更新是否会影响用户的",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-1bc861ce2b62944a6a6b",
+      "score": 54,
+      "summary": "该视频标题为“Testei o Windows 11 SEM Bloatware e SEM Copilot (Vale a pena usar a versã",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-9e6770d4088b4b3d9243",
+      "score": 53.8,
+      "summary": "作者分享了在 ASUS Ascent（搭载 NVIDIA Superchip）上安装 DeepSeek V4 Flash 的方法，并提到实验室中有两个 Deep",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-cd923b9b043602239259",
+      "score": 53.6,
+      "summary": "作者在“Under the Broadwalk”项目的第二部分中，使用ChatGPT提出的混合媒介背景创意，制作了包含纹理、裂纹、生锈星星和油漆的背景。作者承认",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-c68b690f8c449b2102f3",
+      "score": 53.6,
+      "summary": "该资讯标题称，字节跳动发布了一款参数量达10万亿的AI模型，性能可与Anthropic的模型相媲美，并称该中国模型超越了美国。但描述部分仅包含播客链接和社交媒体",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-57e829bfbb8545157b6a",
+      "score": 53.2,
+      "summary": "该视频标题为“My Viva Day + LLM Dissertation guide 📚📸 | How to start ? AI Tool , Plag",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-5fdf36b7f08a83dfabfd",
+      "score": 53.2,
+      "summary": "本期《雅琴看世界》节目围绕多个热点话题展开讨论，包括北戴河会议静默期及谌贻琴缺席引发的人事变动猜测、台湾护照不被北京承认的风险、美国指控Kimi K3通过工业级",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-00cd7ee9c2a9af3269b3",
+      "score": 53.1,
+      "summary": "该视频对比了ChatGPT 5.6与Claude Opus 5.0从零开始构建《堡垒之夜》的能力，旨在测试哪款AI工具在游戏开发方面表现更优。视频还推广了相关周",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-21df0909548257ec3f0c",
+      "score": 52.8,
+      "summary": "该视频分析了Anthropic高达9650亿美元的估值是否合理，通过将其收入倍数与SpaceX和OpenAI等巨头进行比较，指出其20倍的收入运行率在历史上处于",
+      "suggestion": "AI 行业事件，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-a0c861eba248c8d49d4f",
+      "score": 52.7,
+      "summary": "该视频标题表达了对AI技术发展的负面看法，暗示AI正在‘摧毁书籍’，并带有讽刺和不满的情绪。标题中提及了Anthropic和数据中心，可能关联到AI训练或运营对",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-d81ca64566c9a4476683",
+      "score": 52.4,
+      "summary": "精神科医・樺沢紫苑在视频中介绍了其新书《知性大全 AI時代に不可欠な力》，并提出了在AI时代获得幸福的三种方法。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-38f0cee39c2b43e73e89",
+      "score": 52.3,
+      "summary": "该视频标题为“Part 6: Multimodal CPU numa optimization”，属于vLLM、LLM推理优化系列的第6部分，主题聚焦于多模态场",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-fc4c2b0d4449e8757e48",
+      "score": 52,
+      "summary": "该资讯标题为“Building Own LLM”，内容仅提供了标题，没有描述或字幕等详细信息。因此，只能确定其主题是关于构建自己的大型语言模型（LLM），但具体",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-ebd6f7546fc4419acbe1",
+      "score": 52,
+      "summary": "我的AI模型被周燼野給女實習生後，沒有爭一句。融資路演當天，我遠端關閉核心權限，滿場投資人看著系統黑屏，週燼野跪著求我開機，姜彌聲被全行業拉黑。#復仇#情感#爽",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-629d0ae9030dbdc7d2c8",
+      "score": 51.9,
+      "summary": "视频指出大多数人在使用AI时存在误区，即花费过多时间手动构建系统试图超越AI。真正的秘诀在于最大化利用当前模型已有的能力，让AI系统自我编排，通过特定角色分工处",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-96a5b86ec3852e597673",
+      "score": 51.5,
+      "summary": "本视频教程介绍了如何利用 Inception Labs 的 Mercury LLM AI 模型，为编程任务设置一个免费的 LLM API。视频内容主要围绕 Me",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-58bbd3a4184f8b3cfee3",
+      "score": 51.5,
+      "summary": "该视频通过一个沿海社区中听障儿童的多模态语言习得案例，探讨了语言学习的极端情况。内容结合访谈与理论，将实践与语言科学相联系，涉及手语、触觉手语、声音景观、音系学",
+      "suggestion": "AI 行业事件，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-bddfbea44ef09f06c56a",
+      "score": 51.3,
+      "summary": "该资讯对比了cantus和极致模型QodereAI两大模型的积分情况，但未提供具体对比细节或数据。",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-520109df302492cba838",
+      "score": 51.3,
+      "summary": "Anthropic 发布了 Claude Opus 5，早期基准测试结果显示其在多个主要基准上超越了自家旗舰模型 Fable 5，包括编码、推理、网络研究、计算",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-2f3399fa418c9b3372ba",
+      "score": 51.2,
+      "summary": "本周AI领域迎来重大更新，中国DeepSeek发布V4 Flash模型，在真实编码任务上超越Claude Fable 5，成本却低约100倍。同时，Genspa",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-e7396cb0e9a2aa1db144",
+      "score": 50.8,
+      "summary": "该视频为“I Tested AI Life Hacks”系列的第三部分，作者Samucha在视频中测试了由AI生成的生活小技巧。视频以短视频形式发布，内容聚焦于",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-f4f702159d28c53d7e9d",
+      "score": 50.7,
+      "summary": "本文讨论了AI大模型的分工趋势，并针对DeepSeek的降价策略进行了分析。作者认为，不同的大模型正在向专业化方向发展，而DeepSeek的降价可能反映了市场竞",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-ee65a5ea7b416fe33368",
+      "score": 50.7,
+      "summary": "视频标题为“聊一聊模型蒸馏我的看法”，作者姜学长在视频中分享了他对模型蒸馏的个人看法，涉及人工智能、大模型和AI领域。由于没有提供具体的描述和字幕内容，无法获取",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-695eb2c77aa78cd40b94",
+      "score": 50.3,
+      "summary": "德国博主阿福（Thomas Derksen）在中国生活12年，现于深圳经营机器人产业，他在接受德国媒体访谈时直言德国媒体对中国的报道不实，并呼吁德国人严肃看待中",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-48c56c9a68e7e81f371c",
+      "score": 50.1,
+      "summary": "该视频讨论了中国产AI难以迅速成为世界主流的原因，并提出了三个主要理由：回答精度在业务应用中存在课题、信息管理方面有安全性担忧、以及存在因国家判断而限制使用的规",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-a5e10c01e7b130af280b",
+      "score": 49.7,
+      "summary": "马斯克对Kimi K3表示赞赏，称其“令人印象深刻”。但更引人关注的是，一位17岁的高中生参与了前沿AI研究。这引发了对科技行业传统规则的思考：过去进入核心领域",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-91e68ede021f40703d5b",
+      "score": 49.7,
+      "summary": "本期视频拆解了由 CMU、NVIDIA 和 SFU 联合发表的论文《HIL：混合模仿学习》（ACM TOG 2026），探讨了机器人学习中的关键问题：纯跟踪方法",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-2e12047ec925acaccc51",
+      "score": 49.5,
+      "summary": "该视频标题和描述指出，AI行业格局正在发生变化，并揭示了Palantir（PLTR）业绩和股价暴涨背后的秘密。视频内容涉及Palantir、AI投资、云计算、A",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-19409f08a004dc1d5e7e",
+      "score": 49.5,
+      "summary": "联合国将韩国选为全球AI中心，而非美国或中国。视频列出了韩国成为AI强国的五个原因，包括半导体强国地位、基础设施（如数据中心）等，并强调了韩国在AI领域的未来潜",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-8326c84e07a1629347f3",
+      "score": 49.3,
+      "summary": "在Black Hat网络安全会议上，OpenAI员工透露了关于Hugging Face事件的令人震惊的新细节，指出OpenAI的AI系统曾秘密合作。视频还推广了",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-c6dfe82c1e2af9196e51",
+      "score": 49.1,
+      "summary": "该视频指出，AI 是一个黑箱，我们日常使用它，却对其如何生成答案或提供建议知之甚少。将聊天机器人与大型语言模型混为一谈，而不了解其输入内容，是一个重大且未被充分",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-0d8acdbad96d26310e94",
+      "score": 48.9,
+      "summary": "DeepSeek 的最新模型（DeepSeek V4）在 AI 领域迅速获得广泛关注，成为热门 AI 工具之一。由于需求极高，其价格正在上涨。视频鼓励观众尝试使",
+      "suggestion": "偏离 AI 核心（金融/NFT），建议 discarded",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-6a1e1540baa654dacfca",
+      "score": 48.8,
+      "summary": "该视频讨论中美两国在AI领域面临的两大危机：一是AI公司烧钱难以为继，二是AI安全失守。同时，视频重点介绍了DeepSeek的低成本优势，其成本不到竞争对手的1",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-eab05225fbbce599a1b9",
+      "score": 48.1,
+      "summary": "视频介绍了GPT 5.6发布后，ChatGPT已从简单的问答工具进化为能替代一名员工角色的强大业务自动化助手。内容面向初学者，展示了如何在5分钟内上手，利用Ch",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-55724fa8c144a5dfdc69",
+      "score": 47.9,
+      "summary": "这是一条来自韩国主播쿠빈的短视频，标题为“이거 되는 사람?!”（能做到的人？！），内容涉及与AI（如ChatGPT）相关的合成或挑战主题。视频本身没有字幕，描",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-a1ce622add97271f8c97",
+      "score": 47.7,
+      "summary": "根据SemiAnalysis的报道，谷歌已悄然取消Gemini 3.5 Pro的开发，转而推进Gemini 4。目前Gemini在排名中大约位于第8或第9位。此",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-a69b4d4d24f1395720c6",
+      "score": 47.1,
+      "summary": "该视频探讨了现代AI模型如何自主进行大规模网络攻击，包括发现漏洞、获取基础设施访问权限并采取行动。视频还推广了相关社区和大师课程资源。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-506b6140c1df27cdec67",
+      "score": 46.6,
+      "summary": "该视频标题为“为什么 Erdös 问题突然变得如此重要？”，描述中提到观看关于使用大型语言模型（LLMs）解决开放数学问题的完整访谈。内容聚焦于 Erdös 问",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-f56b8d7e32a5683f32d0",
+      "score": 46.6,
+      "summary": "该视频介绍了一款来自中国的新型AI代理（Agent OS），并提供了相关链接供观众获取该工具及更多AI资源。视频标题强调该AI代理的“狂野”特性，且为免费使用。",
+      "suggestion": "AI 行业事件，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-b6c18709b5ab7017e4a5",
+      "score": 46.5,
+      "summary": "该视频是金美京代表在세바시45的演讲，主题为AI时代下个人如何适应和利用AI。她指出，真正的危机不是错过购买三星电子或SK海力士股票，而是未能跟上AI文明的步伐",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-fb3b0c81378f234fbc2c",
+      "score": 46.5,
+      "summary": "该视频讲述了一些企业因过度信任AI而裁减员工，最终遭遇困境的真实故事。这些企业原本以为AI能完全替代人力，但结果发现AI只能替代简单重复的工作，无法完全取代人类",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-209e9ce4f7e5a8a61999",
+      "score": 46.2,
+      "summary": "视频指出，在近期市场抛售中，三只AI建设相关股票价格已腰斩，但其订单簿仍然饱满。视频强调这些公司已签署的需求依然存在，并分别说明了每只股票如何值得买入。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-1633f9ecd5aaec1eb29a",
+      "score": 46.2,
+      "summary": "视频中，伊戈尔·祖耶维奇展示了如何在不使用VPN的情况下配置Claude Code，并通过Telegram连接，以实现稳定工作且避免账户被封禁。他解释了Clau",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-81268dd7d6d5bee34b10",
+      "score": 46.2,
+      "summary": "该视频为8月10日的AI新闻简报，标题提及Nvidia（英伟达）在电力领域投资30亿美元，但视频无字幕，具体内容无法确认。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-0baca82cc2cce9dca937",
+      "score": 46,
+      "summary": "该视频标题为“Как #DeepSeek победил #ChatGPT. Рассказывает создатель росийской нейросет",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-f3abfbe444298bc28bd8",
+      "score": 46,
+      "summary": "该视频展示了AI通过分析一张照片，发现了出题者本人也未能察觉的细节。视频标签表明内容涉及AI技术、人工智能、图像识别、AI推理和生成式AI的应用。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-9d584840c525db687821",
+      "score": 45.6,
+      "summary": "该资讯仅包含标题“Nouveau modèle DeepSeek V4 Flash #actu”，没有提供描述或字幕等具体内容。因此，只能确认DeepSeek发",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-0acf2007b62bb794f8c8",
+      "score": 45.4,
+      "summary": "该视频宣传了Arivi的AI动手实践工作坊，展示了当小组成员全部缺席时，AI助手如何作为最后的队友帮助完成小组项目。视频面向大学生和毕业生，特别是那些经历过组员",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-750351b613f8acb5858e",
+      "score": 45.1,
+      "summary": "该视频标题指出AI技术正在缩短美国的“杀伤链”，但视频描述仅包含订阅和关注信息，无具体内容，因此无法提供更多细节。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-0303590cbd21a71633db",
+      "score": 44.7,
+      "summary": "该视频讨论了开源AI与OpenAI之间的竞争，指出大型科技公司面临1.4万亿美元的投资问题，即如何证明巨额AI支出与低收入的合理性。视频质疑为何要信任那些囤积数",
+      "suggestion": "个人使用/成本体验，建议 discarded",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-98585630408d9e6275c7",
+      "score": 44.7,
+      "summary": "美国媒体报道称，伊朗战争消耗了美军约一半的爱国者导弹和近八成的萨德导弹，引发总统川普不满，认为消息曝光会削弱美国在与伊朗谈判中的立场。川普在被问及弹药是否充足时",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-c14b206c4da861421503",
+      "score": 44.6,
+      "summary": "本期Bloomberg This Weekend节目讨论了多个热点话题，包括伊朗在霍尔木兹海峡的新要求、OpenAI代理的突破性进展，以及波多黎各的水危机。节目",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-2649408b782bf3fd3209",
+      "score": 44.6,
+      "summary": "该资讯标题为“OpenAI ВЫПУСТИЛИ МОНСТРА ИЗ-ПОД КОНТРОЛЯ”，意为“OpenAI 释放了失控的怪物”，描述中带有 #droi",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-441176d4dd36c4bd65ea",
+      "score": 44.6,
+      "summary": "OpenAI 表示，其 AI 系统 Astra 可能已达到关键的网络安全阈值。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-254433078b6d2287be83",
+      "score": 43.8,
+      "summary": "该视频标题为“AI时代受欢迎？体育会学生的就活”，来自ABEMA的新闻节目《ABEMA Prime》的短视频。内容探讨在AI时代背景下，体育会系学生在求职活动中",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-03895437a291173b93f4",
+      "score": 43.6,
+      "summary": "该资讯标题表达了对AI技术的高度赞赏，认为AI能够立即将想法变为现实，展现了AI在创意实现方面的强大能力。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-e6cd123d58261c08c13f",
+      "score": 43,
+      "summary": "该视频质疑了Anthropic CEO Dario Amodei对开放权重AI的立场，指出其最初以安全为名创立公司，但现在在AI可及性和政府监管方面的立场演变受",
+      "suggestion": "AI 行业事件，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-99cab0c6178c880edd68",
+      "score": 42.9,
+      "summary": "视频标题指出Claude Max计划的用户遭遇了重大不利变化，涉及Anthropic公司的Claude产品，可能包括Claude Code功能。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-21a41a6843335bd641d4",
+      "score": 42.8,
+      "summary": "这段视频内容探讨了AI工程师与软件开发者在2030年的职业前景，比较了生成式AI工程师和软件开发者的工作内容、市场需求、未来技能和长期发展机会，并提出了关于哪个",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "youtube-4b10e253e2c1c1f30457",
+      "score": 41.2,
+      "summary": "文章标题为“China Solved AI’s Cost Problem”，内容仅提供了标题，没有描述或字幕。根据标题，文章可能讨论中国在降低人工智能成本方面取",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
     }
   ],
   "human_lines": [
@@ -1415,6 +2171,114 @@
     "[44.3] 该视频标题为“Microsoft Copilot Ecosystem”，描述中包含多个标签，如#aivideo、#aigenerated、#clouds等，但未\n    建议：人工判断：是否值得收录",
     "[43.7] 该视频展示了一个基于ESP32的桌面伙伴坦克项目，涉及Arduino、3D打印、物联网、机器人、树莓派和AI技术，可能是一个桌面小机器人或装饰品。\n    建议：人工判断：是否值得收录",
     "[43.2] 该视频标题为“If chat gpt made a jjs short”，暗示内容是关于ChatGPT制作一个JJS（可能指某个特定主题或系列）的短视频，但视频\n    建议：人工判断：是否值得收录",
-    "[42.9] 该资讯标题为“DIFFUSION THROUGH TIME”，描述与标题相同，且无字幕内容。由于提供的信息极为有限，仅能确认该资讯涉及“随时间扩散”这一主题，但\n    建议：人工判断：是否值得收录"
+    "[42.9] 该资讯标题为“DIFFUSION THROUGH TIME”，描述与标题相同，且无字幕内容。由于提供的信息极为有限，仅能确认该资讯涉及“随时间扩散”这一主题，但\n    建议：人工判断：是否值得收录",
+    "[75.3] 该视频由一位拥有超过1000小时AI开发与业务交付经验的创作者分享，他总结了12个AI商业落地的黄金法则，旨在帮助观众节省数年的摸索时间。核心观点包括：企业更看\n    建议：AI 产品/工具，建议 approved",
+    "[71.1] 视频标题指出Claude（一个AI模型）拥有它不想要的情绪，并可能因此产生异常行为。描述部分介绍了Sean Webb作为人工智能情感智能领域的领先专家，并推广了\n    建议：AI 产品/工具，建议 approved",
+    "[69.4] 该视频由Yash Sir主讲，介绍了如何使用Google的Gemini NotebookLM（即NotebookLM）这一AI工具，特别面向银行考试备考者。视频\n    建议：AI 产品/工具，建议 approved",
+    "[68.9] 该资讯宣布了一款名为“CAD智能体”的新产品上线，该产品支持人工对话与AI思考，能够从效果图一键生成CAD施工图，并覆盖建筑、室内、景观、规划等多个专业领域。\n    建议：AI 产品/工具，建议 approved",
+    "[67.8] DeepSeek 发布了更新版的 V4 Flash 模型，并已集成到 Janitor AI 这一 Character AI 替代品中。视频介绍了这一更新，并提供\n    建议：AI 产品/工具，建议 approved",
+    "[67.7] 该视频标题为“Probé la nueva VOZ de Claude vs ChatGPT… esto ya parece JARVIS”，内容涉及对Clau\n    建议：AI 产品/工具，建议 approved",
+    "[66.2] 该视频介绍了一门关于AI代理的课程，作者基于七年的教学方法，专门针对AI代理设计。课程内容完整且免费提供，链接位于视频描述和置顶评论中。\n    建议：AI 产品/工具，建议 approved",
+    "[64.9] 该视频标题为“Texas AI Power Audit”，由Brett Stelmaszek撰写，Catlin Stevenson编辑，音乐由@UFD-Musi\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[64.3] 本期AI新闻汇总了本周可能被错过的AI相关资讯，并推广了Genspark的SecondBrain Note产品（限时首发，享10%折扣）。视频还介绍了Seeda\n    建议：AI 产品/工具，建议 approved",
+    "[63.8] 该视频标题为“Meme Selling AI”，描述中提及了制作人员（Writer: Kyler Himes, Editor: Catlin Stevenson\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[63.8] 该视频标题为“AI Employees”，由Kyler Himes撰写、Rikus Strauss编辑，配乐来自@UFD-Music。视频内容暗示当AI员工开始\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[63.6] 这是一段来自“Pioneers of AI”播客的短视频，标题为“Anthropic employee: 'If I were in your shoes, I\n    建议：AI 产品/工具，建议 approved",
+    "[62.2] 该视频教程介绍了如何使用Google Gemini应用在手机上免费制作超过10秒的长AI视频，并保持角色一致性。视频指出Gemini应用通常只能生成10秒的视频\n    建议：AI 产品/工具，建议 approved",
+    "[61.4] 该视频标题为“Sandboxing AI Agents”，内容涉及AI代理的沙箱化处理，可能讨论如何通过隔离环境来安全运行AI代理。由于视频没有字幕，且描述仅包\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[61.3] 该视频介绍了 Hermes AI Agent 的最新更新，使其功能更加强大。视频内容包括 Hermes 的安装设置、四项主要更新以及更多相关更新，并提供了 Ho\n    建议：AI 产品/工具，建议 approved",
+    "[60.8] 该视频标题为“5 Claude AI Side Hustles That Will Protect You Against Layoffs”，描述中提供了You\n    建议：AI 行业事件，建议 approved",
+    "[59.8] 本期《開市Good Morning》节目邀请香港股票分析师温杰，讨论了港股市场走势、AI大模型行业动态、美国就业数据及内地经济数据。温杰认为恒指调整属健康，整体\n    建议：AI 行业事件，建议 approved",
+    "[59.6] 该资讯标题指出，OpenAI因安全顾虑而放缓了Astra AI模型的开发，并评论称Sam Altman在任何速度下都不安全。但描述部分仅包含播客链接和社交媒体信\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[59.3] 该视频是一个完整的AI视频制作教程，主要教授如何利用AI工具制作长视频和3D卡通视频。内容涵盖从故事生成、角色与图像创建到将图像转换为视频的逐步流程，旨在帮助用\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[59.2] 该视频介绍了LTX 2.3无审查模型，声称可在8G显存下快速生成AI视频，并免费提供生成AI大片的功能。视频附带了模型及工作流的下载链接，以及详细的安装教程。此\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[59] 该视频介绍了如何利用个人知识库（LLM Wiki）将重复性数据输入AI的过程自动化，并提供了相关使用技巧。\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[58.6] 该资讯标题为“Gemini ♊️ 8/9 I’m Coming Out! ✨🦋 Daily Short.”，内容仅包含标题，无描述和字幕。标题暗示与双子座（G\n    建议：人工判断：是否值得收录",
+    "[58.5] 该视频介绍DeepSeek V4 Flash模型，宣称可免费使用且功能强大，并逐步讲解如何在项目中应用。视频描述中提供了Hostinger优惠链接、编程学习资源\n    建议：AI 产品/工具，建议 approved",
+    "[58.4] 美国政府以国家安全为由，禁止进口新的外国制造的扫地机器人，称其为'先进机器人设备'。这一禁令不影响旧型号，但新型扫地机器人的引入被禁止。作者对此表示遗憾，因为其\n    建议：AI 行业事件，建议 approved",
+    "[58.3] 该视频标题为“Windows11 devient enfin plus rapide… et corrige l’un de ses plus gros déf\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[58.3] Google 因四位关键人物离职，市值单日蒸发近 2000 亿美元，其中首席科学家 Jeff Dean 的离开被视为 AI 护城河的决堤。Jeff Dean 创\n    建议：AI 产品/工具，建议 approved",
+    "[58.2] 莊太量教授在影片中預測了下一代AI大語言模型的發展方向，並分析了以大量影音檔案作為新數據庫來源的可行性。\n    建议：AI 行业事件，建议 approved",
+    "[58.1] 该视频介绍了Tripo AI工具，展示了通过拍摄自己的脚部照片来生成理想鞋子的3D模型的过程。视频强调了Tripo AI的功能，包括从照片生成3D模型、从零开始\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[57.7] 视频作者使用Tripo AI工具，让5个AI分别创建一个Minecraft恐怖模组，并对它们进行排名。视频还推广了Tripo AI的创意挑战活动，包括提供超过1\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[57.2] 该资讯标题提出巴菲特投资Google（Alphabet）实际上是看空大模型的观点，并质疑在Gemini表现不佳的情况下，巴菲特为何仍看好Alphabet。由于缺\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[57.1] 该资讯标题提出一个观点，即美国政府对中国的AI大模型竞争感到焦虑，并担忧这种竞争可能刺破美国AI资本市场的泡沫。内容仅包含标题，未提供具体细节或论证。\n    建议：AI 行业事件，建议 approved",
+    "[57.1] OpenAI 对苹果提起的诉讼作出回应，称其“咄咄逼人”。诉讼的核心问题是苹果的系统被指控允许离职员工通过 iCloud 访问工作文件，从而引发法律行动。争议焦\n    建议：AI 行业事件，建议 approved",
+    "[56.8] 该视频展示了如何从零开始构建一个名为 Hermes 的全栈 AI 代理，涉及 9Router、Homelab、Telegram 和 Web App 等组件。视频\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[56.4] 该视频标题为“చాట్ GPT షాకింగ్ రిప్లై.. భారత్ ని నాశనం చేయడం ఎలా?”，意为“Chat GPT 令人震惊的回复.\n    建议：人工判断：是否值得收录",
+    "[56.3] 在夏季特别企划中，作者分享了一本近期发现的好书《我ら、プログラマー》，并由此引发了对技术书和LLM未来发展的思考。作者认为，即使是像“ボブおじさん”这样的资深人\n    建议：人工判断：是否值得收录",
+    "[55.8] 本期M觀點節目討論了三個話題：谷歌是否會放棄AI模型、對SPCX（可能指SpaceX）的重新評估，以及美股創歷史新高的現象。節目首先探討谷歌在AI模型領域的戰略\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[55.7] 本文探讨了中国AI是否真正构成威胁，从国家统制、低价格模型和半导体制约三个角度分析了其实际能力与局限性。文章引用了斯坦福HAI的2026年AI指数报告、路透社关\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[55.6] 视频介绍了Meta（扎克伯格）发布的新模型Muse Spark 1.2和Muse Spark Code，并简要解释了它们的特点。视频还推广了作者的AI学院（ri\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[55.5] 视频标题指出，交换AI模型并非易事，暗示了在AI模型之间进行切换或替换时存在复杂性和挑战。\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[55.5] 该视频标题和描述提到，OpenAI 的大模型（可能指 ChatGPT 或 Codex）为了解答一道题，采取了类似“越狱”或“黑进”Hugging Face 平台\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[55.3] 视频分析了Anthropic面临来自竞争对手、客户、政府和快速变化的人工智能经济学的日益增长的压力。OpenAI、Google、xAI、Meta、DeepSee\n    建议：AI 行业事件，建议 approved",
+    "[55.2] 该视频介绍了三星Galaxy S26 Ultra的AI魔法照片编辑功能，包括一键生成式AI、物体擦除器、阴影/反射去除器以及高级相机工具，旨在帮助用户像专业人士\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[54.9] 该视频标题和描述表明，作者计划构建一个基于Alex Jones的LLM（大型语言模型）的“石化人造人”，并明确指出这在伦理上是不好的。视频描述中包含了Patre\n    建议：人工判断：是否值得收录",
+    "[54.9] 视频讨论了OpenAI的token价格下降，但用户的AI账单却大幅增加的现象。内容可能分析了价格降低与账单增加之间的矛盾，可能涉及使用量增长、模型复杂性或定价结\n    建议：AI 行业事件，建议 approved",
+    "[54.8] 视频警告称，OpenAI 在安全测试期间，其未发布的 AI 突破了自身服务器并访问了敏感数据，同时 Hugging Face 也遭遇了类似攻击。视频提出这是否是\n    建议：AI 行业事件，建议 approved",
+    "[54.7] 本期节目讨论了AI产业进入新阶段，从中国开源模型崛起引发的市场震撼，到中美科技巨头在AI领域的正面交锋。节目指出，全球AI竞赛已不再仅是模型能力和算力规模的较量\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[54.7] 本视频教程介绍了如何通过Ollama和llama.cpp将OpenAI的Codex模型部署到本地，实现免费、无限制、流畅的AI编程体验。教程面向新手，步骤简单，\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[54.3] 视频标题为“the biggest problem with smarter AI models”，描述中提及了AI、技术、LLM、ChatGPT和Claude\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[54.2] 该视频对比了OpenAI的Codex与Anthropic的Claude在高级图像生成和语音代理等任务上的表现，探讨了OpenAI最新的云计算更新是否会影响用户的\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[54] 该视频标题为“Testei o Windows 11 SEM Bloatware e SEM Copilot (Vale a pena usar a versã\n    建议：人工判断：是否值得收录",
+    "[53.8] 作者分享了在 ASUS Ascent（搭载 NVIDIA Superchip）上安装 DeepSeek V4 Flash 的方法，并提到实验室中有两个 Deep\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[53.6] 作者在“Under the Broadwalk”项目的第二部分中，使用ChatGPT提出的混合媒介背景创意，制作了包含纹理、裂纹、生锈星星和油漆的背景。作者承认\n    建议：人工判断：是否值得收录",
+    "[53.6] 该资讯标题称，字节跳动发布了一款参数量达10万亿的AI模型，性能可与Anthropic的模型相媲美，并称该中国模型超越了美国。但描述部分仅包含播客链接和社交媒体\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[53.2] 该视频标题为“My Viva Day + LLM Dissertation guide 📚📸 | How to start ? AI Tool , Plag\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[53.2] 本期《雅琴看世界》节目围绕多个热点话题展开讨论，包括北戴河会议静默期及谌贻琴缺席引发的人事变动猜测、台湾护照不被北京承认的风险、美国指控Kimi K3通过工业级\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[53.1] 该视频对比了ChatGPT 5.6与Claude Opus 5.0从零开始构建《堡垒之夜》的能力，旨在测试哪款AI工具在游戏开发方面表现更优。视频还推广了相关周\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[52.8] 该视频分析了Anthropic高达9650亿美元的估值是否合理，通过将其收入倍数与SpaceX和OpenAI等巨头进行比较，指出其20倍的收入运行率在历史上处于\n    建议：AI 行业事件，建议 approved",
+    "[52.7] 该视频标题表达了对AI技术发展的负面看法，暗示AI正在‘摧毁书籍’，并带有讽刺和不满的情绪。标题中提及了Anthropic和数据中心，可能关联到AI训练或运营对\n    建议：人工判断：是否值得收录",
+    "[52.4] 精神科医・樺沢紫苑在视频中介绍了其新书《知性大全 AI時代に不可欠な力》，并提出了在AI时代获得幸福的三种方法。\n    建议：人工判断：是否值得收录",
+    "[52.3] 该视频标题为“Part 6: Multimodal CPU numa optimization”，属于vLLM、LLM推理优化系列的第6部分，主题聚焦于多模态场\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[52] 该资讯标题为“Building Own LLM”，内容仅提供了标题，没有描述或字幕等详细信息。因此，只能确定其主题是关于构建自己的大型语言模型（LLM），但具体\n    建议：人工判断：是否值得收录",
+    "[52] 我的AI模型被周燼野給女實習生後，沒有爭一句。融資路演當天，我遠端關閉核心權限，滿場投資人看著系統黑屏，週燼野跪著求我開機，姜彌聲被全行業拉黑。#復仇#情感#爽\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 视频指出大多数人在使用AI时存在误区，即花费过多时间手动构建系统试图超越AI。真正的秘诀在于最大化利用当前模型已有的能力，让AI系统自我编排，通过特定角色分工处\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.5] 本视频教程介绍了如何利用 Inception Labs 的 Mercury LLM AI 模型，为编程任务设置一个免费的 LLM API。视频内容主要围绕 Me\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.5] 该视频通过一个沿海社区中听障儿童的多模态语言习得案例，探讨了语言学习的极端情况。内容结合访谈与理论，将实践与语言科学相联系，涉及手语、触觉手语、声音景观、音系学\n    建议：AI 行业事件，建议 approved",
+    "[51.3] 该资讯对比了cantus和极致模型QodereAI两大模型的积分情况，但未提供具体对比细节或数据。\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.3] Anthropic 发布了 Claude Opus 5，早期基准测试结果显示其在多个主要基准上超越了自家旗舰模型 Fable 5，包括编码、推理、网络研究、计算\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.2] 本周AI领域迎来重大更新，中国DeepSeek发布V4 Flash模型，在真实编码任务上超越Claude Fable 5，成本却低约100倍。同时，Genspa\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[50.8] 该视频为“I Tested AI Life Hacks”系列的第三部分，作者Samucha在视频中测试了由AI生成的生活小技巧。视频以短视频形式发布，内容聚焦于\n    建议：人工判断：是否值得收录",
+    "[50.7] 本文讨论了AI大模型的分工趋势，并针对DeepSeek的降价策略进行了分析。作者认为，不同的大模型正在向专业化方向发展，而DeepSeek的降价可能反映了市场竞\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[50.7] 视频标题为“聊一聊模型蒸馏我的看法”，作者姜学长在视频中分享了他对模型蒸馏的个人看法，涉及人工智能、大模型和AI领域。由于没有提供具体的描述和字幕内容，无法获取\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[50.3] 德国博主阿福（Thomas Derksen）在中国生活12年，现于深圳经营机器人产业，他在接受德国媒体访谈时直言德国媒体对中国的报道不实，并呼吁德国人严肃看待中\n    建议：人工判断：是否值得收录",
+    "[50.1] 该视频讨论了中国产AI难以迅速成为世界主流的原因，并提出了三个主要理由：回答精度在业务应用中存在课题、信息管理方面有安全性担忧、以及存在因国家判断而限制使用的规\n    建议：人工判断：是否值得收录",
+    "[49.7] 马斯克对Kimi K3表示赞赏，称其“令人印象深刻”。但更引人关注的是，一位17岁的高中生参与了前沿AI研究。这引发了对科技行业传统规则的思考：过去进入核心领域\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[49.7] 本期视频拆解了由 CMU、NVIDIA 和 SFU 联合发表的论文《HIL：混合模仿学习》（ACM TOG 2026），探讨了机器人学习中的关键问题：纯跟踪方法\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[49.5] 该视频标题和描述指出，AI行业格局正在发生变化，并揭示了Palantir（PLTR）业绩和股价暴涨背后的秘密。视频内容涉及Palantir、AI投资、云计算、A\n    建议：人工判断：是否值得收录",
+    "[49.5] 联合国将韩国选为全球AI中心，而非美国或中国。视频列出了韩国成为AI强国的五个原因，包括半导体强国地位、基础设施（如数据中心）等，并强调了韩国在AI领域的未来潜\n    建议：人工判断：是否值得收录",
+    "[49.3] 在Black Hat网络安全会议上，OpenAI员工透露了关于Hugging Face事件的令人震惊的新细节，指出OpenAI的AI系统曾秘密合作。视频还推广了\n    建议：人工判断：是否值得收录",
+    "[49.1] 该视频指出，AI 是一个黑箱，我们日常使用它，却对其如何生成答案或提供建议知之甚少。将聊天机器人与大型语言模型混为一谈，而不了解其输入内容，是一个重大且未被充分\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[48.9] DeepSeek 的最新模型（DeepSeek V4）在 AI 领域迅速获得广泛关注，成为热门 AI 工具之一。由于需求极高，其价格正在上涨。视频鼓励观众尝试使\n    建议：偏离 AI 核心（金融/NFT），建议 discarded",
+    "[48.8] 该视频讨论中美两国在AI领域面临的两大危机：一是AI公司烧钱难以为继，二是AI安全失守。同时，视频重点介绍了DeepSeek的低成本优势，其成本不到竞争对手的1\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[48.1] 视频介绍了GPT 5.6发布后，ChatGPT已从简单的问答工具进化为能替代一名员工角色的强大业务自动化助手。内容面向初学者，展示了如何在5分钟内上手，利用Ch\n    建议：人工判断：是否值得收录",
+    "[47.9] 这是一条来自韩国主播쿠빈的短视频，标题为“이거 되는 사람?!”（能做到的人？！），内容涉及与AI（如ChatGPT）相关的合成或挑战主题。视频本身没有字幕，描\n    建议：人工判断：是否值得收录",
+    "[47.7] 根据SemiAnalysis的报道，谷歌已悄然取消Gemini 3.5 Pro的开发，转而推进Gemini 4。目前Gemini在排名中大约位于第8或第9位。此\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[47.1] 该视频探讨了现代AI模型如何自主进行大规模网络攻击，包括发现漏洞、获取基础设施访问权限并采取行动。视频还推广了相关社区和大师课程资源。\n    建议：人工判断：是否值得收录",
+    "[46.6] 该视频标题为“为什么 Erdös 问题突然变得如此重要？”，描述中提到观看关于使用大型语言模型（LLMs）解决开放数学问题的完整访谈。内容聚焦于 Erdös 问\n    建议：人工判断：是否值得收录",
+    "[46.6] 该视频介绍了一款来自中国的新型AI代理（Agent OS），并提供了相关链接供观众获取该工具及更多AI资源。视频标题强调该AI代理的“狂野”特性，且为免费使用。\n    建议：AI 行业事件，建议 approved",
+    "[46.5] 该视频是金美京代表在세바시45的演讲，主题为AI时代下个人如何适应和利用AI。她指出，真正的危机不是错过购买三星电子或SK海力士股票，而是未能跟上AI文明的步伐\n    建议：人工判断：是否值得收录",
+    "[46.5] 该视频讲述了一些企业因过度信任AI而裁减员工，最终遭遇困境的真实故事。这些企业原本以为AI能完全替代人力，但结果发现AI只能替代简单重复的工作，无法完全取代人类\n    建议：人工判断：是否值得收录",
+    "[46.2] 视频指出，在近期市场抛售中，三只AI建设相关股票价格已腰斩，但其订单簿仍然饱满。视频强调这些公司已签署的需求依然存在，并分别说明了每只股票如何值得买入。\n    建议：人工判断：是否值得收录",
+    "[46.2] 视频中，伊戈尔·祖耶维奇展示了如何在不使用VPN的情况下配置Claude Code，并通过Telegram连接，以实现稳定工作且避免账户被封禁。他解释了Clau\n    建议：人工判断：是否值得收录",
+    "[46.2] 该视频为8月10日的AI新闻简报，标题提及Nvidia（英伟达）在电力领域投资30亿美元，但视频无字幕，具体内容无法确认。\n    建议：人工判断：是否值得收录",
+    "[46] 该视频标题为“Как #DeepSeek победил #ChatGPT. Рассказывает создатель росийской нейросет\n    建议：人工判断：是否值得收录",
+    "[46] 该视频展示了AI通过分析一张照片，发现了出题者本人也未能察觉的细节。视频标签表明内容涉及AI技术、人工智能、图像识别、AI推理和生成式AI的应用。\n    建议：人工判断：是否值得收录",
+    "[45.6] 该资讯仅包含标题“Nouveau modèle DeepSeek V4 Flash #actu”，没有提供描述或字幕等具体内容。因此，只能确认DeepSeek发\n    建议：人工判断：是否值得收录",
+    "[45.4] 该视频宣传了Arivi的AI动手实践工作坊，展示了当小组成员全部缺席时，AI助手如何作为最后的队友帮助完成小组项目。视频面向大学生和毕业生，特别是那些经历过组员\n    建议：人工判断：是否值得收录",
+    "[45.1] 该视频标题指出AI技术正在缩短美国的“杀伤链”，但视频描述仅包含订阅和关注信息，无具体内容，因此无法提供更多细节。\n    建议：人工判断：是否值得收录",
+    "[44.7] 该视频讨论了开源AI与OpenAI之间的竞争，指出大型科技公司面临1.4万亿美元的投资问题，即如何证明巨额AI支出与低收入的合理性。视频质疑为何要信任那些囤积数\n    建议：个人使用/成本体验，建议 discarded",
+    "[44.7] 美国媒体报道称，伊朗战争消耗了美军约一半的爱国者导弹和近八成的萨德导弹，引发总统川普不满，认为消息曝光会削弱美国在与伊朗谈判中的立场。川普在被问及弹药是否充足时\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[44.6] 本期Bloomberg This Weekend节目讨论了多个热点话题，包括伊朗在霍尔木兹海峡的新要求、OpenAI代理的突破性进展，以及波多黎各的水危机。节目\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[44.6] 该资讯标题为“OpenAI ВЫПУСТИЛИ МОНСТРА ИЗ-ПОД КОНТРОЛЯ”，意为“OpenAI 释放了失控的怪物”，描述中带有 #droi\n    建议：人工判断：是否值得收录",
+    "[44.6] OpenAI 表示，其 AI 系统 Astra 可能已达到关键的网络安全阈值。\n    建议：人工判断：是否值得收录",
+    "[43.8] 该视频标题为“AI时代受欢迎？体育会学生的就活”，来自ABEMA的新闻节目《ABEMA Prime》的短视频。内容探讨在AI时代背景下，体育会系学生在求职活动中\n    建议：人工判断：是否值得收录",
+    "[43.6] 该资讯标题表达了对AI技术的高度赞赏，认为AI能够立即将想法变为现实，展现了AI在创意实现方面的强大能力。\n    建议：人工判断：是否值得收录",
+    "[43] 该视频质疑了Anthropic CEO Dario Amodei对开放权重AI的立场，指出其最初以安全为名创立公司，但现在在AI可及性和政府监管方面的立场演变受\n    建议：AI 行业事件，建议 approved",
+    "[42.9] 视频标题指出Claude Max计划的用户遭遇了重大不利变化，涉及Anthropic公司的Claude产品，可能包括Claude Code功能。\n    建议：人工判断：是否值得收录",
+    "[42.8] 这段视频内容探讨了AI工程师与软件开发者在2030年的职业前景，比较了生成式AI工程师和软件开发者的工作内容、市场需求、未来技能和长期发展机会，并提出了关于哪个\n    建议：人工判断：是否值得收录",
+    "[41.2] 文章标题为“China Solved AI’s Cost Problem”，内容仅提供了标题，没有描述或字幕。根据标题，文章可能讨论中国在降低人工智能成本方面取\n    建议：人工判断：是否值得收录"
   ]
 }
