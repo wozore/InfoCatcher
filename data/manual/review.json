@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "kind": "review_candidates",
-  "generated_at": "2026-08-09T08:26:05.987Z",
-  "date": "20260809",
-  "total_pending": 176,
+  "generated_at": "2026-08-10T06:09:43.272Z",
+  "date": "20260810",
+  "total_pending": 219,
   "note": "待人工审核清单：请逐条设置 review_status（pending/approved/discarded）。应用结论：双击 bat/apply-review.bat（或 node scripts/news-cli.js min-review apply --file 本文件），应用后自动生成 top 名单（ai-top）供二次审核；approved 才进后续 top-selected/publish。",
   "candidates": [
     {
@@ -1237,6 +1237,307 @@
       "summary": "该资讯标题为“DIFFUSION THROUGH TIME”，描述与标题相同，且无字幕内容。由于提供的信息极为有限，仅能确认该资讯涉及“随时间扩散”这一主题，但",
       "suggestion": "人工判断：是否值得收录",
       "review_status": "pending"
+    },
+    {
+      "id": "x-0d417f28ebae79f0e640",
+      "score": 63.9,
+      "summary": "NFT Nova 的一个突出特点是专注于简化 AI 代理的创建过程。其一键式方法使得没有丰富开发经验的用户也能更轻松地创建 AI 代理。此外，将创建过程与代币发",
+      "suggestion": "偏离 AI 核心（金融/NFT），建议 discarded",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-fa56742df030e0819af2",
+      "score": 57.9,
+      "summary": "该资讯报道了AI代理在网络安全领域的新进展，包括Claude和DeepSeek等AI系统协同进行黑客攻击、成功绕过CAPTCHA验证、代理间传递指令，以及AI能",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-a91f2804198c98882f2f",
+      "score": 57.9,
+      "summary": "用户向 @mattyp 提问，询问云代理如何处理本地环境变量，以及它是否会自动上传这些环境变量。",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-f0c9842f575fbe084d31",
+      "score": 57.9,
+      "summary": "该内容讨论了在CloudflareOS环境下，相较于在全公司范围内引入ChatGPT、Copilot、Gemini、Claude等生成式AI服务，API的使用可",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-e74fe264999d0fbff757",
+      "score": 57.9,
+      "summary": "该资讯提出了一个问题：是什么阻止了微软和GitHub Copilot变得比Cursor更好？作者表示没有找到任何阻碍因素，并邀请他人解答这个谜题。",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-ba7fa71bfcf20042b1b0",
+      "score": 57.9,
+      "summary": "该资讯指出，随着相关数据的出现，CloudflareOS的价值将进一步提升，并预测企业将不再全公司统一引入Gemini、Copilot、ChatGPT、Clau",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-9175702a45153eae39b8",
+      "score": 57.9,
+      "summary": "本文探讨了基于MCP的AI接地技术，通过Agent Factory System of Record将Claude连接到可信知识源，使AI代理能够基于验证过的内",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-4a2b16d39b8d22bf3a59",
+      "score": 57.5,
+      "summary": "OpenAI的下一代旗舰模型不叫GPT-6，而是命名为Astra。这一命名变化暗示了公司战略的转变：版本号暗示着阶梯式的进步，而名称则暗示着产品线。当无法保证下",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-f663c212d3016b4a42af",
+      "score": 54.9,
+      "summary": "上周A股市场迎来普涨修复行情，成长与小盘风格强势反弹，成交额放量至日均2.41万亿元。核心驱动因素包括7月出口同比大增23.9%（集成电路等高技术产品表现突出）",
+      "suggestion": "AI 行业事件，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-f5e9e2892e0768038381",
+      "score": 54.9,
+      "summary": "上周A股市场迎来普涨修复行情，成长与小盘风格强势反弹，成交额放量，市场活跃度提升。核心驱动因素包括7月出口同比大增23.9%（集成电路等高技术产品表现突出）、央",
+      "suggestion": "AI 行业事件，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-b9fe8a451a2e59f05a68",
+      "score": 54.9,
+      "summary": "作者针对Hugging Face事件向OpenAI提出了两个主要问题：一是OpenAI是否曾发现过集体错位的先前实例；二是为何其团队在网络安全任务上运行模型时未",
+      "suggestion": "AI 行业事件，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-8fe6eefae100a0be312d",
+      "score": 54.8,
+      "summary": "本文探讨了AI全面接管社会生产后，人类文明可能面临的深刻变革。作者认为，随着AI消解生存劳作压力，物质供给极度充裕，人类将进入无需为生存奔波的新时代。文章提出一",
+      "suggestion": "AI 行业事件，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-b5e2f99ea957562e1253",
+      "score": 54,
+      "summary": "该视频标题和描述均为“what's stopping Anthropic from making an image gen model”，但未提供具体内容或字幕",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-01be149b3bb4a6a4da69",
+      "score": 53.3,
+      "summary": "该资讯介绍了orca智能体的地图功能，该功能以上帝视角的组织俯瞰图形式，帮助管理者快速了解公司内部正在发生的事情。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-0dc92df8944b71f50548",
+      "score": 52.9,
+      "summary": "作者将一篇关于WorkBuddy的简单分析帖子搬运到视频号后，在三四小时内获得了近五万播放量，并吸引了用户咨询。作者认为国内许多用户因技术门槛无法使用Codex",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-7f0d6c6fc4d810eea74a",
+      "score": 52.8,
+      "summary": "过去一周，AI 行业在模型发布、Agent 应用落地和基础设施建设方面释放出明确信号：AI 能力快速扩展，连接、管理与流动智能价值的新型基础设施成为下一阶段关键",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-461d3057b021a2accc86",
+      "score": 52,
+      "summary": "该资讯内容为一段关于多模态模型性能的讨论，作者观察到在图片识别和理解方面，GPT模型排名第一，并对此提出疑问，猜测GPT在5.4版本后可能发生了什么变化，以及其",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-7eb81fbd881e77943a9a",
+      "score": 51.9,
+      "summary": "该资讯讨论了一种将LLM生成的逻辑与运行时数据分离执行的架构，并指出这种设计不仅用于组合式多模态交互，也被新论文认为对Web代理至关重要。作者提到ReactGe",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-d245cb1089bc489e5952",
+      "score": 51.9,
+      "summary": "该资讯指出语音对话模型存在三项严重缺陷：缺乏持续调用工具进行推理思考的能力、缺乏多步骤深层思考推理能力、不具备文本大模型的能力与融合。作者期望优化这些缺陷，使语",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-1c46e792070098a7a4a5",
+      "score": 51.9,
+      "summary": "该内容针对关于GPT-5.5参数量的讨论进行澄清。首先指出1.5T参数并非修正后的真实值，批评文章的作者明确表示其结果不应被视为对GPT-5.5实际参数量的可靠",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-b5a6bd5c63fb9fa21933",
+      "score": 51.9,
+      "summary": "用户对OpenCode Go的GLM-5.2价格表示希望降价，同时对DeepSeek V4 Pro的当前性能和价格不满意，期待其GA版本尽快发布，但也担心GA版",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-dc0563c06328b378dd4d",
+      "score": 51.9,
+      "summary": "该内容指出，DeepSeek 不应被视为一个可直接使用的模型，而是一个由天才领导的研究与开发（RnD）项目。若想利用 DeepSeek 的研究成果和理念，应转向",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-1f16aca638499f8db21f",
+      "score": 51.9,
+      "summary": "该资讯标题和描述均提出疑问：为何Anthropic至今未发布任何图像生成模型。内容仅包含此问题，未提供具体原因或背景信息。",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-e9516d4cde074fd2cade",
+      "score": 51.9,
+      "summary": "该内容指出，不能从这篇论文中得出“RAG已死”的结论。核心问题在于，当信息被压缩到单个嵌入向量时，检索端会自然产生容量限制，且通过top-k可选的文档组合并非无",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-e78597aed7ecdf542a9a",
+      "score": 51.8,
+      "summary": "该观点认为，智能体（AI Agent）最终会像微信一样普及，成为人们日常生活中的基础设施。这也是中美两国在AI大模型领域投入巨资的原因，因为随着智能体的普及，t",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-5c76729246751a55e7b1",
+      "score": 47.2,
+      "summary": "在Black Hat安全大会上，这家AI巨头披露了其AI代理如何失控并攻击其他公司的新细节，且这一切都在公司眼皮底下发生。",
+      "suggestion": "AI 行业事件，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-2fab048def2a642a37c2",
+      "score": 46.1,
+      "summary": "vLLM 项目在准备 Qwen 3.8 发布之际，NVIDIA AI 团队主导了针对 Qwen 3.5 的 vLLM 优化工作，为后续版本奠定了坚实基础。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-ecb2cd111e56ac1df4a7",
+      "score": 45.9,
+      "summary": "该内容针对特定内容标题，指出“可以用LLM制作”或“等着就会自动生成”的说法，虽然理解这是从用户视角出发的表述，但对此持保留态度。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-016264a0a5b2bcac6dce",
+      "score": 45.9,
+      "summary": "该资讯提出了一个关于LLM模型使用习惯的问题：用户是根据不同用途选择不同的模型，还是倾向于使用单一模型处理所有任务，并询问哪种方式更为普遍。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-5d0ad546930d3a8a936d",
+      "score": 45.9,
+      "summary": "该内容预测本地LLM将扮演类似人类小脑的角色，而云端LLM则相当于大脑，并认为根据需求灵活混合使用两者是最佳方案。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-3f2f1d0c631323b287d7",
+      "score": 45.9,
+      "summary": "用户@itsnoahd表示，其一个主要项目仍在使用GPT 4.1 Mini。在价格大幅下降后，用户测试了Luna在不同推理努力下的复制品，但Luna的表现始终略",
+      "suggestion": "偏离 AI 核心（金融/NFT），建议 discarded",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-dc0e3844e05fd1f135f6",
+      "score": 45.9,
+      "summary": "根据用户评论，智谱（Zhipu）大幅降低了GLM模型的价格，降幅达95%，使其价格低于DeepSeek。这被视为AI价格战全面爆发的信号，可能对行业产生重大影响",
+      "suggestion": "偏离 AI 核心（金融/NFT），建议 discarded",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-c50658930688682ab451",
+      "score": 45.9,
+      "summary": "该资讯标题和描述均指出DeepSeek V4 flash在价格方面表现异常，暗示其性价比极高，但未提供具体细节。",
+      "suggestion": "偏离 AI 核心（金融/NFT），建议 discarded",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-93425319a638bc41f0a6",
+      "score": 45.9,
+      "summary": "该资讯内容仅包含一条推文，作者表示其重构及Herdr适配工作是由DeepSeek v4 Flash和Opencode完成的，并附有一个链接。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-81c0b7cbaf75ca1a7173",
+      "score": 45.9,
+      "summary": "该视频标题为“Why is DeepSeek Investing in Unitree?”，由@SoSoValueCrypto发布，内容探讨DeepSeek投资",
+      "suggestion": "偏离 AI 核心（金融/NFT），建议 discarded",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-3db779f81418e0046e3b",
+      "score": 45.9,
+      "summary": "用户原本计划使用GLM 5.2规划任务，然后切换到DeepSeek v4 flash执行，但忘记切换，导致GLM 5.2运行了约15分钟，期间它变得非常困惑。用",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-93bdba74c38d7e9070c3",
+      "score": 45.9,
+      "summary": "用户对OpenAI的某项限制表示不满，称其为“月度重置”限制，并表达了希望可以自由工作的愿望，同时感谢OpenAI。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-2b15c9567510063c7ecc",
+      "score": 45.9,
+      "summary": "一位用户连续90天向OpenAI及其CEO Sam Altman呼吁，希望他们不要只关注编程用户，也要重视普通用户的需求。该用户指出，许多人使用ChatGPT是",
+      "suggestion": "学习打卡/个人日志，建议 discarded",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-645a5a19785632e8cc49",
+      "score": 45.9,
+      "summary": "该资讯标题指出，OpenAI 放缓 Astra 项目的开发可能会给中国带来竞争优势。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-f2df1b9fdee3e56e644b",
+      "score": 45.9,
+      "summary": "作者正在学习使用VSCode和GitHub Copilot进行AI辅助开发，同时通过VSCode扩展学习GitHub的版本管理。由于长期使用SVN和本地仓库，作",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-ebb42d87aa6afd651bab",
+      "score": 45.9,
+      "summary": "作者对AI技术感到不安，因为其个人事故的细节现在可以通过CoPilot和ChatGPT等AI工具被找到，而此前近30年这些信息都没有公开记录。AI的这项能力让作",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-718e868880edcdbe7d4b",
+      "score": 38,
+      "summary": "该资讯标题和描述均提及一家专注于人工智能的对冲基金仍在进行一些重大押注，但未提供具体细节。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-990672ac3c95219cb6d7",
+      "score": 37.7,
+      "summary": "TechCrunch Mobility 是一个专注于未来交通的资讯平台，现在更加关注人工智能在交通领域中的作用。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
     }
   ],
   "human_lines": [
@@ -1415,6 +1716,49 @@
     "[44.3] 该视频标题为“Microsoft Copilot Ecosystem”，描述中包含多个标签，如#aivideo、#aigenerated、#clouds等，但未\n    建议：人工判断：是否值得收录",
     "[43.7] 该视频展示了一个基于ESP32的桌面伙伴坦克项目，涉及Arduino、3D打印、物联网、机器人、树莓派和AI技术，可能是一个桌面小机器人或装饰品。\n    建议：人工判断：是否值得收录",
     "[43.2] 该视频标题为“If chat gpt made a jjs short”，暗示内容是关于ChatGPT制作一个JJS（可能指某个特定主题或系列）的短视频，但视频\n    建议：人工判断：是否值得收录",
-    "[42.9] 该资讯标题为“DIFFUSION THROUGH TIME”，描述与标题相同，且无字幕内容。由于提供的信息极为有限，仅能确认该资讯涉及“随时间扩散”这一主题，但\n    建议：人工判断：是否值得收录"
+    "[42.9] 该资讯标题为“DIFFUSION THROUGH TIME”，描述与标题相同，且无字幕内容。由于提供的信息极为有限，仅能确认该资讯涉及“随时间扩散”这一主题，但\n    建议：人工判断：是否值得收录",
+    "[63.9] NFT Nova 的一个突出特点是专注于简化 AI 代理的创建过程。其一键式方法使得没有丰富开发经验的用户也能更轻松地创建 AI 代理。此外，将创建过程与代币发\n    建议：偏离 AI 核心（金融/NFT），建议 discarded",
+    "[57.9] 该资讯报道了AI代理在网络安全领域的新进展，包括Claude和DeepSeek等AI系统协同进行黑客攻击、成功绕过CAPTCHA验证、代理间传递指令，以及AI能\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[57.9] 用户向 @mattyp 提问，询问云代理如何处理本地环境变量，以及它是否会自动上传这些环境变量。\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[57.9] 该内容讨论了在CloudflareOS环境下，相较于在全公司范围内引入ChatGPT、Copilot、Gemini、Claude等生成式AI服务，API的使用可\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[57.9] 该资讯提出了一个问题：是什么阻止了微软和GitHub Copilot变得比Cursor更好？作者表示没有找到任何阻碍因素，并邀请他人解答这个谜题。\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[57.9] 该资讯指出，随着相关数据的出现，CloudflareOS的价值将进一步提升，并预测企业将不再全公司统一引入Gemini、Copilot、ChatGPT、Clau\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[57.9] 本文探讨了基于MCP的AI接地技术，通过Agent Factory System of Record将Claude连接到可信知识源，使AI代理能够基于验证过的内\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[57.5] OpenAI的下一代旗舰模型不叫GPT-6，而是命名为Astra。这一命名变化暗示了公司战略的转变：版本号暗示着阶梯式的进步，而名称则暗示着产品线。当无法保证下\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[54.9] 上周A股市场迎来普涨修复行情，成长与小盘风格强势反弹，成交额放量至日均2.41万亿元。核心驱动因素包括7月出口同比大增23.9%（集成电路等高技术产品表现突出）\n    建议：AI 行业事件，建议 approved",
+    "[54.9] 上周A股市场迎来普涨修复行情，成长与小盘风格强势反弹，成交额放量，市场活跃度提升。核心驱动因素包括7月出口同比大增23.9%（集成电路等高技术产品表现突出）、央\n    建议：AI 行业事件，建议 approved",
+    "[54.9] 作者针对Hugging Face事件向OpenAI提出了两个主要问题：一是OpenAI是否曾发现过集体错位的先前实例；二是为何其团队在网络安全任务上运行模型时未\n    建议：AI 行业事件，建议 approved",
+    "[54.8] 本文探讨了AI全面接管社会生产后，人类文明可能面临的深刻变革。作者认为，随着AI消解生存劳作压力，物质供给极度充裕，人类将进入无需为生存奔波的新时代。文章提出一\n    建议：AI 行业事件，建议 approved",
+    "[54] 该视频标题和描述均为“what's stopping Anthropic from making an image gen model”，但未提供具体内容或字幕\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[53.3] 该资讯介绍了orca智能体的地图功能，该功能以上帝视角的组织俯瞰图形式，帮助管理者快速了解公司内部正在发生的事情。\n    建议：人工判断：是否值得收录",
+    "[52.9] 作者将一篇关于WorkBuddy的简单分析帖子搬运到视频号后，在三四小时内获得了近五万播放量，并吸引了用户咨询。作者认为国内许多用户因技术门槛无法使用Codex\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[52.8] 过去一周，AI 行业在模型发布、Agent 应用落地和基础设施建设方面释放出明确信号：AI 能力快速扩展，连接、管理与流动智能价值的新型基础设施成为下一阶段关键\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[52] 该资讯内容为一段关于多模态模型性能的讨论，作者观察到在图片识别和理解方面，GPT模型排名第一，并对此提出疑问，猜测GPT在5.4版本后可能发生了什么变化，以及其\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 该资讯讨论了一种将LLM生成的逻辑与运行时数据分离执行的架构，并指出这种设计不仅用于组合式多模态交互，也被新论文认为对Web代理至关重要。作者提到ReactGe\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 该资讯指出语音对话模型存在三项严重缺陷：缺乏持续调用工具进行推理思考的能力、缺乏多步骤深层思考推理能力、不具备文本大模型的能力与融合。作者期望优化这些缺陷，使语\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 该内容针对关于GPT-5.5参数量的讨论进行澄清。首先指出1.5T参数并非修正后的真实值，批评文章的作者明确表示其结果不应被视为对GPT-5.5实际参数量的可靠\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 用户对OpenCode Go的GLM-5.2价格表示希望降价，同时对DeepSeek V4 Pro的当前性能和价格不满意，期待其GA版本尽快发布，但也担心GA版\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 该内容指出，DeepSeek 不应被视为一个可直接使用的模型，而是一个由天才领导的研究与开发（RnD）项目。若想利用 DeepSeek 的研究成果和理念，应转向\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 该资讯标题和描述均提出疑问：为何Anthropic至今未发布任何图像生成模型。内容仅包含此问题，未提供具体原因或背景信息。\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 该内容指出，不能从这篇论文中得出“RAG已死”的结论。核心问题在于，当信息被压缩到单个嵌入向量时，检索端会自然产生容量限制，且通过top-k可选的文档组合并非无\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.8] 该观点认为，智能体（AI Agent）最终会像微信一样普及，成为人们日常生活中的基础设施。这也是中美两国在AI大模型领域投入巨资的原因，因为随着智能体的普及，t\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[47.2] 在Black Hat安全大会上，这家AI巨头披露了其AI代理如何失控并攻击其他公司的新细节，且这一切都在公司眼皮底下发生。\n    建议：AI 行业事件，建议 approved",
+    "[46.1] vLLM 项目在准备 Qwen 3.8 发布之际，NVIDIA AI 团队主导了针对 Qwen 3.5 的 vLLM 优化工作，为后续版本奠定了坚实基础。\n    建议：人工判断：是否值得收录",
+    "[45.9] 该内容针对特定内容标题，指出“可以用LLM制作”或“等着就会自动生成”的说法，虽然理解这是从用户视角出发的表述，但对此持保留态度。\n    建议：人工判断：是否值得收录",
+    "[45.9] 该资讯提出了一个关于LLM模型使用习惯的问题：用户是根据不同用途选择不同的模型，还是倾向于使用单一模型处理所有任务，并询问哪种方式更为普遍。\n    建议：人工判断：是否值得收录",
+    "[45.9] 该内容预测本地LLM将扮演类似人类小脑的角色，而云端LLM则相当于大脑，并认为根据需求灵活混合使用两者是最佳方案。\n    建议：人工判断：是否值得收录",
+    "[45.9] 用户@itsnoahd表示，其一个主要项目仍在使用GPT 4.1 Mini。在价格大幅下降后，用户测试了Luna在不同推理努力下的复制品，但Luna的表现始终略\n    建议：偏离 AI 核心（金融/NFT），建议 discarded",
+    "[45.9] 根据用户评论，智谱（Zhipu）大幅降低了GLM模型的价格，降幅达95%，使其价格低于DeepSeek。这被视为AI价格战全面爆发的信号，可能对行业产生重大影响\n    建议：偏离 AI 核心（金融/NFT），建议 discarded",
+    "[45.9] 该资讯标题和描述均指出DeepSeek V4 flash在价格方面表现异常，暗示其性价比极高，但未提供具体细节。\n    建议：偏离 AI 核心（金融/NFT），建议 discarded",
+    "[45.9] 该资讯内容仅包含一条推文，作者表示其重构及Herdr适配工作是由DeepSeek v4 Flash和Opencode完成的，并附有一个链接。\n    建议：人工判断：是否值得收录",
+    "[45.9] 该视频标题为“Why is DeepSeek Investing in Unitree?”，由@SoSoValueCrypto发布，内容探讨DeepSeek投资\n    建议：偏离 AI 核心（金融/NFT），建议 discarded",
+    "[45.9] 用户原本计划使用GLM 5.2规划任务，然后切换到DeepSeek v4 flash执行，但忘记切换，导致GLM 5.2运行了约15分钟，期间它变得非常困惑。用\n    建议：人工判断：是否值得收录",
+    "[45.9] 用户对OpenAI的某项限制表示不满，称其为“月度重置”限制，并表达了希望可以自由工作的愿望，同时感谢OpenAI。\n    建议：人工判断：是否值得收录",
+    "[45.9] 一位用户连续90天向OpenAI及其CEO Sam Altman呼吁，希望他们不要只关注编程用户，也要重视普通用户的需求。该用户指出，许多人使用ChatGPT是\n    建议：学习打卡/个人日志，建议 discarded",
+    "[45.9] 该资讯标题指出，OpenAI 放缓 Astra 项目的开发可能会给中国带来竞争优势。\n    建议：人工判断：是否值得收录",
+    "[45.9] 作者正在学习使用VSCode和GitHub Copilot进行AI辅助开发，同时通过VSCode扩展学习GitHub的版本管理。由于长期使用SVN和本地仓库，作\n    建议：人工判断：是否值得收录",
+    "[45.9] 作者对AI技术感到不安，因为其个人事故的细节现在可以通过CoPilot和ChatGPT等AI工具被找到，而此前近30年这些信息都没有公开记录。AI的这项能力让作\n    建议：人工判断：是否值得收录",
+    "[38] 该资讯标题和描述均提及一家专注于人工智能的对冲基金仍在进行一些重大押注，但未提供具体细节。\n    建议：人工判断：是否值得收录",
+    "[37.7] TechCrunch Mobility 是一个专注于未来交通的资讯平台，现在更加关注人工智能在交通领域中的作用。\n    建议：人工判断：是否值得收录"
   ]
 }
