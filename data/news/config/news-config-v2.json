@@ -13,6 +13,7 @@
     "x_tz": "Asia/Shanghai"
   },
   "collection": {
+    "enabled": true,
     "youtube_search_max_per_run": 100,
     "youtube_search_cost_units": 1,
     "youtube_daily_quota_units": 10000,

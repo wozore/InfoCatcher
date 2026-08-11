@@ -36,7 +36,39 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # 双层门禁：Repository Variable 必须先在 Settings → Secrets and variables →
+  # Actions → Variables 中设为字符串 true；随后再读取版本化 JSON 开关。
+  # 任一层关闭时，含 Secrets 的 collect job 都不会启动。
+  collection_gate:
+    if: ${{ vars.NEWS_COLLECTION_ENABLED == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      config_enabled: ${{ steps.config.outputs.enabled }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Resolve versioned collection switch
+        id: config
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const { loadV2Config, isCollectionEnabled } = require('./src/news/min/pipeline-min');
+          const enabled = isCollectionEnabled(loadV2Config());
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `enabled=${enabled}\n`);
+          console.log(`Versioned collection switch: ${enabled ? 'enabled' : 'disabled'}`);
+          NODE
+
   collect:
+    needs: collection_gate
+    if: ${{ needs.collection_gate.result == 'success' && needs.collection_gate.outputs.config_enabled == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

@@ -20,7 +20,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
-const { runMin } = require('../../src/news/min/pipeline-min');
+const { runMin, isCollectionEnabled } = require('../../src/news/min/pipeline-min');
 const { NEWS_FILES } = require('../../src/shared/paths');
 const { readJson, writeJsonAtomic } = require('../../src/news/core/news-storage');
 
@@ -172,6 +172,47 @@ const localize = async items => {
   }
   return { localized, skipped: 0 };
 };
+
+test('热点采集总开关仅接受严格布尔 true', () => {
+  assert.equal(isCollectionEnabled({ collection: { enabled: true } }), true);
+  assert.equal(isCollectionEnabled({ collection: { enabled: false } }), false);
+  assert.equal(isCollectionEnabled({ collection: { enabled: 'true' } }), false);
+  assert.equal(isCollectionEnabled({ collection: {} }), false);
+  assert.equal(isCollectionEnabled({}), false);
+  assert.equal(isCollectionEnabled(null), false);
+});
+
+test('热点采集总开关关闭时全链零调用、零写入', async () => {
+  const calls = [];
+  const never = name => () => {
+    calls.push(name);
+    throw new Error(`${name} 不应被调用`);
+  };
+  const result = await runMin({
+    config: { ...CONFIG, collection: { ...CONFIG.collection, enabled: false } },
+    now: NOW,
+    collectors: { youtube: never('youtube'), x: never('x') },
+    classify: never('classify'),
+    score: never('score'),
+    review: never('review'),
+    summarize: never('summarize'),
+    localize: never('localize'),
+    historyIn: never('historyIn'),
+    historyOut: never('historyOut'),
+    minStoreIn: never('minStoreIn'),
+    minStoreOut: never('minStoreOut'),
+    lastRunOut: never('lastRunOut'),
+    runId: 'test-min-disabled',
+  });
+
+  assert.deepEqual(calls, []);
+  assert.equal(result.coverage.status, 'disabled');
+  assert.equal(result.coverage.collection_enabled, false);
+  assert.equal(result.coverage.collectors.youtube.status, 'not_run');
+  assert.equal(result.coverage.collectors.x.status, 'not_run');
+  assert.equal(result.minCandidates, 0);
+  assert.equal(result.publicItems, 0);
+});
 
 test('pipeline-min 全链：L0 丢弃 → 分类 → 评分 → 审核 → 候选 → 投影', async () => {
   backupAll();

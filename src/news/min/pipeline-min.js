@@ -74,15 +74,20 @@ const V2_CONFIG_PATH = '../../../data/news/config/news-config-v2.json';
 
 let cachedV2Config = null;
 
-/** 懒加载 news-config-v2.json；不可读时退回最小兜底配置。 */
+/** 懒加载 news-config-v2.json；不可读时退回默认关闭的最小兜底配置。 */
 function loadV2Config() {
   if (cachedV2Config) return cachedV2Config;
   try {
     cachedV2Config = require(V2_CONFIG_PATH);
   } catch {
-    cachedV2Config = { schema_version: 1, collection: {}, keywords: { ai_keywords: [] }, review: {}, scoring: {} };
+    cachedV2Config = { schema_version: 1, collection: { enabled: false }, keywords: { ai_keywords: [] }, review: {}, scoring: {} };
   }
   return cachedV2Config;
+}
+
+/** 热点采集总开关：仅严格布尔 true 启用；缺失或类型错误均安全关闭。 */
+function isCollectionEnabled(config) {
+  return config?.collection?.enabled === true;
 }
 
 /** 规范化 now：Date / ISO 字符串 / 非法值 → 回退当前时间。 */
@@ -131,6 +136,7 @@ async function runMin(options = {}) {
   const coverage = {
     run_id: runId,
     status: 'running',
+    collection_enabled: isCollectionEnabled(config),
     started_at: now.toISOString(),
     collectors: {
       youtube: { status: 'not_run', items: 0, error: null },
@@ -148,6 +154,13 @@ async function runMin(options = {}) {
     min_candidates: 0,
     public_items: 0,
   };
+
+  // 统一门禁必须先于采集、AI 处理与任何持久化；关闭时保持零网络、零写入。
+  if (!coverage.collection_enabled) {
+    coverage.status = 'disabled';
+    return { coverage, minCandidates: 0, publicItems: 0 };
+  }
+
   const errors = [];
   const noteError = (step, error) => {
     const message = errorLabel(error);
@@ -485,6 +498,7 @@ async function runMin(options = {}) {
 module.exports = {
   runMin,
   loadV2Config,
+  isCollectionEnabled,
   normalizeNow,
   resolveXWindow,
 };

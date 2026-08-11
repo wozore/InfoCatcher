@@ -23,7 +23,9 @@ node scripts/build-news.js --fixture
 
 - GitHub Pages：<https://wozore.github.io/InfoCatcher/>
 - `main` 分支推送后自动部署静态站
-- 热点每 3 天 UTC 02:00 采集；工具情报每周日 UTC 06:37 更新
+- 热点采集采用双层[功能开关（Feature Flag）](https://vibe-hub.org/feature-flag)：`data/news/config/news-config-v2.json` 的 `collection.enabled` 与 GitHub Repository Variable `NEWS_COLLECTION_ENABLED` 必须同时为 `true`，否则采集 job 不启动且不注入 API Key
+- Repository Variable 位于仓库 **Settings → Secrets and variables → Actions → Variables**；未创建或值为 `false` 时整体关闭，需要采集时设为小写 `true`
+- 开启后按北京时间分时采集：YouTube 每 3 天 20:00，X 每天 13:00 和 22:00；工具情报每周日 UTC 06:37 更新
 
 具体命令、CI 和故障处理见 [运维操作](docs/operations.md)。
 

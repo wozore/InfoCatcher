@@ -34,7 +34,7 @@
 - [min-store.js](src/news/min/min-store.js) — v2 单状态轴候选层读写（min-candidates.json；自动采集继续合并候选，维护者手动归档后才清空；人工结论不因重新采集重置）。导出: `readMinStore, writeMinStore, mergeCandidatesMin, setReviewStatusMin, setBatchReviewStatusMin, isMinPublicEligible, toPublicItemMin`
 - [daily-projection.js](src/news/min/daily-projection.js) — v2 每日 top N 公开投影（approved 按北京时间自然日分组取前 N：含 YouTube 取 8 / 纯 X 取 5，纯逻辑不调 enrich/filter 两步）。导出: `buildDailyProjection`
 - [keyword-refine.js](src/news/min/keyword-refine.js) — 人工首次审核后关键词提纯（只读 approved 顶层原文，规则召回 + DeepSeek 跨语言归并为 English 四字段清单，dateKey 北京时间，清单文件名固定 keyword-refine.json；维护者填 adopted_keywords；不直接改配置）。导出: `refineKeywords, collectApprovedOriginals, buildRuleCandidates`
-- [pipeline-min.js](src/news/min/pipeline-min.js) — **热点管线 v2 总指挥（runMin 编排）**：采集（默认 YouTube+X 并行，`options.platforms` 支持分时单平台）→ 去重 → L0 硬过滤 → 分类 → 评分（历史库）→ L1/L2 审核 → 候选落地 → 总结/本地化 → 自动生成待审清单（review-list，`options.autoReviewList=false` 可关）→ 每日公开投影写 hotspots.json → 写采集运行记录 last-run.json（ai-top 判定 hasYouTube 用）。X 采集窗口缺省「北京时间今天 0 点 → now」；每步失败降级记 coverage 不抛错。导出: `runMin, loadV2Config, normalizeNow, resolveXWindow`
+- [pipeline-min.js](src/news/min/pipeline-min.js) — **热点管线 v2 总指挥（runMin 编排）**：严格读取 `collection.enabled` 统一总开关（关闭时全链零网络/零写入）→ 采集（默认 YouTube+X 并行，`options.platforms` 支持分时单平台）→ 去重 → L0 硬过滤 → 分类 → 评分（历史库）→ L1/L2 审核 → 候选落地 → 总结/本地化 → 自动生成待审清单（review-list，`options.autoReviewList=false` 可关）→ 每日公开投影写 hotspots.json → 写采集运行记录 last-run.json（ai-top 判定 hasYouTube 用）。X 采集窗口缺省「北京时间今天 0 点 → now」；每步失败降级记 coverage 不抛错。导出: `runMin, loadV2Config, isCollectionEnabled, normalizeNow, resolveXWindow`
 - [review-list.js](src/news/min/review-list.js) — 人工审核清单：自动生成待审清单 review.json（文件名固定去掉日期后缀，date 为北京时间；带 id、只含 pending、评分倒序；已存在时追加新 pending、保留人工结论、--force 强制重建）+ 应用人工结论批量写回候选层（apply；pending 跳过、无 id 旧格式拒绝）。维护者入口：bat/after-first-review.bat、bat/archive-min.bat（归档时重置当日人工清单）。导出: `scoreOf, suggestReview, buildReviewList, mergeReviewCandidates, loadReviewList, applyReviewList`
 
 ### collectors/ — 各平台采集（会发网络请求）
@@ -80,7 +80,7 @@
 - [validate-news.js](src/maintenance/validate-news.js) — news 数据校验（hotspots + v2 候选层 min-candidates）。导出: `validateNews`
 
 ## scripts/ — 命令入口（薄包装；src/ 为纯逻辑）
-- [build-news.js](scripts/build-news.js) — 热点构建 CLI（**默认走 v2 runMin**；`--platforms youtube|x` 分时采集；`--fixture` 注入 mock 采集跑通全链；`--min` 兼容 no-op；导出 `{ main: mainMin, mainMin, buildMinFixtureOptions }`）
+- [build-news.js](scripts/build-news.js) — 热点构建 CLI（**默认走 v2 runMin**；统一开关关闭时明确输出 disabled 且正常退出；`--platforms youtube|x` 分时采集；`--fixture` 注入 mock 采集跑通全链；`--min` 兼容 no-op；导出 `{ main: mainMin, mainMin, buildMinFixtureOptions }`）
 - [news-cli.js](scripts/news-cli.js) — CLI 分发入口（透传 src/news/cli/news-cli，含 **`min-review` 命令组**）
 - [validate.js](scripts/validate.js) — 校验聚合入口
 - [build-dist.js](scripts/build-dist.js) — src/web + public + data → dist/（维护者入口：bat/build-dist.bat）

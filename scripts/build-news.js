@@ -29,6 +29,10 @@ async function mainMin(platforms) {
   const options = fixture ? buildMinFixtureOptions() : {};
   if (Array.isArray(platforms) && platforms.length) options.platforms = platforms;
   const { coverage, minCandidates, publicItems } = await runMin(options);
+  if (coverage.status === 'disabled') {
+    console.log('ℹ️ 热点采集已关闭（data/news/config/news-config-v2.json: collection.enabled 未严格设为 true）');
+    return { coverage, minCandidates, publicItems };
+  }
   const youtube = coverage.collectors && coverage.collectors.youtube;
   const x = coverage.collectors && coverage.collectors.x;
   const fmt = slot => slot ? (slot.status === 'not_run' ? '未运行' : `${slot.status}/${slot.items || 0} 条`) : '未运行';
