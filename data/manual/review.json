@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "kind": "review_candidates",
-  "generated_at": "2026-08-09T08:26:05.987Z",
-  "date": "20260809",
-  "total_pending": 176,
+  "generated_at": "2026-08-11T05:52:08.677Z",
+  "date": "20260811",
+  "total_pending": 209,
   "note": "待人工审核清单：请逐条设置 review_status（pending/approved/discarded）。应用结论：双击 bat/apply-review.bat（或 node scripts/news-cli.js min-review apply --file 本文件），应用后自动生成 top 名单（ai-top）供二次审核；approved 才进后续 top-selected/publish。",
   "candidates": [
     {
@@ -1237,6 +1237,237 @@
       "summary": "该资讯标题为“DIFFUSION THROUGH TIME”，描述与标题相同，且无字幕内容。由于提供的信息极为有限，仅能确认该资讯涉及“随时间扩散”这一主题，但",
       "suggestion": "人工判断：是否值得收录",
       "review_status": "pending"
+    },
+    {
+      "id": "x-95fd82735e6324908fe4",
+      "score": 64.9,
+      "summary": "这是一条关于Claude Code入门教程的推文，作者自称将推出“日本最易懂的Claude Code入门”内容，并表达了迫不及待想开始写作的心情。作者提到自己擅",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-202508c181f8feb211bf",
+      "score": 57.9,
+      "summary": "作者尝试在ollama的免费额度下使用cloud模型，感叹速度很快。重新配置了Continue插件，从PowerShell启动VSCode时MCP服务器也能正常",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-c25e6e7100af33a4f8b5",
+      "score": 57.9,
+      "summary": "该内容探讨了将AI技术应用于非拍摄空间（如法庭）的视觉记录概念。作者认为，在相机无法进入的场所，人类可以通过观察、记忆和语言描述，再利用AI重构视觉表现，这为传",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-b000c57d079ee6230079",
+      "score": 57.9,
+      "summary": "该内容讨论了AI水印技术的局限性，指出轻量级改写不足以去除水印，水印在编辑后依然存在，因此需要进行真正的重构。同时，目前没有公开的检测器来验证结果，Anthro",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-ff02ae9804f2826569f6",
+      "score": 57.9,
+      "summary": "该内容指出，人们常将某事物视为作弊检测器，但真正的问题在于：当AI代理的输出被用于其他提示、文档或产品页面时，其品牌信息也随之传播。这种品牌印记并非可通过查找替",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-ed27245b0b28cd0ac8cf",
+      "score": 54.9,
+      "summary": "本文讨论了Anthropic的Claude生成代码中可能存在的持久性机器可读指纹问题。文章指出，问题不在于Anthropic拥有Claude生成代码的所有权（他",
+      "suggestion": "AI 行业事件，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-1beb62cd59e58b8b3b92",
+      "score": 54.9,
+      "summary": "该资讯标题和描述均强调Anthropic公司IPO（首次公开募股）的热度是真实存在的，市场对其上市充满期待。",
+      "suggestion": "AI 行业事件，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-a72b455f869f39ba75d4",
+      "score": 52.9,
+      "summary": "作者通过描述自己日常使用多种AI工具（如威艾斯-代码、微软副驾驶员、克劳德、代码艾克斯等）进行编程和图片生成的场景，探讨了“Token”与“词元”的翻译选择，认",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-a7b284484624ba3fc7aa",
+      "score": 52.6,
+      "summary": "Motif 3 正式发布，包括 Motif 3 Base 和 Motif 3 两个版本。其中 Motif 3 Base 是预训练的基础模型。",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-11df18ad995fe6a45f7b",
+      "score": 52.1,
+      "summary": "作者表示不关心人们是否使用AI进行成人内容创作，但提醒大家注意，许多创建于2026年的账号实际上是AI生成的，这些AI使用了与QWEN相关的本地或在线架构，如K",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-d47f53e9fc9eb0432fc8",
+      "score": 51.9,
+      "summary": "该资讯内容涉及混合行动、OSINT（开源情报）和API的使用，提到了多个AI模型（如Grok、Gemini）及相关人物（如FedorovMykhailo、Elo",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-91fa5d99684dc9301240",
+      "score": 51.9,
+      "summary": "该内容是一条推文或评论，作者提到某个话题（可能由@ciro98762894引发）引导其深入思考，并建议对方询问大语言模型（LLM）关于向量语义模型、余弦相似度、",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-14f2dae46e4ea08bd614",
+      "score": 51.8,
+      "summary": "微软AI负责人Mustafa Suleyman在推特上宣布，其MAI-Image-2.6模型已成为全球排名第二的文本到图像模型，超越了Nano Banana、M",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-eb3202fb5ced888bae35",
+      "score": 51.8,
+      "summary": "该内容讨论了国产AI模型的使用体验。作者认为，使用足够多的国产模型后，会发现它们在某些方面可以替代GPT、Sol和Opus等国际模型。然而，进一步使用后，作者发",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-3187611432b068051ac5",
+      "score": 51.6,
+      "summary": "该资讯引用自 Huberman Lab 的推文，指出人工智能因基于互联网训练而具备某些能力，但也缺乏人类大脑拥有的某些能力。内容仅提出了这一对比，未展开具体细节",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-23b9bcfa64a8b8e4c865",
+      "score": 51.5,
+      "summary": "该资讯标题和描述均为同一句日英双语内容，质疑Anthropic公司是否已养成伪善的习惯。由于缺乏具体事件或细节，摘要仅能反映这一质疑性观点。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-f1b6fb284c3b609af1ac",
+      "score": 49.4,
+      "summary": "该内容标题为“为什么LLM生成的图表如此糟糕”，描述与标题相同，但未提供具体内容或字幕，因此无法获取更多细节。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-ddf7cd79dde79e4f42c8",
+      "score": 48.1,
+      "summary": "该推文指出，Gemini 的文本中已经嵌入了类似 SynthID 的识别信号，这种信号是通过对 LLM 文章结构进行统计模式化来实现的。作者表示已在文章中详细说",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-56e112fdb8dca283bbf3",
+      "score": 46.9,
+      "summary": "该内容讨论了在文本中插入零宽连接符（ZWJ）或零宽空格，以及改变日语浊点表示方式或使用异体字选择器等方法来规避文本处理。作者指出，针对这些方法的对策取决于具体手",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-8973e16b00b53b70ab8e",
+      "score": 46.3,
+      "summary": "该内容是对Meta团队及其成员Mark和Alex在开放权重AI领域所做贡献的感谢。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-bf6727ad10d81723bd99",
+      "score": 45.9,
+      "summary": "该资讯探讨了欧盟《人工智能法案》第50条第2款被大型语言模型提供商采纳后，是否会使类似@pangram的工具变得无关紧要。内容仅提出了这一疑问，未提供具体分析或",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-10a0b87695f1e322d83e",
+      "score": 45.9,
+      "summary": "该内容预测了AI生成内容未来的发展趋势：所有大型语言模型（LLM）都会在其生成的内容中添加标记，平台会自动标记AI生成的内容并减少其传播范围。作者认为，在这种情",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-cb3e9f448b9a9699880b",
+      "score": 45.9,
+      "summary": "欧盟要求所有AI生成媒体必须可区分，所有大型语言模型（LLM）都需要满足这一要求，而不仅仅是Anthropic。虽然这显然不是坏事，但由于这是一种统计方法，存在",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-e4439b451775810e2930",
+      "score": 45.9,
+      "summary": "作者认为在LLM时代，Erlang/OTP的适用场景变得更加狭窄，主要集中在磁盘处理较少的分布式系统领域。虽然自家公司专注于这一领域，因此仍在使用，但一般情况下",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-fe6c0de1afa40ac644f3",
+      "score": 45.9,
+      "summary": "该资讯表达了一种预测，认为一旦DeepSeek V4 Pro发布，所有主要的美国AI提供商将面临订阅量的大幅下降。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-f74b6092cfdd67f7360c",
+      "score": 45.9,
+      "summary": "一位拥有30年技术经验的专业人士表示，在接触DeepSeek仅数小时后，发现自己对该技术的理解远不如预期，感到困惑和谦卑。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-77e671c81a6e15d8af32",
+      "score": 45.9,
+      "summary": "针对“Anthropic与软银集团（SBG）无关”的评论，本文指出即使没有资本关系，Anthropic的估值变动也会影响AI模型企业的公允价值评估，因此仍有意义",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-9bf8a89108f596ee8f35",
+      "score": 45.9,
+      "summary": "OpenAI 因认为 ChatGPT 更新存在极度危险性而暂停了该更新。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-73ed3ef6ea633a671f0f",
+      "score": 45.9,
+      "summary": "该内容指出，AI水印算法自2023年起已公开（Kirchenbauer, ICML 2023），Google于2024年将其工业化（SynthID），Anthr",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-ec4bce8dca73ce3ef7d3",
+      "score": 45.9,
+      "summary": "该资讯指出，即使是顶尖的AI公司Anthropic，其日语使用水平仍存在不足，因此人类的工作机会依然存在。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-afb00711bb6e3ee969d0",
+      "score": 40.3,
+      "summary": "Meta AI 官方账号发布推文，宣布 Muse Glimmer 模型已在 Hugging Face 平台开放下载，并提供了技术博客链接供用户阅读，同时提及可查",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-ddfe271e461a5a3de956",
+      "score": 39.5,
+      "summary": "这是一条关于扎克伯格对更强大AI系统进行思考的推文转发，推文作者认为这是他所见过的扎克伯格关于这一主题的最深思熟虑的文章，并推荐阅读。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-6bdd7e7ac832da87377d",
+      "score": 39.1,
+      "summary": "该资讯宣布 Ling-3.0-tiny 模型已准备好通过 vLLM 进行服务，并强调始终提供 day-0 支持。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
     }
   ],
   "human_lines": [
@@ -1415,6 +1646,39 @@
     "[44.3] 该视频标题为“Microsoft Copilot Ecosystem”，描述中包含多个标签，如#aivideo、#aigenerated、#clouds等，但未\n    建议：人工判断：是否值得收录",
     "[43.7] 该视频展示了一个基于ESP32的桌面伙伴坦克项目，涉及Arduino、3D打印、物联网、机器人、树莓派和AI技术，可能是一个桌面小机器人或装饰品。\n    建议：人工判断：是否值得收录",
     "[43.2] 该视频标题为“If chat gpt made a jjs short”，暗示内容是关于ChatGPT制作一个JJS（可能指某个特定主题或系列）的短视频，但视频\n    建议：人工判断：是否值得收录",
-    "[42.9] 该资讯标题为“DIFFUSION THROUGH TIME”，描述与标题相同，且无字幕内容。由于提供的信息极为有限，仅能确认该资讯涉及“随时间扩散”这一主题，但\n    建议：人工判断：是否值得收录"
+    "[42.9] 该资讯标题为“DIFFUSION THROUGH TIME”，描述与标题相同，且无字幕内容。由于提供的信息极为有限，仅能确认该资讯涉及“随时间扩散”这一主题，但\n    建议：人工判断：是否值得收录",
+    "[64.9] 这是一条关于Claude Code入门教程的推文，作者自称将推出“日本最易懂的Claude Code入门”内容，并表达了迫不及待想开始写作的心情。作者提到自己擅\n    建议：AI 产品/工具，建议 approved",
+    "[57.9] 作者尝试在ollama的免费额度下使用cloud模型，感叹速度很快。重新配置了Continue插件，从PowerShell启动VSCode时MCP服务器也能正常\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[57.9] 该内容探讨了将AI技术应用于非拍摄空间（如法庭）的视觉记录概念。作者认为，在相机无法进入的场所，人类可以通过观察、记忆和语言描述，再利用AI重构视觉表现，这为传\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[57.9] 该内容讨论了AI水印技术的局限性，指出轻量级改写不足以去除水印，水印在编辑后依然存在，因此需要进行真正的重构。同时，目前没有公开的检测器来验证结果，Anthro\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[57.9] 该内容指出，人们常将某事物视为作弊检测器，但真正的问题在于：当AI代理的输出被用于其他提示、文档或产品页面时，其品牌信息也随之传播。这种品牌印记并非可通过查找替\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[54.9] 本文讨论了Anthropic的Claude生成代码中可能存在的持久性机器可读指纹问题。文章指出，问题不在于Anthropic拥有Claude生成代码的所有权（他\n    建议：AI 行业事件，建议 approved",
+    "[54.9] 该资讯标题和描述均强调Anthropic公司IPO（首次公开募股）的热度是真实存在的，市场对其上市充满期待。\n    建议：AI 行业事件，建议 approved",
+    "[52.9] 作者通过描述自己日常使用多种AI工具（如威艾斯-代码、微软副驾驶员、克劳德、代码艾克斯等）进行编程和图片生成的场景，探讨了“Token”与“词元”的翻译选择，认\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[52.6] Motif 3 正式发布，包括 Motif 3 Base 和 Motif 3 两个版本。其中 Motif 3 Base 是预训练的基础模型。\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[52.1] 作者表示不关心人们是否使用AI进行成人内容创作，但提醒大家注意，许多创建于2026年的账号实际上是AI生成的，这些AI使用了与QWEN相关的本地或在线架构，如K\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 该资讯内容涉及混合行动、OSINT（开源情报）和API的使用，提到了多个AI模型（如Grok、Gemini）及相关人物（如FedorovMykhailo、Elo\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 该内容是一条推文或评论，作者提到某个话题（可能由@ciro98762894引发）引导其深入思考，并建议对方询问大语言模型（LLM）关于向量语义模型、余弦相似度、\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.8] 微软AI负责人Mustafa Suleyman在推特上宣布，其MAI-Image-2.6模型已成为全球排名第二的文本到图像模型，超越了Nano Banana、M\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.8] 该内容讨论了国产AI模型的使用体验。作者认为，使用足够多的国产模型后，会发现它们在某些方面可以替代GPT、Sol和Opus等国际模型。然而，进一步使用后，作者发\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.6] 该资讯引用自 Huberman Lab 的推文，指出人工智能因基于互联网训练而具备某些能力，但也缺乏人类大脑拥有的某些能力。内容仅提出了这一对比，未展开具体细节\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.5] 该资讯标题和描述均为同一句日英双语内容，质疑Anthropic公司是否已养成伪善的习惯。由于缺乏具体事件或细节，摘要仅能反映这一质疑性观点。\n    建议：人工判断：是否值得收录",
+    "[49.4] 该内容标题为“为什么LLM生成的图表如此糟糕”，描述与标题相同，但未提供具体内容或字幕，因此无法获取更多细节。\n    建议：人工判断：是否值得收录",
+    "[48.1] 该推文指出，Gemini 的文本中已经嵌入了类似 SynthID 的识别信号，这种信号是通过对 LLM 文章结构进行统计模式化来实现的。作者表示已在文章中详细说\n    建议：人工判断：是否值得收录",
+    "[46.9] 该内容讨论了在文本中插入零宽连接符（ZWJ）或零宽空格，以及改变日语浊点表示方式或使用异体字选择器等方法来规避文本处理。作者指出，针对这些方法的对策取决于具体手\n    建议：人工判断：是否值得收录",
+    "[46.3] 该内容是对Meta团队及其成员Mark和Alex在开放权重AI领域所做贡献的感谢。\n    建议：人工判断：是否值得收录",
+    "[45.9] 该资讯探讨了欧盟《人工智能法案》第50条第2款被大型语言模型提供商采纳后，是否会使类似@pangram的工具变得无关紧要。内容仅提出了这一疑问，未提供具体分析或\n    建议：人工判断：是否值得收录",
+    "[45.9] 该内容预测了AI生成内容未来的发展趋势：所有大型语言模型（LLM）都会在其生成的内容中添加标记，平台会自动标记AI生成的内容并减少其传播范围。作者认为，在这种情\n    建议：人工判断：是否值得收录",
+    "[45.9] 欧盟要求所有AI生成媒体必须可区分，所有大型语言模型（LLM）都需要满足这一要求，而不仅仅是Anthropic。虽然这显然不是坏事，但由于这是一种统计方法，存在\n    建议：人工判断：是否值得收录",
+    "[45.9] 作者认为在LLM时代，Erlang/OTP的适用场景变得更加狭窄，主要集中在磁盘处理较少的分布式系统领域。虽然自家公司专注于这一领域，因此仍在使用，但一般情况下\n    建议：人工判断：是否值得收录",
+    "[45.9] 该资讯表达了一种预测，认为一旦DeepSeek V4 Pro发布，所有主要的美国AI提供商将面临订阅量的大幅下降。\n    建议：人工判断：是否值得收录",
+    "[45.9] 一位拥有30年技术经验的专业人士表示，在接触DeepSeek仅数小时后，发现自己对该技术的理解远不如预期，感到困惑和谦卑。\n    建议：人工判断：是否值得收录",
+    "[45.9] 针对“Anthropic与软银集团（SBG）无关”的评论，本文指出即使没有资本关系，Anthropic的估值变动也会影响AI模型企业的公允价值评估，因此仍有意义\n    建议：人工判断：是否值得收录",
+    "[45.9] OpenAI 因认为 ChatGPT 更新存在极度危险性而暂停了该更新。\n    建议：人工判断：是否值得收录",
+    "[45.9] 该内容指出，AI水印算法自2023年起已公开（Kirchenbauer, ICML 2023），Google于2024年将其工业化（SynthID），Anthr\n    建议：人工判断：是否值得收录",
+    "[45.9] 该资讯指出，即使是顶尖的AI公司Anthropic，其日语使用水平仍存在不足，因此人类的工作机会依然存在。\n    建议：人工判断：是否值得收录",
+    "[40.3] Meta AI 官方账号发布推文，宣布 Muse Glimmer 模型已在 Hugging Face 平台开放下载，并提供了技术博客链接供用户阅读，同时提及可查\n    建议：人工判断：是否值得收录",
+    "[39.5] 这是一条关于扎克伯格对更强大AI系统进行思考的推文转发，推文作者认为这是他所见过的扎克伯格关于这一主题的最深思熟虑的文章，并推荐阅读。\n    建议：人工判断：是否值得收录",
+    "[39.1] 该资讯宣布 Ling-3.0-tiny 模型已准备好通过 vLLM 进行服务，并强调始终提供 day-0 支持。\n    建议：人工判断：是否值得收录"
   ]
 }
