@@ -115,9 +115,40 @@ jobs:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
         run: node scripts/build-news.js --platforms "$NEWS_PLATFORMS"
 
+      - name: Record X usage summary
+        if: always()
+        run: |
+          node - <<'NODE' >> "$GITHUB_STEP_SUMMARY"
+          const fs = require('fs');
+          const path = 'data/news/runtime/last-run.json';
+          if (!fs.existsSync(path)) {
+            console.log('## X 采集额度');
+            console.log('本次没有可用的 last-run.json 额度记录。');
+            process.exit(0);
+          }
+          try {
+            const run = JSON.parse(fs.readFileSync(path, 'utf8'));
+            const x = run.collectors && run.collectors.x;
+            const c = x && x.credits;
+            console.log('## X 采集额度');
+            if (!c) {
+              console.log('本次运行未写入 credits 记录。');
+            } else {
+              const r = c.requests || {};
+              console.log(`- run_id: ${run.run_id || 'unknown'}`);
+              console.log(`- credits: ${c.used || 0}/${c.budget || 0}`);
+              console.log(`- billable tweets: ${c.tweets || 0}`);
+              console.log(`- successful articles: ${c.articles || 0}`);
+              console.log(`- requests: ${r.total || 0} (tweet=${r.tweet || 0}, article=${r.article || 0}, retries=${r.retries || 0})`);
+            }
+          } catch (error) {
+            console.log(`## X 采集额度\n读取记录失败：${error.message}`);
+          }
+          NODE
+
       - name: Test generated data
         run: |
-          node --test tests/news/news-pipeline-min.test.js tests/news/news-rss.test.js tests/news/news-public-gate.test.js tests/news/news-reviewer.test.js tests/news/news-summarizer.test.js tests/news/news-localizer.test.js tests/news/content-classifier-llm.test.js
+          node --test tests/news/collector-x-v2.test.js tests/news/news-pipeline-min.test.js tests/news/news-rss.test.js tests/news/news-public-gate.test.js tests/news/news-reviewer.test.js tests/news/news-summarizer.test.js tests/news/news-localizer.test.js tests/news/content-classifier-llm.test.js
           node scripts/validate.js
 
       - name: Create review branch with internal candidate data

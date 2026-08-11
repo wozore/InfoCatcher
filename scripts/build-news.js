@@ -37,6 +37,10 @@ async function mainMin(platforms) {
   const x = coverage.collectors && coverage.collectors.x;
   const fmt = slot => slot ? (slot.status === 'not_run' ? '未运行' : `${slot.status}/${slot.items || 0} 条`) : '未运行';
   console.log(`ℹ️ v2 覆盖：${coverage.status}（youtube=${fmt(youtube)}，x=${fmt(x)}）`);
+  if (x && x.credits) {
+    const requests = x.credits.requests || {};
+    console.log(`   💳 X credits：${x.credits.used}/${x.credits.budget}（tweets=${x.credits.tweets || 0}，articles=${x.credits.articles || 0}，requests=${requests.total || 0}，retries=${requests.retries || 0}）`);
+  }
   if (coverage.status === 'failed') {
     const reasons = [youtube && youtube.reason, x && x.reason].filter(Boolean).join('；');
     console.log(`   ⚠️ 启用平台采集均失败${reasons ? `（${reasons}）` : ''}——通常因缺 API key，管线已降级不崩`);

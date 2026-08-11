@@ -14,12 +14,12 @@
  *     超 config.collection.x_credits_per_run（3750）即停止。
  *
  * 配额模型（成本要点）：
- *   - 博主 last_tweets 与关键词 advanced_search 均按「时间窗内返回的推文」
- *     每条计 x_credits_per_tweet（15）credits；
- *   - 长文读取按成功读取的篇数计 x_credits_per_article（100）credits；
- *   - usedCredits 为累计值（tweets×15 + articles×100），任一操作前先查配额，
- *     不足则停止并记 failures 降级返回；
- *   - 关键词与博主结果按 native_id 去重（重复推文只输出一次，credits 仍按各自返回计）。
+ *   - last_tweets 与 advanced_search 每次请求先按最大返回条数预占
+ *     x_tweets_per_request_max × x_credits_per_tweet（默认 20×15=300）；
+ *     成功响应按实际返回条数结算，窗外/重复/无效项仍计费；失败重试的预占不退款；
+ *   - 长文读取每次尝试预占 x_credits_per_article（默认 100），空正文/失败/重试不退款；
+ *   - used 为保守预占后的累计值，任何操作前先查预算，避免本地账本低估平台费用；
+ *   - 关键词与博主结果按 native_id 去重（重复推文只输出一次，但 credits 按响应返回计）。
  *
  * 使用示例：
  *   const result = await collectXV2({
@@ -45,6 +45,7 @@ const DEFAULT_CONFIG = Object.freeze({
     x_credits_per_run: 3750,
     x_credits_per_tweet: 15,
     x_credits_per_article: 100,
+    x_tweets_per_request_max: 20,
     request_timeout_ms: 15000,
     max_retries: 2,
     retry_base_ms: 750,
@@ -213,9 +214,9 @@ function extractArticleText(payload) {
   return [title, subtitle, body].map(part => part.trim()).filter(Boolean).join('\n\n') || null;
 }
 
-/** 执行一次请求并解出推文数组；解析/网络错误向上抛，由调用方记录并降级。 */
-async function fetchTweets(url, headers, fetchImpl, config) {
-  const text = await requestText(url, { headers, fetchImpl }, config);
+/** 执行一次请求并解出推文数组；beforeAttempt 在每次真实 fetch 前预占额度。 */
+async function fetchTweets(url, headers, fetchImpl, config, beforeAttempt = null) {
+  const text = await requestText(url, { headers, fetchImpl }, config, beforeAttempt);
   return extractTweetArray(JSON.parse(text));
 }
 
@@ -236,7 +237,18 @@ async function fetchTweets(url, headers, fetchImpl, config) {
 async function collectXV2(options = {}) {
   const config = resolveConfig(options.config);
   const apiKey = options.xApiKey || process.env.X_API_KEY;
-  const emptyCredits = { used: 0, tweets: 0, articles: 0 };
+  const collection = config.collection || {};
+  const creditsPerRun = Math.max(0, Number(collection.x_credits_per_run) || 3750);
+  const tweetsCost = Math.max(1, Number(collection.x_credits_per_tweet) || 15);
+  const articlesCost = Math.max(1, Number(collection.x_credits_per_article) || 100);
+  const tweetsPerRequestMax = Math.max(1, Number(collection.x_tweets_per_request_max) || 20);
+  const emptyCredits = {
+    used: 0,
+    budget: creditsPerRun,
+    tweets: 0,
+    articles: 0,
+    requests: { total: 0, tweet: 0, article: 0, retries: 0 },
+  };
 
   if (!apiKey) {
     return { items: [], credits: emptyCredits, coverage: { status: 'failed', reason: 'missing_api_key' } };
@@ -249,21 +261,38 @@ async function collectXV2(options = {}) {
   const sinceMs = options.sinceIso ? new Date(options.sinceIso).getTime() : null;
   const untilMs = options.untilIso ? new Date(options.untilIso).getTime() : null;
 
-  const collection = config.collection || {};
   const baseUrl = collection.twitter_api_base_url || 'https://api.twitterapi.io';
-  const creditsPerRun = collection.x_credits_per_run ?? 3750;
-  const tweetsCost = collection.x_credits_per_tweet ?? 15;
-  const articlesCost = collection.x_credits_per_article ?? 100;
   const accounts = Array.isArray(config.x_accounts) ? config.x_accounts : [];
   const keywords = Array.isArray(config.keywords?.ai_keywords) ? config.keywords.ai_keywords : [];
 
   const headers = { 'X-API-Key': apiKey };
-  const credits = { used: 0, tweets: 0, articles: 0 };
+  const credits = emptyCredits;
   const items = new Map(); // native_id -> item（博主 + 关键词全局去重）
   const articleCandidates = []; // { tweetId, item } 待补读长文
   const failures = [];
 
   const canAfford = cost => credits.used + cost <= creditsPerRun;
+  const tweetAttemptCost = tweetsPerRequestMax * tweetsCost;
+
+  /** 每次真实 fetch 前预占；失败/空响应不在调用层自动退款。 */
+  const reserveAttempt = (kind, cost, attempt) => {
+    if (!canAfford(cost)) return null;
+    credits.used += cost;
+    credits.requests.total += 1;
+    credits.requests[kind] += 1;
+    if (attempt > 0) credits.requests.retries += 1;
+    return { kind, cost };
+  };
+
+  /** tweet 成功响应按平台实际返回总数结算；窗外/重复/无效项也属于计费返回。 */
+  const settleTweetAttempt = (reservation, returnedCount) => {
+    if (!reservation) return;
+    const count = Math.max(0, Number(returnedCount) || 0);
+    const billableCount = Math.max(1, Math.min(count, tweetsPerRequestMax));
+    const actualCost = billableCount * tweetsCost;
+    credits.used += actualCost - reservation.cost;
+    credits.tweets += count;
+  };
 
   /** 时间窗过滤：created 缺失/不可解析视为不在窗内。 */
   const inWindow = created => {
@@ -275,13 +304,10 @@ async function collectXV2(options = {}) {
     return true;
   };
 
-  /** 统一收口：计配额 → 规范化 → 去重入 items → 标记长文候选。 */
+  /** 统一收口：已在请求级预占额度；这里只做时间窗过滤、规范化和去重。 */
   const ingestTweet = (tweet, author) => {
-    if (!canAfford(tweetsCost)) return false; // 配额不足，停止该来源后续推文
     const created = tweet.createdAt || tweet.created_at || tweet.created || tweet.timestamp;
-    if (!inWindow(created)) return true; // 窗外的推文不消耗配额，继续看下一条
-    credits.used += tweetsCost;
-    credits.tweets += 1;
+    if (!inWindow(created)) return true; // 窗外条目已在响应结算时计费
     const item = normalizeXV2Tweet(tweet, author, fetchedAt);
     if (!item) return true;
     if (!items.has(item.native_id)) {
@@ -293,47 +319,57 @@ async function collectXV2(options = {}) {
     return true;
   };
 
-  // ── 1. 博主时间窗：last_tweets（15 credits/条） ──
+  // ── 1. 博主时间窗：last_tweets（按响应条数计费，先按每页上限预占） ──
   for (const handle of accounts) {
-    if (credits.used >= creditsPerRun) { failures.push('credits_exhausted'); break; }
+    if (!canAfford(tweetAttemptCost)) { failures.push('credits_exhausted'); break; }
     if (!handle) continue;
     const author = { id: `x-${hash(handle)}`, handle, name: handle, language: 'en', content_tags: [] };
     try {
       const url = new URL('/twitter/user/last_tweets', baseUrl);
       url.searchParams.set('userName', handle);
-      for (const tweet of await fetchTweets(url, headers, fetchImpl, config)) {
-        if (ingestTweet(tweet, author) === false) { failures.push('credits_exhausted'); break; }
-      }
+      let lastReservation = null;
+      const tweets = await fetchTweets(url, headers, fetchImpl, config, attempt => {
+        lastReservation = reserveAttempt('tweet', tweetAttemptCost, attempt);
+        return lastReservation !== null;
+      });
+      settleTweetAttempt(lastReservation, tweets.length);
+      for (const tweet of tweets) ingestTweet(tweet, author);
     } catch (error) {
       failures.push(`accounts:${handle}:${errorLabel(error)}`);
     }
   }
 
-  // ── 2. 关键词搜索：advanced_search（15 credits/条），与博主结果按 native_id 去重 ──
+  // ── 2. 关键词搜索：advanced_search（按响应条数计费，与博主结果按 native_id 去重） ──
   for (const keyword of keywords) {
-    if (credits.used >= creditsPerRun) { failures.push('credits_exhausted'); break; }
+    if (!canAfford(tweetAttemptCost)) { failures.push('credits_exhausted'); break; }
     if (!keyword) continue;
     try {
       const url = new URL('/twitter/tweet/advanced_search', baseUrl);
       url.searchParams.set('query', keyword);
       url.searchParams.set('queryType', 'Latest');
-      for (const tweet of await fetchTweets(url, headers, fetchImpl, config)) {
-        if (ingestTweet(tweet, null) === false) { failures.push('credits_exhausted'); break; }
-      }
+      let lastReservation = null;
+      const tweets = await fetchTweets(url, headers, fetchImpl, config, attempt => {
+        lastReservation = reserveAttempt('tweet', tweetAttemptCost, attempt);
+        return lastReservation !== null;
+      });
+      settleTweetAttempt(lastReservation, tweets.length);
+      for (const tweet of tweets) ingestTweet(tweet, null);
     } catch (error) {
       failures.push(`search:${keyword}:${errorLabel(error)}`);
     }
   }
 
-  // ── 3. 长文读取：/twitter/article（100 credits/篇），正文并入 description ──
+  // ── 3. 长文读取：/twitter/article（每次尝试预占 100 credits） ──
   for (const candidate of articleCandidates) {
     if (!canAfford(articlesCost)) { failures.push('credits_exhausted'); break; }
     try {
       const url = new URL('/twitter/article', baseUrl);
       url.searchParams.set('tweetId', String(candidate.tweetId));
-      const body = extractArticleText(JSON.parse(await requestText(url, { headers, fetchImpl }, config)));
+      const bodyText = await requestText(url, { headers, fetchImpl }, config, attempt =>
+        reserveAttempt('article', articlesCost, attempt) !== null
+      );
+      const body = extractArticleText(JSON.parse(bodyText));
       if (body) {
-        credits.used += articlesCost;
         credits.articles += 1;
         const base = candidate.item.description || '';
         candidate.item.description = [body, base].filter(Boolean).join('\n\n').slice(0, 600);

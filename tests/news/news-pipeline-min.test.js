@@ -140,7 +140,17 @@ const previousPublicItem = {
 // ── mock 注入 ──
 const collectors = {
   youtube: async () => ({ items: [ytItem1, ytItem2], quota: {}, coverage: { status: 'success' } }),
-  x: async () => ({ items: [xItem1, xItem2], credits: { used: 0 }, coverage: { status: 'success' } }),
+  x: async () => ({
+    items: [xItem1, xItem2],
+    credits: {
+      used: 45,
+      budget: 3750,
+      tweets: 2,
+      articles: 0,
+      requests: { total: 1, tweet: 1, article: 0, retries: 0 },
+    },
+    coverage: { status: 'success' },
+  }),
 };
 // 审核 mock：YouTube 判 discarded、X 判 kept（避免真实 LLM）
 const review = async items => {
@@ -301,6 +311,13 @@ test('pipeline-min 全链：L0 丢弃 → 分类 → 评分 → 审核 → 候�
     assert.equal(lastRun.collectors.youtube.items, 2, 'YouTube 实际采到 2 条');
     assert.equal(lastRun.collectors.x.status, 'success');
     assert.equal(lastRun.collectors.x.items, 2, 'X 实际采到 2 条');
+    assert.deepEqual(lastRun.collectors.x.credits, {
+      used: 45,
+      budget: 3750,
+      tweets: 2,
+      articles: 0,
+      requests: { total: 1, tweet: 1, article: 0, retries: 0 },
+    });
   } finally {
     restoreAll();
   }

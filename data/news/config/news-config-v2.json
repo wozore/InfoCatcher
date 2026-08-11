@@ -22,6 +22,7 @@
     "x_credits_per_run": 3750,
     "x_credits_per_tweet": 15,
     "x_credits_per_article": 100,
+    "x_tweets_per_request_max": 20,
     "max_output_items_daily": 5,
     "min_output_items_daily": 3,
     "max_output_with_youtube": 8,

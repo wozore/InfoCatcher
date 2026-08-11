@@ -140,7 +140,7 @@ async function runMin(options = {}) {
     started_at: now.toISOString(),
     collectors: {
       youtube: { status: 'not_run', items: 0, error: null },
-      x: { status: 'not_run', items: 0, error: null },
+      x: { status: 'not_run', items: 0, error: null, credits: null },
     },
     collected_total: 0,
     after_dedupe: 0,
@@ -213,6 +213,7 @@ async function runMin(options = {}) {
         slot.items = collected.length;
         slot.status = (result && result.coverage && result.coverage.status) || 'success';
         slot.reason = (result && result.coverage && result.coverage.reason) || null;
+        slot.credits = result && result.credits ? result.credits : null;
         return collected;
       } catch (error) {
         slot.status = 'failed';
@@ -462,7 +463,7 @@ async function runMin(options = {}) {
   // 10.5 采集运行记录：每次采集结束写 data/news/runtime/last-run.json。
   //     这是"最后一次采集记录"的唯一权威来源（hotspots coverage 会被 publish 覆盖），
   //     供 ai-top 判定"最后一次采集是否有 YouTube"来决定 top N（cmd-min.hasYouTubeInLastRun）。
-  //     记录 platforms 与各平台 status/items；写失败仅降级记 coverage，不阻塞管线。
+  //     记录 platforms、各平台 status/items，以及 X credits/请求账本；写失败仅降级记 coverage，不阻塞管线。
   //     测试注入 options.lastRunOut 覆盖写盘，避免污染运行时文件。
   // ═══════════════════════════════════════════════════════════════
   try {
@@ -483,6 +484,7 @@ async function runMin(options = {}) {
           items: coverage.collectors.x.items,
           error: coverage.collectors.x.error,
           reason: coverage.collectors.x.reason || null,
+          credits: coverage.collectors.x.credits || null,
         },
       },
     };
