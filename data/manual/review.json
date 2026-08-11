@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "kind": "review_candidates",
-  "generated_at": "2026-08-09T08:26:05.987Z",
-  "date": "20260809",
-  "total_pending": 176,
+  "generated_at": "2026-08-11T14:51:23.476Z",
+  "date": "20260811",
+  "total_pending": 210,
   "note": "待人工审核清单：请逐条设置 review_status（pending/approved/discarded）。应用结论：双击 bat/apply-review.bat（或 node scripts/news-cli.js min-review apply --file 本文件），应用后自动生成 top 名单（ai-top）供二次审核；approved 才进后续 top-selected/publish。",
   "candidates": [
     {
@@ -1237,6 +1237,244 @@
       "summary": "该资讯标题为“DIFFUSION THROUGH TIME”，描述与标题相同，且无字幕内容。由于提供的信息极为有限，仅能确认该资讯涉及“随时间扩散”这一主题，但",
       "suggestion": "人工判断：是否值得收录",
       "review_status": "pending"
+    },
+    {
+      "id": "x-a71979fb709dfe7145fd",
+      "score": 63.9,
+      "summary": "Kevin T. Frazier 在 MTS 直播中讨论了白宫决定对其 AI 框架保密的问题，认为这一决定并非明智之举。他指出，对于试图与 Anthropic、",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-fbb77394c89a8941a1ea",
+      "score": 63.8,
+      "summary": "Redmi K100 Pro 首发搭载的澎湃 OS 4.0 在 AI 功能上进行了系统级重构，核心在于将 AI 从“应用工具”升级为“系统底层调度中枢”。其主要",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-15ae568f6910a538b963",
+      "score": 57.8,
+      "summary": "该资讯标题和描述均提及“手机里的智能体终于要来了”，暗示手机端智能体功能即将推出，但未提供具体细节。",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-a293dab0fce66403a0b9",
+      "score": 57.4,
+      "summary": "该资讯标题和描述均提及“@bingwujinyi 反事实盲点这思路把多模态模型压榨得够狠”，但未提供具体内容或细节，因此仅能确认该资讯涉及反事实盲点思路对多模态",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-0de9bbbfcee7c1c8ecf7",
+      "score": 54.8,
+      "summary": "拉扎德资产管理公司旗下的多只基础设施基金，包括规模达123亿美元的拉扎德全球上市基础设施投资组合基金、注册于爱尔兰的拉扎德全球上市基础设施股票基金，以及较晚成立",
+      "suggestion": "偏离 AI 核心（金融/NFT），建议 discarded",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-89005570dc3d3ac02ed1",
+      "score": 52.9,
+      "summary": "该资讯自荐一款开源项目，定位为桌面式 Kubernetes 多集群控制台，主要面向私有网络与混合云环境，提供统一的资源管理、权限控制、安全操作与审计入口。目前项",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-f1f8b26516a3fd0f9b0f",
+      "score": 52.8,
+      "summary": "该视频介绍了MiniMax H3创作神器的开源情况，包含整合包，并讨论了官方年更Skill的问题，同时强调社区在推动Skill发展中的作用，提出每个喜欢的视频都",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-5b04db599dd7fb765b0e",
+      "score": 52.4,
+      "summary": "DeepSeek V4 Pro 正式版仍为纯文本模型，预计 DeepSeek V5 才会支持多模态。GLM 5.5 将直接支持多模态。未来国产开源模型三强为 G",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-f4859a7db3bad66b48d9",
+      "score": 51.9,
+      "summary": "本文预测当碳硅负极技术克服震动工况并突破能量密度限制，使机器人续航超过8小时临界点后，VLA（视觉-语言-动作）大模型对吞吐量和高频闭环推理的算力消耗将彻底改变",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-839e2d17b524d8e029f4",
+      "score": 51.9,
+      "summary": "作者认为在游戏开发调试中，本地LLM的用途有限。主要使用DS v4 flash pro，遇到问题时改用HY3 preview或gpt5.6 luna，其中HY3",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-22298a2193fa0549e189",
+      "score": 51.9,
+      "summary": "与一位从事AI行业的朋友交流得知，当前许多AI项目虽然能够获得融资，但往往在第一轮就失败，原因在于这些项目并非从实际需求出发。相比之下，情感陪伴类型的垂直大模型",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-e5517f7d53bad7bb8341",
+      "score": 51.9,
+      "summary": "作者认为DeepSeek在中文写作效果上优于国外大模型，并指出这一现象与训练语料有关。国外大模型受英文语料影响，翻译成中文时存在信息损失，导致所谓的“AI味儿”",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-d1545e555adb7c0ca305",
+      "score": 51.9,
+      "summary": "该内容指出规模阈值是实际的门控因素。DeepSeek V3 在预填充阶段使用 EP32，在解码阶段使用 EP320，这意味着需要数千个 GPU 才能让这种拆分在",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-b0ecd475ef15292fbcb7",
+      "score": 51.9,
+      "summary": "Nvidia 发布了开源模型 Nemotron 3.5 Lightining，该模型在能力排名中位列世界第 24 名。作者感谢 Nvidia 对 AI 产业的开",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-81ce43a078c043603a4a",
+      "score": 51.9,
+      "summary": "作者表示可能不会续订Claude AI的20倍订阅，转而将OpenAI作为主要模型，并辅以K3、Grok和Deepseek。同时，作者可能会按API使用量使用O",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-c1be7d3cd3e7de6702f8",
+      "score": 51.9,
+      "summary": "Anthropic 正在优化其输出 token 的独特可指纹性，而非追求最佳的中性输出结果，这导致其输出内容读起来有些奇怪，例如使用“load-bearing”",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-34fe4e8690c8856698b0",
+      "score": 51.8,
+      "summary": "视频回应了用户关于Mac能否部署本地MiniMax H3大模型的疑问，并带来了好消息，鼓励用户尝试部署。",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-14f2dae46e4ea08bd614",
+      "score": 51.3,
+      "summary": "微软AI负责人Mustafa Suleyman在推特上宣布，其团队开发的MAI-Image-2.6模型已成为全球排名第二的文本到图像模型，超越了Nano Ban",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-3187611432b068051ac5",
+      "score": 51.1,
+      "summary": "该资讯引用自 Huberman Lab 的推文，指出人工智能因基于互联网训练而具备某些能力，但也缺乏人类大脑拥有的某些能力。内容仅提出了这一对比，未展开具体细节",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-a7b284484624ba3fc7aa",
+      "score": 47.4,
+      "summary": "Motif 3 正式发布，包括 Motif 3 Base 和 Motif 3 两个版本。其中 Motif 3 Base 是预训练的基础模型。",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-45f88a19c6c47fbcde36",
+      "score": 45.9,
+      "summary": "该资讯讨论了儿童安全相关措施可能被逐步扩大范围的风险，并强调了需要无审查的本地开源权重大型语言模型（LLM）的原因。内容指出，一旦引入此类措施，其适用范围可能在",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-e81d47f6aa8b3914082d",
+      "score": 45.9,
+      "summary": "作者指出，真正的水平提升不在于安装应用，而在于将应用接入一个包含间歇性故障的爬虫和可能返回空结果的LLM调用的文件夹中。作者构建了这样一个外联管道，并强调人们跳",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-28029d980e57cc1e574c",
+      "score": 45.9,
+      "summary": "本文讨论了在大型语言模型（LLM）输出上使用水印技术可能产生的效果，并指出其效果可能与大多数人的预期完全相反。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-a354fb9629d825cc69dd",
+      "score": 45.9,
+      "summary": "本文讨论了Google在先进LLM开发竞赛中的策略。作者认为Google已半退出前沿模型竞赛，原因之一是Google无需上市融资，而OpenAI和Anthrop",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-747005ccf8f71ddcb285",
+      "score": 45.9,
+      "summary": "该资讯建议尝试使用GPT Live进行睡眠导入用的发声练习和呼吸法的指示监督，认为这具有尝试价值。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-cce6fbf0ba23f546cc03",
+      "score": 45.9,
+      "summary": "作者表示逐渐掌握了DeepSeek（以及一般LLM）的使用习惯，指出它们倾向于不加思考地大量添加显而易见且冗长的评论。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-9f34c5c59bf5f8b73a01",
+      "score": 45.9,
+      "summary": "该资讯指出，微软以约70%的利润率销售H100芯片，旨在向特定企业推销Copilot，并称这不是黑客行为，而是订阅钩子。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-db4af87380b93367a804",
+      "score": 45.8,
+      "summary": "NVIDIA 提出未来每个人都将拥有一个端侧智能体，强调端侧AI的普及趋势。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-8973e16b00b53b70ab8e",
+      "score": 45.7,
+      "summary": "该内容是对Meta团队及其成员Mark和Alex在开放权重AI领域所做贡献的感谢。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-e6f5bff72ae967ac37e5",
+      "score": 40.9,
+      "summary": "该资讯指出，在会议中启用语音识别功能时，只需会议主办方中的一名成员拥有Teams Premium许可证或Copilot Premium许可证即可，而参会者只需拥",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-b72850b9ba9d2e178b49",
+      "score": 40.9,
+      "summary": "用户希望确定后的内容能够被保存，并成为Copilot的上下文。同时，用户询问是否可以使用云端的Word配合SharePoint来实现这一需求。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-afb00711bb6e3ee969d0",
+      "score": 39.8,
+      "summary": "Meta AI 官方账号发布推文，宣布 Muse Glimmer 模型已在 Hugging Face 平台开放下载，并提供了技术博客链接供用户阅读，同时提及可查",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-ddfe271e461a5a3de956",
+      "score": 38.9,
+      "summary": "这是一条关于扎克伯格对更强大AI系统进行思考的推文转发，推文作者认为这是他所见过的扎克伯格关于这一主题的最深思熟虑的文章，并推荐阅读。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-6bdd7e7ac832da87377d",
+      "score": 38.7,
+      "summary": "该资讯宣布 Ling-3.0-tiny 模型已准备好通过 vLLM 进行服务，并强调始终提供 Day-0 支持。",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
     }
   ],
   "human_lines": [
@@ -1415,6 +1653,40 @@
     "[44.3] 该视频标题为“Microsoft Copilot Ecosystem”，描述中包含多个标签，如#aivideo、#aigenerated、#clouds等，但未\n    建议：人工判断：是否值得收录",
     "[43.7] 该视频展示了一个基于ESP32的桌面伙伴坦克项目，涉及Arduino、3D打印、物联网、机器人、树莓派和AI技术，可能是一个桌面小机器人或装饰品。\n    建议：人工判断：是否值得收录",
     "[43.2] 该视频标题为“If chat gpt made a jjs short”，暗示内容是关于ChatGPT制作一个JJS（可能指某个特定主题或系列）的短视频，但视频\n    建议：人工判断：是否值得收录",
-    "[42.9] 该资讯标题为“DIFFUSION THROUGH TIME”，描述与标题相同，且无字幕内容。由于提供的信息极为有限，仅能确认该资讯涉及“随时间扩散”这一主题，但\n    建议：人工判断：是否值得收录"
+    "[42.9] 该资讯标题为“DIFFUSION THROUGH TIME”，描述与标题相同，且无字幕内容。由于提供的信息极为有限，仅能确认该资讯涉及“随时间扩散”这一主题，但\n    建议：人工判断：是否值得收录",
+    "[63.9] Kevin T. Frazier 在 MTS 直播中讨论了白宫决定对其 AI 框架保密的问题，认为这一决定并非明智之举。他指出，对于试图与 Anthropic、\n    建议：AI 产品/工具，建议 approved",
+    "[63.8] Redmi K100 Pro 首发搭载的澎湃 OS 4.0 在 AI 功能上进行了系统级重构，核心在于将 AI 从“应用工具”升级为“系统底层调度中枢”。其主要\n    建议：AI 产品/工具，建议 approved",
+    "[57.8] 该资讯标题和描述均提及“手机里的智能体终于要来了”，暗示手机端智能体功能即将推出，但未提供具体细节。\n    建议：AI 概念，建议看内容后定（学习类多为日志）",
+    "[57.4] 该资讯标题和描述均提及“@bingwujinyi 反事实盲点这思路把多模态模型压榨得够狠”，但未提供具体内容或细节，因此仅能确认该资讯涉及反事实盲点思路对多模态\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[54.8] 拉扎德资产管理公司旗下的多只基础设施基金，包括规模达123亿美元的拉扎德全球上市基础设施投资组合基金、注册于爱尔兰的拉扎德全球上市基础设施股票基金，以及较晚成立\n    建议：偏离 AI 核心（金融/NFT），建议 discarded",
+    "[52.9] 该资讯自荐一款开源项目，定位为桌面式 Kubernetes 多集群控制台，主要面向私有网络与混合云环境，提供统一的资源管理、权限控制、安全操作与审计入口。目前项\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[52.8] 该视频介绍了MiniMax H3创作神器的开源情况，包含整合包，并讨论了官方年更Skill的问题，同时强调社区在推动Skill发展中的作用，提出每个喜欢的视频都\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[52.4] DeepSeek V4 Pro 正式版仍为纯文本模型，预计 DeepSeek V5 才会支持多模态。GLM 5.5 将直接支持多模态。未来国产开源模型三强为 G\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 本文预测当碳硅负极技术克服震动工况并突破能量密度限制，使机器人续航超过8小时临界点后，VLA（视觉-语言-动作）大模型对吞吐量和高频闭环推理的算力消耗将彻底改变\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 作者认为在游戏开发调试中，本地LLM的用途有限。主要使用DS v4 flash pro，遇到问题时改用HY3 preview或gpt5.6 luna，其中HY3\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 与一位从事AI行业的朋友交流得知，当前许多AI项目虽然能够获得融资，但往往在第一轮就失败，原因在于这些项目并非从实际需求出发。相比之下，情感陪伴类型的垂直大模型\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 作者认为DeepSeek在中文写作效果上优于国外大模型，并指出这一现象与训练语料有关。国外大模型受英文语料影响，翻译成中文时存在信息损失，导致所谓的“AI味儿”\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 该内容指出规模阈值是实际的门控因素。DeepSeek V3 在预填充阶段使用 EP32，在解码阶段使用 EP320，这意味着需要数千个 GPU 才能让这种拆分在\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] Nvidia 发布了开源模型 Nemotron 3.5 Lightining，该模型在能力排名中位列世界第 24 名。作者感谢 Nvidia 对 AI 产业的开\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] 作者表示可能不会续订Claude AI的20倍订阅，转而将OpenAI作为主要模型，并辅以K3、Grok和Deepseek。同时，作者可能会按API使用量使用O\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.9] Anthropic 正在优化其输出 token 的独特可指纹性，而非追求最佳的中性输出结果，这导致其输出内容读起来有些奇怪，例如使用“load-bearing”\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.8] 视频回应了用户关于Mac能否部署本地MiniMax H3大模型的疑问，并带来了好消息，鼓励用户尝试部署。\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.3] 微软AI负责人Mustafa Suleyman在推特上宣布，其团队开发的MAI-Image-2.6模型已成为全球排名第二的文本到图像模型，超越了Nano Ban\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.1] 该资讯引用自 Huberman Lab 的推文，指出人工智能因基于互联网训练而具备某些能力，但也缺乏人类大脑拥有的某些能力。内容仅提出了这一对比，未展开具体细节\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[47.4] Motif 3 正式发布，包括 Motif 3 Base 和 Motif 3 两个版本。其中 Motif 3 Base 是预训练的基础模型。\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[45.9] 该资讯讨论了儿童安全相关措施可能被逐步扩大范围的风险，并强调了需要无审查的本地开源权重大型语言模型（LLM）的原因。内容指出，一旦引入此类措施，其适用范围可能在\n    建议：人工判断：是否值得收录",
+    "[45.9] 作者指出，真正的水平提升不在于安装应用，而在于将应用接入一个包含间歇性故障的爬虫和可能返回空结果的LLM调用的文件夹中。作者构建了这样一个外联管道，并强调人们跳\n    建议：人工判断：是否值得收录",
+    "[45.9] 本文讨论了在大型语言模型（LLM）输出上使用水印技术可能产生的效果，并指出其效果可能与大多数人的预期完全相反。\n    建议：人工判断：是否值得收录",
+    "[45.9] 本文讨论了Google在先进LLM开发竞赛中的策略。作者认为Google已半退出前沿模型竞赛，原因之一是Google无需上市融资，而OpenAI和Anthrop\n    建议：人工判断：是否值得收录",
+    "[45.9] 该资讯建议尝试使用GPT Live进行睡眠导入用的发声练习和呼吸法的指示监督，认为这具有尝试价值。\n    建议：人工判断：是否值得收录",
+    "[45.9] 作者表示逐渐掌握了DeepSeek（以及一般LLM）的使用习惯，指出它们倾向于不加思考地大量添加显而易见且冗长的评论。\n    建议：人工判断：是否值得收录",
+    "[45.9] 该资讯指出，微软以约70%的利润率销售H100芯片，旨在向特定企业推销Copilot，并称这不是黑客行为，而是订阅钩子。\n    建议：人工判断：是否值得收录",
+    "[45.8] NVIDIA 提出未来每个人都将拥有一个端侧智能体，强调端侧AI的普及趋势。\n    建议：人工判断：是否值得收录",
+    "[45.7] 该内容是对Meta团队及其成员Mark和Alex在开放权重AI领域所做贡献的感谢。\n    建议：人工判断：是否值得收录",
+    "[40.9] 该资讯指出，在会议中启用语音识别功能时，只需会议主办方中的一名成员拥有Teams Premium许可证或Copilot Premium许可证即可，而参会者只需拥\n    建议：人工判断：是否值得收录",
+    "[40.9] 用户希望确定后的内容能够被保存，并成为Copilot的上下文。同时，用户询问是否可以使用云端的Word配合SharePoint来实现这一需求。\n    建议：人工判断：是否值得收录",
+    "[39.8] Meta AI 官方账号发布推文，宣布 Muse Glimmer 模型已在 Hugging Face 平台开放下载，并提供了技术博客链接供用户阅读，同时提及可查\n    建议：人工判断：是否值得收录",
+    "[38.9] 这是一条关于扎克伯格对更强大AI系统进行思考的推文转发，推文作者认为这是他所见过的扎克伯格关于这一主题的最深思熟虑的文章，并推荐阅读。\n    建议：人工判断：是否值得收录",
+    "[38.7] 该资讯宣布 Ling-3.0-tiny 模型已准备好通过 vLLM 进行服务，并强调始终提供 Day-0 支持。\n    建议：人工判断：是否值得收录"
   ]
 }
