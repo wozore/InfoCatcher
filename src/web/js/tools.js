@@ -21,7 +21,6 @@ import {
   escapeHtml,
   safeExternalUrl,
   renderTimelinessBadge,
-  scoreClass,
   hasFree,
   renderState,
   setRegionBusy,
@@ -337,8 +336,8 @@ function renderToolCard(t) {
   const fitLines = !isCollection && (t.best_for?.length || t.not_for?.length)
     ? '<div class="tool-card-fit">' +
       (intelligenceKindLabel ? '<p class="tool-card-kind">' + escapeHtml(intelligenceKindLabel) + '</p>' : '') +
-      (t.best_for?.[0] ? '<p class="fit-pos">✓ 适合：' + escapeHtml(t.best_for[0]) + '</p>' : '') +
-      (t.not_for?.[0] ? '<p class="fit-neg">✕ 不适合：' + escapeHtml(t.not_for[0]) + '</p>' : '') +
+      (t.best_for?.[0] ? '<p class="fit-pos">适合：' + escapeHtml(t.best_for[0]) + '</p>' : '') +
+      (t.not_for?.[0] ? '<p class="fit-neg">不适合：' + escapeHtml(t.not_for[0]) + '</p>' : '') +
       '</div>'
     : intelligenceKindLabel ? '<div class="tool-card-fit"><p class="tool-card-kind">' + escapeHtml(intelligenceKindLabel) + '</p></div>' : '';
 
@@ -436,9 +435,26 @@ function renderTools() {
 
 function renderScenarioExplanations(title, items) {
   if (!Array.isArray(items) || items.length === 0) return '';
-  return '<div class="intelligence-scenarios"><h5>' + title + '</h5>' + items.map(item =>
-    '<div><b>' + escapeHtml(item.title) + '：</b>' + escapeHtml(item.description) + '</div>'
-  ).join('') + '</div>';
+  return '<div class="intelligence-scenarios"><h5>' + title + '</h5>' + items.map(item => {
+    const itemTitle = typeof item === 'string' ? item : item.title;
+    const description = typeof item === 'string' ? '' : item.description;
+    return '<div><b>' + escapeHtml(itemTitle) + (description ? '：' : '') + '</b>' + escapeHtml(description) + '</div>';
+  }).join('') + '</div>';
+}
+
+function normalizeConcreteToolDetail(tool) {
+  const sourceId = tool.id + '-catalog-source';
+  return {
+    id: tool.id,
+    kind: 'tool',
+    summary: tool.strengths || '',
+    applicable_scenarios: (tool.best_for || []).map(title => ({ title, description: '' })),
+    inapplicable_scenarios: (tool.not_for || []).map(title => ({ title, description: '' })),
+    source_refs: [sourceId],
+    sourceId,
+    source: tool.source || tool.name,
+    last_updated: tool.last_updated || '',
+  };
 }
 
 function renderIntelligenceItem(item, sourceMap, selectedItemId, toolId) {
@@ -480,9 +496,14 @@ function renderLeafDetails(item, sourceMap, showCompare, options = {}) {
     : '';
   const sources = (item.source_refs || []).map(ref => sourceMap.get(ref)).filter(Boolean);
   const latestQueriedAt = sources.map(s => s.queried_at).filter(Boolean).sort().reverse()[0] || null;
-  const sourcesHtml = '<div class="intelligence-sources"><b>资料来源：</b>' + sources.map(source =>
-    '<a href="' + escapeHtml(safeExternalUrl(source.url)) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(source.title) + '</a>'
-  ).join(' · ') + (latestQueriedAt ? '<span>查询于 ' + escapeHtml(latestQueriedAt.slice(0, 10)) + '</span>' : '') + '</div>';
+  const sourceDate = item.last_updated
+    ? '<span>资料更新于 ' + escapeHtml(item.last_updated) + '</span>'
+    : latestQueriedAt ? '<span>查询于 ' + escapeHtml(latestQueriedAt.slice(0, 10)) + '</span>' : '';
+  const sourcesHtml = sources.length
+    ? '<div class="intelligence-sources"><b>资料来源：</b>' + sources.map(source =>
+      '<a href="' + escapeHtml(safeExternalUrl(source.url)) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(source.title) + '</a>'
+    ).join(' · ') + sourceDate + '</div>'
+    : '';
   const compareHtml = showCompare && !options.hideCompare
     ? '<div class="leaf-actions"><button class="compare-toggle ' + (isCompareSelected(showCompare.toolId, item.id) ? 'selected' : '') + '" onclick="toggleCompareRef(\'' + escapeHtml(showCompare.toolId) + '\',\'' + escapeHtml(item.id) + '\',this)">' + (isCompareSelected(showCompare.toolId, item.id) ? '已选' : '+对比') + '</button></div>'
     : '';
@@ -726,6 +747,12 @@ function renderConcreteToolLeaf(t) {
       '<div class="intelligence-item-body">' + renderLeafDetails(item, sourceMap, { toolId: t.collectionToolId }, { hideCompare: true }) + '</div></div>';
   }
 
+  const detail = normalizeConcreteToolDetail(t);
+  const sourceMap = new Map([[detail.sourceId, {
+    id: detail.sourceId,
+    title: detail.source,
+    url: t.url,
+  }]]);
   const leafBadge = renderTimelinessBadge(getToolPublishedDate(t));
   const comparable = isComparableRootTool(t);
   const rootSelected = comparable && isCompareSelected(t.id, null);
@@ -733,54 +760,12 @@ function renderConcreteToolLeaf(t) {
     ? '<button class="compare-toggle ' + (rootSelected ? 'selected' : '') + '" aria-pressed="' + rootSelected + '" onclick="toggleCompareRef(\'' + escapeHtml(t.id) + '\',null,this)">' + (rootSelected ? '已选' : '+对比') + '</button>'
     : '';
 
-  const scenariosHtml = (title, items) => items && items.length
-    ? '<div class="intelligence-scenarios"><h5>' + title + '</h5>' + items.map(item =>
-        '<div><b>' + escapeHtml(item) + '</b></div>'
-      ).join('') + '</div>'
-    : '';
-
-  const pricingHtml = '<div class="intelligence-pricing"><h5>价格</h5>' +
-    '<div class="plan-card"><p><b>免费层：</b>' + escapeHtml(t.free_tier || '无') + '</p>' +
-    (t.paid_tiers || []).map(p =>
-      '<p style="margin-top:4px"><b>' + escapeHtml(p.name) + '：</b>' + escapeHtml(p.price) + ' — ' + escapeHtml(p.features) + '</p>'
-    ).join('') + '</div></div>';
-
-  const accessHtml = '<div class="intelligence-context"><b>访问门槛：</b>' + escapeHtml(t.access_barrier || '未提供') +
-    (t.chinese_note ? '<p style="margin-top:4px"><b>中文支持：</b>' + escapeHtml(t.chinese_note) + '</p>' : '') + '</div>';
-
-  const scoreItem = (val, label) => Number.isFinite(val)
-    ? '<div class="score-item"><div class="score-val ' + scoreClass(val) + '">' + val.toFixed(1) + '</div><div class="score-label">' + label + '</div></div>'
-    : '';
-  const scoresHtml = '<div class="scores">' +
-    scoreItem(t.rating_overall, '综合') +
-    scoreItem(t.rating_chinese, '中文支持') +
-    scoreItem(t.rating_ease, '易用性') +
-    scoreItem(t.rating_price, '性价比') +
-    '</div>';
-
-  const sourcesHtml = '<div class="intelligence-sources"><b>资料来源：</b>' +
-    '<a href="' + escapeHtml(safeExternalUrl(t.url)) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(t.source || t.name) + '</a>' +
-    (t.last_updated ? '<span>资料更新于 ' + escapeHtml(t.last_updated) + '</span>' : '') + '</div>';
-
-  const actionsHtml = comparable
-    ? '<div class="leaf-actions"><a class="btn" href="' + escapeHtml(safeExternalUrl(t.url)) + '" target="_blank" rel="noopener noreferrer">打开工具页面</a></div>'
-    : '';
-
   return detailHeader(t.name, t.icon, t.vendor, t.url) +
     '<div class="model-leaf-panel">' +
     '<div class="model-panel-heading"><div>' +
-      '<span class="node-kind-badge leaf">具体工具</span><h4>' + escapeHtml(t.icon + ' ' + t.name) + '</h4>' + leafBadge +
+      '<span class="node-kind-badge leaf">具体工具</span><h4>' + escapeHtml(t.name) + '</h4>' + leafBadge +
     '</div>' + compareButton + '</div>' +
-    '<div class="intelligence-item-body">' +
-      '<p>' + escapeHtml(t.strengths || '') + '</p>' +
-      scenariosHtml('适用场景及说明', t.best_for) +
-      scenariosHtml('不适用场景及说明', t.not_for) +
-      pricingHtml +
-      accessHtml +
-      scoresHtml +
-      sourcesHtml +
-      actionsHtml +
-    '</div></div>';
+    '<div class="intelligence-item-body">' + renderLeafDetails(detail, sourceMap, null, { hideCompare: true }) + '</div></div>';
 }
 
 function openDirectoryDetail(toolId, itemId, trigger = null) {

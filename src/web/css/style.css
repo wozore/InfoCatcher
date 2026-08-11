@@ -933,8 +933,15 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 .tool-card[class*="tool-card--"] .tool-card-desc { color: var(--tc-ink-secondary); }
 .tool-card-fit { display: grid; gap: 3px; margin-bottom: 12px; }
 .tool-card-fit p { margin: 0; font-size: 13px; line-height: 1.5; }
-.fit-pos { color: var(--tc-accent); }
-.fit-neg { color: var(--danger); }
+.tool-card-fit .fit-pos,
+.tool-card-fit .fit-neg {
+  box-sizing: border-box;
+  display: block;
+  padding-left: 10px;
+  border-left: 3px solid;
+}
+.tool-card-fit .fit-pos { color: var(--tc-accent); border-color: var(--tc-accent); }
+.tool-card-fit .fit-neg { color: var(--danger); border-color: var(--danger); }
 .tool-card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
 .tool-card-name { font-size: 17px; line-height: 1.35; font-weight: 700; letter-spacing: -.01em; }
 .tool-card-vendor { font-size: 12px; line-height: 1.45; color: var(--text-hint); margin-bottom: 8px; }
