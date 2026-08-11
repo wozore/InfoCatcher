@@ -22,6 +22,7 @@ X 采集窗口由管线 `resolveXWindow` 决定：缺省「北京时间今天 0 
 
 | 字段 | 默认值 | 说明 |
 |---|---|---|
+| `enabled` | `true` | 热点采集应用层总开关；仅严格布尔 `true` 启用。GitHub 还要求 Repository Variable `NEWS_COLLECTION_ENABLED=true`，两层任一关闭即零网络、零写入 |
 | `youtube_search_max_per_run` | `100` | 每次运行 search.list 调用上限（独立桶 100 次/天硬上限） |
 | `youtube_search_cost_units` | `1` | 单次 search.list 配额成本（单位） |
 | `youtube_daily_quota_units` | `10000` | YouTube 合并桶每日配额（videos/comments/categories 共享） |
@@ -29,9 +30,10 @@ X 采集窗口由管线 `resolveXWindow` 决定：缺省「北京时间今天 0 
 | `youtube_comments_top_n` | `10` | 每条视频抓取的评论数（点赞最高的前 N 条） |
 | `youtube_fallback_enabled` | `true` | search 桶耗尽时自动降级 videos.list mostPopular（热门榜，合并桶计费） |
 | `youtube_fallback_popular_pages` | `2` | 降级热门榜最多翻页数（每页 50 条） |
-| `x_credits_per_run` | `3750` | X 每次抓取的 credits 预算上限（= 250 条推文） |
-| `x_credits_per_tweet` | `15` | X 单条推文 credits 成本 |
-| `x_credits_per_article` | `100` | X 长文（Twitter Article）单篇 credits 成本 |
+| `x_credits_per_run` | `3750` | X 每次抓取的 credits 硬上限；允许设为 `0` 完全停用 X 请求，不允许高于 3750，非法值按 0 fail closed |
+| `x_credits_per_tweet` | `15` | X 单条返回推文 credits 成本；不得低于供应商安全下界 15 |
+| `x_credits_per_article` | `100` | X 长文请求单次尝试的 credits 成本；空正文、失败与重试也保留预占，不得低于 100 |
+| `x_tweets_per_request_max` | `20` | tweet 请求发出前的最大返回条数预占上界；不得低于供应商单页安全上界 20，超量响应按完整条数结算并停止后续请求 |
 | `max_output_items_daily` | `5` | 每日公开热点最大数（无 YouTube 时 = 5，即"3~5"的上限） |
 | `min_output_items_daily` | `3` | 每日公开热点目标最小数（R1 拍板，投影不强凑；不足 3 条按实际显示） |
 | `max_output_with_youtube` | `8` | 当日有 YouTube 候选进池时公开最大数（"3~8"的上限） |
@@ -42,6 +44,8 @@ X 采集窗口由管线 `resolveXWindow` 决定：缺省「北京时间今天 0 
 | `max_retries` | `2` | 网络请求失败重试次数 |
 | `retry_base_ms` | `750` | 重试退避基数（毫秒，递增） |
 | `twitter_api_base_url` | `https://api.twitterapi.io` | TwitterAPI.io 基地址 |
+
+X 预算采用请求级预占：tweet attempt 先按 `x_tweets_per_request_max × x_credits_per_tweet` 预占，成功后按全部返回条数结算（窗外、重复和无效条目仍属于平台计费返回；空响应按供应商最低 15 credits）；article attempt 每次预占 100，重试独立计入。失败或无法解析的请求不退款，以避免本地账本低估后台费用。
 
 ## long_term_quality —— 来源长期质量分
 

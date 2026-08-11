@@ -37,10 +37,31 @@
 
 const { requestText, numberOrNull, normalizeUrl, hash, extractTweetArray } = require('../pipeline/feed-parser');
 
+const DEFAULT_X_CREDITS_PER_RUN = 3750;
+const MIN_X_CREDITS_PER_TWEET = 15;
+const MIN_X_CREDITS_PER_ARTICLE = 100;
+const MIN_X_TWEETS_PER_REQUEST = 20;
+
+/** 缺失用默认值；显式非法预算 fail closed 为 0。 */
+function resolveBudget(value) {
+  if (value === undefined) return DEFAULT_X_CREDITS_PER_RUN;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed >= 0
+    ? Math.min(DEFAULT_X_CREDITS_PER_RUN, Math.trunc(parsed))
+    : 0;
+}
+
+/** 供应商计费参数不能被配置调低；非法值回到安全下界。 */
+function resolveSafeMinimum(value, minimum) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? Math.max(minimum, Math.trunc(parsed)) : minimum;
+}
+
 /** 兜底配置：仅在未传入 config 且 v2 配置文件不可读时使用。 */
 const DEFAULT_CONFIG = Object.freeze({
   schema_version: 1,
   collection: {
+    enabled: false,
     twitter_api_base_url: 'https://api.twitterapi.io',
     x_credits_per_run: 3750,
     x_credits_per_tweet: 15,
@@ -236,12 +257,11 @@ async function fetchTweets(url, headers, fetchImpl, config, beforeAttempt = null
  */
 async function collectXV2(options = {}) {
   const config = resolveConfig(options.config);
-  const apiKey = options.xApiKey || process.env.X_API_KEY;
   const collection = config.collection || {};
-  const creditsPerRun = Math.max(0, Number(collection.x_credits_per_run) || 3750);
-  const tweetsCost = Math.max(1, Number(collection.x_credits_per_tweet) || 15);
-  const articlesCost = Math.max(1, Number(collection.x_credits_per_article) || 100);
-  const tweetsPerRequestMax = Math.max(1, Number(collection.x_tweets_per_request_max) || 20);
+  const creditsPerRun = resolveBudget(collection.x_credits_per_run);
+  const tweetsCost = resolveSafeMinimum(collection.x_credits_per_tweet, MIN_X_CREDITS_PER_TWEET);
+  const articlesCost = resolveSafeMinimum(collection.x_credits_per_article, MIN_X_CREDITS_PER_ARTICLE);
+  const tweetsPerRequestMax = resolveSafeMinimum(collection.x_tweets_per_request_max, MIN_X_TWEETS_PER_REQUEST);
   const emptyCredits = {
     used: 0,
     budget: creditsPerRun,
@@ -250,6 +270,11 @@ async function collectXV2(options = {}) {
     requests: { total: 0, tweet: 0, article: 0, retries: 0 },
   };
 
+  if (collection.enabled !== true) {
+    return { items: [], credits: emptyCredits, coverage: { status: 'failed', reason: 'collection_disabled' } };
+  }
+
+  const apiKey = options.xApiKey || process.env.X_API_KEY;
   if (!apiKey) {
     return { items: [], credits: emptyCredits, coverage: { status: 'failed', reason: 'missing_api_key' } };
   }
@@ -270,6 +295,7 @@ async function collectXV2(options = {}) {
   const items = new Map(); // native_id -> item（博主 + 关键词全局去重）
   const articleCandidates = []; // { tweetId, item } 待补读长文
   const failures = [];
+  let tweetResponseExceededMax = false;
 
   const canAfford = cost => credits.used + cost <= creditsPerRun;
   const tweetAttemptCost = tweetsPerRequestMax * tweetsCost;
@@ -286,12 +312,13 @@ async function collectXV2(options = {}) {
 
   /** tweet 成功响应按平台实际返回总数结算；窗外/重复/无效项也属于计费返回。 */
   const settleTweetAttempt = (reservation, returnedCount) => {
-    if (!reservation) return;
+    if (!reservation) return false;
     const count = Math.max(0, Number(returnedCount) || 0);
-    const billableCount = Math.max(1, Math.min(count, tweetsPerRequestMax));
+    const billableCount = Math.max(1, count); // TwitterAPI.io 每请求最低 15 credits
     const actualCost = billableCount * tweetsCost;
     credits.used += actualCost - reservation.cost;
     credits.tweets += count;
+    return count > tweetsPerRequestMax;
   };
 
   /** 时间窗过滤：created 缺失/不可解析视为不在窗内。 */
@@ -332,8 +359,13 @@ async function collectXV2(options = {}) {
         lastReservation = reserveAttempt('tweet', tweetAttemptCost, attempt);
         return lastReservation !== null;
       });
-      settleTweetAttempt(lastReservation, tweets.length);
+      const exceededMax = settleTweetAttempt(lastReservation, tweets.length);
       for (const tweet of tweets) ingestTweet(tweet, author);
+      if (exceededMax) {
+        failures.push('tweet_response_exceeded_max');
+        tweetResponseExceededMax = true;
+        break;
+      }
     } catch (error) {
       failures.push(`accounts:${handle}:${errorLabel(error)}`);
     }
@@ -341,6 +373,7 @@ async function collectXV2(options = {}) {
 
   // ── 2. 关键词搜索：advanced_search（按响应条数计费，与博主结果按 native_id 去重） ──
   for (const keyword of keywords) {
+    if (tweetResponseExceededMax) break;
     if (!canAfford(tweetAttemptCost)) { failures.push('credits_exhausted'); break; }
     if (!keyword) continue;
     try {
@@ -352,8 +385,13 @@ async function collectXV2(options = {}) {
         lastReservation = reserveAttempt('tweet', tweetAttemptCost, attempt);
         return lastReservation !== null;
       });
-      settleTweetAttempt(lastReservation, tweets.length);
+      const exceededMax = settleTweetAttempt(lastReservation, tweets.length);
       for (const tweet of tweets) ingestTweet(tweet, null);
+      if (exceededMax) {
+        failures.push('tweet_response_exceeded_max');
+        tweetResponseExceededMax = true;
+        break;
+      }
     } catch (error) {
       failures.push(`search:${keyword}:${errorLabel(error)}`);
     }
@@ -361,6 +399,7 @@ async function collectXV2(options = {}) {
 
   // ── 3. 长文读取：/twitter/article（每次尝试预占 100 credits） ──
   for (const candidate of articleCandidates) {
+    if (tweetResponseExceededMax) break;
     if (!canAfford(articlesCost)) { failures.push('credits_exhausted'); break; }
     try {
       const url = new URL('/twitter/article', baseUrl);

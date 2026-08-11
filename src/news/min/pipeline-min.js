@@ -452,10 +452,14 @@ async function runMin(options = {}) {
   const enabledRunPlatforms = platforms.filter(p => p === 'youtube' || p === 'x');
   const enabledCollectFailed = enabledRunPlatforms.length > 0
     && enabledRunPlatforms.every(p => coverage.collectors[p] && coverage.collectors[p].status === 'failed');
+  const enabledCollectDegraded = enabledRunPlatforms.some(p => {
+    const status = coverage.collectors[p] && coverage.collectors[p].status;
+    return status === 'failed' || status === 'partial';
+  });
   coverage.status =
     enabledCollectFailed
       ? 'failed'
-      : errors.length > 0
+      : enabledCollectDegraded || errors.length > 0
         ? 'partial'
         : 'complete';
 

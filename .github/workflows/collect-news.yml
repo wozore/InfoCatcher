@@ -136,6 +136,7 @@ jobs:
             } else {
               const r = c.requests || {};
               console.log(`- run_id: ${run.run_id || 'unknown'}`);
+              console.log(`- status: ${(x && x.status) || 'unknown'}${x && x.reason ? ` (${x.reason})` : ''}`);
               console.log(`- credits: ${c.used || 0}/${c.budget || 0}`);
               console.log(`- billable tweets: ${c.tweets || 0}`);
               console.log(`- successful articles: ${c.articles || 0}`);
@@ -148,7 +149,7 @@ jobs:
 
       - name: Test generated data
         run: |
-          node --test tests/news/collector-x-v2.test.js tests/news/news-pipeline-min.test.js tests/news/news-rss.test.js tests/news/news-public-gate.test.js tests/news/news-reviewer.test.js tests/news/news-summarizer.test.js tests/news/news-localizer.test.js tests/news/content-classifier-llm.test.js
+          node --test tests/news/collector-x-v2.test.js tests/news/news-pipeline-min.test.js tests/news/news-rss.test.js tests/news/news-public-gate.test.js tests/news/news-reviewer.test.js tests/news/news-summarizer.test.js tests/news/news-localizer.test.js tests/news/content-classifier-llm.test.js tests/maintenance/validate-news-config.test.js
           node scripts/validate.js
 
       - name: Create review branch with internal candidate data

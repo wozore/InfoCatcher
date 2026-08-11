@@ -224,6 +224,34 @@ test('热点采集总开关关闭时全链零调用、零写入', async () => {
   assert.equal(result.publicItems, 0);
 });
 
+test('采集状态汇总：单平台失败/降级为 partial，全部失败才是 failed', async () => {
+  const runCase = async (youtubeStatus, xStatus) => runMin({
+    config: CONFIG,
+    now: NOW,
+    collectors: {
+      youtube: async () => ({ items: [], coverage: { status: youtubeStatus, reason: youtubeStatus === 'success' ? null : 'youtube_test' } }),
+      x: async () => ({
+        items: [],
+        credits: { used: 0, budget: 3750, tweets: 0, articles: 0, requests: { total: 0, tweet: 0, article: 0, retries: 0 } },
+        coverage: { status: xStatus, reason: xStatus === 'success' ? null : 'x_test' },
+      }),
+    },
+    review: async () => ({ kept: [], discarded: [] }),
+    summarize: async () => ({ summarized: 0 }),
+    localize: async () => ({ localized: 0 }),
+    historyIn: () => ({ sources: {} }),
+    historyOut: () => {},
+    minStoreIn: () => ({ schema_version: 1, updated_at: null, candidates: [] }),
+    minStoreOut: () => {},
+    lastRunOut: () => {},
+    autoReviewList: false,
+  });
+
+  assert.equal((await runCase('success', 'failed')).coverage.status, 'partial');
+  assert.equal((await runCase('success', 'partial')).coverage.status, 'partial');
+  assert.equal((await runCase('failed', 'failed')).coverage.status, 'failed');
+});
+
 test('pipeline-min 全链：L0 丢弃 → 分类 → 评分 → 审核 → 候选 → 投影', async () => {
   backupAll();
   // 预置已 approved 候选

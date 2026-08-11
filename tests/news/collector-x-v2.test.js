@@ -14,7 +14,7 @@ const NOW = '2026-08-12T02:00:00.000Z';
 const SINCE = '2026-08-12T00:00:00.000Z';
 const UNTIL = '2026-08-12T03:00:00.000Z';
 
-function configFor({ accounts = [], maxRetries = 0 } = {}) {
+function configFor({ accounts = [], maxRetries = 0, collection: collectionOverrides = {} } = {}) {
   return {
     collection: {
       twitter_api_base_url: 'https://api.twitterapi.io',
@@ -25,6 +25,7 @@ function configFor({ accounts = [], maxRetries = 0 } = {}) {
       request_timeout_ms: 1000,
       max_retries: maxRetries,
       retry_base_ms: 0,
+      ...collectionOverrides,
     },
     keywords: { ai_keywords: [] },
     x_accounts: accounts,
@@ -114,6 +115,109 @@ test('空 article 响应也保留请求预占，不允许长文补读突破总�
   assert.equal(result.credits.used, 3700);
   assert.equal(result.credits.articles, 0, '空正文不算成功文章，但请求费用不能退回');
   assert.deepEqual(result.credits.requests, { total: 21, tweet: 8, article: 13, retries: 0 });
+});
+
+test('显式零预算时不发起任何请求', async () => {
+  let fetchCount = 0;
+  const result = await collectXV2({
+    config: configFor({
+      accounts: ['zero-budget'],
+      collection: { x_credits_per_run: 0 },
+    }),
+    xApiKey: 'test-key',
+    fetchImpl: async () => {
+      fetchCount += 1;
+      return response({ tweets: tweetsFor('zero-budget', 1) });
+    },
+    now: NOW,
+    sinceIso: SINCE,
+    untilIso: UNTIL,
+  });
+
+  assert.equal(fetchCount, 0);
+  assert.equal(result.credits.budget, 0);
+  assert.equal(result.credits.used, 0);
+  assert.equal(result.coverage.reason, 'credits_exhausted');
+});
+
+test('高于硬上限的预算配置会被限制为 3750', async () => {
+  const result = await collectXV2({
+    config: configFor({
+      accounts: [],
+      collection: { x_credits_per_run: 10000 },
+    }),
+    xApiKey: 'test-key',
+    fetchImpl: async () => { throw new Error('不应请求'); },
+    now: NOW,
+    sinceIso: SINCE,
+    untilIso: UNTIL,
+  });
+
+  assert.equal(result.credits.budget, 3750);
+  assert.equal(result.credits.used, 0);
+});
+
+test('过小的每请求条数配置不能削弱供应商安全预占', async () => {
+  const result = await collectXV2({
+    config: configFor({
+      accounts: ['undersized-limit'],
+      collection: { x_tweets_per_request_max: 1 },
+    }),
+    xApiKey: 'test-key',
+    fetchImpl: async () => response({ tweets: tweetsFor('undersized-limit', 20) }),
+    now: NOW,
+    sinceIso: SINCE,
+    untilIso: UNTIL,
+  });
+
+  assert.equal(result.credits.used, 300);
+  assert.equal(result.credits.tweets, 20);
+  assert.equal(result.credits.requests.total, 1);
+});
+
+test('超量 tweet 响应按完整条数结算并停止后续请求', async () => {
+  let fetchCount = 0;
+  const result = await collectXV2({
+    config: configFor({ accounts: ['overflow-1', 'overflow-2'] }),
+    xApiKey: 'test-key',
+    fetchImpl: async url => {
+      fetchCount += 1;
+      const account = new URL(url).searchParams.get('userName');
+      return response({ tweets: tweetsFor(account, 21, { article: true }) });
+    },
+    now: NOW,
+    sinceIso: SINCE,
+    untilIso: UNTIL,
+  });
+
+  assert.equal(fetchCount, 1);
+  assert.equal(result.credits.used, 315);
+  assert.equal(result.credits.tweets, 21);
+  assert.equal(result.coverage.status, 'partial');
+  assert.equal(result.coverage.reason, 'tweet_response_exceeded_max');
+});
+
+test('collection.enabled=false 时直接调用采集器也保持零网络', async () => {
+  let fetchCount = 0;
+  const result = await collectXV2({
+    config: configFor({
+      accounts: ['disabled'],
+      collection: { enabled: false },
+    }),
+    xApiKey: 'test-key',
+    fetchImpl: async () => {
+      fetchCount += 1;
+      return response({ tweets: tweetsFor('disabled', 1) });
+    },
+    now: NOW,
+    sinceIso: SINCE,
+    untilIso: UNTIL,
+  });
+
+  assert.equal(fetchCount, 0);
+  assert.equal(result.credits.used, 0);
+  assert.equal(result.coverage.status, 'failed');
+  assert.equal(result.coverage.reason, 'collection_disabled');
 });
 
 test('tweet 与 article 的每次重试都独立预占并记录', async () => {
