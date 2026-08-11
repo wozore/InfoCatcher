@@ -84,6 +84,7 @@ import {
 import {
   renderTools,
   openDetail,
+  openDirectoryDetail,
   closeModal,
   clearToolFilters,
   toggleToolsViewMode,
@@ -270,6 +271,7 @@ function switchView(view) {
 // 此清单与各模块生成的内联 handler 一一对应，缺失会报“openDetail is not defined”。
 // ═══════════════════════════════════════════════════════════════
 window.openDetail = openDetail;
+window.openDirectoryDetail = openDirectoryDetail;
 window.closeModal = closeModal;
 window.toggleCompareRef = toggleCompareRef;
 window.navigateModelToolPanel = navigateModelToolPanel;

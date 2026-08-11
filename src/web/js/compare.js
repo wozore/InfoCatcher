@@ -45,7 +45,8 @@ function isComparableRootTool(tool) {
 
 function isComparableLeaf(toolId, itemId) {
   const item = getCollectionNode(toolId, itemId);
-  return Boolean(item && item.node_type === 'leaf' && item.display_in_tree !== false);
+  // display_in_tree 只控制厂商树是否展示；工具视图会独立展示所有具体叶节点。
+  return Boolean(item && item.node_type === 'leaf');
 }
 
 function isCompareSelected(toolId, itemId = null) {

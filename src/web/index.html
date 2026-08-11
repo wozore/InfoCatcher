@@ -300,11 +300,11 @@
     <header class="page-header tools-header">
       <div class="tools-header-row">
         <div class="tools-header-copy">
-          <span class="eyebrow">发现工具</span>
-          <h1 class="page-title" id="toolsViewTitle">按任务与条件筛选 AI 工具</h1>
-          <p class="page-lead">从真实使用场景出发，结合访问方式、价格和具体产品层级缩小范围；每项资料保留更新时间和来源入口。</p>
+          <span class="eyebrow" id="toolsViewEyebrow">厂商全景</span>
+          <h1 class="page-title" id="toolsViewTitle">从厂商出发，了解完整 AI 产品体系</h1>
+          <p class="page-lead" id="toolsViewLead">集中查看各厂商旗下的 AI 工具、模型与套餐，快速了解产品布局、主要优势、使用门槛和价格体系。</p>
         </div>
-        <button class="tools-view-toggle" id="toolsViewToggle" type="button" role="switch" aria-checked="false" aria-label="切换工具库视图" aria-describedby="toolsViewToggleStatus" aria-controls="toolGrid">
+        <button class="tools-view-toggle" id="toolsViewToggle" type="button" role="switch" aria-checked="false" aria-label="切换工具库视图" aria-describedby="toolsViewToggleStatus" aria-controls="vendorDirectoryView toolDirectoryView">
           <span class="tools-view-toggle-label">厂商</span>
           <span class="tools-view-toggle-track" aria-hidden="true"><span class="tools-view-toggle-thumb"></span></span>
           <span class="tools-view-toggle-label">工具</span>
@@ -316,18 +316,18 @@
     <section class="tools-controls panel" aria-labelledby="toolsSearchTitle">
       <div class="tools-search-heading">
         <div>
-          <h2 class="section-title" id="toolsSearchTitle">查找已收录工具</h2>
-          <p class="muted">输入工具名、任务或功能，再按条件继续筛选。</p>
+          <h2 class="section-title" id="toolsSearchTitle">查找已收录厂商</h2>
+          <p class="muted" id="toolsSearchLead">输入厂商、产品名称或核心能力，定位相关厂商及其产品体系。</p>
         </div>
         <div class="stats-bar" aria-live="polite">
-          <span id="toolCount">45</span> <span id="toolCountLabel">个工具</span>
+          <span id="toolCount">45</span> <span id="toolCountLabel">个厂商</span>
           <span id="filteredInfo" style="display:none">（已筛选）</span>
         </div>
       </div>
 
       <div class="search-box tools-search-box">
         <label class="sr-only" for="searchInput">搜索工具名、场景或功能</label>
-        <input type="text" id="searchInput" placeholder="例如：写论文、免费、编程" autocomplete="off">
+        <input type="text" id="searchInput" placeholder="例如：OpenAI、Claude、API 模型" autocomplete="off">
         <button id="searchClear" class="clear-btn" type="button" style="display:none" aria-label="清除工具搜索"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg></button>
       </div>
 
@@ -342,19 +342,6 @@
 
       <div class="filters tools-filters" id="toolsFiltersPanel" aria-label="工具筛选条件">
         <!-- EXTENSION POINT: 新增筛选维度时在此添加 <div class="filter-group"> + filter-chip -->
-        <div class="filter-group">
-          <span class="filter-label">分类</span>
-          <button class="filter-chip active" type="button" data-category="all" aria-pressed="true">全部</button>
-          <button class="filter-chip" type="button" data-category="对话" aria-pressed="false">💬 对话</button>
-          <button class="filter-chip" type="button" data-category="AI编程" aria-pressed="false">💻 AI编程</button>
-          <button class="filter-chip" type="button" data-category="AI图像" aria-pressed="false">🎨 AI图像</button>
-          <button class="filter-chip" type="button" data-category="AI视频" aria-pressed="false">🎬 AI视频</button>
-          <button class="filter-chip" type="button" data-category="AI搜索" aria-pressed="false">🔎 AI搜索</button>
-          <button class="filter-chip" type="button" data-category="AI办公" aria-pressed="false">📊 AI办公</button>
-          <button class="filter-chip" type="button" data-category="AI音频" aria-pressed="false">🎵 AI音频</button>
-          <button class="filter-chip" type="button" data-category="AI音乐" aria-pressed="false">🎵 AI音乐</button>
-          <button class="filter-chip" type="button" data-category="开源" aria-pressed="false">🔓 开源</button>
-        </div>
         <div class="filter-group">
           <span class="filter-label">访问</span>
           <button class="filter-chip active" type="button" data-access="all" aria-pressed="true">全部</button>
@@ -378,11 +365,22 @@
       <div class="directory-heading">
         <div>
           <span class="eyebrow">工具目录</span>
-          <h2 class="section-title" id="toolsDirectoryTitle">当前匹配</h2>
+          <h2 class="section-title" id="toolsDirectoryTitle">当前匹配的厂商</h2>
         </div>
         <p class="faint" id="toolsDirectoryLead">点击厂商卡片查看旗下模型与工具详情。</p>
       </div>
-      <div class="tool-grid" id="toolGrid"></div>
+      <div id="vendorDirectoryView" class="directory-view">
+        <div class="tool-grid" id="vendorGrid"></div>
+      </div>
+      <div id="toolDirectoryView" class="directory-view" hidden>
+        <div class="tool-directory-shell">
+          <nav class="tools-category-index" id="toolsCategoryIndex" aria-label="工具分类快速索引">
+            <span class="tools-category-index-title">快速索引</span>
+            <div class="tools-category-index-list" id="toolsCategoryIndexList"></div>
+          </nav>
+          <div class="tool-grid tool-directory-content" id="toolGrid"></div>
+        </div>
+      </div>
     </section>
   </section>
 

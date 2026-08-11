@@ -13,6 +13,8 @@ import {
   getFilteredTools,
   getToolIntelligence,
   getCollectionNode,
+  getToolDirectoryItem,
+  getFilteredToolDirectoryItems,
   getItemLatestQueriedAt,
   getToolPublishedDate,
   formatPrice,
@@ -45,6 +47,40 @@ function setModalScrollPosition(value) { modalScrollPosition = value; }
 
 let toolsViewMode = 'vendor';
 
+// 工具视图四类固定分组（分类名只作为区块大标题，卡片本身不写分类文字，分类由颜色表达）
+const TOOL_GROUPS = [
+  { type: 'general', title: '通用对话与大模型入口' },
+  { type: 'dev', title: 'AI 编程与开发工具' },
+  { type: 'vision', title: '图像与视觉生成' },
+  { type: 'media', title: '视频、音乐与音频生成' },
+];
+
+// 双视图文案：厂商视图以厂商为信息中心，工具视图以单个工具为信息中心
+const TOOLS_COPY = {
+  vendor: {
+    eyebrow: '厂商全景',
+    title: '从厂商出发，了解完整 AI 产品体系',
+    lead: '集中查看各厂商旗下的 AI 工具、模型与套餐，快速了解产品布局、主要优势、使用门槛和价格体系。',
+    searchTitle: '查找已收录厂商',
+    searchLead: '输入厂商、产品名称或核心能力，定位相关厂商及其产品体系。',
+    searchPlaceholder: '例如：OpenAI、Claude、API 模型',
+    directoryTitle: '当前匹配的厂商',
+    directoryLead: '点击厂商卡片查看旗下模型与工具详情。',
+    countLabel: '个厂商',
+  },
+  tool: {
+    eyebrow: '发现工具',
+    title: '直接查找适合你的 AI 工具',
+    lead: '无需先选择厂商，可按名称、任务、访问方式和价格直接查找，也可以按分类浏览发现新工具。',
+    searchTitle: '查找已收录工具',
+    searchLead: '输入工具名、任务或功能，再按使用条件缩小范围。',
+    searchPlaceholder: '例如：写论文、生成图片、免费编程',
+    directoryTitle: '当前匹配的工具',
+    directoryLead: '点击工具查看优势、限制、价格、访问门槛和详细资料。',
+    countLabel: '个工具',
+  },
+};
+
 function getToolsViewMode() {
   return toolsViewMode;
 }
@@ -55,20 +91,174 @@ function syncToolsViewControls() {
   const isToolView = toolsViewMode === 'tool';
   toggle.setAttribute('aria-checked', String(isToolView));
   toggle.dataset.mode = toolsViewMode;
+
+  // 同步两块视图的标题/说明/搜索区/目录文案
+  const copy = TOOLS_COPY[toolsViewMode];
+  const textMap = {
+    toolsViewEyebrow: copy.eyebrow,
+    toolsViewTitle: copy.title,
+    toolsViewLead: copy.lead,
+    toolsSearchTitle: copy.searchTitle,
+    toolsSearchLead: copy.searchLead,
+    toolsDirectoryTitle: copy.directoryTitle,
+    toolsDirectoryLead: copy.directoryLead,
+    toolCountLabel: copy.countLabel,
+  };
+  for (const [id, text] of Object.entries(textMap)) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
+  }
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) searchInput.placeholder = copy.searchPlaceholder;
+
   const status = document.getElementById('toolsViewToggleStatus');
   if (status) status.textContent = '当前为' + (isToolView ? '工具' : '厂商') + '视图';
-  const directoryLead = document.getElementById('toolsDirectoryLead');
-  if (directoryLead) directoryLead.textContent = isToolView
-    ? '点击工具条目查看详情；具体工具、模型或套餐可加入对比。'
-    : '点击厂商卡片查看旗下模型与工具详情。';
-  const countLabel = document.getElementById('toolCountLabel');
-  if (countLabel) countLabel.textContent = isToolView ? '个工具' : '个厂商';
 }
 
 function toggleToolsViewMode() {
   toolsViewMode = toolsViewMode === 'vendor' ? 'tool' : 'vendor';
   renderTools();
   return toolsViewMode;
+}
+
+class VendorDirectoryView {
+  constructor() {
+    this.root = document.getElementById('vendorDirectoryView');
+    this.grid = document.getElementById('vendorGrid');
+  }
+
+  show() {
+    if (this.root) this.root.hidden = false;
+  }
+
+  hide() {
+    if (this.root) this.root.hidden = true;
+  }
+
+  render(items) {
+    if (this.grid) this.grid.innerHTML = items.map(renderToolCard).join('');
+  }
+
+  renderState(state) {
+    if (this.grid) this.grid.innerHTML = renderState(state);
+  }
+}
+
+class ToolDirectoryView {
+  constructor() {
+    this.root = document.getElementById('toolDirectoryView');
+    this.grid = document.getElementById('toolGrid');
+    this.index = document.getElementById('toolsCategoryIndex');
+    this.indexList = document.getElementById('toolsCategoryIndexList');
+    this.indexObserver = null;
+    this.intersectingGroups = new Map();
+    this.bindIndex();
+  }
+
+  show() {
+    if (this.root) this.root.hidden = false;
+  }
+
+  hide() {
+    this.disconnectIndexObserver();
+    if (this.root) this.root.hidden = true;
+  }
+
+  setActiveGroup(type) {
+    if (!this.indexList) return;
+    const targetGroup = 'tool-group-' + type;
+    this.indexList.querySelectorAll('[aria-current]').forEach(link => link.removeAttribute('aria-current'));
+    const button = Array.from(this.indexList.querySelectorAll('[data-tool-group]'))
+      .find(link => link.dataset.toolGroup === targetGroup);
+    if (button) button.setAttribute('aria-current', 'location');
+  }
+
+  bindIndex() {
+    if (!this.indexList || this.indexList.dataset.bound === 'true') return;
+    this.indexList.dataset.bound = 'true';
+    this.indexList.addEventListener('click', event => {
+      const button = event.target.closest('[data-tool-group]');
+      const target = button && document.getElementById(button.dataset.toolGroup);
+      if (!target) return;
+      this.setActiveGroup(button.dataset.toolGroup.replace(/^tool-group-/, ''));
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  disconnectIndexObserver() {
+    if (this.indexObserver) this.indexObserver.disconnect();
+    this.indexObserver = null;
+    this.intersectingGroups.clear();
+  }
+
+  observeGroups() {
+    this.disconnectIndexObserver();
+    if (!this.grid || !this.indexList || this.index.hidden || typeof IntersectionObserver !== 'function') return;
+
+    const sections = Array.from(this.grid.querySelectorAll('.tool-group[id]'));
+    if (sections.length === 0) return;
+
+    this.indexObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        this.intersectingGroups.set(entry.target.id, entry.isIntersecting);
+      });
+
+      const active = sections
+        .filter(section => this.intersectingGroups.get(section.id))
+        .sort((left, right) => left.getBoundingClientRect().top - right.getBoundingClientRect().top)[0];
+      if (active) this.setActiveGroup(active.id.replace(/^tool-group-/, ''));
+    }, {
+      rootMargin: '-112px 0px -62% 0px',
+      threshold: [0, .1, .35],
+    });
+
+    sections.forEach(section => this.indexObserver.observe(section));
+  }
+
+  syncIndex(visibleTypes) {
+    if (!this.index || !this.indexList) return;
+    this.index.hidden = visibleTypes.length === 0;
+    this.indexList.innerHTML = TOOL_GROUPS.filter(group => visibleTypes.includes(group.type)).map(group =>
+      '<button type="button" class="tools-category-index-link" data-tool-group="tool-group-' + escapeHtml(group.type) + '" aria-controls="tool-group-' + escapeHtml(group.type) + '">' + escapeHtml(group.title) + '</button>'
+    ).join('');
+    this.setActiveGroup(visibleTypes[0]);
+  }
+
+  render(items) {
+    if (!this.grid) return;
+    const visibleTypes = [];
+    this.grid.classList.add('tool-groups');
+    this.grid.innerHTML = TOOL_GROUPS.map(group => {
+      const groupItems = items.filter(tool => tool.card_type === group.type);
+      if (groupItems.length === 0) return '';
+      visibleTypes.push(group.type);
+      return '<section class="tool-group" id="tool-group-' + escapeHtml(group.type) + '">' +
+        '<h3 class="tool-group-title">' + escapeHtml(group.title) +
+          ' <span class="tool-group-count">' + groupItems.length + '</span></h3>' +
+        '<div class="tool-group-divider" aria-hidden="true"></div>' +
+        '<div class="tool-grid">' + groupItems.map(renderToolCard).join('') + '</div>' +
+        '</section>';
+    }).join('');
+    this.syncIndex(visibleTypes);
+    this.observeGroups();
+  }
+
+  renderState(state) {
+    this.disconnectIndexObserver();
+    if (this.grid) this.grid.innerHTML = renderState(state);
+    if (this.index) this.index.hidden = true;
+  }
+}
+
+let directoryViews = null;
+function getDirectoryViews() {
+  if (!directoryViews) {
+    directoryViews = {
+      vendor: new VendorDirectoryView(),
+      tool: new ToolDirectoryView(),
+    };
+  }
+  return directoryViews;
 }
 
 // 决策 94：工具库已选筛选条件的低权重标签与一键清除
@@ -98,69 +288,85 @@ function clearToolFilters() {
 }
 
 /**
- * 渲染工具卡片网格。
- * 1. 获取过滤后的工具列表
- * 2. 更新工具计数和筛选提示
- * 3. 空结果时显示空状态占位
- * 4. 正常结果时渲染卡片（名称/图标/评分/场景标签/价格/访问/对比按钮）
- *
- * 注意：对比按钮在卡片 DOM 字符串中使用了 onclick 属性;
- * event.stopPropagation() 防止点击对比按钮同时触发卡片的 openDetail。
- * EXTENSION POINT: 方案一——>方案三变迁中时，实现在对比页面也能自定义添加工具
- * EXTENSION POINT: 方案一——>方案三变迁中时，卡片实现动态效果-描述：默认显示工具大头照，悬停时工具照向左迁移，右边显示简略的信息，点击进入详情
+ * 渲染单张工具卡片。
+ * - 工具视图（tool 模式）：所有记录按 card_type 加四类主题色；具体工具含适合/不适合行；
+ * - 厂商视图（vendor 模式）：只渲染 collection 厂商卡，保持中性视觉（不加主题色），
+ *   标题只显示厂商名，含产品体系计数 + 快捷入口 + 优点/限制。
  */
-function renderTools() {
-  const filtered = getFilteredTools();
-  const visibleTools = filtered.filter(tool => toolsViewMode === 'vendor'
-    ? tool.card_kind === 'collection'
-    : tool.card_kind !== 'collection');
-  const grid = document.getElementById('toolGrid');
-  setRegionBusy(grid, false);
-  renderSelectedFilters();
-  syncToolsViewControls();
-  document.getElementById('toolCount').textContent = visibleTools.length;
-  document.getElementById('filteredInfo').style.display =
-    (activeFilters.category !== 'all' || activeFilters.access !== 'all' || activeFilters.price !== 'all' || document.getElementById('searchInput').value)
-    ? 'inline' : 'none';
+function renderToolCard(t) {
+  const isCollection = t.card_kind === 'collection';
+  const isIntelligenceLeaf = t.card_kind === 'intelligence_leaf';
+  const overview = t.overview;
+  const title = isCollection ? t.vendor : t.name;
+  const description = isCollection
+    ? (overview?.description || t.strengths)
+    : t.strengths;
+  const isToolView = toolsViewMode === 'tool';
+  const typeClass = isToolView && t.card_type ? ' tool-card--' + escapeHtml(t.card_type) : '';
+  const intelligenceKindLabel = t.intelligenceKind === 'api_model'
+    ? 'API 模型'
+    : t.intelligenceKind === 'subscription_plan'
+      ? '订阅套餐'
+      : t.intelligenceKind === 'product_variant' ? '产品变体' : '';
+  const openCard = isIntelligenceLeaf
+    ? 'openDirectoryDetail(\'' + escapeHtml(t.collectionToolId) + '\',\'' + escapeHtml(t.intelligenceItemId) + '\',this)'
+    : 'openDetail(\'' + escapeHtml(t.id) + '\',null,this)';
 
-  if (dataLoadFailures.has('tools')) {
-    grid.innerHTML = renderState({ icon: '⚠️', title: '工具数据加载失败', message: '请刷新页面重试；若问题持续，请检查公开工具数据文件是否可访问。', type: 'error' });
-    return;
-  }
+  // 厂商产品体系（collection 卡）：计数 + 快捷入口，点击直达详情对应分组
+  const intelligence = getToolIntelligence(t.id);
+  const collectionItems = (intelligence?.items || []).filter(item => item.node_type !== 'group' && item.display_in_tree !== false);
+  const collectionSummary = isCollection
+    ? '<div class="collection-summary"><span class="collection-label">厂商模型与工具</span><span>' + collectionItems.length + ' 个可查看叶节点</span></div>' +
+      '<div class="collection-quick-list">' + (intelligence?.tree_mode === 'tree'
+        ? (intelligence.items || []).filter(item => item.node_type === 'group').slice(0, 3).map(item =>
+            '<button type="button" onclick="event.stopPropagation();openDetail(\'' + escapeHtml(t.id) + '\',\'' + escapeHtml(item.id) + '\')">' + escapeHtml(item.name) + '</button>'
+          ).join('')
+        : collectionItems.slice(0, 5).map(item =>
+            '<button type="button" onclick="event.stopPropagation();openDetail(\'' + escapeHtml(t.id) + '\',\'' + escapeHtml(item.id) + '\')">' + escapeHtml(item.name) + '</button>'
+          ).join('')) + '</div>'
+    : '';
 
-  if (visibleTools.length === 0) {
-    grid.innerHTML = renderState({ icon: '⌕', title: toolsViewMode === 'vendor' ? '没有匹配的厂商' : '没有匹配的工具', message: '请调整筛选条件或更换搜索关键词。', type: 'no-match' });
-    return;
-  }
+  // 厂商优点/限制
+  const featurePreview = isCollection && overview?.features?.length
+    ? '<div class="vendor-feature-preview">' + overview.features.map(feature =>
+        '<div class="vendor-feature-slot"><p class="vendor-feature ' + escapeHtml(feature.tone) + '">' + escapeHtml(feature.text) + '</p></div>'
+      ).join('') + '</div>'
+    : '';
 
-  grid.innerHTML = visibleTools.map(t => {
-    const intelligence = getToolIntelligence(t.id);
-    const collectionItems = (intelligence?.items || []).filter(item => item.node_type !== 'group' && item.display_in_tree !== false);
-    const isCollection = t.card_kind === 'collection';
-    const overview = t.overview;
-    const title = isCollection ? t.vendor + '（' + t.name + '）' : t.name;
-    const description = isCollection
-      ? (overview?.description || t.strengths)
-      : t.strengths;
-    const collectionSummary = isCollection
-      ? '<div class="collection-summary"><span class="collection-label">厂商模型与工具</span><span>' + collectionItems.length + ' 个可查看叶节点</span></div>' +
-        '<div class="collection-quick-list">' + (intelligence?.tree_mode === 'tree'
-          ? (intelligence.items || []).filter(item => item.node_type === 'group').slice(0, 3).map(item =>
-              '<button type="button" onclick="event.stopPropagation();openDetail(\'' + escapeHtml(t.id) + '\',\'' + escapeHtml(item.id) + '\')">' + escapeHtml(item.name) + '</button>'
-            ).join('')
-          : collectionItems.slice(0, 5).map(item =>
-              '<button type="button" onclick="event.stopPropagation();openDetail(\'' + escapeHtml(t.id) + '\',\'' + escapeHtml(item.id) + '\')">' + escapeHtml(item.name) + '</button>'
-            ).join('')) + '</div>'
-      : '';
-    const featurePreview = isCollection && overview?.features?.length
-      ? '<div class="vendor-feature-preview">' + overview.features.map(feature =>
-          '<div class="vendor-feature-slot"><p class="vendor-feature ' + escapeHtml(feature.tone) + '">' + escapeHtml(feature.text) + '</p></div>'
-        ).join('') + '</div>'
-      : '';
-    const isSelected = isCompareSelected(t.id, null);
-    const publishedDate = getToolPublishedDate(t);
-    return `
-    <div class="tool-card${isCollection ? ' collection-card' : ''}" onclick="openDetail('${t.id}',null,this)">
+  // 具体工具：适合/不适合行（无该字段则不显示）
+  const fitLines = !isCollection && (t.best_for?.length || t.not_for?.length)
+    ? '<div class="tool-card-fit">' +
+      (intelligenceKindLabel ? '<p class="tool-card-kind">' + escapeHtml(intelligenceKindLabel) + '</p>' : '') +
+      (t.best_for?.[0] ? '<p class="fit-pos">✓ 适合：' + escapeHtml(t.best_for[0]) + '</p>' : '') +
+      (t.not_for?.[0] ? '<p class="fit-neg">✕ 不适合：' + escapeHtml(t.not_for[0]) + '</p>' : '') +
+      '</div>'
+    : intelligenceKindLabel ? '<div class="tool-card-fit"><p class="tool-card-kind">' + escapeHtml(intelligenceKindLabel) + '</p></div>' : '';
+
+  // 具体工具标签（免费/付费 + 访问）与页脚；厂商卡不展示这两块
+  const tagsHtml = !isCollection
+    ? '<div class="tool-card-tags">' +
+      (hasFree(t) ? '<span class="tag free">免费可用</span>' : '<span class="tag paid">仅付费</span>') +
+      '<span class="tag ' + (t.access_level === '开放' ? 'open' : 'restricted') + '">' + (t.access_level === '开放' ? '国内可用' : '需科学上网') + '</span>' +
+      '</div>'
+    : '';
+
+  const isSelected = isIntelligenceLeaf
+    ? isCompareSelected(t.collectionToolId, t.intelligenceItemId)
+    : isCompareSelected(t.id, null);
+  const comparable = isIntelligenceLeaf
+    ? isComparableLeaf(t.collectionToolId, t.intelligenceItemId)
+    : isComparableRootTool(t);
+  const compareRef = isIntelligenceLeaf
+    ? 'toggleCompareRef(\'' + escapeHtml(t.collectionToolId) + '\',\'' + escapeHtml(t.intelligenceItemId) + '\',this)'
+    : 'toggleCompareRef(\'' + escapeHtml(t.id) + '\',null,this)';
+  const compareHtml = !isCollection && comparable
+    ? '<div class="tool-card-actions tool-card-actions-only" onclick="event.stopPropagation()">' +
+      '<button class="compare-toggle ' + (isSelected ? 'selected' : '') + '" aria-pressed="' + isSelected + '" onclick="' + compareRef + '">' + (isSelected ? '已选' : '+对比') + '</button>' +
+      '</div>'
+    : '';
+
+  return `
+    <div class="tool-card${isCollection ? ' collection-card' : ''}${typeClass}" onclick="${openCard}">
       <div class="tool-card-header">
         <div>
           <div class="tool-card-name">${t.icon} ${escapeHtml(title)}</div>
@@ -170,23 +376,58 @@ function renderTools() {
       </div>
 
       <div class="tool-card-desc">${escapeHtml(description)}</div>
-      ${featurePreview}
-      ${isCollection ? '' : collectionSummary}
-      <div class="tool-card-tags">
-        ${t.scenes.slice(0,3).map(s => '<span class="tag scene">' + escapeHtml(s) + '</span>').join('')}
-        ${isCollection ? '' : (hasFree(t) ? '<span class="tag free">免费可用</span>' : '<span class="tag paid">仅付费</span>')}
-        <span class="tag ${t.access_level === '开放' ? 'open' : 'restricted'}">${t.access_level === '开放' ? '国内可用' : '需科学上网'}</span>
-      </div>
-
-      <div class="tool-card-footer" onclick="event.stopPropagation()">
-        <span class="tool-card-updated">${publishedDate ? '发布时间 ' + escapeHtml(publishedDate) : '发布时间待补充'}</span>
-        <div class="tool-card-actions">
-          <button class="detail-button" type="button" onclick="openDetail('${escapeHtml(t.id)}',null,this)">查看详情</button>
-          ${isComparableRootTool(t) ? '<button class="compare-toggle ' + (isSelected ? 'selected' : '') + '" aria-pressed="' + isSelected + '" onclick="toggleCompareRef(\'' + escapeHtml(t.id) + '\',null,this)">' + (isSelected ? '已选' : '+对比') + '</button>' : ''}
-        </div>
-      </div>
+      ${isCollection ? collectionSummary : ''}
+      ${isCollection ? featurePreview : ''}
+      ${fitLines}
+      ${tagsHtml}
+      ${compareHtml}
     </div>`;
-  }).join('');
+}
+
+/**
+ * 渲染工具卡片网格。
+ * 1. 获取过滤后的工具列表
+ * 2. 更新工具计数和筛选提示
+ * 3. 空结果时显示空状态占位
+ * 4. 厂商视图：平铺 collection 厂商卡；工具视图：按四类固定分组渲染（每组大标题 + 横向分割线）
+ *
+ * 注意：对比按钮在卡片 DOM 字符串中使用了 onclick 属性;
+ * event.stopPropagation() 防止点击对比按钮同时触发卡片的 openDetail。
+ * EXTENSION POINT: 方案一——>方案三变迁中时，实现在对比页面也能自定义添加工具
+ * EXTENSION POINT: 方案一——>方案三变迁中时，卡片实现动态效果-描述：默认显示工具大头照，悬停时工具照向左迁移，右边显示简略的信息，点击进入详情
+ */
+function renderTools() {
+  const isToolView = toolsViewMode === 'tool';
+  const filtered = isToolView ? getFilteredToolDirectoryItems() : getFilteredTools();
+  const views = getDirectoryViews();
+  const currentView = isToolView ? views.tool : views.vendor;
+  const otherView = isToolView ? views.vendor : views.tool;
+  const currentGrid = currentView.grid;
+  setRegionBusy(currentGrid, false);
+  renderSelectedFilters();
+  syncToolsViewControls();
+
+  const visibleTools = isToolView
+    ? filtered
+    : filtered.filter(tool => tool.card_kind === 'collection');
+  currentView.show();
+  otherView.hide();
+
+  document.getElementById('toolCount').textContent = visibleTools.length;
+  document.getElementById('filteredInfo').style.display =
+    (activeFilters.category !== 'all' || activeFilters.access !== 'all' || activeFilters.price !== 'all' || document.getElementById('searchInput').value)
+    ? 'inline' : 'none';
+
+  if (dataLoadFailures.has('tools')) {
+    currentView.renderState({ icon: '⚠️', title: '工具数据加载失败', message: '请刷新页面重试；若问题持续，请检查公开工具数据文件是否可访问。', type: 'error' });
+    return;
+  }
+
+  if (visibleTools.length === 0) {
+    currentView.renderState({ icon: '⌕', title: isToolView ? '没有匹配的工具' : '没有匹配的厂商', message: '请调整筛选条件或更换搜索关键词。', type: 'no-match' });
+    return;
+  }
+  currentView.render(visibleTools);
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -430,7 +671,7 @@ function getModalFocusableElements() {
 function configureModalAccessibility() {
   const overlay = document.getElementById('modalOverlay');
   const content = document.getElementById('modalContent');
-  const title = content?.querySelector('h2');
+  const title = content?.querySelector('h2, .model-panel-heading h4');
   const description = content?.querySelector('.vendor-description, .node-description, .vendor, .section p');
   if (!overlay || !content) return;
   if (title) title.id = 'modalTitle';
@@ -457,6 +698,101 @@ function showModal(trigger = null) {
   focusTarget.focus();
 }
 
+/**
+ * 具体工具详情 —— 单级叶节点样式（复用 GPT-5.6 Sol 三级预览的面板视觉）。
+ * 工具内部只有一级面板：不渲染返回键，仅由模态右上角 X 关闭。
+ */
+function renderConcreteToolLeaf(t) {
+  const detailHeader = (name, icon, vendor, url) =>
+    '<header class="concrete-tool-detail-header">' +
+      '<h2>' + escapeHtml((icon || '') + ' ' + name) + '</h2>' +
+      '<div class="vendor">' + escapeHtml(vendor || '') + (url ? ' · <a href="' + escapeHtml(safeExternalUrl(url)) + '" target="_blank" rel="noopener noreferrer">官网 ' + ICON_EXTERNAL + '</a>' : '') + '</div>' +
+    '</header>';
+
+  if (t.card_kind === 'intelligence_leaf') {
+    const collection = t.intelligenceCollection;
+    const item = t.intelligenceItem;
+    const sourceMap = new Map((collection?.sources || []).map(source => [source.id, source]));
+    const leafBadge = renderTimelinessBadge(getItemLatestQueriedAt(collection, item));
+    const compareButton = isComparableLeaf(t.collectionToolId, t.intelligenceItemId)
+      ? '<button class="compare-toggle ' + (isCompareSelected(t.collectionToolId, t.intelligenceItemId) ? 'selected' : '') + '" aria-pressed="' + isCompareSelected(t.collectionToolId, t.intelligenceItemId) + '" onclick="toggleCompareRef(\'' + escapeHtml(t.collectionToolId) + '\',\'' + escapeHtml(t.intelligenceItemId) + '\',this)">' + (isCompareSelected(t.collectionToolId, t.intelligenceItemId) ? '已选' : '+对比') + '</button>'
+      : '';
+    return detailHeader(item.name, t.icon, t.vendor, item.official_url || t.url) +
+      '<div class="model-leaf-panel">' +
+      '<div class="model-panel-heading"><div>' +
+        '<span class="node-kind-badge leaf">具体' + escapeHtml(item.kind === 'api_model' ? '模型' : item.kind === 'subscription_plan' ? '套餐' : '工具') + '</span>' +
+        '<h4>' + escapeHtml(item.name) + '</h4>' + leafBadge +
+      '</div>' + compareButton + '</div>' +
+      '<div class="intelligence-item-body">' + renderLeafDetails(item, sourceMap, { toolId: t.collectionToolId }, { hideCompare: true }) + '</div></div>';
+  }
+
+  const leafBadge = renderTimelinessBadge(getToolPublishedDate(t));
+  const comparable = isComparableRootTool(t);
+  const rootSelected = comparable && isCompareSelected(t.id, null);
+  const compareButton = comparable
+    ? '<button class="compare-toggle ' + (rootSelected ? 'selected' : '') + '" aria-pressed="' + rootSelected + '" onclick="toggleCompareRef(\'' + escapeHtml(t.id) + '\',null,this)">' + (rootSelected ? '已选' : '+对比') + '</button>'
+    : '';
+
+  const scenariosHtml = (title, items) => items && items.length
+    ? '<div class="intelligence-scenarios"><h5>' + title + '</h5>' + items.map(item =>
+        '<div><b>' + escapeHtml(item) + '</b></div>'
+      ).join('') + '</div>'
+    : '';
+
+  const pricingHtml = '<div class="intelligence-pricing"><h5>价格</h5>' +
+    '<div class="plan-card"><p><b>免费层：</b>' + escapeHtml(t.free_tier || '无') + '</p>' +
+    (t.paid_tiers || []).map(p =>
+      '<p style="margin-top:4px"><b>' + escapeHtml(p.name) + '：</b>' + escapeHtml(p.price) + ' — ' + escapeHtml(p.features) + '</p>'
+    ).join('') + '</div></div>';
+
+  const accessHtml = '<div class="intelligence-context"><b>访问门槛：</b>' + escapeHtml(t.access_barrier || '未提供') +
+    (t.chinese_note ? '<p style="margin-top:4px"><b>中文支持：</b>' + escapeHtml(t.chinese_note) + '</p>' : '') + '</div>';
+
+  const scoreItem = (val, label) => Number.isFinite(val)
+    ? '<div class="score-item"><div class="score-val ' + scoreClass(val) + '">' + val.toFixed(1) + '</div><div class="score-label">' + label + '</div></div>'
+    : '';
+  const scoresHtml = '<div class="scores">' +
+    scoreItem(t.rating_overall, '综合') +
+    scoreItem(t.rating_chinese, '中文支持') +
+    scoreItem(t.rating_ease, '易用性') +
+    scoreItem(t.rating_price, '性价比') +
+    '</div>';
+
+  const sourcesHtml = '<div class="intelligence-sources"><b>资料来源：</b>' +
+    '<a href="' + escapeHtml(safeExternalUrl(t.url)) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(t.source || t.name) + '</a>' +
+    (t.last_updated ? '<span>资料更新于 ' + escapeHtml(t.last_updated) + '</span>' : '') + '</div>';
+
+  const actionsHtml = comparable
+    ? '<div class="leaf-actions"><a class="btn" href="' + escapeHtml(safeExternalUrl(t.url)) + '" target="_blank" rel="noopener noreferrer">打开工具页面</a></div>'
+    : '';
+
+  return detailHeader(t.name, t.icon, t.vendor, t.url) +
+    '<div class="model-leaf-panel">' +
+    '<div class="model-panel-heading"><div>' +
+      '<span class="node-kind-badge leaf">具体工具</span><h4>' + escapeHtml(t.icon + ' ' + t.name) + '</h4>' + leafBadge +
+    '</div>' + compareButton + '</div>' +
+    '<div class="intelligence-item-body">' +
+      '<p>' + escapeHtml(t.strengths || '') + '</p>' +
+      scenariosHtml('适用场景及说明', t.best_for) +
+      scenariosHtml('不适用场景及说明', t.not_for) +
+      pricingHtml +
+      accessHtml +
+      scoresHtml +
+      sourcesHtml +
+      actionsHtml +
+    '</div></div>';
+}
+
+function openDirectoryDetail(toolId, itemId, trigger = null) {
+  const directoryItem = getToolDirectoryItem(toolId, itemId);
+  if (!directoryItem) return;
+  const content = document.getElementById('modalContent');
+  if (!content) return;
+  content.innerHTML = '<button class="modal-close" type="button" aria-label="关闭详情" onclick="closeModal()">' + ICON_CLOSE + '</button>' +
+    renderConcreteToolLeaf(directoryItem);
+  showModal(trigger);
+}
+
 function openDetail(id, selectedItemId = null, trigger = null) {
   const t = tools.find(tool => tool.id === id);
   if (!t) return;
@@ -470,33 +806,9 @@ function openDetail(id, selectedItemId = null, trigger = null) {
     return;
   }
 
-  // 决策 90：具体工具模态提供“加入对比”与“打开工具页面”
-  const rootComparable = isComparableRootTool(t);
-  const rootSelected = rootComparable && isCompareSelected(t.id, null);
-  content.innerHTML = `
-    <button class="modal-close" type="button" aria-label="关闭详情" onclick="closeModal()">${ICON_CLOSE}</button>
-    <h2>${escapeHtml(t.icon + ' ' + t.name)}</h2>
-    <div class="vendor">${escapeHtml(t.vendor)} · <a href="${escapeHtml(safeExternalUrl(t.url))}" target="_blank" rel="noopener noreferrer">官网 ${ICON_EXTERNAL}</a></div>
-    ${renderCollectionIntelligence(t, selectedItemId)}
-    <div class="scores">
-      <div class="score-item"><div class="score-val ${scoreClass(t.rating_overall)}">${t.rating_overall.toFixed(1)}</div><div class="score-label">综合</div></div>
-      <div class="score-item"><div class="score-val ${scoreClass(t.rating_chinese)}">${t.rating_chinese.toFixed(1)}</div><div class="score-label">中文支持</div></div>
-      <div class="score-item"><div class="score-val ${scoreClass(t.rating_ease)}">${t.rating_ease.toFixed(1)}</div><div class="score-label">易用性</div></div>
-      <div class="score-item"><div class="score-val ${scoreClass(t.rating_price)}">${t.rating_price.toFixed(1)}</div><div class="score-label">性价比</div></div>
-    </div>
-    <div class="section"><h4>适用场景</h4><div class="tool-card-tags">${t.scenes.map(s => '<span class="tag scene">' + escapeHtml(s) + '</span>').join(' ')}</div></div>
-    <div class="section"><h4>价格</h4><p><b>免费层：</b>${escapeHtml(t.free_tier || '无')}</p>${t.paid_tiers.map(p => '<p style="margin-top:4px"><b>' + escapeHtml(p.name) + '：</b>' + escapeHtml(p.price) + ' — ' + escapeHtml(p.features) + '</p>').join('')}</div>
-    <div class="section"><h4>优势</h4><p>${escapeHtml(t.strengths)}</p></div>
-    <div class="section"><h4>不足</h4><p>${escapeHtml(t.weaknesses)}</p></div>
-    <div class="section"><h4>适用场景及说明</h4><ul>${t.best_for.map(b => '<li>' + escapeHtml(b) + '</li>').join('')}</ul></div>
-    <div class="section"><h4>不适用场景及说明</h4><ul>${t.not_for.map(n => '<li>' + escapeHtml(n) + '</li>').join('')}</ul></div>
-    <div class="section"><h4>访问门槛</h4><p>${escapeHtml(t.access_barrier)}</p>${t.chinese_note ? '<p style="margin-top:4px"><b>中文支持：</b>' + escapeHtml(t.chinese_note) + '</p>' : ''}</div>
-    ${rootComparable ? '<div class="modal-actions">' +
-      '<button class="btn compare-toggle ' + (rootSelected ? 'selected' : '') + '" type="button" aria-pressed="' + rootSelected + '" onclick="toggleCompareRef(\'' + escapeHtml(t.id) + '\',null,this)">' + (rootSelected ? '已加入对比' : '加入对比') + '</button>' +
-      '<a class="btn" href="' + escapeHtml(safeExternalUrl(t.url)) + '" target="_blank" rel="noopener noreferrer">打开工具页面</a>' +
-    '</div>' : ''}
-    <div class="meta">资料更新于 ${escapeHtml(t.last_updated)} · 信息来源: <a href="${escapeHtml(safeExternalUrl(t.url))}" target="_blank" rel="noopener noreferrer">${escapeHtml(t.source)}</a> · 利益声明: 不接收厂商赞助</div>
-  `;
+  // 具体工具：单级叶节点样式详情（复用 GPT-5.6 Sol 三级预览视觉，仅 X 关闭，无返回键）
+  content.innerHTML = '<button class="modal-close" type="button" aria-label="关闭详情" onclick="closeModal()">' + ICON_CLOSE + '</button>' +
+    renderConcreteToolLeaf(t);
   showModal(trigger);
 }
 
@@ -537,6 +849,7 @@ export {
   getModalFocusableElements,
   configureModalAccessibility,
   showModal,
+  openDirectoryDetail,
   openDetail,
   closeModal,
   renderSelectedFilters,

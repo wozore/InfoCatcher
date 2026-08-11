@@ -56,6 +56,7 @@
                     "last_updated": "2026-07-18",
                     "source": "https://openai.com/index/gpt-5-6/",
                     "card_kind": "collection",
+                    "card_type": "general",
                     "entity_kind": "product",
                     "overview": {
                               "description": "OpenAI 提供 ChatGPT、Codex 和 API 等 AI 产品入口；具体模型与套餐在下方按可核实范围单独展示。",
@@ -136,6 +137,7 @@
                     "last_updated": "2026-07-18",
                     "source": "https://www.anthropic.com/news",
                     "card_kind": "collection",
+                    "card_type": "general",
                     "entity_kind": "product",
                     "overview": {
                               "description": "Anthropic 的 Claude 产品入口覆盖对话产品与 API；具体模型和订阅套餐在下方独立展示。",
@@ -206,6 +208,7 @@
                     "last_updated": "2026-07-18",
                     "source": "https://blog.google/technology/ai/",
                     "card_kind": "collection",
+                    "card_type": "general",
                     "entity_kind": "product",
                     "overview": {
                               "description": "Google 的 Gemini 产品入口覆盖 API 模型与 Google AI 订阅；具体资料在下方按已核实范围展示。",
@@ -275,6 +278,7 @@
                     "last_updated": "2026-07-18",
                     "source": "https://api-docs.deepseek.com/updates",
                     "card_kind": "collection",
+                    "card_type": "general",
                     "entity_kind": "product",
                     "overview": {
                               "description": "中国深度求索公司推出的开源大模型，以极致性价比和透明定价著称，V4 系列支持 1M 上下文。",
@@ -352,6 +356,7 @@
                     "last_updated": "2026-07-18",
                     "source": "https://github.com/QwenLM",
                     "card_kind": "concrete",
+                    "card_type": "general",
                     "entity_kind": "product",
                     "published_at": "2026-02-16"
           },
@@ -398,6 +403,7 @@
                     "last_updated": "2026-07-18",
                     "source": "https://www.volcengine.com/product/doubao",
                     "card_kind": "concrete",
+                    "card_type": "general",
                     "entity_kind": "product",
                     "published_at": "2026-06-23"
           },
@@ -449,6 +455,7 @@
                     "last_updated": "2026-07-18",
                     "source": "https://kimi.com",
                     "card_kind": "concrete",
+                    "card_type": "general",
                     "entity_kind": "product",
                     "published_at": "2026-07-17"
           },
@@ -500,6 +507,7 @@
                     "last_updated": "2026-07-18",
                     "source": "https://docs.bigmodel.cn/cn/guide/start/model-overview",
                     "card_kind": "collection",
+                    "card_type": "general",
                     "entity_kind": "product",
                     "overview": {
                               "description": "清华大学孵化、港股上市的国产 AI 公司，提供 GLM 系列模型及全模态 API 服务，中文能力扎实。",
@@ -579,6 +587,7 @@
                     "last_updated": "2026-07-18",
                     "source": "https://cursor.com/cn/changelog",
                     "card_kind": "concrete",
+                    "card_type": "dev",
                     "entity_kind": "product",
                     "published_at": "2026-08-03"
           },
@@ -638,6 +647,7 @@
                     "last_updated": "2026-07-18",
                     "source": "https://learn.microsoft.com/zh-cn/power-platform/released-versions/copilotstudio",
                     "card_kind": "concrete",
+                    "card_type": "dev",
                     "entity_kind": "product",
                     "published_at": "2026-06-30"
           },
@@ -694,6 +704,7 @@
                     "last_updated": "2026-07-18",
                     "source": "https://code.claude.com/docs/en/changelog",
                     "card_kind": "concrete",
+                    "card_type": "dev",
                     "entity_kind": "product",
                     "published_at": "2026-08-04"
           },
@@ -753,6 +764,7 @@
                     "last_updated": "2026-07-18",
                     "source": "https://www.trae.cn/changelog",
                     "card_kind": "concrete",
+                    "card_type": "dev",
                     "entity_kind": "product",
                     "published_at": "2026-07-31"
           },
@@ -813,6 +825,7 @@
                     "last_updated": "2026-07-18",
                     "source": "https://docs.midjourney.com/changelog",
                     "card_kind": "concrete",
+                    "card_type": "vision",
                     "entity_kind": "product",
                     "published_at": "2026-04-14"
           },
@@ -862,6 +875,7 @@
                     "last_updated": "2026-07-18",
                     "source": "https://blog.google/technology/ai/nano-banana-2/",
                     "card_kind": "concrete",
+                    "card_type": "vision",
                     "entity_kind": "product",
                     "published_at": "2026-02-26"
           },
@@ -911,6 +925,7 @@
                     "last_updated": "2026-07-18",
                     "source": "https://bytedance.larkoffice.com/wiki/F95cwC8nniilgbkmUX6cSJLengh",
                     "card_kind": "concrete",
+                    "card_type": "vision",
                     "entity_kind": "product",
                     "published_at": "2026-07-31"
           },
@@ -960,6 +975,7 @@
                     "last_updated": "2026-07-18",
                     "source": "https://kling.ai/release-note/release-history",
                     "card_kind": "concrete",
+                    "card_type": "media",
                     "entity_kind": "product",
                     "published_at": "2026-01-31"
           },
@@ -1014,6 +1030,7 @@
                     "last_updated": "2026-07-18",
                     "source": "https://suno.com/blog/v5-5",
                     "card_kind": "concrete",
+                    "card_type": "media",
                     "entity_kind": "product",
                     "published_at": "2026-03-26"
           },
@@ -1065,6 +1082,7 @@
                     "last_updated": "2026-07-18",
                     "source": "https://stability.ai/news",
                     "card_kind": "concrete",
+                    "card_type": "vision",
                     "entity_kind": "open_source_project",
                     "published_at": "2024-10-22"
           },
@@ -1118,6 +1136,7 @@
                     "last_updated": "2026-07-21",
                     "source": "https://ernie.baidu.com",
                     "card_kind": "collection",
+                    "card_type": "general",
                     "entity_kind": "product",
                     "overview": {
                               "description": "百度推出的文心大模型，通过千帆平台提供 ERNIE 系列 API，深度集成百度云生态。",
@@ -1194,6 +1213,7 @@
                     "last_updated": "2026-07-21",
                     "source": "https://www.xfyun.cn",
                     "card_kind": "collection",
+                    "card_type": "general",
                     "entity_kind": "product",
                     "overview": {
                               "description": "科大讯飞推出的星火认知大模型，深耕语音与教育场景，Lite 版本 API 永久免费。",
@@ -1270,6 +1290,7 @@
                     "last_updated": "2026-07-21",
                     "source": "https://cloud.tencent.com/product/tclm",
                     "card_kind": "concrete",
+                    "card_type": "general",
                     "entity_kind": "product",
                     "published_at": "2026-07-06"
           },
@@ -1315,6 +1336,7 @@
                     "last_updated": "2026-07-21",
                     "source": "https://www.tiangong.cn",
                     "card_kind": "concrete",
+                    "card_type": "general",
                     "entity_kind": "product",
                     "published_at": "2026-05-26"
           },
@@ -1365,6 +1387,7 @@
                     "last_updated": "2026-07-21",
                     "source": "https://platform.minimaxi.com/docs/release-notes/models",
                     "card_kind": "collection",
+                    "card_type": "general",
                     "entity_kind": "product",
                     "overview": {
                               "description": "MiniMax 推出的多模态 AI 平台，以海螺AI 视频生成和超低 API 文本价格著称。",
@@ -1446,6 +1469,7 @@
                     "last_updated": "2026-07-21",
                     "source": "https://x.ai/news",
                     "card_kind": "collection",
+                    "card_type": "general",
                     "entity_kind": "product",
                     "overview": {
                               "description": "Elon Musk 创办的 xAI 公司推出的 AI 模型，以实时 X 平台数据接入和推理能力见长，API 定价极具竞争力。",
@@ -1526,6 +1550,7 @@
                     "last_updated": "2026-07-21",
                     "source": "https://openai.com",
                     "card_kind": "concrete",
+                    "card_type": "vision",
                     "entity_kind": "model",
                     "published_at": "2026-04-21"
           },
@@ -1574,6 +1599,7 @@
                     "last_updated": "2026-07-21",
                     "source": "https://ideogram.ai",
                     "card_kind": "concrete",
+                    "card_type": "vision",
                     "entity_kind": "product",
                     "published_at": "2026-06-03"
           },
@@ -1619,6 +1645,7 @@
                     "last_updated": "2026-07-27",
                     "source": "https://mistral.ai/news",
                     "card_kind": "collection",
+                    "card_type": "general",
                     "entity_kind": "product",
                     "overview": {
                               "description": "法国 AI 公司，提供开放权重和商业许可的多种模型，覆盖文本、编码、推理和 OCR 场景。",
@@ -1694,6 +1721,7 @@
                     "last_updated": "2026-07-28",
                     "source": "https://docs.cohere.com/changelog",
                     "card_kind": "collection",
+                    "card_type": "general",
                     "entity_kind": "product",
                     "overview": {
                               "description": "加拿大 AI 公司，以企业级检索增强生成（RAG）、文本嵌入和重排序模型见长，Command 系列覆盖通用对话和编码。",

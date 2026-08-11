@@ -80,7 +80,11 @@ function scoreClass(val) {
 
 /** 判断工具是否有真正可用的免费层 */
 function hasFree(t) {
-  return t.free_tier && !t.free_tier.includes('无免费') && !t.free_tier.startsWith('无(');
+  return Boolean(t?.free_tier && !t.free_tier.includes('无免费') && !t.free_tier.startsWith('无('));
+}
+
+function hasDirectoryFreeTier(item) {
+  return hasFree(item);
 }
 
 /** B11 时效分级：根据 ISO 时间戳与当前时间差值返回新鲜度 */
@@ -292,6 +296,71 @@ function getCollectionNode(toolId, itemId) {
   return getToolIntelligence(toolId)?.items?.find(item => item.id === itemId) || null;
 }
 
+/**
+ * 工具视图目录投影：将顶层具体工具与厂商情报中的具体叶节点统一为可搜索卡片记录。
+ * collection 本身不进入工具目录；collection 只作为叶节点的归属与访问/分类来源。
+ */
+function buildIntelligenceDirectoryItem(tool, collection, item) {
+  const applicable = (item.applicable_scenarios || []).map(scene =>
+    [scene.title, scene.description].filter(Boolean).join('：')
+  ).filter(Boolean);
+  const inapplicable = (item.inapplicable_scenarios || []).map(scene =>
+    [scene.title, scene.description].filter(Boolean).join('：')
+  ).filter(Boolean);
+  const latestQueriedAt = getItemLatestQueriedAt(collection, item);
+  return {
+    id: item.id,
+    name: item.name,
+    vendor: tool.vendor,
+    icon: tool.icon,
+    category: [...(tool.category || [])],
+    scenes: [...new Set([...applicable, ...inapplicable])],
+    url: item.official_url || tool.url,
+    source: collection.sources?.find(source => (item.source_refs || []).includes(source.id))?.title || tool.source,
+    free_tier: '',
+    paid_tiers: [],
+    access_level: tool.access_level,
+    access_barrier: tool.access_barrier,
+    strengths: item.summary || '',
+    weaknesses: inapplicable.join('；'),
+    best_for: applicable,
+    not_for: inapplicable,
+    rating_overall: null,
+    rating_chinese: null,
+    rating_ease: null,
+    rating_price: null,
+    last_updated: latestQueriedAt ? latestQueriedAt.slice(0, 10) : null,
+    card_kind: 'intelligence_leaf',
+    entity_kind: 'intelligence_leaf',
+    card_type: tool.card_type,
+    intelligenceItem: item,
+    intelligenceCollection: collection,
+    collectionToolId: tool.id,
+    intelligenceItemId: item.id,
+    intelligenceKind: item.kind,
+  };
+}
+
+function getToolDirectoryItem(toolId, itemId) {
+  const tool = tools.find(candidate => candidate.id === toolId);
+  if (!tool || tool.card_kind !== 'collection') return null;
+  const collection = getToolIntelligence(toolId);
+  const item = collection?.items?.find(candidate => candidate.id === itemId && candidate.node_type === 'leaf');
+  return item ? buildIntelligenceDirectoryItem(tool, collection, item) : null;
+}
+
+function getToolDirectoryItems() {
+  const concreteTools = tools.filter(tool => tool.card_kind !== 'collection');
+  const intelligenceLeaves = tools.flatMap(tool => {
+    if (tool.card_kind !== 'collection') return [];
+    const collection = getToolIntelligence(tool.id);
+    return (collection?.items || [])
+      .filter(item => item.node_type === 'leaf')
+      .map(item => buildIntelligenceDirectoryItem(tool, collection, item));
+  });
+  return [...concreteTools, ...intelligenceLeaves];
+}
+
 // ═══ P1-A：静态搜索只读适配器（概念词条投影，供搜索与热点关联复用） ═══
 function searchConceptKey(term) {
   const normalizedTerm = String(term || '')
@@ -370,7 +439,40 @@ function getFilteredTools() {
   return filtered;
 }
 
-/** 按分类 + 空格分隔关键词过滤术语（AND 关系） */
+/**
+ * 工具目录过滤：工具视图使用顶层具体工具 + intelligence 叶节点投影，
+ * 不把 collection 厂商入口直接作为工具卡片。
+ */
+function getFilteredToolDirectoryItems() {
+  const query = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
+  let filtered = getToolDirectoryItems();
+
+  if (query) {
+    const keywords = query.split(/\s+/).filter(k => k.length > 0);
+    filtered = filtered.filter(item => {
+      const searchText = getToolSearchText(item);
+      return keywords.some(kw => searchText.includes(kw));
+    });
+    for (const [kw, fn] of Object.entries(searchAliases)) {
+      if (query.includes(kw)) filtered = filtered.filter(fn);
+    }
+  }
+
+  // 分类 chips 已弃用；保留该条件以兼容旧状态，不主动增加新的分类筛选入口。
+  if (activeFilters.category !== 'all') {
+    filtered = filtered.filter(item => (item.category || []).includes(activeFilters.category));
+  }
+  if (activeFilters.access !== 'all') {
+    filtered = filtered.filter(item => item.access_level === activeFilters.access);
+  }
+  if (activeFilters.price === 'free') {
+    filtered = filtered.filter(item => hasFree(item));
+  } else if (activeFilters.price === 'paid') {
+    filtered = filtered.filter(item => !hasFree(item));
+  }
+  return filtered;
+}
+
 function getFilteredGlossary() {
   const query = (document.getElementById('glossarySearch')?.value || '').toLowerCase().trim();
   let filtered = glossary;
@@ -477,6 +579,8 @@ function renderSkeletons() {
   const skeleton = '<div class="skeleton-list">' +
     Array(4).fill('<div class="skeleton"><span></span><span></span><span></span></div>').join('') +
   '</div>';
+  const vendorGrid = document.getElementById('vendorGrid');
+  if (vendorGrid) vendorGrid.innerHTML = skeleton;
   const toolGrid = document.getElementById('toolGrid');
   if (toolGrid) toolGrid.innerHTML = skeleton;
   const sceneDetail = document.getElementById('sceneDetail');
@@ -635,6 +739,9 @@ export {
   getToolIntelligence,
   getToolSearchText,
   getCollectionNode,
+  getToolDirectoryItems,
+  getToolDirectoryItem,
+  getFilteredToolDirectoryItems,
   searchConceptKey,
   getSearchConcepts,
   getFilteredTools,
