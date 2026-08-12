@@ -17,6 +17,7 @@ const fs = require('fs');
 const { readJson, writeJsonAtomic } = require('../core/news-storage');
 const { normalizeUrl, hash } = require('./feed-parser');
 const { NEWS_FILES, CATALOG_FILES } = require('../../shared/paths');
+const { catalog } = require('../../catalog-interface');
 
 const OUTPUT_PATH = NEWS_FILES.hotspots; // 前端热点投影（就地升级/迁移的目标文件）
 
@@ -220,11 +221,18 @@ let cachedRelatedLexicon = null;
 /** 惰性构建标题匹配词表（一次构建只读一次；读取失败时降级为空词表）。 */
 function getRelatedLexicon() {
   if (cachedRelatedLexicon === null) {
-    let tools = [], glossary = [], scenes = [];
-    try { tools = JSON.parse(fs.readFileSync(CATALOG_FILES.tools, 'utf8')); } catch { tools = []; }
-    try { glossary = JSON.parse(fs.readFileSync(CATALOG_FILES.glossary, 'utf8')); } catch { glossary = []; }
+    const toolResult = catalog({ area: 'tool-card', operation: 'list' });
+    const vendorResult = catalog({ area: 'vendor-card', operation: 'list' });
+    const toolCards = toolResult.ok ? toolResult.data : [];
+    const vendorCards = vendorResult.ok ? vendorResult.data : [];
+    const tools = [
+      ...vendorCards.map(item => ({ id: item.vendor_key, name: item.title, vendor: item.title, url: item.official_url })),
+      ...toolCards.map(item => ({ id: item.tool_key, name: item.title, vendor: item.vendor_label, url: '' })),
+    ];
+    let glossary = [], scenes = [];
+    try { glossary = readJson(CATALOG_FILES.glossary, []); } catch { glossary = []; }
     try {
-      const scenesData = JSON.parse(fs.readFileSync(CATALOG_FILES.scenes, 'utf8'));
+      const scenesData = readJson(CATALOG_FILES.scenes, { scenes: [] });
       scenes = Array.isArray(scenesData) ? scenesData : (scenesData.scenes || []);
     } catch { scenes = []; }
     cachedRelatedLexicon = buildRelatedTitleLexicon(tools, glossary, scenes);
@@ -261,8 +269,13 @@ let cachedToolUrlIndex = null;
 /** 惰性加载工具目录 URL 索引（一次构建只读一次；读取失败时降级为空索引）。 */
 function getToolUrlIndex() {
   if (cachedToolUrlIndex === null) {
-    let tools = [];
-    try { tools = JSON.parse(fs.readFileSync(CATALOG_FILES.tools, 'utf8')); } catch { tools = []; }
+    const result = catalog({ area: 'tool-card', operation: 'list' });
+    const tools = result.ok ? result.data.map(item => ({
+      id: item.tool_key,
+      name: item.title,
+      vendor: item.vendor_label,
+      url: item.url || '',
+    })) : [];
     cachedToolUrlIndex = buildToolUrlIndex(tools);
   }
   return cachedToolUrlIndex;

@@ -74,7 +74,7 @@ try {
   const result = require('../acquisition/validate-intel').validate({ silent: true });
   result.errors.forEach(e => fail(`acquisition: ${e}`));
   result.warnings.forEach(w => console.warn('⚠️  acquisition:', w));
-  console.log(`  intel-sources.json + tool-intelligence.json: ${result.valid ? '通过' : '失败'}`);
+  console.log(`  intel-sources.json + tool-preview-level3.json: ${result.valid ? '通过' : '失败'}`);
 } catch (e) {
   fail(`acquisition 校验异常: ${e.message}`);
 }

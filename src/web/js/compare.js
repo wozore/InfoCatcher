@@ -18,6 +18,10 @@ import {
   toolIntelligence,
   getToolIntelligence,
   getCollectionNode,
+  getToolCardItems,
+  getToolCardItem,
+  getToolLevel3Item,
+  getVendorLevel2Item,
   getItemLatestQueriedAt,
   getTimelinessInfo,
   formatPrice,
@@ -27,7 +31,7 @@ import {
   renderState,
   ICON_CLOSE,
 } from './data.js';
-import { renderTools, getLeafDescendants, closeModal, showModal } from './tools.js';
+import { renderTools, closeModal, showModal } from './tools.js';
 import { currentView, switchView } from './main.js';
 
 // ═══════════════════════════════════════════════════════════════
@@ -44,9 +48,8 @@ function isComparableRootTool(tool) {
 }
 
 function isComparableLeaf(toolId, itemId) {
-  const item = getCollectionNode(toolId, itemId);
-  // display_in_tree 只控制厂商树是否展示；工具视图会独立展示所有具体叶节点。
-  return Boolean(item && item.node_type === 'leaf');
+  const item = getToolLevel3Item(toolId, itemId);
+  return Boolean(item && item.kind !== 'tool');
 }
 
 function isCompareSelected(toolId, itemId = null) {
@@ -67,15 +70,11 @@ function setCompareStatus(message) {
 // 对比核心逻辑
 // ═══════════════════════════════════════════════════════════════
 function resolveCompareTarget(ref) {
-  const tool = tools.find(item => item.id === ref.toolId);
-  if (!tool) return null;
-  if (ref.itemId === null) {
-    return isComparableRootTool(tool) ? { type: 'root', kind: 'tool', tool, name: tool.name, icon: tool.icon } : null;
-  }
-  const item = getCollectionNode(ref.toolId, ref.itemId);
-  return isComparableLeaf(ref.toolId, ref.itemId)
-    ? { type: 'leaf', kind: item.kind, tool, item, name: item.name, icon: tool.icon }
-    : null;
+  const card = ref.itemId === null ? getToolCardItems().find(item => item.detail_kind === 'tool' && item.tool_key === ref.toolId) : getToolCardItem(ref.toolId, ref.itemId);
+  if (!card) return null;
+  const detail = getToolLevel3Item(ref.toolId, ref.itemId || ref.toolId);
+  if (!detail) return null;
+  return { type: detail.kind === 'tool' ? 'root' : 'leaf', kind: detail.kind, tool: card, item: detail.kind === 'tool' ? null : detail, name: detail.title, icon: detail.icon };
 }
 
 function toggleCompareRef(toolId, itemId = null, btn) {
@@ -106,8 +105,8 @@ function toggleCompareRef(toolId, itemId = null, btn) {
 }
 
 function compareGroupLeaves(toolId, groupId) {
-  const collection = getToolIntelligence(toolId);
-  const leaves = getLeafDescendants(collection, groupId).filter(item => isComparableLeaf(toolId, item.id));
+  const level2 = getVendorLevel2Item(toolId, groupId);
+  const leaves = (level2?.detail_refs || []).map(ref => getToolLevel3Item(toolId, ref.id)).filter(Boolean).filter(item => isComparableLeaf(toolId, item.tool_key));
   if (leaves.length < 2) return;
   if (leaves.length > 5) {
     setCompareStatus('该分类超过 5 个可比较项目，请在下方逐项选择最多 5 个后再进入对比。');
@@ -118,7 +117,7 @@ function compareGroupLeaves(toolId, groupId) {
     setCompareStatus('该分类包含不同类型的项目，不能混合对比。');
     return;
   }
-  compareList = leaves.map(item => ({ toolId, itemId: item.id }));
+  compareList = leaves.map(item => ({ toolId, itemId: item.tool_key }));
   updateCompareCount();
   renderTools();
   closeModal();
@@ -134,7 +133,7 @@ function compareTargetLabel(target) {
 }
 
 // 决策 9.5/93：对比数据来源与更新时间说明。图表标题/单位/数值之外，逐项列出数据来源与时效。
-// 具体工具使用 tools.json 的 source + last_updated（评分来源/资料更新时间）；
+// 具体工具使用三级详情的 source + last_updated（评分来源/资料更新时间）；
 // API 模型与订阅套餐使用 tool-intelligence collection.sources 的标题与查询时间。
 function renderCompareProvenance(targets) {
   const rows = targets.map(target => {

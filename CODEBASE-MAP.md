@@ -2,18 +2,34 @@
 
 维护约定：改动/新增/删除代码文件后，必须同步更新本文件。条目 = `文件名 — 职责。导出: 关键导出`。
 
-## src/shared/ — 底层公共
+## data/catalog/ — 五模块目录数据
+- [vendor-cards.json](data/catalog/vendor-cards.json) — 厂商列表卡片数据。
+- [tool-cards.json](data/catalog/tool-cards.json) — 工具列表卡片数据；每项仅通过 `detail_ref` 指向三级详情。
+- [vendor-preview-level1.json](data/catalog/vendor-preview-level1.json) — 厂商一级预览数据。
+- [vendor-preview-level2.json](data/catalog/vendor-preview-level2.json) — 厂商二级分组预览数据。
+- [tool-preview-level3.json](data/catalog/tool-preview-level3.json) — 厂商三级预览/工具详情唯一数据源。
+
+
 - [env.js](src/shared/env.js) — dotenv 子集解析 + 项目根目录。导出: `loadDotEnv, PROJECT_DIR`
-- [paths.js](src/shared/paths.js) — 目录与数据文件路径常量（全仓唯一数据登记点，含 `NEWS_FILES.configV2`/`lastRun`）。导出: `DIRS, CATALOG_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH`
+- [paths.js](src/shared/paths.js) — 目录与数据文件路径常量（全仓唯一数据登记点，含五模块 catalog 文件、`NEWS_FILES.configV2`/`lastRun`）。导出: `DIRS, CATALOG_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH`
 - [beijing-time.js](src/shared/beijing-time.js) — 北京时间（UTC+8 固定偏移）工具，不依赖运行环境时区（CI=UTC / 本地=北京）。导出: `BEIJING_OFFSET_MS, beijingDateKey, beijingDayKey, beijingMidnightIso`
 
+## src/catalog/ — 目录数据接口
+- [catalog-interface.js](src/catalog-interface.js) — Node 侧五模块目录唯一 Interface（列表、稳定引用解析、三级详情原子替换）。导出: `catalog, DATA_FILES, resetCatalogForTests`
+
 ## src/web/ — 前端静态站（原生 ES module，无打包器；build-dist.js 原样复制到 dist/）
-- [index.html](src/web/index.html) — 8 视图 DOM + 导航骨架，入口 `<script type="module" src="js/main.js">`（trending 视图静态文案已 data-i18n 化）
 - [css/style.css](src/web/css/style.css) — 全站样式；工具视图分类索引含极简编辑部科技风格、左侧独立定位、移动端横向布局与具体工具卡片主题/微纹理；厂商卡片与具体工具卡片的悬停样式作用域隔离；工具卡片适合/不适合提示使用颜色竖线
 - [i18n/zh.js](src/web/i18n/zh.js) — 语言字典（试点：trending 视图 + 共享工具；未来加 en.js 等）。导出: `messages`
 - [js/i18n.js](src/web/js/i18n.js) — **前端 i18n 框架核心**（两层：UI 文案 t() + 内容数据 getLocalizedField）。导出: `t, setLang, getCurrentLang, getLocalizedField, applyStaticTranslations`
 - [js/main.js](src/web/js/main.js) — 入口：共享状态、导航 switchView、全部事件绑定（DOMContentLoaded 先 applyStaticTranslations，工具分类索引由 tools.js 的 ToolDirectoryView 自管理）。导出: `currentView, switchView`
-- [js/data.js](src/web/js/data.js) — 数据加载(fetch JSON) + 过滤 + 工具目录投影（顶层具体工具 + tool-intelligence 叶节点）+ 平台元数据 + 通用工具（timeAgo/formatMetric/标签已接入 i18n 字典）。导出: 各数据状态与 setter、`getToolDirectoryItems/getToolDirectoryItem/getFilteredToolDirectoryItems`、escapeHtml/timeAgo/formatPrice 等
+- [js/catalog-interface.js](src/web/js/catalog-interface.js) — 浏览器侧五模块目录唯一 Interface（加载、查询、稳定引用解析）。导出: `catalog`
+- [js/vendor-cards.js](src/web/js/vendor-cards.js) — 厂商卡片模块。导出: 默认厂商卡渲染器
+- [js/tool-cards.js](src/web/js/tool-cards.js) — 工具卡片模块。导出: 默认工具卡渲染器
+- [js/vendor-preview-level1.js](src/web/js/vendor-preview-level1.js) — 厂商一级预览模块。导出: 默认一级预览渲染器
+- [js/vendor-preview-level2.js](src/web/js/vendor-preview-level2.js) — 厂商二级预览模块。导出: 默认二级预览渲染器
+- [js/tool-preview-level3.js](src/web/js/tool-preview-level3.js) — 厂商三级预览/工具详情模块。导出: `renderToolLevel3`、默认详情渲染器
+
+- [js/data.js](src/web/js/data.js) — 目录 Interface 兼容投影、独立数据加载、过滤、平台元数据与通用工具。导出: 五模块查询函数、各数据状态与 setter、escapeHtml/timeAgo/formatPrice 等
 - [js/search.js](src/web/js/search.js) — AI 搜索全链路（首页/结果/处理/概念标记）。导出: `searchState, submitSearchHome, renderSearchResults...`
 - [js/tools.js](src/web/js/tools.js) — 工具库视图（厂商/工具 Toggle）由独立 `VendorDirectoryView` / `ToolDirectoryView` 控制器分别管理；工具卡片四类主题、分组和快速索引 + 滤选 + 单级详情弹窗；具体工具/模型/套餐详情统一复用 GPT-5.6 Sol 叶节点视觉与详情渲染器，普通工具字段经适配层接入，仅 X 关闭；导出: `openDetail, openDirectoryDetail, closeModal, showModal, renderConcreteToolLeaf, getToolsViewMode, toggleToolsViewMode, renderTools...`
 - [js/compare.js](src/web/js/compare.js) — 对比模式。导出: `compareList, toggleCompareRef, quickCompare, renderCompare...`
@@ -80,6 +96,7 @@
 - [validate-news.js](src/maintenance/validate-news.js) — news 数据校验（news-config-v2 采集安全配置 + last-run X credits/request 账本 + hotspots + v2 候选层 min-candidates）。导出: `validateNews, validateMinNews, validateNewsConfig, validateLastRun`
 
 ## tests/ — 自动化回归
+- [catalog-interface.test.js](tests/catalog-interface.test.js) — 五模块目录 Interface、稳定引用和工具卡→三级详情关系回归。
 - [collector-x-v2.test.js](tests/news/collector-x-v2.test.js) — X 请求级 credits 硬预算回归：窗外/空长文/重试/零预算/低配置/超量响应/直接门禁。
 - [news-pipeline-min.test.js](tests/news/news-pipeline-min.test.js) — v2 全链编排、总开关、采集状态汇总、credits→last-run 透传回归。
 - [validate-news-config.test.js](tests/maintenance/validate-news-config.test.js) — news-config-v2 安全字段与 last-run X credits/request schema 校验。
@@ -94,7 +111,7 @@
 - [check-secrets.js](scripts/check-secrets.js) — 密钥/高熵扫描（validate.js 反向依赖）
 - [generate-og-image.js](scripts/generate-og-image.js) — OG 图生成入口
 
-## bat/ — Windows 维护者入口
+- [migrate-catalog-five-modules.js](scripts/migrate-catalog-five-modules.js) — 旧目录迁移为五模块 catalog 数据及引用报告。
 - [after-first-review.bat](bat/after-first-review.bat) — 首次人工审核后：应用 review 清单，再安全并行生成关键词提纯与 AI top 清单。
 - [apply-keywords.bat](bat/apply-keywords.bat) — 应用维护者填写的 keyword-refine 清单；仅更新后续采集关键词，不发布或构建。
 - [apply-top.bat](bat/apply-top.bat) — 应用 top_selected 并发布公开投影。

@@ -22,7 +22,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const { ACQUISITION_FILES, CATALOG_FILES } = require('../shared/paths');
+const { ACQUISITION_FILES } = require('../shared/paths');
+const { catalog } = require('../catalog-interface');
 const { requestText, fetchToolIntel } = require('./fetch-intel-http');
 const {
   extractMarkdownTables,
@@ -77,9 +78,9 @@ async function collectIntelligence(options = {}) {
     if (tools.length === 0) throw new Error(`未找到工具: ${options.toolId}`);
   }
 
-  // 2. 读取现有情报数据
-  const intelPath = CATALOG_FILES.toolIntelligence;
-  const existingIntel = JSON.parse(fs.readFileSync(intelPath, 'utf8'));
+  const detailResult = catalog({ area: 'tool-level3', operation: 'list' });
+  const details = detailResult.ok ? detailResult.data.map(item => ({ ...item, api_pricing: item.api_pricing ? { ...item.api_pricing, rate_cards: (item.api_pricing.rate_cards || []).map(rate => ({ ...rate })) } : item.api_pricing })) : [];
+  if (!detailResult.ok) throw new Error(`三级工具目录读取失败: ${detailResult.error.message}`);
 
   let hasConflict = false;
   let totalConflicts = 0;
@@ -100,7 +101,16 @@ async function collectIntelligence(options = {}) {
     // 4. 合并到现有数据
     const lastSource = toolConfig.intel_sources[toolConfig.intel_sources.length - 1];
     const sourceId = lastSource ? lastSource.id : 'manual';
-    const mergeResult = mergeIntelData(existingIntel, toolConfig.tool_id, results, sourceId, queriedAt);
+    const matches = details.filter(item => item.vendor_key === toolConfig.tool_id && item.kind === 'api_model');
+    const mergeResult = mergeIntelData({ collections: [{ tool_id: toolConfig.tool_id, items: matches }] }, toolConfig.tool_id, results, sourceId, queriedAt);
+    for (const detail of matches) {
+      const source = detail.sources?.find(item => item.id === sourceId);
+      if (source) source.queried_at = queriedAt;
+      else if (lastSource) detail.sources = [...(detail.sources || []), { id: sourceId, title: lastSource.publisher || sourceId, url: lastSource.url || '', publisher: lastSource.publisher || '', source_type: 'official', queried_at: queriedAt }];
+      if (detail.source_refs && !detail.source_refs.includes(sourceId)) detail.source_refs.push(sourceId);
+      if (detail.api_pricing?.rate_cards?.length) detail.api_pricing.rate_cards[0].source_refs = [...new Set([...(detail.api_pricing.rate_cards[0].source_refs || []), sourceId])];
+      detail.last_updated = queriedAt.slice(0, 10);
+    }
 
     log.push(`[${toolConfig.tool_id}] 合并结果: ${mergeResult.status}`);
     if (mergeResult.conflicts.length > 0) {
@@ -113,15 +123,10 @@ async function collectIntelligence(options = {}) {
     }
   }
 
-  // 5. 更新元数据
-  existingIntel.catalog_queried_at = queriedAt;
-
-  // 6. 写入文件
   if (!options.dryRun) {
-    const tmpPath = intelPath + '.tmp';
-    fs.writeFileSync(tmpPath, JSON.stringify(existingIntel, null, 2), 'utf8');
-    fs.renameSync(tmpPath, intelPath);
-    log.push(`写入 ${intelPath}`);
+    const writeResult = catalog({ area: 'tool-level3', operation: 'replace', items: details });
+    if (!writeResult.ok) throw new Error(`写入三级工具目录失败: ${writeResult.error.message}`);
+    log.push('写入 data/catalog/tool-preview-level3.json');
   }
 
   log.push(`[完成] 冲突数: ${totalConflicts}`);

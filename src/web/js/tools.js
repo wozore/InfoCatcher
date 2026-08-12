@@ -15,6 +15,14 @@ import {
   getCollectionNode,
   getToolDirectoryItem,
   getFilteredToolDirectoryItems,
+  getVendorCardItems,
+  getToolCardItems,
+  getFilteredVendorCardItems,
+  getFilteredToolCardItems,
+  getVendorLevel1Item,
+  getVendorLevel2Item,
+  getVendorLevel2Items,
+  getToolLevel3Item,
   getItemLatestQueriedAt,
   getToolPublishedDate,
   formatPrice,
@@ -29,6 +37,11 @@ import {
   ICON_EXTERNAL,
 } from './data.js';
 import { isComparableRootTool, isComparableLeaf, isCompareSelected } from './compare.js';
+import vendorCards from './vendor-cards.js';
+import toolCards from './tool-cards.js';
+import renderVendorLevel1 from './vendor-preview-level1.js';
+import renderVendorLevel2 from './vendor-preview-level2.js';
+import renderToolLevel3 from './tool-preview-level3.js';
 
 // ═══════════════════════════════════════════════════════════════
 // 详情弹窗状态（全站复用）
@@ -135,7 +148,7 @@ class VendorDirectoryView {
   }
 
   render(items) {
-    if (this.grid) this.grid.innerHTML = items.map(renderToolCard).join('');
+    if (this.grid) this.grid.innerHTML = items.map(item => vendorCards({ card: item })).join('');
   }
 
   renderState(state) {
@@ -228,14 +241,14 @@ class ToolDirectoryView {
     const visibleTypes = [];
     this.grid.classList.add('tool-groups');
     this.grid.innerHTML = TOOL_GROUPS.map(group => {
-      const groupItems = items.filter(tool => tool.card_type === group.type);
+      const groupItems = items.filter(tool => tool.theme === group.type);
       if (groupItems.length === 0) return '';
       visibleTypes.push(group.type);
       return '<section class="tool-group" id="tool-group-' + escapeHtml(group.type) + '">' +
         '<h3 class="tool-group-title">' + escapeHtml(group.title) +
           ' <span class="tool-group-count">' + groupItems.length + '</span></h3>' +
         '<div class="tool-group-divider" aria-hidden="true"></div>' +
-        '<div class="tool-grid">' + groupItems.map(renderToolCard).join('') + '</div>' +
+        '<div class="tool-grid">' + groupItems.map(item => toolCards({ card: item })).join('') + '</div>' +
         '</section>';
     }).join('');
     this.syncIndex(visibleTypes);
@@ -397,7 +410,7 @@ function renderToolCard(t) {
  */
 function renderTools() {
   const isToolView = toolsViewMode === 'tool';
-  const filtered = isToolView ? getFilteredToolDirectoryItems() : getFilteredTools();
+  const filtered = isToolView ? getFilteredToolCardItems() : getFilteredVendorCardItems();
   const views = getDirectoryViews();
   const currentView = isToolView ? views.tool : views.vendor;
   const otherView = isToolView ? views.vendor : views.tool;
@@ -406,9 +419,7 @@ function renderTools() {
   renderSelectedFilters();
   syncToolsViewControls();
 
-  const visibleTools = isToolView
-    ? filtered
-    : filtered.filter(tool => tool.card_kind === 'collection');
+  const visibleTools = isToolView ? filtered : filtered;
   currentView.show();
   otherView.hide();
 
@@ -624,38 +635,21 @@ function renderModelIndexOverview(node, options = {}) {
 }
 
 function renderOpenAIDetailBody(toolId, nodeId = null) {
-  const tool = tools.find(item => item.id === toolId);
-  const collection = getToolIntelligence(toolId);
-  const node = nodeId ? getCollectionNode(toolId, nodeId) : null;
-  if (!tool || !collection || (nodeId && !node)) return '<div class="intelligence-unavailable">该模型或工具节点不存在。</div>';
-
-  if (!node) {
-    return '<section class="openai-root">' +
-      '<h2>' + escapeHtml(tool.icon + ' ' + tool.vendor + '（' + tool.name + '）') + '</h2>' +
-      '<div class="vendor"><a href="' + escapeHtml(safeExternalUrl(tool.url)) + '" target="_blank" rel="noopener noreferrer">官网 ' + ICON_EXTERNAL + '</a></div>' +
-      '<p class="vendor-description">' + escapeHtml(tool.overview?.description || tool.strengths) + '</p>' +
-      '<section class="model-tool-panel"><div class="intelligence-heading"><h3>模型与工具</h3><span class="intelligence-status status-' + escapeHtml(collection.status) + '">' + escapeHtml({ verified: '已核实', partial: '部分核实', conflict: '资料冲突', unavailable: '资料不可用' }[collection.status] || collection.status) + '</span></div>' +
-      renderTreeChildren(toolId, collection, null, { showHeading: false }) +
-      '</section>' +
-      renderVendorFeatures(tool) +
-      '</section>';
+  const vendor = getVendorCardItems().find(card => card.vendor_key === toolId);
+  const level1 = getVendorLevel1Item(toolId);
+  if (!vendor || !level1) return '<div class="intelligence-unavailable">该厂商不存在。</div>';
+  if (!nodeId) {
+    const level2 = getVendorLevel2Items(toolId).map(item => ({ ...item, legacy_id: item.id.split(':').pop() }));
+    return renderVendorLevel1({ vendor, preview: level1, level2 });
   }
-
-  if (node.node_type === 'leaf') {
-    const sourceMap = new Map((collection.sources || []).map(source => [source.id, source]));
-    const leafBadge = renderTimelinessBadge(getItemLatestQueriedAt(collection, node));
-    const compareButton = '<button class="compare-toggle" onclick="toggleCompareRef(\'' + escapeHtml(toolId) + '\',\'' + escapeHtml(node.id) + '\',this)">' + (isCompareSelected(toolId, node.id) ? '已选' : '+对比') + '</button>';
-    return '<div class="model-index-page model-leaf-page">' + renderModelBackButton(toolId) + renderModelIndexOverview(node, { showDescription: false }) +
-      '<div class="model-leaf-panel"><div class="model-panel-heading"><div><span class="node-kind-badge leaf">具体' + escapeHtml(node.kind === 'api_model' ? '模型' : node.kind === 'subscription_plan' ? '套餐' : '工具') + '</span><h4>' + escapeHtml(node.name) + '</h4>' + leafBadge + '</div>' + compareButton + '</div>' +
-      '<div class="intelligence-item-body">' + renderLeafDetails(node, sourceMap, { toolId }, { hideCompare: true }) + '</div></div></div>';
-  }
-
-  return '<div class="model-index-page">' + renderModelBackButton(toolId) + renderModelIndexOverview(node) +
-    '<div class="model-index-divider" aria-hidden="true"></div>' +
-    '<section class="model-tool-panel"><div class="model-index-actions"><div>' + renderGroupCompareButton(toolId, collection, node.id) + '</div><span class="intelligence-status status-' + escapeHtml(node.status === 'active' ? 'verified' : node.status === 'unknown' ? 'partial' : node.status) + '">' + escapeHtml(getNodeStatusLabel(node.status)) + '</span></div>' +
-    renderTreeChildren(toolId, collection, node.id, { showHeading: false, showBulkCompare: false }) +
-    '</section></div>';
+  const detail = getToolLevel3Item(toolId, nodeId);
+  if (detail) return renderToolLevel3({ detail, showCompare: detail.kind !== 'tool', compareSelected: isCompareSelected(toolId, nodeId) });
+  const level2 = getVendorLevel2Item(toolId, nodeId);
+  if (!level2) return '<div class="intelligence-unavailable">该模型或工具节点不存在。</div>';
+  const detailCards = getToolCardItems().filter(card => level2.detail_refs.some(ref => ref.id === card.detail_ref?.id));
+  return renderVendorLevel2({ preview: { ...level2, vendor_key: toolId }, detailCards });
 }
+
 
 function renderLeafPanel(toolId, collection, leaf) {
   const sourceMap = new Map((collection.sources || []).map(source => [source.id, source]));
@@ -724,48 +718,15 @@ function showModal(trigger = null) {
  * 工具内部只有一级面板：不渲染返回键，仅由模态右上角 X 关闭。
  */
 function renderConcreteToolLeaf(t) {
-  const detailHeader = (name, icon, vendor, url) =>
-    '<header class="concrete-tool-detail-header">' +
-      '<h2>' + escapeHtml((icon || '') + ' ' + name) + '</h2>' +
-      '<div class="vendor">' + escapeHtml(vendor || '') + (url ? ' · <a href="' + escapeHtml(safeExternalUrl(url)) + '" target="_blank" rel="noopener noreferrer">官网 ' + ICON_EXTERNAL + '</a>' : '') + '</div>' +
-    '</header>';
-
-  if (t.card_kind === 'intelligence_leaf') {
-    const collection = t.intelligenceCollection;
-    const item = t.intelligenceItem;
-    const sourceMap = new Map((collection?.sources || []).map(source => [source.id, source]));
-    const leafBadge = renderTimelinessBadge(getItemLatestQueriedAt(collection, item));
-    const compareButton = isComparableLeaf(t.collectionToolId, t.intelligenceItemId)
-      ? '<button class="compare-toggle ' + (isCompareSelected(t.collectionToolId, t.intelligenceItemId) ? 'selected' : '') + '" aria-pressed="' + isCompareSelected(t.collectionToolId, t.intelligenceItemId) + '" onclick="toggleCompareRef(\'' + escapeHtml(t.collectionToolId) + '\',\'' + escapeHtml(t.intelligenceItemId) + '\',this)">' + (isCompareSelected(t.collectionToolId, t.intelligenceItemId) ? '已选' : '+对比') + '</button>'
-      : '';
-    return detailHeader(item.name, t.icon, t.vendor, item.official_url || t.url) +
-      '<div class="model-leaf-panel">' +
-      '<div class="model-panel-heading"><div>' +
-        '<span class="node-kind-badge leaf">具体' + escapeHtml(item.kind === 'api_model' ? '模型' : item.kind === 'subscription_plan' ? '套餐' : '工具') + '</span>' +
-        '<h4>' + escapeHtml(item.name) + '</h4>' + leafBadge +
-      '</div>' + compareButton + '</div>' +
-      '<div class="intelligence-item-body">' + renderLeafDetails(item, sourceMap, { toolId: t.collectionToolId }, { hideCompare: true }) + '</div></div>';
-  }
-
-  const detail = normalizeConcreteToolDetail(t);
-  const sourceMap = new Map([[detail.sourceId, {
-    id: detail.sourceId,
-    title: detail.source,
-    url: t.url,
-  }]]);
-  const leafBadge = renderTimelinessBadge(getToolPublishedDate(t));
-  const comparable = isComparableRootTool(t);
-  const rootSelected = comparable && isCompareSelected(t.id, null);
-  const compareButton = comparable
-    ? '<button class="compare-toggle ' + (rootSelected ? 'selected' : '') + '" aria-pressed="' + rootSelected + '" onclick="toggleCompareRef(\'' + escapeHtml(t.id) + '\',null,this)">' + (rootSelected ? '已选' : '+对比') + '</button>'
-    : '';
-
-  return detailHeader(t.name, t.icon, t.vendor, t.url) +
-    '<div class="model-leaf-panel">' +
-    '<div class="model-panel-heading"><div>' +
-      '<span class="node-kind-badge leaf">具体工具</span><h4>' + escapeHtml(t.name) + '</h4>' + leafBadge +
-    '</div>' + compareButton + '</div>' +
-    '<div class="intelligence-item-body">' + renderLeafDetails(detail, sourceMap, null, { hideCompare: true }) + '</div></div>';
+  const vendorKey = t.collectionToolId || t.id;
+  const itemKey = t.intelligenceItemId || t.id;
+  const detail = getToolLevel3Item(vendorKey, itemKey);
+  if (!detail) return '<div class="intelligence-unavailable">该工具详情不存在。</div>';
+  const comparable = detail.kind === 'tool' ? isComparableRootTool(t) : isComparableLeaf(vendorKey, itemKey);
+  const selected = detail.kind === 'tool'
+    ? isCompareSelected(vendorKey, null)
+    : isCompareSelected(vendorKey, itemKey);
+  return renderToolLevel3({ detail, showCompare: comparable, compareSelected: selected });
 }
 
 function openDirectoryDetail(toolId, itemId, trigger = null) {
@@ -779,21 +740,18 @@ function openDirectoryDetail(toolId, itemId, trigger = null) {
 }
 
 function openDetail(id, selectedItemId = null, trigger = null) {
-  const t = tools.find(tool => tool.id === id);
-  if (!t) return;
-  const collection = getToolIntelligence(id);
+  const tool = tools.find(item => item.id === id);
+  if (!tool) return;
   const content = document.getElementById('modalContent');
-  if (t.card_kind === 'collection' && collection?.tree_mode === 'tree') {
+  if (tool.card_kind === 'collection') {
     content.innerHTML = '<button class="modal-close" type="button" aria-label="关闭详情" onclick="closeModal()">' + ICON_CLOSE + '</button>' +
       '<div id="openaiDetailBody" class="openai-detail"></div>';
     navigateModelToolPanel(id, selectedItemId);
     showModal(trigger);
     return;
   }
-
-  // 具体工具：单级叶节点样式详情（复用 GPT-5.6 Sol 三级预览视觉，仅 X 关闭，无返回键）
   content.innerHTML = '<button class="modal-close" type="button" aria-label="关闭详情" onclick="closeModal()">' + ICON_CLOSE + '</button>' +
-    renderConcreteToolLeaf(t);
+    renderConcreteToolLeaf(tool);
   showModal(trigger);
 }
 

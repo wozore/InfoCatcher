@@ -402,12 +402,13 @@ function mergeIntelData(existingIntel, toolId, newData, sourceId, queriedAt) {
 
   // 匹配已知的叶子节点
   for (const item of collection.items) {
-    if (item.node_type !== 'leaf' || !item.api_pricing) continue;
+    if (item.node_type !== 'leaf' && !(item.kind === 'api_model' && item.tool_key)) continue;
 
     // 尝试通过名称匹配
+    const itemName = item.name || item.title || item.id;
     const matchedData = newData.find(d =>
-      item.name.toLowerCase().includes(d.modelName.toLowerCase()) ||
-      d.modelName.toLowerCase().includes(item.name.toLowerCase())
+      itemName.toLowerCase().includes(d.modelName.toLowerCase()) ||
+      d.modelName.toLowerCase().includes(itemName.toLowerCase())
     );
     if (!matchedData) continue;
 

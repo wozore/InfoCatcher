@@ -3,7 +3,7 @@
  *
  * 五个分类（无"全部"），编辑精选和热门模型各带独立分类 tab。
  * 编辑精选来自 featured.json（手动维护 tool_id + item_id）。
- * 热门模型从 tool-intelligence.json 自动取 leaf 模型，按 active + 有定价排序取 top-3。
+ * 热门模型从三级详情自动取 API 模型，按 active + 有定价排序取 top-3。
  * 分类 tab 点击由 main.js 在 #editorPicksTabs / #hotRankingTabs 上委托监听。
  * 架构概要、八个视图与扩展模式见 main.js 顶部维护文档。
  */

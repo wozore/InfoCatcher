@@ -4,7 +4,7 @@
  * 在热点管线 v2 中的位置：收尾环节之一，与 transcript-notify / keyword-refine 并列，
  * **独立于主链、互相不依赖**。吃 approved 内容的 summary，反哺两个知识库：
  *   1. 工具反哺（config.feedback.tool_feedback）：从 summary 提取疑似 AI 工具名，
- *      与 data/catalog/tools.json 比对，缺失 → 生成"待补工具卡"草案（人工补全后导入）。
+ *      与五模块工具目录的工具卡片比对，缺失 → 生成"待补工具卡"草案（人工补全后导入）。
  *   2. 概念反哺（config.feedback.concept_feedback）：提取疑似 AI 概念名，
  *      与 data/catalog/glossary.json 比对，缺失 → 生成"待补概念卡"草案。
  *
@@ -25,7 +25,7 @@ const path = require('path');
 const fs = require('fs');
 const { readJson, writeJsonAtomic } = require('../core/news-storage');
 const { readMinStore } = require('../min/min-store');
-const { CATALOG_FILES } = require('../../shared/paths');
+const { catalog } = require('../../catalog-interface');
 const { beijingDateKey } = require('../../shared/beijing-time');
 
 // ═══════════════════════════════════════════════════════════════
@@ -94,10 +94,11 @@ function toolExists(toolName, tools) {
   const needle = String(toolName || '').toLowerCase();
   if (!needle) return false;
   return (tools || []).some(tool =>
-    (tool.name && String(tool.name).toLowerCase().includes(needle)) ||
-    (tool.id && String(tool.id).toLowerCase().includes(needle)) ||
-    (needle.includes(String(tool.name || '').toLowerCase()) && tool.name) ||
-    (needle.includes(String(tool.id || '').toLowerCase()) && tool.id)
+    (tool.title && String(tool.title).toLowerCase().includes(needle)) ||
+    (tool.tool_key && String(tool.tool_key).toLowerCase().includes(needle)) ||
+    (tool.vendor_label && String(tool.vendor_label).toLowerCase().includes(needle)) ||
+    (needle.includes(String(tool.title || '').toLowerCase()) && tool.title) ||
+    (needle.includes(String(tool.tool_key || '').toLowerCase()) && tool.tool_key)
   );
 }
 
@@ -140,7 +141,7 @@ function dateKeyOf(input) {
  * @param {object} [options] { store?, now?, llmExtract?, tools?, glossary? }
  *   - llmExtract  实体提取注入函数 (text) => Promise<string[]>/string[]；缺省正则
  *   - now         清单日期参考（缺省当天）
- *   - tools       tools.json 数据注入（测试用）；缺省读 CATALOG_FILES.tools
+ *   - tools       工具卡片数据注入（测试用）；缺省通过目录 Interface 读取
  *   - glossary    glossary.json 数据注入（测试用）；缺省读 CATALOG_FILES.glossary
  * @returns {Promise<{
  *   toolsFound: string[], toolsPending: Array<{name,url,description,source_hotspot,pending}>,
@@ -167,7 +168,10 @@ async function feedbackFromSummaries(store, config, options = {}) {
     }
   }
 
-  const tools = options.tools ?? readJson(CATALOG_FILES.tools, []);
+  const tools = options.tools ?? (() => {
+    const result = catalog({ area: 'tool-card', operation: 'list' });
+    return result.ok ? result.data : [];
+  })();
   const glossary = options.glossary ?? readJson(CATALOG_FILES.glossary, []);
   const dateKey = dateKeyOf(options && options.now);
   const manualFolder = (config && config.manual_folder) || 'data/manual';

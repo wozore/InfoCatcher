@@ -16,13 +16,15 @@
  */
 
 // ═══════════════════════════════════════════════════════════════
-// 共享数据状态 —— tools.json / tool-intelligence / glossary / scenes / hotspots / featured
+// 共享数据状态 —— 五模块目录 Interface + glossary / scenes / hotspots / featured
 // ═══════════════════════════════════════════════════════════════
 import { t } from './i18n.js';
+import { catalog } from './catalog-interface.js';
 
-let tools = [];               // tools.json 的完整内容
-let toolIntelligence = { collections: [] }; // 具体模型、变体、套餐与可追溯来源
-let toolIntelligenceById = new Map();        // tool_id → 集合情报
+let tools = [];               // 旧视图兼容投影，不再作为目录事实来源
+let toolIntelligence = { collections: [] }; // 旧视图兼容投影，不再作为目录事实来源
+let toolIntelligenceById = new Map();        // tool_id → 兼容集合投影
+let directoryItems = [];       // 工具卡片模块的公开投影
 let glossary = [];            // glossary.json 的完整内容
 let scenes = [];              // scenes.json 的场景、子任务和工具映射
 let hotspots = {              // hotspots.json 的前端投影
@@ -271,8 +273,267 @@ function copyTextWithFeedback(button, text, label) {
 // ═══════════════════════════════════════════════════════════════
 // 工具/概念数据域辅助 —— 供各视图读取
 // ═══════════════════════════════════════════════════════════════
+function getCatalogItems(area) {
+  const result = catalog({ area, operation: 'list' });
+  return result.ok ? result.data : [];
+}
+
+function buildLegacyToolFromVendorCard(card, level1) {
+  return {
+    id: card.vendor_key,
+    name: card.entry_label || card.title,
+    vendor: card.title,
+    category: [...(card.categories || [])],
+    scenes: [...(card.scenes || [])],
+    url: card.official_url || level1?.official_url || '',
+    icon: card.icon || '',
+    free_tier: card.price_status === 'free' ? '有免费层' : '无免费层',
+    paid_tiers: [],
+    chinese_support: null,
+    chinese_note: '',
+    access_barrier: card.access_barrier || '',
+    access_level: card.access_level || '受限',
+    strengths: card.strengths || card.summary || '',
+    weaknesses: card.weaknesses || '',
+    best_for: [...(card.best_for || [])],
+    not_for: [...(card.not_for || [])],
+    rating_overall: null,
+    rating_chinese: null,
+    rating_ease: null,
+    rating_price: null,
+    last_updated: card.last_updated || null,
+    source: card.source || '',
+    card_kind: 'collection',
+    card_type: card.theme || 'general',
+    entity_kind: 'product',
+    overview: {
+      description: card.summary || '',
+      features: [...(card.feature_preview || [])],
+      source_refs: (level1?.citations || []).map(source => source.id),
+    },
+    published_at: card.published_at || null,
+  };
+}
+
+function buildLegacyToolFromDetail(card, detail) {
+  return {
+    id: detail.tool_key,
+    name: detail.title,
+    vendor: detail.vendor_label,
+    category: [...(detail.category || card?.categories || [])],
+    scenes: [...(detail.scenes || card?.scenes || [])],
+    url: detail.official_url || '',
+    icon: detail.icon || card?.icon || '',
+    free_tier: detail.free_tier || '',
+    paid_tiers: [...(detail.paid_tiers || [])],
+    chinese_support: null,
+    chinese_note: '',
+    access_barrier: detail.access_barrier || card?.access_barrier || '',
+    access_level: detail.access_level || card?.access_level || '受限',
+    strengths: detail.summary || '',
+    weaknesses: detail.weaknesses || (detail.inapplicable_scenarios || []).map(item => item.title).join('；'),
+    best_for: (detail.applicable_scenarios || []).map(item => item.title),
+    not_for: (detail.inapplicable_scenarios || []).map(item => item.title),
+    rating_overall: detail.rating_overall ?? null,
+    rating_chinese: detail.rating_chinese ?? null,
+    rating_ease: detail.rating_ease ?? null,
+    rating_price: detail.rating_price ?? null,
+    last_updated: detail.last_updated || null,
+    source: detail.sources?.[0]?.url || detail.official_url || '',
+    card_kind: 'concrete',
+    card_type: card?.theme || 'general',
+    entity_kind: 'product',
+  };
+}
+
+function buildLegacyIntelligence(vendorCards, level1Items, level2Items, details) {
+  const detailByRef = new Map(details.map(item => [item.id, item]));
+  const level2ByLevel1 = new Map();
+  for (const item of level2Items) {
+    const list = level2ByLevel1.get(item.level1_ref.id) || [];
+    list.push(item);
+    level2ByLevel1.set(item.level1_ref.id, list);
+  }
+  const collections = vendorCards.map(card => {
+    const root = level1Items.find(item => item.id === card.level1_ref.id);
+    const groups = (level2ByLevel1.get(card.level1_ref.id) || []).map(level2 => {
+      const legacyId = level2.id.replace(`vendor-level2:${card.vendor_key}:`, '');
+      return {
+        id: legacyId,
+        node_type: 'group',
+        parent_id: null,
+        group_id: legacyId,
+        kind: level2.kind === 'product_family' ? 'product_variant' : level2.kind,
+        name: level2.title,
+        status: level2.status,
+        summary: level2.summary,
+        official_url: level2.official_url,
+        source_refs: (level2.citations || []).map(source => source.id),
+        relation_source_refs: (level2.citations || []).map(source => source.id),
+        display_in_tree: true,
+      };
+    });
+    const leaves = (level2ByLevel1.get(card.level1_ref.id) || []).flatMap(level2 => {
+      const legacyParent = level2.id.replace(`vendor-level2:${card.vendor_key}:`, '');
+      return (level2.detail_refs || []).map(detailRef => {
+        const detail = detailByRef.get(detailRef.id);
+        if (!detail) return null;
+        return {
+          id: detail.tool_key,
+          node_type: 'leaf',
+          parent_id: legacyParent,
+          group_id: legacyParent,
+          kind: detail.kind,
+          name: detail.title,
+          status: detail.status,
+          summary: detail.summary,
+          official_url: detail.official_url,
+          one_m_context: detail.one_m_context,
+          api_pricing: detail.api_pricing,
+          cache_hit_rate: detail.cache_hit_rate,
+          plan: detail.plan,
+          applicable_scenarios: detail.applicable_scenarios,
+          inapplicable_scenarios: detail.inapplicable_scenarios,
+          source_refs: [...(detail.source_refs || [])],
+          relation_source_refs: [...(detail.relation_source_refs || [])],
+          display_in_tree: true,
+          detail_id: detail.id,
+        };
+      }).filter(Boolean);
+    });
+    const sourceMap = new Map();
+    for (const source of [...(root?.citations || []), ...groups.flatMap(group => (level2ByLevel1.get(card.level1_ref.id) || []).find(item => item.id.endsWith(group.id))?.citations || []), ...leaves.flatMap(leaf => detailByRef.get(leaf.detail_id)?.sources || [])]) {
+      sourceMap.set(source.id, source);
+    }
+    return {
+      tool_id: card.vendor_key,
+      status: root?.status || 'unavailable',
+      tree_mode: root?.tree_mode || 'tree',
+      items: [...groups, ...leaves],
+      sources: [...sourceMap.values()],
+    };
+  });
+  return { schema_version: 2, collections };
+}
+
+function buildDirectoryProjection(toolCards, details, intelligence) {
+  const detailByRef = new Map(details.map(item => [item.id, item]));
+  return toolCards.map(card => {
+    const detail = detailByRef.get(card.detail_ref?.id);
+    const collection = card.vendor_key ? intelligence.collections.find(item => item.tool_id === card.vendor_key) : null;
+    const item = detail && detail.kind !== 'tool'
+      ? collection?.items.find(candidate => candidate.id === detail.tool_key)
+      : null;
+    return {
+      id: card.tool_key,
+      name: card.title,
+      vendor: card.vendor_label,
+      icon: card.icon,
+      category: [...(card.categories || [])],
+      scenes: [...(card.scenes || [])],
+      url: detail?.official_url || '',
+      source: detail?.sources?.[0]?.title || '',
+      free_tier: detail?.free_tier || '',
+      paid_tiers: [...(detail?.paid_tiers || [])],
+      access_level: card.access_level,
+      access_barrier: card.access_barrier,
+      strengths: card.summary || '',
+      weaknesses: card.not_for_preview || '',
+      best_for: card.best_for_preview ? [card.best_for_preview] : [],
+      not_for: card.not_for_preview ? [card.not_for_preview] : [],
+      rating_overall: detail?.rating_overall ?? null,
+      rating_chinese: detail?.rating_chinese ?? null,
+      rating_ease: detail?.rating_ease ?? null,
+      rating_price: detail?.rating_price ?? null,
+      last_updated: card.last_updated || null,
+      card_kind: detail?.kind === 'tool' ? 'concrete' : 'intelligence_leaf',
+      entity_kind: detail?.kind === 'tool' ? 'product' : 'intelligence_leaf',
+      card_type: card.theme,
+      intelligenceItem: item || null,
+      intelligenceCollection: collection || null,
+      collectionToolId: detail?.kind === 'tool' ? null : card.vendor_key,
+      intelligenceItemId: detail?.kind === 'tool' ? null : detail?.tool_key,
+      intelligenceKind: detail?.kind,
+    };
+  });
+}
+
+function initializeCatalogCompatibility() {
+  const vendorCards = getCatalogItems('vendor-card');
+  const toolCards = getCatalogItems('tool-card');
+  const level1Items = getCatalogItems('vendor-level1');
+  const level2Items = getCatalogItems('vendor-level2');
+  const details = getCatalogItems('tool-level3');
+  const level1ByVendor = new Map(level1Items.map(item => [item.vendor_key, item]));
+  const legacyIntel = buildLegacyIntelligence(vendorCards, level1Items, level2Items, details);
+  const concreteDetails = details.filter(item => item.kind === 'tool');
+  const concreteCards = toolCards.filter(card => card.detail_kind === 'tool');
+  const roots = vendorCards.map(card => buildLegacyToolFromVendorCard(card, level1ByVendor.get(card.vendor_key)));
+  const concretes = concreteCards.map(card => buildLegacyToolFromDetail(card, details.find(item => item.id === card.detail_ref.id)));
+  const directory = buildDirectoryProjection(toolCards, details, legacyIntel);
+  return { tools: [...roots, ...concretes], toolIntelligence: legacyIntel, directory, concreteDetails };
+}
+
+
 function getToolIntelligence(toolId) {
   return toolIntelligenceById.get(toolId) || null;
+}
+
+function getVendorCardItems() {
+  return getCatalogItems('vendor-card');
+}
+
+function getVendorCardItem(vendorKey) {
+  return getVendorCardItems().find(item => item.vendor_key === vendorKey) || null;
+}
+
+function getToolCardItems() {
+  return [...getCatalogItems('tool-card')];
+}
+
+function getToolCardItem(toolKey, itemKey = null) {
+  const detailKey = itemKey || toolKey;
+  return getToolCardItems().find(item => item.tool_key === detailKey && (!itemKey || item.vendor_key === toolKey)) || null;
+}
+
+function getVendorLevel1Item(vendorKey) {
+  return getCatalogItems('vendor-level1').find(item => item.vendor_key === vendorKey) || null;
+}
+
+function getVendorLevel2Item(vendorKey, groupKey) {
+  const items = getCatalogItems('vendor-level2');
+  return items.find(item => item.vendor_key === vendorKey && (item.id === groupKey || item.id.endsWith(':' + groupKey))) || null;
+}
+
+function getVendorLevel2Items(vendorKey) {
+  return getCatalogItems('vendor-level2').filter(item => item.vendor_key === vendorKey);
+}
+
+function getToolLevel3Item(vendorKey, itemKey) {
+  const items = getCatalogItems('tool-level3');
+  return items.find(item => item.vendor_key === vendorKey && (item.id === itemKey || item.tool_key === itemKey || item.id.endsWith(':' + itemKey))) || null;
+}
+
+function getFilteredVendorCardItems() {
+  const query = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
+  let filtered = getVendorCardItems();
+  if (query) filtered = filtered.filter(item => (item.search_terms || []).some(term => String(term).toLowerCase().includes(query)));
+  if (activeFilters.category !== 'all') filtered = filtered.filter(item => (item.categories || []).includes(activeFilters.category));
+  if (activeFilters.access !== 'all') filtered = filtered.filter(item => item.access_level === activeFilters.access);
+  if (activeFilters.price === 'free') filtered = filtered.filter(item => item.price_status === 'free');
+  if (activeFilters.price === 'paid') filtered = filtered.filter(item => item.price_status !== 'free');
+  return filtered;
+}
+
+function getFilteredToolCardItems() {
+  const query = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
+  let filtered = getToolCardItems();
+  if (query) filtered = filtered.filter(item => (item.search_terms || []).some(term => String(term).toLowerCase().includes(query)));
+  if (activeFilters.category !== 'all') filtered = filtered.filter(item => (item.categories || []).includes(activeFilters.category));
+  if (activeFilters.access !== 'all') filtered = filtered.filter(item => item.access_level === activeFilters.access);
+  if (activeFilters.price === 'free') filtered = filtered.filter(item => item.price_badge === 'free');
+  if (activeFilters.price === 'paid') filtered = filtered.filter(item => item.price_badge !== 'free');
+  return filtered;
 }
 
 function getToolSearchText(tool) {
@@ -342,23 +603,11 @@ function buildIntelligenceDirectoryItem(tool, collection, item) {
 }
 
 function getToolDirectoryItem(toolId, itemId) {
-  const tool = tools.find(candidate => candidate.id === toolId);
-  if (!tool || tool.card_kind !== 'collection') return null;
-  const collection = getToolIntelligence(toolId);
-  const item = collection?.items?.find(candidate => candidate.id === itemId && candidate.node_type === 'leaf');
-  return item ? buildIntelligenceDirectoryItem(tool, collection, item) : null;
+  return directoryItems.find(item => item.collectionToolId === toolId && item.intelligenceItemId === itemId) || null;
 }
 
 function getToolDirectoryItems() {
-  const concreteTools = tools.filter(tool => tool.card_kind !== 'collection');
-  const intelligenceLeaves = tools.flatMap(tool => {
-    if (tool.card_kind !== 'collection') return [];
-    const collection = getToolIntelligence(tool.id);
-    return (collection?.items || [])
-      .filter(item => item.node_type === 'leaf')
-      .map(item => buildIntelligenceDirectoryItem(tool, collection, item));
-  });
-  return [...concreteTools, ...intelligenceLeaves];
+  return [...directoryItems];
 }
 
 // ═══ P1-A：静态搜索只读适配器（概念词条投影，供搜索与热点关联复用） ═══
@@ -600,23 +849,22 @@ function renderSkeletons() {
  * 将加载结果存入一个全局变量。
  */
 async function loadData() {
-  try {
-    const resp = await fetch('data/catalog/tools.json');
-    tools = await resp.json();
-    document.getElementById('dataDate').textContent =
-      '数据更新: ' + new Date().toISOString().slice(0, 10);
-  } catch (e) {
-    tools = [];
+  const catalogResult = await catalog({ operation: 'load' });
+  if (!catalogResult.ok) {
     dataLoadFailures.add('tools');
-  }
-  try {
-    const iResp = await fetch('data/catalog/tool-intelligence.json');
-    toolIntelligence = await iResp.json();
-    const collections = Array.isArray(toolIntelligence.collections) ? toolIntelligence.collections : [];
-    toolIntelligenceById = new Map(collections.map(collection => [collection.tool_id, collection]));
-  } catch (e) {
+    dataLoadFailures.add('catalog');
+    tools = [];
     toolIntelligence = { collections: [] };
     toolIntelligenceById = new Map();
+    directoryItems = [];
+  } else {
+    const compatibility = initializeCatalogCompatibility();
+    tools = compatibility.tools;
+    toolIntelligence = compatibility.toolIntelligence;
+    directoryItems = compatibility.directory;
+    toolIntelligenceById = new Map(toolIntelligence.collections.map(collection => [collection.tool_id, collection]));
+    document.getElementById('dataDate').textContent =
+      '数据更新: ' + new Date().toISOString().slice(0, 10);
   }
   try {
     const gResp = await fetch('data/catalog/glossary.json');
@@ -737,6 +985,16 @@ export {
   copyTextToClipboard,
   copyTextWithFeedback,
   getToolIntelligence,
+  getVendorCardItems,
+  getVendorCardItem,
+  getToolCardItems,
+  getToolCardItem,
+  getVendorLevel1Item,
+  getVendorLevel2Item,
+  getVendorLevel2Items,
+  getToolLevel3Item,
+  getFilteredVendorCardItems,
+  getFilteredToolCardItems,
   getToolSearchText,
   getCollectionNode,
   getToolDirectoryItems,

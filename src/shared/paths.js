@@ -39,10 +39,13 @@ const DIRS = Object.freeze({
 });
 
 const CATALOG_FILES = Object.freeze({
-  tools: path.join(CATALOG_DIR, 'tools.json'),
+  vendorCards: path.join(CATALOG_DIR, 'vendor-cards.json'),
+  toolCards: path.join(CATALOG_DIR, 'tool-cards.json'),
+  vendorPreviewLevel1: path.join(CATALOG_DIR, 'vendor-preview-level1.json'),
+  vendorPreviewLevel2: path.join(CATALOG_DIR, 'vendor-preview-level2.json'),
+  toolPreviewLevel3: path.join(CATALOG_DIR, 'tool-preview-level3.json'),
   glossary: path.join(CATALOG_DIR, 'glossary.json'),
   scenes: path.join(CATALOG_DIR, 'scenes.json'),
-  toolIntelligence: path.join(CATALOG_DIR, 'tool-intelligence.json'),
   featured: path.join(CATALOG_DIR, 'featured.json'),
 });
 

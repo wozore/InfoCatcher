@@ -26,7 +26,7 @@
 'use strict';
 
 const fs = require('fs');
-const { CATALOG_FILES } = require('../../shared/paths');
+const { catalog } = require('../../catalog-interface');
 const { classifyWithDeepSeek } = require('./llm-provider');
 
 // ═══════════════════════════════════════════════════════════════
@@ -60,17 +60,14 @@ const CONTENT_TYPE_LABELS = Object.freeze({
 
 /** 工具名别名表：tool_id -> 匹配词（含 catalog 中的 name 与常见别名）。 */
 function loadToolNames() {
-  const names = new Map(); // tool_id -> 名称数组
-  let tools = [];
-  try {
-    tools = JSON.parse(fs.readFileSync(CATALOG_FILES.tools, 'utf8'));
-  } catch {
-    tools = [];
-  }
+  const names = new Map();
+  const result = catalog({ area: 'tool-card', operation: 'list' });
+  const tools = result.ok ? result.data : [];
   for (const tool of tools) {
-    const key = tool.id;
+    const key = tool.vendor_key || tool.tool_key;
     if (!names.has(key)) names.set(key, []);
-    if (tool.name) names.get(key).push(tool.name);
+    if (tool.title) names.get(key).push(tool.title);
+    if (tool.vendor_label) names.get(key).push(tool.vendor_label);
   }
   return names;
 }

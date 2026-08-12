@@ -15,7 +15,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const { ACQUISITION_FILES, CATALOG_FILES } = require('../shared/paths');
+const { ACQUISITION_FILES } = require('../shared/paths');
+const { catalog } = require('../catalog-interface');
 
 /** 支持的方法列表 */
 const VALID_METHODS = new Set([
@@ -96,7 +97,7 @@ function validateSourceConfig(config) {
  * 校验采集结果的数据合理性。
  * 确保价格不超出合理范围，必填字段不缺失。
  *
- * @param {object} intel - 解析后的 tool-intelligence.json
+ * @param {object} intel - 三级工具详情适配结构
  * @returns {{ valid: boolean, errors: string[], warnings: string[] }}
  */
 function validateIntelData(intel) {
@@ -104,7 +105,7 @@ function validateIntelData(intel) {
   const warnings = [];
 
   if (!intel || !Array.isArray(intel.collections)) {
-    return { valid: false, errors: ['tool-intelligence.json 缺少 collections 数组'], warnings: [] };
+    return { valid: false, errors: ['三级详情缺少 items'], warnings: [] };
   }
 
   for (const collection of intel.collections) {
@@ -200,19 +201,16 @@ function validate(options = { silent: false }) {
   result.warnings.push(...cfgResult.warnings);
   if (!cfgResult.valid) result.valid = false;
 
-  // 2. 校验现有情报数据
-  const intelPath = CATALOG_FILES.toolIntelligence;
-  if (fs.existsSync(intelPath)) {
-    try {
-      const intel = JSON.parse(fs.readFileSync(intelPath, 'utf8'));
-      const intelResult = validateIntelData(intel);
-      result.errors.push(...intelResult.errors);
-      result.warnings.push(...intelResult.warnings);
-      if (!intelResult.valid) result.valid = false;
-    } catch (e) {
-      result.errors.push(`工具情报数据解析失败: ${e.message}`);
-      result.valid = false;
-    }
+  // 2. 校验现有三级详情数据
+  const detailResult = catalog({ area: 'tool-level3', operation: 'list' });
+  if (detailResult.ok) {
+    const intelResult = validateIntelData({ collections: [{ tool_id: 'tool-level3', items: detailResult.data, sources: detailResult.data.flatMap(item => item.sources || []) }] });
+    result.errors.push(...intelResult.errors);
+    result.warnings.push(...intelResult.warnings);
+    if (!intelResult.valid) result.valid = false;
+  } else {
+    result.errors.push(`工具三级详情读取失败: ${detailResult.error.message}`);
+    result.valid = false;
   }
 
   return result;
