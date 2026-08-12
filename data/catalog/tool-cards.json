@@ -32,9 +32,7 @@
       "best_for_preview": "国内企业用户",
       "not_for_preview": "纯英文或国际化场景",
       "price_badge": "free",
-      "access_badge": "open",
       "access_level": "开放",
-      "access_barrier": "国内可直接访问，需阿里云/支付宝账号",
       "search_terms": [
         "通义千问",
         "阿里巴巴",
@@ -54,9 +52,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:tongyi"
       },
-      "detail_kind": "tool",
-      "status": "active",
-      "last_updated": "2026-07-18"
+      "detail_kind": "tool"
     },
     {
       "id": "tool-card:doubao",
@@ -88,9 +84,7 @@
       "best_for_preview": "日常中文对话",
       "not_for_preview": "复杂代码开发",
       "price_badge": "free",
-      "access_badge": "open",
       "access_level": "开放",
-      "access_barrier": "国内可直接访问，手机号注册",
       "search_terms": [
         "豆包",
         "字节跳动",
@@ -109,9 +103,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:doubao"
       },
-      "detail_kind": "tool",
-      "status": "active",
-      "last_updated": "2026-07-18"
+      "detail_kind": "tool"
     },
     {
       "id": "tool-card:kimi",
@@ -142,9 +134,7 @@
       "best_for_preview": "长文档分析(论文/合同/报告)",
       "not_for_preview": "代码开发",
       "price_badge": "free",
-      "access_badge": "open",
       "access_level": "开放",
-      "access_barrier": "国内可直接访问，手机号注册",
       "search_terms": [
         "Kimi",
         "月之暗面",
@@ -162,9 +152,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:kimi"
       },
-      "detail_kind": "tool",
-      "status": "active",
-      "last_updated": "2026-07-18"
+      "detail_kind": "tool"
     },
     {
       "id": "tool-card:cursor",
@@ -194,9 +182,7 @@
       "best_for_preview": "全栈开发者",
       "not_for_preview": "企业合规敏感用户",
       "price_badge": "free",
-      "access_badge": "open",
       "access_level": "开放",
-      "access_barrier": "国内可直接访问，需海外支付方式",
       "search_terms": [
         "Cursor",
         "Anysphere",
@@ -212,9 +198,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:cursor"
       },
-      "detail_kind": "tool",
-      "status": "active",
-      "last_updated": "2026-07-18"
+      "detail_kind": "tool"
     },
     {
       "id": "tool-card:copilot",
@@ -243,9 +227,7 @@
       "best_for_preview": "微软/GitHub生态用户",
       "not_for_preview": "需要跨文件重构的复杂项目",
       "price_badge": "free",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "国内可访问GitHub但速度慢",
       "search_terms": [
         "GitHub Copilot",
         "Microsoft/GitHub",
@@ -261,9 +243,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:copilot"
       },
-      "detail_kind": "tool",
-      "status": "active",
-      "last_updated": "2026-07-18"
+      "detail_kind": "tool"
     },
     {
       "id": "tool-card:claude-code",
@@ -294,9 +274,7 @@
       "best_for_preview": "架构师和高级开发者",
       "not_for_preview": "预算有限的个人开发者",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "需要科学上网 + 付费账号",
       "search_terms": [
         "Claude Code",
         "Anthropic",
@@ -313,9 +291,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:claude-code"
       },
-      "detail_kind": "tool",
-      "status": "active",
-      "last_updated": "2026-07-18"
+      "detail_kind": "tool"
     },
     {
       "id": "tool-card:trae",
@@ -344,9 +320,7 @@
       "best_for_preview": "国内开发者",
       "not_for_preview": "国际化项目",
       "price_badge": "free",
-      "access_badge": "open",
       "access_level": "开放",
-      "access_barrier": "国内可直接访问",
       "search_terms": [
         "Trae",
         "字节跳动",
@@ -361,9 +335,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:trae"
       },
-      "detail_kind": "tool",
-      "status": "active",
-      "last_updated": "2026-07-18"
+      "detail_kind": "tool"
     },
     {
       "id": "tool-card:midjourney",
@@ -393,9 +365,7 @@
       "best_for_preview": "需要最高艺术品质的设计师",
       "not_for_preview": "中文用户(英文门槛)",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "需要科学上网 + 海外支付(Discord使用)",
       "search_terms": [
         "Midjourney",
         "Midjourney Inc.",
@@ -411,9 +381,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:midjourney"
       },
-      "detail_kind": "tool",
-      "status": "active",
-      "last_updated": "2026-07-18"
+      "detail_kind": "tool"
     },
     {
       "id": "tool-card:nano-banana",
@@ -442,9 +410,7 @@
       "best_for_preview": "需要精准控制画面的设计师",
       "not_for_preview": "需要极致艺术性的场景",
       "price_badge": "free",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "需要科学上网",
       "search_terms": [
         "Nano Banana",
         "Google",
@@ -460,9 +426,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:nano-banana"
       },
-      "detail_kind": "tool",
-      "status": "active",
-      "last_updated": "2026-07-18"
+      "detail_kind": "tool"
     },
     {
       "id": "tool-card:jimeng",
@@ -491,9 +455,7 @@
       "best_for_preview": "短视频创作者",
       "not_for_preview": "国际化创意项目",
       "price_badge": "free",
-      "access_badge": "open",
       "access_level": "开放",
-      "access_barrier": "国内可直接访问，抖音/剪映账号登录",
       "search_terms": [
         "即梦",
         "字节跳动",
@@ -509,9 +471,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:jimeng"
       },
-      "detail_kind": "tool",
-      "status": "active",
-      "last_updated": "2026-07-18"
+      "detail_kind": "tool"
     },
     {
       "id": "tool-card:kling",
@@ -540,9 +500,7 @@
       "best_for_preview": "短视频创作者",
       "not_for_preview": "国际化视频项目",
       "price_badge": "free",
-      "access_badge": "open",
       "access_level": "开放",
-      "access_barrier": "国内可直接访问",
       "search_terms": [
         "可灵",
         "快手",
@@ -558,9 +516,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:kling"
       },
-      "detail_kind": "tool",
-      "status": "active",
-      "last_updated": "2026-07-18"
+      "detail_kind": "tool"
     },
     {
       "id": "tool-card:suno",
@@ -589,9 +545,7 @@
       "best_for_preview": "音乐创作者",
       "not_for_preview": "国内直连用户",
       "price_badge": "free",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "需要科学上网",
       "search_terms": [
         "Suno",
         "Suno Inc.",
@@ -607,9 +561,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:suno"
       },
-      "detail_kind": "tool",
-      "status": "active",
-      "last_updated": "2026-07-18"
+      "detail_kind": "tool"
     },
     {
       "id": "tool-card:stable-diffusion",
@@ -640,9 +592,7 @@
       "best_for_preview": "技术向用户",
       "not_for_preview": "普通设计人员(部署门槛高)",
       "price_badge": "free",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "本地部署需GPU(8GB+显存)，云端使用需海外服务",
       "search_terms": [
         "Stable Diffusion",
         "Stability AI",
@@ -658,9 +608,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:stable-diffusion"
       },
-      "detail_kind": "tool",
-      "status": "active",
-      "last_updated": "2026-07-18"
+      "detail_kind": "tool"
     },
     {
       "id": "tool-card:hunyuan",
@@ -692,9 +640,7 @@
       "best_for_preview": "微信/企业微信生态用户",
       "not_for_preview": "追求独立AI助手的个人用户",
       "price_badge": "free",
-      "access_badge": "open",
       "access_level": "开放",
-      "access_barrier": "国内可直接访问，需微信/QQ账号",
       "search_terms": [
         "腾讯混元",
         "腾讯",
@@ -713,9 +659,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:hunyuan"
       },
-      "detail_kind": "tool",
-      "status": "active",
-      "last_updated": "2026-07-21"
+      "detail_kind": "tool"
     },
     {
       "id": "tool-card:tiangong",
@@ -746,9 +690,7 @@
       "best_for_preview": "中文AI搜索",
       "not_for_preview": "需要深度对话和推理的场景",
       "price_badge": "free",
-      "access_badge": "open",
       "access_level": "开放",
-      "access_barrier": "国内可直接访问",
       "search_terms": [
         "天工AI",
         "昆仑万维",
@@ -766,9 +708,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:tiangong"
       },
-      "detail_kind": "tool",
-      "status": "active",
-      "last_updated": "2026-07-21"
+      "detail_kind": "tool"
     },
     {
       "id": "tool-card:dalle",
@@ -799,9 +739,7 @@
       "best_for_preview": "ChatGPT生态用户",
       "not_for_preview": "国内直连用户",
       "price_badge": "free",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "需要科学上网 + ChatGPT账号",
       "search_terms": [
         "DALL·E 3",
         "OpenAI",
@@ -818,9 +756,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:dalle"
       },
-      "detail_kind": "tool",
-      "status": "active",
-      "last_updated": "2026-07-21"
+      "detail_kind": "tool"
     },
     {
       "id": "tool-card:ideogram",
@@ -848,9 +784,7 @@
       "best_for_preview": "需要图片含文字的设计(海报/封面/Logo)",
       "not_for_preview": "中文文案设计(中文渲染差)",
       "price_badge": "free",
-      "access_badge": "open",
       "access_level": "开放",
-      "access_barrier": "国内可访问",
       "search_terms": [
         "Ideogram",
         "Ideogram AI",
@@ -866,9 +800,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:ideogram"
       },
-      "detail_kind": "tool",
-      "status": "active",
-      "last_updated": "2026-07-21"
+      "detail_kind": "tool"
     },
     {
       "id": "tool-card:gpt-5.6-sol",
@@ -893,9 +825,7 @@
       "best_for_preview": "复杂专业工作：官方将其定位为处理复杂专业工作的旗舰模型。",
       "not_for_preview": "成本敏感型高频调用：同系列存在官方定位为平衡成本或成本敏感工作负载的更低价变体。",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "需要科学上网 + 海外手机号注册",
       "search_terms": [
         "GPT-5.6 Sol",
         "OpenAI",
@@ -912,9 +842,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:gpt-5.6-sol"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-26"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:gpt-5.6-terra",
@@ -939,9 +867,7 @@
       "best_for_preview": "通用专业任务：官方定位强调智能水平与调用成本的平衡。",
       "not_for_preview": "只追求最高能力或最低成本：同系列另有旗舰 Sol 与成本优化 Luna 变体。",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "需要科学上网 + 海外手机号注册",
       "search_terms": [
         "GPT-5.6 Terra",
         "OpenAI",
@@ -958,9 +884,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:gpt-5.6-terra"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-26"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:gpt-5.6-luna",
@@ -985,9 +909,7 @@
       "best_for_preview": "成本敏感型 API 工作负载：官方明确将其定位为成本优化变体。",
       "not_for_preview": "要求同系列最高能力：复杂高要求工作应比较同系列 Sol 或 Terra。",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "需要科学上网 + 海外手机号注册",
       "search_terms": [
         "GPT-5.6 Luna",
         "OpenAI",
@@ -1004,9 +926,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:gpt-5.6-luna"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-26"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:chatgpt-go",
@@ -1028,9 +948,7 @@
       "best_for_preview": "",
       "not_for_preview": "",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "需要科学上网 + 海外手机号注册",
       "search_terms": [
         "ChatGPT Go",
         "OpenAI",
@@ -1045,9 +963,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:chatgpt-go"
       },
-      "detail_kind": "subscription_plan",
-      "status": "active",
-      "last_updated": "2026-07-26"
+      "detail_kind": "subscription_plan"
     },
     {
       "id": "tool-card:chatgpt-plus",
@@ -1069,9 +985,7 @@
       "best_for_preview": "",
       "not_for_preview": "",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "需要科学上网 + 海外手机号注册",
       "search_terms": [
         "ChatGPT Plus",
         "OpenAI",
@@ -1086,9 +1000,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:chatgpt-plus"
       },
-      "detail_kind": "subscription_plan",
-      "status": "active",
-      "last_updated": "2026-07-26"
+      "detail_kind": "subscription_plan"
     },
     {
       "id": "tool-card:chatgpt-pro",
@@ -1110,9 +1022,7 @@
       "best_for_preview": "",
       "not_for_preview": "",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "需要科学上网 + 海外手机号注册",
       "search_terms": [
         "ChatGPT Pro",
         "OpenAI",
@@ -1127,9 +1037,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:chatgpt-pro"
       },
-      "detail_kind": "subscription_plan",
-      "status": "active",
-      "last_updated": "2026-07-26"
+      "detail_kind": "subscription_plan"
     },
     {
       "id": "tool-card:claude-fable-5",
@@ -1153,9 +1061,7 @@
       "best_for_preview": "长时间复杂任务：官方将其定位为可持续处理长时间、复杂和异步工作。",
       "not_for_preview": "预算敏感型常规调用：同系列有价格更低的 Sonnet 与 Haiku。",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "需要科学上网，部分地区支持手机号注册",
       "search_terms": [
         "Claude Fable 5",
         "Anthropic",
@@ -1171,9 +1077,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:claude-fable-5"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-26"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:claude-opus-4.8",
@@ -1197,9 +1101,7 @@
       "best_for_preview": "高要求编码与知识工作：官方用例包括软件工程、智能体工作流和高风险企业任务。",
       "not_for_preview": "低成本批量简单任务：较低价模型通常更适合简单高频调用。",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "需要科学上网，部分地区支持手机号注册",
       "search_terms": [
         "Claude Opus 4.8",
         "Anthropic",
@@ -1215,9 +1117,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:claude-opus-4.8"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-26"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:claude-sonnet-5",
@@ -1241,9 +1141,7 @@
       "best_for_preview": "通用写作、研究与编码：当前 Sonnet 在速度、能力和成本之间取得平衡。",
       "not_for_preview": "只追求最高能力：应同时比较 Fable 或 Opus。",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "需要科学上网，部分地区支持手机号注册",
       "search_terms": [
         "Claude Sonnet 5",
         "Anthropic",
@@ -1259,9 +1157,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:claude-sonnet-5"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-26"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:claude-haiku-4.5",
@@ -1285,9 +1181,7 @@
       "best_for_preview": "低延迟与成本敏感任务：官方比较表将其列为速度最快的当前 Claude 模型。",
       "not_for_preview": "必须使用 1M 上下文：当前官方上下文窗口为 200k。",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "需要科学上网，部分地区支持手机号注册",
       "search_terms": [
         "Claude Haiku 4.5",
         "Anthropic",
@@ -1303,9 +1197,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:claude-haiku-4.5"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-26"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:claude-pro",
@@ -1326,9 +1218,7 @@
       "best_for_preview": "",
       "not_for_preview": "",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "需要科学上网，部分地区支持手机号注册",
       "search_terms": [
         "Claude Pro",
         "Anthropic",
@@ -1342,9 +1232,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:claude-pro"
       },
-      "detail_kind": "subscription_plan",
-      "status": "active",
-      "last_updated": "2026-07-26"
+      "detail_kind": "subscription_plan"
     },
     {
       "id": "tool-card:claude-max-5x",
@@ -1365,9 +1253,7 @@
       "best_for_preview": "",
       "not_for_preview": "",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "需要科学上网，部分地区支持手机号注册",
       "search_terms": [
         "Claude Max 5x",
         "Anthropic",
@@ -1381,9 +1267,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:claude-max-5x"
       },
-      "detail_kind": "subscription_plan",
-      "status": "active",
-      "last_updated": "2026-07-26"
+      "detail_kind": "subscription_plan"
     },
     {
       "id": "tool-card:claude-max-20x",
@@ -1404,9 +1288,7 @@
       "best_for_preview": "",
       "not_for_preview": "",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "需要科学上网，部分地区支持手机号注册",
       "search_terms": [
         "Claude Max 20x",
         "Anthropic",
@@ -1420,9 +1302,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:claude-max-20x"
       },
-      "detail_kind": "subscription_plan",
-      "status": "active",
-      "last_updated": "2026-07-26"
+      "detail_kind": "subscription_plan"
     },
     {
       "id": "tool-card:gemini-3.5-flash",
@@ -1447,9 +1327,7 @@
       "best_for_preview": "速度与搜索 grounding 并重：官方定位强调速度、智能以及搜索和 grounding。",
       "not_for_preview": "需要明确最高阶 Pro 能力：应另行比较 Gemini Pro 系列。",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "需要科学上网",
       "search_terms": [
         "Gemini 3.5 Flash",
         "Google",
@@ -1466,9 +1344,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:gemini-3.5-flash"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-26"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:gemini-2.5-pro",
@@ -1493,9 +1369,7 @@
       "best_for_preview": "编程与复杂推理：官方定价页将其描述为擅长编程和复杂推理的多用途模型。",
       "not_for_preview": "极低成本简单调用：可比较 Flash 或 Flash-Lite 系列。",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "需要科学上网",
       "search_terms": [
         "Gemini 2.5 Pro",
         "Google",
@@ -1512,9 +1386,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:gemini-2.5-pro"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-26"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:google-ai-pro",
@@ -1536,9 +1408,7 @@
       "best_for_preview": "",
       "not_for_preview": "",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "需要科学上网",
       "search_terms": [
         "Google AI Pro",
         "Google",
@@ -1553,9 +1423,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:google-ai-pro"
       },
-      "detail_kind": "subscription_plan",
-      "status": "active",
-      "last_updated": "2026-07-26"
+      "detail_kind": "subscription_plan"
     },
     {
       "id": "tool-card:google-ai-ultra-5x",
@@ -1577,9 +1445,7 @@
       "best_for_preview": "",
       "not_for_preview": "",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "需要科学上网",
       "search_terms": [
         "Google AI Ultra 5x",
         "Google",
@@ -1594,9 +1460,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:google-ai-ultra-5x"
       },
-      "detail_kind": "subscription_plan",
-      "status": "active",
-      "last_updated": "2026-07-26"
+      "detail_kind": "subscription_plan"
     },
     {
       "id": "tool-card:google-ai-ultra-20x",
@@ -1618,9 +1482,7 @@
       "best_for_preview": "",
       "not_for_preview": "",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "需要科学上网",
       "search_terms": [
         "Google AI Ultra 20x",
         "Google",
@@ -1635,9 +1497,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:google-ai-ultra-20x"
       },
-      "detail_kind": "subscription_plan",
-      "status": "active",
-      "last_updated": "2026-07-26"
+      "detail_kind": "subscription_plan"
     },
     {
       "id": "tool-card:deepseek-v4-flash",
@@ -1661,9 +1521,7 @@
       "best_for_preview": "成本敏感的高频 API 调用：官方价格显著区分缓存命中与未命中，且该变体并发限制更高。",
       "not_for_preview": "要求更高规格变体：需要更高阶配置时应比较 V4 Pro。",
       "price_badge": "paid",
-      "access_badge": "open",
       "access_level": "开放",
-      "access_barrier": "国内可直接访问，偶尔需要手机验证",
       "search_terms": [
         "DeepSeek-V4-Flash",
         "深度求索",
@@ -1679,9 +1537,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:deepseek-v4-flash"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-26"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:deepseek-v4-pro",
@@ -1705,9 +1561,7 @@
       "best_for_preview": "需要 V4 Pro 规格的推理和开发任务：作为 V4 Pro 变体，应结合实际质量、并发和预算评估。",
       "not_for_preview": "优先最低成本或更高并发：官方表中 V4 Flash 价格更低且并发限制更高。",
       "price_badge": "paid",
-      "access_badge": "open",
       "access_level": "开放",
-      "access_barrier": "国内可直接访问，偶尔需要手机验证",
       "search_terms": [
         "DeepSeek-V4-Pro",
         "深度求索",
@@ -1723,9 +1577,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:deepseek-v4-pro"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-26"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:glm-5.2",
@@ -1749,9 +1601,7 @@
       "best_for_preview": "复杂长程任务与编码工程：1M 上下文适合长文档分析、大型代码库理解和多轮 Agent 任务。",
       "not_for_preview": "成本敏感型简单调用：可选择 GLM-4.7 Flash（免费）或 GLM-5 Turbo。",
       "price_badge": "paid",
-      "access_badge": "open",
       "access_level": "开放",
-      "access_barrier": "国内可直接访问",
       "search_terms": [
         "GLM-5.2",
         "智谱AI",
@@ -1767,9 +1617,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:glm-5.2"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-28"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:glm-5.1",
@@ -1793,9 +1641,7 @@
       "best_for_preview": "长程自主编码任务：官方定位为长程任务显著提升，可自主工作长达 8 小时。",
       "not_for_preview": "追求最新最强模型：应比较 GLM-5.2。",
       "price_badge": "paid",
-      "access_badge": "open",
       "access_level": "开放",
-      "access_barrier": "国内可直接访问",
       "search_terms": [
         "GLM-5.1",
         "智谱AI",
@@ -1811,9 +1657,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:glm-5.1"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-28"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:glm-5",
@@ -1837,9 +1681,7 @@
       "best_for_preview": "结构化思维链推理：在中文复杂推理场景表现最强，适合 Agentic 长程规划。",
       "not_for_preview": "需要 1M 上下文：GLM-5 上下文为 200K，长文档需求应选 GLM-5.2。",
       "price_badge": "paid",
-      "access_badge": "open",
       "access_level": "开放",
-      "access_barrier": "国内可直接访问",
       "search_terms": [
         "GLM-5",
         "智谱AI",
@@ -1855,9 +1697,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:glm-5"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-28"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:glm-4.7",
@@ -1881,9 +1721,7 @@
       "best_for_preview": "通用中文对话与写作：高性价比，适合中文内容生成和通用智能体任务。",
       "not_for_preview": "需要最高编码能力：应比较 GLM-5.1 或 GLM-5.2。",
       "price_badge": "paid",
-      "access_badge": "open",
       "access_level": "开放",
-      "access_barrier": "国内可直接访问",
       "search_terms": [
         "GLM-4.7",
         "智谱AI",
@@ -1899,9 +1737,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:glm-4.7"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-28"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:ernie-5.1",
@@ -1925,9 +1761,7 @@
       "best_for_preview": "百度生态内企业级应用：千帆平台深度集成，适合百度云生态用户。",
       "not_for_preview": "需要详细输出定价和完整缓存信息：当前仅为部分核实，输出和长输入定价待补全。",
       "price_badge": "paid",
-      "access_badge": "open",
       "access_level": "开放",
-      "access_barrier": "国内可直接访问，需百度账号",
       "search_terms": [
         "ERNIE 5.1",
         "百度",
@@ -1943,9 +1777,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:ernie-5.1"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-28"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:ernie-5.0",
@@ -1969,9 +1801,7 @@
       "best_for_preview": "复杂推理与知识工作：ERNIE 5.0 支持 Thinking 模式，适合深度推理任务。",
       "not_for_preview": "追求最新模型能力：应比较 ERNIE 5.1。",
       "price_badge": "paid",
-      "access_badge": "open",
       "access_level": "开放",
-      "access_barrier": "国内可直接访问，需百度账号",
       "search_terms": [
         "ERNIE 5.0",
         "百度",
@@ -1987,9 +1817,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:ernie-5.0"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-28"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:ernie-4.5-turbo",
@@ -2013,9 +1841,7 @@
       "best_for_preview": "成本敏感的通用任务：追求更低入门成本的中文文本生成和理解场景。",
       "not_for_preview": "要求最高模型能力：应比较 ERNIE 5.0 或 ERNIE 5.1。",
       "price_badge": "paid",
-      "access_badge": "open",
       "access_level": "开放",
-      "access_barrier": "国内可直接访问，需百度账号",
       "search_terms": [
         "ERNIE 4.5 Turbo",
         "百度",
@@ -2031,9 +1857,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:ernie-4.5-turbo"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-28"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:spark-ultra",
@@ -2057,9 +1881,7 @@
       "best_for_preview": "中文结构化抽取与逻辑推理：旗舰级大语言模型，适合企业级应用和复杂推理。",
       "not_for_preview": "成本敏感的高频调用：可选择 Spark Lite（免费）或 Spark Pro。",
       "price_badge": "paid",
-      "access_badge": "open",
       "access_level": "开放",
-      "access_barrier": "国内可直接访问",
       "search_terms": [
         "Spark 4.0 Ultra",
         "科大讯飞",
@@ -2075,9 +1897,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:spark-ultra"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-28"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:spark-pro",
@@ -2101,9 +1921,7 @@
       "best_for_preview": "文本处理与智能问答：性能和响应速度均衡，适合对时效性有要求的业务场景。",
       "not_for_preview": "需要最高精度和复杂推理：应选择 Spark Ultra。",
       "price_badge": "paid",
-      "access_badge": "open",
       "access_level": "开放",
-      "access_barrier": "国内可直接访问",
       "search_terms": [
         "Spark Pro",
         "科大讯飞",
@@ -2119,9 +1937,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:spark-pro"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-28"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:spark-lite",
@@ -2145,9 +1961,7 @@
       "best_for_preview": "高并发低延迟场景：适合对成本敏感、对响应速度要求高的简单任务。",
       "not_for_preview": "复杂推理或专业任务：免费模型能力有限，高要求场景应选择 Pro 或 Ultra。",
       "price_badge": "paid",
-      "access_badge": "open",
       "access_level": "开放",
-      "access_barrier": "国内可直接访问",
       "search_terms": [
         "Spark Lite",
         "科大讯飞",
@@ -2163,9 +1977,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:spark-lite"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-28"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:minimax-text-01",
@@ -2188,9 +2000,7 @@
       "best_for_preview": "成本敏感的企业级文本处理：极低 API 价格适合大规模文本生成和批量调用。",
       "not_for_preview": "需要 1M 上下文窗口：请核实官方最新上下文窗口规格。",
       "price_badge": "paid",
-      "access_badge": "open",
       "access_level": "开放",
-      "access_barrier": "国内可直接访问",
       "search_terms": [
         "MiniMax-Text-01",
         "MiniMax",
@@ -2205,9 +2015,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:minimax-text-01"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-28"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:minimax-vl-01",
@@ -2230,9 +2038,7 @@
       "best_for_preview": "图像理解与视频生成：Hailuo 02 支持 1080p 10 秒视频生成。",
       "not_for_preview": "纯文本处理：纯文本任务应使用 MiniMax-Text-01。",
       "price_badge": "paid",
-      "access_badge": "open",
       "access_level": "开放",
-      "access_barrier": "国内可直接访问",
       "search_terms": [
         "MiniMax-VL-01",
         "MiniMax",
@@ -2247,9 +2053,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:minimax-vl-01"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-28"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:grok-4.3",
@@ -2272,9 +2076,7 @@
       "best_for_preview": "高要求推理与生产任务：官方定位为最高智能旗舰，适合复杂推理和生产级应用。",
       "not_for_preview": "成本敏感型批量调用：可选择 Grok 4.1 Fast 以降低费用。",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "需要科学上网",
       "search_terms": [
         "Grok 4.3",
         "xAI",
@@ -2289,9 +2091,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:grok-4.3"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-28"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:grok-4.1-fast",
@@ -2314,9 +2114,7 @@
       "best_for_preview": "成本敏感的高频调用：目前最具性价比的具备推理能力的前沿模型之一。",
       "not_for_preview": "要求最高智能水平：应比较 Grok 4.3。",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "需要科学上网",
       "search_terms": [
         "Grok 4.1 Fast",
         "xAI",
@@ -2331,9 +2129,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:grok-4.1-fast"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-28"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:mistral-medium-3.5",
@@ -2354,9 +2150,7 @@
       "best_for_preview": "复杂推理与编码：官方旗舰多模态，适合高要求工作。",
       "not_for_preview": "成本敏感型：可选 Mistral Small 4 降低费用。",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "境外（需科学上网）",
       "search_terms": [
         "Mistral Medium 3.5",
         "Mistral AI",
@@ -2369,9 +2163,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:mistral-medium-3.5"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-27"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:mistral-large-3",
@@ -2392,9 +2184,7 @@
       "best_for_preview": "通用文本与多语言：开放权重旗舰，适合自部署和微调。",
       "not_for_preview": "要求最高最新能力：应比较 Mistral Medium 3.5。",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "境外（需科学上网）",
       "search_terms": [
         "Mistral Large 3",
         "Mistral AI",
@@ -2407,9 +2197,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:mistral-large-3"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-27"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:mistral-small-4",
@@ -2430,9 +2218,7 @@
       "best_for_preview": "成本敏感的批量处理：Apache 2.0 许可适合自由部署和商用。",
       "not_for_preview": "高要求复杂工作：可选 Mistral Medium 3.5。",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "境外（需科学上网）",
       "search_terms": [
         "Mistral Small 4",
         "Mistral AI",
@@ -2445,9 +2231,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:mistral-small-4"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-27"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:devstral-2",
@@ -2468,9 +2252,7 @@
       "best_for_preview": "AI 编程代理：官方定位为自主软件工程编码模型。",
       "not_for_preview": "非编码工作：纯推理或写作可选 Medium 3.5。",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "境外（需科学上网）",
       "search_terms": [
         "Devstral 2",
         "Mistral AI",
@@ -2483,9 +2265,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:devstral-2"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-27"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:codestral",
@@ -2506,9 +2286,7 @@
       "best_for_preview": "IDE 代码补全和 FIM：低延迟优化，适合高频编码交互。",
       "not_for_preview": "长文本、多模态：Codestral 是纯编码模型。",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "境外（需科学上网）",
       "search_terms": [
         "Codestral",
         "Mistral AI",
@@ -2521,9 +2299,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:codestral"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-27"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:command-a",
@@ -2547,9 +2323,7 @@
       "best_for_preview": "企业级复杂推理与 RAG：最大最强大的 Command 模型，适合高要求企业级应用。",
       "not_for_preview": "成本敏感型简单任务：可选择 Command R 或 Command R7B。",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "境外（需科学上网）",
       "search_terms": [
         "Command A",
         "Cohere",
@@ -2565,9 +2339,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:command-a"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-28"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:command-r-plus",
@@ -2591,9 +2363,7 @@
       "best_for_preview": "高级检索增强与多步工具使用：面向需要复杂推理和工具调用的企业级场景。",
       "not_for_preview": "需要最新最强模型：应比较 Command A。",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "境外（需科学上网）",
       "search_terms": [
         "Command R+",
         "Cohere",
@@ -2609,9 +2379,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:command-r-plus"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-28"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:command-r",
@@ -2635,9 +2403,7 @@
       "best_for_preview": "中等复杂度文本处理：在性能和成本之间取得良好平衡，与 GPT-4o Mini 同价。",
       "not_for_preview": "要求最低成本：可选择 Command R7B。",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "境外（需科学上网）",
       "search_terms": [
         "Command R",
         "Cohere",
@@ -2653,9 +2419,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:command-r"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-28"
+      "detail_kind": "api_model"
     },
     {
       "id": "tool-card:command-r7b",
@@ -2679,9 +2443,7 @@
       "best_for_preview": "大容量简单任务与分类：追求极致性价比的场景，如批量文本分类、摘要和情感分析。",
       "not_for_preview": "复杂推理或多步工具使用：应选择 Command R 或 Command R+。",
       "price_badge": "paid",
-      "access_badge": "restricted",
       "access_level": "受限",
-      "access_barrier": "境外（需科学上网）",
       "search_terms": [
         "Command R7B",
         "Cohere",
@@ -2697,9 +2459,7 @@
         "kind": "tool-level3",
         "id": "tool-level3:command-r7b"
       },
-      "detail_kind": "api_model",
-      "status": "active",
-      "last_updated": "2026-07-28"
+      "detail_kind": "api_model"
     }
   ]
 }

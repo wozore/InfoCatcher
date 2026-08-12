@@ -44,7 +44,6 @@
       "source_refs": [
         "tongyi-catalog-source"
       ],
-      "relation_source_refs": [],
       "sources": [
         {
           "id": "tongyi-catalog-source",
@@ -83,11 +82,7 @@
       "rating_chinese": 5,
       "rating_ease": 4.5,
       "rating_price": 4.5,
-      "last_updated": "2026-07-18",
-      "compare": {
-        "kind": "tool",
-        "enabled": true
-      }
+      "last_updated": "2026-07-18"
     },
     {
       "id": "tool-level3:doubao",
@@ -132,7 +127,6 @@
       "source_refs": [
         "doubao-catalog-source"
       ],
-      "relation_source_refs": [],
       "sources": [
         {
           "id": "doubao-catalog-source",
@@ -164,11 +158,7 @@
       "rating_chinese": 4.5,
       "rating_ease": 5,
       "rating_price": 5,
-      "last_updated": "2026-07-18",
-      "compare": {
-        "kind": "tool",
-        "enabled": true
-      }
+      "last_updated": "2026-07-18"
     },
     {
       "id": "tool-level3:kimi",
@@ -213,7 +203,6 @@
       "source_refs": [
         "kimi-catalog-source"
       ],
-      "relation_source_refs": [],
       "sources": [
         {
           "id": "kimi-catalog-source",
@@ -250,11 +239,7 @@
       "rating_chinese": 5,
       "rating_ease": 4.5,
       "rating_price": 3.5,
-      "last_updated": "2026-07-18",
-      "compare": {
-        "kind": "tool",
-        "enabled": true
-      }
+      "last_updated": "2026-07-18"
     },
     {
       "id": "tool-level3:cursor",
@@ -303,7 +288,6 @@
       "source_refs": [
         "cursor-catalog-source"
       ],
-      "relation_source_refs": [],
       "sources": [
         {
           "id": "cursor-catalog-source",
@@ -343,11 +327,7 @@
       "rating_chinese": 3,
       "rating_ease": 4,
       "rating_price": 3,
-      "last_updated": "2026-07-18",
-      "compare": {
-        "kind": "tool",
-        "enabled": true
-      }
+      "last_updated": "2026-07-18"
     },
     {
       "id": "tool-level3:copilot",
@@ -392,7 +372,6 @@
       "source_refs": [
         "copilot-catalog-source"
       ],
-      "relation_source_refs": [],
       "sources": [
         {
           "id": "copilot-catalog-source",
@@ -437,11 +416,7 @@
       "rating_chinese": 3,
       "rating_ease": 3.5,
       "rating_price": 4,
-      "last_updated": "2026-07-18",
-      "compare": {
-        "kind": "tool",
-        "enabled": true
-      }
+      "last_updated": "2026-07-18"
     },
     {
       "id": "tool-level3:claude-code",
@@ -490,7 +465,6 @@
       "source_refs": [
         "claude-code-catalog-source"
       ],
-      "relation_source_refs": [],
       "sources": [
         {
           "id": "claude-code-catalog-source",
@@ -531,11 +505,7 @@
       "rating_chinese": 3.5,
       "rating_ease": 2,
       "rating_price": 1.5,
-      "last_updated": "2026-07-18",
-      "compare": {
-        "kind": "tool",
-        "enabled": true
-      }
+      "last_updated": "2026-07-18"
     },
     {
       "id": "tool-level3:trae",
@@ -584,7 +554,6 @@
       "source_refs": [
         "trae-catalog-source"
       ],
-      "relation_source_refs": [],
       "sources": [
         {
           "id": "trae-catalog-source",
@@ -628,11 +597,7 @@
       "rating_chinese": 5,
       "rating_ease": 5,
       "rating_price": 4.5,
-      "last_updated": "2026-07-18",
-      "compare": {
-        "kind": "tool",
-        "enabled": true
-      }
+      "last_updated": "2026-07-18"
     },
     {
       "id": "tool-level3:midjourney",
@@ -681,7 +646,6 @@
       "source_refs": [
         "midjourney-catalog-source"
       ],
-      "relation_source_refs": [],
       "sources": [
         {
           "id": "midjourney-catalog-source",
@@ -726,11 +690,7 @@
       "rating_chinese": 2,
       "rating_ease": 2,
       "rating_price": 3,
-      "last_updated": "2026-07-18",
-      "compare": {
-        "kind": "tool",
-        "enabled": true
-      }
+      "last_updated": "2026-07-18"
     },
     {
       "id": "tool-level3:nano-banana",
@@ -775,7 +735,6 @@
       "source_refs": [
         "nano-banana-catalog-source"
       ],
-      "relation_source_refs": [],
       "sources": [
         {
           "id": "nano-banana-catalog-source",
@@ -810,11 +769,7 @@
       "rating_chinese": 4,
       "rating_ease": 3,
       "rating_price": 4.5,
-      "last_updated": "2026-07-18",
-      "compare": {
-        "kind": "tool",
-        "enabled": true
-      }
+      "last_updated": "2026-07-18"
     },
     {
       "id": "tool-level3:jimeng",
@@ -859,7 +814,6 @@
       "source_refs": [
         "jimeng-catalog-source"
       ],
-      "relation_source_refs": [],
       "sources": [
         {
           "id": "jimeng-catalog-source",
@@ -894,11 +848,7 @@
       "rating_chinese": 5,
       "rating_ease": 5,
       "rating_price": 4.5,
-      "last_updated": "2026-07-18",
-      "compare": {
-        "kind": "tool",
-        "enabled": true
-      }
+      "last_updated": "2026-07-18"
     },
     {
       "id": "tool-level3:kling",
@@ -943,7 +893,6 @@
       "source_refs": [
         "kling-catalog-source"
       ],
-      "relation_source_refs": [],
       "sources": [
         {
           "id": "kling-catalog-source",
@@ -978,11 +927,7 @@
       "rating_chinese": 5,
       "rating_ease": 5,
       "rating_price": 4.5,
-      "last_updated": "2026-07-18",
-      "compare": {
-        "kind": "tool",
-        "enabled": true
-      }
+      "last_updated": "2026-07-18"
     },
     {
       "id": "tool-level3:suno",
@@ -1027,7 +972,6 @@
       "source_refs": [
         "suno-catalog-source"
       ],
-      "relation_source_refs": [],
       "sources": [
         {
           "id": "suno-catalog-source",
@@ -1067,11 +1011,7 @@
       "rating_chinese": 3,
       "rating_ease": 3,
       "rating_price": 4,
-      "last_updated": "2026-07-18",
-      "compare": {
-        "kind": "tool",
-        "enabled": true
-      }
+      "last_updated": "2026-07-18"
     },
     {
       "id": "tool-level3:stable-diffusion",
@@ -1124,7 +1064,6 @@
       "source_refs": [
         "stable-diffusion-catalog-source"
       ],
-      "relation_source_refs": [],
       "sources": [
         {
           "id": "stable-diffusion-catalog-source",
@@ -1159,11 +1098,7 @@
       "rating_chinese": 2,
       "rating_ease": 2,
       "rating_price": 5,
-      "last_updated": "2026-07-18",
-      "compare": {
-        "kind": "tool",
-        "enabled": true
-      }
+      "last_updated": "2026-07-18"
     },
     {
       "id": "tool-level3:hunyuan",
@@ -1208,7 +1143,6 @@
       "source_refs": [
         "hunyuan-catalog-source"
       ],
-      "relation_source_refs": [],
       "sources": [
         {
           "id": "hunyuan-catalog-source",
@@ -1246,11 +1180,7 @@
       "rating_chinese": 4.5,
       "rating_ease": 4,
       "rating_price": 4.5,
-      "last_updated": "2026-07-21",
-      "compare": {
-        "kind": "tool",
-        "enabled": true
-      }
+      "last_updated": "2026-07-21"
     },
     {
       "id": "tool-level3:tiangong",
@@ -1295,7 +1225,6 @@
       "source_refs": [
         "tiangong-catalog-source"
       ],
-      "relation_source_refs": [],
       "sources": [
         {
           "id": "tiangong-catalog-source",
@@ -1326,11 +1255,7 @@
       "rating_chinese": 4.5,
       "rating_ease": 4.5,
       "rating_price": 5,
-      "last_updated": "2026-07-21",
-      "compare": {
-        "kind": "tool",
-        "enabled": true
-      }
+      "last_updated": "2026-07-21"
     },
     {
       "id": "tool-level3:dalle",
@@ -1379,7 +1304,6 @@
       "source_refs": [
         "dalle-catalog-source"
       ],
-      "relation_source_refs": [],
       "sources": [
         {
           "id": "dalle-catalog-source",
@@ -1420,11 +1344,7 @@
       "rating_chinese": 3,
       "rating_ease": 3.5,
       "rating_price": 3,
-      "last_updated": "2026-07-21",
-      "compare": {
-        "kind": "tool",
-        "enabled": true
-      }
+      "last_updated": "2026-07-21"
     },
     {
       "id": "tool-level3:ideogram",
@@ -1465,7 +1385,6 @@
       "source_refs": [
         "ideogram-catalog-source"
       ],
-      "relation_source_refs": [],
       "sources": [
         {
           "id": "ideogram-catalog-source",
@@ -1500,11 +1419,7 @@
       "rating_chinese": 2,
       "rating_ease": 4,
       "rating_price": 3.5,
-      "last_updated": "2026-07-21",
-      "compare": {
-        "kind": "tool",
-        "enabled": true
-      }
+      "last_updated": "2026-07-21"
     },
     {
       "id": "tool-level3:gpt-5.6-sol",
@@ -1595,9 +1510,6 @@
         "openai-model-compare",
         "openai-api-pricing"
       ],
-      "relation_source_refs": [
-        "openai-model-compare"
-      ],
       "sources": [
         {
           "id": "openai-model-compare",
@@ -1629,14 +1541,6 @@
       ],
       "access_level": "受限",
       "access_barrier": "需要科学上网 + 海外手机号注册",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:chatgpt:gpt-5.6"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-26"
     },
     {
@@ -1708,9 +1612,6 @@
         "openai-model-compare",
         "openai-api-pricing"
       ],
-      "relation_source_refs": [
-        "openai-model-compare"
-      ],
       "sources": [
         {
           "id": "openai-model-compare",
@@ -1742,14 +1643,6 @@
       ],
       "access_level": "受限",
       "access_barrier": "需要科学上网 + 海外手机号注册",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:chatgpt:gpt-5.6"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-26"
     },
     {
@@ -1821,9 +1714,6 @@
         "openai-model-compare",
         "openai-api-pricing"
       ],
-      "relation_source_refs": [
-        "openai-model-compare"
-      ],
       "sources": [
         {
           "id": "openai-model-compare",
@@ -1855,14 +1745,6 @@
       ],
       "access_level": "受限",
       "access_barrier": "需要科学上网 + 海外手机号注册",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:chatgpt:gpt-5.6"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-26"
     },
     {
@@ -1896,10 +1778,6 @@
         "openai-chatgpt-go",
         "openai-chatgpt-pricing"
       ],
-      "relation_source_refs": [
-        "openai-chatgpt-go",
-        "openai-chatgpt-pricing"
-      ],
       "sources": [
         {
           "id": "openai-chatgpt-pricing",
@@ -1928,11 +1806,6 @@
       "scenes": [],
       "access_level": "受限",
       "access_barrier": "需要科学上网 + 海外手机号注册",
-      "parent_level2_ref": null,
-      "compare": {
-        "kind": "subscription_plan",
-        "enabled": true
-      },
       "last_updated": "2026-07-26"
     },
     {
@@ -1969,10 +1842,6 @@
         "openai-chatgpt-go",
         "openai-chatgpt-pricing"
       ],
-      "relation_source_refs": [
-        "openai-chatgpt-go",
-        "openai-chatgpt-pricing"
-      ],
       "sources": [
         {
           "id": "openai-chatgpt-pricing",
@@ -2001,11 +1870,6 @@
       "scenes": [],
       "access_level": "受限",
       "access_barrier": "需要科学上网 + 海外手机号注册",
-      "parent_level2_ref": null,
-      "compare": {
-        "kind": "subscription_plan",
-        "enabled": true
-      },
       "last_updated": "2026-07-26"
     },
     {
@@ -2042,10 +1906,6 @@
         "openai-chatgpt-go",
         "openai-chatgpt-pricing"
       ],
-      "relation_source_refs": [
-        "openai-chatgpt-go",
-        "openai-chatgpt-pricing"
-      ],
       "sources": [
         {
           "id": "openai-chatgpt-pricing",
@@ -2074,11 +1934,6 @@
       "scenes": [],
       "access_level": "受限",
       "access_barrier": "需要科学上网 + 海外手机号注册",
-      "parent_level2_ref": null,
-      "compare": {
-        "kind": "subscription_plan",
-        "enabled": true
-      },
       "last_updated": "2026-07-26"
     },
     {
@@ -2139,9 +1994,6 @@
         "anthropic-api-pricing",
         "anthropic-context"
       ],
-      "relation_source_refs": [
-        "anthropic-models"
-      ],
       "sources": [
         {
           "id": "anthropic-api-pricing",
@@ -2180,14 +2032,6 @@
       ],
       "access_level": "受限",
       "access_barrier": "需要科学上网，部分地区支持手机号注册",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:claude:claude-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-26"
     },
     {
@@ -2248,9 +2092,6 @@
         "anthropic-api-pricing",
         "anthropic-context"
       ],
-      "relation_source_refs": [
-        "anthropic-models"
-      ],
       "sources": [
         {
           "id": "anthropic-api-pricing",
@@ -2289,14 +2130,6 @@
       ],
       "access_level": "受限",
       "access_barrier": "需要科学上网，部分地区支持手机号注册",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:claude:claude-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-26"
     },
     {
@@ -2369,9 +2202,6 @@
         "anthropic-api-pricing",
         "anthropic-context"
       ],
-      "relation_source_refs": [
-        "anthropic-models"
-      ],
       "sources": [
         {
           "id": "anthropic-api-pricing",
@@ -2410,14 +2240,6 @@
       ],
       "access_level": "受限",
       "access_barrier": "需要科学上网，部分地区支持手机号注册",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:claude:claude-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-26"
     },
     {
@@ -2479,9 +2301,6 @@
         "anthropic-api-pricing",
         "anthropic-context"
       ],
-      "relation_source_refs": [
-        "anthropic-models"
-      ],
       "sources": [
         {
           "id": "anthropic-models",
@@ -2520,14 +2339,6 @@
       ],
       "access_level": "受限",
       "access_barrier": "需要科学上网，部分地区支持手机号注册",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:claude:claude-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-26"
     },
     {
@@ -2560,9 +2371,6 @@
       "source_refs": [
         "anthropic-plans"
       ],
-      "relation_source_refs": [
-        "anthropic-plans"
-      ],
       "sources": [
         {
           "id": "anthropic-plans",
@@ -2582,14 +2390,6 @@
       "scenes": [],
       "access_level": "受限",
       "access_barrier": "需要科学上网，部分地区支持手机号注册",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:claude:claude-coding-plan"
-      },
-      "compare": {
-        "kind": "subscription_plan",
-        "enabled": true
-      },
       "last_updated": "2026-07-26"
     },
     {
@@ -2622,9 +2422,6 @@
       "source_refs": [
         "anthropic-plans"
       ],
-      "relation_source_refs": [
-        "anthropic-plans"
-      ],
       "sources": [
         {
           "id": "anthropic-plans",
@@ -2644,14 +2441,6 @@
       "scenes": [],
       "access_level": "受限",
       "access_barrier": "需要科学上网，部分地区支持手机号注册",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:claude:claude-coding-plan"
-      },
-      "compare": {
-        "kind": "subscription_plan",
-        "enabled": true
-      },
       "last_updated": "2026-07-26"
     },
     {
@@ -2684,9 +2473,6 @@
       "source_refs": [
         "anthropic-plans"
       ],
-      "relation_source_refs": [
-        "anthropic-plans"
-      ],
       "sources": [
         {
           "id": "anthropic-plans",
@@ -2706,14 +2492,6 @@
       "scenes": [],
       "access_level": "受限",
       "access_barrier": "需要科学上网，部分地区支持手机号注册",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:claude:claude-coding-plan"
-      },
-      "compare": {
-        "kind": "subscription_plan",
-        "enabled": true
-      },
       "last_updated": "2026-07-26"
     },
     {
@@ -2784,9 +2562,6 @@
         "google-gemini-35",
         "google-api-pricing"
       ],
-      "relation_source_refs": [
-        "google-api-pricing"
-      ],
       "sources": [
         {
           "id": "google-gemini-35",
@@ -2818,14 +2593,6 @@
       ],
       "access_level": "受限",
       "access_barrier": "需要科学上网",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:gemini:gemini-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-26"
     },
     {
@@ -2907,9 +2674,6 @@
       "source_refs": [
         "google-api-pricing"
       ],
-      "relation_source_refs": [
-        "google-api-pricing"
-      ],
       "sources": [
         {
           "id": "google-api-pricing",
@@ -2933,14 +2697,6 @@
       ],
       "access_level": "受限",
       "access_barrier": "需要科学上网",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:gemini:gemini-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-26"
     },
     {
@@ -2975,9 +2731,6 @@
       "source_refs": [
         "google-consumer-plans"
       ],
-      "relation_source_refs": [
-        "google-consumer-plans"
-      ],
       "sources": [
         {
           "id": "google-consumer-plans",
@@ -2998,14 +2751,6 @@
       "scenes": [],
       "access_level": "受限",
       "access_barrier": "需要科学上网",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:gemini:gemini-coding-plan"
-      },
-      "compare": {
-        "kind": "subscription_plan",
-        "enabled": true
-      },
       "last_updated": "2026-07-26"
     },
     {
@@ -3038,9 +2783,6 @@
       "source_refs": [
         "google-consumer-plans"
       ],
-      "relation_source_refs": [
-        "google-consumer-plans"
-      ],
       "sources": [
         {
           "id": "google-consumer-plans",
@@ -3061,14 +2803,6 @@
       "scenes": [],
       "access_level": "受限",
       "access_barrier": "需要科学上网",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:gemini:gemini-coding-plan"
-      },
-      "compare": {
-        "kind": "subscription_plan",
-        "enabled": true
-      },
       "last_updated": "2026-07-26"
     },
     {
@@ -3101,9 +2835,6 @@
       "source_refs": [
         "google-consumer-plans"
       ],
-      "relation_source_refs": [
-        "google-consumer-plans"
-      ],
       "sources": [
         {
           "id": "google-consumer-plans",
@@ -3124,14 +2855,6 @@
       "scenes": [],
       "access_level": "受限",
       "access_barrier": "需要科学上网",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:gemini:gemini-coding-plan"
-      },
-      "compare": {
-        "kind": "subscription_plan",
-        "enabled": true
-      },
       "last_updated": "2026-07-26"
     },
     {
@@ -3204,11 +2927,6 @@
         "deepseek-pricing-en",
         "deepseek-cache"
       ],
-      "relation_source_refs": [
-        "deepseek-pricing-cn",
-        "deepseek-pricing-en",
-        "deepseek-cache"
-      ],
       "sources": [
         {
           "id": "deepseek-pricing-cn",
@@ -3247,14 +2965,6 @@
       ],
       "access_level": "开放",
       "access_barrier": "国内可直接访问，偶尔需要手机验证",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:deepseek:deepseek-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-26"
     },
     {
@@ -3327,11 +3037,6 @@
         "deepseek-pricing-en",
         "deepseek-cache"
       ],
-      "relation_source_refs": [
-        "deepseek-pricing-cn",
-        "deepseek-pricing-en",
-        "deepseek-cache"
-      ],
       "sources": [
         {
           "id": "deepseek-pricing-cn",
@@ -3370,14 +3075,6 @@
       ],
       "access_level": "开放",
       "access_barrier": "国内可直接访问，偶尔需要手机验证",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:deepseek:deepseek-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-26"
     },
     {
@@ -3437,10 +3134,6 @@
         "zhipu-api-pricing",
         "zhipu-model-overview"
       ],
-      "relation_source_refs": [
-        "zhipu-api-pricing",
-        "zhipu-model-overview"
-      ],
       "sources": [
         {
           "id": "zhipu-api-pricing",
@@ -3471,14 +3164,6 @@
       ],
       "access_level": "开放",
       "access_barrier": "国内可直接访问",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:zhipu:glm-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-28"
     },
     {
@@ -3550,10 +3235,6 @@
         "zhipu-api-pricing",
         "zhipu-model-overview"
       ],
-      "relation_source_refs": [
-        "zhipu-api-pricing",
-        "zhipu-model-overview"
-      ],
       "sources": [
         {
           "id": "zhipu-api-pricing",
@@ -3584,14 +3265,6 @@
       ],
       "access_level": "开放",
       "access_barrier": "国内可直接访问",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:zhipu:glm-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-28"
     },
     {
@@ -3663,10 +3336,6 @@
         "zhipu-api-pricing",
         "zhipu-model-overview"
       ],
-      "relation_source_refs": [
-        "zhipu-api-pricing",
-        "zhipu-model-overview"
-      ],
       "sources": [
         {
           "id": "zhipu-api-pricing",
@@ -3697,14 +3366,6 @@
       ],
       "access_level": "开放",
       "access_barrier": "国内可直接访问",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:zhipu:glm-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-28"
     },
     {
@@ -3776,10 +3437,6 @@
         "zhipu-api-pricing",
         "zhipu-model-overview"
       ],
-      "relation_source_refs": [
-        "zhipu-api-pricing",
-        "zhipu-model-overview"
-      ],
       "sources": [
         {
           "id": "zhipu-api-pricing",
@@ -3810,14 +3467,6 @@
       ],
       "access_level": "开放",
       "access_barrier": "国内可直接访问",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:zhipu:glm-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-28"
     },
     {
@@ -3875,9 +3524,6 @@
       "source_refs": [
         "wenxin-api-pricing"
       ],
-      "relation_source_refs": [
-        "wenxin-api-pricing"
-      ],
       "sources": [
         {
           "id": "wenxin-api-pricing",
@@ -3900,14 +3546,6 @@
       ],
       "access_level": "开放",
       "access_barrier": "国内可直接访问，需百度账号",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:wenxin:ernie-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-28"
     },
     {
@@ -3963,9 +3601,6 @@
       "source_refs": [
         "wenxin-api-pricing"
       ],
-      "relation_source_refs": [
-        "wenxin-api-pricing"
-      ],
       "sources": [
         {
           "id": "wenxin-api-pricing",
@@ -3988,14 +3623,6 @@
       ],
       "access_level": "开放",
       "access_barrier": "国内可直接访问，需百度账号",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:wenxin:ernie-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-28"
     },
     {
@@ -4054,9 +3681,6 @@
       "source_refs": [
         "wenxin-api-pricing"
       ],
-      "relation_source_refs": [
-        "wenxin-api-pricing"
-      ],
       "sources": [
         {
           "id": "wenxin-api-pricing",
@@ -4079,14 +3703,6 @@
       ],
       "access_level": "开放",
       "access_barrier": "国内可直接访问，需百度账号",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:wenxin:ernie-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-28"
     },
     {
@@ -4145,9 +3761,6 @@
       "source_refs": [
         "xinghuo-api-docs"
       ],
-      "relation_source_refs": [
-        "xinghuo-api-docs"
-      ],
       "sources": [
         {
           "id": "xinghuo-api-docs",
@@ -4170,14 +3783,6 @@
       ],
       "access_level": "开放",
       "access_barrier": "国内可直接访问",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:xinghuo:spark-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-28"
     },
     {
@@ -4236,9 +3841,6 @@
       "source_refs": [
         "xinghuo-api-docs"
       ],
-      "relation_source_refs": [
-        "xinghuo-api-docs"
-      ],
       "sources": [
         {
           "id": "xinghuo-api-docs",
@@ -4261,14 +3863,6 @@
       ],
       "access_level": "开放",
       "access_barrier": "国内可直接访问",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:xinghuo:spark-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-28"
     },
     {
@@ -4314,9 +3908,6 @@
       "source_refs": [
         "xinghuo-api-docs"
       ],
-      "relation_source_refs": [
-        "xinghuo-api-docs"
-      ],
       "sources": [
         {
           "id": "xinghuo-api-docs",
@@ -4339,14 +3930,6 @@
       ],
       "access_level": "开放",
       "access_barrier": "国内可直接访问",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:xinghuo:spark-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-28"
     },
     {
@@ -4404,9 +3987,6 @@
       "source_refs": [
         "hailuo-api-pricing"
       ],
-      "relation_source_refs": [
-        "hailuo-api-pricing"
-      ],
       "sources": [
         {
           "id": "hailuo-api-pricing",
@@ -4428,14 +4008,6 @@
       ],
       "access_level": "开放",
       "access_barrier": "国内可直接访问",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:hailuo:minimax-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-28"
     },
     {
@@ -4480,9 +4052,6 @@
       "source_refs": [
         "hailuo-api-pricing"
       ],
-      "relation_source_refs": [
-        "hailuo-api-pricing"
-      ],
       "sources": [
         {
           "id": "hailuo-api-pricing",
@@ -4504,14 +4073,6 @@
       ],
       "access_level": "开放",
       "access_barrier": "国内可直接访问",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:hailuo:minimax-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-28"
     },
     {
@@ -4570,9 +4131,6 @@
       "source_refs": [
         "xai-api-pricing"
       ],
-      "relation_source_refs": [
-        "xai-api-pricing"
-      ],
       "sources": [
         {
           "id": "xai-api-pricing",
@@ -4594,14 +4152,6 @@
       ],
       "access_level": "受限",
       "access_barrier": "需要科学上网",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:grok:grok-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-28"
     },
     {
@@ -4660,9 +4210,6 @@
       "source_refs": [
         "xai-api-pricing"
       ],
-      "relation_source_refs": [
-        "xai-api-pricing"
-      ],
       "sources": [
         {
           "id": "xai-api-pricing",
@@ -4684,14 +4231,6 @@
       ],
       "access_level": "受限",
       "access_barrier": "需要科学上网",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:grok:grok-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-28"
     },
     {
@@ -4746,9 +4285,6 @@
       "source_refs": [
         "mistral-api-pricing"
       ],
-      "relation_source_refs": [
-        "mistral-api-pricing"
-      ],
       "sources": [
         {
           "id": "mistral-api-pricing",
@@ -4768,14 +4304,6 @@
       ],
       "access_level": "受限",
       "access_barrier": "境外（需科学上网）",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:mistral:mistral-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-27"
     },
     {
@@ -4830,9 +4358,6 @@
       "source_refs": [
         "mistral-api-pricing"
       ],
-      "relation_source_refs": [
-        "mistral-api-pricing"
-      ],
       "sources": [
         {
           "id": "mistral-api-pricing",
@@ -4852,14 +4377,6 @@
       ],
       "access_level": "受限",
       "access_barrier": "境外（需科学上网）",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:mistral:mistral-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-27"
     },
     {
@@ -4914,9 +4431,6 @@
       "source_refs": [
         "mistral-api-pricing"
       ],
-      "relation_source_refs": [
-        "mistral-api-pricing"
-      ],
       "sources": [
         {
           "id": "mistral-api-pricing",
@@ -4936,14 +4450,6 @@
       ],
       "access_level": "受限",
       "access_barrier": "境外（需科学上网）",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:mistral:mistral-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-27"
     },
     {
@@ -4998,9 +4504,6 @@
       "source_refs": [
         "mistral-api-pricing"
       ],
-      "relation_source_refs": [
-        "mistral-api-pricing"
-      ],
       "sources": [
         {
           "id": "mistral-api-pricing",
@@ -5020,14 +4523,6 @@
       ],
       "access_level": "受限",
       "access_barrier": "境外（需科学上网）",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:mistral:mistral-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-27"
     },
     {
@@ -5082,9 +4577,6 @@
       "source_refs": [
         "mistral-api-pricing"
       ],
-      "relation_source_refs": [
-        "mistral-api-pricing"
-      ],
       "sources": [
         {
           "id": "mistral-api-pricing",
@@ -5104,14 +4596,6 @@
       ],
       "access_level": "受限",
       "access_barrier": "境外（需科学上网）",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:mistral:mistral-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-27"
     },
     {
@@ -5170,9 +4654,6 @@
       "source_refs": [
         "cohere-api-pricing"
       ],
-      "relation_source_refs": [
-        "cohere-api-pricing"
-      ],
       "sources": [
         {
           "id": "cohere-api-pricing",
@@ -5195,14 +4676,6 @@
       ],
       "access_level": "受限",
       "access_barrier": "境外（需科学上网）",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:cohere:command-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-28"
     },
     {
@@ -5261,9 +4734,6 @@
       "source_refs": [
         "cohere-api-pricing"
       ],
-      "relation_source_refs": [
-        "cohere-api-pricing"
-      ],
       "sources": [
         {
           "id": "cohere-api-pricing",
@@ -5286,14 +4756,6 @@
       ],
       "access_level": "受限",
       "access_barrier": "境外（需科学上网）",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:cohere:command-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-28"
     },
     {
@@ -5352,9 +4814,6 @@
       "source_refs": [
         "cohere-api-pricing"
       ],
-      "relation_source_refs": [
-        "cohere-api-pricing"
-      ],
       "sources": [
         {
           "id": "cohere-api-pricing",
@@ -5377,14 +4836,6 @@
       ],
       "access_level": "受限",
       "access_barrier": "境外（需科学上网）",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:cohere:command-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-28"
     },
     {
@@ -5443,9 +4894,6 @@
       "source_refs": [
         "cohere-api-pricing"
       ],
-      "relation_source_refs": [
-        "cohere-api-pricing"
-      ],
       "sources": [
         {
           "id": "cohere-api-pricing",
@@ -5468,14 +4916,6 @@
       ],
       "access_level": "受限",
       "access_barrier": "境外（需科学上网）",
-      "parent_level2_ref": {
-        "kind": "vendor-level2",
-        "id": "vendor-level2:cohere:command-models"
-      },
-      "compare": {
-        "kind": "api_model",
-        "enabled": true
-      },
       "last_updated": "2026-07-28"
     }
   ]

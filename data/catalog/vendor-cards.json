@@ -5,24 +5,8 @@
       "id": "vendor-card:chatgpt",
       "vendor_key": "chatgpt",
       "title": "OpenAI",
-      "entry_label": "ChatGPT",
       "icon": "🤖",
-      "official_url": "https://chatgpt.com",
-      "source": "https://openai.com/index/gpt-5-6/",
-      "published_at": "2026-07-09",
-      "last_updated": "2026-07-18",
       "summary": "OpenAI 提供 ChatGPT、Codex 和 API 等 AI 产品入口；具体模型与套餐在下方按可核实范围单独展示。",
-      "strengths": "综合能力最强、生态最丰富(GPTs商店)、多模态领先、长期记忆",
-      "weaknesses": "国内访问困难、注册门槛高、免费版限制严格、高峰期降级",
-      "best_for": [
-        "需要最强综合能力的场景",
-        "复杂推理和长文档处理",
-        "多模态任务"
-      ],
-      "not_for": [
-        "国内网络受限用户",
-        "预算极度敏感用户"
-      ],
       "feature_preview": [
         {
           "tone": "positive",
@@ -50,7 +34,6 @@
         "学习辅导"
       ],
       "access_level": "受限",
-      "access_barrier": "需要科学上网 + 海外手机号注册",
       "price_status": "free",
       "search_terms": [
         "OpenAI",
@@ -71,59 +54,14 @@
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:chatgpt"
-      },
-      "quick_level2_refs": [
-        {
-          "kind": "vendor-level2",
-          "id": "vendor-level2:chatgpt:gpt-5.6"
-        },
-        {
-          "kind": "vendor-level2",
-          "id": "vendor-level2:chatgpt:codex"
-        },
-        {
-          "kind": "vendor-level2",
-          "id": "vendor-level2:chatgpt:openai-coding-plan"
-        }
-      ],
-      "quick_level2": [
-        {
-          "id": "vendor-level2:chatgpt:gpt-5.6",
-          "title": "GPT-5.6"
-        },
-        {
-          "id": "vendor-level2:chatgpt:codex",
-          "title": "Codex"
-        },
-        {
-          "id": "vendor-level2:chatgpt:openai-coding-plan",
-          "title": "套餐（Coding Plan）"
-        }
-      ],
-      "leaf_count": 3
+      }
     },
     {
       "id": "vendor-card:claude",
       "vendor_key": "claude",
       "title": "Anthropic",
-      "entry_label": "Claude",
       "icon": "🧠",
-      "official_url": "https://claude.ai",
-      "source": "https://www.anthropic.com/news",
-      "published_at": "2026-07-24",
-      "last_updated": "2026-07-18",
       "summary": "Anthropic 的 Claude 产品入口覆盖对话产品与 API；具体模型和订阅套餐在下方独立展示。",
-      "strengths": "推理能力强(Claude Code在SWE-bench达80.9%)、超长上下文、代码能力顶级、安全性高",
-      "weaknesses": "国内同样受限、免费版窗口限制、高峰期排队",
-      "best_for": [
-        "复杂推理和代码开发",
-        "长文档分析和研究",
-        "结构化写作"
-      ],
-      "not_for": [
-        "频繁大量使用的免费用户",
-        "国内直连用户"
-      ],
       "feature_preview": [
         {
           "tone": "positive",
@@ -149,7 +87,6 @@
         "头脑风暴"
       ],
       "access_level": "受限",
-      "access_barrier": "需要科学上网，部分地区支持手机号注册",
       "price_status": "free",
       "search_terms": [
         "Anthropic",
@@ -168,51 +105,14 @@
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:claude"
-      },
-      "quick_level2_refs": [
-        {
-          "kind": "vendor-level2",
-          "id": "vendor-level2:claude:claude-models"
-        },
-        {
-          "kind": "vendor-level2",
-          "id": "vendor-level2:claude:claude-coding-plan"
-        }
-      ],
-      "quick_level2": [
-        {
-          "id": "vendor-level2:claude:claude-models",
-          "title": "Claude 模型"
-        },
-        {
-          "id": "vendor-level2:claude:claude-coding-plan",
-          "title": "套餐（Coding Plan）"
-        }
-      ],
-      "leaf_count": 7
+      }
     },
     {
       "id": "vendor-card:gemini",
       "vendor_key": "gemini",
       "title": "Google",
-      "entry_label": "Gemini",
       "icon": "🌐",
-      "official_url": "https://gemini.google.com",
-      "source": "https://blog.google/technology/ai/",
-      "published_at": "2026-05-19",
-      "last_updated": "2026-07-18",
       "summary": "Google 的 Gemini 产品入口覆盖 API 模型与 Google AI 订阅；具体资料在下方按已核实范围展示。",
-      "strengths": "世界知识最强(Google搜索)、多模态原生、超长上下文(1M+)、Nano Banana绘画",
-      "weaknesses": "国内访问不稳定、付费版性价比争议、创作型写作不如Claude",
-      "best_for": [
-        "需要最新信息的搜索型任务",
-        "多模态任务",
-        "Google生态用户"
-      ],
-      "not_for": [
-        "国内直连用户",
-        "纯代码开发(不如Claude)"
-      ],
       "feature_preview": [
         {
           "tone": "positive",
@@ -238,7 +138,6 @@
         "数据分析"
       ],
       "access_level": "受限",
-      "access_barrier": "需要科学上网",
       "price_status": "free",
       "search_terms": [
         "Google",
@@ -257,51 +156,14 @@
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:gemini"
-      },
-      "quick_level2_refs": [
-        {
-          "kind": "vendor-level2",
-          "id": "vendor-level2:gemini:gemini-models"
-        },
-        {
-          "kind": "vendor-level2",
-          "id": "vendor-level2:gemini:gemini-coding-plan"
-        }
-      ],
-      "quick_level2": [
-        {
-          "id": "vendor-level2:gemini:gemini-models",
-          "title": "Gemini 模型"
-        },
-        {
-          "id": "vendor-level2:gemini:gemini-coding-plan",
-          "title": "套餐（Coding Plan）"
-        }
-      ],
-      "leaf_count": 5
+      }
     },
     {
       "id": "vendor-card:deepseek",
       "vendor_key": "deepseek",
       "title": "深度求索",
-      "entry_label": "DeepSeek",
       "icon": "🔍",
-      "official_url": "https://chat.deepseek.com",
-      "source": "https://api-docs.deepseek.com/updates",
-      "published_at": "2026-07-31",
-      "last_updated": "2026-07-18",
       "summary": "中国深度求索公司推出的开源大模型，以极致性价比和透明定价著称，V4 系列支持 1M 上下文。",
-      "strengths": "完全免费、中文顶级、推理能力强(R1媲美o1)、API极其便宜、开源模型",
-      "weaknesses": "高峰期偶有排队、多模态能力弱于ChatGPT/Gemini、生态不如ChatGPT",
-      "best_for": [
-        "预算敏感用户",
-        "中文场景首选",
-        "编程和逻辑推理",
-        "高频使用场景"
-      ],
-      "not_for": [
-        "需要图像生成或识别的任务"
-      ],
       "feature_preview": [
         {
           "tone": "positive",
@@ -334,7 +196,6 @@
         "数学解题"
       ],
       "access_level": "开放",
-      "access_barrier": "国内可直接访问，偶尔需要手机验证",
       "price_status": "free",
       "search_terms": [
         "深度求索",
@@ -352,43 +213,14 @@
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:deepseek"
-      },
-      "quick_level2_refs": [
-        {
-          "kind": "vendor-level2",
-          "id": "vendor-level2:deepseek:deepseek-models"
-        }
-      ],
-      "quick_level2": [
-        {
-          "id": "vendor-level2:deepseek:deepseek-models",
-          "title": "DeepSeek 模型"
-        }
-      ],
-      "leaf_count": 2
+      }
     },
     {
       "id": "vendor-card:zhipu",
       "vendor_key": "zhipu",
       "title": "智谱AI",
-      "entry_label": "智谱清言",
       "icon": "🏛️",
-      "official_url": "https://chatglm.cn",
-      "source": "https://docs.bigmodel.cn/cn/guide/start/model-overview",
-      "published_at": "2026-06-13",
-      "last_updated": "2026-07-18",
       "summary": "清华大学孵化、港股上市的国产 AI 公司，提供 GLM 系列模型及全模态 API 服务，中文能力扎实。",
-      "strengths": "中文企业级应用强、GLM模型幻觉率最低、支持私有化部署、合规性好",
-      "weaknesses": "国际生态弱、多模态不如ChatGPT、大众认知度不如DeepSeek",
-      "best_for": [
-        "国内企业应用",
-        "需私有化部署的场景",
-        "高合规要求场景"
-      ],
-      "not_for": [
-        "个人创意类使用",
-        "需要最强国际模型的任务"
-      ],
       "feature_preview": [
         {
           "tone": "positive",
@@ -420,7 +252,6 @@
         "企业应用开发"
       ],
       "access_level": "开放",
-      "access_barrier": "国内可直接访问",
       "price_status": "free",
       "search_terms": [
         "智谱AI",
@@ -437,43 +268,14 @@
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:zhipu"
-      },
-      "quick_level2_refs": [
-        {
-          "kind": "vendor-level2",
-          "id": "vendor-level2:zhipu:glm-models"
-        }
-      ],
-      "quick_level2": [
-        {
-          "id": "vendor-level2:zhipu:glm-models",
-          "title": "GLM 模型"
-        }
-      ],
-      "leaf_count": 4
+      }
     },
     {
       "id": "vendor-card:wenxin",
       "vendor_key": "wenxin",
       "title": "百度",
-      "entry_label": "文心一言",
       "icon": "📘",
-      "official_url": "https://yiyan.baidu.com",
-      "source": "https://ernie.baidu.com",
-      "published_at": "2026-05-08",
-      "last_updated": "2026-07-21",
       "summary": "百度推出的文心大模型，通过千帆平台提供 ERNIE 系列 API，深度集成百度云生态。",
-      "strengths": "完全免费、中文理解深度国内最佳之一、ERNIE 4.5 128K超长上下文、百度生态集成、AI搜索功能强",
-      "weaknesses": "国际生态弱、英文场景偏弱、创意写作灵动性不如ChatGPT",
-      "best_for": [
-        "中文深度理解场景",
-        "百度生态用户",
-        "需要AI搜索的中文研究"
-      ],
-      "not_for": [
-        "国际化场景",
-        "英文内容创作"
-      ],
       "feature_preview": [
         {
           "tone": "positive",
@@ -507,7 +309,6 @@
         "头脑风暴"
       ],
       "access_level": "开放",
-      "access_barrier": "国内可直接访问，需百度账号",
       "price_status": "free",
       "search_terms": [
         "百度",
@@ -526,43 +327,14 @@
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:wenxin"
-      },
-      "quick_level2_refs": [
-        {
-          "kind": "vendor-level2",
-          "id": "vendor-level2:wenxin:ernie-models"
-        }
-      ],
-      "quick_level2": [
-        {
-          "id": "vendor-level2:wenxin:ernie-models",
-          "title": "ERNIE 模型"
-        }
-      ],
-      "leaf_count": 3
+      }
     },
     {
       "id": "vendor-card:xinghuo",
       "vendor_key": "xinghuo",
       "title": "科大讯飞",
-      "entry_label": "讯飞星火",
       "icon": "🔥",
-      "official_url": "https://xinghuo.xfyun.cn",
-      "source": "https://www.xfyun.cn",
-      "published_at": "2026-02-11",
-      "last_updated": "2026-07-21",
       "summary": "科大讯飞推出的星火认知大模型，深耕语音与教育场景，Lite 版本 API 永久免费。",
-      "strengths": "语音技术国内第一(TTS/STT)、教育场景深耕、API性价比高、国产合规性顶级",
-      "weaknesses": "通用对话能力不如DeepSeek/通义千问、国际知名度低",
-      "best_for": [
-        "语音合成和识别需求",
-        "教育场景",
-        "企业办公(会议纪要/语音转写)"
-      ],
-      "not_for": [
-        "需要最强通用推理的任务",
-        "国际化场景"
-      ],
       "feature_preview": [
         {
           "tone": "positive",
@@ -595,7 +367,6 @@
         "翻译文档"
       ],
       "access_level": "开放",
-      "access_barrier": "国内可直接访问",
       "price_status": "free",
       "search_terms": [
         "科大讯飞",
@@ -613,42 +384,14 @@
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:xinghuo"
-      },
-      "quick_level2_refs": [
-        {
-          "kind": "vendor-level2",
-          "id": "vendor-level2:xinghuo:spark-models"
-        }
-      ],
-      "quick_level2": [
-        {
-          "id": "vendor-level2:xinghuo:spark-models",
-          "title": "星火模型"
-        }
-      ],
-      "leaf_count": 3
+      }
     },
     {
       "id": "vendor-card:hailuo",
       "vendor_key": "hailuo",
       "title": "MiniMax",
-      "entry_label": "海螺AI",
       "icon": "🐚",
-      "official_url": "https://hailuoai.com",
-      "source": "https://platform.minimaxi.com/docs/release-notes/models",
-      "published_at": "2026-06-01",
-      "last_updated": "2026-07-21",
       "summary": "MiniMax 推出的多模态 AI 平台，以海螺AI 视频生成和超低 API 文本价格著称。",
-      "strengths": "中文视频生成质量高、对话自然、MiniMax-01模型、国内可用",
-      "weaknesses": "通用能力不如头部大厂、品牌知名度提升中",
-      "best_for": [
-        "中文短视频创作",
-        "需要视频生成+对话的用户"
-      ],
-      "not_for": [
-        "专业级视频制作",
-        "需要最强推理能力的场景"
-      ],
       "feature_preview": [
         {
           "tone": "positive",
@@ -680,7 +423,6 @@
         "视频生成"
       ],
       "access_level": "开放",
-      "access_barrier": "国内可直接访问",
       "price_status": "free",
       "search_terms": [
         "MiniMax",
@@ -697,44 +439,14 @@
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:hailuo"
-      },
-      "quick_level2_refs": [
-        {
-          "kind": "vendor-level2",
-          "id": "vendor-level2:hailuo:minimax-models"
-        }
-      ],
-      "quick_level2": [
-        {
-          "id": "vendor-level2:hailuo:minimax-models",
-          "title": "MiniMax 模型"
-        }
-      ],
-      "leaf_count": 2
+      }
     },
     {
       "id": "vendor-card:grok",
       "vendor_key": "grok",
       "title": "xAI",
-      "entry_label": "Grok",
       "icon": "🚀",
-      "official_url": "https://grok.com",
-      "source": "https://x.ai/news",
-      "published_at": "2026-07-16",
-      "last_updated": "2026-07-21",
       "summary": "Elon Musk 创办的 xAI 公司推出的 AI 模型，以实时 X 平台数据接入和推理能力见长，API 定价极具竞争力。",
-      "strengths": "X平台深度集成、Grok 4推理强、DeepSearch搜索、最大的上下文窗口(2M)、免费层慷慨",
-      "weaknesses": "国内访问受限、中文优化不足、依赖X生态",
-      "best_for": [
-        "X/Twitter重度用户",
-        "需要实时信息(通过X数据)",
-        "追求最大上下文窗口"
-      ],
-      "not_for": [
-        "国内直连用户",
-        "中文深度场景",
-        "需要ChatGPT级别多模态的用户"
-      ],
       "feature_preview": [
         {
           "tone": "positive",
@@ -766,7 +478,6 @@
         "数据分析"
       ],
       "access_level": "受限",
-      "access_barrier": "需要科学上网",
       "price_status": "free",
       "search_terms": [
         "xAI",
@@ -783,42 +494,14 @@
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:grok"
-      },
-      "quick_level2_refs": [
-        {
-          "kind": "vendor-level2",
-          "id": "vendor-level2:grok:grok-models"
-        }
-      ],
-      "quick_level2": [
-        {
-          "id": "vendor-level2:grok:grok-models",
-          "title": "Grok 模型"
-        }
-      ],
-      "leaf_count": 2
+      }
     },
     {
       "id": "vendor-card:mistral",
       "vendor_key": "mistral",
       "title": "Mistral AI",
-      "entry_label": "Mistral AI（产品入口）",
       "icon": "🏔️",
-      "official_url": "https://mistral.ai/",
-      "source": "https://mistral.ai/news",
-      "published_at": "2026-04-29",
-      "last_updated": "2026-07-27",
       "summary": "法国 AI 公司，提供开放权重和商业许可的多种模型，覆盖文本、编码、推理和 OCR 场景。",
-      "strengths": "开放权重模型丰富、Apache 2.0 许可、多语言多模态",
-      "weaknesses": "中国市场访问受限、缓存定价未公开",
-      "best_for": [
-        "需要开源部署",
-        "欧洲合规场景"
-      ],
-      "not_for": [
-        "中文为主的工作",
-        "需要国内直接访问"
-      ],
       "feature_preview": [
         {
           "tone": "positive",
@@ -846,7 +529,6 @@
         "翻译文档"
       ],
       "access_level": "受限",
-      "access_barrier": "境外（需科学上网）",
       "price_status": "free",
       "search_terms": [
         "Mistral AI",
@@ -859,43 +541,14 @@
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:mistral"
-      },
-      "quick_level2_refs": [
-        {
-          "kind": "vendor-level2",
-          "id": "vendor-level2:mistral:mistral-models"
-        }
-      ],
-      "quick_level2": [
-        {
-          "id": "vendor-level2:mistral:mistral-models",
-          "title": "Mistral 模型"
-        }
-      ],
-      "leaf_count": 5
+      }
     },
     {
       "id": "vendor-card:cohere",
       "vendor_key": "cohere",
       "title": "Cohere",
-      "entry_label": "Cohere（产品入口）",
       "icon": "🔗",
-      "official_url": "https://cohere.com",
-      "source": "https://docs.cohere.com/changelog",
-      "published_at": "2026-05-20",
-      "last_updated": "2026-07-28",
       "summary": "加拿大 AI 公司，以企业级检索增强生成（RAG）、文本嵌入和重排序模型见长，Command 系列覆盖通用对话和编码。",
-      "strengths": "企业级 RAG 和检索能力领先、Embed/Rerank 模型行业标杆、Command R7B 极具性价比",
-      "weaknesses": "中国市场访问受限、中文能力有限、消费者端知名度低",
-      "best_for": [
-        "企业 RAG 和搜索增强",
-        "多语言文本分类和嵌入",
-        "需要高质量 Rerank 的场景"
-      ],
-      "not_for": [
-        "中文为主的对话场景",
-        "需要国内直接访问"
-      ],
       "feature_preview": [
         {
           "tone": "positive",
@@ -927,7 +580,6 @@
         "企业应用开发"
       ],
       "access_level": "受限",
-      "access_barrier": "境外（需科学上网）",
       "price_status": "free",
       "search_terms": [
         "Cohere",
@@ -944,20 +596,7 @@
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:cohere"
-      },
-      "quick_level2_refs": [
-        {
-          "kind": "vendor-level2",
-          "id": "vendor-level2:cohere:command-models"
-        }
-      ],
-      "quick_level2": [
-        {
-          "id": "vendor-level2:cohere:command-models",
-          "title": "Command 模型"
-        }
-      ],
-      "leaf_count": 4
+      }
     }
   ]
 }

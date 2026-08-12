@@ -56,34 +56,19 @@ function makeVendorCard(tool, collection) {
       { tone: 'positive', text: `优点：${tool.strengths || ''}` },
       { tone: 'negative', text: `限制：${tool.weaknesses || ''}` },
     ];
-  const groups = (collection?.items || []).filter(item => item.node_type === 'group' && item.display_in_tree !== false);
-  const leaves = (collection?.items || []).filter(item => item.node_type === 'leaf' && item.display_in_tree !== false);
   return {
     id: `vendor-card:${tool.id}`,
     vendor_key: tool.id,
     title: tool.vendor,
-    entry_label: tool.name,
     icon: tool.icon,
-    official_url: tool.url,
-    source: tool.source,
-    published_at: tool.published_at || null,
-    last_updated: tool.last_updated || null,
     summary: overview.description || tool.strengths || '',
-    strengths: tool.strengths || '',
-    weaknesses: tool.weaknesses || '',
-    best_for: [...(tool.best_for || [])],
-    not_for: [...(tool.not_for || [])],
     feature_preview: features,
     categories: [...(tool.category || [])],
     scenes: [...(tool.scenes || [])],
     access_level: tool.access_level,
-    access_barrier: tool.access_barrier,
     price_status: priceStatus(tool),
     search_terms: [tool.vendor, tool.name, ...(tool.category || []), ...(tool.scenes || [])].filter(Boolean),
     level1_ref: ref('vendor-level1', level1Id(tool.id)),
-    quick_level2_refs: groups.slice(0, 3).map(item => ref('vendor-level2', level2Id(tool.id, item.id))),
-    quick_level2: groups.slice(0, 3).map(item => ({ id: level2Id(tool.id, item.id), title: item.name })),
-    leaf_count: leaves.length,
   };
 }
 
@@ -106,7 +91,6 @@ function makeLevel1(tool, collection) {
     official_url: tool.url,
     description: overview.description || tool.strengths || '',
     status: collection?.status || 'unavailable',
-    tree_mode: collection?.tree_mode || 'tree',
     features,
     level2_refs: groups.map(item => ref('vendor-level2', level2Id(tool.id, item.id))),
     citations: sourceRecords(collection, overview.source_refs),
@@ -129,13 +113,6 @@ function makeLevel2(toolId, collection, item) {
     summary: item.summary || '',
     status: item.status,
     detail_refs: children.map(child => ref('tool-level3', level3Id(child.id))),
-    child_previews: children.map(child => ({
-      ref: ref('tool-level3', level3Id(child.id)),
-      title: child.name,
-      summary: child.summary || '',
-      kind: child.kind,
-      status: child.status,
-    })),
     citations: sourceRecords(collection, item.source_refs),
   };
 }
@@ -159,14 +136,11 @@ function makeIntelligenceLevel3(tool, collection, item) {
     applicable_scenarios: scenarios(item.applicable_scenarios),
     inapplicable_scenarios: scenarios(item.inapplicable_scenarios),
     source_refs: [...(item.source_refs || [])],
-    relation_source_refs: [...(item.relation_source_refs || [])],
     sources: sourceRecords(collection, item.source_refs),
     category: [...(tool.category || [])],
     scenes: [...new Set([...textScenario(item.applicable_scenarios), ...textScenario(item.inapplicable_scenarios)])],
     access_level: tool.access_level,
     access_barrier: tool.access_barrier,
-    parent_level2_ref: item.parent_id ? ref('vendor-level2', level2Id(tool.id, item.parent_id)) : null,
-    compare: { kind: item.kind, enabled: true },
     last_updated: sourceRecords(collection, item.source_refs).map(source => source.queried_at).filter(Boolean).sort().reverse()[0]?.slice(0, 10) || null,
   };
 }
@@ -192,7 +166,6 @@ function makeConcreteLevel3(tool) {
     applicable_scenarios: scenarios(tool.best_for),
     inapplicable_scenarios: scenarios(tool.not_for),
     source_refs: [sourceId],
-    relation_source_refs: [],
     sources: [{ id: sourceId, title: tool.source || tool.name, url: tool.url, publisher: tool.vendor, source_type: 'official', queried_at: tool.last_updated ? `${tool.last_updated}T00:00:00.000Z` : null }],
     category: [...(tool.category || [])],
     scenes: [...(tool.scenes || [])],
@@ -205,7 +178,6 @@ function makeConcreteLevel3(tool) {
     rating_ease: tool.rating_ease ?? null,
     rating_price: tool.rating_price ?? null,
     last_updated: tool.last_updated || null,
-    compare: { kind: 'tool', enabled: true },
   };
 }
 
@@ -227,14 +199,10 @@ function makeToolCardFromLevel3(detail, tool) {
     best_for_preview: applicable[0] || '',
     not_for_preview: inapplicable[0] || '',
     price_badge: isConcrete ? (detail.free_tier && !detail.free_tier.includes('无免费') && !detail.free_tier.startsWith('无(') ? 'free' : 'paid') : 'paid',
-    access_badge: detail.access_level === '开放' ? 'open' : 'restricted',
     access_level: detail.access_level,
-    access_barrier: detail.access_barrier,
     search_terms: [detail.title, detail.vendor_label, ...(detail.category || []), ...(detail.scenes || []), detail.summary].filter(Boolean),
     detail_ref: ref('tool-level3', detail.id),
     detail_kind: detail.kind,
-    status: detail.status,
-    last_updated: detail.last_updated || null,
   };
 }
 

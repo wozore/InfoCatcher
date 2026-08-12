@@ -46,6 +46,39 @@ function checkRef(area, source, target, targetIds, field) {
   }
 }
 
+const VENDOR_CARD_FIELDS = new Set([
+  'id', 'vendor_key', 'title', 'icon', 'summary', 'feature_preview',
+  'categories', 'scenes', 'access_level', 'price_status', 'search_terms', 'level1_ref',
+]);
+const TOOL_CARD_FIELDS = new Set([
+  'id', 'tool_key', 'vendor_key', 'title', 'vendor_label', 'icon', 'summary', 'theme',
+  'categories', 'scenes', 'best_for_preview', 'not_for_preview', 'price_badge',
+  'access_level', 'search_terms', 'detail_ref', 'detail_kind',
+]);
+const VENDOR_LEVEL1_FIELDS = new Set([
+  'id', 'vendor_key', 'title', 'entry_label', 'display_title', 'icon', 'official_url',
+  'description', 'status', 'features', 'level2_refs', 'citations',
+]);
+const VENDOR_LEVEL2_FIELDS = new Set([
+  'id', 'level1_ref', 'vendor_key', 'title', 'kind', 'official_url', 'summary', 'status',
+  'detail_refs', 'citations',
+]);
+const TOOL_LEVEL3_FIELDS = new Set([
+  'id', 'tool_key', 'vendor_key', 'kind', 'title', 'vendor_label', 'icon', 'official_url',
+  'status', 'summary', 'weaknesses', 'one_m_context', 'api_pricing', 'cache_hit_rate', 'plan',
+  'applicable_scenarios', 'inapplicable_scenarios', 'source_refs', 'sources', 'category', 'scenes',
+  'access_level', 'access_barrier', 'free_tier', 'paid_tiers', 'rating_overall', 'rating_chinese',
+  'rating_ease', 'rating_price', 'last_updated',
+]);
+
+function checkAllowedFields(area, items, allowedFields) {
+  items.forEach(item => {
+    Object.keys(item).filter(field => !allowedFields.has(field)).forEach(field => {
+      fail(`${area} ${item.id} 包含未允许字段: ${field}`);
+    });
+  });
+}
+
 function validateFiveModules() {
   const vendorCards = readItems('vendor-cards.json', CATALOG_FILES.vendorCards);
   const toolCards = readItems('tool-cards.json', CATALOG_FILES.toolCards);
@@ -59,6 +92,11 @@ function validateFiveModules() {
     ['vendor-preview-level2.json', level2],
     ['tool-preview-level3.json', level3],
   ].forEach(([area, items]) => checkUnique(area, items));
+  checkAllowedFields('vendor-cards.json', vendorCards, VENDOR_CARD_FIELDS);
+  checkAllowedFields('tool-cards.json', toolCards, TOOL_CARD_FIELDS);
+  checkAllowedFields('vendor-preview-level1.json', level1, VENDOR_LEVEL1_FIELDS);
+  checkAllowedFields('vendor-preview-level2.json', level2, VENDOR_LEVEL2_FIELDS);
+  checkAllowedFields('tool-preview-level3.json', level3, TOOL_LEVEL3_FIELDS);
 
   const level1Ids = new Set(level1.map(item => item.id));
   const level2Ids = new Set(level2.map(item => item.id));

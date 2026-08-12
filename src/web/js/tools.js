@@ -148,7 +148,14 @@ class VendorDirectoryView {
   }
 
   render(items) {
-    if (this.grid) this.grid.innerHTML = items.map(item => vendorCards({ card: item })).join('');
+    if (this.grid) {
+      this.grid.innerHTML = items.map(item => {
+        const level2Items = getVendorLevel2Items(item.vendor_key);
+        const quickItems = level2Items.slice(0, 5).map(level2 => ({ id: level2.id.split(':').pop(), title: level2.title }));
+        const leafCount = level2Items.reduce((count, level2) => count + level2.detail_refs.length, 0);
+        return vendorCards({ card: item, quickItems, leafCount });
+      }).join('');
+    }
   }
 
   renderState(state) {

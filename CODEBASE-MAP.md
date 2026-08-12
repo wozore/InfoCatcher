@@ -3,11 +3,11 @@
 维护约定：改动/新增/删除代码文件后，必须同步更新本文件。条目 = `文件名 — 职责。导出: 关键导出`。
 
 ## data/catalog/ — 五模块目录数据
-- [vendor-cards.json](data/catalog/vendor-cards.json) — 厂商列表卡片数据。
-- [tool-cards.json](data/catalog/tool-cards.json) — 工具列表卡片数据；每项仅通过 `detail_ref` 指向三级详情。
-- [vendor-preview-level1.json](data/catalog/vendor-preview-level1.json) — 厂商一级预览数据。
-- [vendor-preview-level2.json](data/catalog/vendor-preview-level2.json) — 厂商二级分组预览数据。
-- [tool-preview-level3.json](data/catalog/tool-preview-level3.json) — 厂商三级预览/工具详情唯一数据源。
+- [vendor-cards.json](data/catalog/vendor-cards.json) — 厂商列表卡片数据；只含卡片展示、列表筛选/搜索字段和一级预览稳定引用，二级快捷入口与三级数量由目录数据动态派生。
+- [tool-cards.json](data/catalog/tool-cards.json) — 工具列表卡片数据；每项仅通过 `detail_ref` 指向三级详情，卡片不重复保存详情访问门槛、状态和更新时间。
+- [vendor-preview-level1.json](data/catalog/vendor-preview-level1.json) — 厂商一级预览数据；标题、描述、状态、特点和二级稳定引用由一级模块拥有，不保存固定 `tree_mode`。
+- [vendor-preview-level2.json](data/catalog/vendor-preview-level2.json) — 厂商二级分组预览数据；通过 `detail_refs` 指向三级详情，不重复保存三级子卡片投影。
+- [tool-preview-level3.json](data/catalog/tool-preview-level3.json) — 厂商三级预览/工具详情唯一数据源；层级由二级 `detail_refs` 表达，详情类型由 `kind` 表达。
 
 
 - [env.js](src/shared/env.js) — dotenv 子集解析 + 项目根目录。导出: `loadDotEnv, PROJECT_DIR`

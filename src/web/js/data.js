@@ -279,39 +279,45 @@ function getCatalogItems(area) {
 }
 
 function buildLegacyToolFromVendorCard(card, level1) {
+  const citations = level1?.citations || [];
+  const latestCitation = citations
+    .map(source => source.queried_at)
+    .filter(Boolean)
+    .sort()
+    .reverse()[0] || null;
   return {
     id: card.vendor_key,
-    name: card.entry_label || card.title,
+    name: level1?.entry_label || card.title,
     vendor: card.title,
     category: [...(card.categories || [])],
     scenes: [...(card.scenes || [])],
-    url: card.official_url || level1?.official_url || '',
+    url: level1?.official_url || '',
     icon: card.icon || '',
     free_tier: card.price_status === 'free' ? '有免费层' : '无免费层',
     paid_tiers: [],
     chinese_support: null,
     chinese_note: '',
-    access_barrier: card.access_barrier || '',
+    access_barrier: '',
     access_level: card.access_level || '受限',
-    strengths: card.strengths || card.summary || '',
-    weaknesses: card.weaknesses || '',
-    best_for: [...(card.best_for || [])],
-    not_for: [...(card.not_for || [])],
+    strengths: card.summary || '',
+    weaknesses: '',
+    best_for: [],
+    not_for: [],
     rating_overall: null,
     rating_chinese: null,
     rating_ease: null,
     rating_price: null,
-    last_updated: card.last_updated || null,
-    source: card.source || '',
+    last_updated: latestCitation ? latestCitation.slice(0, 10) : null,
+    source: citations[0]?.url || level1?.official_url || '',
     card_kind: 'collection',
-    card_type: card.theme || 'general',
+    card_type: 'general',
     entity_kind: 'product',
     overview: {
       description: card.summary || '',
       features: [...(card.feature_preview || [])],
-      source_refs: (level1?.citations || []).map(source => source.id),
+      source_refs: citations.map(source => source.id),
     },
-    published_at: card.published_at || null,
+    published_at: null,
   };
 }
 
@@ -369,7 +375,6 @@ function buildLegacyIntelligence(vendorCards, level1Items, level2Items, details)
         summary: level2.summary,
         official_url: level2.official_url,
         source_refs: (level2.citations || []).map(source => source.id),
-        relation_source_refs: (level2.citations || []).map(source => source.id),
         display_in_tree: true,
       };
     });
@@ -395,7 +400,6 @@ function buildLegacyIntelligence(vendorCards, level1Items, level2Items, details)
           applicable_scenarios: detail.applicable_scenarios,
           inapplicable_scenarios: detail.inapplicable_scenarios,
           source_refs: [...(detail.source_refs || [])],
-          relation_source_refs: [...(detail.relation_source_refs || [])],
           display_in_tree: true,
           detail_id: detail.id,
         };
@@ -408,7 +412,7 @@ function buildLegacyIntelligence(vendorCards, level1Items, level2Items, details)
     return {
       tool_id: card.vendor_key,
       status: root?.status || 'unavailable',
-      tree_mode: root?.tree_mode || 'tree',
+      tree_mode: 'tree',
       items: [...groups, ...leaves],
       sources: [...sourceMap.values()],
     };
@@ -436,7 +440,7 @@ function buildDirectoryProjection(toolCards, details, intelligence) {
       free_tier: detail?.free_tier || '',
       paid_tiers: [...(detail?.paid_tiers || [])],
       access_level: card.access_level,
-      access_barrier: card.access_barrier,
+      access_barrier: detail?.access_barrier || '',
       strengths: card.summary || '',
       weaknesses: card.not_for_preview || '',
       best_for: card.best_for_preview ? [card.best_for_preview] : [],
@@ -445,7 +449,7 @@ function buildDirectoryProjection(toolCards, details, intelligence) {
       rating_chinese: detail?.rating_chinese ?? null,
       rating_ease: detail?.rating_ease ?? null,
       rating_price: detail?.rating_price ?? null,
-      last_updated: card.last_updated || null,
+      last_updated: detail?.last_updated || null,
       card_kind: detail?.kind === 'tool' ? 'concrete' : 'intelligence_leaf',
       entity_kind: detail?.kind === 'tool' ? 'product' : 'intelligence_leaf',
       card_type: card.theme,
