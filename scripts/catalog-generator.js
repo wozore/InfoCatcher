@@ -1,5 +1,8 @@
 'use strict';
 
+const { loadDotEnv } = require('../src/shared/env');
+loadDotEnv();
+
 const fs = require('fs');
 const { loadCatalogSnapshot } = require('../src/catalog/catalog-snapshot-store');
 const {
@@ -63,11 +66,25 @@ async function main(argv = process.argv.slice(2)) {
   const { positional, flags } = parseArgs(argv);
   const [command, id] = positional;
   if (command === 'probe') {
-    if (!flags.confirm_cost) return { ok: false, code: 'COST_CONFIRMATION_REQUIRED', cost: { max_ai_calls: 1 } };
-    return probeDeepSeekCapabilities({ ...normalizeGeneratorOptions(loadGeneratorConfig()), confirmCost: true });
+    if (!flags.confirm_cost) {
+      const result = { ok: false, code: 'COST_CONFIRMATION_REQUIRED', cost: { max_ai_calls: 1 } };
+      console.log(JSON.stringify(result, null, 2));
+      return result;
+    }
+    const result = await probeDeepSeekCapabilities({ ...normalizeGeneratorOptions(loadGeneratorConfig()), confirmCost: true });
+    console.log(JSON.stringify(result, null, 2));
+    return result;
   }
-  if (command === 'list') return { ok: true, drafts: listDrafts().map(draft => ({ draft_id: draft.draft_id, state: draft.state, readiness: draft.readiness })) };
-  if (command === 'recover') return recoverCatalogTransactions();
+  if (command === 'list') {
+    const result = { ok: true, drafts: listDrafts().map(draft => ({ draft_id: draft.draft_id, state: draft.state, readiness: draft.readiness })) };
+    console.log(JSON.stringify(result, null, 2));
+    return result;
+  }
+  if (command === 'recover') {
+    const result = recoverCatalogTransactions();
+    console.log(JSON.stringify(result, null, 2));
+    return result;
+  }
   if (command === 'new') {
     const seed = readSeed(flags);
     if (!flags.confirm_cost) return { ok: false, code: 'COST_CONFIRMATION_REQUIRED', cost: flags };

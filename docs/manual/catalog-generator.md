@@ -9,7 +9,7 @@
 - Node.js；
 - 在项目根目录执行命令；
 - `DEEPSEEK_API_KEY` 环境变量；
-- DeepSeek API 账户具备 Responses API 的 `web_search` 能力。
+- DeepSeek API 账户具备 Responses API 的 `web_search` 能力（联网搜索为两段式工具循环：先返回搜索调用、回传后恢复结果，生成器内部自动完成，维护者无需手动干预）。
 
 API Key 只通过环境变量读取，不要写入 Seed、配置文件、BAT、草案或目录 JSON。
 
@@ -27,7 +27,38 @@ $env:DEEPSEEK_API_KEY = "你的DeepSeek_API_Key"
 
 关闭当前终端后，临时设置会失效。不要把真实 Key 粘贴到 Git 或文档中。
 
-## 2. 先检查 DeepSeek 联网搜索
+## 2. 启动方式
+
+双击后会显示中文指令菜单：
+
+| 指令 | 功能 | 网络/API | 是否修改正式目录 |
+|---|---|---|---|
+| `probe --confirm-cost` | 检查 Key、模型和 DeepSeek 联网搜索能力 | 会调用一次 DeepSeek | 否 |
+| `new --seed <file> --confirm-cost` | 联网研究并生成 Preview 草案 | 会联网并可能产生费用 | 否 |
+| `prepare --seed <file>` | 使用已有输入准备离线草案，主要用于测试 | 否 | 否 |
+| `list` | 列出草案及状态 | 否 | 否 |
+| `review <draft-id>` | 重新校验草案和目录版本 | 否 | 否 |
+| `apply <draft-id>` | 等待 `APPLY <draft-id>` 确认后正式写入 | 通常不需要 AI 调用 | 是 |
+| `cancel <draft-id>` | 删除尚未 Apply 的草案 | 否 | 否 |
+| `recover` | 恢复中断的目录事务 | 否 | 可能回滚本地事务文件 |
+
+其中 `probe` 和 `new` 可能产生 DeepSeek API 费用；`apply`、`cancel` 和 `recover` 可能修改本地文件。菜单会显示这些风险。
+
+输入完整命令后按回车执行，例如：
+
+```text
+probe --confirm-cost
+```
+
+也可以在 CMD 或 PowerShell 中直接带参数执行：
+
+```bat
+bat\catalog-generator.bat probe --confirm-cost
+```
+
+双击后直接按回车会退出，不会修改任何文件。命令执行完毕后窗口不会自动进入下一轮交互；需要执行下一条命令时重新双击 BAT，或在终端中再次运行。
+
+## 3. 先检查 DeepSeek 联网搜索
 
 在项目根目录执行：
 
@@ -44,7 +75,7 @@ bat\catalog-generator.bat probe --confirm-cost
 常见失败：
 
 - `DEEPSEEK_AUTH_REQUIRED`：当前终端没有 `DEEPSEEK_API_KEY`；
-- `DEEPSEEK_SEARCH_UNAVAILABLE`：响应没有可审计来源，不能继续生成正式草案；
+- `DEEPSEEK_SEARCH_UNAVAILABLE`：响应没有可审计来源，不能继续生成正式草案。联网搜索为两段式调用，模型偶发不输出结构化结果，重试一次通常可恢复；
 - `DEEPSEEK_RATE_LIMITED`：触发限流；
 - `DEEPSEEK_TIMEOUT`：请求超时。
 

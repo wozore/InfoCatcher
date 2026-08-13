@@ -13,6 +13,7 @@
 - [env.js](src/shared/env.js) — dotenv 子集解析 + 项目根目录。导出: `loadDotEnv, PROJECT_DIR`
 - [paths.js](src/shared/paths.js) — 目录、catalog 文件与生成器事务路径常量（全仓唯一数据登记点，含五模块 catalog、草案、锁、staging、backup、journal）。导出: `DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH`
 - [deepseek-client.js](src/shared/deepseek-client.js) — DeepSeek Responses transport、认证/HTTP/超时错误归一化和来源提取。导出: `requestDeepSeek, textFromResponse, collectResponseSources`
+- [deepseek-websearch.js](src/shared/deepseek-websearch.js) — **DeepSeek API 联网搜索可复用模块**（两段式工具循环：第一段强制 web_search 拿 `web_search_call`，全量回传含 `reasoning_text` 后服务端恢复搜索结果，循环至模型不再搜索；从最终文本提取来源 URL）。`twoStage` 开关缺省 true（DeepSeek 特有），接入其他工具（OpenAI 等单段 web_search）时传 false 绕过回传循环。导出: `webSearchDeepSeek, extractUrls, buildSourcesFromText, messageTextOf`
 
 ## src/catalog/ — 目录数据接口与生成器
 - [catalog-interface.js](src/catalog-interface.js) — Node 侧五模块目录唯一 Interface；三级批量替换委托共同事务。导出: `catalog, DATA_FILES, resetCatalogForTests`
@@ -24,7 +25,7 @@
 - [catalog-change-planner.js](src/catalog/catalog-change-planner.js) — Seed + 业务草案到 records/refs/FutureSnapshot 的确定性规划。导出: `planCatalogChange`
 - [catalog-transaction-store.js](src/catalog/catalog-transaction-store.js) — catalog 共同锁、五文件 staging、staged dist、journal、回滚和恢复。导出: `commitCatalogChange, replaceToolLevel3, recoverCatalogTransaction`
 - [catalog-assistant.js](src/catalog/catalog-assistant.js) — 生成器深 Module；统一研究、草案、Review、Apply、取消和恢复 Interface。导出: `prepareCatalogDraft, reviewCatalogDraft, applyCatalogDraft, discardCatalogDraft, recoverCatalogTransactions`
-- [catalog/ai/deepseek-catalog-ai.js](src/catalog/ai/deepseek-catalog-ai.js) — DeepSeek Responses API web_search 研究、EvidenceBundle 和严格草案整理。导出: `probeDeepSeekCapabilities, collectEvidence, generateCatalogDraft`
+- [catalog/ai/deepseek-catalog-ai.js](src/catalog/ai/deepseek-catalog-ai.js) — DeepSeek 联网研究（走两段式 shared/deepseek-websearch）、EvidenceBundle 和严格草案整理；evidence 解析容忍数组/包裹/多个并列对象三种 JSON 形态。导出: `probeDeepSeekCapabilities, collectEvidence, generateCatalogDraft, evidenceFromSearchText, safeEvidenceArray, buildSearchQuery, buildSearchInstructions`
 
 ## src/web/ — 前端静态站（原生 ES module，无打包器；build-dist.js 原样复制到 dist/）
 - [css/style.css](src/web/css/style.css) — 全站样式；工具视图分类索引含极简编辑部科技风格、左侧独立定位、移动端横向布局与具体工具卡片主题/微纹理；厂商卡片与具体工具卡片的悬停样式作用域隔离；工具卡片适合/不适合提示使用颜色竖线
@@ -111,6 +112,7 @@
 - [catalog-interface.test.js](tests/catalog-interface.test.js) — 五模块目录 Interface、字段所有权、稳定引用、工具卡→三级详情以及场景/精选详情引用回归。
 - [catalog-generator.test.js](tests/catalog/catalog-generator.test.js) — DeepSeek 搜索请求、EvidenceBundle、一次修复、生成矩阵和 revision 回归。
 - [catalog-cli.test.js](tests/catalog/catalog-cli.test.js) — CLI 参数、热点 Seed、DeepSeek 能力 fail-closed 和共享 transport 回归。
+- [deepseek-websearch.test.js](tests/shared/deepseek-websearch.test.js) — 联网搜索模块回归：twoStage=false 单段绕过、twoStage=true 回传恢复结果、URL 提取去重与标点清理。
 - [collector-x-v2.test.js](tests/news/collector-x-v2.test.js) — X 请求级 credits 硬预算回归：窗外/空长文/重试/零预算/低配置/超量响应/直接门禁。
 - [news-pipeline-min.test.js](tests/news/news-pipeline-min.test.js) — v2 全链编排、总开关、采集状态汇总、credits→last-run 透传回归。
 - [validate-news-config.test.js](tests/maintenance/validate-news-config.test.js) — news-config-v2 安全字段与 last-run X credits/request schema 校验。
