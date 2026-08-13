@@ -1,46 +1,39 @@
-/**
- * scripts/build-dist.js — 前端静态站构建（src/web + public + data → dist/）
- *
- * 产出 dist/ 供 GitHub Pages 部署。步骤：清空重建 dist/ → 复制 src/web
- * （原生 ES module，无打包器，build-news 等脚本原样使用）→ 复制 public 静态资源
- * → 复制浏览器可读的 catalog 与 news/output 数据（保留子目录结构）。
- */
 'use strict';
 
 const fs = require('fs');
 const path = require('path');
 const { DIRS } = require('../src/shared/paths');
 
-const DIST = path.join(DIRS.project, 'dist');
-
-// Clean and recreate
-if (fs.existsSync(DIST)) fs.rmSync(DIST, { recursive: true });
-fs.mkdirSync(DIST);
-
-// Copy web root
-fs.cpSync(path.join(DIRS.src, 'web'), DIST, { recursive: true });
-
-// Copy public assets
-const publicDir = DIRS.public;
-for (const f of fs.readdirSync(publicDir)) {
-  fs.cpSync(path.join(publicDir, f), path.join(DIST, f));
+function countFiles(dir) {
+  let count = 0;
+  if (!fs.existsSync(dir)) return count;
+  for (const entry of fs.readdirSync(dir, { recursive: true })) {
+    if (fs.statSync(path.join(dir, entry)).isFile()) count += 1;
+  }
+  return count;
 }
 
-// Copy data for browser consumption
-const dataDir = DIRS.data;
-const catalogSrc = path.join(dataDir, 'catalog');
-const hotspotsSrc = path.join(dataDir, 'news', 'output');
-const dataDist = path.join(DIST, 'data');
-fs.mkdirSync(path.join(dataDist, 'catalog'), { recursive: true });
-fs.mkdirSync(path.join(dataDist, 'news'), { recursive: true });
-fs.cpSync(catalogSrc, path.join(dataDist, 'catalog'), { recursive: true });
-fs.cpSync(hotspotsSrc, path.join(dataDist, 'news', 'output'), { recursive: true });
+function buildDist(options = {}) {
+  const outputDir = options.outputDir || path.join(DIRS.project, 'dist');
+  const srcDir = options.srcDir || path.join(DIRS.src, 'web');
+  const publicDir = options.publicDir || DIRS.public;
+  const catalogDir = options.catalogDir || path.join(DIRS.data, 'catalog');
+  const hotspotsDir = options.hotspotsDir || path.join(DIRS.data, 'news', 'output');
+  if (fs.existsSync(outputDir)) fs.rmSync(outputDir, { recursive: true, force: true });
+  fs.mkdirSync(outputDir, { recursive: true });
+  fs.cpSync(srcDir, outputDir, { recursive: true });
+  for (const file of fs.readdirSync(publicDir)) fs.cpSync(path.join(publicDir, file), path.join(outputDir, file), { recursive: true });
+  const dataDist = path.join(outputDir, 'data');
+  fs.mkdirSync(path.join(dataDist, 'catalog'), { recursive: true });
+  fs.mkdirSync(path.join(dataDist, 'news'), { recursive: true });
+  fs.cpSync(catalogDir, path.join(dataDist, 'catalog'), { recursive: true });
+  fs.cpSync(hotspotsDir, path.join(dataDist, 'news', 'output'), { recursive: true });
+  return { outputDir, fileCount: countFiles(outputDir) };
+}
 
-const countFiles = (dir) => {
-  let n = 0;
-  for (const e of fs.readdirSync(dir, { recursive: true }))
-    if (fs.statSync(path.join(dir, e)).isFile()) n++;
-  return n;
-};
+if (require.main === module) {
+  const result = buildDist();
+  console.log(`dist/ 构建完成：${result.fileCount} 个文件`);
+}
 
-console.log(`dist/ 构建完成：${countFiles(DIST)} 个文件`);
+module.exports = { buildDist, countFiles };

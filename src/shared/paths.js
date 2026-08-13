@@ -49,6 +49,18 @@ const CATALOG_FILES = Object.freeze({
   featured: path.join(CATALOG_DIR, 'featured.json'),
 });
 
+const CATALOG_GENERATOR_FILES = Object.freeze({
+  draftsDir: path.join(DATA_DIR, 'manual', 'catalog-drafts'),
+  localConfig: path.join(PROJECT_DIR, 'config', 'catalog-generator.local.json'),
+  exampleConfig: path.join(PROJECT_DIR, 'config', 'catalog-generator.example.json'),
+  lock: path.join(DATA_DIR, 'catalog', '.catalog.lock'),
+  transactionDir: path.join(DATA_DIR, 'catalog', '.transactions'),
+  stagingDir: path.join(DATA_DIR, 'catalog', '.staging'),
+  backupDir: path.join(DATA_DIR, 'catalog', '.backup'),
+  journal: path.join(DATA_DIR, 'catalog', '.transactions', 'journal.json'),
+  audit: path.join(DATA_DIR, 'catalog', '.transactions', 'audit.json'),
+});
+
 const NEWS_FILES = Object.freeze({
   config: path.join(NEWS_CONFIG_DIR, 'news-config.json'),
   configV2: path.join(NEWS_CONFIG_DIR, 'news-config-v2.json'), // 热点管线 v2：采集/评分/审核/收尾配置
@@ -79,4 +91,4 @@ const ACQUISITION_FILES = Object.freeze({
 
 const RSS_FEED_PATH = path.join(PUBLIC_DIR, 'feed.xml');
 
-module.exports = { DIRS, CATALOG_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH };
+module.exports = { DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH };

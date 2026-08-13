@@ -22,7 +22,7 @@ import {
   setRegionBusy,
   ICON_CLOSE,
 } from './data.js';
-import { isComparableRootTool, isComparableLeaf, isCompareSelected } from './compare.js';
+import { isComparableLeaf, isCompareSelected } from './compare.js';
 import vendorCards from './vendor-cards.js';
 import toolCards from './tool-cards.js';
 import renderVendorLevel1 from './vendor-preview-level1.js';
@@ -240,7 +240,10 @@ class ToolDirectoryView {
         '<h3 class="tool-group-title">' + escapeHtml(group.title) +
           ' <span class="tool-group-count">' + groupItems.length + '</span></h3>' +
         '<div class="tool-group-divider" aria-hidden="true"></div>' +
-        '<div class="tool-grid">' + groupItems.map(item => toolCards({ card: item })).join('') + '</div>' +
+        '<div class="tool-grid">' + groupItems.map(item => toolCards({
+          card: item,
+          compareSelected: isCompareSelected(item.detail_ref.id, item.detail_ref.id),
+        })).join('') + '</div>' +
         '</section>';
     }).join('');
     this.syncIndex(visibleTypes);

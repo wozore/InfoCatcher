@@ -11,11 +11,20 @@
 
 
 - [env.js](src/shared/env.js) — dotenv 子集解析 + 项目根目录。导出: `loadDotEnv, PROJECT_DIR`
-- [paths.js](src/shared/paths.js) — 目录与数据文件路径常量（全仓唯一数据登记点，含五模块 catalog 文件、`NEWS_FILES.configV2`/`lastRun`）。导出: `DIRS, CATALOG_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH`
-- [beijing-time.js](src/shared/beijing-time.js) — 北京时间（UTC+8 固定偏移）工具，不依赖运行环境时区（CI=UTC / 本地=北京）。导出: `BEIJING_OFFSET_MS, beijingDateKey, beijingDayKey, beijingMidnightIso`
+- [paths.js](src/shared/paths.js) — 目录、catalog 文件与生成器事务路径常量（全仓唯一数据登记点，含五模块 catalog、草案、锁、staging、backup、journal）。导出: `DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH`
+- [deepseek-client.js](src/shared/deepseek-client.js) — DeepSeek Responses transport、认证/HTTP/超时错误归一化和来源提取。导出: `requestDeepSeek, textFromResponse, collectResponseSources`
 
-## src/catalog/ — 目录数据接口
-- [catalog-interface.js](src/catalog-interface.js) — Node 侧五模块目录唯一 Interface（列表、稳定引用解析、三级详情原子替换）。导出: `catalog, DATA_FILES, resetCatalogForTests`
+## src/catalog/ — 目录数据接口与生成器
+- [catalog-interface.js](src/catalog-interface.js) — Node 侧五模块目录唯一 Interface；三级批量替换委托共同事务。导出: `catalog, DATA_FILES, resetCatalogForTests`
+- [catalog-contract.js](src/catalog/catalog-contract.js) — 五模块字段、枚举、引用和快照形状契约。导出: `AREAS, ALLOWED_FIELDS, DETAIL_KINDS, TOOL_CARD_KINDS, THEMES`
+- [catalog-snapshot-validator.js](src/catalog/catalog-snapshot-validator.js) — FutureSnapshot 纯校验，返回结构化 errors/warnings。导出: `validateCatalogSnapshot`
+- [catalog-revision.js](src/catalog/catalog-revision.js) — 五模块稳定序列化、revision 和 preview hash。导出: `stableStringify, revisionOf, previewHashOf`
+- [catalog-draft-store.js](src/catalog/catalog-draft-store.js) — 临时草案创建、读取、更新、列举和删除。导出: `createDraft, readDraft, updateDraft, deleteDraft, listDrafts`
+- [catalog-record-builders.js](src/catalog/catalog-record-builders.js) — 确定性五类记录 Builder 和业务键规范化。导出: `buildVendorCard, buildLevel1, buildLevel2, buildDetail, buildToolCard, deriveKeys`
+- [catalog-change-planner.js](src/catalog/catalog-change-planner.js) — Seed + 业务草案到 records/refs/FutureSnapshot 的确定性规划。导出: `planCatalogChange`
+- [catalog-transaction-store.js](src/catalog/catalog-transaction-store.js) — catalog 共同锁、五文件 staging、staged dist、journal、回滚和恢复。导出: `commitCatalogChange, replaceToolLevel3, recoverCatalogTransaction`
+- [catalog-assistant.js](src/catalog/catalog-assistant.js) — 生成器深 Module；统一研究、草案、Review、Apply、取消和恢复 Interface。导出: `prepareCatalogDraft, reviewCatalogDraft, applyCatalogDraft, discardCatalogDraft, recoverCatalogTransactions`
+- [catalog/ai/deepseek-catalog-ai.js](src/catalog/ai/deepseek-catalog-ai.js) — DeepSeek Responses API web_search 研究、EvidenceBundle 和严格草案整理。导出: `probeDeepSeekCapabilities, collectEvidence, generateCatalogDraft`
 
 ## src/web/ — 前端静态站（原生 ES module，无打包器；build-dist.js 原样复制到 dist/）
 - [css/style.css](src/web/css/style.css) — 全站样式；工具视图分类索引含极简编辑部科技风格、左侧独立定位、移动端横向布局与具体工具卡片主题/微纹理；厂商卡片与具体工具卡片的悬停样式作用域隔离；工具卡片适合/不适合提示使用颜色竖线
@@ -24,7 +33,7 @@
 - [js/main.js](src/web/js/main.js) — 入口：共享状态、导航 switchView、全部事件绑定（DOMContentLoaded 先 applyStaticTranslations，工具分类索引由 tools.js 的 ToolDirectoryView 自管理）。导出: `currentView, switchView`
 - [js/catalog-interface.js](src/web/js/catalog-interface.js) — 浏览器侧五模块目录唯一 Interface（加载、查询、稳定引用解析）。导出: `catalog`
 - [js/vendor-cards.js](src/web/js/vendor-cards.js) — 厂商卡片模块。导出: 默认厂商卡渲染器
-- [js/tool-cards.js](src/web/js/tool-cards.js) — 工具卡片模块。导出: 默认工具卡渲染器
+- [js/tool-cards.js](src/web/js/tool-cards.js) — 工具卡片模块；导出: 默认工具卡渲染器；具体工具/API 模型在卡片右下角复用详情页对比按钮，套餐不显示该按钮。
 - [js/vendor-preview-level1.js](src/web/js/vendor-preview-level1.js) — 厂商一级预览模块。导出: 默认一级预览渲染器
 - [js/vendor-preview-level2.js](src/web/js/vendor-preview-level2.js) — 厂商二级预览模块。导出: 默认二级预览渲染器
 - [js/tool-preview-level3.js](src/web/js/tool-preview-level3.js) — 厂商三级预览/工具详情模块。导出: `renderToolLevel3`、默认详情渲染器
@@ -78,9 +87,12 @@
 - [transcript-notify.js](src/news/transcripts/transcript-notify.js) — 每日"待人工获取字幕"清单（min 候选层挑评分最高 notify_count 个 YouTube，写 transcript-requests.json 交人工，文件名固定去掉日期后缀、dateKey 北京时间；不碰主链/不调采集总结）。导出: `notifyTranscripts, parseNotifyCount, scoreOf`
 
 ### feedback/ — 收尾环节：工具库/概念库反哺（独立于主链，只写待补卡文件）
-- [tool-feedback.js](src/news/feedback/tool-feedback.js) — 从 approved summary 提取 AI 工具/概念名（缺省正则 / options.llmExtract 注入），与五模块工具卡/glossary.json 比对，缺失写 tool-cards-pending.json / concept-cards-pending.json 待补卡（文件名固定去掉日期后缀、dateKey 北京时间），不直接改知识库。导出: `feedbackFromSummaries, extractEntities, toolExists, conceptExists`
+- [tool-feedback.js](src/news/feedback/tool-feedback.js) — 从 approved summary 提取 AI 工具/概念名（缺省正则 / options.llmExtract 注入），与五模块工具卡/glossary.json 比对，缺失写 tool-cards-pending.json / concept-cards-pending.json 待补卡，不直接改知识库。导出: `feedbackFromSummaries, extractEntities, toolExists, conceptExists`
+- [catalog-draft-adapter.js](src/news/feedback/catalog-draft-adapter.js) — 将热点待补工具候选转换为 Seed，不直接写正式目录。导出: `pendingCandidateToSeed`
 
-## src/content/ — 内容产物
+## docs/manual/ — 用户说明
+- [catalog-generator.md](docs/manual/catalog-generator.md) — 五模块目录生成器的手动使用流程、Seed 示例、DeepSeek 联网研究、Preview/Apply、恢复和安全规则。
+
 - [generate-rss.js](src/content/generate-rss.js) — RSS 生成。导出: `getFeedItems, generateRss`
 - [generate-og-image.js](src/content/generate-og-image.js) — OG 图生成。导出: `generateOgImage`
 
@@ -97,12 +109,14 @@
 
 ## tests/ — 自动化回归
 - [catalog-interface.test.js](tests/catalog-interface.test.js) — 五模块目录 Interface、字段所有权、稳定引用、工具卡→三级详情以及场景/精选详情引用回归。
+- [catalog-generator.test.js](tests/catalog/catalog-generator.test.js) — DeepSeek 搜索请求、EvidenceBundle、一次修复、生成矩阵和 revision 回归。
+- [catalog-cli.test.js](tests/catalog/catalog-cli.test.js) — CLI 参数、热点 Seed、DeepSeek 能力 fail-closed 和共享 transport 回归。
 - [collector-x-v2.test.js](tests/news/collector-x-v2.test.js) — X 请求级 credits 硬预算回归：窗外/空长文/重试/零预算/低配置/超量响应/直接门禁。
 - [news-pipeline-min.test.js](tests/news/news-pipeline-min.test.js) — v2 全链编排、总开关、采集状态汇总、credits→last-run 透传回归。
 - [validate-news-config.test.js](tests/maintenance/validate-news-config.test.js) — news-config-v2 安全字段与 last-run X credits/request schema 校验。
 
 ## scripts/ — 命令入口（薄包装；src/ 为纯逻辑）
-- [build-news.js](scripts/build-news.js) — 热点构建 CLI（**默认走 v2 runMin**；统一开关关闭时明确输出 disabled 且正常退出；X 采集输出 credits/请求/重试用量；`--platforms youtube|x` 分时采集；`--fixture` 注入 mock 采集跑通全链；`--min` 兼容 no-op；导出 `{ main: mainMin, mainMin, buildMinFixtureOptions }`）
+- [catalog-generator.js](scripts/catalog-generator.js) — 目录生成器 CLI；研究只生成 Preview，Apply 要求维护者确认。导出: `parseArgs, main`
 - [news-cli.js](scripts/news-cli.js) — CLI 分发入口（透传 src/news/cli/news-cli，含 **`min-review` 命令组**）
 - [validate.js](scripts/validate.js) — 校验聚合入口
 - [build-dist.js](scripts/build-dist.js) — src/web + public + data → dist/（维护者入口：bat/build-dist.bat）
@@ -115,4 +129,5 @@
 - [after-first-review.bat](bat/after-first-review.bat) — 首次人工审核后：应用 review 清单，再安全并行生成关键词提纯与 AI top 清单。
 - [apply-keywords.bat](bat/apply-keywords.bat) — 应用维护者填写的 keyword-refine 清单；仅更新后续采集关键词，不发布或构建。
 - [apply-top.bat](bat/apply-top.bat) — 应用 top_selected 并发布公开投影。
+- [catalog-generator.bat](bat/catalog-generator.bat) — 目录生成器维护者入口，只转发 Node CLI，不包含凭据或业务逻辑。
 - [build-dist.bat](bat/build-dist.bat) — 重建静态 dist。

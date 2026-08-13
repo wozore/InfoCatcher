@@ -173,7 +173,7 @@ try {
   (function collect(v) {
     if (typeof v === 'string' && v.includes(DIRS.data)) registered.add(path.resolve(v));
     else if (v && typeof v === 'object') Object.values(v).forEach(collect);
-  })({ DIRS: exports.DIRS, CATALOG_FILES: exports.CATALOG_FILES, NEWS_FILES: exports.NEWS_FILES, ACQUISITION_FILES: exports.ACQUISITION_FILES });
+  })({ DIRS: exports.DIRS, CATALOG_FILES: exports.CATALOG_FILES, CATALOG_GENERATOR_FILES: exports.CATALOG_GENERATOR_FILES, NEWS_FILES: exports.NEWS_FILES, ACQUISITION_FILES: exports.ACQUISITION_FILES });
 
   const dataJson = [];
   (function walk(d) {

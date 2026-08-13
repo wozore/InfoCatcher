@@ -20,6 +20,8 @@
 
 'use strict';
 
+const { requestDeepSeek } = require('../../shared/deepseek-client');
+
 // ═══════════════════════════════════════════════════════════════
 // 常量
 // ═══════════════════════════════════════════════════════════════
@@ -222,9 +224,21 @@ function normalizeLabel(raw) {
   return null;
 }
 
-// ═══════════════════════════════════════════════════════════════
-// DeepSeek 调用
-// ═══════════════════════════════════════════════════════════════
+async function requestLegacyDeepSeek(payload, options = {}) {
+  const apiKey = options.apiKey ?? process.env.DEEPSEEK_API_KEY;
+  const fetchImpl = options.fetchImpl || (typeof fetch === 'function' ? fetch : null);
+  const timeoutMs = options.timeoutMs ?? 15_000;
+  if (!apiKey) return { ok: false, error: '缺少 DEEPSEEK_API_KEY', code: 'missing_api_key' };
+  if (!fetchImpl) return { ok: false, error: '当前运行环境无 fetch', code: 'no_fetch' };
+  const result = await requestDeepSeek(payload, { apiKey, fetchImpl, timeoutMs, endpoint: API_BASE });
+  if (result.ok) return result;
+  return {
+    ok: false,
+    error: result.error,
+    code: result.status ? `http_${result.status}` : (result.code === 'DEEPSEEK_TIMEOUT' ? 'timeout' : 'network_error'),
+  };
+}
+
 
 /**
  * 对单条候选做 DeepSeek 语义分类。
@@ -253,42 +267,17 @@ async function classifyWithDeepSeek(item, options = {}) {
     return { ok: false, error: err.message, code: 'payload_error' };
   }
 
-  try {
-    const response = await fetchImpl(API_BASE, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(timeoutMs),
-    });
-
-    if (!response.ok) {
-      let detail = '';
-      try {
-        const text = await response.text();
-        detail = (text || '').slice(0, 200);
-      } catch { /* 读取错误体失败不影响降级返回 */ }
-      return { ok: false, error: `DeepSeek HTTP ${response.status}${detail ? `: ${detail}` : ''}`, code: `http_${response.status}` };
-    }
-
-    const data = await response.json();
-    const content = data?.choices?.[0]?.message?.content;
-    if (typeof content !== 'string' || !content.trim()) {
-      return { ok: false, error: 'DeepSeek 返回空内容', code: 'empty_content' };
-    }
-    const label = normalizeLabel(content);
-    if (!label) {
-      return { ok: false, error: `DeepSeek 输出无法映射到六类：${content.slice(0, 60)}`, code: 'invalid_label' };
-    }
-    // ai_confidence：DeepSeek 不返回 token 概率，此固定经验值仅表示"调用成功"，
-    // 供建议排序参考，不作为审核依据（审核以人工确认 reviewed 为准）。
-    return { ok: true, content_type: label, ai_confidence: 0.85, raw: content };
-  } catch (err) {
-    const code = err?.name === 'TimeoutError' || err?.code === 'ETIMEDOUT' ? 'timeout' : 'network_error';
-    return { ok: false, error: err?.message || String(err), code };
+  const result = await requestLegacyDeepSeek(payload, options);
+  if (!result.ok) return result;
+  const content = result.data?.choices?.[0]?.message?.content;
+  if (typeof content !== 'string' || !content.trim()) {
+    return { ok: false, error: 'DeepSeek 返回空内容', code: 'empty_content' };
   }
+  const label = normalizeLabel(content);
+  if (!label) {
+    return { ok: false, error: `DeepSeek 输出无法映射到六类：${content.slice(0, 60)}`, code: 'invalid_label' };
+  }
+  return { ok: true, content_type: label, ai_confidence: 0.85, raw: content };
 }
 
 // ═══════════════════════════════════════════════════════════════

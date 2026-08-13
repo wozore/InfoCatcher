@@ -1,0 +1,9 @@
+{
+  "provider": "deepseek",
+  "model": "deepseek-v4-flash",
+  "timeout_ms": 180000,
+  "max_search_queries": 4,
+  "max_pages": 8,
+  "max_ai_calls": 3,
+  "max_repair_calls": 1
+}

@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const { DIRS } = require('./shared/paths');
+const { replaceToolLevel3 } = require('./catalog/catalog-transaction-store');
 
 const DATA_FILES = Object.freeze({
   'vendor-card': path.join(DIRS.catalog, 'vendor-cards.json'),
@@ -54,10 +55,8 @@ function queryArea(area, operation, id, ids, filters, writeItems) {
   }
   if (operation === 'replace') {
     if (area !== 'tool-level3' || !Array.isArray(writeItems)) return failure('INVALID_WRITE', '只有 tool-level3 支持批量替换');
-    const file = DATA_FILES[area];
-    const tmp = file + '.tmp';
-    fs.writeFileSync(tmp, JSON.stringify({ schema_version: 1, items: writeItems }, null, 2) + '\n', 'utf8');
-    fs.renameSync(tmp, file);
+    const result = replaceToolLevel3(writeItems);
+    if (!result.ok) return failure(result.code, result.error || '目录事务写入失败', result);
     state = null;
     return loadCatalogData();
   }

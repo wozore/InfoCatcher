@@ -820,6 +820,7 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 .concrete-tool-detail-header h2 { margin-bottom: 4px; }
 .concrete-tool-detail-header .vendor { margin-bottom: 0; }
 .tool-card-actions-only {
+  display: flex;
   justify-content: flex-end;
   margin-top: 12px;
   padding-top: 12px;

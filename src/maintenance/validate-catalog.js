@@ -3,6 +3,8 @@
 const fs = require('fs');
 const { CATALOG_FILES } = require('../shared/paths');
 const { catalog } = require('../catalog-interface');
+const { validateCatalogSnapshot } = require('../catalog/catalog-snapshot-validator');
+const { AREAS } = require('../catalog/catalog-contract');
 
 let failed = false;
 
@@ -81,56 +83,19 @@ function checkAllowedFields(area, items, allowedFields) {
 }
 
 function validateFiveModules() {
-  const vendorCards = readItems('vendor-cards.json', CATALOG_FILES.vendorCards);
-  const toolCards = readItems('tool-cards.json', CATALOG_FILES.toolCards);
-  const level1 = readItems('vendor-preview-level1.json', CATALOG_FILES.vendorPreviewLevel1);
-  const level2 = readItems('vendor-preview-level2.json', CATALOG_FILES.vendorPreviewLevel2);
-  const level3 = readItems('tool-preview-level3.json', CATALOG_FILES.toolPreviewLevel3);
-  [
-    ['vendor-cards.json', vendorCards],
-    ['tool-cards.json', toolCards],
-    ['vendor-preview-level1.json', level1],
-    ['vendor-preview-level2.json', level2],
-    ['tool-preview-level3.json', level3],
-  ].forEach(([area, items]) => checkUnique(area, items));
-  checkAllowedFields('vendor-cards.json', vendorCards, VENDOR_CARD_FIELDS);
-  checkAllowedFields('tool-cards.json', toolCards, TOOL_CARD_FIELDS);
-  checkAllowedFields('vendor-preview-level1.json', level1, VENDOR_LEVEL1_FIELDS);
-  checkAllowedFields('vendor-preview-level2.json', level2, VENDOR_LEVEL2_FIELDS);
-  checkAllowedFields('tool-preview-level3.json', level3, TOOL_LEVEL3_FIELDS);
-
-  const level1Ids = new Set(level1.map(item => item.id));
-  const level2Ids = new Set(level2.map(item => item.id));
-  const level3Ids = new Set(level3.map(item => item.id));
-  checkRef('vendor-cards.json', vendorCards, 'vendor-preview-level1.json', level1Ids, 'level1_ref');
-  checkRef('vendor-preview-level1.json', level1, 'vendor-preview-level2.json', level2Ids, 'level2_refs');
-  checkRef('vendor-preview-level2.json', level2, 'tool-preview-level3.json', level3Ids, 'detail_refs');
-  checkRef('tool-cards.json', toolCards, 'tool-preview-level3.json', level3Ids, 'detail_ref');
-
-  const cardsByDetail = new Map(toolCards.map(item => [item.detail_ref?.id, item]));
-  level3.forEach(item => {
-    if (!DETAIL_KINDS.has(item.detail_kind)) fail(`tool-preview-level3.json ${item.id} detail_kind 无效: ${item.detail_kind}`);
-    if (!item.title || !item.detail_kind || !item.vendor_key) fail(`tool-preview-level3.json ${item.id} 缺少 title/detail_kind/vendor_key`);
-    if (item.official_url && !isHttpUrl(item.official_url)) fail(`tool-preview-level3.json ${item.id}.official_url 仅允许 HTTP/HTTPS`);
-    if (item.official_date !== null && item.official_date !== undefined && !/^\\d{4}-\\d{2}-\\d{2}$/.test(item.official_date)) fail(`tool-preview-level3.json ${item.id}.official_date 格式无效`);
-    if (item.detail_kind !== 'subscription_plan' && (!item.theme || !THEMES.has(item.theme))) fail(`tool-preview-level3.json ${item.id} 缺少有效 theme`);
-    if (item.detail_kind === 'subscription_plan' && cardsByDetail.has(item.id)) fail(`tool-preview-level3.json ${item.id} 套餐不应生成工具卡`);
-    if (item.detail_kind !== 'subscription_plan' && !cardsByDetail.has(item.id)) fail(`tool-preview-level3.json ${item.id} 没有对应工具卡片`);
-    const card = cardsByDetail.get(item.id);
-    if (card && (!TOOL_CARD_KINDS.has(card.detail_kind) || card.detail_kind !== item.detail_kind || card.theme !== item.theme)) fail(`tool-preview-level3.json ${item.id} 与工具卡 detail_kind/theme 不一致`);
-    if (item.sources?.some(source => !source.title || !isHttpUrl(source.url))) fail(`tool-preview-level3.json ${item.id}.sources 存在无效来源`);
-    if (item.one_m_context?.source_refs || item.api_pricing?.rate_cards?.some(rate => rate.source_refs) || item.api_pricing?.additional_charges?.some(charge => charge.source_refs) || item.plan?.source_refs) fail(`tool-preview-level3.json ${item.id} 包含已删除的嵌套 source_refs`);
-  });
-
-  vendorCards.forEach(item => {
-    if (!item.title || !item.vendor_key || !item.summary) fail(`vendor-cards.json ${item.id} 缺少 title/vendor_key/summary`);
-  });
-  toolCards.forEach(item => {
-    if (!item.title || !item.tool_key || !item.detail_ref) fail(`tool-cards.json ${item.id} 缺少 title/tool_key/detail_ref`);
-    if (!TOOL_CARD_KINDS.has(item.detail_kind)) fail(`tool-cards.json ${item.id} 不允许作为工具卡: ${item.detail_kind}`);
-    if (!THEMES.has(item.theme)) fail(`tool-cards.json ${item.id} 缺少有效 theme`);
-  });
-  console.log(`  五模块目录: 厂商卡 ${vendorCards.length} · 工具卡 ${toolCards.length} · 一级 ${level1.length} · 二级 ${level2.length} · 三级 ${level3.length}，通过`);
+  const snapshot = {
+    'vendor-card': readItems('vendor-cards.json', CATALOG_FILES.vendorCards),
+    'tool-card': readItems('tool-cards.json', CATALOG_FILES.toolCards),
+    'vendor-level1': readItems('vendor-preview-level1.json', CATALOG_FILES.vendorPreviewLevel1),
+    'vendor-level2': readItems('vendor-preview-level2.json', CATALOG_FILES.vendorPreviewLevel2),
+    'tool-level3': readItems('tool-preview-level3.json', CATALOG_FILES.toolPreviewLevel3),
+  };
+  const result = validateCatalogSnapshot(snapshot);
+  result.errors.forEach(item => fail(`${item.path}: ${item.message}`));
+  if (result.ok) {
+    console.log(`  五模块目录: 厂商卡 ${snapshot['vendor-card'].length} · 工具卡 ${snapshot['tool-card'].length} · 一级 ${snapshot['vendor-level1'].length} · 二级 ${snapshot['vendor-level2'].length} · 三级 ${snapshot['tool-level3'].length}，通过`);
+  }
+  return result;
 }
 
 function validateGlossary(data) {
