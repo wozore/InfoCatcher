@@ -9,7 +9,7 @@
  *      与 data/catalog/glossary.json 比对，缺失 → 生成"待补概念卡"草案。
  *
  * 完全分离：只读 min-store + catalog（JSON），只写 manual_folder 下的待补卡文件，
- * 不直接改 tools.json / glossary.json —— 补全由维护者人工确认后导入。
+ * 不直接改五模块工具卡或 glossary.json —— 补全由维护者人工确认后导入。
  *
  * 提取方式：默认用正则匹配大写品牌名/知名模型名（DeepSeek/Ollama/Claude/GPT…）；
  * 需要更智能的语义提取时由调用方注入 options.llmExtract（LLM 提取函数）。

@@ -103,68 +103,20 @@ function validateSourceConfig(config) {
 function validateIntelData(intel) {
   const errors = [];
   const warnings = [];
-
-  if (!intel || !Array.isArray(intel.collections)) {
-    return { valid: false, errors: ['三级详情缺少 items'], warnings: [] };
+  const items = Array.isArray(intel) ? intel : intel?.items || [];
+  for (const item of items) {
+    if (item.detail_kind !== 'api_model') continue;
+    if (item.api_pricing) {
+      if (item.api_pricing.status === 'conflict') warnings.push(`${item.vendor_key}/${item.id} 价格冲突待人工确认`);
+      for (const card of item.api_pricing.rate_cards || []) {
+        if (card.input_uncached !== undefined && (card.input_uncached <= 0 || card.input_uncached > 10000)) errors.push(`${item.vendor_key}/${item.id}: input_uncached 不合理 (${card.input_uncached})`);
+        if (card.output !== undefined && (card.output <= 0 || card.output > 50000)) errors.push(`${item.vendor_key}/${item.id}: output 不合理 (${card.output})`);
+        if (card.input_uncached && card.output && card.output < card.input_uncached * 0.1) warnings.push(`${item.vendor_key}/${item.id}: output (${card.output}) 远低于 input (${card.input_uncached})`);
+      }
+    }
+    if (item.sources?.some(source => source.queried_at || source.id || source.publisher || source.source_type)) errors.push(`${item.vendor_key}/${item.id}: sources 含已删除采集字段`);
+    if (item.source_refs || item.api_pricing?.rate_cards?.some(rate => rate.source_refs)) errors.push(`${item.vendor_key}/${item.id}: 含已删除 source_refs`);
   }
-
-  for (const collection of intel.collections) {
-    if (!collection.tool_id) {
-      errors.push('collection 缺少 tool_id');
-      continue;
-    }
-
-    if (collection.status === 'conflict') {
-      warnings.push(`工具 ${collection.tool_id} 存在待确认的冲突`);
-    }
-
-    for (const item of collection.items || []) {
-      if (item.node_type !== 'leaf') continue;
-
-      // 验证 api_pricing
-      if (item.api_pricing) {
-        if (item.api_pricing.status === 'conflict') {
-          warnings.push(`工具 ${collection.tool_id}/${item.id} 价格冲突待人工确认`);
-        }
-
-        for (const card of item.api_pricing.rate_cards || []) {
-          // 价格应正数
-          if (card.input_uncached !== undefined && (card.input_uncached <= 0 || card.input_uncached > 10000)) {
-            errors.push(`${collection.tool_id}/${item.id}: input_uncached 不合理 (${card.input_uncached})`);
-          }
-          if (card.output !== undefined && (card.output <= 0 || card.output > 50000)) {
-            errors.push(`${collection.tool_id}/${item.id}: output 不合理 (${card.output})`);
-          }
-          // 输出价格不应低于输入价格（常见的合理性检查）
-          if (card.input_uncached && card.output && card.output < card.input_uncached * 0.1) {
-            warnings.push(`${collection.tool_id}/${item.id}: output (${card.output}) 远低于 input (${card.input_uncached})`);
-          }
-        }
-      }
-
-      // 验证 plan
-      if (item.plan) {
-        if (item.plan.amount <= 0 || item.plan.amount > 100000) {
-          warnings.push(`${collection.tool_id}/${item.id}: plan.amount 可能不合理 (${item.plan.amount})`);
-        }
-      }
-
-      // 验证 source_refs
-      if (item.source_refs && item.source_refs.length === 0) {
-        warnings.push(`${collection.tool_id}/${item.id}: 无 source_refs`);
-      }
-    }
-
-    // 验证 sources 记录
-    if (collection.sources) {
-      for (const src of collection.sources) {
-        if (src.queried_at && isDateTooOld(src.queried_at, 90)) {
-          warnings.push(`来源 ${src.id} 查询时间超过 90 天: ${src.queried_at}`);
-        }
-      }
-    }
-  }
-
   return { valid: errors.length === 0, errors, warnings };
 }
 
@@ -204,7 +156,7 @@ function validate(options = { silent: false }) {
   // 2. 校验现有三级详情数据
   const detailResult = catalog({ area: 'tool-level3', operation: 'list' });
   if (detailResult.ok) {
-    const intelResult = validateIntelData({ collections: [{ tool_id: 'tool-level3', items: detailResult.data, sources: detailResult.data.flatMap(item => item.sources || []) }] });
+    const intelResult = validateIntelData(detailResult.data);
     result.errors.push(...intelResult.errors);
     result.warnings.push(...intelResult.warnings);
     if (!intelResult.valid) result.valid = false;

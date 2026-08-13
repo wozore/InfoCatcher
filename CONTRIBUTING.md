@@ -4,7 +4,7 @@ InfoCatcher 是开源、免费且不接受厂商赞助的 AI 工具信息对比�
 
 ## 贡献入口
 
-- **纠错数据**：提交[数据纠错 Issue](https://github.com/wozore/infocatcher/issues/new?template=data-correction.yml)，或修改 `data/catalog/tools.json` / `data/catalog/tool-intelligence.json` 后提交 PR。
+- **纠错数据**：提交[数据纠错 Issue](https://github.com/wozore/infocatcher/issues/new?template=data-correction.yml)，或修改 `data/catalog/vendor-cards.json`、`data/catalog/tool-cards.json`、`data/catalog/tool-preview-level3.json` 后提交 PR。
 - **推荐工具**：提交[新工具推荐 Issue](https://github.com/wozore/infocatcher/issues/new?template=new-tool.yml)，提供名称、分类、场景、价格/免费信息及使用体验。
 - **补充资料**：说明具体工具或模型，并提供官方来源、访问条件、价格/免费层或使用场景的证据。
 - **改进代码**：从带 `help wanted` 标签的 [Issues](https://github.com/wozore/infocatcher/issues) 选取任务，Fork 后提交 PR。
@@ -13,23 +13,24 @@ InfoCatcher 是开源、免费且不接受厂商赞助的 AI 工具信息对比�
 
 新增或移动文件时按职责归类，不在 `data/` 或 `src/` 根目录平铺业务文件：
 
-- 工具、模型/套餐情报、概念和场景放入 `data/catalog/`；高频变化且需追溯的字段集中在 `tool-intelligence.json`。
+- 工具、模型/套餐情报、概念和场景放入 `data/catalog/`；五模块目录是公开事实来源，高频变化的模型价格直接维护在三级详情的 `api_pricing` 中。
 - 热点配置、来源、人工暂存、运行状态和公开投影分别放入 `data/news/config/`、`sources/`、`manual/`、`runtime/`、`output/`。
 - Node 实现按职责放入 `src/news/`、`src/content/`、`src/acquisition/`、`src/maintenance/` 或 `src/shared/`。
 - `scripts/` 只保留 CI 使用的稳定入口；新 Node 数据路径必须在 `src/shared/paths.js` 登记。
 - 不用复制文件或符号链接维护两套路径；数据结构变化时同步 `validate.js` 和相关测试。
 
-`tools.json` 中每个工具至少包含名称、厂商、分类、功能描述、价格/权益、免费额度、访问门槛、中文支持、擅长场景和最后更新日期；模型、变体、套餐、API 价格及核验来源放在 `tool-intelligence.json`。
+`tool-cards.json` 中每个工具至少包含名称、厂商、主题、功能描述、价格标签、访问层级、擅长场景和三级详情引用；API 模型的价格、上下文、套餐和核验来源放在 `tool-preview-level3.json`，订阅套餐不生成工具卡。
 
 ## 模型、套餐与价格情报
 
 - 推荐对象优先落到具体模型、版本、变体或套餐；泛化品牌/入口标为 `collection` 并列出已核实子项。
 - 模型、价格、套餐、上下文长度和弃用状态优先引用官方文档、定价页、套餐页或发布公告；搜索摘要不能直接入库。
-- 来源保存精确 URL 和实际 UTC `queried_at`；`last_updated` 仅表示 InfoCatcher 编辑日期。
+- 公开详情来源只保存精确的官方 `title` 与 `url`；采集执行时间留在内部日志，不写入公开详情，也不冒充官方日期。
+- `official_date` 只记录有官方证据的发布或更新时间；工具显示更新时间，API 模型/产品变体显示发布时间，订阅套餐不显示日期。
 - API 价格分别记录缓存命中输入、缓存未命中输入和输出价格，并注明币种、每百万 tokens 单位、地区及长上下文/服务层级条件。
 - 官方未说明的价格、包含模型、缓存命中率或上下文结论使用明确未知状态，不填 `0`、不推算。
 - 套餐注明金额、币种、周期、地区/税费条件和官方列出的主要模型；不同地区价格不合并。
-- 场景中的集合推荐通过 `recommendations` 显式引用具体 `item_id` 并说明理由。
+- 场景推荐以正式工具卡 `tool_key` 为对象；需要指定具体模型时，通过 `recommendations[].detail_ref` 引用完整的 `tool-level3:*` 详情 ID 并说明理由。
 
 ## 热点来源与内容评估
 

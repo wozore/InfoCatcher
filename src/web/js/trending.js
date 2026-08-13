@@ -38,7 +38,8 @@ import {
   setRegionBusy,
   announceStatus,
   searchConceptKey,
-  getCollectionNode,
+  getToolCardItem,
+  getToolLevel3Item,
   ICON_CLOSE,
   ICON_EXTERNAL,
 } from './data.js';
@@ -299,13 +300,15 @@ function getHotspotRelatedResources(item) {
     if (!id || !['tools', 'concepts', 'scenes'].includes(type)) return null;
 
     if (type === 'tools') {
-      const tool = tools.find(entry => entry.id === id);
-      const itemId = resource.item_id || null;
-      const item = itemId ? getCollectionNode(id, itemId) : null;
-      const available = Boolean(tool && (!itemId || item));
-      return available
-        ? { type, id: tool.id, itemId, label: resource.label || item?.name || tool.name, available: true }
-        : { type, id, itemId, label: resource.label || id, available: false };
+      const tool = getToolCardItem(id) || tools.find(entry => entry.detail_ref?.id === id);
+      const requestedDetail = resource.detail_ref || resource.item_id || null;
+      const detailRef = requestedDetail
+        ? (String(requestedDetail).startsWith('tool-level3:') ? requestedDetail : 'tool-level3:' + requestedDetail)
+        : tool?.detail_ref?.id;
+      const detail = tool && detailRef ? getToolLevel3Item(tool.vendor_key, detailRef) : null;
+      return tool && detail
+        ? { type, id: detail.id, itemId: null, label: resource.label || detail.title || tool.title, available: true }
+        : { type, id, itemId: null, label: resource.label || id, available: false };
     }
     if (type === 'concepts') {
       const concept = glossary.find(entry => entry.term === id || searchConceptKey(entry.term) === id);

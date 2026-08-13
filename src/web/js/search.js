@@ -8,6 +8,7 @@
  */
 import {
   tools,
+  getToolLevel3Item,
   glossary,
   scenes,
   hotspots,
@@ -217,10 +218,10 @@ function getSearchResultProjection(query) {
     sources.push({
       id: 'tool-' + tool.id,
       type: '工具资料',
-      title: tool.name,
-      description: tool.overview?.description || tool.strengths || '描述暂不可用',
-      updatedAt: tool.last_updated || null,
-      url: tool.url || null
+      title: tool.title,
+      description: tool.summary || '描述暂不可用',
+      updatedAt: tool.detail_ref ? (getToolLevel3Item(tool.vendor_key, tool.detail_ref.id)?.official_date || null) : null,
+      url: tool.detail_ref ? (getToolLevel3Item(tool.vendor_key, tool.detail_ref.id)?.official_url || null) : null
     });
   });
 
@@ -240,7 +241,7 @@ function getSearchResultProjection(query) {
   }
   if (selectedTools.length) {
     paragraphs.push({
-      text: '当前资料中，与该问题直接匹配的工具包括：' + selectedTools.map(tool => tool.name).join('、') + '。',
+      text: '当前资料中，与该问题直接匹配的工具包括：' + selectedTools.map(tool => tool.title).join('、') + '。',
       sourceIds: selectedTools.map(tool => 'tool-' + tool.id)
     });
   }
@@ -337,7 +338,7 @@ function renderSearchResults() {
 }
 
 function searchMatchDescription(item, type) {
-  if (type === 'tools') return item.overview?.description || item.strengths || '描述暂不可用';
+  if (type === 'tools') return item.summary || '描述暂不可用';
   if (type === 'scenes') return item.description || '描述暂不可用';
   if (type === 'hotspots') return item.description || '描述暂不可用';
   return item.summary || '描述暂不可用';
@@ -357,7 +358,7 @@ function renderSearchMatches(matches, visible) {
   }
 
   const groups = [
-    { key: 'tools', label: '工具', items: matches.tools, limit: 3, id: item => item.id, title: item => item.name },
+    { key: 'tools', label: '工具', items: matches.tools, limit: 3, id: item => item.detail_ref.id, title: item => item.title },
     { key: 'scenes', label: '场景', items: matches.scenes, limit: 2, id: item => item.id, title: item => item.name },
     { key: 'hotspots', label: '热点', items: matches.hotspots, limit: 2, id: item => item.id, title: item => item.title },
     { key: 'concepts', label: '概念', items: matches.concepts, limit: 2, id: item => item.term, title: item => item.term }

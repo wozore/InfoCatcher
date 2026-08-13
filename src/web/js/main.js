@@ -84,13 +84,10 @@ import {
 import {
   renderTools,
   openDetail,
-  openDirectoryDetail,
   closeModal,
   clearToolFilters,
   toggleToolsViewMode,
   getModalFocusableElements,
-  navigateModelToolPanel,
-  goBackModelToolPanel,
 } from './tools.js';
 import {
   updateCompareCount,
@@ -271,11 +268,8 @@ function switchView(view) {
 // 此清单与各模块生成的内联 handler 一一对应，缺失会报“openDetail is not defined”。
 // ═══════════════════════════════════════════════════════════════
 window.openDetail = openDetail;
-window.openDirectoryDetail = openDirectoryDetail;
 window.closeModal = closeModal;
 window.toggleCompareRef = toggleCompareRef;
-window.navigateModelToolPanel = navigateModelToolPanel;
-window.goBackModelToolPanel = goBackModelToolPanel;
 window.compareGroupLeaves = compareGroupLeaves;
 window.removeCompare = removeCompare;
 window.quickCompare = quickCompare;
@@ -545,17 +539,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
   syncNavigationState(currentView);
-
-  // 分类筛选
-  document.querySelectorAll('.filter-chip[data-category]').forEach(chip => {
-    chip.addEventListener('click', function() {
-      const controls = [...document.querySelectorAll('.filter-chip[data-category]')];
-      setPressedState(controls, this);
-      activeFilters.category = this.dataset.category;
-      if (currentView !== 'tools') switchView('tools');
-      else renderTools();
-    });
-  });
 
   // 访问筛选
   document.querySelectorAll('.filter-chip[data-access]').forEach(chip => {

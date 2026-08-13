@@ -2,7 +2,7 @@
  * fetch-tool-intel.js — 工具情报自动采集引擎（编排入口）
  *
  * 职责：从厂商官方来源（llms.txt / pricing.md / HTML 表格）自动获取
- * 模型、API 价格、套餐等信息，与现有 tool-intelligence.json 做增量合并。
+ * 模型与 API 价格信息，与现有五模块三级详情做增量合并。
  *
  * 本文件保留主编排 collectIntelligence()（抓取→规范化→写入 data/）与 CLI 入口，
  * 并对拆分的子模块做汇总 re-export，保持原有导出面不变：
@@ -101,16 +101,8 @@ async function collectIntelligence(options = {}) {
     // 4. 合并到现有数据
     const lastSource = toolConfig.intel_sources[toolConfig.intel_sources.length - 1];
     const sourceId = lastSource ? lastSource.id : 'manual';
-    const matches = details.filter(item => item.vendor_key === toolConfig.tool_id && item.kind === 'api_model');
-    const mergeResult = mergeIntelData({ collections: [{ tool_id: toolConfig.tool_id, items: matches }] }, toolConfig.tool_id, results, sourceId, queriedAt);
-    for (const detail of matches) {
-      const source = detail.sources?.find(item => item.id === sourceId);
-      if (source) source.queried_at = queriedAt;
-      else if (lastSource) detail.sources = [...(detail.sources || []), { id: sourceId, title: lastSource.publisher || sourceId, url: lastSource.url || '', publisher: lastSource.publisher || '', source_type: 'official', queried_at: queriedAt }];
-      if (detail.source_refs && !detail.source_refs.includes(sourceId)) detail.source_refs.push(sourceId);
-      if (detail.api_pricing?.rate_cards?.length) detail.api_pricing.rate_cards[0].source_refs = [...new Set([...(detail.api_pricing.rate_cards[0].source_refs || []), sourceId])];
-      detail.last_updated = queriedAt.slice(0, 10);
-    }
+    const matches = details.filter(item => item.vendor_key === toolConfig.tool_id && item.detail_kind === 'api_model');
+    const mergeResult = mergeIntelData(details, toolConfig.tool_id, results, sourceId, queriedAt);
 
     log.push(`[${toolConfig.tool_id}] 合并结果: ${mergeResult.status}`);
     if (mergeResult.conflicts.length > 0) {

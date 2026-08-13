@@ -8,17 +8,16 @@
 import {
   tools,
   scenes,
+  getToolCardItem,
+  getToolLevel3Item,
   dataLoadFailures,
   getFilteredScenes,
   setRegionBusy,
   renderState,
   escapeHtml,
-  getCollectionNode,
-  getToolIntelligence,
   getToolPublishedDate,
-  hasFree,
 } from './data.js';
-import { isComparableRootTool, isComparableLeaf, isCompareSelected } from './compare.js';
+import { isComparableLeaf, isCompareSelected } from './compare.js';
 import { markConceptsIn } from './search.js';
 
 const scenePalette = {
@@ -41,34 +40,34 @@ function getSceneToolIds(scene) {
   return [...new Set((scene.tasks || []).flatMap(task => task.tools || []))];
 }
 
-function renderSceneToolCard(tool, selectedItemId = null) {
-  const selectedLeaf = selectedItemId ? getCollectionNode(tool.id, selectedItemId) : null;
-  const isComparable = selectedLeaf
-    ? isComparableLeaf(tool.id, selectedItemId)
-    : isComparableRootTool(tool);
-  const isSelected = isComparable && isCompareSelected(tool.id, selectedLeaf ? selectedItemId : null);
-  const specificLabel = selectedLeaf?.name || null;
-  const title = tool.card_kind === 'collection' && specificLabel ? specificLabel : tool.name;
-  const description = selectedLeaf?.summary || tool.strengths;
-  const publishedDate = getToolPublishedDate(tool);
-  return '<div class="tool-card scene-tool-card" onclick="openDetail(\'' + escapeHtml(tool.id) + '\',' + (selectedItemId ? '\'' + escapeHtml(selectedItemId) + '\'' : 'null') + ')">' +
+function renderSceneToolCard(tool, selectedDetailRef = null) {
+  const detailRef = selectedDetailRef || tool.detail_ref.id;
+  const detail = getToolLevel3Item(tool.vendor_key, detailRef);
+  const isComparable = detail ? isComparableLeaf(detail.id, detail.id) : false;
+  const isSelected = isComparable && isCompareSelected(detail.id, detail.id);
+  const specificLabel = selectedDetailRef ? detail?.title : null;
+  const title = specificLabel || tool.title;
+  const description = detail?.summary || tool.summary;
+  const publishedDate = getToolPublishedDate(detail);
+  const dateLabel = detail?.detail_kind === 'tool' ? '更新时间' : '发布时间';
+  return '<div class="tool-card scene-tool-card" onclick="openDetail(\'' + escapeHtml(detailRef) + '\')">' +
     '<div class="tool-card-header">' +
-      '<div><div class="tool-card-name">' + escapeHtml(tool.icon + ' ' + title) + '</div>' +
+      '<div><div class="tool-card-name">' + escapeHtml((tool.icon || '') + ' ' + title) + '</div>' +
       (specificLabel ? '<div class="scene-specific-recommendation">具体推荐：' + escapeHtml(specificLabel) + '</div>' : '') +
-      '<div class="tool-card-vendor">' + escapeHtml(tool.vendor) + '</div></div>' +
+      '<div class="tool-card-vendor">' + escapeHtml(tool.vendor_label) + '</div></div>' +
       '' /* 决策 98：场景工具卡默认区不显示评分，评分保留在详情模态 */ +
     '</div>' +
     '<div class="tool-card-desc">' + escapeHtml(description) + '</div>' +
     '<div class="tool-card-tags">' +
-      tool.scenes.slice(0, 3).map(scene => '<span class="tag scene">' + escapeHtml(scene) + '</span>').join('') +
-      (tool.card_kind === 'collection' ? '' : (hasFree(tool) ? '<span class="tag free">免费可用</span>' : '<span class="tag paid">仅付费</span>')) +
+      (tool.scenes || []).slice(0, 3).map(scene => '<span class="tag scene">' + escapeHtml(scene) + '</span>').join('') +
+      (tool.price_badge === 'free' ? '<span class="tag free">免费可用</span>' : '<span class="tag paid">仅付费</span>') +
       '<span class="tag ' + (tool.access_level === '开放' ? 'open' : 'restricted') + '">' + (tool.access_level === '开放' ? '国内可用' : '需科学上网') + '</span>' +
     '</div>' +
     '<div class="tool-card-footer" onclick="event.stopPropagation()">' +
-      '<span class="scene-tool-updated">' + (publishedDate ? '发布时间 ' + escapeHtml(publishedDate) : '发布时间待补充') + '</span>' +
+      '<span class="scene-tool-updated">' + (publishedDate ? dateLabel + ' ' + escapeHtml(publishedDate) : dateLabel + '待补充') + '</span>' +
       '<div class="tool-card-actions">' +
-        '<button class="detail-button" type="button" onclick="openDetail(\'' + escapeHtml(tool.id) + '\',' + (selectedItemId ? '\'' + escapeHtml(selectedItemId) + '\'' : 'null') + ',this)">查看详情</button>' +
-        (isComparable ? '<button class="compare-toggle ' + (isSelected ? 'selected' : '') + '" aria-pressed="' + isSelected + '" onclick="toggleCompareRef(\'' + escapeHtml(tool.id) + '\',' + (selectedLeaf ? '\'' + escapeHtml(selectedItemId) + '\'' : 'null') + ',this)">' + (isSelected ? '已选' : '+对比') + '</button>' : '') +
+        '<button class="detail-button" type="button" onclick="openDetail(\'' + escapeHtml(detailRef) + '\',null,this)">查看详情</button>' +
+        (isComparable ? '<button class="compare-toggle ' + (isSelected ? 'selected' : '') + '" aria-pressed="' + isSelected + '" onclick="toggleCompareRef(\'' + escapeHtml(detail.id) + '\',\'' + escapeHtml(detail.id) + '\',this)">' + (isSelected ? '已选' : '+对比') + '</button>' : '') +
       '</div>' +
     '</div>' +
   '</div>';
@@ -119,14 +118,14 @@ function renderSceneDetail() {
   const palette = scenePalette[scene.category] || scenePalette.learning;
   const toolIds = getSceneToolIds(scene);
   const taskRows = (scene.tasks || []).map((task, taskIndex) => {
-    const matchedTools = (task.tools || []).map(toolId => tools.find(tool => tool.id === toolId)).filter(Boolean);
+    const matchedTools = (task.tools || []).map(toolId => getToolCardItem(toolId)).filter(Boolean);
     const recommendationByTool = new Map((task.recommendations || []).map(item => [item.tool_id, item]));
     const toolButtons = matchedTools.map(tool => {
-      const recommendation = recommendationByTool.get(tool.id);
-      const label = recommendation ? getToolIntelligence(tool.id)?.items?.find(item => item.id === recommendation.item_id)?.name : null;
-      return '<button class="scene-tool-button" type="button" aria-pressed="false" aria-controls="scene-tool-preview-' + escapeHtml(scene.id) + '-' + taskIndex + '" onclick="toggleSceneToolCard(\'' + escapeHtml(scene.id) + '\',' + taskIndex + ',\'' + escapeHtml(tool.id) + '\',' + (recommendation ? '\'' + escapeHtml(recommendation.item_id) + '\'' : 'null') + ',this)">' +
+      const recommendation = recommendationByTool.get(tool.tool_key);
+      const label = recommendation ? getToolLevel3Item(tool.vendor_key, recommendation.detail_ref)?.title : null;
+      return '<button class="scene-tool-button" type="button" aria-pressed="false" aria-controls="scene-tool-preview-' + escapeHtml(scene.id) + '-' + taskIndex + '" onclick="toggleSceneToolCard(\'' + escapeHtml(scene.id) + '\',' + taskIndex + ',\'' + escapeHtml(tool.tool_key) + '\',' + (recommendation ? '\'' + escapeHtml(recommendation.detail_ref) + '\'' : 'null') + ',this)">' +
         '<span class="scene-tool-button-icon" aria-hidden="true">' + escapeHtml(tool.icon) + '</span>' +
-        '<span>' + escapeHtml(label || tool.name) + '</span>' +
+        '<span>' + escapeHtml(label || tool.title) + '</span>' +
       '</button>';
     }).join('');
     const recommendationNotes = (task.recommendations || []).map(item => item.reason).filter(Boolean);
@@ -157,7 +156,7 @@ function renderSceneDetail() {
 
 function toggleSceneToolCard(sceneId, taskIndex, toolId, selectedItemId, button) {
   const preview = document.getElementById('scene-tool-preview-' + sceneId + '-' + taskIndex);
-  const tool = tools.find(item => item.id === toolId);
+  const tool = getToolCardItem(toolId);
   if (!preview || !tool) return;
 
   const isCurrent = button.classList.contains('active') && !preview.hidden;

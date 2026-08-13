@@ -17,39 +17,12 @@
           "text": "限制：模型可用性会随产品、订阅等级、地区及逐步开放状态变化，需以叶节点条件为准。"
         }
       ],
-      "categories": [
-        "对话",
-        "写作",
-        "编程",
-        "翻译",
-        "数据分析"
-      ],
-      "scenes": [
-        "写论文",
-        "写周报",
-        "写代码",
-        "翻译文档",
-        "数据分析",
-        "头脑风暴",
-        "学习辅导"
-      ],
       "access_level": "受限",
-      "price_status": "free",
+      "price_badge": "free",
       "search_terms": [
         "OpenAI",
-        "ChatGPT",
-        "对话",
-        "写作",
-        "编程",
-        "翻译",
-        "数据分析",
-        "写论文",
-        "写周报",
-        "写代码",
-        "翻译文档",
-        "数据分析",
-        "头脑风暴",
-        "学习辅导"
+        "chatgpt",
+        "ChatGPT"
       ],
       "level1_ref": {
         "kind": "vendor-level1",
@@ -72,35 +45,12 @@
           "text": "限制：订阅权益、地区可用性和使用限制需以各套餐官方条件为准。"
         }
       ],
-      "categories": [
-        "对话",
-        "写作",
-        "编程",
-        "长文档分析"
-      ],
-      "scenes": [
-        "写论文",
-        "写周报",
-        "写代码",
-        "长文档分析",
-        "深度研究",
-        "头脑风暴"
-      ],
       "access_level": "受限",
-      "price_status": "free",
+      "price_badge": "free",
       "search_terms": [
         "Anthropic",
-        "Claude",
-        "对话",
-        "写作",
-        "编程",
-        "长文档分析",
-        "写论文",
-        "写周报",
-        "写代码",
-        "长文档分析",
-        "深度研究",
-        "头脑风暴"
+        "claude",
+        "Claude"
       ],
       "level1_ref": {
         "kind": "vendor-level1",
@@ -123,35 +73,12 @@
           "text": "限制：官方套餐页面未稳定完整列出全部模型包含关系，相关项目明确标为部分核实。"
         }
       ],
-      "categories": [
-        "对话",
-        "写作",
-        "翻译",
-        "搜索",
-        "多模态"
-      ],
-      "scenes": [
-        "写论文",
-        "翻译文档",
-        "搜索研究",
-        "头脑风暴",
-        "数据分析"
-      ],
       "access_level": "受限",
-      "price_status": "free",
+      "price_badge": "free",
       "search_terms": [
         "Google",
-        "Gemini",
-        "对话",
-        "写作",
-        "翻译",
-        "搜索",
-        "多模态",
-        "写论文",
-        "翻译文档",
-        "搜索研究",
-        "头脑风暴",
-        "数据分析"
+        "gemini",
+        "Gemini"
       ],
       "level1_ref": {
         "kind": "vendor-level1",
@@ -182,33 +109,12 @@
           "text": "高峰时段 API 并发限制可能触发排队"
         }
       ],
-      "categories": [
-        "对话",
-        "写作",
-        "编程",
-        "推理"
-      ],
-      "scenes": [
-        "写代码",
-        "写论文",
-        "翻译文档",
-        "深度研究",
-        "数学解题"
-      ],
       "access_level": "开放",
-      "price_status": "free",
+      "price_badge": "free",
       "search_terms": [
         "深度求索",
-        "DeepSeek",
-        "对话",
-        "写作",
-        "编程",
-        "推理",
-        "写代码",
-        "写论文",
-        "翻译文档",
-        "深度研究",
-        "数学解题"
+        "deepseek",
+        "DeepSeek"
       ],
       "level1_ref": {
         "kind": "vendor-level1",
@@ -239,31 +145,12 @@
           "text": "多模态视觉模型（GLM-5V）定价高于纯文本模型"
         }
       ],
-      "categories": [
-        "对话",
-        "写作",
-        "编程",
-        "企业应用"
-      ],
-      "scenes": [
-        "写论文",
-        "写代码",
-        "办公文档处理",
-        "企业应用开发"
-      ],
       "access_level": "开放",
-      "price_status": "free",
+      "price_badge": "free",
       "search_terms": [
         "智谱AI",
-        "智谱清言",
-        "对话",
-        "写作",
-        "编程",
-        "企业应用",
-        "写论文",
-        "写代码",
-        "办公文档处理",
-        "企业应用开发"
+        "zhipu",
+        "智谱清言"
       ],
       "level1_ref": {
         "kind": "vendor-level1",
@@ -294,35 +181,12 @@
           "text": "AI 编程和 Agent 生态相对 OpenAI/Claude 不够成熟"
         }
       ],
-      "categories": [
-        "对话",
-        "写作",
-        "编程",
-        "搜索"
-      ],
-      "scenes": [
-        "写论文",
-        "写周报",
-        "翻译文档",
-        "搜索研究",
-        "学习辅导",
-        "头脑风暴"
-      ],
       "access_level": "开放",
-      "price_status": "free",
+      "price_badge": "free",
       "search_terms": [
         "百度",
-        "文心一言",
-        "对话",
-        "写作",
-        "编程",
-        "搜索",
-        "写论文",
-        "写周报",
-        "翻译文档",
-        "搜索研究",
-        "学习辅导",
-        "头脑风暴"
+        "wenxin",
+        "文心一言"
       ],
       "level1_ref": {
         "kind": "vendor-level1",
@@ -353,33 +217,12 @@
           "text": "Max 版本已下线合并，API 版本稳定性有不确定性"
         }
       ],
-      "categories": [
-        "对话",
-        "写作",
-        "语音",
-        "办公"
-      ],
-      "scenes": [
-        "写周报",
-        "办公文档处理",
-        "配音",
-        "学习辅导",
-        "翻译文档"
-      ],
       "access_level": "开放",
-      "price_status": "free",
+      "price_badge": "free",
       "search_terms": [
         "科大讯飞",
-        "讯飞星火",
-        "对话",
-        "写作",
-        "语音",
-        "办公",
-        "写周报",
-        "办公文档处理",
-        "配音",
-        "学习辅导",
-        "翻译文档"
+        "xinghuo",
+        "讯飞星火"
       ],
       "level1_ref": {
         "kind": "vendor-level1",
@@ -410,31 +253,12 @@
           "text": "上下文窗口规格未在定价页公开，需查阅模型文档"
         }
       ],
-      "categories": [
-        "对话",
-        "写作",
-        "AI视频"
-      ],
-      "scenes": [
-        "短视频制作",
-        "创意写作",
-        "头脑风暴",
-        "写周报",
-        "视频生成"
-      ],
       "access_level": "开放",
-      "price_status": "free",
+      "price_badge": "free",
       "search_terms": [
         "MiniMax",
-        "海螺AI",
-        "对话",
-        "写作",
-        "AI视频",
-        "短视频制作",
-        "创意写作",
-        "头脑风暴",
-        "写周报",
-        "视频生成"
+        "hailuo",
+        "海螺AI"
       ],
       "level1_ref": {
         "kind": "vendor-level1",
@@ -465,31 +289,12 @@
           "text": "模型淘汰速度较快（2026-05 退役 8 个旧模型），需关注迁移通知"
         }
       ],
-      "categories": [
-        "对话",
-        "搜索",
-        "编程"
-      ],
-      "scenes": [
-        "搜索研究",
-        "写代码",
-        "头脑风暴",
-        "写周报",
-        "数据分析"
-      ],
       "access_level": "受限",
-      "price_status": "free",
+      "price_badge": "free",
       "search_terms": [
         "xAI",
-        "Grok",
-        "对话",
-        "搜索",
-        "编程",
-        "搜索研究",
-        "写代码",
-        "头脑风暴",
-        "写周报",
-        "数据分析"
+        "grok",
+        "Grok"
       ],
       "level1_ref": {
         "kind": "vendor-level1",
@@ -520,23 +325,12 @@
           "text": "缓存定价信息未在官方价格页公开"
         }
       ],
-      "categories": [
-        "对话"
-      ],
-      "scenes": [
-        "写代码",
-        "写论文",
-        "翻译文档"
-      ],
       "access_level": "受限",
-      "price_status": "free",
+      "price_badge": "free",
       "search_terms": [
         "Mistral AI",
-        "Mistral AI（产品入口）",
-        "对话",
-        "写代码",
-        "写论文",
-        "翻译文档"
+        "mistral",
+        "Mistral AI（产品入口）"
       ],
       "level1_ref": {
         "kind": "vendor-level1",
@@ -567,31 +361,12 @@
           "text": "Command A / R+ 缓存定价未在官方价格页公开"
         }
       ],
-      "categories": [
-        "对话",
-        "写作",
-        "编程",
-        "企业应用"
-      ],
-      "scenes": [
-        "写代码",
-        "写论文",
-        "翻译文档",
-        "企业应用开发"
-      ],
       "access_level": "受限",
-      "price_status": "free",
+      "price_badge": "free",
       "search_terms": [
         "Cohere",
-        "Cohere（产品入口）",
-        "对话",
-        "写作",
-        "编程",
-        "企业应用",
-        "写代码",
-        "写论文",
-        "翻译文档",
-        "企业应用开发"
+        "cohere",
+        "Cohere（产品入口）"
       ],
       "level1_ref": {
         "kind": "vendor-level1",

@@ -2,7 +2,7 @@
  * normalize-intel.js — 解析/规范化/合并层
  *
  * 职责：把抓取到的原始文本（Markdown / HTML）解析为统一的定价记录，
- * 并负责价格冲突检测与 tool-intelligence.json 的增量合并。
+ * 并负责价格冲突检测与五模块三级详情的增量合并。
  *
  * 从 fetch-tool-intel.js 拆分而来，仅移动代码、不重写逻辑。
  * 本文件是纯函数集合，不发起任何网络请求、不读写文件。
@@ -366,88 +366,37 @@ function detectPricingChange(oldRateCard, newRateCard) {
 }
 
 /**
- * 将提取的新数据合并到现有的 tool-intelligence.json 中。
+ * 将提取的新数据合并到现有五模块三级详情数组中。
  *
- * @param {object} existingIntel — 现有的 tool-intelligence.json 内容
+ * @param {object[]} details — 现有三级详情数组
  * @param {string} toolId — 工具 ID（如 "claude"）
  * @param {Array<{modelName: string, rateCard: object}>} newData — 新提取的定价数据
  * @param {string} sourceId — 来源 ID
  * @param {string} queriedAt — ISO 时间戳
  * @returns {{ updated: boolean, conflicts: object[], status: string }}
  */
-function mergeIntelData(existingIntel, toolId, newData, sourceId, queriedAt) {
-  const collection = existingIntel.collections.find(c => c.tool_id === toolId);
-  if (!collection) {
-    return { updated: false, conflicts: [], status: 'tool_not_found' };
-  }
-
+function mergeIntelData(details, toolId, newData, sourceId, queriedAt) {
+  const items = Array.isArray(details) ? details : [];
+  const modelItems = items.filter(item => item.vendor_key === toolId && item.detail_kind === 'api_model');
+  if (!modelItems.length) return { updated: false, conflicts: [], status: 'tool_not_found' };
   const conflicts = [];
   let updated = false;
-
-  // 更新来源记录
-  if (!collection.sources) collection.sources = [];
-  const sourceEntry = collection.sources.find(s => s.id === sourceId);
-  if (sourceEntry) {
-    sourceEntry.queried_at = queriedAt;
-  } else {
-    collection.sources.push({
-      id: sourceId,
-      url: '',  // 由调用方填充
-      title: '',
-      publisher: collection.name || toolId,
-      source_type: 'official',
-      queried_at: queriedAt,
-    });
-  }
-
-  // 匹配已知的叶子节点
-  for (const item of collection.items) {
-    if (item.node_type !== 'leaf' && !(item.kind === 'api_model' && item.tool_key)) continue;
-
-    // 尝试通过名称匹配
-    const itemName = item.name || item.title || item.id;
-    const matchedData = newData.find(d =>
-      itemName.toLowerCase().includes(d.modelName.toLowerCase()) ||
-      d.modelName.toLowerCase().includes(itemName.toLowerCase())
-    );
+  for (const item of modelItems) {
+    const itemName = item.title || item.id;
+    const matchedData = newData.find(data => itemName.toLowerCase().includes(data.modelName.toLowerCase()) || data.modelName.toLowerCase().includes(itemName.toLowerCase()));
     if (!matchedData) continue;
-
-    const change = detectPricingChange(item.api_pricing.rate_cards?.[0] || {}, matchedData.rateCard);
+    const rateCards = item.api_pricing?.rate_cards || [];
+    const change = detectPricingChange(rateCards[0] || {}, matchedData.rateCard);
     if (!change.changed) continue;
-
     if (change.hasConflict) {
-      conflicts.push({
-        tool_id: toolId,
-        item_id: item.id,
-        item_name: item.name,
-        changes: change.changes,
-        source_id: sourceId,
-        queried_at: queriedAt,
-        status: 'pending_review',
-      });
-      // 标记冲突但不修改数据
-      item.api_pricing.status = 'conflict';
-      item.api_pricing.conflict_detected_at = queriedAt;
+      conflicts.push({ tool_id: toolId, item_id: item.id, item_name: item.title, changes: change.changes, source_id: sourceId, queried_at: queriedAt, status: 'pending_review' });
+      item.api_pricing = { ...(item.api_pricing || {}), status: 'conflict' };
     } else {
-      // 小幅变化自动更新
-      Object.assign(item.api_pricing.rate_cards[0], matchedData.rateCard);
-      item.api_pricing.status = 'provided';
-      item.api_pricing.updated_at = queriedAt;
-      // 更新 source_refs
-      if (!item.api_pricing.source_refs.includes(sourceId)) {
-        item.api_pricing.source_refs.push(sourceId);
-      }
+      const nextRate = { ...(rateCards[0] || {}), ...matchedData.rateCard };
+      item.api_pricing = { ...(item.api_pricing || {}), status: 'provided', rate_cards: [nextRate] };
     }
     updated = true;
   }
-
-  // 更新整个 collection 的状态
-  if (conflicts.length > 0) {
-    collection.status = 'conflict';
-  } else if (updated) {
-    collection.status = 'verified';
-  }
-
   return { updated, conflicts, status: conflicts.length > 0 ? 'conflict' : updated ? 'updated' : 'no_change' };
 }
 

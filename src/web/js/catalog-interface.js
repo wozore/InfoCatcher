@@ -71,13 +71,11 @@ function queryArea(area, operation, id, ids, filters) {
     if (query) result = result.filter(item => (item.search_terms || []).some(term => String(term).toLocaleLowerCase('zh-CN').includes(query)));
   }
   if (area === 'vendor-card') {
-    if (filters?.category && filters.category !== 'all') result = result.filter(item => (item.categories || []).includes(filters.category));
     if (filters?.access && filters.access !== 'all') result = result.filter(item => item.access_level === filters.access);
-    if (filters?.price === 'free') result = result.filter(item => item.price_status === 'free');
-    if (filters?.price === 'paid') result = result.filter(item => item.price_status !== 'free');
+    if (filters?.price === 'free') result = result.filter(item => item.price_badge === 'free');
+    if (filters?.price === 'paid') result = result.filter(item => item.price_badge !== 'free');
   }
   if (area === 'tool-card') {
-    if (filters?.category && filters.category !== 'all') result = result.filter(item => (item.categories || []).includes(filters.category));
     if (filters?.access && filters.access !== 'all') result = result.filter(item => item.access_level === filters.access);
     if (filters?.price === 'free') result = result.filter(item => item.price_badge === 'free');
     if (filters?.price === 'paid') result = result.filter(item => item.price_badge !== 'free');

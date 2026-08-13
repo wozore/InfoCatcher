@@ -3,11 +3,11 @@
 维护约定：改动/新增/删除代码文件后，必须同步更新本文件。条目 = `文件名 — 职责。导出: 关键导出`。
 
 ## data/catalog/ — 五模块目录数据
-- [vendor-cards.json](data/catalog/vendor-cards.json) — 厂商列表卡片数据；只含卡片展示、列表筛选/搜索字段和一级预览稳定引用，二级快捷入口与三级数量由目录数据动态派生。
-- [tool-cards.json](data/catalog/tool-cards.json) — 工具列表卡片数据；每项仅通过 `detail_ref` 指向三级详情，卡片不重复保存详情访问门槛、状态和更新时间。
-- [vendor-preview-level1.json](data/catalog/vendor-preview-level1.json) — 厂商一级预览数据；标题、描述、状态、特点和二级稳定引用由一级模块拥有，不保存固定 `tree_mode`。
-- [vendor-preview-level2.json](data/catalog/vendor-preview-level2.json) — 厂商二级分组预览数据；通过 `detail_refs` 指向三级详情，不重复保存三级子卡片投影。
-- [tool-preview-level3.json](data/catalog/tool-preview-level3.json) — 厂商三级预览/工具详情唯一数据源；层级由二级 `detail_refs` 表达，详情类型由 `kind` 表达，价格/访问/场景与来源信息由详情拥有。
+- [vendor-cards.json](data/catalog/vendor-cards.json) — 厂商列表卡片数据；只含卡片展示、访问/价格判断、搜索字段和一级预览稳定引用，不保存场景推荐字段，二级快捷入口与三级数量由目录数据动态派生。
+- [tool-cards.json](data/catalog/tool-cards.json) — 工具列表卡片数据；包含具体工具和 API 模型工具，不包含订阅套餐；通过 `detail_ref` 指向三级详情，卡片不重复保存三级来源与价格详情。
+- [vendor-preview-level1.json](data/catalog/vendor-preview-level1.json) — 厂商一级预览数据；标题、描述、状态、特点和二级稳定引用由一级模块拥有。
+- [vendor-preview-level2.json](data/catalog/vendor-preview-level2.json) — 厂商二级分组预览数据；通过 `detail_refs` 指向三级详情，不重复保存来源或三级子卡片投影。
+- [tool-preview-level3.json](data/catalog/tool-preview-level3.json) — 厂商三级预览/工具详情唯一数据源；由 `detail_kind` 区分工具、API 模型和订阅套餐，层级由二级 `detail_refs` 表达，价格/访问/场景与来源信息由详情拥有。
 
 
 - [env.js](src/shared/env.js) — dotenv 子集解析 + 项目根目录。导出: `loadDotEnv, PROJECT_DIR`
@@ -29,14 +29,14 @@
 - [js/vendor-preview-level2.js](src/web/js/vendor-preview-level2.js) — 厂商二级预览模块。导出: 默认二级预览渲染器
 - [js/tool-preview-level3.js](src/web/js/tool-preview-level3.js) — 厂商三级预览/工具详情模块。导出: `renderToolLevel3`、默认详情渲染器
 
-- [js/data.js](src/web/js/data.js) — 目录 Interface 兼容投影、独立数据加载、过滤、平台元数据与通用工具。导出: 五模块查询函数、各数据状态与 setter、escapeHtml/timeAgo/formatPrice 等
+- [js/data.js](src/web/js/data.js) — 五模块目录领域查询、独立数据加载、过滤、平台元数据与通用工具；不再构造旧 `tools.json` / `tool-intelligence.json` 兼容投影。导出: 五模块查询函数、各数据状态与 setter、escapeHtml/timeAgo/formatPrice 等
 - [js/search.js](src/web/js/search.js) — AI 搜索全链路（首页/结果/处理/概念标记）。导出: `searchState, submitSearchHome, renderSearchResults...`
-- [js/tools.js](src/web/js/tools.js) — 工具库视图（厂商/工具 Toggle）由独立 `VendorDirectoryView` / `ToolDirectoryView` 控制器分别管理；工具卡片四类主题、分组和快速索引 + 滤选 + 单级详情弹窗；具体工具/模型/套餐详情统一复用 GPT-5.6 Sol 叶节点视觉与详情渲染器，普通工具字段经适配层接入，仅 X 关闭；导出: `openDetail, openDirectoryDetail, closeModal, showModal, renderConcreteToolLeaf, getToolsViewMode, toggleToolsViewMode, renderTools...`
-- [js/compare.js](src/web/js/compare.js) — 对比模式（访问、免费层、价格、场景和资料来源）。导出: `compareList, toggleCompareRef, quickCompare, renderCompare...`
-- [js/featured.js](src/web/js/featured.js) — 推荐视图（精选/编辑推荐/热榜）。导出: `renderFeatured, renderFeaturedTabs...`
+- [js/tools.js](src/web/js/tools.js) — 工具库视图（厂商/工具 Toggle）由独立 `VendorDirectoryView` / `ToolDirectoryView` 控制器分别管理；工具卡片四类主题、分组和快速索引 + 滤选 + 单级详情弹窗；厂商一级/二级与工具/模型/套餐三级详情统一按稳定 ref 打开，仅 X 关闭。导出: `openDetail, closeModal, showModal, getToolsViewMode, toggleToolsViewMode, renderTools...`
+- [js/compare.js](src/web/js/compare.js) — 对比模式（工具与 API 模型由工具卡加入；订阅套餐由二级详情组加入；按详情类型使用访问、免费标签、价格、场景、资料来源和官方日期维度）。导出: `compareList, toggleCompareRef, compareGroupLeaves, quickCompare, renderCompare...`
+- [js/featured.js](src/web/js/featured.js) — 推荐视图（编辑精选通过工具 `tool_key` + 三级 `detail_ref` 导航，热门模型按正式工具卡 `detail_kind/theme` 分类）。导出: `renderFeatured, renderFeaturedTabs...`
 - [js/glossary.js](src/web/js/glossary.js) — AI 概念视图。导出: `activeGlossaryId, openGlossaryConcept, renderGlossary...`
-- [js/trending.js](src/web/js/trending.js) — AI 热点视图（文案走 t()、内容走 getLocalizedField，试点）。导出: `renderTrending, openHotspotDetail, reloadHotspots...`
-- [js/scenes.js](src/web/js/scenes.js) — 场景模式视图。导出: `activeSceneId, renderScenes, renderSceneDetail...`
+- [js/trending.js](src/web/js/trending.js) — AI 热点视图（文案走 t()、内容走 getLocalizedField；相关工具资源解析为正式工具卡和三级详情引用）。导出: `renderTrending, openHotspotDetail, reloadHotspots...`
+- [js/scenes.js](src/web/js/scenes.js) — 场景模式视图；任务引用正式工具 `tool_key`，具体模型推荐通过完整三级 `detail_ref` 打开。导出: `activeSceneId, renderScenes, renderSceneDetail...`
 
 ## src/news/ — 新闻采集管线（CommonJS）
 ### core/ — 数据层（无网络副作用）
@@ -78,7 +78,7 @@
 - [transcript-notify.js](src/news/transcripts/transcript-notify.js) — 每日"待人工获取字幕"清单（min 候选层挑评分最高 notify_count 个 YouTube，写 transcript-requests.json 交人工，文件名固定去掉日期后缀、dateKey 北京时间；不碰主链/不调采集总结）。导出: `notifyTranscripts, parseNotifyCount, scoreOf`
 
 ### feedback/ — 收尾环节：工具库/概念库反哺（独立于主链，只写待补卡文件）
-- [tool-feedback.js](src/news/feedback/tool-feedback.js) — 从 approved summary 提取 AI 工具/概念名（缺省正则 / options.llmExtract 注入），与 tools.json/glossary.json 比对，缺失写 tool-cards-pending.json / concept-cards-pending.json 待补卡（文件名固定去掉日期后缀、dateKey 北京时间），不直接改知识库。导出: `feedbackFromSummaries, extractEntities, toolExists, conceptExists`
+- [tool-feedback.js](src/news/feedback/tool-feedback.js) — 从 approved summary 提取 AI 工具/概念名（缺省正则 / options.llmExtract 注入），与五模块工具卡/glossary.json 比对，缺失写 tool-cards-pending.json / concept-cards-pending.json 待补卡（文件名固定去掉日期后缀、dateKey 北京时间），不直接改知识库。导出: `feedbackFromSummaries, extractEntities, toolExists, conceptExists`
 
 ## src/content/ — 内容产物
 - [generate-rss.js](src/content/generate-rss.js) — RSS 生成。导出: `getFeedItems, generateRss`
@@ -96,7 +96,7 @@
 - [validate-news.js](src/maintenance/validate-news.js) — news 数据校验（news-config-v2 采集安全配置 + last-run X credits/request 账本 + hotspots + v2 候选层 min-candidates）。导出: `validateNews, validateMinNews, validateNewsConfig, validateLastRun`
 
 ## tests/ — 自动化回归
-- [catalog-interface.test.js](tests/catalog-interface.test.js) — 五模块目录 Interface、稳定引用和工具卡→三级详情关系回归。
+- [catalog-interface.test.js](tests/catalog-interface.test.js) — 五模块目录 Interface、字段所有权、稳定引用、工具卡→三级详情以及场景/精选详情引用回归。
 - [collector-x-v2.test.js](tests/news/collector-x-v2.test.js) — X 请求级 credits 硬预算回归：窗外/空长文/重试/零预算/低配置/超量响应/直接门禁。
 - [news-pipeline-min.test.js](tests/news/news-pipeline-min.test.js) — v2 全链编排、总开关、采集状态汇总、credits→last-run 透传回归。
 - [validate-news-config.test.js](tests/maintenance/validate-news-config.test.js) — news-config-v2 安全字段与 last-run X credits/request schema 校验。

@@ -2,12 +2,14 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('fs');
+const { CATALOG_FILES } = require('../src/shared/paths');
 const { catalog, resetCatalogForTests } = require('../src/catalog-interface');
 
 test.beforeEach(() => resetCatalogForTests());
 
 test('five catalog areas expose list data through one interface', () => {
-  for (const [area, expectedMinimum] of [['vendor-card', 11], ['tool-card', 60], ['vendor-level1', 11], ['vendor-level2', 15], ['tool-level3', 60]]) {
+  for (const [area, expectedMinimum] of [['vendor-card', 11], ['tool-card', 62], ['vendor-level1', 11], ['vendor-level2', 15], ['tool-level3', 71]]) {
     const result = catalog({ area, operation: 'list' });
     assert.equal(result.ok, true);
     assert.ok(result.data.length >= expectedMinimum);
@@ -18,7 +20,7 @@ test('five catalog areas expose list data through one interface', () => {
 test('vendor cards expose only card, filter, and level1 reference fields', () => {
   const allowed = new Set([
     'id', 'vendor_key', 'title', 'icon', 'summary', 'feature_preview',
-    'categories', 'scenes', 'access_level', 'price_status', 'search_terms', 'level1_ref',
+    'access_level', 'price_badge', 'search_terms', 'level1_ref',
   ]);
   const vendors = catalog({ area: 'vendor-card', operation: 'list' }).data;
   vendors.forEach(item => {
@@ -30,12 +32,12 @@ test('vendor cards expose only card, filter, and level1 reference fields', () =>
 test('tool cards and level2 previews expose only owned fields', () => {
   const toolCardFields = new Set([
     'id', 'tool_key', 'vendor_key', 'title', 'vendor_label', 'icon', 'summary', 'theme',
-    'categories', 'scenes', 'best_for_preview', 'not_for_preview', 'price_badge',
+    'scenes', 'best_for_preview', 'not_for_preview', 'price_badge',
     'access_level', 'search_terms', 'detail_ref', 'detail_kind',
   ]);
   const level2Fields = new Set([
-    'id', 'level1_ref', 'vendor_key', 'title', 'kind', 'official_url', 'summary', 'status',
-    'detail_refs', 'citations',
+    'id', 'level1_ref', 'vendor_key', 'title', 'official_url', 'summary', 'status',
+    'detail_refs',
   ]);
   const cards = catalog({ area: 'tool-card', operation: 'list' }).data;
   const level2 = catalog({ area: 'vendor-level2', operation: 'list' }).data;
@@ -45,17 +47,18 @@ test('tool cards and level2 previews expose only owned fields', () => {
 
 test('level1 and level3 records expose only owned fields', () => {
   const level1Fields = new Set([
-    'id', 'vendor_key', 'title', 'entry_label', 'display_title', 'icon', 'official_url',
-    'description', 'status', 'features', 'level2_refs', 'citations',
+    'id', 'vendor_key', 'title', 'icon', 'official_url',
+    'description', 'status', 'features', 'level2_refs',
   ]);
   const level3Fields = new Set([
-    'id', 'tool_key', 'vendor_key', 'kind', 'title', 'vendor_label', 'icon', 'official_url',
-    'status', 'summary', 'weaknesses', 'one_m_context', 'api_pricing', 'cache_hit_rate', 'plan',
-    'applicable_scenarios', 'inapplicable_scenarios', 'source_refs', 'sources', 'category', 'scenes',
-    'access_level', 'access_barrier', 'free_tier', 'paid_tiers', 'last_updated',
+    'id', 'vendor_key', 'detail_kind', 'theme', 'title', 'vendor_label', 'icon', 'official_url',
+    'status', 'summary', 'one_m_context', 'api_pricing', 'plan',
+    'applicable_scenarios', 'inapplicable_scenarios', 'sources', 'official_date',
   ]);
   const level1 = catalog({ area: 'vendor-level1', operation: 'list' }).data;
   const level3 = catalog({ area: 'tool-level3', operation: 'list' }).data;
+  const vendors = catalog({ area: 'vendor-card', operation: 'list' }).data;
+  const cards = catalog({ area: 'tool-card', operation: 'list' }).data;
   level1.forEach(item => assert.deepEqual(Object.keys(item).filter(key => !level1Fields.has(key)), []));
   level3.forEach(item => assert.deepEqual(Object.keys(item).filter(key => !level3Fields.has(key)), []));
   for (const item of level3) {
@@ -64,7 +67,13 @@ test('level1 and level3 records expose only owned fields', () => {
     assert.equal('rating_ease' in item, false);
     assert.equal('rating_price' in item, false);
   }
-  assert.deepEqual(new Set(level3.map(item => item.kind)), new Set(['tool', 'api_model', 'subscription_plan']));
+  assert.deepEqual(new Set(level3.map(item => item.detail_kind)), new Set(['tool', 'api_model', 'subscription_plan']));
+  assert.equal(level1.every(item => !('display_title' in item) && !('entry_label' in item) && !('citations' in item)), true);
+  assert.equal(vendors.every(item => !('scenes' in item) && !('categories' in item)), true);
+  const cardsByDetail = new Map(cards.map(card => [card.detail_ref.id, card]));
+  assert.equal(cards.every(card => card.detail_kind !== 'subscription_plan'), true);
+  assert.equal(level3.filter(item => item.detail_kind !== 'subscription_plan').every(item => cardsByDetail.has(item.id)), true);
+  assert.equal(level3.filter(item => item.detail_kind === 'subscription_plan').every(item => !cardsByDetail.has(item.id)), true);
 });
 
 test('cross-module references resolve to their target areas', () => {
@@ -94,4 +103,34 @@ test('tool card and detail share one detail reference', () => {
   const cards = catalog({ area: 'tool-card', operation: 'list' }).data;
   const details = new Set(catalog({ area: 'tool-level3', operation: 'list' }).data.map(item => item.id));
   cards.forEach(card => assert.equal(details.has(card.detail_ref.id), true));
+});
+
+test('scene and featured recommendations use stable tool and detail references', () => {
+  const cards = catalog({ area: 'tool-card', operation: 'list' }).data;
+  const details = catalog({ area: 'tool-level3', operation: 'list' }).data;
+  const toolKeys = new Set(cards.map(card => card.tool_key));
+  const detailIds = new Set(details.map(detail => detail.id));
+  const scenes = JSON.parse(fs.readFileSync(CATALOG_FILES.scenes, 'utf8')).scenes;
+  const featured = JSON.parse(fs.readFileSync(CATALOG_FILES.featured, 'utf8'));
+
+  for (const scene of scenes) {
+    for (const task of scene.tasks || []) {
+      for (const toolKey of task.tools || []) assert.equal(toolKeys.has(toolKey), true);
+      for (const recommendation of task.recommendations || []) {
+        assert.equal(toolKeys.has(recommendation.tool_id), true);
+        assert.match(recommendation.detail_ref, /^tool-level3:/);
+        assert.equal(detailIds.has(recommendation.detail_ref), true);
+        assert.equal('item_id' in recommendation, false);
+      }
+    }
+  }
+
+  for (const pick of featured) {
+    assert.equal(toolKeys.has(pick.tool_id), true);
+    if (pick.detail_ref !== null) {
+      assert.match(pick.detail_ref, /^tool-level3:/);
+      assert.equal(detailIds.has(pick.detail_ref), true);
+    }
+    assert.equal('item_id' in pick, false);
+  }
 });

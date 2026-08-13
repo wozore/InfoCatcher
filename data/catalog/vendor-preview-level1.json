@@ -5,8 +5,6 @@
       "id": "vendor-level1:chatgpt",
       "vendor_key": "chatgpt",
       "title": "OpenAI",
-      "entry_label": "ChatGPT",
-      "display_title": "OpenAI（ChatGPT）",
       "icon": "🤖",
       "official_url": "https://chatgpt.com",
       "description": "OpenAI 提供 ChatGPT、Codex 和 API 等 AI 产品入口；具体模型与套餐在下方按可核实范围单独展示。",
@@ -34,32 +32,12 @@
           "kind": "vendor-level2",
           "id": "vendor-level2:chatgpt:openai-coding-plan"
         }
-      ],
-      "citations": [
-        {
-          "id": "openai-model-compare",
-          "title": "Compare models",
-          "url": "https://developers.openai.com/api/docs/models/compare",
-          "publisher": "OpenAI",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
-        },
-        {
-          "id": "openai-gpt-56-chatgpt",
-          "title": "GPT-5.6 in ChatGPT",
-          "url": "https://help.openai.com/en/articles/20001354-gpt-56-in-chatgpt",
-          "publisher": "OpenAI",
-          "source_type": "official",
-          "queried_at": "2026-07-27T00:00:00Z"
-        }
       ]
     },
     {
       "id": "vendor-level1:claude",
       "vendor_key": "claude",
       "title": "Anthropic",
-      "entry_label": "Claude",
-      "display_title": "Anthropic（Claude）",
       "icon": "🧠",
       "official_url": "https://claude.ai",
       "description": "Anthropic 的 Claude 产品入口覆盖对话产品与 API；具体模型和订阅套餐在下方独立展示。",
@@ -83,32 +61,12 @@
           "kind": "vendor-level2",
           "id": "vendor-level2:claude:claude-coding-plan"
         }
-      ],
-      "citations": [
-        {
-          "id": "anthropic-models",
-          "title": "Models overview",
-          "url": "https://docs.anthropic.com/en/docs/about-claude/models/overview",
-          "publisher": "Anthropic",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
-        },
-        {
-          "id": "anthropic-plans",
-          "title": "Choose a Claude plan",
-          "url": "https://support.anthropic.com/en/articles/11049762-choosing-a-claude-ai-plan",
-          "publisher": "Anthropic",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
-        }
       ]
     },
     {
       "id": "vendor-level1:gemini",
       "vendor_key": "gemini",
       "title": "Google",
-      "entry_label": "Gemini",
-      "display_title": "Google（Gemini）",
       "icon": "🌐",
       "official_url": "https://gemini.google.com",
       "description": "Google 的 Gemini 产品入口覆盖 API 模型与 Google AI 订阅；具体资料在下方按已核实范围展示。",
@@ -132,32 +90,12 @@
           "kind": "vendor-level2",
           "id": "vendor-level2:gemini:gemini-coding-plan"
         }
-      ],
-      "citations": [
-        {
-          "id": "google-api-pricing",
-          "title": "Gemini Developer API pricing",
-          "url": "https://ai.google.dev/gemini-api/docs/pricing",
-          "publisher": "Google",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
-        },
-        {
-          "id": "google-consumer-plans",
-          "title": "Gemini plans",
-          "url": "https://gemini.google/about",
-          "publisher": "Google",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
-        }
       ]
     },
     {
       "id": "vendor-level1:deepseek",
       "vendor_key": "deepseek",
       "title": "深度求索",
-      "entry_label": "DeepSeek",
-      "display_title": "深度求索（DeepSeek）",
       "icon": "🔍",
       "official_url": "https://chat.deepseek.com",
       "description": "中国深度求索公司推出的开源大模型，以极致性价比和透明定价著称，V4 系列支持 1M 上下文。",
@@ -185,24 +123,12 @@
           "kind": "vendor-level2",
           "id": "vendor-level2:deepseek:deepseek-models"
         }
-      ],
-      "citations": [
-        {
-          "id": "deepseek-pricing-cn",
-          "title": "模型与价格",
-          "url": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing",
-          "publisher": "DeepSeek",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
-        }
       ]
     },
     {
       "id": "vendor-level1:zhipu",
       "vendor_key": "zhipu",
       "title": "智谱AI",
-      "entry_label": "智谱清言",
-      "display_title": "智谱AI（智谱清言）",
       "icon": "🏛️",
       "official_url": "https://chatglm.cn",
       "description": "清华大学孵化、港股上市的国产 AI 公司，提供 GLM 系列模型及全模态 API 服务，中文能力扎实。",
@@ -230,24 +156,12 @@
           "kind": "vendor-level2",
           "id": "vendor-level2:zhipu:glm-models"
         }
-      ],
-      "citations": [
-        {
-          "id": "zhipu-api-pricing",
-          "title": "智谱AI开放平台 - 产品定价",
-          "url": "https://bigmodel.cn/pricing",
-          "publisher": "智谱AI",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
-        }
       ]
     },
     {
       "id": "vendor-level1:wenxin",
       "vendor_key": "wenxin",
       "title": "百度",
-      "entry_label": "文心一言",
-      "display_title": "百度（文心一言）",
       "icon": "📘",
       "official_url": "https://yiyan.baidu.com",
       "description": "百度推出的文心大模型，通过千帆平台提供 ERNIE 系列 API，深度集成百度云生态。",
@@ -275,24 +189,12 @@
           "kind": "vendor-level2",
           "id": "vendor-level2:wenxin:ernie-models"
         }
-      ],
-      "citations": [
-        {
-          "id": "wenxin-api-pricing",
-          "title": "百度千帆 — 模型服务计费",
-          "url": "https://cloud.baidu.com/doc/qianfan/s/wmh4sv6ya",
-          "publisher": "百度",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
-        }
       ]
     },
     {
       "id": "vendor-level1:xinghuo",
       "vendor_key": "xinghuo",
       "title": "科大讯飞",
-      "entry_label": "讯飞星火",
-      "display_title": "科大讯飞（讯飞星火）",
       "icon": "🔥",
       "official_url": "https://xinghuo.xfyun.cn",
       "description": "科大讯飞推出的星火认知大模型，深耕语音与教育场景，Lite 版本 API 永久免费。",
@@ -320,24 +222,12 @@
           "kind": "vendor-level2",
           "id": "vendor-level2:xinghuo:spark-models"
         }
-      ],
-      "citations": [
-        {
-          "id": "xinghuo-api-docs",
-          "title": "星火认知大模型 HTTP 接口文档",
-          "url": "https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html",
-          "publisher": "科大讯飞",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
-        }
       ]
     },
     {
       "id": "vendor-level1:hailuo",
       "vendor_key": "hailuo",
       "title": "MiniMax",
-      "entry_label": "海螺AI",
-      "display_title": "MiniMax（海螺AI）",
       "icon": "🐚",
       "official_url": "https://hailuoai.com",
       "description": "MiniMax 推出的多模态 AI 平台，以海螺AI 视频生成和超低 API 文本价格著称。",
@@ -365,24 +255,12 @@
           "kind": "vendor-level2",
           "id": "vendor-level2:hailuo:minimax-models"
         }
-      ],
-      "citations": [
-        {
-          "id": "hailuo-api-pricing",
-          "title": "MiniMax Pricing",
-          "url": "https://minimax.io/pricing",
-          "publisher": "MiniMax",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
-        }
       ]
     },
     {
       "id": "vendor-level1:grok",
       "vendor_key": "grok",
       "title": "xAI",
-      "entry_label": "Grok",
-      "display_title": "xAI（Grok）",
       "icon": "🚀",
       "official_url": "https://grok.com",
       "description": "Elon Musk 创办的 xAI 公司推出的 AI 模型，以实时 X 平台数据接入和推理能力见长，API 定价极具竞争力。",
@@ -410,24 +288,12 @@
           "kind": "vendor-level2",
           "id": "vendor-level2:grok:grok-models"
         }
-      ],
-      "citations": [
-        {
-          "id": "xai-api-pricing",
-          "title": "xAI API Pricing",
-          "url": "https://x.ai/api/pricing",
-          "publisher": "xAI",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
-        }
       ]
     },
     {
       "id": "vendor-level1:mistral",
       "vendor_key": "mistral",
       "title": "Mistral AI",
-      "entry_label": "Mistral AI（产品入口）",
-      "display_title": "Mistral AI（Mistral AI（产品入口））",
       "icon": "🏔️",
       "official_url": "https://mistral.ai/",
       "description": "法国 AI 公司，提供开放权重和商业许可的多种模型，覆盖文本、编码、推理和 OCR 场景。",
@@ -455,24 +321,12 @@
           "kind": "vendor-level2",
           "id": "vendor-level2:mistral:mistral-models"
         }
-      ],
-      "citations": [
-        {
-          "id": "mistral-api-pricing",
-          "title": "Mistral API Pricing",
-          "url": "https://mistral.ai/pricing/api/",
-          "publisher": "Mistral AI",
-          "source_type": "official",
-          "queried_at": "2026-07-27T07:46:15.009Z"
-        }
       ]
     },
     {
       "id": "vendor-level1:cohere",
       "vendor_key": "cohere",
       "title": "Cohere",
-      "entry_label": "Cohere（产品入口）",
-      "display_title": "Cohere（Cohere（产品入口））",
       "icon": "🔗",
       "official_url": "https://cohere.com",
       "description": "加拿大 AI 公司，以企业级检索增强生成（RAG）、文本嵌入和重排序模型见长，Command 系列覆盖通用对话和编码。",
@@ -499,16 +353,6 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:cohere:command-models"
-        }
-      ],
-      "citations": [
-        {
-          "id": "cohere-api-pricing",
-          "title": "Cohere Pricing",
-          "url": "https://cohere.com/pricing",
-          "publisher": "Cohere",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
         }
       ]
     }

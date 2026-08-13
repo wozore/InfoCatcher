@@ -2,20 +2,513 @@
   "schema_version": 1,
   "items": [
     {
+      "id": "tool-level3:chatgpt",
+      "vendor_key": "chatgpt",
+      "detail_kind": "tool",
+      "theme": "general",
+      "title": "ChatGPT",
+      "vendor_label": "OpenAI",
+      "icon": "🤖",
+      "official_url": "https://chatgpt.com",
+      "status": "verified",
+      "summary": "OpenAI 提供 ChatGPT、Codex 和 API 等 AI 产品入口；具体模型与套餐在下方按可核实范围单独展示。",
+      "one_m_context": null,
+      "api_pricing": null,
+      "plan": null,
+      "applicable_scenarios": [
+        {
+          "title": "写论文",
+          "description": ""
+        },
+        {
+          "title": "写周报",
+          "description": ""
+        },
+        {
+          "title": "写代码",
+          "description": ""
+        },
+        {
+          "title": "翻译文档",
+          "description": ""
+        },
+        {
+          "title": "数据分析",
+          "description": ""
+        },
+        {
+          "title": "头脑风暴",
+          "description": ""
+        },
+        {
+          "title": "学习辅导",
+          "description": ""
+        }
+      ],
+      "inapplicable_scenarios": [],
+      "sources": [
+        {
+          "title": "官方产品页",
+          "url": "https://chatgpt.com"
+        }
+      ],
+      "official_date": null
+    },
+    {
+      "id": "tool-level3:claude",
+      "vendor_key": "claude",
+      "detail_kind": "tool",
+      "theme": "general",
+      "title": "Claude",
+      "vendor_label": "Anthropic",
+      "icon": "🧠",
+      "official_url": "https://claude.ai",
+      "status": "verified",
+      "summary": "Anthropic 的 Claude 产品入口覆盖对话产品与 API；具体模型和订阅套餐在下方独立展示。",
+      "one_m_context": null,
+      "api_pricing": null,
+      "plan": null,
+      "applicable_scenarios": [
+        {
+          "title": "写论文",
+          "description": ""
+        },
+        {
+          "title": "写周报",
+          "description": ""
+        },
+        {
+          "title": "写代码",
+          "description": ""
+        },
+        {
+          "title": "长文档分析",
+          "description": ""
+        },
+        {
+          "title": "深度研究",
+          "description": ""
+        },
+        {
+          "title": "头脑风暴",
+          "description": ""
+        }
+      ],
+      "inapplicable_scenarios": [],
+      "sources": [
+        {
+          "title": "官方产品页",
+          "url": "https://claude.ai"
+        }
+      ],
+      "official_date": null
+    },
+    {
+      "id": "tool-level3:gemini",
+      "vendor_key": "gemini",
+      "detail_kind": "tool",
+      "theme": "general",
+      "title": "Gemini",
+      "vendor_label": "Google",
+      "icon": "🌐",
+      "official_url": "https://gemini.google.com",
+      "status": "partial",
+      "summary": "Google 的 Gemini 产品入口覆盖 API 模型与 Google AI 订阅；具体资料在下方按已核实范围展示。",
+      "one_m_context": null,
+      "api_pricing": null,
+      "plan": null,
+      "applicable_scenarios": [
+        {
+          "title": "写论文",
+          "description": ""
+        },
+        {
+          "title": "翻译文档",
+          "description": ""
+        },
+        {
+          "title": "搜索研究",
+          "description": ""
+        },
+        {
+          "title": "头脑风暴",
+          "description": ""
+        },
+        {
+          "title": "数据分析",
+          "description": ""
+        }
+      ],
+      "inapplicable_scenarios": [],
+      "sources": [
+        {
+          "title": "官方产品页",
+          "url": "https://gemini.google.com"
+        }
+      ],
+      "official_date": null
+    },
+    {
+      "id": "tool-level3:deepseek",
+      "vendor_key": "deepseek",
+      "detail_kind": "tool",
+      "theme": "general",
+      "title": "DeepSeek",
+      "vendor_label": "深度求索",
+      "icon": "🔍",
+      "official_url": "https://chat.deepseek.com",
+      "status": "verified",
+      "summary": "中国深度求索公司推出的开源大模型，以极致性价比和透明定价著称，V4 系列支持 1M 上下文。",
+      "one_m_context": null,
+      "api_pricing": null,
+      "plan": null,
+      "applicable_scenarios": [
+        {
+          "title": "写代码",
+          "description": ""
+        },
+        {
+          "title": "写论文",
+          "description": ""
+        },
+        {
+          "title": "翻译文档",
+          "description": ""
+        },
+        {
+          "title": "深度研究",
+          "description": ""
+        },
+        {
+          "title": "数学解题",
+          "description": ""
+        }
+      ],
+      "inapplicable_scenarios": [],
+      "sources": [
+        {
+          "title": "官方产品页",
+          "url": "https://chat.deepseek.com"
+        }
+      ],
+      "official_date": null
+    },
+    {
+      "id": "tool-level3:zhipu",
+      "vendor_key": "zhipu",
+      "detail_kind": "tool",
+      "theme": "general",
+      "title": "智谱清言",
+      "vendor_label": "智谱AI",
+      "icon": "🏛️",
+      "official_url": "https://chatglm.cn",
+      "status": "partial",
+      "summary": "清华大学孵化、港股上市的国产 AI 公司，提供 GLM 系列模型及全模态 API 服务，中文能力扎实。",
+      "one_m_context": null,
+      "api_pricing": null,
+      "plan": null,
+      "applicable_scenarios": [
+        {
+          "title": "写论文",
+          "description": ""
+        },
+        {
+          "title": "写代码",
+          "description": ""
+        },
+        {
+          "title": "办公文档处理",
+          "description": ""
+        },
+        {
+          "title": "企业应用开发",
+          "description": ""
+        }
+      ],
+      "inapplicable_scenarios": [],
+      "sources": [
+        {
+          "title": "官方产品页",
+          "url": "https://chatglm.cn"
+        }
+      ],
+      "official_date": null
+    },
+    {
+      "id": "tool-level3:wenxin",
+      "vendor_key": "wenxin",
+      "detail_kind": "tool",
+      "theme": "general",
+      "title": "文心一言",
+      "vendor_label": "百度",
+      "icon": "📘",
+      "official_url": "https://yiyan.baidu.com",
+      "status": "partial",
+      "summary": "百度推出的文心大模型，通过千帆平台提供 ERNIE 系列 API，深度集成百度云生态。",
+      "one_m_context": null,
+      "api_pricing": null,
+      "plan": null,
+      "applicable_scenarios": [
+        {
+          "title": "写论文",
+          "description": ""
+        },
+        {
+          "title": "写周报",
+          "description": ""
+        },
+        {
+          "title": "翻译文档",
+          "description": ""
+        },
+        {
+          "title": "搜索研究",
+          "description": ""
+        },
+        {
+          "title": "学习辅导",
+          "description": ""
+        },
+        {
+          "title": "头脑风暴",
+          "description": ""
+        }
+      ],
+      "inapplicable_scenarios": [],
+      "sources": [
+        {
+          "title": "官方产品页",
+          "url": "https://yiyan.baidu.com"
+        }
+      ],
+      "official_date": null
+    },
+    {
+      "id": "tool-level3:xinghuo",
+      "vendor_key": "xinghuo",
+      "detail_kind": "tool",
+      "theme": "general",
+      "title": "讯飞星火",
+      "vendor_label": "科大讯飞",
+      "icon": "🔥",
+      "official_url": "https://xinghuo.xfyun.cn",
+      "status": "partial",
+      "summary": "科大讯飞推出的星火认知大模型，深耕语音与教育场景，Lite 版本 API 永久免费。",
+      "one_m_context": null,
+      "api_pricing": null,
+      "plan": null,
+      "applicable_scenarios": [
+        {
+          "title": "写周报",
+          "description": ""
+        },
+        {
+          "title": "办公文档处理",
+          "description": ""
+        },
+        {
+          "title": "配音",
+          "description": ""
+        },
+        {
+          "title": "学习辅导",
+          "description": ""
+        },
+        {
+          "title": "翻译文档",
+          "description": ""
+        }
+      ],
+      "inapplicable_scenarios": [],
+      "sources": [
+        {
+          "title": "官方产品页",
+          "url": "https://xinghuo.xfyun.cn"
+        }
+      ],
+      "official_date": null
+    },
+    {
+      "id": "tool-level3:hailuo",
+      "vendor_key": "hailuo",
+      "detail_kind": "tool",
+      "theme": "media",
+      "title": "海螺AI",
+      "vendor_label": "MiniMax",
+      "icon": "🐚",
+      "official_url": "https://hailuoai.com",
+      "status": "partial",
+      "summary": "MiniMax 推出的多模态 AI 平台，以海螺AI 视频生成和超低 API 文本价格著称。",
+      "one_m_context": null,
+      "api_pricing": null,
+      "plan": null,
+      "applicable_scenarios": [
+        {
+          "title": "短视频制作",
+          "description": ""
+        },
+        {
+          "title": "创意写作",
+          "description": ""
+        },
+        {
+          "title": "头脑风暴",
+          "description": ""
+        },
+        {
+          "title": "写周报",
+          "description": ""
+        },
+        {
+          "title": "视频生成",
+          "description": ""
+        }
+      ],
+      "inapplicable_scenarios": [],
+      "sources": [
+        {
+          "title": "官方产品页",
+          "url": "https://hailuoai.com"
+        }
+      ],
+      "official_date": null
+    },
+    {
+      "id": "tool-level3:grok",
+      "vendor_key": "grok",
+      "detail_kind": "tool",
+      "theme": "general",
+      "title": "Grok",
+      "vendor_label": "xAI",
+      "icon": "🚀",
+      "official_url": "https://grok.com",
+      "status": "partial",
+      "summary": "Elon Musk 创办的 xAI 公司推出的 AI 模型，以实时 X 平台数据接入和推理能力见长，API 定价极具竞争力。",
+      "one_m_context": null,
+      "api_pricing": null,
+      "plan": null,
+      "applicable_scenarios": [
+        {
+          "title": "搜索研究",
+          "description": ""
+        },
+        {
+          "title": "写代码",
+          "description": ""
+        },
+        {
+          "title": "头脑风暴",
+          "description": ""
+        },
+        {
+          "title": "写周报",
+          "description": ""
+        },
+        {
+          "title": "数据分析",
+          "description": ""
+        }
+      ],
+      "inapplicable_scenarios": [],
+      "sources": [
+        {
+          "title": "官方产品页",
+          "url": "https://grok.com"
+        }
+      ],
+      "official_date": null
+    },
+    {
+      "id": "tool-level3:mistral",
+      "vendor_key": "mistral",
+      "detail_kind": "tool",
+      "theme": "general",
+      "title": "Mistral AI（产品入口）",
+      "vendor_label": "Mistral AI",
+      "icon": "🏔️",
+      "official_url": "https://mistral.ai/",
+      "status": "verified",
+      "summary": "法国 AI 公司，提供开放权重和商业许可的多种模型，覆盖文本、编码、推理和 OCR 场景。",
+      "one_m_context": null,
+      "api_pricing": null,
+      "plan": null,
+      "applicable_scenarios": [
+        {
+          "title": "写代码",
+          "description": ""
+        },
+        {
+          "title": "写论文",
+          "description": ""
+        },
+        {
+          "title": "翻译文档",
+          "description": ""
+        }
+      ],
+      "inapplicable_scenarios": [],
+      "sources": [
+        {
+          "title": "官方产品页",
+          "url": "https://mistral.ai/"
+        }
+      ],
+      "official_date": null
+    },
+    {
+      "id": "tool-level3:cohere",
+      "vendor_key": "cohere",
+      "detail_kind": "tool",
+      "theme": "general",
+      "title": "Cohere（产品入口）",
+      "vendor_label": "Cohere",
+      "icon": "🔗",
+      "official_url": "https://cohere.com",
+      "status": "partial",
+      "summary": "加拿大 AI 公司，以企业级检索增强生成（RAG）、文本嵌入和重排序模型见长，Command 系列覆盖通用对话和编码。",
+      "one_m_context": null,
+      "api_pricing": null,
+      "plan": null,
+      "applicable_scenarios": [
+        {
+          "title": "写代码",
+          "description": ""
+        },
+        {
+          "title": "写论文",
+          "description": ""
+        },
+        {
+          "title": "翻译文档",
+          "description": ""
+        },
+        {
+          "title": "企业应用开发",
+          "description": ""
+        }
+      ],
+      "inapplicable_scenarios": [],
+      "sources": [
+        {
+          "title": "官方产品页",
+          "url": "https://cohere.com"
+        }
+      ],
+      "official_date": null
+    },
+    {
       "id": "tool-level3:tongyi",
-      "tool_key": "tongyi",
       "vendor_key": "tongyi",
-      "kind": "tool",
+      "detail_kind": "tool",
+      "theme": "general",
       "title": "通义千问",
       "vendor_label": "阿里巴巴",
       "icon": "☁️",
       "official_url": "https://tongyi.aliyun.com",
       "status": "active",
       "summary": "中文顶级、阿里云生态集成、企业级安全合规、通义灵码(IDE插件)",
-      "weaknesses": "创意写作灵动性不如ChatGPT、英文场景偏弱",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": null,
       "applicable_scenarios": [
         {
@@ -41,60 +534,27 @@
           "description": ""
         }
       ],
-      "source_refs": [
-        "tongyi-catalog-source"
-      ],
       "sources": [
         {
-          "id": "tongyi-catalog-source",
           "title": "https://github.com/QwenLM",
-          "url": "https://tongyi.aliyun.com",
-          "publisher": "阿里巴巴",
-          "source_type": "official",
-          "queried_at": "2026-07-18T00:00:00.000Z"
+          "url": "https://tongyi.aliyun.com"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "翻译",
-        "办公"
-      ],
-      "scenes": [
-        "写论文",
-        "写周报",
-        "翻译文档",
-        "办公文档处理",
-        "学习辅导"
-      ],
-      "access_level": "开放",
-      "access_barrier": "国内可直接访问，需阿里云/支付宝账号",
-      "free_tier": "Qwen-Max/Turbo 每月100万Token免费，长期有效",
-      "paid_tiers": [
-        {
-          "name": "API",
-          "price": "按量计费",
-          "features": "Qwen系列模型API调用、阿里云集成"
-        }
-      ],
-      "last_updated": "2026-07-18"
+      "official_date": null
     },
     {
       "id": "tool-level3:doubao",
-      "tool_key": "doubao",
       "vendor_key": "doubao",
-      "kind": "tool",
+      "detail_kind": "tool",
+      "theme": "general",
       "title": "豆包",
       "vendor_label": "字节跳动",
       "icon": "🫘",
       "official_url": "https://www.doubao.com",
       "status": "active",
       "summary": "完全免费、中文对话自然、多模态支持、字节生态(TikTok/抖音数据积累)",
-      "weaknesses": "深度推理和代码能力不如DeepSeek/Claude、国际化弱",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": null,
       "applicable_scenarios": [
         {
@@ -120,53 +580,27 @@
           "description": ""
         }
       ],
-      "source_refs": [
-        "doubao-catalog-source"
-      ],
       "sources": [
         {
-          "id": "doubao-catalog-source",
           "title": "https://www.volcengine.com/product/doubao",
-          "url": "https://www.doubao.com",
-          "publisher": "字节跳动",
-          "source_type": "official",
-          "queried_at": "2026-07-18T00:00:00.000Z"
+          "url": "https://www.doubao.com"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "翻译",
-        "创意"
-      ],
-      "scenes": [
-        "写周报",
-        "头脑风暴",
-        "翻译文档",
-        "创意写作",
-        "日常闲聊"
-      ],
-      "access_level": "开放",
-      "access_barrier": "国内可直接访问，手机号注册",
-      "free_tier": "完全免费，无限使用",
-      "paid_tiers": [],
-      "last_updated": "2026-07-18"
+      "official_date": null
     },
     {
       "id": "tool-level3:kimi",
-      "tool_key": "kimi",
       "vendor_key": "kimi",
-      "kind": "tool",
+      "detail_kind": "tool",
+      "theme": "general",
       "title": "Kimi",
       "vendor_label": "月之暗面",
       "icon": "🌙",
       "official_url": "https://kimi.moonshot.cn",
       "status": "active",
       "summary": "超长上下文(200万字)、中文长文档分析最优、联网搜索、文件上传解析",
-      "weaknesses": "代码能力一般、创意写作偏弱、免费额度有限",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": null,
       "applicable_scenarios": [
         {
@@ -192,58 +626,27 @@
           "description": ""
         }
       ],
-      "source_refs": [
-        "kimi-catalog-source"
-      ],
       "sources": [
         {
-          "id": "kimi-catalog-source",
           "title": "https://kimi.com",
-          "url": "https://kimi.moonshot.cn",
-          "publisher": "月之暗面",
-          "source_type": "official",
-          "queried_at": "2026-07-18T00:00:00.000Z"
+          "url": "https://kimi.moonshot.cn"
         }
       ],
-      "category": [
-        "对话",
-        "长文档",
-        "搜索",
-        "写作"
-      ],
-      "scenes": [
-        "写论文",
-        "长文档分析",
-        "搜索研究",
-        "学习辅导"
-      ],
-      "access_level": "开放",
-      "access_barrier": "国内可直接访问，手机号注册",
-      "free_tier": "免费使用，每日限额",
-      "paid_tiers": [
-        {
-          "name": "会员",
-          "price": "约¥50/月",
-          "features": "更高限额、优先响应"
-        }
-      ],
-      "last_updated": "2026-07-18"
+      "official_date": null
     },
     {
       "id": "tool-level3:cursor",
-      "tool_key": "cursor",
       "vendor_key": "cursor",
-      "kind": "tool",
+      "detail_kind": "tool",
+      "theme": "dev",
       "title": "Cursor",
       "vendor_label": "Anysphere",
       "icon": "⌨️",
       "official_url": "https://cursor.com",
       "status": "active",
       "summary": "AI原生IDE标杆、Plan模式(架构规划)、多文件批量编辑、VS Code无缝迁移",
-      "weaknesses": "企业合规性弱、仅支持VS Code生态、Pro版月费不低",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": null,
       "applicable_scenarios": [
         {
@@ -273,61 +676,27 @@
           "description": ""
         }
       ],
-      "source_refs": [
-        "cursor-catalog-source"
-      ],
       "sources": [
         {
-          "id": "cursor-catalog-source",
           "title": "https://cursor.com/cn/changelog",
-          "url": "https://cursor.com",
-          "publisher": "Anysphere",
-          "source_type": "official",
-          "queried_at": "2026-07-18T00:00:00.000Z"
+          "url": "https://cursor.com"
         }
       ],
-      "category": [
-        "AI编程",
-        "IDE"
-      ],
-      "scenes": [
-        "写代码",
-        "项目开发",
-        "代码重构",
-        "Bug修复"
-      ],
-      "access_level": "开放",
-      "access_barrier": "国内可直接访问，需海外支付方式",
-      "free_tier": "个人免费版(有限额)",
-      "paid_tiers": [
-        {
-          "name": "Pro",
-          "price": "$20/月",
-          "features": "无限补全、高级Agent模式"
-        },
-        {
-          "name": "Teams",
-          "price": "$40/人/月",
-          "features": "团队协作、管理面板"
-        }
-      ],
-      "last_updated": "2026-07-18"
+      "official_date": null
     },
     {
       "id": "tool-level3:copilot",
-      "tool_key": "copilot",
       "vendor_key": "copilot",
-      "kind": "tool",
+      "detail_kind": "tool",
+      "theme": "dev",
       "title": "GitHub Copilot",
       "vendor_label": "Microsoft/GitHub",
       "icon": "🐙",
       "official_url": "https://github.com/features/copilot",
       "status": "active",
       "summary": "生态最广(37+语言)、GitHub深度集成、性价比高($10/月)、企业级安全",
-      "weaknesses": "多文件Agent能力弱、复杂推理不如Cursor、国内访问速度慢",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": null,
       "applicable_scenarios": [
         {
@@ -353,66 +722,27 @@
           "description": ""
         }
       ],
-      "source_refs": [
-        "copilot-catalog-source"
-      ],
       "sources": [
         {
-          "id": "copilot-catalog-source",
           "title": "https://learn.microsoft.com/zh-cn/power-platform/released-versions/copilotstudio",
-          "url": "https://github.com/features/copilot",
-          "publisher": "Microsoft/GitHub",
-          "source_type": "official",
-          "queried_at": "2026-07-18T00:00:00.000Z"
+          "url": "https://github.com/features/copilot"
         }
       ],
-      "category": [
-        "AI编程",
-        "IDE插件"
-      ],
-      "scenes": [
-        "写代码",
-        "代码补全",
-        "Bug修复",
-        "代码审查"
-      ],
-      "access_level": "受限",
-      "access_barrier": "国内可访问GitHub但速度慢",
-      "free_tier": "学生免费、开源维护者免费、普通用户50聊天+2000补全/月",
-      "paid_tiers": [
-        {
-          "name": "Pro",
-          "price": "$10/月",
-          "features": "无限补全和聊天"
-        },
-        {
-          "name": "Business",
-          "price": "$19/人/月",
-          "features": "企业管理、安全策略"
-        },
-        {
-          "name": "Max",
-          "price": "$100/月",
-          "features": "最高限额、所有模型"
-        }
-      ],
-      "last_updated": "2026-07-18"
+      "official_date": null
     },
     {
       "id": "tool-level3:claude-code",
-      "tool_key": "claude-code",
       "vendor_key": "claude-code",
-      "kind": "tool",
+      "detail_kind": "tool",
+      "theme": "dev",
       "title": "Claude Code",
       "vendor_label": "Anthropic",
       "icon": "⚡",
       "official_url": "https://claude.ai/claude-code",
       "status": "active",
       "summary": "推理最强(SWE-bench 80.9%)、长任务自主完成、MCP/Skills生态、子代理并行",
-      "weaknesses": "成本高($100+/周)、仅终端使用(无GUI)、国内网络+支付双重门槛",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": null,
       "applicable_scenarios": [
         {
@@ -442,62 +772,27 @@
           "description": ""
         }
       ],
-      "source_refs": [
-        "claude-code-catalog-source"
-      ],
       "sources": [
         {
-          "id": "claude-code-catalog-source",
           "title": "https://code.claude.com/docs/en/changelog",
-          "url": "https://claude.ai/claude-code",
-          "publisher": "Anthropic",
-          "source_type": "official",
-          "queried_at": "2026-07-18T00:00:00.000Z"
+          "url": "https://claude.ai/claude-code"
         }
       ],
-      "category": [
-        "AI编程",
-        "命令行"
-      ],
-      "scenes": [
-        "写代码",
-        "项目开发",
-        "代码重构",
-        "自动化测试",
-        "架构设计"
-      ],
-      "access_level": "受限",
-      "access_barrier": "需要科学上网 + 付费账号",
-      "free_tier": "无(需Claude Pro订阅以上)",
-      "paid_tiers": [
-        {
-          "name": "按量",
-          "price": "重度使用约$100+/周",
-          "features": "终端使用、子代理并行、全代码库操作"
-        },
-        {
-          "name": "Max",
-          "price": "$200/月",
-          "features": "最高使用限额"
-        }
-      ],
-      "last_updated": "2026-07-18"
+      "official_date": null
     },
     {
       "id": "tool-level3:trae",
-      "tool_key": "trae",
       "vendor_key": "trae",
-      "kind": "tool",
+      "detail_kind": "tool",
+      "theme": "dev",
       "title": "Trae",
       "vendor_label": "字节跳动",
       "icon": "🇨🇳",
       "official_url": "https://www.trae.ai",
       "status": "active",
       "summary": "中文原生IDE、全链路开发闭环、VS Code无感迁移、多模态输入、价格亲民",
-      "weaknesses": "国际生态弱、用户基数不如Cursor、插件生态仍在建设",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": null,
       "applicable_scenarios": [
         {
@@ -527,65 +822,27 @@
           "description": ""
         }
       ],
-      "source_refs": [
-        "trae-catalog-source"
-      ],
       "sources": [
         {
-          "id": "trae-catalog-source",
           "title": "https://www.trae.cn/changelog",
-          "url": "https://www.trae.ai",
-          "publisher": "字节跳动",
-          "source_type": "official",
-          "queried_at": "2026-07-18T00:00:00.000Z"
+          "url": "https://www.trae.ai"
         }
       ],
-      "category": [
-        "AI编程",
-        "IDE"
-      ],
-      "scenes": [
-        "写代码",
-        "项目开发",
-        "快速原型"
-      ],
-      "access_level": "开放",
-      "access_barrier": "国内可直接访问",
-      "free_tier": "个人免费(多档可选)",
-      "paid_tiers": [
-        {
-          "name": "Lite",
-          "price": "$3/月",
-          "features": "基础AI辅助"
-        },
-        {
-          "name": "Pro",
-          "price": "$10/月",
-          "features": "完整AI功能"
-        },
-        {
-          "name": "Ultra",
-          "price": "$100/月",
-          "features": "最高级别支持"
-        }
-      ],
-      "last_updated": "2026-07-18"
+      "official_date": null
     },
     {
       "id": "tool-level3:midjourney",
-      "tool_key": "midjourney",
       "vendor_key": "midjourney",
-      "kind": "tool",
+      "detail_kind": "tool",
+      "theme": "vision",
       "title": "Midjourney",
       "vendor_label": "Midjourney Inc.",
       "icon": "🎨",
       "official_url": "https://www.midjourney.com",
       "status": "active",
       "summary": "艺术品质最高、审美极其出色、风格多样性、社区活跃",
-      "weaknesses": "需要英文prompt、必须用Discord(体验差)、国内不可用、无免费层",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": null,
       "applicable_scenarios": [
         {
@@ -615,66 +872,27 @@
           "description": ""
         }
       ],
-      "source_refs": [
-        "midjourney-catalog-source"
-      ],
       "sources": [
         {
-          "id": "midjourney-catalog-source",
           "title": "https://docs.midjourney.com/changelog",
-          "url": "https://www.midjourney.com",
-          "publisher": "Midjourney Inc.",
-          "source_type": "official",
-          "queried_at": "2026-07-18T00:00:00.000Z"
+          "url": "https://www.midjourney.com"
         }
       ],
-      "category": [
-        "AI图像",
-        "AI绘画"
-      ],
-      "scenes": [
-        "设计配图",
-        "概念艺术",
-        "海报设计",
-        "插画创作"
-      ],
-      "access_level": "受限",
-      "access_barrier": "需要科学上网 + 海外支付(Discord使用)",
-      "free_tier": "无(已取消免费试用)",
-      "paid_tiers": [
-        {
-          "name": "Basic",
-          "price": "$10/月",
-          "features": "约200张/月"
-        },
-        {
-          "name": "Standard",
-          "price": "$30/月",
-          "features": "无限低速生成"
-        },
-        {
-          "name": "Pro",
-          "price": "$60/月",
-          "features": "高速生成、Stealth模式"
-        }
-      ],
-      "last_updated": "2026-07-18"
+      "official_date": null
     },
     {
       "id": "tool-level3:nano-banana",
-      "tool_key": "nano-banana",
       "vendor_key": "nano-banana",
-      "kind": "tool",
+      "detail_kind": "tool",
+      "theme": "vision",
       "title": "Nano Banana",
       "vendor_label": "Google",
       "icon": "🍌",
       "official_url": "https://aistudio.google.com",
       "status": "active",
       "summary": "提示词理解最佳、角色一致性极好、多模态联动(Gemini)、免费可用",
-      "weaknesses": "国内访问受限、艺术性不如Midjourney、风格范围有限",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": null,
       "applicable_scenarios": [
         {
@@ -700,56 +918,27 @@
           "description": ""
         }
       ],
-      "source_refs": [
-        "nano-banana-catalog-source"
-      ],
       "sources": [
         {
-          "id": "nano-banana-catalog-source",
           "title": "https://blog.google/technology/ai/nano-banana-2/",
-          "url": "https://aistudio.google.com",
-          "publisher": "Google",
-          "source_type": "official",
-          "queried_at": "2026-07-18T00:00:00.000Z"
+          "url": "https://aistudio.google.com"
         }
       ],
-      "category": [
-        "AI图像",
-        "AI绘画"
-      ],
-      "scenes": [
-        "设计配图",
-        "海报设计",
-        "营销素材",
-        "角色设计"
-      ],
-      "access_level": "受限",
-      "access_barrier": "需要科学上网",
-      "free_tier": "Google AI Studio 免费使用",
-      "paid_tiers": [
-        {
-          "name": "Gemini Advanced",
-          "price": "$20/月",
-          "features": "Pro版画质、更高分辨率"
-        }
-      ],
-      "last_updated": "2026-07-18"
+      "official_date": null
     },
     {
       "id": "tool-level3:jimeng",
-      "tool_key": "jimeng",
       "vendor_key": "jimeng",
-      "kind": "tool",
+      "detail_kind": "tool",
+      "theme": "vision",
       "title": "即梦",
       "vendor_label": "字节跳动",
       "icon": "✨",
       "official_url": "https://jimeng.jianying.com",
       "status": "active",
       "summary": "中文支持顶级、剪映生态集成、视频生成能力强、国内可用、免费额度足",
-      "weaknesses": "国际化弱、艺术性不如Midjourney、生态锁定字节系",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": null,
       "applicable_scenarios": [
         {
@@ -775,56 +964,27 @@
           "description": ""
         }
       ],
-      "source_refs": [
-        "jimeng-catalog-source"
-      ],
       "sources": [
         {
-          "id": "jimeng-catalog-source",
           "title": "https://bytedance.larkoffice.com/wiki/F95cwC8nniilgbkmUX6cSJLengh",
-          "url": "https://jimeng.jianying.com",
-          "publisher": "字节跳动",
-          "source_type": "official",
-          "queried_at": "2026-07-18T00:00:00.000Z"
+          "url": "https://jimeng.jianying.com"
         }
       ],
-      "category": [
-        "AI图像",
-        "AI视频"
-      ],
-      "scenes": [
-        "设计配图",
-        "短视频制作",
-        "营销素材",
-        "创意表达"
-      ],
-      "access_level": "开放",
-      "access_barrier": "国内可直接访问，抖音/剪映账号登录",
-      "free_tier": "每日免费额度",
-      "paid_tiers": [
-        {
-          "name": "会员",
-          "price": "约¥30/月",
-          "features": "更多生成次数、更高画质"
-        }
-      ],
-      "last_updated": "2026-07-18"
+      "official_date": null
     },
     {
       "id": "tool-level3:kling",
-      "tool_key": "kling",
       "vendor_key": "kling",
-      "kind": "tool",
+      "detail_kind": "tool",
+      "theme": "media",
       "title": "可灵",
       "vendor_label": "快手",
       "icon": "🎥",
       "official_url": "https://kling.kuaishou.com",
       "status": "active",
       "summary": "视频质量国产最佳、物理规律模拟好、中文场景自然、国内可用、免费额度",
-      "weaknesses": "国际化弱、仅限视频生成、风格多样性不如Runway",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": null,
       "applicable_scenarios": [
         {
@@ -850,56 +1010,27 @@
           "description": ""
         }
       ],
-      "source_refs": [
-        "kling-catalog-source"
-      ],
       "sources": [
         {
-          "id": "kling-catalog-source",
           "title": "https://kling.ai/release-note/release-history",
-          "url": "https://kling.kuaishou.com",
-          "publisher": "快手",
-          "source_type": "official",
-          "queried_at": "2026-07-18T00:00:00.000Z"
+          "url": "https://kling.kuaishou.com"
         }
       ],
-      "category": [
-        "AI视频",
-        "AI创作"
-      ],
-      "scenes": [
-        "短视频制作",
-        "视频生成",
-        "创意表达",
-        "营销视频"
-      ],
-      "access_level": "开放",
-      "access_barrier": "国内可直接访问",
-      "free_tier": "每日免费生成额度",
-      "paid_tiers": [
-        {
-          "name": "会员",
-          "price": "约¥30/月",
-          "features": "更多生成、更高画质"
-        }
-      ],
-      "last_updated": "2026-07-18"
+      "official_date": null
     },
     {
       "id": "tool-level3:suno",
-      "tool_key": "suno",
       "vendor_key": "suno",
-      "kind": "tool",
+      "detail_kind": "tool",
+      "theme": "media",
       "title": "Suno",
       "vendor_label": "Suno Inc.",
       "icon": "🎵",
       "official_url": "https://suno.com",
       "status": "active",
       "summary": "音乐质量惊艳(《技能五子棋》出圈)、曲风多样、一分钟成曲、专业级输出",
-      "weaknesses": "国内访问受限、中文歌词偶有不自然、版权归属有争议",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": null,
       "applicable_scenarios": [
         {
@@ -925,61 +1056,27 @@
           "description": ""
         }
       ],
-      "source_refs": [
-        "suno-catalog-source"
-      ],
       "sources": [
         {
-          "id": "suno-catalog-source",
           "title": "https://suno.com/blog/v5-5",
-          "url": "https://suno.com",
-          "publisher": "Suno Inc.",
-          "source_type": "official",
-          "queried_at": "2026-07-18T00:00:00.000Z"
+          "url": "https://suno.com"
         }
       ],
-      "category": [
-        "AI音乐",
-        "AI音频"
-      ],
-      "scenes": [
-        "音乐创作",
-        "背景音乐",
-        "歌曲制作",
-        "配乐"
-      ],
-      "access_level": "受限",
-      "access_barrier": "需要科学上网",
-      "free_tier": "每日免费额度(约5首)",
-      "paid_tiers": [
-        {
-          "name": "Pro",
-          "price": "$10/月",
-          "features": "500首/月、商业使用许可"
-        },
-        {
-          "name": "Premier",
-          "price": "$30/月",
-          "features": "2000首/月、更高音质"
-        }
-      ],
-      "last_updated": "2026-07-18"
+      "official_date": null
     },
     {
       "id": "tool-level3:stable-diffusion",
-      "tool_key": "stable-diffusion",
       "vendor_key": "stable-diffusion",
-      "kind": "tool",
+      "detail_kind": "tool",
+      "theme": "vision",
       "title": "Stable Diffusion",
       "vendor_label": "Stability AI",
       "icon": "🖼️",
       "official_url": "https://stability.ai",
       "status": "active",
       "summary": "完全开源免费、可本地部署(隐私)、生态最全(ControlNet/LoRA/ComfyUI)、无限生成",
-      "weaknesses": "部署门槛高(GPU需求)、英文Prompt门槛、艺术性不如Midjourney",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": null,
       "applicable_scenarios": [
         {
@@ -1013,56 +1110,27 @@
           "description": ""
         }
       ],
-      "source_refs": [
-        "stable-diffusion-catalog-source"
-      ],
       "sources": [
         {
-          "id": "stable-diffusion-catalog-source",
           "title": "https://stability.ai/news",
-          "url": "https://stability.ai",
-          "publisher": "Stability AI",
-          "source_type": "official",
-          "queried_at": "2026-07-18T00:00:00.000Z"
+          "url": "https://stability.ai"
         }
       ],
-      "category": [
-        "AI图像",
-        "开源"
-      ],
-      "scenes": [
-        "设计配图",
-        "概念艺术",
-        "AI艺术",
-        "图像研究"
-      ],
-      "access_level": "受限",
-      "access_barrier": "本地部署需GPU(8GB+显存)，云端使用需海外服务",
-      "free_tier": "完全免费开源(自行部署)",
-      "paid_tiers": [
-        {
-          "name": "云端使用",
-          "price": "按量或订阅",
-          "features": "无需本地GPU的SD体验"
-        }
-      ],
-      "last_updated": "2026-07-18"
+      "official_date": null
     },
     {
       "id": "tool-level3:hunyuan",
-      "tool_key": "hunyuan",
       "vendor_key": "hunyuan",
-      "kind": "tool",
+      "detail_kind": "tool",
+      "theme": "general",
       "title": "腾讯混元",
       "vendor_label": "腾讯",
       "icon": "💬",
       "official_url": "https://hunyuan.tencent.com",
       "status": "active",
       "summary": "微信/QQ生态深度集成、多模态(文本+图像+视频)、企业级API价格低、合规性高",
-      "weaknesses": "C端知名度不如豆包/DeepSeek、独立产品体验中等",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": null,
       "applicable_scenarios": [
         {
@@ -1088,59 +1156,27 @@
           "description": ""
         }
       ],
-      "source_refs": [
-        "hunyuan-catalog-source"
-      ],
       "sources": [
         {
-          "id": "hunyuan-catalog-source",
           "title": "https://cloud.tencent.com/product/tclm",
-          "url": "https://hunyuan.tencent.com",
-          "publisher": "腾讯",
-          "source_type": "official",
-          "queried_at": "2026-07-21T00:00:00.000Z"
+          "url": "https://hunyuan.tencent.com"
         }
       ],
-      "category": [
-        "对话",
-        "编程",
-        "图像",
-        "办公"
-      ],
-      "scenes": [
-        "写代码",
-        "办公文档处理",
-        "写周报",
-        "设计配图",
-        "学习辅导"
-      ],
-      "access_level": "开放",
-      "access_barrier": "国内可直接访问，需微信/QQ账号",
-      "free_tier": "注册送100万tokens(1年有效)，Hunyuan Standard ¥0.3/百万tokens输入",
-      "paid_tiers": [
-        {
-          "name": "API后付费",
-          "price": "按量计费(¥0.3-2.4/百万tokens)",
-          "features": "混元全系列模型、腾讯云生态集成"
-        }
-      ],
-      "last_updated": "2026-07-21"
+      "official_date": null
     },
     {
       "id": "tool-level3:tiangong",
-      "tool_key": "tiangong",
       "vendor_key": "tiangong",
-      "kind": "tool",
+      "detail_kind": "tool",
+      "theme": "general",
       "title": "天工AI",
       "vendor_label": "昆仑万维",
       "icon": "🛠️",
       "official_url": "https://www.tiangong.cn",
       "status": "active",
       "summary": "完全免费、AI搜索能力强、中文结果质量高、实时联网",
-      "weaknesses": "对话能力一般、品牌知名度低、功能相对单一",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": null,
       "applicable_scenarios": [
         {
@@ -1166,52 +1202,27 @@
           "description": ""
         }
       ],
-      "source_refs": [
-        "tiangong-catalog-source"
-      ],
       "sources": [
         {
-          "id": "tiangong-catalog-source",
           "title": "https://www.tiangong.cn",
-          "url": "https://www.tiangong.cn",
-          "publisher": "昆仑万维",
-          "source_type": "official",
-          "queried_at": "2026-07-21T00:00:00.000Z"
+          "url": "https://www.tiangong.cn"
         }
       ],
-      "category": [
-        "AI搜索",
-        "对话",
-        "写作"
-      ],
-      "scenes": [
-        "搜索研究",
-        "写论文",
-        "写周报",
-        "资料收集",
-        "事实核查"
-      ],
-      "access_level": "开放",
-      "access_barrier": "国内可直接访问",
-      "free_tier": "完全免费",
-      "paid_tiers": [],
-      "last_updated": "2026-07-21"
+      "official_date": null
     },
     {
       "id": "tool-level3:dalle",
-      "tool_key": "dalle",
       "vendor_key": "dalle",
-      "kind": "tool",
+      "detail_kind": "tool",
+      "theme": "vision",
       "title": "DALL·E 3",
       "vendor_label": "OpenAI",
       "icon": "🖼️",
       "official_url": "https://openai.com/dall-e-3",
       "status": "active",
       "summary": "提示词理解最智能、与ChatGPT无缝集成、安全性高(内容审核)、易上手",
-      "weaknesses": "国内访问双重门槛、生成速度较慢、风格多样性不如Midjourney",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": null,
       "applicable_scenarios": [
         {
@@ -1241,62 +1252,27 @@
           "description": ""
         }
       ],
-      "source_refs": [
-        "dalle-catalog-source"
-      ],
       "sources": [
         {
-          "id": "dalle-catalog-source",
           "title": "https://openai.com",
-          "url": "https://openai.com/dall-e-3",
-          "publisher": "OpenAI",
-          "source_type": "official",
-          "queried_at": "2026-07-21T00:00:00.000Z"
+          "url": "https://openai.com/dall-e-3"
         }
       ],
-      "category": [
-        "AI图像",
-        "AI绘画"
-      ],
-      "scenes": [
-        "设计配图",
-        "海报设计",
-        "概念艺术",
-        "营销素材",
-        "插画创作"
-      ],
-      "access_level": "受限",
-      "access_barrier": "需要科学上网 + ChatGPT账号",
-      "free_tier": "ChatGPT免费版有限额度",
-      "paid_tiers": [
-        {
-          "name": "ChatGPT Plus",
-          "price": "$20/月",
-          "features": "DALL·E 3完整访问、更高额度"
-        },
-        {
-          "name": "ChatGPT Pro",
-          "price": "$200/月",
-          "features": "最高额度、商业使用"
-        }
-      ],
-      "last_updated": "2026-07-21"
+      "official_date": null
     },
     {
       "id": "tool-level3:ideogram",
-      "tool_key": "ideogram",
       "vendor_key": "ideogram",
-      "kind": "tool",
+      "detail_kind": "tool",
+      "theme": "vision",
       "title": "Ideogram",
       "vendor_label": "Ideogram AI",
       "icon": "✍️",
       "official_url": "https://ideogram.ai",
       "status": "active",
       "summary": "图片内文字渲染业界最佳(海报/Logo/封面)、设计感好、国内可访问",
-      "weaknesses": "英文prompt门槛、中国风/中文字体渲染弱、艺术性不如Midjourney",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": null,
       "applicable_scenarios": [
         {
@@ -1318,46 +1294,19 @@
           "description": ""
         }
       ],
-      "source_refs": [
-        "ideogram-catalog-source"
-      ],
       "sources": [
         {
-          "id": "ideogram-catalog-source",
           "title": "https://ideogram.ai",
-          "url": "https://ideogram.ai",
-          "publisher": "Ideogram AI",
-          "source_type": "official",
-          "queried_at": "2026-07-21T00:00:00.000Z"
+          "url": "https://ideogram.ai"
         }
       ],
-      "category": [
-        "AI图像",
-        "AI绘画"
-      ],
-      "scenes": [
-        "设计配图",
-        "海报设计",
-        "营销素材",
-        "Logo设计"
-      ],
-      "access_level": "开放",
-      "access_barrier": "国内可访问",
-      "free_tier": "每日免费额度(约100张)",
-      "paid_tiers": [
-        {
-          "name": "Plus",
-          "price": "$20/月",
-          "features": "更多生成、无水印、商业使用"
-        }
-      ],
-      "last_updated": "2026-07-21"
+      "official_date": null
     },
     {
       "id": "tool-level3:gpt-5.6-sol",
-      "tool_key": "gpt-5.6-sol",
       "vendor_key": "chatgpt",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "GPT-5.6 Sol",
       "vendor_label": "OpenAI",
       "icon": "🤖",
@@ -1367,10 +1316,7 @@
       "one_m_context": {
         "status": "native",
         "tokens": 1050000,
-        "conditions": "API 默认上下文窗口为 1,050,000 tokens。",
-        "source_refs": [
-          "openai-model-compare"
-        ]
+        "conditions": "API 默认上下文窗口为 1,050,000 tokens。"
       },
       "api_pricing": {
         "status": "provided",
@@ -1382,10 +1328,7 @@
             "input_cached": 0.5,
             "input_uncached": 5,
             "output": 30,
-            "conditions": "Standard 服务层级，短上下文请求。",
-            "source_refs": [
-              "openai-api-pricing"
-            ]
+            "conditions": "Standard 服务层级，短上下文请求。"
           },
           {
             "label": "Standard · 长上下文",
@@ -1394,10 +1337,7 @@
             "input_cached": 1,
             "input_uncached": 10,
             "output": 45,
-            "conditions": "Standard 服务层级，长上下文请求；以官方长上下文计费条件为准。",
-            "source_refs": [
-              "openai-api-pricing"
-            ]
+            "conditions": "Standard 服务层级，长上下文请求；以官方长上下文计费条件为准。"
           }
         ],
         "additional_charges": [
@@ -1405,25 +1345,15 @@
             "label": "短上下文缓存写入",
             "value": 6.25,
             "currency": "USD",
-            "unit": "per_1m_tokens",
-            "source_refs": [
-              "openai-api-pricing"
-            ]
+            "unit": "per_1m_tokens"
           },
           {
             "label": "长上下文缓存写入",
             "value": 12.5,
             "currency": "USD",
-            "unit": "per_1m_tokens",
-            "source_refs": [
-              "openai-api-pricing"
-            ]
+            "unit": "per_1m_tokens"
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方提供缓存计价，但未提供可靠的平均缓存命中率区间。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -1438,48 +1368,23 @@
           "description": "同系列存在官方定位为平衡成本或成本敏感工作负载的更低价变体。"
         }
       ],
-      "source_refs": [
-        "openai-model-compare",
-        "openai-api-pricing"
-      ],
       "sources": [
         {
-          "id": "openai-model-compare",
           "title": "Compare models",
-          "url": "https://developers.openai.com/api/docs/models/compare",
-          "publisher": "OpenAI",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://developers.openai.com/api/docs/models/compare"
         },
         {
-          "id": "openai-api-pricing",
           "title": "OpenAI API pricing",
-          "url": "https://developers.openai.com/api/docs/pricing",
-          "publisher": "OpenAI",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://developers.openai.com/api/docs/pricing"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "翻译",
-        "数据分析"
-      ],
-      "scenes": [
-        "复杂专业工作：官方将其定位为处理复杂专业工作的旗舰模型。",
-        "成本敏感型高频调用：同系列存在官方定位为平衡成本或成本敏感工作负载的更低价变体。"
-      ],
-      "access_level": "受限",
-      "access_barrier": "需要科学上网 + 海外手机号注册",
-      "last_updated": "2026-07-26"
+      "official_date": null
     },
     {
       "id": "tool-level3:gpt-5.6-terra",
-      "tool_key": "gpt-5.6-terra",
       "vendor_key": "chatgpt",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "GPT-5.6 Terra",
       "vendor_label": "OpenAI",
       "icon": "🤖",
@@ -1489,10 +1394,7 @@
       "one_m_context": {
         "status": "native",
         "tokens": 1050000,
-        "conditions": "API 默认上下文窗口为 1,050,000 tokens。",
-        "source_refs": [
-          "openai-model-compare"
-        ]
+        "conditions": "API 默认上下文窗口为 1,050,000 tokens。"
       },
       "api_pricing": {
         "status": "provided",
@@ -1504,10 +1406,7 @@
             "input_cached": 0.25,
             "input_uncached": 2.5,
             "output": 15,
-            "conditions": "Standard 服务层级，短上下文请求。",
-            "source_refs": [
-              "openai-api-pricing"
-            ]
+            "conditions": "Standard 服务层级，短上下文请求。"
           },
           {
             "label": "Standard · 长上下文",
@@ -1516,16 +1415,9 @@
             "input_cached": 0.5,
             "input_uncached": 5,
             "output": 22.5,
-            "conditions": "Standard 服务层级，长上下文请求；以官方长上下文计费条件为准。",
-            "source_refs": [
-              "openai-api-pricing"
-            ]
+            "conditions": "Standard 服务层级，长上下文请求；以官方长上下文计费条件为准。"
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方未提供可靠的平均缓存命中率区间。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -1540,48 +1432,23 @@
           "description": "同系列另有旗舰 Sol 与成本优化 Luna 变体。"
         }
       ],
-      "source_refs": [
-        "openai-model-compare",
-        "openai-api-pricing"
-      ],
       "sources": [
         {
-          "id": "openai-model-compare",
           "title": "Compare models",
-          "url": "https://developers.openai.com/api/docs/models/compare",
-          "publisher": "OpenAI",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://developers.openai.com/api/docs/models/compare"
         },
         {
-          "id": "openai-api-pricing",
           "title": "OpenAI API pricing",
-          "url": "https://developers.openai.com/api/docs/pricing",
-          "publisher": "OpenAI",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://developers.openai.com/api/docs/pricing"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "翻译",
-        "数据分析"
-      ],
-      "scenes": [
-        "通用专业任务：官方定位强调智能水平与调用成本的平衡。",
-        "只追求最高能力或最低成本：同系列另有旗舰 Sol 与成本优化 Luna 变体。"
-      ],
-      "access_level": "受限",
-      "access_barrier": "需要科学上网 + 海外手机号注册",
-      "last_updated": "2026-07-26"
+      "official_date": null
     },
     {
       "id": "tool-level3:gpt-5.6-luna",
-      "tool_key": "gpt-5.6-luna",
       "vendor_key": "chatgpt",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "GPT-5.6 Luna",
       "vendor_label": "OpenAI",
       "icon": "🤖",
@@ -1591,10 +1458,7 @@
       "one_m_context": {
         "status": "native",
         "tokens": 1050000,
-        "conditions": "API 默认上下文窗口为 1,050,000 tokens。",
-        "source_refs": [
-          "openai-model-compare"
-        ]
+        "conditions": "API 默认上下文窗口为 1,050,000 tokens。"
       },
       "api_pricing": {
         "status": "provided",
@@ -1606,10 +1470,7 @@
             "input_cached": 0.1,
             "input_uncached": 1,
             "output": 6,
-            "conditions": "Standard 服务层级，短上下文请求。",
-            "source_refs": [
-              "openai-api-pricing"
-            ]
+            "conditions": "Standard 服务层级，短上下文请求。"
           },
           {
             "label": "Standard · 长上下文",
@@ -1618,16 +1479,9 @@
             "input_cached": 0.2,
             "input_uncached": 2,
             "output": 9,
-            "conditions": "Standard 服务层级，长上下文请求；以官方长上下文计费条件为准。",
-            "source_refs": [
-              "openai-api-pricing"
-            ]
+            "conditions": "Standard 服务层级，长上下文请求；以官方长上下文计费条件为准。"
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方未提供可靠的平均缓存命中率区间。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -1642,48 +1496,22 @@
           "description": "复杂高要求工作应比较同系列 Sol 或 Terra。"
         }
       ],
-      "source_refs": [
-        "openai-model-compare",
-        "openai-api-pricing"
-      ],
       "sources": [
         {
-          "id": "openai-model-compare",
           "title": "Compare models",
-          "url": "https://developers.openai.com/api/docs/models/compare",
-          "publisher": "OpenAI",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://developers.openai.com/api/docs/models/compare"
         },
         {
-          "id": "openai-api-pricing",
           "title": "OpenAI API pricing",
-          "url": "https://developers.openai.com/api/docs/pricing",
-          "publisher": "OpenAI",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://developers.openai.com/api/docs/pricing"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "翻译",
-        "数据分析"
-      ],
-      "scenes": [
-        "成本敏感型 API 工作负载：官方明确将其定位为成本优化变体。",
-        "要求同系列最高能力：复杂高要求工作应比较同系列 Sol 或 Terra。"
-      ],
-      "access_level": "受限",
-      "access_barrier": "需要科学上网 + 海外手机号注册",
-      "last_updated": "2026-07-26"
+      "official_date": null
     },
     {
       "id": "tool-level3:chatgpt-go",
-      "tool_key": "chatgpt-go",
       "vendor_key": "chatgpt",
-      "kind": "subscription_plan",
+      "detail_kind": "subscription_plan",
       "title": "ChatGPT Go",
       "vendor_label": "OpenAI",
       "icon": "🤖",
@@ -1692,59 +1520,32 @@
       "summary": "面向需要更多消息、上传和图像生成额度的个人订阅。",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": {
         "amount": 8,
         "currency": "USD",
         "billing_period": "month",
         "conditions": "美国显示价格；部分市场采用本地化定价。",
         "included_models": [],
-        "included_models_status": "not_listed",
-        "source_refs": [
-          "openai-chatgpt-go"
-        ]
+        "included_models_status": "not_listed"
       },
       "applicable_scenarios": [],
       "inapplicable_scenarios": [],
-      "source_refs": [
-        "openai-chatgpt-go",
-        "openai-chatgpt-pricing"
-      ],
       "sources": [
         {
-          "id": "openai-chatgpt-pricing",
           "title": "ChatGPT pricing",
-          "url": "https://chatgpt.com/pricing",
-          "publisher": "OpenAI",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://chatgpt.com/pricing"
         },
         {
-          "id": "openai-chatgpt-go",
           "title": "Introducing ChatGPT Go",
-          "url": "https://openai.com/index/introducing-chatgpt-go",
-          "publisher": "OpenAI",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://openai.com/index/introducing-chatgpt-go"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "翻译",
-        "数据分析"
-      ],
-      "scenes": [],
-      "access_level": "受限",
-      "access_barrier": "需要科学上网 + 海外手机号注册",
-      "last_updated": "2026-07-26"
+      "official_date": null
     },
     {
       "id": "tool-level3:chatgpt-plus",
-      "tool_key": "chatgpt-plus",
       "vendor_key": "chatgpt",
-      "kind": "subscription_plan",
+      "detail_kind": "subscription_plan",
       "title": "ChatGPT Plus",
       "vendor_label": "OpenAI",
       "icon": "🤖",
@@ -1753,7 +1554,6 @@
       "summary": "面向高级工作与生产力任务的个人订阅。",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": {
         "amount": 20,
         "currency": "USD",
@@ -1762,53 +1562,26 @@
         "included_models": [
           "GPT-5.6 系列"
         ],
-        "included_models_status": "partial",
-        "source_refs": [
-          "openai-chatgpt-go",
-          "openai-chatgpt-pricing"
-        ]
+        "included_models_status": "partial"
       },
       "applicable_scenarios": [],
       "inapplicable_scenarios": [],
-      "source_refs": [
-        "openai-chatgpt-go",
-        "openai-chatgpt-pricing"
-      ],
       "sources": [
         {
-          "id": "openai-chatgpt-pricing",
           "title": "ChatGPT pricing",
-          "url": "https://chatgpt.com/pricing",
-          "publisher": "OpenAI",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://chatgpt.com/pricing"
         },
         {
-          "id": "openai-chatgpt-go",
           "title": "Introducing ChatGPT Go",
-          "url": "https://openai.com/index/introducing-chatgpt-go",
-          "publisher": "OpenAI",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://openai.com/index/introducing-chatgpt-go"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "翻译",
-        "数据分析"
-      ],
-      "scenes": [],
-      "access_level": "受限",
-      "access_barrier": "需要科学上网 + 海外手机号注册",
-      "last_updated": "2026-07-26"
+      "official_date": null
     },
     {
       "id": "tool-level3:chatgpt-pro",
-      "tool_key": "chatgpt-pro",
       "vendor_key": "chatgpt",
-      "kind": "subscription_plan",
+      "detail_kind": "subscription_plan",
       "title": "ChatGPT Pro",
       "vendor_label": "OpenAI",
       "icon": "🤖",
@@ -1817,7 +1590,6 @@
       "summary": "面向研究、编程和高使用量需求的个人订阅。",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": {
         "amount": 200,
         "currency": "USD",
@@ -1826,53 +1598,27 @@
         "included_models": [
           "GPT-5.6 Sol Pro"
         ],
-        "included_models_status": "partial",
-        "source_refs": [
-          "openai-chatgpt-go",
-          "openai-chatgpt-pricing"
-        ]
+        "included_models_status": "partial"
       },
       "applicable_scenarios": [],
       "inapplicable_scenarios": [],
-      "source_refs": [
-        "openai-chatgpt-go",
-        "openai-chatgpt-pricing"
-      ],
       "sources": [
         {
-          "id": "openai-chatgpt-pricing",
           "title": "ChatGPT pricing",
-          "url": "https://chatgpt.com/pricing",
-          "publisher": "OpenAI",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://chatgpt.com/pricing"
         },
         {
-          "id": "openai-chatgpt-go",
           "title": "Introducing ChatGPT Go",
-          "url": "https://openai.com/index/introducing-chatgpt-go",
-          "publisher": "OpenAI",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://openai.com/index/introducing-chatgpt-go"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "翻译",
-        "数据分析"
-      ],
-      "scenes": [],
-      "access_level": "受限",
-      "access_barrier": "需要科学上网 + 海外手机号注册",
-      "last_updated": "2026-07-26"
+      "official_date": null
     },
     {
       "id": "tool-level3:claude-fable-5",
-      "tool_key": "claude-fable-5",
       "vendor_key": "claude",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "Claude Fable 5",
       "vendor_label": "Anthropic",
       "icon": "🧠",
@@ -1882,10 +1628,7 @@
       "one_m_context": {
         "status": "native",
         "tokens": 1000000,
-        "conditions": "API 默认支持 1M 上下文。",
-        "source_refs": [
-          "anthropic-context"
-        ]
+        "conditions": "API 默认支持 1M 上下文。"
       },
       "api_pricing": {
         "status": "provided",
@@ -1897,16 +1640,9 @@
             "input_cached": 1,
             "input_uncached": 10,
             "output": 50,
-            "conditions": "缓存命中价对应 5 分钟缓存命中与刷新。",
-            "source_refs": [
-              "anthropic-api-pricing"
-            ]
+            "conditions": "缓存命中价对应 5 分钟缓存命中与刷新。"
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方提供缓存价格乘数，但未提供平均缓存命中率区间。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -1921,56 +1657,27 @@
           "description": "同系列有价格更低的 Sonnet 与 Haiku。"
         }
       ],
-      "source_refs": [
-        "anthropic-fable",
-        "anthropic-api-pricing",
-        "anthropic-context"
-      ],
       "sources": [
         {
-          "id": "anthropic-api-pricing",
           "title": "Claude Platform pricing",
-          "url": "https://docs.anthropic.com/en/docs/about-claude/pricing",
-          "publisher": "Anthropic",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://docs.anthropic.com/en/docs/about-claude/pricing"
         },
         {
-          "id": "anthropic-context",
           "title": "Context windows",
-          "url": "https://docs.anthropic.com/en/docs/build-with-claude/context-windows",
-          "publisher": "Anthropic",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://docs.anthropic.com/en/docs/build-with-claude/context-windows"
         },
         {
-          "id": "anthropic-fable",
           "title": "Claude Fable 5",
-          "url": "https://www.anthropic.com/claude/fable",
-          "publisher": "Anthropic",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://www.anthropic.com/claude/fable"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "长文档分析"
-      ],
-      "scenes": [
-        "长时间复杂任务：官方将其定位为可持续处理长时间、复杂和异步工作。",
-        "预算敏感型常规调用：同系列有价格更低的 Sonnet 与 Haiku。"
-      ],
-      "access_level": "受限",
-      "access_barrier": "需要科学上网，部分地区支持手机号注册",
-      "last_updated": "2026-07-26"
+      "official_date": null
     },
     {
       "id": "tool-level3:claude-opus-4.8",
-      "tool_key": "claude-opus-4.8",
       "vendor_key": "claude",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "Claude Opus 4.8",
       "vendor_label": "Anthropic",
       "icon": "🧠",
@@ -1980,10 +1687,7 @@
       "one_m_context": {
         "status": "native",
         "tokens": 1000000,
-        "conditions": "API 默认支持 1M 上下文。",
-        "source_refs": [
-          "anthropic-context"
-        ]
+        "conditions": "API 默认支持 1M 上下文。"
       },
       "api_pricing": {
         "status": "provided",
@@ -1995,16 +1699,9 @@
             "input_cached": 0.5,
             "input_uncached": 5,
             "output": 25,
-            "conditions": "缓存命中价对应 5 分钟缓存命中与刷新。",
-            "source_refs": [
-              "anthropic-api-pricing"
-            ]
+            "conditions": "缓存命中价对应 5 分钟缓存命中与刷新。"
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方未提供平均缓存命中率区间。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -2019,56 +1716,27 @@
           "description": "较低价模型通常更适合简单高频调用。"
         }
       ],
-      "source_refs": [
-        "anthropic-opus",
-        "anthropic-api-pricing",
-        "anthropic-context"
-      ],
       "sources": [
         {
-          "id": "anthropic-api-pricing",
           "title": "Claude Platform pricing",
-          "url": "https://docs.anthropic.com/en/docs/about-claude/pricing",
-          "publisher": "Anthropic",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://docs.anthropic.com/en/docs/about-claude/pricing"
         },
         {
-          "id": "anthropic-context",
           "title": "Context windows",
-          "url": "https://docs.anthropic.com/en/docs/build-with-claude/context-windows",
-          "publisher": "Anthropic",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://docs.anthropic.com/en/docs/build-with-claude/context-windows"
         },
         {
-          "id": "anthropic-opus",
           "title": "Claude Opus 4.8",
-          "url": "https://www.anthropic.com/claude/opus",
-          "publisher": "Anthropic",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://www.anthropic.com/claude/opus"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "长文档分析"
-      ],
-      "scenes": [
-        "高要求编码与知识工作：官方用例包括软件工程、智能体工作流和高风险企业任务。",
-        "低成本批量简单任务：较低价模型通常更适合简单高频调用。"
-      ],
-      "access_level": "受限",
-      "access_barrier": "需要科学上网，部分地区支持手机号注册",
-      "last_updated": "2026-07-26"
+      "official_date": null
     },
     {
       "id": "tool-level3:claude-sonnet-5",
-      "tool_key": "claude-sonnet-5",
       "vendor_key": "claude",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "Claude Sonnet 5",
       "vendor_label": "Anthropic",
       "icon": "🧠",
@@ -2078,10 +1746,7 @@
       "one_m_context": {
         "status": "native",
         "tokens": 1000000,
-        "conditions": "API 默认支持 1M 上下文。",
-        "source_refs": [
-          "anthropic-context"
-        ]
+        "conditions": "API 默认支持 1M 上下文。"
       },
       "api_pricing": {
         "status": "provided",
@@ -2093,10 +1758,7 @@
             "input_cached": 0.2,
             "input_uncached": 2,
             "output": 10,
-            "conditions": "2026-08-31 前有效；缓存命中价对应 5 分钟缓存。",
-            "source_refs": [
-              "anthropic-api-pricing"
-            ]
+            "conditions": "2026-08-31 前有效；缓存命中价对应 5 分钟缓存。"
           },
           {
             "label": "标准价（自 2026-09-01）",
@@ -2105,16 +1767,9 @@
             "input_cached": 0.3,
             "input_uncached": 3,
             "output": 15,
-            "conditions": "自 2026-09-01 起生效；缓存命中价对应 5 分钟缓存。",
-            "source_refs": [
-              "anthropic-api-pricing"
-            ]
+            "conditions": "自 2026-09-01 起生效；缓存命中价对应 5 分钟缓存。"
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方未提供平均缓存命中率区间。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -2129,56 +1784,27 @@
           "description": "应同时比较 Fable 或 Opus。"
         }
       ],
-      "source_refs": [
-        "anthropic-sonnet",
-        "anthropic-api-pricing",
-        "anthropic-context"
-      ],
       "sources": [
         {
-          "id": "anthropic-api-pricing",
           "title": "Claude Platform pricing",
-          "url": "https://docs.anthropic.com/en/docs/about-claude/pricing",
-          "publisher": "Anthropic",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://docs.anthropic.com/en/docs/about-claude/pricing"
         },
         {
-          "id": "anthropic-context",
           "title": "Context windows",
-          "url": "https://docs.anthropic.com/en/docs/build-with-claude/context-windows",
-          "publisher": "Anthropic",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://docs.anthropic.com/en/docs/build-with-claude/context-windows"
         },
         {
-          "id": "anthropic-sonnet",
           "title": "Claude Sonnet 5",
-          "url": "https://www.anthropic.com/claude/sonnet",
-          "publisher": "Anthropic",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://www.anthropic.com/claude/sonnet"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "长文档分析"
-      ],
-      "scenes": [
-        "通用写作、研究与编码：当前 Sonnet 在速度、能力和成本之间取得平衡。",
-        "只追求最高能力：应同时比较 Fable 或 Opus。"
-      ],
-      "access_level": "受限",
-      "access_barrier": "需要科学上网，部分地区支持手机号注册",
-      "last_updated": "2026-07-26"
+      "official_date": null
     },
     {
       "id": "tool-level3:claude-haiku-4.5",
-      "tool_key": "claude-haiku-4.5",
       "vendor_key": "claude",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "Claude Haiku 4.5",
       "vendor_label": "Anthropic",
       "icon": "🧠",
@@ -2188,11 +1814,7 @@
       "one_m_context": {
         "status": "not_supported",
         "tokens": 200000,
-        "conditions": "官方模型概览列出的上下文窗口为 200k。",
-        "source_refs": [
-          "anthropic-models",
-          "anthropic-context"
-        ]
+        "conditions": "官方模型概览列出的上下文窗口为 200k。"
       },
       "api_pricing": {
         "status": "provided",
@@ -2204,16 +1826,9 @@
             "input_cached": 0.1,
             "input_uncached": 1,
             "output": 5,
-            "conditions": "缓存命中价对应 5 分钟缓存命中与刷新。",
-            "source_refs": [
-              "anthropic-api-pricing"
-            ]
+            "conditions": "缓存命中价对应 5 分钟缓存命中与刷新。"
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方未提供平均缓存命中率区间。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -2228,56 +1843,26 @@
           "description": "当前官方上下文窗口为 200k。"
         }
       ],
-      "source_refs": [
-        "anthropic-models",
-        "anthropic-api-pricing",
-        "anthropic-context"
-      ],
       "sources": [
         {
-          "id": "anthropic-models",
           "title": "Models overview",
-          "url": "https://docs.anthropic.com/en/docs/about-claude/models/overview",
-          "publisher": "Anthropic",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://docs.anthropic.com/en/docs/about-claude/models/overview"
         },
         {
-          "id": "anthropic-api-pricing",
           "title": "Claude Platform pricing",
-          "url": "https://docs.anthropic.com/en/docs/about-claude/pricing",
-          "publisher": "Anthropic",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://docs.anthropic.com/en/docs/about-claude/pricing"
         },
         {
-          "id": "anthropic-context",
           "title": "Context windows",
-          "url": "https://docs.anthropic.com/en/docs/build-with-claude/context-windows",
-          "publisher": "Anthropic",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://docs.anthropic.com/en/docs/build-with-claude/context-windows"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "长文档分析"
-      ],
-      "scenes": [
-        "低延迟与成本敏感任务：官方比较表将其列为速度最快的当前 Claude 模型。",
-        "必须使用 1M 上下文：当前官方上下文窗口为 200k。"
-      ],
-      "access_level": "受限",
-      "access_barrier": "需要科学上网，部分地区支持手机号注册",
-      "last_updated": "2026-07-26"
+      "official_date": null
     },
     {
       "id": "tool-level3:claude-pro",
-      "tool_key": "claude-pro",
       "vendor_key": "claude",
-      "kind": "subscription_plan",
+      "detail_kind": "subscription_plan",
       "title": "Claude Pro",
       "vendor_label": "Anthropic",
       "icon": "🧠",
@@ -2286,49 +1871,28 @@
       "summary": "面向日常生产力的个人订阅。",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": {
         "amount": 20,
         "currency": "USD",
         "billing_period": "month",
         "conditions": "美国月付价格；另有 $200/年年付。API 使用量另行计费。",
         "included_models": [],
-        "included_models_status": "not_listed",
-        "source_refs": [
-          "anthropic-plans"
-        ]
+        "included_models_status": "not_listed"
       },
       "applicable_scenarios": [],
       "inapplicable_scenarios": [],
-      "source_refs": [
-        "anthropic-plans"
-      ],
       "sources": [
         {
-          "id": "anthropic-plans",
           "title": "Choose a Claude plan",
-          "url": "https://support.anthropic.com/en/articles/11049762-choosing-a-claude-ai-plan",
-          "publisher": "Anthropic",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://support.anthropic.com/en/articles/11049762-choosing-a-claude-ai-plan"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "长文档分析"
-      ],
-      "scenes": [],
-      "access_level": "受限",
-      "access_barrier": "需要科学上网，部分地区支持手机号注册",
-      "last_updated": "2026-07-26"
+      "official_date": null
     },
     {
       "id": "tool-level3:claude-max-5x",
-      "tool_key": "claude-max-5x",
       "vendor_key": "claude",
-      "kind": "subscription_plan",
+      "detail_kind": "subscription_plan",
       "title": "Claude Max 5x",
       "vendor_label": "Anthropic",
       "icon": "🧠",
@@ -2337,49 +1901,28 @@
       "summary": "每个会话约为 Pro 5 倍容量的个人订阅。",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": {
         "amount": 100,
         "currency": "USD",
         "billing_period": "month",
         "conditions": "月付；使用限制仍适用。",
         "included_models": [],
-        "included_models_status": "not_listed",
-        "source_refs": [
-          "anthropic-plans"
-        ]
+        "included_models_status": "not_listed"
       },
       "applicable_scenarios": [],
       "inapplicable_scenarios": [],
-      "source_refs": [
-        "anthropic-plans"
-      ],
       "sources": [
         {
-          "id": "anthropic-plans",
           "title": "Choose a Claude plan",
-          "url": "https://support.anthropic.com/en/articles/11049762-choosing-a-claude-ai-plan",
-          "publisher": "Anthropic",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://support.anthropic.com/en/articles/11049762-choosing-a-claude-ai-plan"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "长文档分析"
-      ],
-      "scenes": [],
-      "access_level": "受限",
-      "access_barrier": "需要科学上网，部分地区支持手机号注册",
-      "last_updated": "2026-07-26"
+      "official_date": null
     },
     {
       "id": "tool-level3:claude-max-20x",
-      "tool_key": "claude-max-20x",
       "vendor_key": "claude",
-      "kind": "subscription_plan",
+      "detail_kind": "subscription_plan",
       "title": "Claude Max 20x",
       "vendor_label": "Anthropic",
       "icon": "🧠",
@@ -2388,49 +1931,29 @@
       "summary": "每个会话约为 Pro 20 倍容量的个人订阅。",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": {
         "amount": 200,
         "currency": "USD",
         "billing_period": "month",
         "conditions": "月付；使用限制仍适用。",
         "included_models": [],
-        "included_models_status": "not_listed",
-        "source_refs": [
-          "anthropic-plans"
-        ]
+        "included_models_status": "not_listed"
       },
       "applicable_scenarios": [],
       "inapplicable_scenarios": [],
-      "source_refs": [
-        "anthropic-plans"
-      ],
       "sources": [
         {
-          "id": "anthropic-plans",
           "title": "Choose a Claude plan",
-          "url": "https://support.anthropic.com/en/articles/11049762-choosing-a-claude-ai-plan",
-          "publisher": "Anthropic",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://support.anthropic.com/en/articles/11049762-choosing-a-claude-ai-plan"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "长文档分析"
-      ],
-      "scenes": [],
-      "access_level": "受限",
-      "access_barrier": "需要科学上网，部分地区支持手机号注册",
-      "last_updated": "2026-07-26"
+      "official_date": null
     },
     {
       "id": "tool-level3:gemini-3.5-flash",
-      "tool_key": "gemini-3.5-flash",
       "vendor_key": "gemini",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "Gemini 3.5 Flash",
       "vendor_label": "Google",
       "icon": "🌐",
@@ -2440,10 +1963,7 @@
       "one_m_context": {
         "status": "native",
         "tokens": 1000000,
-        "conditions": "官方文档明确支持 1M 输入上下文。",
-        "source_refs": [
-          "google-gemini-35"
-        ]
+        "conditions": "官方文档明确支持 1M 输入上下文。"
       },
       "api_pricing": {
         "status": "provided",
@@ -2455,10 +1975,7 @@
             "input_cached": 0.15,
             "input_uncached": 1.5,
             "output": 9,
-            "conditions": "文本/图像/视频输入；context caching 另有每百万 tokens 每小时 $1 存储费。",
-            "source_refs": [
-              "google-api-pricing"
-            ]
+            "conditions": "文本/图像/视频输入；context caching 另有每百万 tokens 每小时 $1 存储费。"
           }
         ],
         "additional_charges": [
@@ -2466,16 +1983,9 @@
             "label": "缓存存储（每小时）",
             "value": 1,
             "currency": "USD",
-            "unit": "per_1m_tokens_per_hour",
-            "source_refs": [
-              "google-api-pricing"
-            ]
+            "unit": "per_1m_tokens_per_hour"
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方提供缓存读取与存储价格，但未提供平均命中率区间。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -2490,48 +2000,23 @@
           "description": "应另行比较 Gemini Pro 系列。"
         }
       ],
-      "source_refs": [
-        "google-gemini-35",
-        "google-api-pricing"
-      ],
       "sources": [
         {
-          "id": "google-gemini-35",
           "title": "What's new in Gemini 3.5 Flash",
-          "url": "https://ai.google.dev/gemini-api/docs/whats-new-gemini-3.5",
-          "publisher": "Google",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://ai.google.dev/gemini-api/docs/whats-new-gemini-3.5"
         },
         {
-          "id": "google-api-pricing",
           "title": "Gemini Developer API pricing",
-          "url": "https://ai.google.dev/gemini-api/docs/pricing",
-          "publisher": "Google",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://ai.google.dev/gemini-api/docs/pricing"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "翻译",
-        "搜索",
-        "多模态"
-      ],
-      "scenes": [
-        "速度与搜索 grounding 并重：官方定位强调速度、智能以及搜索和 grounding。",
-        "需要明确最高阶 Pro 能力：应另行比较 Gemini Pro 系列。"
-      ],
-      "access_level": "受限",
-      "access_barrier": "需要科学上网",
-      "last_updated": "2026-07-26"
+      "official_date": null
     },
     {
       "id": "tool-level3:gemini-2.5-pro",
-      "tool_key": "gemini-2.5-pro",
       "vendor_key": "gemini",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "Gemini 2.5 Pro",
       "vendor_label": "Google",
       "icon": "🌐",
@@ -2541,10 +2026,7 @@
       "one_m_context": {
         "status": "native",
         "tokens": 1000000,
-        "conditions": "官方模型文档列为 1M 上下文；价格按 200k prompt 阈值分层。",
-        "source_refs": [
-          "google-api-pricing"
-        ]
+        "conditions": "官方模型文档列为 1M 上下文；价格按 200k prompt 阈值分层。"
       },
       "api_pricing": {
         "status": "provided",
@@ -2556,10 +2038,7 @@
             "input_cached": 0.125,
             "input_uncached": 1.25,
             "output": 10,
-            "conditions": "prompt 不超过 200k tokens；缓存另有存储费。",
-            "source_refs": [
-              "google-api-pricing"
-            ]
+            "conditions": "prompt 不超过 200k tokens；缓存另有存储费。"
           },
           {
             "label": "Standard · prompts > 200k",
@@ -2568,10 +2047,7 @@
             "input_cached": 0.25,
             "input_uncached": 2.5,
             "output": 15,
-            "conditions": "prompt 超过 200k tokens；缓存另有存储费。",
-            "source_refs": [
-              "google-api-pricing"
-            ]
+            "conditions": "prompt 超过 200k tokens；缓存另有存储费。"
           }
         ],
         "additional_charges": [
@@ -2579,16 +2055,9 @@
             "label": "缓存存储（每小时）",
             "value": 4.5,
             "currency": "USD",
-            "unit": "per_1m_tokens_per_hour",
-            "source_refs": [
-              "google-api-pricing"
-            ]
+            "unit": "per_1m_tokens_per_hour"
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方未提供平均缓存命中率区间。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -2603,39 +2072,18 @@
           "description": "可比较 Flash 或 Flash-Lite 系列。"
         }
       ],
-      "source_refs": [
-        "google-api-pricing"
-      ],
       "sources": [
         {
-          "id": "google-api-pricing",
           "title": "Gemini Developer API pricing",
-          "url": "https://ai.google.dev/gemini-api/docs/pricing",
-          "publisher": "Google",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://ai.google.dev/gemini-api/docs/pricing"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "翻译",
-        "搜索",
-        "多模态"
-      ],
-      "scenes": [
-        "编程与复杂推理：官方定价页将其描述为擅长编程和复杂推理的多用途模型。",
-        "极低成本简单调用：可比较 Flash 或 Flash-Lite 系列。"
-      ],
-      "access_level": "受限",
-      "access_barrier": "需要科学上网",
-      "last_updated": "2026-07-26"
+      "official_date": null
     },
     {
       "id": "tool-level3:google-ai-pro",
-      "tool_key": "google-ai-pro",
       "vendor_key": "gemini",
-      "kind": "subscription_plan",
+      "detail_kind": "subscription_plan",
       "title": "Google AI Pro",
       "vendor_label": "Google",
       "icon": "🌐",
@@ -2644,7 +2092,6 @@
       "summary": "提供更高 Gemini 使用量和 Google 应用集成的个人订阅。",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": {
         "amount": 19.99,
         "currency": "USD",
@@ -2653,43 +2100,22 @@
         "included_models": [
           "Gemini 3 Pro"
         ],
-        "included_models_status": "partial",
-        "source_refs": [
-          "google-consumer-plans"
-        ]
+        "included_models_status": "partial"
       },
       "applicable_scenarios": [],
       "inapplicable_scenarios": [],
-      "source_refs": [
-        "google-consumer-plans"
-      ],
       "sources": [
         {
-          "id": "google-consumer-plans",
           "title": "Gemini plans",
-          "url": "https://gemini.google/about",
-          "publisher": "Google",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://gemini.google/about"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "翻译",
-        "搜索",
-        "多模态"
-      ],
-      "scenes": [],
-      "access_level": "受限",
-      "access_barrier": "需要科学上网",
-      "last_updated": "2026-07-26"
+      "official_date": null
     },
     {
       "id": "tool-level3:google-ai-ultra-5x",
-      "tool_key": "google-ai-ultra-5x",
       "vendor_key": "gemini",
-      "kind": "subscription_plan",
+      "detail_kind": "subscription_plan",
       "title": "Google AI Ultra 5x",
       "vendor_label": "Google",
       "icon": "🌐",
@@ -2698,50 +2124,28 @@
       "summary": "相对 AI Pro 提供约 5 倍使用上限的高阶订阅。",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": {
         "amount": 99.99,
         "currency": "USD",
         "billing_period": "month",
         "conditions": "美国起始价格；地区、权益和使用限制以官方页面为准。",
         "included_models": [],
-        "included_models_status": "not_listed",
-        "source_refs": [
-          "google-consumer-plans"
-        ]
+        "included_models_status": "not_listed"
       },
       "applicable_scenarios": [],
       "inapplicable_scenarios": [],
-      "source_refs": [
-        "google-consumer-plans"
-      ],
       "sources": [
         {
-          "id": "google-consumer-plans",
           "title": "Gemini plans",
-          "url": "https://gemini.google/about",
-          "publisher": "Google",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://gemini.google/about"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "翻译",
-        "搜索",
-        "多模态"
-      ],
-      "scenes": [],
-      "access_level": "受限",
-      "access_barrier": "需要科学上网",
-      "last_updated": "2026-07-26"
+      "official_date": null
     },
     {
       "id": "tool-level3:google-ai-ultra-20x",
-      "tool_key": "google-ai-ultra-20x",
       "vendor_key": "gemini",
-      "kind": "subscription_plan",
+      "detail_kind": "subscription_plan",
       "title": "Google AI Ultra 20x",
       "vendor_label": "Google",
       "icon": "🌐",
@@ -2750,50 +2154,29 @@
       "summary": "相对 AI Pro 提供约 20 倍使用上限的高阶订阅。",
       "one_m_context": null,
       "api_pricing": null,
-      "cache_hit_rate": null,
       "plan": {
         "amount": 199.99,
         "currency": "USD",
         "billing_period": "month",
         "conditions": "美国显示价格；地区、权益和使用限制以官方页面为准。",
         "included_models": [],
-        "included_models_status": "not_listed",
-        "source_refs": [
-          "google-consumer-plans"
-        ]
+        "included_models_status": "not_listed"
       },
       "applicable_scenarios": [],
       "inapplicable_scenarios": [],
-      "source_refs": [
-        "google-consumer-plans"
-      ],
       "sources": [
         {
-          "id": "google-consumer-plans",
           "title": "Gemini plans",
-          "url": "https://gemini.google/about",
-          "publisher": "Google",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://gemini.google/about"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "翻译",
-        "搜索",
-        "多模态"
-      ],
-      "scenes": [],
-      "access_level": "受限",
-      "access_barrier": "需要科学上网",
-      "last_updated": "2026-07-26"
+      "official_date": null
     },
     {
       "id": "tool-level3:deepseek-v4-flash",
-      "tool_key": "deepseek-v4-flash",
       "vendor_key": "deepseek",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "DeepSeek-V4-Flash",
       "vendor_label": "深度求索",
       "icon": "🔍",
@@ -2803,10 +2186,7 @@
       "one_m_context": {
         "status": "native",
         "tokens": 1000000,
-        "conditions": "官方模型价格页列出的上下文长度为 1M。",
-        "source_refs": [
-          "deepseek-pricing-cn"
-        ]
+        "conditions": "官方模型价格页列出的上下文长度为 1M。"
       },
       "api_pricing": {
         "status": "provided",
@@ -2818,10 +2198,7 @@
             "input_cached": 0.02,
             "input_uncached": 1,
             "output": 2,
-            "conditions": "以中文官方价格页及实际账户结算为准。",
-            "source_refs": [
-              "deepseek-pricing-cn"
-            ]
+            "conditions": "以中文官方价格页及实际账户结算为准。"
           },
           {
             "label": "美元价格",
@@ -2830,16 +2207,9 @@
             "input_cached": 0.0028,
             "input_uncached": 0.14,
             "output": 0.28,
-            "conditions": "以英文官方价格页及实际账户结算为准。",
-            "source_refs": [
-              "deepseek-pricing-en"
-            ]
+            "conditions": "以英文官方价格页及实际账户结算为准。"
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方说明缓存为 best-effort，未提供可普遍适用的平均命中率区间。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -2854,56 +2224,27 @@
           "description": "需要更高阶配置时应比较 V4 Pro。"
         }
       ],
-      "source_refs": [
-        "deepseek-pricing-cn",
-        "deepseek-pricing-en",
-        "deepseek-cache"
-      ],
       "sources": [
         {
-          "id": "deepseek-pricing-cn",
           "title": "模型与价格",
-          "url": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing",
-          "publisher": "DeepSeek",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing"
         },
         {
-          "id": "deepseek-pricing-en",
           "title": "Models & Pricing",
-          "url": "https://api-docs.deepseek.com/quick_start/pricing",
-          "publisher": "DeepSeek",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://api-docs.deepseek.com/quick_start/pricing"
         },
         {
-          "id": "deepseek-cache",
           "title": "Context Caching",
-          "url": "https://api-docs.deepseek.com/guides/kv_cache",
-          "publisher": "DeepSeek",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://api-docs.deepseek.com/guides/kv_cache"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "推理"
-      ],
-      "scenes": [
-        "成本敏感的高频 API 调用：官方价格显著区分缓存命中与未命中，且该变体并发限制更高。",
-        "要求更高规格变体：需要更高阶配置时应比较 V4 Pro。"
-      ],
-      "access_level": "开放",
-      "access_barrier": "国内可直接访问，偶尔需要手机验证",
-      "last_updated": "2026-07-26"
+      "official_date": null
     },
     {
       "id": "tool-level3:deepseek-v4-pro",
-      "tool_key": "deepseek-v4-pro",
       "vendor_key": "deepseek",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "DeepSeek-V4-Pro",
       "vendor_label": "深度求索",
       "icon": "🔍",
@@ -2913,10 +2254,7 @@
       "one_m_context": {
         "status": "native",
         "tokens": 1000000,
-        "conditions": "官方模型价格页列出的上下文长度为 1M。",
-        "source_refs": [
-          "deepseek-pricing-cn"
-        ]
+        "conditions": "官方模型价格页列出的上下文长度为 1M。"
       },
       "api_pricing": {
         "status": "provided",
@@ -2928,10 +2266,7 @@
             "input_cached": 0.025,
             "input_uncached": 3,
             "output": 6,
-            "conditions": "以中文官方价格页及实际账户结算为准。",
-            "source_refs": [
-              "deepseek-pricing-cn"
-            ]
+            "conditions": "以中文官方价格页及实际账户结算为准。"
           },
           {
             "label": "美元价格",
@@ -2940,16 +2275,9 @@
             "input_cached": 0.003625,
             "input_uncached": 0.435,
             "output": 0.87,
-            "conditions": "以英文官方价格页及实际账户结算为准。",
-            "source_refs": [
-              "deepseek-pricing-en"
-            ]
+            "conditions": "以英文官方价格页及实际账户结算为准。"
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方未提供可普遍适用的平均缓存命中率区间。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -2964,56 +2292,27 @@
           "description": "官方表中 V4 Flash 价格更低且并发限制更高。"
         }
       ],
-      "source_refs": [
-        "deepseek-pricing-cn",
-        "deepseek-pricing-en",
-        "deepseek-cache"
-      ],
       "sources": [
         {
-          "id": "deepseek-pricing-cn",
           "title": "模型与价格",
-          "url": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing",
-          "publisher": "DeepSeek",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing"
         },
         {
-          "id": "deepseek-pricing-en",
           "title": "Models & Pricing",
-          "url": "https://api-docs.deepseek.com/quick_start/pricing",
-          "publisher": "DeepSeek",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://api-docs.deepseek.com/quick_start/pricing"
         },
         {
-          "id": "deepseek-cache",
           "title": "Context Caching",
-          "url": "https://api-docs.deepseek.com/guides/kv_cache",
-          "publisher": "DeepSeek",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
+          "url": "https://api-docs.deepseek.com/guides/kv_cache"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "推理"
-      ],
-      "scenes": [
-        "需要 V4 Pro 规格的推理和开发任务：作为 V4 Pro 变体，应结合实际质量、并发和预算评估。",
-        "优先最低成本或更高并发：官方表中 V4 Flash 价格更低且并发限制更高。"
-      ],
-      "access_level": "开放",
-      "access_barrier": "国内可直接访问，偶尔需要手机验证",
-      "last_updated": "2026-07-26"
+      "official_date": null
     },
     {
       "id": "tool-level3:glm-5.2",
-      "tool_key": "glm-5.2",
       "vendor_key": "zhipu",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "GLM-5.2",
       "vendor_label": "智谱AI",
       "icon": "🏛️",
@@ -3023,10 +2322,7 @@
       "one_m_context": {
         "status": "native",
         "tokens": 1000000,
-        "conditions": "官方产品页标注 1M 上下文。",
-        "source_refs": [
-          "zhipu-api-pricing"
-        ]
+        "conditions": "官方产品页标注 1M 上下文。"
       },
       "api_pricing": {
         "status": "provided",
@@ -3038,16 +2334,9 @@
             "input_uncached": 8,
             "output": 28,
             "input_cached": 2,
-            "conditions": "缓存存储限时免费；以官方价格页及实际账户结算为准。",
-            "source_refs": [
-              "zhipu-api-pricing"
-            ]
+            "conditions": "缓存存储限时免费；以官方价格页及实际账户结算为准。"
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方提供缓存命中价格但未提供平均命中率区间。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -3062,47 +2351,23 @@
           "description": "可选择 GLM-4.7 Flash（免费）或 GLM-5 Turbo。"
         }
       ],
-      "source_refs": [
-        "zhipu-api-pricing",
-        "zhipu-model-overview"
-      ],
       "sources": [
         {
-          "id": "zhipu-api-pricing",
           "title": "智谱AI开放平台 - 产品定价",
-          "url": "https://bigmodel.cn/pricing",
-          "publisher": "智谱AI",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
+          "url": "https://bigmodel.cn/pricing"
         },
         {
-          "id": "zhipu-model-overview",
           "title": "模型概览",
-          "url": "https://docs.bigmodel.cn/cn/guide/start/model-overview",
-          "publisher": "智谱AI",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
+          "url": "https://docs.bigmodel.cn/cn/guide/start/model-overview"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "企业应用"
-      ],
-      "scenes": [
-        "复杂长程任务与编码工程：1M 上下文适合长文档分析、大型代码库理解和多轮 Agent 任务。",
-        "成本敏感型简单调用：可选择 GLM-4.7 Flash（免费）或 GLM-5 Turbo。"
-      ],
-      "access_level": "开放",
-      "access_barrier": "国内可直接访问",
-      "last_updated": "2026-07-28"
+      "official_date": null
     },
     {
       "id": "tool-level3:glm-5.1",
-      "tool_key": "glm-5.1",
       "vendor_key": "zhipu",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "GLM-5.1",
       "vendor_label": "智谱AI",
       "icon": "🏛️",
@@ -3111,11 +2376,8 @@
       "summary": "Coding 能力对齐 Claude Opus 4.6，支持自主工作长达 8 小时。",
       "one_m_context": {
         "status": "not_supported",
-        "conditions": "200K 上下文",
-        "source_refs": [
-          "zhipu-api-pricing"
-        ],
-        "tokens": 200000
+        "tokens": 200000,
+        "conditions": "200K 上下文"
       },
       "api_pricing": {
         "status": "provided",
@@ -3127,10 +2389,7 @@
             "input_uncached": 6,
             "output": 24,
             "input_cached": 1.3,
-            "conditions": "输入长度 <32K tokens；缓存存储限时免费。",
-            "source_refs": [
-              "zhipu-api-pricing"
-            ]
+            "conditions": "输入长度 <32K tokens；缓存存储限时免费。"
           },
           {
             "label": "长输入（≥32K）",
@@ -3139,16 +2398,9 @@
             "input_uncached": 8,
             "output": 28,
             "input_cached": 2,
-            "conditions": "输入长度 ≥32K tokens；缓存存储限时免费。",
-            "source_refs": [
-              "zhipu-api-pricing"
-            ]
+            "conditions": "输入长度 ≥32K tokens；缓存存储限时免费。"
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方提供缓存命中价格但未提供平均命中率区间。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -3163,47 +2415,23 @@
           "description": "应比较 GLM-5.2。"
         }
       ],
-      "source_refs": [
-        "zhipu-api-pricing",
-        "zhipu-model-overview"
-      ],
       "sources": [
         {
-          "id": "zhipu-api-pricing",
           "title": "智谱AI开放平台 - 产品定价",
-          "url": "https://bigmodel.cn/pricing",
-          "publisher": "智谱AI",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
+          "url": "https://bigmodel.cn/pricing"
         },
         {
-          "id": "zhipu-model-overview",
           "title": "模型概览",
-          "url": "https://docs.bigmodel.cn/cn/guide/start/model-overview",
-          "publisher": "智谱AI",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
+          "url": "https://docs.bigmodel.cn/cn/guide/start/model-overview"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "企业应用"
-      ],
-      "scenes": [
-        "长程自主编码任务：官方定位为长程任务显著提升，可自主工作长达 8 小时。",
-        "追求最新最强模型：应比较 GLM-5.2。"
-      ],
-      "access_level": "开放",
-      "access_barrier": "国内可直接访问",
-      "last_updated": "2026-07-28"
+      "official_date": null
     },
     {
       "id": "tool-level3:glm-5",
-      "tool_key": "glm-5",
       "vendor_key": "zhipu",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "GLM-5",
       "vendor_label": "智谱AI",
       "icon": "🏛️",
@@ -3212,11 +2440,8 @@
       "summary": "编程能力对齐 Claude Opus 4.5，擅长 Agentic 长程规划与执行。",
       "one_m_context": {
         "status": "not_supported",
-        "conditions": "200K 上下文",
-        "source_refs": [
-          "zhipu-api-pricing"
-        ],
-        "tokens": 200000
+        "tokens": 200000,
+        "conditions": "200K 上下文"
       },
       "api_pricing": {
         "status": "provided",
@@ -3228,10 +2453,7 @@
             "input_uncached": 4,
             "output": 18,
             "input_cached": 1,
-            "conditions": "输入长度 <32K tokens；缓存存储限时免费。",
-            "source_refs": [
-              "zhipu-api-pricing"
-            ]
+            "conditions": "输入长度 <32K tokens；缓存存储限时免费。"
           },
           {
             "label": "长输入（≥32K）",
@@ -3240,16 +2462,9 @@
             "input_uncached": 6,
             "output": 22,
             "input_cached": 1.5,
-            "conditions": "输入长度 ≥32K tokens；缓存存储限时免费。",
-            "source_refs": [
-              "zhipu-api-pricing"
-            ]
+            "conditions": "输入长度 ≥32K tokens；缓存存储限时免费。"
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方提供缓存命中价格但未提供平均命中率区间。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -3264,47 +2479,23 @@
           "description": "GLM-5 上下文为 200K，长文档需求应选 GLM-5.2。"
         }
       ],
-      "source_refs": [
-        "zhipu-api-pricing",
-        "zhipu-model-overview"
-      ],
       "sources": [
         {
-          "id": "zhipu-api-pricing",
           "title": "智谱AI开放平台 - 产品定价",
-          "url": "https://bigmodel.cn/pricing",
-          "publisher": "智谱AI",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
+          "url": "https://bigmodel.cn/pricing"
         },
         {
-          "id": "zhipu-model-overview",
           "title": "模型概览",
-          "url": "https://docs.bigmodel.cn/cn/guide/start/model-overview",
-          "publisher": "智谱AI",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
+          "url": "https://docs.bigmodel.cn/cn/guide/start/model-overview"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "企业应用"
-      ],
-      "scenes": [
-        "结构化思维链推理：在中文复杂推理场景表现最强，适合 Agentic 长程规划。",
-        "需要 1M 上下文：GLM-5 上下文为 200K，长文档需求应选 GLM-5.2。"
-      ],
-      "access_level": "开放",
-      "access_barrier": "国内可直接访问",
-      "last_updated": "2026-07-28"
+      "official_date": null
     },
     {
       "id": "tool-level3:glm-4.7",
-      "tool_key": "glm-4.7",
       "vendor_key": "zhipu",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "GLM-4.7",
       "vendor_label": "智谱AI",
       "icon": "🏛️",
@@ -3313,11 +2504,8 @@
       "summary": "通用对话与推理升级版，编程更强更稳，审美更好。",
       "one_m_context": {
         "status": "not_supported",
-        "conditions": "200K 上下文",
-        "source_refs": [
-          "zhipu-api-pricing"
-        ],
-        "tokens": 200000
+        "tokens": 200000,
+        "conditions": "200K 上下文"
       },
       "api_pricing": {
         "status": "provided",
@@ -3329,10 +2517,7 @@
             "input_uncached": 2,
             "output": 8,
             "input_cached": 0.4,
-            "conditions": "输出长度 <0.2K tokens；缓存存储限时免费。",
-            "source_refs": [
-              "zhipu-api-pricing"
-            ]
+            "conditions": "输出长度 <0.2K tokens；缓存存储限时免费。"
           },
           {
             "label": "短输入 + 长输出",
@@ -3341,16 +2526,9 @@
             "input_uncached": 3,
             "output": 14,
             "input_cached": 0.6,
-            "conditions": "输出长度 ≥0.2K tokens；缓存存储限时免费。",
-            "source_refs": [
-              "zhipu-api-pricing"
-            ]
+            "conditions": "输出长度 ≥0.2K tokens；缓存存储限时免费。"
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方提供缓存命中价格但未提供平均命中率区间。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -3365,47 +2543,23 @@
           "description": "应比较 GLM-5.1 或 GLM-5.2。"
         }
       ],
-      "source_refs": [
-        "zhipu-api-pricing",
-        "zhipu-model-overview"
-      ],
       "sources": [
         {
-          "id": "zhipu-api-pricing",
           "title": "智谱AI开放平台 - 产品定价",
-          "url": "https://bigmodel.cn/pricing",
-          "publisher": "智谱AI",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
+          "url": "https://bigmodel.cn/pricing"
         },
         {
-          "id": "zhipu-model-overview",
           "title": "模型概览",
-          "url": "https://docs.bigmodel.cn/cn/guide/start/model-overview",
-          "publisher": "智谱AI",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
+          "url": "https://docs.bigmodel.cn/cn/guide/start/model-overview"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "企业应用"
-      ],
-      "scenes": [
-        "通用中文对话与写作：高性价比，适合中文内容生成和通用智能体任务。",
-        "需要最高编码能力：应比较 GLM-5.1 或 GLM-5.2。"
-      ],
-      "access_level": "开放",
-      "access_barrier": "国内可直接访问",
-      "last_updated": "2026-07-28"
+      "official_date": null
     },
     {
       "id": "tool-level3:ernie-5.1",
-      "tool_key": "ernie-5.1",
       "vendor_key": "wenxin",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "ERNIE 5.1",
       "vendor_label": "百度",
       "icon": "📘",
@@ -3414,10 +2568,7 @@
       "summary": "百度最新旗舰模型，输入 ¥4/MTok（≤32K），千帆平台部署。",
       "one_m_context": {
         "status": "unknown",
-        "conditions": "上下文窗口待核实",
-        "source_refs": [
-          "wenxin-api-pricing"
-        ]
+        "conditions": "上下文窗口待核实"
       },
       "api_pricing": {
         "status": "provided",
@@ -3428,17 +2579,10 @@
             "unit": "per_1m_tokens",
             "input_uncached": 4,
             "conditions": "输入长度 ≤32K tokens；输出定价待补全，以千帆官方计费页为准。",
-            "source_refs": [
-              "wenxin-api-pricing"
-            ],
             "input_cached": 0,
             "output": 16
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方计费页未列出缓存价格，缓存能力待核实。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -3453,38 +2597,19 @@
           "description": "当前仅为部分核实，输出和长输入定价待补全。"
         }
       ],
-      "source_refs": [
-        "wenxin-api-pricing"
-      ],
       "sources": [
         {
-          "id": "wenxin-api-pricing",
           "title": "百度千帆 — 模型服务计费",
-          "url": "https://cloud.baidu.com/doc/qianfan/s/wmh4sv6ya",
-          "publisher": "百度",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
+          "url": "https://cloud.baidu.com/doc/qianfan/s/wmh4sv6ya"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "搜索"
-      ],
-      "scenes": [
-        "百度生态内企业级应用：千帆平台深度集成，适合百度云生态用户。",
-        "需要详细输出定价和完整缓存信息：当前仅为部分核实，输出和长输入定价待补全。"
-      ],
-      "access_level": "开放",
-      "access_barrier": "国内可直接访问，需百度账号",
-      "last_updated": "2026-07-28"
+      "official_date": null
     },
     {
       "id": "tool-level3:ernie-5.0",
-      "tool_key": "ernie-5.0",
       "vendor_key": "wenxin",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "ERNIE 5.0",
       "vendor_label": "百度",
       "icon": "📘",
@@ -3493,8 +2618,7 @@
       "summary": "百度旗舰模型，输入 ¥6/MTok（≤32K），128K 上下文，支持 Thinking 模式。",
       "one_m_context": {
         "status": "unknown",
-        "tokens": null,
-        "note": "模型列表标注 128K 上下文，但未确认是否支持 1M；请以官方最新文档为准。"
+        "conditions": "模型列表标注 128K 上下文，但未确认是否支持 1M；请以官方最新文档为准。"
       },
       "api_pricing": {
         "status": "provided",
@@ -3505,17 +2629,10 @@
             "unit": "per_1m_tokens",
             "input_uncached": 6,
             "conditions": "输入长度 ≤32K tokens；国际版约 $1.4/MTok 输入、$5.6/MTok 输出。",
-            "source_refs": [
-              "wenxin-api-pricing"
-            ],
             "input_cached": 0,
             "output": 24
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方计费页未列出缓存价格。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -3530,38 +2647,19 @@
           "description": "应比较 ERNIE 5.1。"
         }
       ],
-      "source_refs": [
-        "wenxin-api-pricing"
-      ],
       "sources": [
         {
-          "id": "wenxin-api-pricing",
           "title": "百度千帆 — 模型服务计费",
-          "url": "https://cloud.baidu.com/doc/qianfan/s/wmh4sv6ya",
-          "publisher": "百度",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
+          "url": "https://cloud.baidu.com/doc/qianfan/s/wmh4sv6ya"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "搜索"
-      ],
-      "scenes": [
-        "复杂推理与知识工作：ERNIE 5.0 支持 Thinking 模式，适合深度推理任务。",
-        "追求最新模型能力：应比较 ERNIE 5.1。"
-      ],
-      "access_level": "开放",
-      "access_barrier": "国内可直接访问，需百度账号",
-      "last_updated": "2026-07-28"
+      "official_date": null
     },
     {
       "id": "tool-level3:ernie-4.5-turbo",
-      "tool_key": "ernie-4.5-turbo",
       "vendor_key": "wenxin",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "ERNIE 4.5 Turbo",
       "vendor_label": "百度",
       "icon": "📘",
@@ -3570,11 +2668,8 @@
       "summary": "高性价比模型，¥0.8/MTok 输入、¥3.2/MTok 输出，128K 上下文。",
       "one_m_context": {
         "status": "not_supported",
-        "conditions": "128K 上下文",
-        "source_refs": [
-          "wenxin-api-pricing"
-        ],
-        "tokens": 128000
+        "tokens": 128000,
+        "conditions": "128K 上下文"
       },
       "api_pricing": {
         "status": "provided",
@@ -3586,16 +2681,9 @@
             "input_uncached": 0.8,
             "output": 3.2,
             "input_cached": 0.32,
-            "conditions": "缓存命中价格 ¥0.32/MTok（输入缓存命中时）。",
-            "source_refs": [
-              "wenxin-api-pricing"
-            ]
+            "conditions": "缓存命中价格 ¥0.32/MTok（输入缓存命中时）。"
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方提供缓存价格但未提供平均命中率区间。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -3610,38 +2698,19 @@
           "description": "应比较 ERNIE 5.0 或 ERNIE 5.1。"
         }
       ],
-      "source_refs": [
-        "wenxin-api-pricing"
-      ],
       "sources": [
         {
-          "id": "wenxin-api-pricing",
           "title": "百度千帆 — 模型服务计费",
-          "url": "https://cloud.baidu.com/doc/qianfan/s/wmh4sv6ya",
-          "publisher": "百度",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
+          "url": "https://cloud.baidu.com/doc/qianfan/s/wmh4sv6ya"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "搜索"
-      ],
-      "scenes": [
-        "成本敏感的通用任务：追求更低入门成本的中文文本生成和理解场景。",
-        "要求最高模型能力：应比较 ERNIE 5.0 或 ERNIE 5.1。"
-      ],
-      "access_level": "开放",
-      "access_barrier": "国内可直接访问，需百度账号",
-      "last_updated": "2026-07-28"
+      "official_date": null
     },
     {
       "id": "tool-level3:spark-ultra",
-      "tool_key": "spark-ultra",
       "vendor_key": "xinghuo",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "Spark 4.0 Ultra",
       "vendor_label": "科大讯飞",
       "icon": "🔥",
@@ -3650,11 +2719,8 @@
       "summary": "讯飞最强大的星火非思考大模型，已升级至 X1.5 快思考模式，32K 上下文。",
       "one_m_context": {
         "status": "not_supported",
-        "conditions": "32K 上下文",
-        "source_refs": [
-          "xinghuo-api-docs"
-        ],
-        "tokens": 32000
+        "tokens": 32000,
+        "conditions": "32K 上下文"
       },
       "api_pricing": {
         "status": "provided",
@@ -3665,17 +2731,10 @@
             "unit": "per_1m_tokens",
             "input_uncached": 2.1,
             "conditions": "约 ¥2.1/MTok（按 0.021元/万tokens 换算）；以官方控制台实际价格为准。",
-            "source_refs": [
-              "xinghuo-api-docs"
-            ],
             "input_cached": 0,
             "output": 2.1
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方文档未列出缓存价格。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -3690,38 +2749,19 @@
           "description": "可选择 Spark Lite（免费）或 Spark Pro。"
         }
       ],
-      "source_refs": [
-        "xinghuo-api-docs"
-      ],
       "sources": [
         {
-          "id": "xinghuo-api-docs",
           "title": "星火认知大模型 HTTP 接口文档",
-          "url": "https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html",
-          "publisher": "科大讯飞",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
+          "url": "https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "语音",
-        "办公"
-      ],
-      "scenes": [
-        "中文结构化抽取与逻辑推理：旗舰级大语言模型，适合企业级应用和复杂推理。",
-        "成本敏感的高频调用：可选择 Spark Lite（免费）或 Spark Pro。"
-      ],
-      "access_level": "开放",
-      "access_barrier": "国内可直接访问",
-      "last_updated": "2026-07-28"
+      "official_date": null
     },
     {
       "id": "tool-level3:spark-pro",
-      "tool_key": "spark-pro",
       "vendor_key": "xinghuo",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "Spark Pro",
       "vendor_label": "科大讯飞",
       "icon": "🔥",
@@ -3730,11 +2770,8 @@
       "summary": "专业级大语言模型，128K 上下文可选，适合文本和智能问答。",
       "one_m_context": {
         "status": "not_supported",
-        "conditions": "128K 上下文",
-        "source_refs": [
-          "xinghuo-api-docs"
-        ],
-        "tokens": 128000
+        "tokens": 128000,
+        "conditions": "128K 上下文"
       },
       "api_pricing": {
         "status": "provided",
@@ -3745,17 +2782,10 @@
             "unit": "per_1m_tokens",
             "input_uncached": 2.1,
             "conditions": "约 ¥2.1/MTok；已支持搜索、天气等内置插件；以官方控制台实际价格为准。",
-            "source_refs": [
-              "xinghuo-api-docs"
-            ],
             "input_cached": 0,
             "output": 2.1
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方文档未列出缓存价格。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -3770,38 +2800,19 @@
           "description": "应选择 Spark Ultra。"
         }
       ],
-      "source_refs": [
-        "xinghuo-api-docs"
-      ],
       "sources": [
         {
-          "id": "xinghuo-api-docs",
           "title": "星火认知大模型 HTTP 接口文档",
-          "url": "https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html",
-          "publisher": "科大讯飞",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
+          "url": "https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "语音",
-        "办公"
-      ],
-      "scenes": [
-        "文本处理与智能问答：性能和响应速度均衡，适合对时效性有要求的业务场景。",
-        "需要最高精度和复杂推理：应选择 Spark Ultra。"
-      ],
-      "access_level": "开放",
-      "access_barrier": "国内可直接访问",
-      "last_updated": "2026-07-28"
+      "official_date": null
     },
     {
       "id": "tool-level3:spark-lite",
-      "tool_key": "spark-lite",
       "vendor_key": "xinghuo",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "Spark Lite",
       "vendor_label": "科大讯飞",
       "icon": "🔥",
@@ -3810,19 +2821,12 @@
       "summary": "轻量级大模型，免费使用，响应速度最高。",
       "one_m_context": {
         "status": "not_supported",
-        "conditions": "8K 上下文",
-        "source_refs": [
-          "xinghuo-api-docs"
-        ],
-        "tokens": 8000
+        "tokens": 8000,
+        "conditions": "8K 上下文"
       },
       "api_pricing": {
         "status": "not_provided",
         "note": "Lite 版本 API 永久免费，官方未提供标准 token 计价；以官方控制台实际额度为准。"
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "免费模型不涉及缓存计费。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -3837,38 +2841,19 @@
           "description": "免费模型能力有限，高要求场景应选择 Pro 或 Ultra。"
         }
       ],
-      "source_refs": [
-        "xinghuo-api-docs"
-      ],
       "sources": [
         {
-          "id": "xinghuo-api-docs",
           "title": "星火认知大模型 HTTP 接口文档",
-          "url": "https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html",
-          "publisher": "科大讯飞",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
+          "url": "https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "语音",
-        "办公"
-      ],
-      "scenes": [
-        "高并发低延迟场景：适合对成本敏感、对响应速度要求高的简单任务。",
-        "复杂推理或专业任务：免费模型能力有限，高要求场景应选择 Pro 或 Ultra。"
-      ],
-      "access_level": "开放",
-      "access_barrier": "国内可直接访问",
-      "last_updated": "2026-07-28"
+      "official_date": null
     },
     {
       "id": "tool-level3:minimax-text-01",
-      "tool_key": "minimax-text-01",
       "vendor_key": "hailuo",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "MiniMax-Text-01",
       "vendor_label": "MiniMax",
       "icon": "🐚",
@@ -3877,10 +2862,7 @@
       "summary": "MiniMax 旗舰文本模型，$0.30/MTok，极具性价比。",
       "one_m_context": {
         "status": "unknown",
-        "conditions": "上下文窗口待核实",
-        "source_refs": [
-          "hailuo-api-pricing"
-        ]
+        "conditions": "上下文窗口待核实"
       },
       "api_pricing": {
         "status": "provided",
@@ -3892,16 +2874,9 @@
             "input_uncached": 0.3,
             "output": 0.3,
             "conditions": "以官方定价页为准；支持文本生成和 Agent 任务。",
-            "source_refs": [
-              "hailuo-api-pricing"
-            ],
             "input_cached": 0
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方未提供缓存命中率区间。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -3916,37 +2891,19 @@
           "description": "请核实官方最新上下文窗口规格。"
         }
       ],
-      "source_refs": [
-        "hailuo-api-pricing"
-      ],
       "sources": [
         {
-          "id": "hailuo-api-pricing",
           "title": "MiniMax Pricing",
-          "url": "https://minimax.io/pricing",
-          "publisher": "MiniMax",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
+          "url": "https://minimax.io/pricing"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "AI视频"
-      ],
-      "scenes": [
-        "成本敏感的企业级文本处理：极低 API 价格适合大规模文本生成和批量调用。",
-        "需要 1M 上下文窗口：请核实官方最新上下文窗口规格。"
-      ],
-      "access_level": "开放",
-      "access_barrier": "国内可直接访问",
-      "last_updated": "2026-07-28"
+      "official_date": null
     },
     {
       "id": "tool-level3:minimax-vl-01",
-      "tool_key": "minimax-vl-01",
       "vendor_key": "hailuo",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "MiniMax-VL-01",
       "vendor_label": "MiniMax",
       "icon": "🐚",
@@ -3955,18 +2912,11 @@
       "summary": "多模态视觉语言模型，按调用次数计费，$0.01/次。",
       "one_m_context": {
         "status": "unknown",
-        "conditions": "上下文窗口待核实",
-        "source_refs": [
-          "hailuo-api-pricing"
-        ]
+        "conditions": "上下文窗口待核实"
       },
       "api_pricing": {
         "status": "not_provided",
         "note": "官方按调用次数计费（/usr/bin/bash.01/次），无标准 token 计价；以官方定价页为准。"
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "按调用次数计费，不涉及 token 缓存。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -3981,37 +2931,19 @@
           "description": "纯文本任务应使用 MiniMax-Text-01。"
         }
       ],
-      "source_refs": [
-        "hailuo-api-pricing"
-      ],
       "sources": [
         {
-          "id": "hailuo-api-pricing",
           "title": "MiniMax Pricing",
-          "url": "https://minimax.io/pricing",
-          "publisher": "MiniMax",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
+          "url": "https://minimax.io/pricing"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "AI视频"
-      ],
-      "scenes": [
-        "图像理解与视频生成：Hailuo 02 支持 1080p 10 秒视频生成。",
-        "纯文本处理：纯文本任务应使用 MiniMax-Text-01。"
-      ],
-      "access_level": "开放",
-      "access_barrier": "国内可直接访问",
-      "last_updated": "2026-07-28"
+      "official_date": null
     },
     {
       "id": "tool-level3:grok-4.3",
-      "tool_key": "grok-4.3",
       "vendor_key": "grok",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "Grok 4.3",
       "vendor_label": "xAI",
       "icon": "🚀",
@@ -4021,10 +2953,7 @@
       "one_m_context": {
         "status": "native",
         "tokens": 1000000,
-        "conditions": "官方文档列为 1M 上下文窗口。",
-        "source_refs": [
-          "xai-api-pricing"
-        ]
+        "conditions": "官方文档列为 1M 上下文窗口。"
       },
       "api_pricing": {
         "status": "provided",
@@ -4036,16 +2965,9 @@
             "input_uncached": 1.25,
             "output": 2.5,
             "input_cached": 0.2,
-            "conditions": "缓存命中价格对应 5 分钟缓存。",
-            "source_refs": [
-              "xai-api-pricing"
-            ]
+            "conditions": "缓存命中价格对应 5 分钟缓存。"
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方提供缓存价格但未提供平均命中率区间。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -4060,37 +2982,19 @@
           "description": "可选择 Grok 4.1 Fast 以降低费用。"
         }
       ],
-      "source_refs": [
-        "xai-api-pricing"
-      ],
       "sources": [
         {
-          "id": "xai-api-pricing",
           "title": "xAI API Pricing",
-          "url": "https://x.ai/api/pricing",
-          "publisher": "xAI",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
+          "url": "https://x.ai/api/pricing"
         }
       ],
-      "category": [
-        "对话",
-        "搜索",
-        "编程"
-      ],
-      "scenes": [
-        "高要求推理与生产任务：官方定位为最高智能旗舰，适合复杂推理和生产级应用。",
-        "成本敏感型批量调用：可选择 Grok 4.1 Fast 以降低费用。"
-      ],
-      "access_level": "受限",
-      "access_barrier": "需要科学上网",
-      "last_updated": "2026-07-28"
+      "official_date": null
     },
     {
       "id": "tool-level3:grok-4.1-fast",
-      "tool_key": "grok-4.1-fast",
       "vendor_key": "grok",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "Grok 4.1 Fast",
       "vendor_label": "xAI",
       "icon": "🚀",
@@ -4100,10 +3004,7 @@
       "one_m_context": {
         "status": "native",
         "tokens": 2000000,
-        "conditions": "官方文档列为 2M 上下文窗口。",
-        "source_refs": [
-          "xai-api-pricing"
-        ]
+        "conditions": "官方文档列为 2M 上下文窗口。"
       },
       "api_pricing": {
         "status": "provided",
@@ -4115,16 +3016,9 @@
             "input_uncached": 0.2,
             "output": 0.5,
             "input_cached": 0.02,
-            "conditions": "缓存命中价格约 10%。",
-            "source_refs": [
-              "xai-api-pricing"
-            ]
+            "conditions": "缓存命中价格约 10%。"
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方提供缓存价格但未提供平均命中率区间。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -4139,37 +3033,19 @@
           "description": "应比较 Grok 4.3。"
         }
       ],
-      "source_refs": [
-        "xai-api-pricing"
-      ],
       "sources": [
         {
-          "id": "xai-api-pricing",
           "title": "xAI API Pricing",
-          "url": "https://x.ai/api/pricing",
-          "publisher": "xAI",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
+          "url": "https://x.ai/api/pricing"
         }
       ],
-      "category": [
-        "对话",
-        "搜索",
-        "编程"
-      ],
-      "scenes": [
-        "成本敏感的高频调用：目前最具性价比的具备推理能力的前沿模型之一。",
-        "要求最高智能水平：应比较 Grok 4.3。"
-      ],
-      "access_level": "受限",
-      "access_barrier": "需要科学上网",
-      "last_updated": "2026-07-28"
+      "official_date": null
     },
     {
       "id": "tool-level3:mistral-medium-3.5",
-      "tool_key": "mistral-medium-3.5",
       "vendor_key": "mistral",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "Mistral Medium 3.5",
       "vendor_label": "Mistral AI",
       "icon": "🏔️",
@@ -4178,7 +3054,7 @@
       "summary": "当前旗舰模型，兼顾逻辑推理、编码和 Agent 流程。",
       "one_m_context": {
         "status": "unknown",
-        "note": "官方定价页未列出具体上下文窗口限制；请参见 https://docs.mistral.ai/models/overview"
+        "conditions": "官方定价页未列出具体上下文窗口限制；请参见 https://docs.mistral.ai/models/overview"
       },
       "api_pricing": {
         "status": "provided",
@@ -4190,16 +3066,9 @@
             "input_uncached": 1.5,
             "output": 7.5,
             "conditions": "开放许可；支持 text-to-text、推理、编码和 Agent。",
-            "source_refs": [
-              "mistral-api-pricing"
-            ],
             "input_cached": 0
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方未提供缓存命中率区间。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -4214,35 +3083,19 @@
           "description": "可选 Mistral Small 4 降低费用。"
         }
       ],
-      "source_refs": [
-        "mistral-api-pricing"
-      ],
       "sources": [
         {
-          "id": "mistral-api-pricing",
           "title": "Mistral API Pricing",
-          "url": "https://mistral.ai/pricing/api/",
-          "publisher": "Mistral AI",
-          "source_type": "official",
-          "queried_at": "2026-07-27T07:46:15.009Z"
+          "url": "https://mistral.ai/pricing/api/"
         }
       ],
-      "category": [
-        "对话"
-      ],
-      "scenes": [
-        "复杂推理与编码：官方旗舰多模态，适合高要求工作。",
-        "成本敏感型：可选 Mistral Small 4 降低费用。"
-      ],
-      "access_level": "受限",
-      "access_barrier": "境外（需科学上网）",
-      "last_updated": "2026-07-27"
+      "official_date": null
     },
     {
       "id": "tool-level3:mistral-large-3",
-      "tool_key": "mistral-large-3",
       "vendor_key": "mistral",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "Mistral Large 3",
       "vendor_label": "Mistral AI",
       "icon": "🏔️",
@@ -4251,7 +3104,7 @@
       "summary": "开放权重旗舰模型，通用多语言多模态。",
       "one_m_context": {
         "status": "unknown",
-        "note": "官方定价页未列出具体上下文窗口限制；请参见 https://docs.mistral.ai/models/overview"
+        "conditions": "官方定价页未列出具体上下文窗口限制；请参见 https://docs.mistral.ai/models/overview"
       },
       "api_pricing": {
         "status": "provided",
@@ -4263,16 +3116,9 @@
             "input_uncached": 0.5,
             "output": 1.5,
             "conditions": "开放许可；面向通用文本和多模态任务。",
-            "source_refs": [
-              "mistral-api-pricing"
-            ],
             "input_cached": 0
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方未提供缓存命中率区间。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -4287,35 +3133,19 @@
           "description": "应比较 Mistral Medium 3.5。"
         }
       ],
-      "source_refs": [
-        "mistral-api-pricing"
-      ],
       "sources": [
         {
-          "id": "mistral-api-pricing",
           "title": "Mistral API Pricing",
-          "url": "https://mistral.ai/pricing/api/",
-          "publisher": "Mistral AI",
-          "source_type": "official",
-          "queried_at": "2026-07-27T07:46:15.009Z"
+          "url": "https://mistral.ai/pricing/api/"
         }
       ],
-      "category": [
-        "对话"
-      ],
-      "scenes": [
-        "通用文本与多语言：开放权重旗舰，适合自部署和微调。",
-        "要求最高最新能力：应比较 Mistral Medium 3.5。"
-      ],
-      "access_level": "受限",
-      "access_barrier": "境外（需科学上网）",
-      "last_updated": "2026-07-27"
+      "official_date": null
     },
     {
       "id": "tool-level3:mistral-small-4",
-      "tool_key": "mistral-small-4",
       "vendor_key": "mistral",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "Mistral Small 4",
       "vendor_label": "Mistral AI",
       "icon": "🏔️",
@@ -4324,7 +3154,7 @@
       "summary": "轻量多语言多模态模型，Apache 2.0 许可。",
       "one_m_context": {
         "status": "unknown",
-        "note": "官方定价页未列出具体上下文窗口限制；请参见 https://docs.mistral.ai/models/overview"
+        "conditions": "官方定价页未列出具体上下文窗口限制；请参见 https://docs.mistral.ai/models/overview"
       },
       "api_pricing": {
         "status": "provided",
@@ -4336,16 +3166,9 @@
             "input_uncached": 0.15,
             "output": 0.6,
             "conditions": "Apache 2.0 许可；面向低成本、轻量级任务。",
-            "source_refs": [
-              "mistral-api-pricing"
-            ],
             "input_cached": 0
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方未提供缓存命中率区间。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -4360,35 +3183,19 @@
           "description": "可选 Mistral Medium 3.5。"
         }
       ],
-      "source_refs": [
-        "mistral-api-pricing"
-      ],
       "sources": [
         {
-          "id": "mistral-api-pricing",
           "title": "Mistral API Pricing",
-          "url": "https://mistral.ai/pricing/api/",
-          "publisher": "Mistral AI",
-          "source_type": "official",
-          "queried_at": "2026-07-27T07:46:15.009Z"
+          "url": "https://mistral.ai/pricing/api/"
         }
       ],
-      "category": [
-        "对话"
-      ],
-      "scenes": [
-        "成本敏感的批量处理：Apache 2.0 许可适合自由部署和商用。",
-        "高要求复杂工作：可选 Mistral Medium 3.5。"
-      ],
-      "access_level": "受限",
-      "access_barrier": "境外（需科学上网）",
-      "last_updated": "2026-07-27"
+      "official_date": null
     },
     {
       "id": "tool-level3:devstral-2",
-      "tool_key": "devstral-2",
       "vendor_key": "mistral",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "Devstral 2",
       "vendor_label": "Mistral AI",
       "icon": "🏔️",
@@ -4397,7 +3204,7 @@
       "summary": "开源编码代理模型，面向自主软件工程。",
       "one_m_context": {
         "status": "unknown",
-        "note": "官方定价页未列出具体上下文窗口限制；请参见 https://docs.mistral.ai/models/overview"
+        "conditions": "官方定价页未列出具体上下文窗口限制；请参见 https://docs.mistral.ai/models/overview"
       },
       "api_pricing": {
         "status": "provided",
@@ -4409,16 +3216,9 @@
             "input_uncached": 0.4,
             "output": 2,
             "conditions": "开放许可；面向编程和 Agent 工作流。",
-            "source_refs": [
-              "mistral-api-pricing"
-            ],
             "input_cached": 0
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方未提供缓存命中率区间。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -4433,35 +3233,19 @@
           "description": "纯推理或写作可选 Medium 3.5。"
         }
       ],
-      "source_refs": [
-        "mistral-api-pricing"
-      ],
       "sources": [
         {
-          "id": "mistral-api-pricing",
           "title": "Mistral API Pricing",
-          "url": "https://mistral.ai/pricing/api/",
-          "publisher": "Mistral AI",
-          "source_type": "official",
-          "queried_at": "2026-07-27T07:46:15.009Z"
+          "url": "https://mistral.ai/pricing/api/"
         }
       ],
-      "category": [
-        "对话"
-      ],
-      "scenes": [
-        "AI 编程代理：官方定位为自主软件工程编码模型。",
-        "非编码工作：纯推理或写作可选 Medium 3.5。"
-      ],
-      "access_level": "受限",
-      "access_barrier": "境外（需科学上网）",
-      "last_updated": "2026-07-27"
+      "official_date": null
     },
     {
       "id": "tool-level3:codestral",
-      "tool_key": "codestral",
       "vendor_key": "mistral",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "Codestral",
       "vendor_label": "Mistral AI",
       "icon": "🏔️",
@@ -4470,7 +3254,7 @@
       "summary": "低延迟编码模型，优化高频补全和代码生成。",
       "one_m_context": {
         "status": "unknown",
-        "note": "官方定价页未列出具体上下文窗口限制；请参见 https://docs.mistral.ai/models/overview"
+        "conditions": "官方定价页未列出具体上下文窗口限制；请参见 https://docs.mistral.ai/models/overview"
       },
       "api_pricing": {
         "status": "provided",
@@ -4482,16 +3266,9 @@
             "input_uncached": 0.3,
             "output": 0.9,
             "conditions": "Premier 许可；面向高频代码补全和中段填充。",
-            "source_refs": [
-              "mistral-api-pricing"
-            ],
             "input_cached": 0
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方未提供缓存命中率区间。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -4506,35 +3283,19 @@
           "description": "Codestral 是纯编码模型。"
         }
       ],
-      "source_refs": [
-        "mistral-api-pricing"
-      ],
       "sources": [
         {
-          "id": "mistral-api-pricing",
           "title": "Mistral API Pricing",
-          "url": "https://mistral.ai/pricing/api/",
-          "publisher": "Mistral AI",
-          "source_type": "official",
-          "queried_at": "2026-07-27T07:46:15.009Z"
+          "url": "https://mistral.ai/pricing/api/"
         }
       ],
-      "category": [
-        "对话"
-      ],
-      "scenes": [
-        "IDE 代码补全和 FIM：低延迟优化，适合高频编码交互。",
-        "长文本、多模态：Codestral 是纯编码模型。"
-      ],
-      "access_level": "受限",
-      "access_barrier": "境外（需科学上网）",
-      "last_updated": "2026-07-27"
+      "official_date": null
     },
     {
       "id": "tool-level3:command-a",
-      "tool_key": "command-a",
       "vendor_key": "cohere",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "Command A",
       "vendor_label": "Cohere",
       "icon": "🔗",
@@ -4543,11 +3304,8 @@
       "summary": "Cohere 最大最强模型，$2.50/$10.00 每百万 token，128K 上下文。",
       "one_m_context": {
         "status": "not_supported",
-        "conditions": "128K 上下文",
-        "source_refs": [
-          "cohere-api-pricing"
-        ],
-        "tokens": 128000
+        "tokens": 128000,
+        "conditions": "128K 上下文"
       },
       "api_pricing": {
         "status": "provided",
@@ -4559,16 +3317,9 @@
             "input_uncached": 2.5,
             "output": 10,
             "conditions": "以 Cohere Dashboard 实际费率为准。",
-            "source_refs": [
-              "cohere-api-pricing"
-            ],
             "input_cached": 0
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方定价页未公开缓存价格。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -4583,38 +3334,19 @@
           "description": "可选择 Command R 或 Command R7B。"
         }
       ],
-      "source_refs": [
-        "cohere-api-pricing"
-      ],
       "sources": [
         {
-          "id": "cohere-api-pricing",
           "title": "Cohere Pricing",
-          "url": "https://cohere.com/pricing",
-          "publisher": "Cohere",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
+          "url": "https://cohere.com/pricing"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "企业应用"
-      ],
-      "scenes": [
-        "企业级复杂推理与 RAG：最大最强大的 Command 模型，适合高要求企业级应用。",
-        "成本敏感型简单任务：可选择 Command R 或 Command R7B。"
-      ],
-      "access_level": "受限",
-      "access_barrier": "境外（需科学上网）",
-      "last_updated": "2026-07-28"
+      "official_date": null
     },
     {
       "id": "tool-level3:command-r-plus",
-      "tool_key": "command-r-plus",
       "vendor_key": "cohere",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "Command R+",
       "vendor_label": "Cohere",
       "icon": "🔗",
@@ -4623,11 +3355,8 @@
       "summary": "面向高级企业任务，$2.50/$10.00 每百万 token，128K 上下文。",
       "one_m_context": {
         "status": "not_supported",
-        "conditions": "128K 上下文",
-        "source_refs": [
-          "cohere-api-pricing"
-        ],
-        "tokens": 128000
+        "tokens": 128000,
+        "conditions": "128K 上下文"
       },
       "api_pricing": {
         "status": "provided",
@@ -4639,16 +3368,9 @@
             "input_uncached": 2.5,
             "output": 10,
             "conditions": "以 Cohere Dashboard 实际费率为准。",
-            "source_refs": [
-              "cohere-api-pricing"
-            ],
             "input_cached": 0
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方定价页未公开缓存价格。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -4663,38 +3385,19 @@
           "description": "应比较 Command A。"
         }
       ],
-      "source_refs": [
-        "cohere-api-pricing"
-      ],
       "sources": [
         {
-          "id": "cohere-api-pricing",
           "title": "Cohere Pricing",
-          "url": "https://cohere.com/pricing",
-          "publisher": "Cohere",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
+          "url": "https://cohere.com/pricing"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "企业应用"
-      ],
-      "scenes": [
-        "高级检索增强与多步工具使用：面向需要复杂推理和工具调用的企业级场景。",
-        "需要最新最强模型：应比较 Command A。"
-      ],
-      "access_level": "受限",
-      "access_barrier": "境外（需科学上网）",
-      "last_updated": "2026-07-28"
+      "official_date": null
     },
     {
       "id": "tool-level3:command-r",
-      "tool_key": "command-r",
       "vendor_key": "cohere",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "Command R",
       "vendor_label": "Cohere",
       "icon": "🔗",
@@ -4703,11 +3406,8 @@
       "summary": "平衡性能与成本，$0.15/$0.60 每百万 token，128K 上下文。",
       "one_m_context": {
         "status": "not_supported",
-        "conditions": "128K 上下文",
-        "source_refs": [
-          "cohere-api-pricing"
-        ],
-        "tokens": 128000
+        "tokens": 128000,
+        "conditions": "128K 上下文"
       },
       "api_pricing": {
         "status": "provided",
@@ -4719,16 +3419,9 @@
             "input_uncached": 0.15,
             "output": 0.6,
             "conditions": "以 Cohere Dashboard 实际费率为准。",
-            "source_refs": [
-              "cohere-api-pricing"
-            ],
             "input_cached": 0
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方定价页未公开缓存价格。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -4743,38 +3436,19 @@
           "description": "可选择 Command R7B。"
         }
       ],
-      "source_refs": [
-        "cohere-api-pricing"
-      ],
       "sources": [
         {
-          "id": "cohere-api-pricing",
           "title": "Cohere Pricing",
-          "url": "https://cohere.com/pricing",
-          "publisher": "Cohere",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
+          "url": "https://cohere.com/pricing"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "企业应用"
-      ],
-      "scenes": [
-        "中等复杂度文本处理：在性能和成本之间取得良好平衡，与 GPT-4o Mini 同价。",
-        "要求最低成本：可选择 Command R7B。"
-      ],
-      "access_level": "受限",
-      "access_barrier": "境外（需科学上网）",
-      "last_updated": "2026-07-28"
+      "official_date": null
     },
     {
       "id": "tool-level3:command-r7b",
-      "tool_key": "command-r7b",
       "vendor_key": "cohere",
-      "kind": "api_model",
+      "detail_kind": "api_model",
+      "theme": "general",
       "title": "Command R7B",
       "vendor_label": "Cohere",
       "icon": "🔗",
@@ -4783,11 +3457,8 @@
       "summary": "最具性价比，$0.0375/$0.15 每百万 token，适合大容量简单任务。",
       "one_m_context": {
         "status": "not_supported",
-        "conditions": "128K 上下文",
-        "source_refs": [
-          "cohere-api-pricing"
-        ],
-        "tokens": 128000
+        "tokens": 128000,
+        "conditions": "128K 上下文"
       },
       "api_pricing": {
         "status": "provided",
@@ -4799,16 +3470,9 @@
             "input_uncached": 0.0375,
             "output": 0.15,
             "conditions": "以 Cohere Dashboard 实际费率为准。",
-            "source_refs": [
-              "cohere-api-pricing"
-            ],
             "input_cached": 0
           }
         ]
-      },
-      "cache_hit_rate": {
-        "status": "not_provided",
-        "note": "官方定价页未公开缓存价格。"
       },
       "plan": null,
       "applicable_scenarios": [
@@ -4823,32 +3487,13 @@
           "description": "应选择 Command R 或 Command R+。"
         }
       ],
-      "source_refs": [
-        "cohere-api-pricing"
-      ],
       "sources": [
         {
-          "id": "cohere-api-pricing",
           "title": "Cohere Pricing",
-          "url": "https://cohere.com/pricing",
-          "publisher": "Cohere",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
+          "url": "https://cohere.com/pricing"
         }
       ],
-      "category": [
-        "对话",
-        "写作",
-        "编程",
-        "企业应用"
-      ],
-      "scenes": [
-        "大容量简单任务与分类：追求极致性价比的场景，如批量文本分类、摘要和情感分析。",
-        "复杂推理或多步工具使用：应选择 Command R 或 Command R+。"
-      ],
-      "access_level": "受限",
-      "access_barrier": "境外（需科学上网）",
-      "last_updated": "2026-07-28"
+      "official_date": null
     }
   ]
 }

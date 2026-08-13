@@ -48,27 +48,29 @@ function checkRef(area, source, target, targetIds, field) {
 
 const VENDOR_CARD_FIELDS = new Set([
   'id', 'vendor_key', 'title', 'icon', 'summary', 'feature_preview',
-  'categories', 'scenes', 'access_level', 'price_status', 'search_terms', 'level1_ref',
+  'access_level', 'price_badge', 'search_terms', 'level1_ref',
 ]);
 const TOOL_CARD_FIELDS = new Set([
   'id', 'tool_key', 'vendor_key', 'title', 'vendor_label', 'icon', 'summary', 'theme',
-  'categories', 'scenes', 'best_for_preview', 'not_for_preview', 'price_badge',
+  'scenes', 'best_for_preview', 'not_for_preview', 'price_badge',
   'access_level', 'search_terms', 'detail_ref', 'detail_kind',
 ]);
 const VENDOR_LEVEL1_FIELDS = new Set([
-  'id', 'vendor_key', 'title', 'entry_label', 'display_title', 'icon', 'official_url',
-  'description', 'status', 'features', 'level2_refs', 'citations',
+  'id', 'vendor_key', 'title', 'icon', 'official_url',
+  'description', 'status', 'features', 'level2_refs',
 ]);
 const VENDOR_LEVEL2_FIELDS = new Set([
-  'id', 'level1_ref', 'vendor_key', 'title', 'kind', 'official_url', 'summary', 'status',
-  'detail_refs', 'citations',
+  'id', 'level1_ref', 'vendor_key', 'title', 'official_url', 'summary', 'status',
+  'detail_refs',
 ]);
 const TOOL_LEVEL3_FIELDS = new Set([
-  'id', 'tool_key', 'vendor_key', 'kind', 'title', 'vendor_label', 'icon', 'official_url',
-  'status', 'summary', 'weaknesses', 'one_m_context', 'api_pricing', 'cache_hit_rate', 'plan',
-  'applicable_scenarios', 'inapplicable_scenarios', 'source_refs', 'sources', 'category', 'scenes',
-  'access_level', 'access_barrier', 'free_tier', 'paid_tiers', 'last_updated',
+  'id', 'vendor_key', 'detail_kind', 'theme', 'title', 'vendor_label', 'icon', 'official_url',
+  'status', 'summary', 'one_m_context', 'api_pricing', 'plan',
+  'applicable_scenarios', 'inapplicable_scenarios', 'sources', 'official_date',
 ]);
+const DETAIL_KINDS = new Set(['tool', 'api_model', 'subscription_plan', 'product_variant']);
+const TOOL_CARD_KINDS = new Set(['tool', 'api_model', 'product_variant']);
+const THEMES = new Set(['general', 'dev', 'vision', 'media']);
 
 function checkAllowedFields(area, items, allowedFields) {
   items.forEach(item => {
@@ -105,11 +107,19 @@ function validateFiveModules() {
   checkRef('vendor-preview-level2.json', level2, 'tool-preview-level3.json', level3Ids, 'detail_refs');
   checkRef('tool-cards.json', toolCards, 'tool-preview-level3.json', level3Ids, 'detail_ref');
 
-  const cardDetails = new Set(toolCards.map(item => item.detail_ref?.id).filter(Boolean));
+  const cardsByDetail = new Map(toolCards.map(item => [item.detail_ref?.id, item]));
   level3.forEach(item => {
-    if (!cardDetails.has(item.id)) fail(`tool-preview-level3.json ${item.id} 没有对应工具卡片`);
-    if (!item.title || !item.kind || !item.vendor_key) fail(`tool-preview-level3.json ${item.id} 缺少 title/kind/vendor_key`);
+    if (!DETAIL_KINDS.has(item.detail_kind)) fail(`tool-preview-level3.json ${item.id} detail_kind 无效: ${item.detail_kind}`);
+    if (!item.title || !item.detail_kind || !item.vendor_key) fail(`tool-preview-level3.json ${item.id} 缺少 title/detail_kind/vendor_key`);
     if (item.official_url && !isHttpUrl(item.official_url)) fail(`tool-preview-level3.json ${item.id}.official_url 仅允许 HTTP/HTTPS`);
+    if (item.official_date !== null && item.official_date !== undefined && !/^\\d{4}-\\d{2}-\\d{2}$/.test(item.official_date)) fail(`tool-preview-level3.json ${item.id}.official_date 格式无效`);
+    if (item.detail_kind !== 'subscription_plan' && (!item.theme || !THEMES.has(item.theme))) fail(`tool-preview-level3.json ${item.id} 缺少有效 theme`);
+    if (item.detail_kind === 'subscription_plan' && cardsByDetail.has(item.id)) fail(`tool-preview-level3.json ${item.id} 套餐不应生成工具卡`);
+    if (item.detail_kind !== 'subscription_plan' && !cardsByDetail.has(item.id)) fail(`tool-preview-level3.json ${item.id} 没有对应工具卡片`);
+    const card = cardsByDetail.get(item.id);
+    if (card && (!TOOL_CARD_KINDS.has(card.detail_kind) || card.detail_kind !== item.detail_kind || card.theme !== item.theme)) fail(`tool-preview-level3.json ${item.id} 与工具卡 detail_kind/theme 不一致`);
+    if (item.sources?.some(source => !source.title || !isHttpUrl(source.url))) fail(`tool-preview-level3.json ${item.id}.sources 存在无效来源`);
+    if (item.one_m_context?.source_refs || item.api_pricing?.rate_cards?.some(rate => rate.source_refs) || item.api_pricing?.additional_charges?.some(charge => charge.source_refs) || item.plan?.source_refs) fail(`tool-preview-level3.json ${item.id} 包含已删除的嵌套 source_refs`);
   });
 
   vendorCards.forEach(item => {
@@ -117,6 +127,8 @@ function validateFiveModules() {
   });
   toolCards.forEach(item => {
     if (!item.title || !item.tool_key || !item.detail_ref) fail(`tool-cards.json ${item.id} 缺少 title/tool_key/detail_ref`);
+    if (!TOOL_CARD_KINDS.has(item.detail_kind)) fail(`tool-cards.json ${item.id} 不允许作为工具卡: ${item.detail_kind}`);
+    if (!THEMES.has(item.theme)) fail(`tool-cards.json ${item.id} 缺少有效 theme`);
   });
   console.log(`  五模块目录: 厂商卡 ${vendorCards.length} · 工具卡 ${toolCards.length} · 一级 ${level1.length} · 二级 ${level2.length} · 三级 ${level3.length}，通过`);
 }

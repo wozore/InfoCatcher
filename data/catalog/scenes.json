@@ -30,12 +30,12 @@
                               "recommendations": [
                                     {
                                           "tool_id": "claude",
-                                          "item_id": "claude-sonnet-5",
+                                          "detail_ref": "tool-level3:claude-sonnet-5",
                                           "reason": "通用写作、研究与整理任务优先展示能力与成本平衡的 Sonnet 5。"
                                     },
                                     {
                                           "tool_id": "chatgpt",
-                                          "item_id": "gpt-5.6-terra",
+                                          "detail_ref": "tool-level3:gpt-5.6-terra",
                                           "reason": "通用工作优先展示智能与成本平衡的 GPT-5.6 Terra。"
                                     }
                               ]
@@ -50,12 +50,12 @@
                               "recommendations": [
                                     {
                                           "tool_id": "gemini",
-                                          "item_id": "gemini-3.5-flash",
+                                          "detail_ref": "tool-level3:gemini-3.5-flash",
                                           "reason": "翻译、搜索与通用任务优先展示速度和 grounding 兼顾的 Gemini 3.5 Flash。"
                                     },
                                     {
                                           "tool_id": "deepseek",
-                                          "item_id": "deepseek-v4-flash",
+                                          "detail_ref": "tool-level3:deepseek-v4-flash",
                                           "reason": "翻译与通用高频任务优先展示低成本 V4 Flash。"
                                     }
                               ]
@@ -90,7 +90,7 @@
                               "recommendations": [
                                     {
                                           "tool_id": "chatgpt",
-                                          "item_id": "gpt-5.6-terra",
+                                          "detail_ref": "tool-level3:gpt-5.6-terra",
                                           "reason": "通用工作优先展示智能与成本平衡的 GPT-5.6 Terra。"
                                     }
                               ]
@@ -104,7 +104,7 @@
                               "recommendations": [
                                     {
                                           "tool_id": "claude",
-                                          "item_id": "claude-fable-5",
+                                          "detail_ref": "tool-level3:claude-fable-5",
                                           "reason": "长时间复杂知识任务优先展示 Fable 5。"
                                     }
                               ]
@@ -118,7 +118,7 @@
                               "recommendations": [
                                     {
                                           "tool_id": "gemini",
-                                          "item_id": "gemini-2.5-pro",
+                                          "detail_ref": "tool-level3:gemini-2.5-pro",
                                           "reason": "复杂推理与数据任务优先展示 Gemini 2.5 Pro。"
                                     }
                               ]
@@ -174,7 +174,7 @@
                               "recommendations": [
                                     {
                                           "tool_id": "deepseek",
-                                          "item_id": "deepseek-v4-pro",
+                                          "detail_ref": "tool-level3:deepseek-v4-pro",
                                           "reason": "编码、数学和逻辑任务优先展示 V4 Pro。"
                                     }
                               ]
@@ -208,12 +208,12 @@
                               "recommendations": [
                                     {
                                           "tool_id": "gemini",
-                                          "item_id": "gemini-3.5-flash",
+                                          "detail_ref": "tool-level3:gemini-3.5-flash",
                                           "reason": "翻译、搜索与通用任务优先展示速度和 grounding 兼顾的 Gemini 3.5 Flash。"
                                     },
                                     {
                                           "tool_id": "chatgpt",
-                                          "item_id": "gpt-5.6-terra",
+                                          "detail_ref": "tool-level3:gpt-5.6-terra",
                                           "reason": "通用工作优先展示智能与成本平衡的 GPT-5.6 Terra。"
                                     }
                               ]
@@ -227,7 +227,7 @@
                               "recommendations": [
                                     {
                                           "tool_id": "claude",
-                                          "item_id": "claude-fable-5",
+                                          "detail_ref": "tool-level3:claude-fable-5",
                                           "reason": "长时间复杂知识任务优先展示 Fable 5。"
                                     }
                               ]
@@ -242,12 +242,12 @@
                               "recommendations": [
                                     {
                                           "tool_id": "deepseek",
-                                          "item_id": "deepseek-v4-flash",
+                                          "detail_ref": "tool-level3:deepseek-v4-flash",
                                           "reason": "翻译与通用高频任务优先展示低成本 V4 Flash。"
                                     },
                                     {
                                           "tool_id": "claude",
-                                          "item_id": "claude-sonnet-5",
+                                          "detail_ref": "tool-level3:claude-sonnet-5",
                                           "reason": "通用写作、研究与整理任务优先展示能力与成本平衡的 Sonnet 5。"
                                     }
                               ]
@@ -287,7 +287,7 @@
                               "recommendations": [
                                     {
                                           "tool_id": "claude",
-                                          "item_id": "claude-fable-5",
+                                          "detail_ref": "tool-level3:claude-fable-5",
                                           "reason": "长时间复杂知识任务优先展示 Fable 5。"
                                     }
                               ]
@@ -301,12 +301,12 @@
                               "recommendations": [
                                     {
                                           "tool_id": "chatgpt",
-                                          "item_id": "gpt-5.6-sol",
+                                          "detail_ref": "tool-level3:gpt-5.6-sol",
                                           "reason": "复杂专业任务优先展示旗舰变体 GPT-5.6 Sol。"
                                     },
                                     {
                                           "tool_id": "gemini",
-                                          "item_id": "gemini-2.5-pro",
+                                          "detail_ref": "tool-level3:gemini-2.5-pro",
                                           "reason": "复杂推理与数据任务优先展示 Gemini 2.5 Pro。"
                                     }
                               ]
@@ -431,12 +431,12 @@
                               "recommendations": [
                                     {
                                           "tool_id": "chatgpt",
-                                          "item_id": "gpt-5.6-terra",
+                                          "detail_ref": "tool-level3:gpt-5.6-terra",
                                           "reason": "通用工作优先展示智能与成本平衡的 GPT-5.6 Terra。"
                                     },
                                     {
                                           "tool_id": "claude",
-                                          "item_id": "claude-sonnet-5",
+                                          "detail_ref": "tool-level3:claude-sonnet-5",
                                           "reason": "通用写作、研究与整理任务优先展示能力与成本平衡的 Sonnet 5。"
                                     }
                               ]
@@ -450,7 +450,7 @@
                               "recommendations": [
                                     {
                                           "tool_id": "gemini",
-                                          "item_id": "gemini-3.5-flash",
+                                          "detail_ref": "tool-level3:gemini-3.5-flash",
                                           "reason": "翻译、搜索与通用任务优先展示速度和 grounding 兼顾的 Gemini 3.5 Flash。"
                                     }
                               ]
@@ -493,12 +493,12 @@
                               "recommendations": [
                                     {
                                           "tool_id": "chatgpt",
-                                          "item_id": "gpt-5.6-terra",
+                                          "detail_ref": "tool-level3:gpt-5.6-terra",
                                           "reason": "通用工作优先展示智能与成本平衡的 GPT-5.6 Terra。"
                                     },
                                     {
                                           "tool_id": "claude",
-                                          "item_id": "claude-sonnet-5",
+                                          "detail_ref": "tool-level3:claude-sonnet-5",
                                           "reason": "通用写作、研究与整理任务优先展示能力与成本平衡的 Sonnet 5。"
                                     }
                               ]
@@ -542,7 +542,7 @@
                               "recommendations": [
                                     {
                                           "tool_id": "chatgpt",
-                                          "item_id": "gpt-5.6-luna",
+                                          "detail_ref": "tool-level3:gpt-5.6-luna",
                                           "reason": "学习和常规任务优先展示成本优化变体 GPT-5.6 Luna。"
                                     }
                               ]
@@ -562,7 +562,7 @@
                               "recommendations": [
                                     {
                                           "tool_id": "deepseek",
-                                          "item_id": "deepseek-v4-flash",
+                                          "detail_ref": "tool-level3:deepseek-v4-flash",
                                           "reason": "翻译与通用高频任务优先展示低成本 V4 Flash。"
                                     }
                               ]
@@ -577,17 +577,17 @@
                               "recommendations": [
                                     {
                                           "tool_id": "deepseek",
-                                          "item_id": "deepseek-v4-pro",
+                                          "detail_ref": "tool-level3:deepseek-v4-pro",
                                           "reason": "编码、数学和逻辑任务优先展示 V4 Pro。"
                                     },
                                     {
                                           "tool_id": "gemini",
-                                          "item_id": "gemini-2.5-pro",
+                                          "detail_ref": "tool-level3:gemini-2.5-pro",
                                           "reason": "复杂推理与数据任务优先展示 Gemini 2.5 Pro。"
                                     },
                                     {
                                           "tool_id": "chatgpt",
-                                          "item_id": "gpt-5.6-terra",
+                                          "detail_ref": "tool-level3:gpt-5.6-terra",
                                           "reason": "通用工作优先展示智能与成本平衡的 GPT-5.6 Terra。"
                                     }
                               ]

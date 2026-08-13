@@ -9,7 +9,6 @@
       },
       "vendor_key": "chatgpt",
       "title": "GPT-5.6",
-      "kind": "product_variant",
       "official_url": "https://openai.com/index/gpt-5-6",
       "summary": "GPT-5.6 模型家族；Sol、Terra 与 Luna 分别对应旗舰、平衡和高效率层级。",
       "status": "active",
@@ -26,16 +25,6 @@
           "kind": "tool-level3",
           "id": "tool-level3:gpt-5.6-luna"
         }
-      ],
-      "citations": [
-        {
-          "id": "openai-model-compare",
-          "title": "Compare models",
-          "url": "https://developers.openai.com/api/docs/models/compare",
-          "publisher": "OpenAI",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
-        }
       ]
     },
     {
@@ -46,21 +35,10 @@
       },
       "vendor_key": "chatgpt",
       "title": "Codex",
-      "kind": "product_variant",
       "official_url": "https://help.openai.com/en/articles/20001354-gpt-56-in-chatgpt",
       "summary": "OpenAI 的编码体验。已确认可使用 GPT-5.6，但不同产品和计划的可用模型不同；暂不展示未经核实的可比较子项。",
       "status": "partial",
-      "detail_refs": [],
-      "citations": [
-        {
-          "id": "openai-gpt-56-chatgpt",
-          "title": "GPT-5.6 in ChatGPT",
-          "url": "https://help.openai.com/en/articles/20001354-gpt-56-in-chatgpt",
-          "publisher": "OpenAI",
-          "source_type": "official",
-          "queried_at": "2026-07-27T00:00:00Z"
-        }
-      ]
+      "detail_refs": []
     },
     {
       "id": "vendor-level2:chatgpt:openai-coding-plan",
@@ -70,21 +48,10 @@
       },
       "vendor_key": "chatgpt",
       "title": "套餐（Coding Plan）",
-      "kind": "subscription_plan",
       "official_url": "https://help.openai.com/en/articles/20001354-gpt-56-in-chatgpt",
       "summary": "统一的导航分组名称，并非已核实的 OpenAI 正式套餐名。具体套餐、权益和 Codex 关系仍待按官方页面逐项核验。",
       "status": "unknown",
-      "detail_refs": [],
-      "citations": [
-        {
-          "id": "openai-gpt-56-chatgpt",
-          "title": "GPT-5.6 in ChatGPT",
-          "url": "https://help.openai.com/en/articles/20001354-gpt-56-in-chatgpt",
-          "publisher": "OpenAI",
-          "source_type": "official",
-          "queried_at": "2026-07-27T00:00:00Z"
-        }
-      ]
+      "detail_refs": []
     },
     {
       "id": "vendor-level2:claude:claude-models",
@@ -94,7 +61,6 @@
       },
       "vendor_key": "claude",
       "title": "Claude 模型",
-      "kind": "product_variant",
       "official_url": "https://docs.anthropic.com/en/docs/about-claude/models/overview",
       "summary": "当前已核实的 Claude API 模型。",
       "status": "active",
@@ -115,16 +81,6 @@
           "kind": "tool-level3",
           "id": "tool-level3:claude-haiku-4.5"
         }
-      ],
-      "citations": [
-        {
-          "id": "anthropic-models",
-          "title": "Models overview",
-          "url": "https://docs.anthropic.com/en/docs/about-claude/models/overview",
-          "publisher": "Anthropic",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
-        }
       ]
     },
     {
@@ -135,7 +91,6 @@
       },
       "vendor_key": "claude",
       "title": "套餐（Coding Plan）",
-      "kind": "subscription_plan",
       "official_url": "https://support.anthropic.com/en/articles/11049762-choosing-a-claude-ai-plan",
       "summary": "Claude 订阅套餐的统一导航分组；具体价格、周期和权益以叶节点的官方条件为准。",
       "status": "active",
@@ -152,16 +107,6 @@
           "kind": "tool-level3",
           "id": "tool-level3:claude-max-20x"
         }
-      ],
-      "citations": [
-        {
-          "id": "anthropic-plans",
-          "title": "Choose a Claude plan",
-          "url": "https://support.anthropic.com/en/articles/11049762-choosing-a-claude-ai-plan",
-          "publisher": "Anthropic",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
-        }
       ]
     },
     {
@@ -172,7 +117,6 @@
       },
       "vendor_key": "gemini",
       "title": "Gemini 模型",
-      "kind": "product_variant",
       "official_url": "https://ai.google.dev/gemini-api/docs/pricing",
       "summary": "当前已核实的 Gemini API 模型。",
       "status": "active",
@@ -185,16 +129,6 @@
           "kind": "tool-level3",
           "id": "tool-level3:gemini-2.5-pro"
         }
-      ],
-      "citations": [
-        {
-          "id": "google-api-pricing",
-          "title": "Gemini Developer API pricing",
-          "url": "https://ai.google.dev/gemini-api/docs/pricing",
-          "publisher": "Google",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
-        }
       ]
     },
     {
@@ -205,7 +139,6 @@
       },
       "vendor_key": "gemini",
       "title": "套餐（Coding Plan）",
-      "kind": "subscription_plan",
       "official_url": "https://gemini.google/about",
       "summary": "Google AI 订阅套餐的统一导航分组；官方页面未稳定完整列出所有模型包含关系。",
       "status": "partial",
@@ -222,16 +155,6 @@
           "kind": "tool-level3",
           "id": "tool-level3:google-ai-ultra-20x"
         }
-      ],
-      "citations": [
-        {
-          "id": "google-consumer-plans",
-          "title": "Gemini plans",
-          "url": "https://gemini.google/about",
-          "publisher": "Google",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
-        }
       ]
     },
     {
@@ -242,7 +165,6 @@
       },
       "vendor_key": "deepseek",
       "title": "DeepSeek 模型",
-      "kind": "product_variant",
       "official_url": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing",
       "summary": "当前已核实的 DeepSeek API 模型。",
       "status": "active",
@@ -255,32 +177,6 @@
           "kind": "tool-level3",
           "id": "tool-level3:deepseek-v4-pro"
         }
-      ],
-      "citations": [
-        {
-          "id": "deepseek-pricing-cn",
-          "title": "模型与价格",
-          "url": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing",
-          "publisher": "DeepSeek",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
-        },
-        {
-          "id": "deepseek-pricing-en",
-          "title": "Models & Pricing",
-          "url": "https://api-docs.deepseek.com/quick_start/pricing",
-          "publisher": "DeepSeek",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
-        },
-        {
-          "id": "deepseek-cache",
-          "title": "Context Caching",
-          "url": "https://api-docs.deepseek.com/guides/kv_cache",
-          "publisher": "DeepSeek",
-          "source_type": "official",
-          "queried_at": "2026-07-26T10:35:25Z"
-        }
       ]
     },
     {
@@ -291,7 +187,6 @@
       },
       "vendor_key": "zhipu",
       "title": "GLM 模型",
-      "kind": "product_variant",
       "official_url": "https://bigmodel.cn/pricing",
       "summary": "当前已核实的智谱 GLM API 模型。",
       "status": "active",
@@ -312,24 +207,6 @@
           "kind": "tool-level3",
           "id": "tool-level3:glm-4.7"
         }
-      ],
-      "citations": [
-        {
-          "id": "zhipu-api-pricing",
-          "title": "智谱AI开放平台 - 产品定价",
-          "url": "https://bigmodel.cn/pricing",
-          "publisher": "智谱AI",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
-        },
-        {
-          "id": "zhipu-model-overview",
-          "title": "模型概览",
-          "url": "https://docs.bigmodel.cn/cn/guide/start/model-overview",
-          "publisher": "智谱AI",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
-        }
       ]
     },
     {
@@ -340,7 +217,6 @@
       },
       "vendor_key": "wenxin",
       "title": "ERNIE 模型",
-      "kind": "product_variant",
       "official_url": "https://cloud.baidu.com/doc/qianfan/s/wmh4sv6ya",
       "summary": "当前已核实的百度 ERNIE API 模型。",
       "status": "active",
@@ -357,16 +233,6 @@
           "kind": "tool-level3",
           "id": "tool-level3:ernie-4.5-turbo"
         }
-      ],
-      "citations": [
-        {
-          "id": "wenxin-api-pricing",
-          "title": "百度千帆 — 模型服务计费",
-          "url": "https://cloud.baidu.com/doc/qianfan/s/wmh4sv6ya",
-          "publisher": "百度",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
-        }
       ]
     },
     {
@@ -377,7 +243,6 @@
       },
       "vendor_key": "xinghuo",
       "title": "星火模型",
-      "kind": "product_variant",
       "official_url": "https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html",
       "summary": "当前已核实的讯飞星火 API 模型。",
       "status": "active",
@@ -394,16 +259,6 @@
           "kind": "tool-level3",
           "id": "tool-level3:spark-lite"
         }
-      ],
-      "citations": [
-        {
-          "id": "xinghuo-api-docs",
-          "title": "星火认知大模型 HTTP 接口文档",
-          "url": "https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html",
-          "publisher": "科大讯飞",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
-        }
       ]
     },
     {
@@ -414,7 +269,6 @@
       },
       "vendor_key": "hailuo",
       "title": "MiniMax 模型",
-      "kind": "product_variant",
       "official_url": "https://minimax.io/pricing",
       "summary": "当前已核实的 MiniMax API 模型。",
       "status": "active",
@@ -427,16 +281,6 @@
           "kind": "tool-level3",
           "id": "tool-level3:minimax-vl-01"
         }
-      ],
-      "citations": [
-        {
-          "id": "hailuo-api-pricing",
-          "title": "MiniMax Pricing",
-          "url": "https://minimax.io/pricing",
-          "publisher": "MiniMax",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
-        }
       ]
     },
     {
@@ -447,7 +291,6 @@
       },
       "vendor_key": "grok",
       "title": "Grok 模型",
-      "kind": "product_variant",
       "official_url": "https://x.ai/api/pricing",
       "summary": "当前已核实的 Grok API 模型。",
       "status": "active",
@@ -460,16 +303,6 @@
           "kind": "tool-level3",
           "id": "tool-level3:grok-4.1-fast"
         }
-      ],
-      "citations": [
-        {
-          "id": "xai-api-pricing",
-          "title": "xAI API Pricing",
-          "url": "https://x.ai/api/pricing",
-          "publisher": "xAI",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
-        }
       ]
     },
     {
@@ -480,7 +313,6 @@
       },
       "vendor_key": "mistral",
       "title": "Mistral 模型",
-      "kind": "product_variant",
       "official_url": "https://mistral.ai/pricing/api/",
       "summary": "当前核实的 Mistral API 模型，覆盖通用、编码和推理场景。",
       "status": "active",
@@ -505,16 +337,6 @@
           "kind": "tool-level3",
           "id": "tool-level3:codestral"
         }
-      ],
-      "citations": [
-        {
-          "id": "mistral-api-pricing",
-          "title": "Mistral API Pricing",
-          "url": "https://mistral.ai/pricing/api/",
-          "publisher": "Mistral AI",
-          "source_type": "official",
-          "queried_at": "2026-07-27T07:46:15.009Z"
-        }
       ]
     },
     {
@@ -525,7 +347,6 @@
       },
       "vendor_key": "cohere",
       "title": "Command 模型",
-      "kind": "product_variant",
       "official_url": "https://cohere.com/pricing",
       "summary": "当前已核实的 Cohere Command API 模型。",
       "status": "active",
@@ -545,16 +366,6 @@
         {
           "kind": "tool-level3",
           "id": "tool-level3:command-r7b"
-        }
-      ],
-      "citations": [
-        {
-          "id": "cohere-api-pricing",
-          "title": "Cohere Pricing",
-          "url": "https://cohere.com/pricing",
-          "publisher": "Cohere",
-          "source_type": "official",
-          "queried_at": "2026-07-28T00:00:00Z"
         }
       ]
     }

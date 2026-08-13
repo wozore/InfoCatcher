@@ -1,4 +1,4 @@
-import { escapeHtml, hasFree } from './data.js';
+import { escapeHtml } from './data.js';
 
 function toolCards(request = {}) {
   if (request.operation === 'list') return request.items || [];
@@ -17,12 +17,10 @@ function toolCards(request = {}) {
       '</div>'
     : '';
   const tags = '<div class="tool-card-tags">' +
-    (card.price_badge === 'free' || hasFree(card) ? '<span class="tag free">免费可用</span>' : '<span class="tag paid">仅付费</span>') +
+    (card.price_badge === 'free' ? '<span class="tag free">免费可用</span>' : '<span class="tag paid">仅付费</span>') +
     '<span class="tag ' + (card.access_level === '开放' ? 'open' : 'restricted') + '">' + (card.access_level === '开放' ? '国内可用' : '需科学上网') + '</span>' +
     '</div>';
-  const openCard = card.detail_kind === 'tool'
-    ? 'openDetail(\'' + escapeHtml(card.tool_key) + '\',null,this)'
-    : 'openDirectoryDetail(\'' + escapeHtml(card.vendor_key) + '\',\'' + escapeHtml(card.tool_key) + '\',this)';
+  const openCard = 'openDetail(\'' + escapeHtml(card.detail_ref.id) + '\',null,this)';
   return `<div class="tool-card tool-card--${escapeHtml(card.theme || 'general')}" onclick="${openCard}">
     <div class="tool-card-header"><div>
       <div class="tool-card-name">${card.icon || ''} ${escapeHtml(card.title || '')}</div>
