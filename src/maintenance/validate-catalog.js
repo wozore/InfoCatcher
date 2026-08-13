@@ -67,8 +67,7 @@ const TOOL_LEVEL3_FIELDS = new Set([
   'id', 'tool_key', 'vendor_key', 'kind', 'title', 'vendor_label', 'icon', 'official_url',
   'status', 'summary', 'weaknesses', 'one_m_context', 'api_pricing', 'cache_hit_rate', 'plan',
   'applicable_scenarios', 'inapplicable_scenarios', 'source_refs', 'sources', 'category', 'scenes',
-  'access_level', 'access_barrier', 'free_tier', 'paid_tiers', 'rating_overall', 'rating_chinese',
-  'rating_ease', 'rating_price', 'last_updated',
+  'access_level', 'access_barrier', 'free_tier', 'paid_tiers', 'last_updated',
 ]);
 
 function checkAllowedFields(area, items, allowedFields) {

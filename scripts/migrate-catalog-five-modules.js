@@ -173,10 +173,6 @@ function makeConcreteLevel3(tool) {
     access_barrier: tool.access_barrier,
     free_tier: tool.free_tier || '',
     paid_tiers: [...(tool.paid_tiers || [])],
-    rating_overall: tool.rating_overall ?? null,
-    rating_chinese: tool.rating_chinese ?? null,
-    rating_ease: tool.rating_ease ?? null,
-    rating_price: tool.rating_price ?? null,
     last_updated: tool.last_updated || null,
   };
 }

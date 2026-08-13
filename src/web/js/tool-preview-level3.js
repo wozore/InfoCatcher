@@ -1,4 +1,4 @@
-import { escapeHtml, safeExternalUrl, formatPrice, renderTimelinessBadge, ICON_EXTERNAL } from './data.js';
+import { escapeHtml, safeExternalUrl, formatPrice, renderTimelinessBadge, ICON_ARROW_LEFT, ICON_EXTERNAL } from './data.js';
 
 function renderScenario(title, items) {
   if (!Array.isArray(items) || !items.length) return '';
@@ -8,7 +8,7 @@ function renderScenario(title, items) {
 }
 
 function renderToolLevel3(request = {}) {
-  const { detail, showCompare = false, compareSelected = false } = request;
+  const { detail, showCompare = false, compareSelected = false, backTarget = null } = request;
   if (!detail) return '<div class="intelligence-unavailable">工具详情暂不可用。</div>';
   const kindLabel = detail.kind === 'api_model' ? '模型' : detail.kind === 'subscription_plan' ? '套餐' : detail.kind === 'product_variant' ? '变体' : '工具';
   const sourceHtml = (detail.sources || []).length
@@ -33,9 +33,16 @@ function renderToolLevel3(request = {}) {
   const compareHtml = showCompare
     ? '<div class="leaf-actions"><button class="compare-toggle ' + (compareSelected ? 'selected' : '') + '" onclick="toggleCompareRef(\'' + escapeHtml(detail.vendor_key) + '\',' + compareRef + ',this)">' + (compareSelected ? '已选' : '+对比') + '</button></div>'
     : '';
-  return '<header class="concrete-tool-detail-header"><h2>' + escapeHtml((detail.icon || '') + ' ' + detail.title) + '</h2><div class="vendor">' + escapeHtml(detail.vendor_label || '') + ' · <a href="' + escapeHtml(safeExternalUrl(detail.official_url)) + '" target="_blank" rel="noopener noreferrer">官网 ' + ICON_EXTERNAL + '</a></div></header>' +
+  const backHtml = backTarget?.vendorKey
+    ? '<button class="model-index-back" type="button" aria-label="返回上一级" title="返回上一级" onclick="goBackModelToolPanel(\'' + escapeHtml(backTarget.vendorKey) + '\')">' + ICON_ARROW_LEFT + '</button>'
+    : '';
+  const vendorHtml = detail.vendor_label
+    ? escapeHtml(detail.vendor_label) + ' · '
+    : '';
+  return '<div class="model-index-page model-leaf-page">' + backHtml +
+    '<section class="node-overview model-index-overview"><h2>' + escapeHtml((detail.icon || '') + ' ' + detail.title) + '</h2><div class="vendor">' + vendorHtml + '<a href="' + escapeHtml(safeExternalUrl(detail.official_url)) + '" target="_blank" rel="noopener noreferrer">官网 ' + ICON_EXTERNAL + '</a></div></section>' +
     '<div class="model-leaf-panel"><div class="model-panel-heading"><div><span class="node-kind-badge leaf">具体' + kindLabel + '</span><h4>' + escapeHtml(detail.title) + '</h4>' + renderTimelinessBadge(detail.last_updated) + '</div>' + compareHtml + '</div>' +
-    '<div class="intelligence-item-body"><p>' + escapeHtml(detail.summary || '') + '</p>' + contextHtml + pricingHtml + planHtml + renderScenario('适用场景及说明', detail.applicable_scenarios) + renderScenario('不适用场景及说明', detail.inapplicable_scenarios) + sourceHtml + '</div></div>';
+    '<div class="intelligence-item-body"><p>' + escapeHtml(detail.summary || '') + '</p>' + contextHtml + pricingHtml + planHtml + renderScenario('适用场景及说明', detail.applicable_scenarios) + renderScenario('不适用场景及说明', detail.inapplicable_scenarios) + sourceHtml + '</div></div></div>';
 }
 
 export { renderToolLevel3 };

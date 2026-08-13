@@ -7,7 +7,7 @@
 - [tool-cards.json](data/catalog/tool-cards.json) — 工具列表卡片数据；每项仅通过 `detail_ref` 指向三级详情，卡片不重复保存详情访问门槛、状态和更新时间。
 - [vendor-preview-level1.json](data/catalog/vendor-preview-level1.json) — 厂商一级预览数据；标题、描述、状态、特点和二级稳定引用由一级模块拥有，不保存固定 `tree_mode`。
 - [vendor-preview-level2.json](data/catalog/vendor-preview-level2.json) — 厂商二级分组预览数据；通过 `detail_refs` 指向三级详情，不重复保存三级子卡片投影。
-- [tool-preview-level3.json](data/catalog/tool-preview-level3.json) — 厂商三级预览/工具详情唯一数据源；层级由二级 `detail_refs` 表达，详情类型由 `kind` 表达。
+- [tool-preview-level3.json](data/catalog/tool-preview-level3.json) — 厂商三级预览/工具详情唯一数据源；层级由二级 `detail_refs` 表达，详情类型由 `kind` 表达，价格/访问/场景与来源信息由详情拥有。
 
 
 - [env.js](src/shared/env.js) — dotenv 子集解析 + 项目根目录。导出: `loadDotEnv, PROJECT_DIR`
@@ -32,7 +32,7 @@
 - [js/data.js](src/web/js/data.js) — 目录 Interface 兼容投影、独立数据加载、过滤、平台元数据与通用工具。导出: 五模块查询函数、各数据状态与 setter、escapeHtml/timeAgo/formatPrice 等
 - [js/search.js](src/web/js/search.js) — AI 搜索全链路（首页/结果/处理/概念标记）。导出: `searchState, submitSearchHome, renderSearchResults...`
 - [js/tools.js](src/web/js/tools.js) — 工具库视图（厂商/工具 Toggle）由独立 `VendorDirectoryView` / `ToolDirectoryView` 控制器分别管理；工具卡片四类主题、分组和快速索引 + 滤选 + 单级详情弹窗；具体工具/模型/套餐详情统一复用 GPT-5.6 Sol 叶节点视觉与详情渲染器，普通工具字段经适配层接入，仅 X 关闭；导出: `openDetail, openDirectoryDetail, closeModal, showModal, renderConcreteToolLeaf, getToolsViewMode, toggleToolsViewMode, renderTools...`
-- [js/compare.js](src/web/js/compare.js) — 对比模式。导出: `compareList, toggleCompareRef, quickCompare, renderCompare...`
+- [js/compare.js](src/web/js/compare.js) — 对比模式（访问、免费层、价格、场景和资料来源）。导出: `compareList, toggleCompareRef, quickCompare, renderCompare...`
 - [js/featured.js](src/web/js/featured.js) — 推荐视图（精选/编辑推荐/热榜）。导出: `renderFeatured, renderFeaturedTabs...`
 - [js/glossary.js](src/web/js/glossary.js) — AI 概念视图。导出: `activeGlossaryId, openGlossaryConcept, renderGlossary...`
 - [js/trending.js](src/web/js/trending.js) — AI 热点视图（文案走 t()、内容走 getLocalizedField，试点）。导出: `renderTrending, openHotspotDetail, reloadHotspots...`

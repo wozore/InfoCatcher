@@ -6,7 +6,7 @@ InfoCatcher 是开源、免费且不接受厂商赞助的 AI 工具信息对比�
 
 - **纠错数据**：提交[数据纠错 Issue](https://github.com/wozore/infocatcher/issues/new?template=data-correction.yml)，或修改 `data/catalog/tools.json` / `data/catalog/tool-intelligence.json` 后提交 PR。
 - **推荐工具**：提交[新工具推荐 Issue](https://github.com/wozore/infocatcher/issues/new?template=new-tool.yml)，提供名称、分类、场景、价格/免费信息及使用体验。
-- **质疑评分**：说明具体工具和维度，并提供对比测试、用例或其他证据。
+- **补充资料**：说明具体工具或模型，并提供官方来源、访问条件、价格/免费层或使用场景的证据。
 - **改进代码**：从带 `help wanted` 标签的 [Issues](https://github.com/wozore/infocatcher/issues) 选取任务，Fork 后提交 PR。
 
 ## 数据与模块规范
@@ -31,17 +31,14 @@ InfoCatcher 是开源、免费且不接受厂商赞助的 AI 工具信息对比�
 - 套餐注明金额、币种、周期、地区/税费条件和官方列出的主要模型；不同地区价格不合并。
 - 场景中的集合推荐通过 `recommendations` 显式引用具体 `item_id` 并说明理由。
 
-综合评分使用 1—5 分（极差、较差、一般、良好、优秀），是各维度的整体判断，不是简单平均。
-
 ## 热点来源与内容评估
 
-热点判断以 [质量评估标准](docs/content-quality.md) 为准。提交来源、转载关系、商单标识或评分调整时：
+热点判断以 [质量评估标准](docs/content-quality.md) 为准。提交来源、转载关系、商单标识或内容质量调整时：
 
 - 来源须有可核验主页和平台 ID/Handle；分类支持多标签，更新频率不等于质量。可用 `node scripts/news-cli.js source add` 添加单条来源，或用 `source import --file ... --dry-run` 预检批量来源；不得通过 CLI 参数传入 API Key。
 - 原创、转载、引用或同主题关系须附原文链接、平台标识或其他证据；证据不足只能标为候选。
 - 商单、软广、赞助或利益关系仅在存在明确声明、平台广告标识、affiliate 链接等证据时标识和降权。
 - 官方来源用于核验发布事实；官方宣传主张与独立测试分开处理。正常质疑、纠错和技术争论不得作为低质量依据。
-- B站视频、动态和专栏均可入库；动态不可用时记录降级，禁止使用内部 API、逆向 SDK 或绕过风控补数据。
 - 历史回溯遵守五层时间边界和平台额度；超出 270 天只能通过授权任务继续，B站授权也不能突破 RSSHub 公开能力边界。
 - 不直接编辑或删除 `.news-build.lock`；先运行 `news-cli.js lock status`，确认原任务终止后才能带理由执行 `lock force-unlock`，操作会写入审计。
 - 异常判断须保留样本量、方法、阈值和基线；小样本不得自动删除或降权。

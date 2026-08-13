@@ -5,7 +5,7 @@
  *   - 共享数据状态（tools/glossary/scenes/hotspots/featuredPicks/compareList/...）
  *   - 数据加载（loadData / renderSkeletons）
  *   - 过滤管线（getFilteredTools / getFilteredGlossary / getFilteredTrending / getFilteredScenes）
- *   - 通用工具与安全边界（escapeHtml / safeExternalUrl / timeAgo / formatMetric / scoreClass 等）
+ *   - 通用工具与安全边界（escapeHtml / safeExternalUrl / timeAgo / formatMetric 等）
  *   - 平台元数据与系统图标常量
  *
  * 架构概要、八个视图、安全约束与扩展模式维护文档见 main.js 顶部。
@@ -65,20 +65,6 @@ const ICON_CLOSE = '<svg class="icon" aria-hidden="true"><use href="#icon-close"
 const ICON_CHEVRON = '<svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"/></svg>';
 const ICON_ARROW_LEFT = '<svg class="icon" aria-hidden="true"><use href="#icon-arrow-left"/></svg>';
 const ICON_EXTERNAL = '<svg class="icon" aria-hidden="true"><use href="#icon-external"/></svg>';
-
-/** 1-5 分转换为 ★☆☆☆☆ 格式的星级显示，EXTENSION POINT：MVP完成后实现非完整填充的☆ */
-function stars(rating) {
-  const full = Math.floor(rating);
-  const half = rating - full >= 0.5 ? 1 : 0;
-  return '★'.repeat(full) + (half ? '☆' : '') + '☆'.repeat(5 - full - half);
-}
-
-/** 根据分值返回对应的 CSS class */
-function scoreClass(val) {
-  if (val >= 4) return 'score-high';
-  if (val >= 3) return 'score-mid';
-  return 'score-low';
-}
 
 /** 判断工具是否有真正可用的免费层 */
 function hasFree(t) {
@@ -303,10 +289,6 @@ function buildLegacyToolFromVendorCard(card, level1) {
     weaknesses: '',
     best_for: [],
     not_for: [],
-    rating_overall: null,
-    rating_chinese: null,
-    rating_ease: null,
-    rating_price: null,
     last_updated: latestCitation ? latestCitation.slice(0, 10) : null,
     source: citations[0]?.url || level1?.official_url || '',
     card_kind: 'collection',
@@ -340,10 +322,6 @@ function buildLegacyToolFromDetail(card, detail) {
     weaknesses: detail.weaknesses || (detail.inapplicable_scenarios || []).map(item => item.title).join('；'),
     best_for: (detail.applicable_scenarios || []).map(item => item.title),
     not_for: (detail.inapplicable_scenarios || []).map(item => item.title),
-    rating_overall: detail.rating_overall ?? null,
-    rating_chinese: detail.rating_chinese ?? null,
-    rating_ease: detail.rating_ease ?? null,
-    rating_price: detail.rating_price ?? null,
     last_updated: detail.last_updated || null,
     source: detail.sources?.[0]?.url || detail.official_url || '',
     card_kind: 'concrete',
@@ -445,10 +423,6 @@ function buildDirectoryProjection(toolCards, details, intelligence) {
       weaknesses: card.not_for_preview || '',
       best_for: card.best_for_preview ? [card.best_for_preview] : [],
       not_for: card.not_for_preview ? [card.not_for_preview] : [],
-      rating_overall: detail?.rating_overall ?? null,
-      rating_chinese: detail?.rating_chinese ?? null,
-      rating_ease: detail?.rating_ease ?? null,
-      rating_price: detail?.rating_price ?? null,
       last_updated: detail?.last_updated || null,
       card_kind: detail?.kind === 'tool' ? 'concrete' : 'intelligence_leaf',
       entity_kind: detail?.kind === 'tool' ? 'product' : 'intelligence_leaf',
@@ -590,10 +564,6 @@ function buildIntelligenceDirectoryItem(tool, collection, item) {
     weaknesses: inapplicable.join('；'),
     best_for: applicable,
     not_for: inapplicable,
-    rating_overall: null,
-    rating_chinese: null,
-    rating_ease: null,
-    rating_price: null,
     last_updated: latestQueriedAt ? latestQueriedAt.slice(0, 10) : null,
     card_kind: 'intelligence_leaf',
     entity_kind: 'intelligence_leaf',
@@ -970,8 +940,6 @@ export {
   platformMeta,
   contentTypeLabels,
   SOURCE_TYPE_LABELS,
-  stars,
-  scoreClass,
   hasFree,
   getTimelinessInfo,
   renderTimelinessBadge,

@@ -52,13 +52,18 @@ test('level1 and level3 records expose only owned fields', () => {
     'id', 'tool_key', 'vendor_key', 'kind', 'title', 'vendor_label', 'icon', 'official_url',
     'status', 'summary', 'weaknesses', 'one_m_context', 'api_pricing', 'cache_hit_rate', 'plan',
     'applicable_scenarios', 'inapplicable_scenarios', 'source_refs', 'sources', 'category', 'scenes',
-    'access_level', 'access_barrier', 'free_tier', 'paid_tiers', 'rating_overall', 'rating_chinese',
-    'rating_ease', 'rating_price', 'last_updated',
+    'access_level', 'access_barrier', 'free_tier', 'paid_tiers', 'last_updated',
   ]);
   const level1 = catalog({ area: 'vendor-level1', operation: 'list' }).data;
   const level3 = catalog({ area: 'tool-level3', operation: 'list' }).data;
   level1.forEach(item => assert.deepEqual(Object.keys(item).filter(key => !level1Fields.has(key)), []));
   level3.forEach(item => assert.deepEqual(Object.keys(item).filter(key => !level3Fields.has(key)), []));
+  for (const item of level3) {
+    assert.equal('rating_overall' in item, false);
+    assert.equal('rating_chinese' in item, false);
+    assert.equal('rating_ease' in item, false);
+    assert.equal('rating_price' in item, false);
+  }
   assert.deepEqual(new Set(level3.map(item => item.kind)), new Set(['tool', 'api_model', 'subscription_plan']));
 });
 

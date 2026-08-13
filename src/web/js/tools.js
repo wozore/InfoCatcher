@@ -650,7 +650,7 @@ function renderOpenAIDetailBody(toolId, nodeId = null) {
     return renderVendorLevel1({ vendor, preview: level1, level2 });
   }
   const detail = getToolLevel3Item(toolId, nodeId);
-  if (detail) return renderToolLevel3({ detail, showCompare: detail.kind !== 'tool', compareSelected: isCompareSelected(toolId, nodeId) });
+  if (detail) return renderToolLevel3({ detail, showCompare: detail.kind !== 'tool', compareSelected: isCompareSelected(toolId, nodeId), backTarget: { vendorKey: toolId } });
   const level2 = getVendorLevel2Item(toolId, nodeId);
   if (!level2) return '<div class="intelligence-unavailable">该模型或工具节点不存在。</div>';
   const detailCards = getToolCardItems().filter(card => level2.detail_refs.some(ref => ref.id === card.detail_ref?.id));

@@ -26,7 +26,6 @@ import {
   getTimelinessInfo,
   formatPrice,
   escapeHtml,
-  scoreClass,
   hasFree,
   renderState,
   ICON_CLOSE,
@@ -132,8 +131,7 @@ function compareTargetLabel(target) {
   return target.icon + ' ' + target.name;
 }
 
-// 决策 9.5/93：对比数据来源与更新时间说明。图表标题/单位/数值之外，逐项列出数据来源与时效。
-// 具体工具使用三级详情的 source + last_updated（评分来源/资料更新时间）；
+// 具体工具使用三级详情的 source + last_updated；
 // API 模型与订阅套餐使用 tool-intelligence collection.sources 的标题与查询时间。
 function renderCompareProvenance(targets) {
   const rows = targets.map(target => {
@@ -143,7 +141,7 @@ function renderCompareProvenance(targets) {
       const updatedText = tool.last_updated
         ? '资料更新于 ' + String(tool.last_updated).slice(0, 10) + (info ? ' ' + info.emoji : '')
         : '资料更新时间待补充';
-      return { name: compareTargetLabel(target), text: '评分来源：' + (tool.source || '来源待补充') + ' · ' + updatedText };
+      return { name: compareTargetLabel(target), text: '资料来源：' + (tool.source || '来源待补充') + ' · ' + updatedText };
     }
     const collection = getToolIntelligence(target.tool.id);
     const refs = target.item.source_refs || [];
@@ -164,35 +162,6 @@ function renderCompareProvenance(targets) {
 // 决策 9.5/93：关键量化指标横向柱状图。只对真实、同口径数值绘制；
 // 缺失不画 0 柱，币种/口径不一致时不直接比较。颜色不作为唯一区分，保留表格文本替代。
 function renderCompareBars(targets) {
-  if (targets[0].kind === 'tool') {
-    const dims = [
-      { key: 'rating_overall', label: '综合评分' },
-      { key: 'rating_chinese', label: '中文支持' },
-      { key: 'rating_ease', label: '易用性' },
-      { key: 'rating_price', label: '性价比' }
-    ];
-    return '<section class="compare-bars" aria-labelledby="compareBarsTitle">' +
-      '<div class="compare-bars-heading"><h3 id="compareBarsTitle">关键数据对比</h3>' +
-      '<span class="compare-bars-note">InfoCatcher 自定义评分（满分 5，人工维护），维度为综合、中文支持、易用性、性价比；不代表第三方跑分，评分口径见“关于”页。</span></div>' +
-      dims.map(dim => {
-        const row = targets.map(target => {
-          const value = Number(target.tool[dim.key]);
-          const valid = Number.isFinite(value);
-          const pct = valid ? Math.max(0, Math.min(100, (value / 5) * 100)) : 0;
-          return '<div class="compare-bar-item">' +
-            '<span class="compare-bar-name">' + escapeHtml(compareTargetLabel(target)) + '</span>' +
-            '<div class="compare-bar-track" role="img" aria-label="' + escapeHtml(compareTargetLabel(target) + ' ' + dim.label + (valid ? ' ' + value.toFixed(1) + ' 分' : ' 暂无可比数据')) + '">' +
-              (valid ? '<span class="compare-bar-fill" style="width:' + pct + '%"></span>' : '<span class="compare-bar-empty">暂无可比数据</span>') +
-            '</div>' +
-            '<span class="compare-bar-value">' + (valid ? value.toFixed(1) : '—') + '</span>' +
-          '</div>';
-        }).join('');
-        return '<div class="compare-bar-row"><div class="compare-bar-label">' + dim.label + '</div><div class="compare-bar-group">' + row + '</div></div>';
-      }).join('') +
-      renderCompareProvenance(targets) +
-    '</section>';
-  }
-
   if (targets[0].kind === 'api_model' || targets[0].kind === 'subscription_plan') {
     const priced = targets.map(target => {
       let price = null, currency = null;
@@ -236,23 +205,19 @@ function renderCompareBars(targets) {
 
 function renderRootToolCompare(targets) {
   const dims = [
-    { key: 'rating_overall', label: '综合评分', format: value => value.toFixed(1) },
-    { key: 'rating_chinese', label: '中文支持', format: value => value.toFixed(1) },
-    { key: 'rating_ease', label: '易用性', format: value => value.toFixed(1) },
-    { key: 'rating_price', label: '性价比', format: value => value.toFixed(1) },
     { key: 'access_level', label: '国内访问', format: value => value === '开放' ? '可访问' : '需科学上网' },
     { key: 'has_free', label: '免费层', format: value => value ? '有' : '无' }
   ];
   return '<table class="compare-table"><thead><tr><th>维度</th>' + targets.map(target => '<th>' + escapeHtml(compareTargetLabel(target)) + '</th>').join('') + '</tr></thead><tbody>' +
     dims.map(dimension => '<tr><td class="dim">' + dimension.label + '</td>' + targets.map(target => {
       const value = dimension.key === 'has_free' ? hasFree(target.tool) : target.tool[dimension.key];
-      return '<td class="' + (typeof value === 'number' ? scoreClass(value) : '') + '">' + escapeHtml(dimension.format(value)) + '</td>';
+      return '<td>' + escapeHtml(dimension.format(value)) + '</td>';
     }).join('') + '</tr>').join('') +
     '<tr><td class="dim">适用场景</td>' + targets.map(target => '<td>' + escapeHtml(target.tool.scenes.slice(0, 5).join('、')) + '</td>').join('') + '</tr>' +
     '<tr><td class="dim">免费层说明</td>' + targets.map(target => '<td>' + escapeHtml(target.tool.free_tier || '无') + '</td>').join('') + '</tr>' +
     '<tr><td class="dim">最适合</td>' + targets.map(target => '<td>' + escapeHtml(target.tool.best_for.join('；')) + '</td>').join('') + '</tr>' +
     '<tr><td class="dim">不适合/限制</td>' + targets.map(target => '<td>' + escapeHtml((target.tool.not_for || []).join('；')) + '</td>').join('') + '</tr>' +
-    '<tr><td class="dim">评分来源 / 更新时间</td>' + targets.map(target => {
+    '<tr><td class="dim">资料来源 / 更新时间</td>' + targets.map(target => {
       const tool = target.tool;
       const info = getTimelinessInfo(tool.last_updated);
       return '<td>' + escapeHtml((tool.source || '来源待补充') + ' · 资料更新于 ' + (tool.last_updated ? String(tool.last_updated).slice(0, 10) : '待补充')) + (info ? ' ' + info.emoji : '') + '</td>';
