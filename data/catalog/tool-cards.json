@@ -2272,6 +2272,31 @@
         "id": "tool-level3:cohere"
       },
       "detail_kind": "tool"
+    },
+    {
+      "id": "tool-card:kling-2-6-pro",
+      "tool_key": "kling-2-6-pro",
+      "vendor_key": "kling",
+      "title": "kling 2.6 Pro",
+      "vendor_label": "可灵",
+      "icon": "",
+      "summary": "可灵 kling 2.6 Pro",
+      "theme": "media",
+      "scenes": [],
+      "best_for_preview": "",
+      "not_for_preview": "",
+      "price_badge": "unknown",
+      "access_level": "未知",
+      "search_terms": [
+        "kling 2.6 Pro",
+        "可灵",
+        "kling-2-6-pro"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:kling-2-6-pro"
+      },
+      "detail_kind": "api_model"
     }
   ]
 }

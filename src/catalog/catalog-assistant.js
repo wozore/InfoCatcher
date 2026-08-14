@@ -1,7 +1,6 @@
 'use strict';
 
-const fs = require('fs');
-const { CATALOG_GENERATOR_FILES } = require('../shared/paths');
+const { loadAiModuleConfig } = require('../shared/ai-config');
 const { loadCatalogSnapshot } = require('./catalog-snapshot-store');
 const { revisionOf, previewHashOf } = require('./catalog-revision');
 const { validateCatalogSnapshot } = require('./catalog-snapshot-validator');
@@ -22,7 +21,9 @@ const OUTPUT_SCHEMA = Object.freeze({
 function normalizeGeneratorOptions(options = {}) {
   return {
     ...options,
+    provider: options.provider || 'deepseek',
     model: options.model,
+    protocol: options.protocol || 'responses',
     timeoutMs: options.timeoutMs ?? options.timeout_ms,
     maxSearchQueries: options.maxSearchQueries ?? options.max_search_queries,
     maxPages: options.maxPages ?? options.max_pages,
@@ -133,10 +134,7 @@ function recoverCatalogTransactions() {
 }
 
 function loadGeneratorConfig() {
-  try { return JSON.parse(fs.readFileSync(CATALOG_GENERATOR_FILES.localConfig, 'utf8')); } catch (error) {
-    if (error.code === 'ENOENT') return { provider: 'deepseek' };
-    throw error;
-  }
+  return loadAiModuleConfig('catalog');
 }
 
 module.exports = { OUTPUT_SCHEMA, normalizeGeneratorOptions, prepareCatalogDraft, reviewCatalogDraft, applyCatalogDraft, discardCatalogDraft, recoverCatalogTransactions, probeDeepSeekCapabilities, loadGeneratorConfig };

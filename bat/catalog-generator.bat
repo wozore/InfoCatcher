@@ -20,7 +20,7 @@ echo   prepare --seed ^<file^>
 echo     使用已有输入准备离线草案；通常用于测试，不进行联网搜索。
 echo.
 echo   list
-echo     列出当前保存的所有草案及其状态；只读，不联网、不写入目录。
+echo     列出当前保存的所有草案及其状态；只读，不联网、~不写入目录。
 echo.
 echo   review ^<draft-id^>
 echo     重新检查草案、目录版本和变更预览；只读，不写入正式目录。

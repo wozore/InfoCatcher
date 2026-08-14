@@ -5,6 +5,7 @@ const assert = require('node:assert/strict');
 const { pendingCandidateToSeed } = require('../../src/news/feedback/catalog-draft-adapter');
 const { parseArgs } = require('../../scripts/catalog-generator');
 const { probeDeepSeekCapabilities } = require('../../src/catalog/ai/deepseek-catalog-ai');
+const { loadGeneratorConfig, normalizeGeneratorOptions } = require('../../src/catalog/catalog-assistant');
 const { requestDeepSeek } = require('../../src/shared/deepseek-client');
 
 test('pending hotspot candidate becomes a tool Seed without Apply capability', () => {
@@ -20,6 +21,16 @@ test('catalog generator CLI parses cost confirmation and seed flags', () => {
   assert.deepEqual(parsed.positional, ['new']);
   assert.equal(parsed.flags.seed, 'seed.json');
   assert.equal(parsed.flags.confirm_cost, true);
+});
+
+test('catalog module config maps snake_case limits to internal options', () => {
+  const options = normalizeGeneratorOptions(loadGeneratorConfig());
+  assert.equal(options.provider, 'deepseek');
+  assert.equal(options.model, 'deepseek-v4-flash');
+  assert.equal(options.protocol, 'responses');
+  assert.equal(options.timeoutMs, 180000);
+  assert.equal(options.maxSearchQueries, 4);
+  assert.equal(options.maxRepairCalls, 1);
 });
 
 test('DeepSeek capability probe fails closed without auditable search evidence', async () => {

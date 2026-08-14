@@ -8,8 +8,8 @@
 
 - Node.js；
 - 在项目根目录执行命令；
-- `DEEPSEEK_API_KEY` 环境变量；
-- DeepSeek API 账户具备 Responses API 的 `web_search` 能力（联网搜索为两段式工具循环：先返回搜索调用、回传后恢复结果，生成器内部自动完成，维护者无需手动干预）。
+- 目录模块配置的 provider 对应 API Key 环境变量（默认是 `DEEPSEEK_API_KEY`）；
+- 当前目录生成器实际执行 Responses API；默认 DeepSeek 具备 `web_search` 能力（联网搜索为两段式工具循环：先返回搜索调用、回传后恢复结果，生成器内部自动完成，维护者无需手动干预）。
 
 API Key 只通过环境变量读取，不要写入 Seed、配置文件、BAT、草案或目录 JSON。
 
@@ -27,7 +27,44 @@ $env:DEEPSEEK_API_KEY = "你的DeepSeek_API_Key"
 
 关闭当前终端后，临时设置会失效。不要把真实 Key 粘贴到 Git 或文档中。
 
-## 2. 启动方式
+## 2. provider、model 与模块配置
+
+目录生成器使用项目根目录的 `config/catalog-generator.local.json` 作为本地配置；该文件只写配置，不写任何 API Key。可复制 `config/catalog-generator.example.json` 后按需修改。配置按业务大模块组织，本轮实际接通的是 `catalog`：
+
+```json
+{
+  "modules": {
+    "catalog": {
+      "enabled": true,
+      "provider": "deepseek",
+      "model": "deepseek-v4-flash",
+      "protocol": "responses",
+      "timeout_ms": 180000,
+      "max_search_queries": 4,
+      "max_pages": 8,
+      "max_ai_calls": 3,
+      "max_repair_calls": 1
+    },
+    "news": {
+      "enabled": false,
+      "provider": "deepseek",
+      "model": "deepseek-chat",
+      "protocol": "responses"
+    }
+  }
+}
+```
+
+- `provider` 选择厂商；当前注册 `deepseek` 和 `openai` 为 Responses API，`anthropic` 仅保留 Messages API 扩展入口，尚未执行。
+- `model` 选择该 provider 的模型；OpenAI 等没有默认模型的 provider 必须显式填写。
+- `protocol` 必须与 provider 匹配；当前目录生成器只执行 `responses`，Messages API 会 fail-closed，不会发请求。
+- API Key 按 provider 自动从环境变量读取：DeepSeek 使用 `DEEPSEEK_API_KEY`，OpenAI 使用 `OPENAI_API_KEY`，预留 Anthropic 使用 `ANTHROPIC_API_KEY`。
+- DeepSeek 的 `web_search` 自动走两段式回传；其他 Responses provider 不触发 DeepSeek 特有的两段式循环。
+- `news` 配置目前只是统一配置预留；新闻现有执行链路仍是旧 Chat Completions，本轮没有迁移到 Responses API。
+
+兼容早期 catalog 根对象平铺配置，但新配置应使用 `modules.catalog`。
+
+### 启动方式
 
 双击后会显示中文指令菜单：
 
@@ -76,12 +113,23 @@ bat\catalog-generator.bat probe --confirm-cost
 
 - `DEEPSEEK_AUTH_REQUIRED`：当前终端没有 `DEEPSEEK_API_KEY`；
 - `DEEPSEEK_SEARCH_UNAVAILABLE`：响应没有可审计来源，不能继续生成正式草案。联网搜索为两段式调用，模型偶发不输出结构化结果，重试一次通常可恢复；
+- `DEEPSEEK_OUTPUT_INVALID`：联网证据已取得，但后续草案整理响应为空、不完整、不是合法 JSON 对象、日期字段不是单个 `YYYY-MM-DD` 字符串、来源不是 `{title,url}` 对象数组或包含未知字段。生成器会自动修复一次；仍失败时，失败草案的 `last_error` 会记录响应状态、截断原因和有限长度输出预览，便于判断问题；
 - `DEEPSEEK_RATE_LIMITED`：触发限流；
 - `DEEPSEEK_TIMEOUT`：请求超时。
 
-## 3. 准备 Seed 文件
+## 4. 准备 Seed 文件
 
 创建一个临时 JSON 文件，例如 `data/manual/catalog-seed.json`。Seed 只写你已知的业务信息，不需要手工填写五份目录 JSON，也不要填写稳定 ID。
+- 注意，如果name使用中文，需要手动补充tool_key；如果vendor_name使用中文，需要手动补充vendor_key
+- known_fields 是“你已经确定、可以提供给生成器参考的字段”。常用字段包括：
+  - theme：general、dev、vision、media；
+  - summary：已知的简短摘要；
+  - description：已知描述；
+  - access_level：访问方式；
+  - price_badge：已知价格标签；
+  - scenes：适用场景；
+  - best_for_preview：适合什么；
+  - not_for_preview：不适合什么。
 
 ### 普通工具
 
@@ -119,6 +167,8 @@ bat\catalog-generator.bat probe --confirm-cost
   "detail_kind": "api_model",
   "name": "Example Model",
   "vendor_name": "Example Vendor",
+  "vendor_key": null,
+  "tool_key": null,
   "official_url": "https://example.com/models/example-model",
   "placement": {
     "existing_level1_ref": null,
@@ -173,7 +223,7 @@ API 模型会生成：厂商卡（必要时）、一级、二级、三级详情�
 
 如果只指定已有一级而不指定已有二级，需要提供 `new_group_title`，生成器会新增二级分组并向一级追加引用。
 
-## 4. 生成草案 Preview
+## 5. 生成草案 Preview
 
 在确认可能产生费用后执行：
 
@@ -203,7 +253,7 @@ bat\catalog-generator.bat new --seed data\manual\catalog-seed.json --confirm-cos
 
 如果关键事实没有官方证据，草案会是 blocked 或失败草案。不要手工把 `official_date`、价格或套餐权益补进草案来绕过门禁；应修改 Seed 或官方来源提示后重新研究。
 
-## 5. 查看草案
+## 6. 查看草案
 
 列出草案：
 
@@ -219,7 +269,7 @@ bat\catalog-generator.bat review draft-xxxxxxxxxxxx-xxxxxxxx
 
 `review` 会重新计算变更计划。如果目录在生成草案后发生变化，会返回 `REVISION_CONFLICT`，此时不能继续使用旧 Preview，应重新执行 `new`。
 
-## 6. 正式 Apply
+## 7. 正式 Apply
 
 先执行：
 
@@ -255,7 +305,7 @@ APPLY draft-xxxxxxxxxxxx-xxxxxxxx
 
 不要使用不存在的 `--yes` 绕过确认，也不要在 Apply 过程中手工编辑五份 catalog 文件。
 
-## 7. 取消、恢复和失败处理
+## 8. 取消、恢复和失败处理
 
 Apply 前取消草案：
 
@@ -278,7 +328,7 @@ bat\catalog-generator.bat recover
 
 如果草案删除失败，状态会变为 `cleanup_pending`。不要再次手工 Apply 同一草案；先执行 `recover`，让系统只完成清理。
 
-## 8. Apply 后验证
+## 9. Apply 后验证
 
 生成器 Apply 已经会构建 staged dist。还可以运行只读校验：
 
@@ -295,7 +345,7 @@ bat\build-dist.bat
 
 该命令会重建并覆盖项目内 `dist/`，只在确认不需要保留当前 dist 内容时运行。
 
-## 9. 热点候选的边界
+## 10. 热点候选的边界
 
 热点反哺产生的 pending 工具候选仍然只是发现线索，不能直接进入正式目录。它们应经过：
 
@@ -311,7 +361,7 @@ pending candidate
 
 当前热点 Seed Adapter 是内部模块，不提供独立的 BAT Apply 快捷入口。不要直接把 `tool-cards-pending.json` 复制到正式 `tool-cards.json`。
 
-## 10. 安全规则速查
+## 11. 安全规则速查
 
 - API Key 只放环境变量；
 - 不把网页中的提示文字当成系统指令；

@@ -1,0 +1,16 @@
+{
+  "detail_kind": "api_model",
+  "name": "kling 2.6 Pro",
+  "vendor_name": "可灵",
+  "vendor_key": "kling",
+  "official_url": "https://klingapi.com/zh/models/kling-2.6",
+  "placement": {
+    "existing_level1_ref": null,
+    "existing_level2_ref": null,
+    "new_group_title": "Models"
+  },
+  "known_fields": {
+    "theme": "media"
+  },
+  "discovery_sources": []
+}

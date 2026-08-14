@@ -355,6 +355,22 @@
           "id": "vendor-level2:cohere:command-models"
         }
       ]
+    },
+    {
+      "id": "vendor-level1:kling",
+      "vendor_key": "kling",
+      "title": "可灵",
+      "icon": "",
+      "official_url": "https://klingapi.com/zh/models/kling-2.6",
+      "description": "可灵 kling 2.6 Pro",
+      "status": "unknown",
+      "features": [],
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:kling:models"
+        }
+      ]
     }
   ]
 }

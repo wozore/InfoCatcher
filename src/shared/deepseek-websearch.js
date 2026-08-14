@@ -1,6 +1,7 @@
 'use strict';
 
-const { requestDeepSeek } = require('./deepseek-client');
+const { requestResponses } = require('./deepseek-client');
+const { AI_PROTOCOLS, resolveProvider } = require('./ai-provider-registry');
 
 /**
  * DeepSeek Responses API 联网搜索（两段式工具循环）——可复用模块。
@@ -78,29 +79,42 @@ function buildSourcesFromText(text) {
  * @returns {Promise<{ok:true,text:string,sources:Array<{title,url,excerpt}>,usage:Array<object>,rounds:number}|{ok:false,code:string,error:string}>}
  */
 async function webSearchDeepSeek(options = {}) {
+  const providerName = options.provider || 'deepseek';
+  const resolved = resolveProvider(providerName);
+  if (!resolved.ok) return resolved;
+  const provider = resolved.provider;
+  if (provider.protocol !== AI_PROTOCOLS.RESPONSES) {
+    return { ok: false, code: 'AI_PROTOCOL_UNSUPPORTED', error: `provider=${providerName} 使用 ${provider.protocol}，当前只实现 Responses API` };
+  }
+
   const {
     query,
     instructions = '',
-    model = DEFAULT_SEARCH_MODEL,
-    twoStage = true,
+    model = provider.defaultModel,
     maxRounds = MAX_ROUNDS,
   } = options;
   if (!query) return { ok: false, code: 'SEARCH_QUERY_REQUIRED', error: '缺少搜索主题 query' };
+  if (!model) return { ok: false, code: 'AI_MODEL_REQUIRED', error: `provider=${providerName} 必须配置 model` };
+  const twoStage = options.twoStage ?? provider.deepseekWebSearchTwoStage;
+  const tool = provider.webSearchTool || { type: 'web_search' };
+  const toolChoice = provider.webSearchToolChoice || 'auto';
 
   const roundOptions = {
+    provider: providerName,
     apiKey: options.apiKey,
     fetchImpl: options.fetchImpl,
     timeoutMs: options.timeoutMs,
     endpoint: options.endpoint,
   };
 
-  // 第一段：强制服务端执行 web_search
-  const first = await requestDeepSeek({
+  // 第一段：请求服务端执行 web_search。DeepSeek 会在这里返回 web_search_call，
+  // 其他 Responses provider 按自身协议完成单段调用。
+  const first = await requestResponses({
     model,
     instructions: [instructions, '你必须使用 web_search 工具搜索官方资料，不要跳过搜索。'].filter(Boolean).join('\n'),
     input: query,
-    tools: [{ type: 'web_search' }],
-    tool_choice: { type: 'web_search' },
+    tools: [tool],
+    tool_choice: twoStage ? toolChoice : 'auto',
     max_output_tokens: options.maxOutputTokens || DEFAULT_MAX_OUTPUT_TOKENS,
     stream: false,
   }, roundOptions);
@@ -110,20 +124,19 @@ async function webSearchDeepSeek(options = {}) {
   const usage = first.usage ? [first.usage] : [];
   const hasSearchCall = () => (data.output || []).some(item => item.type === 'web_search_call');
 
-  // 回传循环（仅两段式启用时）：把上一轮全部 output（含 reasoning_text 与 web_search_call）
-  // 原样回传，直到模型不再调用搜索（已基于结果输出结论）。
-  // twoStage=false（其他工具单段 web_search）时跳过，只发第一段请求。
+  // DeepSeek 的无状态 Responses API 需要把上一轮全部 output（含 reasoning_text
+  // 与 web_search_call）原样回传，服务端才会恢复搜索结果。
   let rounds = 0;
   while (twoStage && hasSearchCall() && rounds < maxRounds) {
     rounds += 1;
-    const next = await requestDeepSeek({
+    const next = await requestResponses({
       model,
       instructions: instructions || '你是资料研究器。根据搜索结果输出研究结论，并逐条列出可审计的来源 URL。',
       input: [
         { type: 'message', role: 'user', content: [{ type: 'input_text', text: query }] },
         ...(data.output || []),
       ],
-      tools: [{ type: 'web_search' }],
+      tools: [tool],
       tool_choice: 'auto',
       max_output_tokens: options.maxOutputTokens || DEFAULT_MAX_OUTPUT_TOKENS,
       stream: false,
@@ -144,4 +157,5 @@ module.exports = {
   extractUrls,
   buildSourcesFromText,
   webSearchDeepSeek,
+  webSearchResponses: webSearchDeepSeek,
 };

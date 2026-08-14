@@ -62,7 +62,7 @@ function replaceCatalogFiles(sourceDir) {
   }
 }
 
-function backupDist(target) {
+function backupDistDirectory(target) {
   const dist = path.join(DIRS.project, 'dist');
   if (fs.existsSync(dist)) fs.cpSync(dist, target, { recursive: true });
 }
@@ -125,7 +125,7 @@ function commitCatalogChange(seed, options = {}) {
     journal.phase = 'dist_staged';
     journalWrite(journal, runId);
     copyCatalogFiles(backupCatalog);
-    backupDist(backupDist);
+    backupDistDirectory(backupDist);
     journal.phase = 'committing';
     journal.replaced = Object.keys(FILE_BY_AREA);
     journalWrite(journal, runId);
@@ -189,7 +189,7 @@ function replaceToolLevel3(items, options = {}) {
     journal.phase = 'dist_staged';
     journalWrite(journal, runId);
     copyCatalogFiles(backupCatalog);
-    backupDist(backupDist);
+    backupDistDirectory(backupDist);
     journal.phase = 'committing';
     journal.replaced = Object.keys(FILE_BY_AREA);
     journalWrite(journal, runId);

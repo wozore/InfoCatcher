@@ -1,15 +1,21 @@
 'use strict';
 
+const { AI_PROTOCOLS, apiKeyForProvider, resolveProvider } = require('./ai-provider-registry');
+
 const DEFAULT_BASE_URL = 'https://api.deepseek.com';
 const DEFAULT_RESPONSES_ENDPOINT = `${DEFAULT_BASE_URL}/responses`;
 
-function classifyHttpError(status) {
-  if (status === 401 || status === 403) return 'DEEPSEEK_AUTH_REQUIRED';
-  if (status === 404) return 'DEEPSEEK_ENDPOINT_INVALID';
-  if (status === 408 || status === 504) return 'DEEPSEEK_TIMEOUT';
-  if (status === 429) return 'DEEPSEEK_RATE_LIMITED';
-  if (status >= 500) return 'DEEPSEEK_PROVIDER_ERROR';
-  return 'DEEPSEEK_OUTPUT_INVALID';
+function providerPrefix(provider) {
+  return provider.name === 'deepseek' ? 'DEEPSEEK' : String(provider.name || 'AI').toUpperCase();
+}
+
+function classifyHttpError(status, prefix = 'DEEPSEEK') {
+  if (status === 401 || status === 403) return `${prefix}_AUTH_REQUIRED`;
+  if (status === 404) return `${prefix}_ENDPOINT_INVALID`;
+  if (status === 408 || status === 504) return `${prefix}_TIMEOUT`;
+  if (status === 429) return `${prefix}_RATE_LIMITED`;
+  if (status >= 500) return `${prefix}_PROVIDER_ERROR`;
+  return `${prefix}_OUTPUT_INVALID`;
 }
 
 function redact(value) {
@@ -19,14 +25,23 @@ function redact(value) {
     .slice(0, 500);
 }
 
-async function requestDeepSeek(payload, options = {}) {
-  const apiKey = options.apiKey ?? process.env.DEEPSEEK_API_KEY;
+async function requestResponses(payload, options = {}) {
+  const providerName = options.provider || 'deepseek';
+  const resolved = resolveProvider(providerName);
+  if (!resolved.ok) return resolved;
+  const provider = resolved.provider;
+  const prefix = providerPrefix(provider);
+  if (provider.protocol !== AI_PROTOCOLS.RESPONSES) {
+    return { ok: false, code: 'AI_PROTOCOL_UNSUPPORTED', error: `provider=${providerName} 使用 ${provider.protocol}，当前只实现 Responses API` };
+  }
+
+  const apiKey = apiKeyForProvider(provider, options.apiKey);
   const fetchImpl = options.fetchImpl || (typeof fetch === 'function' ? fetch : null);
   const timeoutMs = options.timeoutMs ?? 180000;
-  const endpoint = options.endpoint || DEFAULT_RESPONSES_ENDPOINT;
-  if (!apiKey) return { ok: false, code: 'DEEPSEEK_AUTH_REQUIRED', error: '缺少 DEEPSEEK_API_KEY' };
-  if (!fetchImpl) return { ok: false, code: 'DEEPSEEK_NETWORK_ERROR', error: '当前运行环境无 fetch' };
-  if (!/^https:\/\//.test(endpoint)) return { ok: false, code: 'DEEPSEEK_ENDPOINT_INVALID', error: 'DeepSeek endpoint 必须使用 HTTPS' };
+  const endpoint = options.endpoint || provider.responsesEndpoint;
+  if (!apiKey) return { ok: false, code: `${prefix}_AUTH_REQUIRED`, error: `缺少 ${provider.apiKeyEnv}` };
+  if (!fetchImpl) return { ok: false, code: `${prefix}_NETWORK_ERROR`, error: '当前运行环境无 fetch' };
+  if (!/^https:\/\//.test(endpoint)) return { ok: false, code: `${prefix}_ENDPOINT_INVALID`, error: 'AI endpoint 必须使用 HTTPS' };
 
   let response;
   try {
@@ -39,7 +54,7 @@ async function requestDeepSeek(payload, options = {}) {
     });
   } catch (error) {
     const timeout = error?.name === 'TimeoutError' || error?.code === 'ETIMEDOUT' || error?.name === 'AbortError';
-    return { ok: false, code: timeout ? 'DEEPSEEK_TIMEOUT' : 'DEEPSEEK_NETWORK_ERROR', error: redact(error?.message || error) };
+    return { ok: false, code: timeout ? `${prefix}_TIMEOUT` : `${prefix}_NETWORK_ERROR`, error: redact(error?.message || error) };
   }
 
   if (!response?.ok) {
@@ -47,9 +62,9 @@ async function requestDeepSeek(payload, options = {}) {
     try { detail = redact(await response.text()); } catch {}
     return {
       ok: false,
-      code: classifyHttpError(response?.status),
+      code: classifyHttpError(response?.status, prefix),
       status: response?.status,
-      error: `DeepSeek HTTP ${response?.status}${detail ? `: ${detail}` : ''}`,
+      error: `${provider.label} HTTP ${response?.status}${detail ? `: ${detail}` : ''}`,
     };
   }
 
@@ -57,10 +72,14 @@ async function requestDeepSeek(payload, options = {}) {
   try {
     data = await response.json();
   } catch (error) {
-    return { ok: false, code: 'DEEPSEEK_OUTPUT_INVALID', error: `DeepSeek 响应不是 JSON: ${redact(error?.message || error)}` };
+    return { ok: false, code: `${prefix}_OUTPUT_INVALID`, error: `${provider.label} 响应不是 JSON: ${redact(error?.message || error)}` };
   }
-  if (!data || typeof data !== 'object') return { ok: false, code: 'DEEPSEEK_OUTPUT_INVALID', error: 'DeepSeek 响应为空对象' };
+  if (!data || typeof data !== 'object') return { ok: false, code: `${prefix}_OUTPUT_INVALID`, error: `${provider.label} 响应为空对象` };
   return { ok: true, data, usage: data.usage || null };
+}
+
+async function requestDeepSeek(payload, options = {}) {
+  return requestResponses(payload, { ...options, provider: 'deepseek' });
 }
 
 function textFromResponse(data) {
@@ -96,6 +115,7 @@ module.exports = {
   DEFAULT_RESPONSES_ENDPOINT,
   classifyHttpError,
   redact,
+  requestResponses,
   requestDeepSeek,
   textFromResponse,
   collectResponseSources,

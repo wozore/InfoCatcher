@@ -11,9 +11,11 @@
 
 
 - [env.js](src/shared/env.js) — dotenv 子集解析 + 项目根目录。导出: `loadDotEnv, PROJECT_DIR`
-- [paths.js](src/shared/paths.js) — 目录、catalog 文件与生成器事务路径常量（全仓唯一数据登记点，含五模块 catalog、草案、锁、staging、backup、journal）。导出: `DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH`
-- [deepseek-client.js](src/shared/deepseek-client.js) — DeepSeek Responses transport、认证/HTTP/超时错误归一化和来源提取。导出: `requestDeepSeek, textFromResponse, collectResponseSources`
-- [deepseek-websearch.js](src/shared/deepseek-websearch.js) — **DeepSeek API 联网搜索可复用模块**（两段式工具循环：第一段强制 web_search 拿 `web_search_call`，全量回传含 `reasoning_text` 后服务端恢复搜索结果，循环至模型不再搜索；从最终文本提取来源 URL）。`twoStage` 开关缺省 true（DeepSeek 特有），接入其他工具（OpenAI 等单段 web_search）时传 false 绕过回传循环。导出: `webSearchDeepSeek, extractUrls, buildSourcesFromText, messageTextOf`
+- [paths.js](src/shared/paths.js) — 目录、catalog 文件与生成器事务路径常量，以及统一 AI 配置文件路径（全仓唯一数据登记点，含五模块 catalog、草案、锁、staging、backup、journal）。导出: `DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, AI_CONFIG_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH`
+- [ai-provider-registry.js](src/shared/ai-provider-registry.js) — AI provider 注册表、Responses/Messages 协议枚举、provider 到 `.env` Key 字段映射和解析。导出: `AI_PROTOCOLS, AI_PROVIDERS, getProvider, resolveProvider, apiKeyForProvider`
+- [ai-config.js](src/shared/ai-config.js) — 按业务大模块读取、合并和校验 provider/model/protocol 配置；兼容 catalog 旧平铺配置。导出: `DEFAULT_MODULE_CONFIGS, readAiConfig, loadAiModuleConfig, validateModuleConfig`
+- [deepseek-client.js](src/shared/deepseek-client.js) — provider-aware Responses transport、认证/HTTP/超时错误归一化和来源提取；保留 DeepSeek 兼容包装。导出: `requestResponses, requestDeepSeek, textFromResponse, collectResponseSources`
+- [deepseek-websearch.js](src/shared/deepseek-websearch.js) — **Responses API 联网搜索可复用模块**；按 provider 自动选择 DeepSeek 两段式或其他 Responses provider 单段调用，并提取可审计来源 URL。保留 `webSearchDeepSeek` 兼容导出，另导出 `webSearchResponses`。
 
 ## src/catalog/ — 目录数据接口与生成器
 - [catalog-interface.js](src/catalog-interface.js) — Node 侧五模块目录唯一 Interface；三级批量替换委托共同事务。导出: `catalog, DATA_FILES, resetCatalogForTests`
@@ -111,8 +113,10 @@
 ## tests/ — 自动化回归
 - [catalog-interface.test.js](tests/catalog-interface.test.js) — 五模块目录 Interface、字段所有权、稳定引用、工具卡→三级详情以及场景/精选详情引用回归。
 - [catalog-generator.test.js](tests/catalog/catalog-generator.test.js) — DeepSeek 搜索请求、EvidenceBundle、一次修复、生成矩阵和 revision 回归。
-- [catalog-cli.test.js](tests/catalog/catalog-cli.test.js) — CLI 参数、热点 Seed、DeepSeek 能力 fail-closed 和共享 transport 回归。
-- [deepseek-websearch.test.js](tests/shared/deepseek-websearch.test.js) — 联网搜索模块回归：twoStage=false 单段绕过、twoStage=true 回传恢复结果、URL 提取去重与标点清理。
+- [catalog-cli.test.js](tests/catalog/catalog-cli.test.js) — CLI 参数、热点 Seed、catalog 模块配置、DeepSeek 能力 fail-closed 和共享 transport 回归。
+- [ai-provider-registry.test.js](tests/shared/ai-provider-registry.test.js) — provider 协议、Key 环境变量映射和 Messages API fail-closed 回归。
+- [ai-config.test.js](tests/shared/ai-config.test.js) — 业务模块配置合并、旧 catalog 配置兼容和 protocol 校验回归。
+- [deepseek-websearch.test.js](tests/shared/deepseek-websearch.test.js) — 联网搜索模块回归：DeepSeek 两段式、OpenAI 单段、Messages 拒绝、URL 去重与标点清理。
 - [collector-x-v2.test.js](tests/news/collector-x-v2.test.js) — X 请求级 credits 硬预算回归：窗外/空长文/重试/零预算/低配置/超量响应/直接门禁。
 - [news-pipeline-min.test.js](tests/news/news-pipeline-min.test.js) — v2 全链编排、总开关、采集状态汇总、credits→last-run 透传回归。
 - [validate-news-config.test.js](tests/maintenance/validate-news-config.test.js) — news-config-v2 安全字段与 last-run X credits/request schema 校验。

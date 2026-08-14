@@ -18,6 +18,10 @@ const NEWS_RUNTIME_DIR = path.join(NEWS_DIR, 'runtime');
 const NEWS_OUTPUT_DIR = path.join(NEWS_DIR, 'output');
 const ACQUISITION_DIR = path.join(DATA_DIR, 'acquisition');
 const FIXTURE_DIR = path.join(TESTS_DIR, 'fixtures');
+const AI_CONFIG_FILES = Object.freeze({
+  local: path.join(PROJECT_DIR, 'config', 'catalog-generator.local.json'),
+  example: path.join(PROJECT_DIR, 'config', 'catalog-generator.example.json'),
+});
 
 const DIRS = Object.freeze({
   project: PROJECT_DIR,
@@ -51,8 +55,8 @@ const CATALOG_FILES = Object.freeze({
 
 const CATALOG_GENERATOR_FILES = Object.freeze({
   draftsDir: path.join(DATA_DIR, 'manual', 'catalog-drafts'),
-  localConfig: path.join(PROJECT_DIR, 'config', 'catalog-generator.local.json'),
-  exampleConfig: path.join(PROJECT_DIR, 'config', 'catalog-generator.example.json'),
+  localConfig: AI_CONFIG_FILES.local,
+  exampleConfig: AI_CONFIG_FILES.example,
   lock: path.join(DATA_DIR, 'catalog', '.catalog.lock'),
   transactionDir: path.join(DATA_DIR, 'catalog', '.transactions'),
   stagingDir: path.join(DATA_DIR, 'catalog', '.staging'),
@@ -91,4 +95,4 @@ const ACQUISITION_FILES = Object.freeze({
 
 const RSS_FEED_PATH = path.join(PUBLIC_DIR, 'feed.xml');
 
-module.exports = { DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH };
+module.exports = { DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, AI_CONFIG_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH };

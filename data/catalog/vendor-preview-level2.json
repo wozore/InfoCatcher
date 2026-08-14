@@ -368,6 +368,24 @@
           "id": "tool-level3:command-r7b"
         }
       ]
+    },
+    {
+      "id": "vendor-level2:kling:models",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:kling"
+      },
+      "vendor_key": "kling",
+      "title": "Models",
+      "official_url": "https://klingapi.com/zh/models/kling-2.6",
+      "summary": "可灵 kling 2.6 Pro",
+      "status": "unknown",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:kling-2-6-pro"
+        }
+      ]
     }
   ]
 }

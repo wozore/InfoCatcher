@@ -51,6 +51,36 @@ test('twoStage=true returns web_search_call back to restore results', async () =
   assert.equal(result.sources[0].url, 'https://api-docs.deepseek.com/updates/');
 });
 
+test('OpenAI Responses provider bypasses DeepSeek two-stage return loop', async () => {
+  let calls = 0;
+  let payload;
+  const fetchImpl = async (_endpoint, request) => {
+    calls += 1;
+    payload = JSON.parse(request.body);
+    return fakeResponse({
+      output: [{ type: 'message', content: [{ type: 'output_text', text: '单段回答，来源 https://example.com/openai' }] }],
+      status: 'completed',
+    });
+  };
+  const result = await webSearchDeepSeek({
+    provider: 'openai',
+    model: 'gpt-test',
+    query: 'test',
+    apiKey: 'test-key',
+    fetchImpl,
+  });
+  assert.equal(result.ok, true);
+  assert.equal(calls, 1);
+  assert.equal(payload.tools[0].type, 'web_search_preview');
+  assert.equal(result.rounds, 0);
+});
+
+test('Messages provider is rejected by reusable web search module', async () => {
+  const result = await webSearchDeepSeek({ provider: 'anthropic', model: 'claude-test', query: 'test', apiKey: 'test-key' });
+  assert.equal(result.ok, false);
+  assert.equal(result.code, 'AI_PROTOCOL_UNSUPPORTED');
+});
+
 test('extractUrls deduplicates and trims trailing punctuation', () => {
   const urls = extractUrls('见 https://a.com/page. 与 https://a.com/page，及 https://b.com/x?q=1。');
   assert.deepEqual(urls, ['https://a.com/page', 'https://b.com/x?q=1']);

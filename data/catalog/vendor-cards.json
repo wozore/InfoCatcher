@@ -372,6 +372,24 @@
         "kind": "vendor-level1",
         "id": "vendor-level1:cohere"
       }
+    },
+    {
+      "id": "vendor-card:kling",
+      "vendor_key": "kling",
+      "title": "可灵",
+      "icon": "",
+      "summary": "可灵 kling 2.6 Pro",
+      "feature_preview": [],
+      "access_level": "未知",
+      "price_badge": "unknown",
+      "search_terms": [
+        "可灵",
+        "kling"
+      ],
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:kling"
+      }
     }
   ]
 }
