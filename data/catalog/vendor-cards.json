@@ -377,11 +377,32 @@
       "id": "vendor-card:kling",
       "vendor_key": "kling",
       "title": "可灵",
-      "icon": "",
-      "summary": "可灵 kling 2.6 Pro",
-      "feature_preview": [],
-      "access_level": "未知",
-      "price_badge": "unknown",
+      "icon": "🎬",
+      "summary": "Kling AI 官方提供视频生成模型，支持文本和图像输入生成视频。",
+      "feature_preview": [
+        {
+          "tone": "positive",
+          "text": "同时生成视觉、语音和音效，实现音画同步。"
+        },
+        {
+          "tone": "positive",
+          "text": "支持中文和英文语音生成。"
+        },
+        {
+          "tone": "positive",
+          "text": "支持文本和图像输入生成视频。"
+        },
+        {
+          "tone": "positive",
+          "text": "支持运动控制，实现精确的动作迁移。"
+        },
+        {
+          "tone": "positive",
+          "text": "提供多种视频特效。"
+        }
+      ],
+      "access_level": "开放",
+      "price_badge": "usage_based",
       "search_terms": [
         "可灵",
         "kling"

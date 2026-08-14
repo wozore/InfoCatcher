@@ -1,0 +1,87 @@
+'use strict';
+
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const { emptySnapshot } = require('../../src/catalog/catalog-contract');
+const { planCatalogResearch } = require('../../src/catalog/catalog-profile-contract');
+
+function videoSeed(overrides = {}) {
+  return {
+    detail_kind: 'api_model',
+    modality: 'video',
+    name: 'Kling 2.6 Pro',
+    vendor_name: '可灵',
+    vendor_key: 'kling',
+    tool_key: 'kling-2-6-pro',
+    placement: { new_group_title: 'Models' },
+    known_fields: { theme: 'media' },
+    ...overrides,
+  };
+}
+
+function existingVendorSnapshot() {
+  const snapshot = emptySnapshot();
+  snapshot['vendor-card'].push({ id: 'vendor-card:kling', vendor_key: 'kling' });
+  snapshot['vendor-level1'].push({ id: 'vendor-level1:kling', vendor_key: 'kling', level2_refs: [] });
+  return snapshot;
+}
+
+test('video API profile requires API/access/pricing facts and marks text context/plan inapplicable', () => {
+  const plan = planCatalogResearch(videoSeed(), emptySnapshot());
+  assert.equal(plan.profile.key, 'api_model:video');
+  assert.ok(plan.required_predicates.includes('api_available'));
+  assert.ok(plan.required_predicates.includes('access_conditions'));
+  assert.ok(plan.required_predicates.includes('price_rate'));
+  assert.ok(plan.required_predicates.includes('max_duration'));
+  assert.equal(plan.applicability.one_m_context, 'not_applicable');
+  assert.equal(plan.applicability.plan, 'not_applicable');
+  assert.equal(plan.applicability.api_pricing, 'required');
+});
+
+test('existing healthy vendor layers are noop while missing model layers are created', () => {
+  const plan = planCatalogResearch(videoSeed(), existingVendorSnapshot());
+  assert.equal(plan.layer_plan['vendor-card'].operation, 'noop');
+  assert.equal(plan.layer_plan['vendor-level1'].operation, 'noop');
+  assert.equal(plan.layer_plan['vendor-level2'].operation, 'create');
+  assert.equal(plan.layer_plan['tool-level3'].operation, 'create');
+  assert.equal(plan.layer_plan['tool-card'].operation, 'create');
+  assert.equal(plan.research_scopes.some(scope => scope.kind === 'vendor'), false);
+  assert.equal(plan.research_scopes.some(scope => scope.kind === 'detail'), true);
+});
+
+test('repair layers replace only explicitly targeted existing records', () => {
+  const snapshot = existingVendorSnapshot();
+  snapshot['vendor-level2'].push({ id: 'vendor-level2:kling:models', vendor_key: 'kling', detail_refs: [] });
+  snapshot['tool-level3'].push({ id: 'tool-level3:kling-2-6-pro', vendor_key: 'kling', detail_kind: 'api_model' });
+  snapshot['tool-card'].push({ id: 'tool-card:kling-2-6-pro', vendor_key: 'kling', tool_key: 'kling-2-6-pro' });
+  const plan = planCatalogResearch(videoSeed({ repair_layers: ['vendor-card', 'vendor-level1', 'vendor-level2', 'tool-level3', 'tool-card'] }), snapshot);
+  for (const area of ['vendor-card', 'vendor-level1', 'vendor-level2', 'tool-level3', 'tool-card']) {
+    assert.equal(plan.layer_plan[area].operation, 'replace');
+  }
+  assert.deepEqual(plan.research_scopes.map(scope => scope.kind), ['vendor', 'group', 'detail']);
+});
+
+test('profile matrix keeps modality-specific predicates and applicability separate', () => {
+  const cases = [
+    { detail_kind: 'api_model', modality: 'text', profile: 'api_model:text', required: ['context_window', 'api_available', 'price_rate'], absent: ['max_duration'], applicability: ['required', 'required', 'not_applicable'], toolCard: true },
+    { detail_kind: 'api_model', modality: 'image', profile: 'api_model:image', required: ['output_resolution', 'api_available', 'price_rate'], absent: ['context_window', 'audio_capability'], applicability: ['not_applicable', 'required', 'not_applicable'], toolCard: true },
+    { detail_kind: 'api_model', modality: 'audio', profile: 'api_model:audio', required: ['audio_capability', 'supported_languages', 'price_rate'], absent: ['context_window', 'max_duration'], applicability: ['not_applicable', 'required', 'not_applicable'], toolCard: true },
+    { detail_kind: 'tool', modality: undefined, profile: 'tool:general', required: ['access_conditions', 'pricing_model'], absent: ['api_available', 'price_rate'], applicability: ['not_applicable', 'not_applicable', 'not_applicable'], toolCard: true },
+    { detail_kind: 'product_variant', modality: undefined, profile: 'product_variant:general', required: ['access_conditions', 'pricing_model'], absent: ['api_available', 'price_rate'], applicability: ['not_applicable', 'not_applicable', 'not_applicable'], toolCard: true },
+    { detail_kind: 'subscription_plan', modality: undefined, profile: 'subscription_plan:general', required: ['price_rate', 'billing_period', 'plan_conditions', 'included_models_status'], absent: ['api_available', 'capability'], applicability: ['not_applicable', 'not_applicable', 'required'], toolCard: false },
+  ];
+
+  for (const item of cases) {
+    const plan = planCatalogResearch(videoSeed({ detail_kind: item.detail_kind, modality: item.modality }), emptySnapshot());
+    const detail = plan.research_scopes.find(scope => scope.kind === 'detail');
+    assert.equal(plan.profile.key, item.profile);
+    item.required.forEach(predicate => assert.ok(detail.predicates.includes(predicate), `${item.profile} missing ${predicate}`));
+    item.absent.forEach(predicate => assert.equal(detail.predicates.includes(predicate), false, `${item.profile} unexpectedly requires ${predicate}`));
+    assert.deepEqual([plan.applicability.one_m_context, plan.applicability.api_pricing, plan.applicability.plan], item.applicability);
+    assert.equal(Boolean(plan.layer_plan['tool-card']), item.toolCard);
+  }
+});
+
+test('profile planning rejects unsupported modality instead of falling back silently', () => {
+  assert.throws(() => planCatalogResearch(videoSeed({ modality: 'hologram' }), emptySnapshot()), /CATALOG_PROFILE_UNSUPPORTED/);
+});

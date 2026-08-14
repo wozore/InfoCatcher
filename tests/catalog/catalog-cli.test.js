@@ -4,7 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const { pendingCandidateToSeed } = require('../../src/news/feedback/catalog-draft-adapter');
 const { parseArgs } = require('../../scripts/catalog-generator');
-const { probeDeepSeekCapabilities } = require('../../src/catalog/ai/deepseek-catalog-ai');
+const { probeCatalogCapabilities } = require('../../src/catalog/ai/catalog-adapters');
 const { loadGeneratorConfig, normalizeGeneratorOptions } = require('../../src/catalog/catalog-assistant');
 const { requestDeepSeek } = require('../../src/shared/deepseek-client');
 
@@ -26,6 +26,7 @@ test('catalog generator CLI parses cost confirmation and seed flags', () => {
 test('catalog module config maps snake_case limits to internal options', () => {
   const options = normalizeGeneratorOptions(loadGeneratorConfig());
   assert.equal(options.provider, 'deepseek');
+  assert.equal(options.retrievalProvider, 'tavily');
   assert.equal(options.model, 'deepseek-v4-flash');
   assert.equal(options.protocol, 'responses');
   assert.equal(options.timeoutMs, 180000);
@@ -33,13 +34,14 @@ test('catalog module config maps snake_case limits to internal options', () => {
   assert.equal(options.maxRepairCalls, 1);
 });
 
-test('DeepSeek capability probe fails closed without auditable search evidence', async () => {
-  const result = await probeDeepSeekCapabilities({
+test('Tavily capability probe fails closed without a search key', async () => {
+  const result = await probeCatalogCapabilities({
     apiKey: 'test-key',
-    fetchImpl: async () => ({ ok: true, status: 200, json: async () => ({ output_text: 'no sources' }) }),
+    searchApiKey: '',
+    fetchImpl: async () => ({ ok: true, status: 200, json: async () => ({ results: [] }) }),
   });
   assert.equal(result.ok, false);
-  assert.equal(result.code, 'DEEPSEEK_SEARCH_UNAVAILABLE');
+  assert.equal(result.code, 'TAVILY_SEARCH_AUTH_REQUIRED');
 });
 
 test('shared DeepSeek client classifies auth and rate limit errors', async () => {

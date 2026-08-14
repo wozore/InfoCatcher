@@ -3,12 +3,14 @@
     "catalog": {
       "enabled": true,
       "provider": "deepseek",
+      "retrieval_provider": "tavily",
       "model": "deepseek-v4-flash",
       "protocol": "responses",
       "timeout_ms": 180000,
       "max_search_queries": 4,
       "max_pages": 8,
-      "max_ai_calls": 3,
+      "max_responses_calls": 12,
+      "max_synthesis_calls": 1,
       "max_repair_calls": 1
     },
     "news": {

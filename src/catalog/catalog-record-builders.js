@@ -76,8 +76,8 @@ function buildDetail({ vendorKey, detailKind, theme, title, vendorLabel, icon, o
     inapplicable_scenarios: inapplicableScenarios || [],
     sources: sources || [],
     official_date: officialDate ?? null,
+    theme: theme || 'general',
   };
-  if (detailKind !== 'subscription_plan') detail.theme = theme || 'general';
   return detail;
 }
 

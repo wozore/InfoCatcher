@@ -16,6 +16,7 @@ import {
   renderState,
   escapeHtml,
 } from './data.js';
+import { renderAccessTag } from './tool-cards.js';
 
 const FEATURED_CATEGORIES = [
   { key: 'llm', label: 'LLM 模型' },
@@ -82,9 +83,14 @@ function getFeaturedSummary(toolId, itemId) {
 
 function getFeaturedPricing(toolId, itemId) {
   const item = resolveFeaturedDetail(toolId, itemId);
+  if (item?.api_pricing?.status === 'not_applicable') return '';
   const rate = item?.api_pricing?.rate_cards?.[0];
   if (!rate) return '';
-  const symbol = rate.currency === 'USD' ? '$' : rate.currency === 'CNY' ? '¥' : '';
+  const symbol = rate.currency === 'USD' ? '$' : rate.currency === 'CNY' ? '¥' : rate.currency + ' ';
+  if (Array.isArray(rate.metrics) && rate.metrics.length) {
+    const metric = rate.metrics[0];
+    return symbol + metric.amount + '/' + metric.unit;
+  }
   return symbol + rate.input_uncached + '/' + symbol + rate.output;
 }
 
@@ -140,7 +146,7 @@ function renderEditorPicksForCat() {
       '<p class="featured-pick-reason">' + escapeHtml(pick.reason) + '</p>' +
       '<div class="featured-pick-tags">' +
         (pick.tool.scenes || []).slice(0, 3).map(s => '<span class="tag scene">' + escapeHtml(s) + '</span>').join('') +
-        '<span class="tag ' + (pick.tool.access_level === '开放' ? 'open' : 'restricted') + '">' + (pick.tool.access_level === '开放' ? '国内可用' : '需科学上网') + '</span>' +
+        renderAccessTag(pick.tool.access_level) +
       '</div>' +
     '</article>';
   }).join('');
@@ -168,7 +174,7 @@ function renderHotRankingForCat() {
         '<p class="featured-hot-desc">' + escapeHtml(leaf.summary || '') + '</p>' +
         '<div class="featured-hot-meta">' +
           (pricing ? '<span>API ' + escapeHtml(pricing) + '</span>' : '') +
-          '<span class="tag ' + (leaf.status === 'active' ? 'open' : 'restricted') + '">' + (leaf.status === 'active' ? '已核实' : '部分核实') + '</span>' +
+          '<span class="tag ' + (leaf.status === 'active' ? 'open' : 'neutral') + '">' + escapeHtml({ active: '已核实', partial: '部分核实', deprecated: '已弃用', retired: '已停用' }[leaf.status] || '资料待核验') + '</span>' +
         '</div>' +
       '</div>' +
     '</article>';

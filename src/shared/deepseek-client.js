@@ -94,22 +94,6 @@ function textFromResponse(data) {
   return parts.join('\n').trim();
 }
 
-function collectResponseSources(value, sources = [], seen = new Set()) {
-  if (!value || typeof value !== 'object' || seen.has(value)) return sources;
-  seen.add(value);
-  if (typeof value.url === 'string' && /^https?:\/\//.test(value.url)) {
-    const title = typeof value.title === 'string' ? value.title.trim() : '';
-    const excerpt = typeof value.excerpt === 'string' ? value.excerpt.trim() : (typeof value.snippet === 'string' ? value.snippet.trim() : '');
-    if (title || excerpt) {
-      const key = `${value.url}\n${title}`;
-      if (!sources.some(source => `${source.url}\n${source.title}` === key)) sources.push({ title: title || value.url, url: value.url, excerpt });
-    }
-  }
-  if (Array.isArray(value)) value.forEach(item => collectResponseSources(item, sources, seen));
-  else Object.values(value).forEach(item => collectResponseSources(item, sources, seen));
-  return sources;
-}
-
 module.exports = {
   DEFAULT_BASE_URL,
   DEFAULT_RESPONSES_ENDPOINT,
@@ -118,5 +102,4 @@ module.exports = {
   requestResponses,
   requestDeepSeek,
   textFromResponse,
-  collectResponseSources,
 };

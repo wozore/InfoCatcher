@@ -33,15 +33,20 @@ function writeDraft(draft, runId = 'catalog-draft') {
 
 function createDraft(input) {
   const draft = {
-    schema_version: 1,
+    schema_version: input?.schema_version || 3,
     draft_id: input?.draft_id || newDraftId(),
     state: input?.state || 'researching',
     created_at: input?.created_at || new Date().toISOString(),
     updated_at: new Date().toISOString(),
     base_revision: input?.base_revision || null,
     seed: input?.seed || {},
-    research: input?.research || { evidence: [], unresolved_claims: [] },
-    catalog_draft: input?.catalog_draft || null,
+    research: input?.research || { official_sources: [], warnings: [] },
+    research_plan: input?.research_plan || null,
+    coverage: input?.coverage || null,
+    layer_patches: input?.layer_patches || [],
+    synthesis: input?.synthesis || null,
+    record_preview: input?.record_preview || null,
+    cost: input?.cost || null,
     readiness: input?.readiness || { status: 'blocked', blocking_reasons: [], warnings: [] },
     change_preview: input?.change_preview || null,
     preview_hash: input?.preview_hash || null,

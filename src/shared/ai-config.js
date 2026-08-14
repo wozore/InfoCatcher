@@ -8,12 +8,14 @@ const DEFAULT_MODULE_CONFIGS = Object.freeze({
   catalog: Object.freeze({
     enabled: true,
     provider: 'deepseek',
+    retrieval_provider: 'tavily',
     model: 'deepseek-v4-flash',
     protocol: AI_PROTOCOLS.RESPONSES,
     timeout_ms: 180000,
     max_search_queries: 4,
     max_pages: 8,
-    max_ai_calls: 3,
+    max_responses_calls: 12,
+    max_synthesis_calls: 1,
     max_repair_calls: 1,
   }),
   news: Object.freeze({
@@ -49,6 +51,11 @@ function validateModuleConfig(moduleName, config) {
       code: 'AI_PROTOCOL_MISMATCH',
     });
   }
+  if (moduleName === 'catalog' && config.retrieval_provider !== 'tavily') {
+    throw Object.assign(new Error(`模块 ${moduleName} 的 retrieval_provider 只支持 tavily`), {
+      code: 'RETRIEVAL_PROVIDER_UNSUPPORTED',
+    });
+  }
   return config;
 }
 
@@ -59,8 +66,7 @@ function loadAiModuleConfig(moduleName, filePath = AI_CONFIG_FILES.local) {
     protocol: AI_PROTOCOLS.RESPONSES,
   });
   const raw = readAiConfig(filePath);
-  const configured = raw?.modules?.[moduleName]
-    || (moduleName === 'catalog' && !raw?.modules ? raw : {});
+  const configured = raw?.modules?.[moduleName];
   const config = {
     ...defaults,
     ...(configured && typeof configured === 'object' ? configured : {}),

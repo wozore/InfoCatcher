@@ -8,8 +8,9 @@
 
 - Node.js；
 - 在项目根目录执行命令；
-- 目录模块配置的 provider 对应 API Key 环境变量（默认是 `DEEPSEEK_API_KEY`）；
-- 当前目录生成器实际执行 Responses API；默认 DeepSeek 具备 `web_search` 能力（联网搜索为两段式工具循环：先返回搜索调用、回传后恢复结果，生成器内部自动完成，维护者无需手动干预）。
+- 目录模块配置的 DeepSeek provider 对应 API Key 环境变量（默认是 `DEEPSEEK_API_KEY`）；
+- 官方资料搜索和正文提取使用 Tavily，对应环境变量是 `TAVILY_API_KEY`；
+- 目录生成器不再使用 DeepSeek `web_search`。Tavily Search 负责发现官方来源，Tavily Extract 负责返回清洗后的正文，DeepSeek 单段式基于官方来源正文合成五层字段与来源 provenance（不再有 AtomicClaim 中间层）。
 
 API Key 只通过环境变量读取，不要写入 Seed、配置文件、BAT、草案或目录 JSON。
 
@@ -17,12 +18,14 @@ API Key 只通过环境变量读取，不要写入 Seed、配置文件、BAT、�
 
 ```bat
 set DEEPSEEK_API_KEY=你的DeepSeek_API_Key
+set TAVILY_API_KEY=你的Tavily_API_Key
 ```
 
 ### PowerShell 临时设置
 
 ```powershell
 $env:DEEPSEEK_API_KEY = "你的DeepSeek_API_Key"
+$env:TAVILY_API_KEY = "你的Tavily_API_Key"
 ```
 
 关闭当前终端后，临时设置会失效。不要把真实 Key 粘贴到 Git 或文档中。
@@ -37,12 +40,14 @@ $env:DEEPSEEK_API_KEY = "你的DeepSeek_API_Key"
     "catalog": {
       "enabled": true,
       "provider": "deepseek",
+      "retrieval_provider": "tavily",
       "model": "deepseek-v4-flash",
       "protocol": "responses",
       "timeout_ms": 180000,
       "max_search_queries": 4,
       "max_pages": 8,
-      "max_ai_calls": 3,
+      "max_responses_calls": 12,
+      "max_synthesis_calls": 1,
       "max_repair_calls": 1
     },
     "news": {
@@ -55,14 +60,16 @@ $env:DEEPSEEK_API_KEY = "你的DeepSeek_API_Key"
 }
 ```
 
-- `provider` 选择厂商；当前注册 `deepseek` 和 `openai` 为 Responses API，`anthropic` 仅保留 Messages API 扩展入口，尚未执行。
-- `model` 选择该 provider 的模型；OpenAI 等没有默认模型的 provider 必须显式填写。
+- `provider` 选择字段合成的模型厂商；当前目录生成器默认使用 DeepSeek Responses API。
+- `retrieval_provider` 固定为 `tavily`；Tavily Search 发现来源，Tavily Extract 获取清洗后的正文。
+- `model` 选择 DeepSeek provider 的模型；OpenAI 等没有默认模型的 provider 必须显式填写。
 - `protocol` 必须与 provider 匹配；当前目录生成器只执行 `responses`，Messages API 会 fail-closed，不会发请求。
-- API Key 按 provider 自动从环境变量读取：DeepSeek 使用 `DEEPSEEK_API_KEY`，OpenAI 使用 `OPENAI_API_KEY`，预留 Anthropic 使用 `ANTHROPIC_API_KEY`。
-- DeepSeek 的 `web_search` 自动走两段式回传；其他 Responses provider 不触发 DeepSeek 特有的两段式循环。
-- `news` 配置目前只是统一配置预留；新闻现有执行链路仍是旧 Chat Completions，本轮没有迁移到 Responses API。
+- API Key 只按职责从环境变量读取：DeepSeek 使用 `DEEPSEEK_API_KEY`，Tavily 使用 `TAVILY_API_KEY`；Key 不进入配置文件。
+- `max_search_queries`、`max_pages`、`max_responses_calls`、`max_synthesis_calls` 是执行前就生效的硬上限；搜索请求、正文 URL 和模型请求均在执行前扣减，额度不足时返回 `COST_BUDGET_EXHAUSTED`。
+- `resume --confirm-cost` 表示维护者授权一组新的增量硬预算；历史消耗仍保留在 Draft 成本账本中，不会被重置。
+- `news` 配置目前只是统一配置预留；新闻现有执行链路仍是旧 Chat Completions，本轮没有迁移到 Tavily。
 
-兼容早期 catalog 根对象平铺配置，但新配置应使用 `modules.catalog`。
+配置只读取 `modules.catalog`。
 
 ### 启动方式
 
@@ -70,16 +77,18 @@ $env:DEEPSEEK_API_KEY = "你的DeepSeek_API_Key"
 
 | 指令 | 功能 | 网络/API | 是否修改正式目录 |
 |---|---|---|---|
-| `probe --confirm-cost` | 检查 Key、模型和 DeepSeek 联网搜索能力 | 会调用一次 DeepSeek | 否 |
-| `new --seed <file> --confirm-cost` | 联网研究并生成 Preview 草案 | 会联网并可能产生费用 | 否 |
-| `prepare --seed <file>` | 使用已有输入准备离线草案，主要用于测试 | 否 | 否 |
+| `plan --seed <file>` | 离线计算 CatalogProfile、ResearchScope、LayerPlan 和硬成本计划 | 否 | 否 |
+| `prepare --seed <file>` | `plan` 的兼容别名；只输出离线计划 | 否 | 否 |
+| `probe --confirm-cost` | 检查 Tavily 检索和 DeepSeek 合成配置 | 会调用一次 Tavily | 否 |
+| `new --seed <file> --confirm-cost` | 按计划联网研究并生成 schema v3 Preview Draft | 会联网并可能产生费用 | 否 |
+| `resume <draft-id> --confirm-cost` | 只补 FieldCoverage 中仍缺失字段对应的层来源并重新合成 | 会联网并可能产生费用 | 否 |
 | `list` | 列出草案及状态 | 否 | 否 |
-| `review <draft-id>` | 重新校验草案和目录版本 | 否 | 否 |
+| `review <draft-id>` | 重算字段覆盖、LayerPatch、Preview hash 和目录版本 | 否 | 否 |
 | `apply <draft-id>` | 等待 `APPLY <draft-id>` 确认后正式写入 | 通常不需要 AI 调用 | 是 |
 | `cancel <draft-id>` | 删除尚未 Apply 的草案 | 否 | 否 |
 | `recover` | 恢复中断的目录事务 | 否 | 可能回滚本地事务文件 |
 
-其中 `probe` 和 `new` 可能产生 DeepSeek API 费用；`apply`、`cancel` 和 `recover` 可能修改本地文件。菜单会显示这些风险。
+其中 `probe`、`new` 和 `resume` 可能产生 API 费用；先用 `plan` 查看本次 ResearchScope 和硬上限。`apply`、`cancel` 和 `recover` 可能修改本地文件。
 
 输入完整命令后按回车执行，例如：
 
@@ -95,7 +104,7 @@ bat\catalog-generator.bat probe --confirm-cost
 
 双击后直接按回车会退出，不会修改任何文件。命令执行完毕后窗口不会自动进入下一轮交互；需要执行下一条命令时重新双击 BAT，或在终端中再次运行。
 
-## 3. 先检查 DeepSeek 联网搜索
+## 3. 先检查 Tavily 检索和 DeepSeek 提取配置
 
 在项目根目录执行：
 
@@ -103,33 +112,48 @@ bat\catalog-generator.bat probe --confirm-cost
 bat\catalog-generator.bat probe --confirm-cost
 ```
 
-这会执行一次最小动态检查，可能产生 API 调用费用。成功时应看到：
+这会执行一次最小 Tavily 动态检查，可能产生 API 调用费用。成功时应看到：
 
-- DeepSeek 模型和 endpoint；
-- 可审计来源数量；
-- EvidenceBundle 覆盖数量。
+- Tavily 检索 provider；
+- DeepSeek 提取 provider 和 model；
+- 可审计官方来源数量。
 
 常见失败：
 
+- `TAVILY_SEARCH_AUTH_REQUIRED`：当前终端没有 `TAVILY_API_KEY`；
+- `TAVILY_SEARCH_RATE_LIMITED` / `TAVILY_SEARCH_FAILED`：Tavily Search 被限流或返回失败；
+- `TAVILY_EXTRACT_FAILED`：官方页面正文提取失败，来源会保留但字段合成证据不足；
 - `DEEPSEEK_AUTH_REQUIRED`：当前终端没有 `DEEPSEEK_API_KEY`；
-- `DEEPSEEK_SEARCH_UNAVAILABLE`：响应没有可审计来源，不能继续生成正式草案。联网搜索为两段式调用，模型偶发不输出结构化结果，重试一次通常可恢复；
-- `DEEPSEEK_OUTPUT_INVALID`：联网证据已取得，但后续草案整理响应为空、不完整、不是合法 JSON 对象、日期字段不是单个 `YYYY-MM-DD` 字符串、来源不是 `{title,url}` 对象数组或包含未知字段。生成器会自动修复一次；仍失败时，失败草案的 `last_error` 会记录响应状态、截断原因和有限长度输出预览，便于判断问题；
-- `DEEPSEEK_RATE_LIMITED`：触发限流；
-- `DEEPSEEK_TIMEOUT`：请求超时。
+- `DEEPSEEK_RATE_LIMITED` / `DEEPSEEK_TIMEOUT`：DeepSeek 字段合成请求失败；
+- `DEEPSEEK_SYNTHESIS_EMPTY`：DeepSeek 没有返回文本；
+- `DEEPSEEK_SYNTHESIS_INCOMPLETE`：DeepSeek 响应被截断，Draft 会保存 `response_status`、`incomplete_reason` 和有限输出预览；
+- `DEEPSEEK_SYNTHESIS_OUTPUT_INVALID`：DeepSeek 返回的文本不是可解析 JSON；
+- `DEEPSEEK_SYNTHESIS_SCHEMA_INVALID`：返回了 JSON，但缺少 `layer_fields` 对象或结构不符合约束；
+- DeepSeek 的 JSON 外壳允许有限归一化，但每个字段仍必须引用真实官方来源并通过 FieldCoverage 本地门禁；
+- `SYNTHESIS_COVERAGE_INCOMPLETE`：CatalogProfile 的适用字段仍无值、仍是占位或未引用官方来源；Draft 保持 `preview_blocked`；
+- `PROFILE_MISMATCH_SUSPECTED`：`api_model` 缺少访问方式、价格徽标或 API 计价等类型成立所必需的字段；继续检索官方 developer/API/pricing/credits 资料，仍找不到时可人工考虑改建为 `product_variant`，生成器不会自动改类；
+- `SYNTHESIS_INVALID` / `LAYER_PATCH_INVALID`：派生字段引用不存在的官方来源、记录字段不完整、存在空值，或字段缺少 provenance；
+- `COST_BUDGET_EXHAUSTED`：某类硬成本额度已耗尽，本次不会继续发请求；可审核已有来源后执行一次明确授权的 `resume --confirm-cost`；
+- `DRAFT_SCHEMA_UNSUPPORTED`：旧 schema Draft 不能进入新的 Review/Apply 路径。
 
 ## 4. 准备 Seed 文件
 
 创建一个临时 JSON 文件，例如 `data/manual/catalog-seed.json`。Seed 只写你已知的业务信息，不需要手工填写五份目录 JSON，也不要填写稳定 ID。
-- 注意，如果name使用中文，需要手动补充tool_key；如果vendor_name使用中文，需要手动补充vendor_key
-- known_fields 是“你已经确定、可以提供给生成器参考的字段”。常用字段包括：
-  - theme：general、dev、vision、media；
-  - summary：已知的简短摘要；
-  - description：已知描述；
-  - access_level：访问方式；
-  - price_badge：已知价格标签；
-  - scenes：适用场景；
-  - best_for_preview：适合什么；
-  - not_for_preview：不适合什么。
+- 如果 `name` 无法稳定转成 ASCII 业务键，需要手工填写 `tool_key`；如果 `vendor_name` 无法稳定转成 ASCII 业务键，需要手工填写 `vendor_key`。
+- `modality` 与 `detail_kind` 共同决定 CatalogProfile。API 模型必须明确 `text`、`video`、`image` 或 `audio`，不能让视频模型落入文本 token/context 假设。
+- `known_fields` 只放维护者已经确定的结构提示；当前稳定支持 `theme` 和 `icon`。摘要、价格、访问方式与场景仍必须从官方来源正文派生，不能用 `known_fields` 绕过证据门禁。
+- `repair_layers` 用于声明本次确实需要替换的污染层；未列入且已存在的健康层为 `noop`，不会因新增一个模型而重写厂商资料。
+
+生成器对本次新建或替换的记录执行严格完整性校验：每个适用契约字段都必须是非空、类型正确的明确值，禁止 `null`、空字符串、空数组、`unknown/未知` 等占位值。`one_m_context`、`api_pricing` 或 `plan` 确实不适用时，必须使用：
+
+```json
+{
+  "status": "not_applicable",
+  "reason": "该字段为何不适用于当前记录"
+}
+```
+
+官方来源正文直接支撑字段合成：DeepSeek 一次调用按层生成全部字段，每个字段引用一个或多个 `source_id` 作为 provenance。摘要、特点、场景和适合/不适合说明属于 `DerivedField`，必须保留来源 IDs。官方资料未覆盖任一适用字段时，FieldCoverage 会保持 missing，Draft 不能 Apply。
 
 ### 普通工具
 
@@ -165,24 +189,35 @@ bat\catalog-generator.bat probe --confirm-cost
 ```json
 {
   "detail_kind": "api_model",
-  "name": "Example Model",
+  "modality": "video",
+  "name": "Example Video Model",
   "vendor_name": "Example Vendor",
-  "vendor_key": null,
-  "tool_key": null,
-  "official_url": "https://example.com/models/example-model",
+  "vendor_key": "example-vendor",
+  "tool_key": "example-video-model",
+  "official_url": "https://example.com/models/example-video-model",
+  "repair_layers": [],
   "placement": {
     "existing_level1_ref": null,
     "existing_level2_ref": null,
     "new_group_title": "Models"
   },
   "known_fields": {
-    "theme": "dev"
+    "theme": "media"
   },
-  "discovery_sources": []
+  "discovery_sources": [
+    {
+      "url": "https://example.com/developer",
+      "kind": "official_hint"
+    },
+    {
+      "url": "https://example.com/pricing",
+      "kind": "official_hint"
+    }
+  ]
 }
 ```
 
-API 模型会生成：厂商卡（必要时）、一级、二级、三级详情和工具卡。
+API 模型会生成三级详情和工具卡；厂商卡、一级、二级是否创建或替换由 LayerPlan 决定。`api_model:video` 必须覆盖访问方式、价格徽标、API 计价、时长、分辨率、音频和语言等字段；`one_m_context` 与订阅 `plan` 由 Profile 确定为结构化不适用。
 
 ### 订阅套餐
 
@@ -223,9 +258,35 @@ API 模型会生成：厂商卡（必要时）、一级、二级、三级详情�
 
 如果只指定已有一级而不指定已有二级，需要提供 `new_group_title`，生成器会新增二级分组并向一级追加引用。
 
+### 显式修复已有层
+
+修复已 Apply 的污染记录时，优先在 Seed 顶层列出需要替换的层：
+
+```json
+{
+  "repair_layers": [
+    "vendor-card",
+    "vendor-level1",
+    "vendor-level2",
+    "tool-level3",
+    "tool-card"
+  ]
+}
+```
+
+LayerPlan 对每层独立判定：目标不存在是 `create`；目标存在且列入 `repair_layers` 是 `replace`；目标存在且未列入是 `noop`。兼容旧 `"operation":"replace"`，但它会把五层都视为修复目标，不适合只修模型层。
+
+替换不是静默 upsert：目标必须已存在、稳定业务键必须匹配，否则生成器 fail-closed。Review 会显示每个 LayerPatch 的 `create/replace/noop`；Apply 仍使用 revision、preview hash、共同锁、staging、backup、journal 与回滚事务。普通 create 遇到相同 ID 时仍返回 `ID_CONFLICT`。
+
 ## 5. 生成草案 Preview
 
-在确认可能产生费用后执行：
+先执行零网络计划：
+
+```bat
+bat\catalog-generator.bat plan --seed data\manual\catalog-seed.json
+```
+
+确认输出中的 `profile`、三个 ResearchScope、每层 `create/replace/noop` 和硬成本上限后，再执行：
 
 ```bat
 bat\catalog-generator.bat new --seed data\manual\catalog-seed.json --confirm-cost
@@ -233,25 +294,36 @@ bat\catalog-generator.bat new --seed data\manual\catalog-seed.json --confirm-cos
 
 `new` 会依次执行：
 
-1. 调用 DeepSeek `web_search` 搜索官方资料；
-2. 把来源 URL、标题、摘录和字段证据整理到临时 EvidenceBundle；
-3. 调用 DeepSeek 生成业务字段草案；
-4. 本地生成稳定 ID、refs 和五模块变更计划；
-5. 校验完整 FutureSnapshot；
-6. 将草案保存到：
-   `data/manual/catalog-drafts/<draft-id>.json`；
-7. 输出 Preview，不会写入正式 catalog。
+1. 根据 `detail_kind + modality` 选择 CatalogProfile，并计算需要研究的 vendor/group/detail scope；
+2. 使用 Tavily Search 按官方域名和谓词联想搜索 developer/API/OpenAPI/pricing/credits/specifications 等资料；
+3. canonicalize URL、过滤非官方域名，再用 Tavily Extract 获取清洗后的 markdown/text 正文；
+4. DeepSeek 不使用 web tools，单段式直接基于各层官方来源正文合成全部层字段与来源 provenance；
+5. 计算 FieldCoverage；任一适用字段缺值、占位或未引用官方来源时保持 blocked；
+6. 验证每个字段引用的 source_id 真实存在，并校验记录完整性；
+7. 本地生成每层完整的 `create/replace/noop` LayerPatch，禁止空值、`null`、空数组和 `unknown/未知`；
+8. 校验 FutureSnapshot、revision 与 Preview hash；
+9. 将 schema v3 Draft 保存到 `data/manual/catalog-drafts/<draft-id>.json`；
+10. 输出 Preview，不会写入正式 catalog。
 
 输出中的关键值：
 
-- `draft_id`：后续 review/apply 使用；
+- `draft_id`：后续 resume/review/apply 使用；
 - `readiness.status`：必须是 `ready` 才能 Apply；
-- `base_revision`：生成草案时的目录版本；
-- `preview_hash`：本次变更预览的校验值；
-- `change_preview`：将创建哪些记录、追加哪些 refs；
-- `evidence_count`：临时证据数量。
+- `research_plan`：CatalogProfile、ResearchScope、LayerPlan 与适用性；
+- `coverage`：每层每个适用字段的 `covered/missing`；
+- `source_count` / `missing_field_count`：官方来源数量与缺失字段数；
+- `layer_patches`：五层独立的 `create/replace/noop`、完整记录和字段 provenance；
+- `record_preview`：本次实际写入的完整记录；
+- `cost`：各类硬上限、已花费和剩余额度；
+- `base_revision`、`preview_hash` 和 `change_preview`：Apply 前的事务校验信息。
 
-如果关键事实没有官方证据，草案会是 blocked 或失败草案。不要手工把 `official_date`、价格或套餐权益补进草案来绕过门禁；应修改 Seed 或官方来源提示后重新研究。
+如果关键事实没有官方证据，Draft 会是 `preview_blocked`。不要手工补价格、日期或占位值绕过门禁；可修正官方来源提示后执行：
+
+```bat
+bat\catalog-generator.bat resume draft-xxxxxxxxxxxx-xxxxxxxx --confirm-cost
+```
+
+`resume` 只重新研究 FieldCoverage 中仍 missing 字段对应的层 scope，并重新合成，保留已有来源和累计成本账本。即使前一次因网络错误或 `COST_BUDGET_EXHAUSTED` 中断，已完成的 OfficialSources 也会写入失败 Draft，后续不会从已覆盖的 scope 重新开始。
 
 ## 6. 查看草案
 
@@ -267,7 +339,7 @@ bat\catalog-generator.bat list
 bat\catalog-generator.bat review draft-xxxxxxxxxxxx-xxxxxxxx
 ```
 
-`review` 会重新计算变更计划。如果目录在生成草案后发生变化，会返回 `REVISION_CONFLICT`，此时不能继续使用旧 Preview，应重新执行 `new`。
+`review` 会重新计算必需字段覆盖、记录完整性、字段 provenance、LayerPatch、Preview hash 和当前 revision。目录在生成 Draft 后发生变化时返回 `REVISION_CONFLICT`；schema v2 Draft 返回 `DRAFT_SCHEMA_UNSUPPORTED`。任一 missing 或无效 Patch 都不能 Apply。
 
 ## 7. 正式 Apply
 
@@ -279,9 +351,10 @@ bat\catalog-generator.bat apply draft-xxxxxxxxxxxx-xxxxxxxx
 
 CLI 会再次显示：
 
-- readiness；
-- 五模块将创建的记录；
-- 将追加的 refs；
+- readiness 和字段覆盖；
+- 每层 `create/replace/noop` 及完整记录；
+- 每字段 provenance；
+- Responses、页面、提取和合成的累计成本；
 - 当前 revision；
 - preview hash。
 
@@ -352,8 +425,9 @@ bat\build-dist.bat
 ```text
 pending candidate
   → Seed
-  → DeepSeek 官方资料研究
-  → EvidenceBundle
+  → CatalogProfile / ResearchPlan
+  → OfficialSources
+  → FieldCoverage / LayerPatches
   → Preview
   → 维护者确认
   → Apply
@@ -365,7 +439,10 @@ pending candidate
 
 - API Key 只放环境变量；
 - 不把网页中的提示文字当成系统指令；
-- 搜索失败时不允许模型凭记忆猜价格和日期；
+- Tavily 只负责来源检索和正文提取，字段合成必须以官方来源正文为唯一证据，provenance 引用真实 source_id；
+- 搜索或正文提取失败时不允许模型凭记忆猜价格和日期；
+- `api_model` 的 API 可用性、访问条件和价格不能用 `not_applicable` 掩盖；缺失时必须 blocked，并只建议人工考虑 `product_variant`；
+- `resume` 只补 missing 字段对应的层来源，但每次仍需 `--confirm-cost` 授权新的增量硬预算；
 - `retrieved_at` 不是 `official_date`；
 - API 模型要有工具卡；
 - 订阅套餐不能有工具卡；

@@ -19,6 +19,7 @@ import {
 } from './data.js';
 import { isComparableLeaf, isCompareSelected } from './compare.js';
 import { markConceptsIn } from './search.js';
+import { renderPriceTag, renderAccessTag } from './tool-cards.js';
 
 const scenePalette = {
   writing: { accent: '#d97706', border: '#92400e' },
@@ -60,8 +61,8 @@ function renderSceneToolCard(tool, selectedDetailRef = null) {
     '<div class="tool-card-desc">' + escapeHtml(description) + '</div>' +
     '<div class="tool-card-tags">' +
       (tool.scenes || []).slice(0, 3).map(scene => '<span class="tag scene">' + escapeHtml(scene) + '</span>').join('') +
-      (tool.price_badge === 'free' ? '<span class="tag free">免费可用</span>' : '<span class="tag paid">仅付费</span>') +
-      '<span class="tag ' + (tool.access_level === '开放' ? 'open' : 'restricted') + '">' + (tool.access_level === '开放' ? '国内可用' : '需科学上网') + '</span>' +
+      renderPriceTag(tool.price_badge) +
+      renderAccessTag(tool.access_level) +
     '</div>' +
     '<div class="tool-card-footer" onclick="event.stopPropagation()">' +
       '<span class="scene-tool-updated">' + (publishedDate ? dateLabel + ' ' + escapeHtml(publishedDate) : dateLabel + '待补充') + '</span>' +

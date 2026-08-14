@@ -13,9 +13,6 @@ const AI_PROVIDERS = Object.freeze({
     apiKeyEnv: 'DEEPSEEK_API_KEY',
     responsesEndpoint: 'https://api.deepseek.com/responses',
     defaultModel: 'deepseek-v4-flash',
-    webSearchTool: Object.freeze({ type: 'web_search' }),
-    webSearchToolChoice: Object.freeze({ type: 'web_search' }),
-    deepseekWebSearchTwoStage: true,
   }),
   openai: Object.freeze({
     name: 'openai',
@@ -24,9 +21,6 @@ const AI_PROVIDERS = Object.freeze({
     apiKeyEnv: 'OPENAI_API_KEY',
     responsesEndpoint: 'https://api.openai.com/v1/responses',
     defaultModel: null,
-    webSearchTool: Object.freeze({ type: 'web_search_preview' }),
-    webSearchToolChoice: 'auto',
-    deepseekWebSearchTwoStage: false,
   }),
   anthropic: Object.freeze({
     name: 'anthropic',

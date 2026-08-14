@@ -1,5 +1,26 @@
 import { escapeHtml } from './data.js';
 
+function renderPriceTag(value) {
+  const labels = {
+    free: ['free', '免费可用'],
+    paid: ['paid', '仅付费'],
+    freemium: ['free', '含免费额度'],
+    usage_based: ['paid', '按量计费'],
+  };
+  const [tone, label] = labels[value] || ['neutral', '价格待核验'];
+  return '<span class="tag ' + tone + '">' + label + '</span>';
+}
+
+function renderAccessTag(value) {
+  const labels = {
+    '开放': ['open', '国内可用'],
+    '受限': ['restricted', '访问受限'],
+    '区域限制': ['restricted', '区域限制'],
+  };
+  const [tone, label] = labels[value] || ['neutral', '访问待核验'];
+  return '<span class="tag ' + tone + '">' + label + '</span>';
+}
+
 function toolCards(request = {}) {
   if (request.operation === 'list') return request.items || [];
   const card = request.card;
@@ -17,8 +38,8 @@ function toolCards(request = {}) {
       '</div>'
     : '';
   const tags = '<div class="tool-card-tags">' +
-    (card.price_badge === 'free' ? '<span class="tag free">免费可用</span>' : '<span class="tag paid">仅付费</span>') +
-    '<span class="tag ' + (card.access_level === '开放' ? 'open' : 'restricted') + '">' + (card.access_level === '开放' ? '国内可用' : '需科学上网') + '</span>' +
+    renderPriceTag(card.price_badge) +
+    renderAccessTag(card.access_level) +
     '</div>';
   const openCard = 'openDetail(\'' + escapeHtml(card.detail_ref.id) + '\',null,this)';
   const canCompare = ['tool', 'api_model', 'product_variant'].includes(card.detail_kind);
@@ -38,4 +59,5 @@ function toolCards(request = {}) {
   </div>`;
 }
 
+export { renderPriceTag, renderAccessTag };
 export default toolCards;

@@ -7,11 +7,13 @@ const fs = require('fs');
 const { loadCatalogSnapshot } = require('../src/catalog/catalog-snapshot-store');
 const {
   prepareCatalogDraft,
+  resumeCatalogDraft,
+  planCatalogDraft,
   reviewCatalogDraft,
   applyCatalogDraft,
   discardCatalogDraft,
   recoverCatalogTransactions,
-  probeDeepSeekCapabilities,
+  probeCatalogCapabilities,
   loadGeneratorConfig,
   normalizeGeneratorOptions,
 } = require('../src/catalog/catalog-assistant');
@@ -49,8 +51,13 @@ function printPreview(result) {
     base_revision: draft.base_revision,
     preview_hash: draft.preview_hash,
     change_preview: draft.change_preview,
-    evidence_count: draft.research.evidence.length,
-    cost: result.cost,
+    research_plan: draft.research_plan,
+    coverage: draft.coverage,
+    source_count: draft.research?.official_sources?.length || 0,
+    missing_field_count: draft.coverage?.missing?.length || 0,
+    layer_patches: draft.layer_patches,
+    record_preview: draft.record_preview,
+    cost: draft.cost || result.cost,
   }, null, 2));
 }
 
@@ -71,7 +78,7 @@ async function main(argv = process.argv.slice(2)) {
       console.log(JSON.stringify(result, null, 2));
       return result;
     }
-    const result = await probeDeepSeekCapabilities({ ...normalizeGeneratorOptions(loadGeneratorConfig()), confirmCost: true });
+    const result = await probeCatalogCapabilities({ ...normalizeGeneratorOptions(loadGeneratorConfig()), confirmCost: true });
     console.log(JSON.stringify(result, null, 2));
     return result;
   }
@@ -85,16 +92,37 @@ async function main(argv = process.argv.slice(2)) {
     console.log(JSON.stringify(result, null, 2));
     return result;
   }
+  if (command === 'plan') {
+    const seed = readSeed(flags);
+    const result = planCatalogDraft(seed, normalizeGeneratorOptions(loadGeneratorConfig()));
+    console.log(JSON.stringify(result, null, 2));
+    return result;
+  }
   if (command === 'new') {
     const seed = readSeed(flags);
-    if (!flags.confirm_cost) return { ok: false, code: 'COST_CONFIRMATION_REQUIRED', cost: flags };
+    if (!flags.confirm_cost) {
+      const result = { ok: false, code: 'COST_CONFIRMATION_REQUIRED' };
+      console.log(JSON.stringify(result, null, 2));
+      return result;
+    }
     const result = await prepareCatalogDraft(seed, { ...normalizeGeneratorOptions(loadGeneratorConfig()), confirmCost: true });
     printPreview(result);
     return result;
   }
   if (command === 'prepare') {
     const seed = readSeed(flags);
-    const result = await prepareCatalogDraft(seed, { ...normalizeGeneratorOptions(loadGeneratorConfig()), skipAi: true, catalogDraft: seed.catalog_draft || seed.known_fields || {} });
+    const result = planCatalogDraft(seed, normalizeGeneratorOptions(loadGeneratorConfig()));
+    console.log(JSON.stringify(result, null, 2));
+    return result;
+  }
+  if (command === 'resume') {
+    if (!id) throw new Error('请提供 draft-id');
+    if (!flags.confirm_cost) {
+      const result = { ok: false, code: 'COST_CONFIRMATION_REQUIRED' };
+      console.log(JSON.stringify(result, null, 2));
+      return result;
+    }
+    const result = await resumeCatalogDraft(id, { ...normalizeGeneratorOptions(loadGeneratorConfig()), confirmCost: true });
     printPreview(result);
     return result;
   }
@@ -117,6 +145,10 @@ async function main(argv = process.argv.slice(2)) {
       draft_id: id,
       readiness: review.draft?.readiness,
       change_preview: review.plan?.changePreview,
+      coverage: review.draft?.coverage,
+      layer_patches: review.draft?.layer_patches,
+      record_preview: review.plan?.plannedRecords,
+      cost: review.draft?.cost,
       preview_hash: review.previewHash,
       current_revision: review.currentRevision,
     }, null, 2));
@@ -127,7 +159,7 @@ async function main(argv = process.argv.slice(2)) {
     console.log(JSON.stringify(result, null, 2));
     return result;
   }
-  throw new Error('用法: catalog-generator probe|list|recover|new|prepare|review|apply|cancel');
+  throw new Error('用法: catalog-generator probe|plan|prepare|list|recover|new|resume|review|apply|cancel');
 }
 
 if (require.main === module) {

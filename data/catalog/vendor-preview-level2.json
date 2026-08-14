@@ -377,9 +377,9 @@
       },
       "vendor_key": "kling",
       "title": "Models",
-      "official_url": "https://klingapi.com/zh/models/kling-2.6",
-      "summary": "可灵 kling 2.6 Pro",
-      "status": "unknown",
+      "official_url": "https://kling.ai",
+      "summary": "Kling AI 是快手科技推出的 AI 创作平台，提供视频、图像和音频生成工具。",
+      "status": "active",
       "detail_refs": [
         {
           "kind": "tool-level3",

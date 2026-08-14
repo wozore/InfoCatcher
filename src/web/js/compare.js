@@ -178,6 +178,7 @@ function renderCompareBars(targets) {
         renderCompareProvenance(targets) +
       '</section>';
     }
+    if (!withPrice.length) return '';
     return '<section class="compare-bars"><div class="compare-bars-gate"><strong>口径不同，不直接比较。</strong>各项目价格币种或口径不一致，仅保留下方表格逐项查看。</div></section>';
   }
   return '';
@@ -185,12 +186,12 @@ function renderCompareBars(targets) {
 
 function renderRootToolCompare(targets) {
   const dims = [
-    { key: 'access_level', label: '国内访问', format: value => value === '开放' ? '可访问' : '需科学上网' },
-    { key: 'has_free', label: '免费层', format: value => value ? '有' : '无' }
+    { key: 'access_level', label: '国内访问', format: value => ({ '开放': '可访问', '受限': '访问受限', '区域限制': '区域限制' }[value] || '访问待核验') },
+    { key: 'price_badge', label: '价格状态', format: value => ({ free: '免费', paid: '仅付费', freemium: '含免费额度', usage_based: '按量计费' }[value] || '价格待核验') }
   ];
   return '<table class="compare-table"><thead><tr><th>维度</th>' + targets.map(target => '<th>' + escapeHtml(compareTargetLabel(target)) + '</th>').join('') + '</tr></thead><tbody>' +
     dims.map(dimension => '<tr><td class="dim">' + dimension.label + '</td>' + targets.map(target => {
-      const value = dimension.key === 'has_free' ? target.tool?.price_badge === 'free' : target.tool?.[dimension.key];
+      const value = target.tool?.[dimension.key];
       return '<td>' + escapeHtml(dimension.format(value)) + '</td>';
     }).join('') + '</tr>').join('') +
     '<tr><td class="dim">适用场景</td>' + targets.map(target => '<td>' + escapeHtml((target.tool?.scenes || []).slice(0, 5).join('、')) + '</td>').join('') + '</tr>' +
@@ -205,17 +206,25 @@ function renderRootToolCompare(targets) {
 }
 
 function getPrimaryRate(item) {
-  return item.api_pricing?.rate_cards?.[0] || null;
+  return item.api_pricing?.status === 'not_applicable' ? null : item.api_pricing?.rate_cards?.[0] || null;
+}
+
+function formatApiPricing(item) {
+  if (item.api_pricing?.status === 'not_applicable') return '不适用：' + (item.api_pricing.reason || '未说明原因');
+  const rate = getPrimaryRate(item);
+  if (!rate) return '暂无可比数据';
+  if (Array.isArray(rate.metrics) && rate.metrics.length) {
+    return rate.metrics.map(metric => metric.label + '：' + formatPrice(metric.amount, rate.currency) + ' / ' + metric.unit).join('；');
+  }
+  return '缓存输入 ' + formatPrice(rate.input_cached, rate.currency) + '；普通输入 ' + formatPrice(rate.input_uncached, rate.currency) + '；输出 ' + formatPrice(rate.output, rate.currency) + ' / 百万 tokens';
 }
 
 function renderApiModelCompare(targets) {
   const rows = [
-    { label: '缓存命中输入价', format: item => { const rate = getPrimaryRate(item); return rate ? formatPrice(rate.input_cached, rate.currency) + ' / 百万 tokens' : '暂无可比数据'; } },
-    { label: '缓存未命中输入价', format: item => { const rate = getPrimaryRate(item); return rate ? formatPrice(rate.input_uncached, rate.currency) + ' / 百万 tokens' : '暂无可比数据'; } },
-    { label: '输出价', format: item => { const rate = getPrimaryRate(item); return rate ? formatPrice(rate.output, rate.currency) + ' / 百万 tokens' : '暂无可比数据'; } },
-    { label: '1M 上下文', format: item => item.one_m_context?.status === 'native' ? '原生支持' : item.one_m_context?.status === 'conditional' ? '特定条件支持' : item.one_m_context?.status === 'not_supported' ? '不支持' : '未知' },
-    { label: '适用说明', format: item => (item.applicable_scenarios || []).map(scene => scene.title + '：' + scene.description).join('；') || '暂无可比数据' },
-    { label: '官方日期', format: item => item.official_date || '待补充' }
+    { label: 'API 价格', format: formatApiPricing },
+    { label: '上下文', format: item => item.one_m_context?.status === 'not_applicable' ? '不适用：' + item.one_m_context.reason : item.one_m_context?.status === 'native' ? '原生支持（' + Number(item.one_m_context.tokens || 0).toLocaleString('zh-CN') + ' tokens）' : item.one_m_context?.status === 'conditional' ? '特定条件支持' : item.one_m_context?.status === 'not_supported' ? '不支持' : '资料待核验' },
+    { label: '适用说明', format: item => Array.isArray(item.applicable_scenarios) ? item.applicable_scenarios.filter(scene => scene && typeof scene === 'object').map(scene => scene.title + '：' + scene.description).join('；') || '资料结构待修复' : '暂无可比数据' },
+    { label: '官方日期', format: item => item.official_date || '资料待核验' }
   ];
   return '<table class="compare-table"><thead><tr><th>维度</th>' + targets.map(target => '<th>' + escapeHtml(compareTargetLabel(target)) + '</th>').join('') + '</tr></thead><tbody>' +
     rows.map(row => '<tr><td class="dim">' + row.label + '</td>' + targets.map(target => '<td>' + escapeHtml(row.format(target.item)) + '</td>').join('') + '</tr>').join('') +

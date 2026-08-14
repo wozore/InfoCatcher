@@ -46,9 +46,3 @@ test('rejects protocol mismatch before execution', () => {
     error => error.code === 'AI_PROTOCOL_MISMATCH',
   );
 });
-
-test('supports legacy catalog root config during transition', () => {
-  const config = withConfig({ provider: 'deepseek', model: 'legacy-model' }, filePath => loadAiModuleConfig('catalog', filePath));
-  assert.equal(config.model, 'legacy-model');
-  assert.equal(config.provider, 'deepseek');
-});

@@ -360,11 +360,32 @@
       "id": "vendor-level1:kling",
       "vendor_key": "kling",
       "title": "可灵",
-      "icon": "",
-      "official_url": "https://klingapi.com/zh/models/kling-2.6",
-      "description": "可灵 kling 2.6 Pro",
-      "status": "unknown",
-      "features": [],
+      "icon": "🎬",
+      "official_url": "https://kling.ai",
+      "description": "Kling AI 是快手科技旗下的 AI 视频生成工具，提供文本生成视频、图像生成视频、音频生成等功能。其 Video 2.6 模型实现了同时生成视觉和音频的能力。",
+      "status": "verified",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "同时生成视觉、语音和音效，实现音画同步。"
+        },
+        {
+          "tone": "positive",
+          "text": "支持中文和英文语音生成。"
+        },
+        {
+          "tone": "positive",
+          "text": "支持文本和图像输入生成视频。"
+        },
+        {
+          "tone": "positive",
+          "text": "支持运动控制，实现精确的动作迁移。"
+        },
+        {
+          "tone": "positive",
+          "text": "提供多种视频特效。"
+        }
+      ],
       "level2_refs": [
         {
           "kind": "vendor-level2",

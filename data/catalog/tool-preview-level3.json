@@ -3498,47 +3498,91 @@
     {
       "vendor_key": "kling",
       "detail_kind": "api_model",
-      "title": "kling 2.6 Pro",
+      "title": "Kling 2.6 Pro",
       "vendor_label": "可灵",
-      "icon": "",
-      "official_url": "https://klingapi.com/zh/models/kling-2.6",
-      "status": "unknown",
-      "summary": "可灵 kling 2.6 Pro",
-      "one_m_context": null,
-      "api_pricing": null,
-      "plan": null,
+      "icon": "🎬",
+      "official_url": "https://kling.ai/quickstart/klingai-video-26-audio-user-guide",
+      "status": "active",
+      "summary": "Kling Video 2.6 模型支持文本和图像输入，同时生成视觉、语音、音效和环境音，实现音画同步，支持中英文。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用文本上下文窗口。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "V2.6 模型计费",
+            "pricing_basis": "按视频时长计费",
+            "currency": "单位",
+            "metrics": [
+              {
+                "label": "5秒视频",
+                "amount": 6,
+                "unit": "单位"
+              },
+              {
+                "label": "10秒视频",
+                "amount": 12,
+                "unit": "单位"
+              }
+            ],
+            "conditions": "通过API使用V2.6模型生成视频时，5秒扣6单位，10秒扣12单位。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
       "applicable_scenarios": [
-        "产品展示",
-        "生活 Vlog",
-        "新闻报道",
-        "公众演讲",
-        "产品讲解",
-        "活动解说",
-        "纪录片",
-        "故事讲述",
-        "访谈节目",
-        "剧情短剧",
-        "日常对话",
-        "喜剧短剧",
-        "唱歌/说唱"
+        {
+          "title": "电商短视频",
+          "description": "利用静态视觉加专业旁白生成产品介绍视频。"
+        },
+        {
+          "title": "有声内容制作",
+          "description": "生成包含语音、音效和环境音的完整视频，减少后期制作。"
+        },
+        {
+          "title": "角色动画",
+          "description": "通过运动控制让静态角色执行动作，实现数字木偶效果。"
+        }
       ],
-      "inapplicable_scenarios": [],
+      "inapplicable_scenarios": [
+        {
+          "title": "长时间视频",
+          "description": "生成的视频最长只有10秒，不适合需要长时长的项目。"
+        },
+        {
+          "title": "复杂物理模拟",
+          "description": "虽然有所改进，但对于极其复杂的物理交互可能表现不佳。"
+        },
+        {
+          "title": "多语言配音",
+          "description": "目前仅支持中英文，多语言场景不适用。"
+        }
+      ],
       "sources": [
         {
-          "title": "KLING VIDEO 2.6 User Guide | Kling AI（官方）",
+          "title": "Kling Video 2.6 Audio User Guide",
           "url": "https://kling.ai/quickstart/klingai-video-26-audio-user-guide"
         },
         {
-          "title": "Kling AI Launches Video 2.6 Model | Kuaishou Technology（官方新闻稿）",
+          "title": "Kling AI Launches Video 2.6 Model with \"Simultaneous ...",
           "url": "https://ir.kuaishou.com/news-releases/news-release-details/kling-ai-launches-video-26-model-simultaneous-audio-visual"
         },
         {
-          "title": "Kling AI Annualized Revenue Run Rate Hits USD240 Million | Kuaishou Technology（官方公告）",
-          "url": "https://ir.kuaishou.com/news-releases/news-release-details/kling-ai-annualized-revenue-run-rate-hits-usd240-million"
+          "title": "Ultimate Guide to the Kling VIDEO 2.6 Motion Control",
+          "url": "https://kling.ai/blog/ai-motion-transfer-video-tutorial"
         },
         {
-          "title": "Kling AI Release Notes：Kling VIDEO 2.6 | Kling AI（官方更新日志）",
-          "url": "https://kling.ai/release-note/release-notes/c605hp1tzd"
+          "title": "API Updates | Kling AI API Documentation",
+          "url": "https://kling.ai/document-api/apiReference/updateNotice"
+        },
+        {
+          "title": "How to Produce Professional-Grade Visual Effects",
+          "url": "https://kling.ai/blog/ai-special-effects-guide-visual-effects"
         }
       ],
       "official_date": "2025-12-03",

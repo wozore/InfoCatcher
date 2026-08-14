@@ -8,26 +8,36 @@
 - [vendor-preview-level1.json](data/catalog/vendor-preview-level1.json) — 厂商一级预览数据；标题、描述、状态、特点和二级稳定引用由一级模块拥有。
 - [vendor-preview-level2.json](data/catalog/vendor-preview-level2.json) — 厂商二级分组预览数据；通过 `detail_refs` 指向三级详情，不重复保存来源或三级子卡片投影。
 - [tool-preview-level3.json](data/catalog/tool-preview-level3.json) — 厂商三级预览/工具详情唯一数据源；由 `detail_kind` 区分工具、API 模型和订阅套餐，层级由二级 `detail_refs` 表达，价格/访问/场景与来源信息由详情拥有。
+## 根领域文档
+- [CONTEXT.md](CONTEXT.md) — catalog 领域词汇表；定义 CatalogProfile、ResearchScope、OfficialSource、FieldCoverage、DerivedField、LayerPatch、CatalogDraft、Readiness 与 Apply。
 
-
+## src/shared/ — 跨模块基础能力
 - [env.js](src/shared/env.js) — dotenv 子集解析 + 项目根目录。导出: `loadDotEnv, PROJECT_DIR`
 - [paths.js](src/shared/paths.js) — 目录、catalog 文件与生成器事务路径常量，以及统一 AI 配置文件路径（全仓唯一数据登记点，含五模块 catalog、草案、锁、staging、backup、journal）。导出: `DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, AI_CONFIG_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH`
 - [ai-provider-registry.js](src/shared/ai-provider-registry.js) — AI provider 注册表、Responses/Messages 协议枚举、provider 到 `.env` Key 字段映射和解析。导出: `AI_PROTOCOLS, AI_PROVIDERS, getProvider, resolveProvider, apiKeyForProvider`
-- [ai-config.js](src/shared/ai-config.js) — 按业务大模块读取、合并和校验 provider/model/protocol 配置；兼容 catalog 旧平铺配置。导出: `DEFAULT_MODULE_CONFIGS, readAiConfig, loadAiModuleConfig, validateModuleConfig`
-- [deepseek-client.js](src/shared/deepseek-client.js) — provider-aware Responses transport、认证/HTTP/超时错误归一化和来源提取；保留 DeepSeek 兼容包装。导出: `requestResponses, requestDeepSeek, textFromResponse, collectResponseSources`
-- [deepseek-websearch.js](src/shared/deepseek-websearch.js) — **Responses API 联网搜索可复用模块**；按 provider 自动选择 DeepSeek 两段式或其他 Responses provider 单段调用，并提取可审计来源 URL。保留 `webSearchDeepSeek` 兼容导出，另导出 `webSearchResponses`。
+- [ai-config.js](src/shared/ai-config.js) — 按业务大模块读取、合并和校验 provider/model/protocol 与 Tavily retrieval 配置。导出: `DEFAULT_MODULE_CONFIGS, readAiConfig, loadAiModuleConfig, validateModuleConfig`
+- [deepseek-client.js](src/shared/deepseek-client.js) — provider-aware Responses transport、认证/HTTP/超时错误归一化；保留 DeepSeek 兼容包装。导出: `requestResponses, requestDeepSeek, textFromResponse`
+- [tavily-client.js](src/shared/tavily-client.js) — Tavily Search/Extract 原生 fetch transport、Key/HTTP/超时错误归一化和 URL canonicalization。导出: `SEARCH_ENDPOINT, EXTRACT_ENDPOINT, canonicalizeUrl, searchTavily, extractTavily, probeTavily`
 
 ## src/catalog/ — 目录数据接口与生成器
 - [catalog-interface.js](src/catalog-interface.js) — Node 侧五模块目录唯一 Interface；三级批量替换委托共同事务。导出: `catalog, DATA_FILES, resetCatalogForTests`
 - [catalog-contract.js](src/catalog/catalog-contract.js) — 五模块字段、枚举、引用和快照形状契约。导出: `AREAS, ALLOWED_FIELDS, DETAIL_KINDS, TOOL_CARD_KINDS, THEMES`
-- [catalog-snapshot-validator.js](src/catalog/catalog-snapshot-validator.js) — FutureSnapshot 纯校验，返回结构化 errors/warnings。导出: `validateCatalogSnapshot`
+- [catalog-snapshot-validator.js](src/catalog/catalog-snapshot-validator.js) — FutureSnapshot 兼容性结构/引用纯校验；严格新记录完整性由 catalog-record-completeness 单独门禁。导出: `validateCatalogSnapshot`
+- [catalog-record-completeness.js](src/catalog/catalog-record-completeness.js) — schema v3 正式记录字段齐全和非缺省门禁，拒绝 null、空字符串、空数组、unknown/未知。导出: `NOT_APPLICABLE_STATUS, FORBIDDEN_PLACEHOLDERS, isExplicitValue, validatePlannedRecords`
+- [catalog-profile-contract.js](src/catalog/catalog-profile-contract.js) — 按 `detail_kind + modality` 选择 CatalogProfile，计算适用谓词、ResearchScope、稳定目标 ID 与逐层 create/replace/noop LayerPlan。导出: `PROFILE_DEFINITIONS, VENDOR_PREDICATES, GROUP_PREDICATES, inferModality, planCatalogResearch`
+- [catalog-research.js](src/catalog/catalog-research.js) — Tavily 来源发现与正文获取编排（discover+acquire）、官方域名信任、URL canonicalization、字段级增量 resume（按缺失字段收敛到对应层 scope）和硬 CostLedger 深 Module；保留预算/Adapter 失败时的来源进度。导出: `DEFAULT_LIMITS, createCostLedger, canonicalizeUrl, officialRootsOf, isTrustedOfficialUrl, sourceIdOf, sourcesForScope, scopeKindsOfFields, researchCatalog`
+- [catalog-synthesis.js](src/catalog/catalog-synthesis.js) — 按层从官方来源正文合成完整记录和来源 provenance（source_ids）；字段级 FieldCoverage 覆盖门禁，api_model 缺 access/price 关键字段建议 product_variant，字段值缺省/占位 fail-closed。导出: `DETAIL_MISMATCH_FIELDS, REQUIRED_LAYER_FIELDS, expectedLayerFields, isNonDefaultFieldValue, fieldCoverageOf, missingCoverageFailure, validateSynthesisOutput, validateLayerPatches, synthesizeCatalog`
+- [catalog-draft-envelope.js](src/catalog/catalog-draft-envelope.js) — schema v3 CatalogDraft Envelope 构建与 Apply 前重算门禁；只消费 ResearchPlan、official_sources、字段级 coverage 和 LayerPatches，ready 时用 fieldCoverageOf 重算防伪造。导出: `buildCatalogDraftEnvelope, validateCatalogDraftEnvelope`
 - [catalog-revision.js](src/catalog/catalog-revision.js) — 五模块稳定序列化、revision 和 preview hash。导出: `stableStringify, revisionOf, previewHashOf`
-- [catalog-draft-store.js](src/catalog/catalog-draft-store.js) — 临时草案创建、读取、更新、列举和删除。导出: `createDraft, readDraft, updateDraft, deleteDraft, listDrafts`
-- [catalog-record-builders.js](src/catalog/catalog-record-builders.js) — 确定性五类记录 Builder 和业务键规范化。导出: `buildVendorCard, buildLevel1, buildLevel2, buildDetail, buildToolCard, deriveKeys`
-- [catalog-change-planner.js](src/catalog/catalog-change-planner.js) — Seed + 业务草案到 records/refs/FutureSnapshot 的确定性规划。导出: `planCatalogChange`
-- [catalog-transaction-store.js](src/catalog/catalog-transaction-store.js) — catalog 共同锁、五文件 staging、staged dist、journal、回滚和恢复。导出: `commitCatalogChange, replaceToolLevel3, recoverCatalogTransaction`
-- [catalog-assistant.js](src/catalog/catalog-assistant.js) — 生成器深 Module；统一研究、草案、Review、Apply、取消和恢复 Interface。导出: `prepareCatalogDraft, reviewCatalogDraft, applyCatalogDraft, discardCatalogDraft, recoverCatalogTransactions`
-- [catalog/ai/deepseek-catalog-ai.js](src/catalog/ai/deepseek-catalog-ai.js) — DeepSeek 联网研究（走两段式 shared/deepseek-websearch）、EvidenceBundle 和严格草案整理；evidence 解析容忍数组/包裹/多个并列对象三种 JSON 形态。导出: `probeDeepSeekCapabilities, collectEvidence, generateCatalogDraft, evidenceFromSearchText, safeEvidenceArray, buildSearchQuery, buildSearchInstructions`
+- [catalog-draft-store.js](src/catalog/catalog-draft-store.js) — schema v3 临时 Draft 创建、读取、更新、列举和删除；持久化 ResearchPlan、OfficialSources、字段级 Coverage、LayerPatches、Readiness 与成本账本。导出: `createDraft, readDraft, updateDraft, deleteDraft, listDrafts`
+- [catalog-record-builders.js](src/catalog/catalog-record-builders.js) — 确定性五类记录 Builder 和业务键规范化；严格生成路径由上游契约保证非缺省输入。导出: `buildVendorCard, buildLevel1, buildLevel2, buildDetail, buildToolCard, deriveKeys`
+- [catalog-change-planner.js](src/catalog/catalog-change-planner.js) — LayerPatches 到 FutureSnapshot 的确定性规划；逐层 create/replace/noop，普通 create 不静默覆盖。导出: `planCatalogPatches`
+- [catalog-transaction-store.js](src/catalog/catalog-transaction-store.js) — catalog 共同锁、五文件 staging、staged dist、journal、回滚和恢复；schema v3 通过 LayerPatches 复用事务。导出: `commitCatalogChange, replaceToolLevel3, recoverCatalogTransaction`
+- [catalog-assistant.js](src/catalog/catalog-assistant.js) — schema v3 生成器深 Module；统一离线 plan、按缺失字段研究/resume、单段合成、Review、Apply、取消和恢复 Interface；resume 的明确成本确认获得一组增量硬预算。导出: `planCatalogDraft, prepareCatalogDraft, resumeCatalogDraft, reviewCatalogDraft, applyCatalogDraft, discardCatalogDraft, recoverCatalogTransactions, researchLimits, resumeResearchLimits, estimateResearchCost, probeCatalogCapabilities`
+- [catalog/ai/deepseek-structured.js](src/catalog/ai/deepseek-structured.js) — DeepSeek Responses 结构化 JSON 深 Module；统一预算预占（ledger 必传，缺省 fail-closed）、JSON 外壳归一化、empty/incomplete/invalid/schema-invalid 分类和有限响应诊断。导出: `extractJsonValues, diagnosticsOf, requestStructuredJson`
+- [catalog/ai/deepseek-catalog-ai.js](src/catalog/ai/deepseek-catalog-ai.js) — DeepSeek 结构化 Catalog Adapter；单段式调用结构化深 Module，基于官方来源正文直接合成各层字段与来源 provenance。导出: `synthesizeLayerFields`
+- [catalog/ai/catalog-synthesis-prompt.js](src/catalog/ai/catalog-synthesis-prompt.js) — 目录合成 prompt 纯函数构建；按层分组官方来源正文（截断/限量）与字段清单，生成 instructions 与 input。导出: `DEFAULT_MAX_SOURCES_PER_LAYER, DEFAULT_MAX_SOURCE_CHARS, sourcesForLayer, buildSynthesisInput, buildSynthesisInstructions`
+- [catalog/ai/catalog-adapters.js](src/catalog/ai/catalog-adapters.js) — 目录检索/模型 Adapter 组合；Tavily 负责官方来源发现和清洗正文，DeepSeek 负责单段字段合成。导出: `buildOfficialDiscoveryQuery, discoverOfficialSources, acquireOfficialSources, probeCatalogCapabilities, createCatalogAiAdapters`
 
 ## src/web/ — 前端静态站（原生 ES module，无打包器；build-dist.js 原样复制到 dist/）
 - [css/style.css](src/web/css/style.css) — 全站样式；工具视图分类索引含极简编辑部科技风格、左侧独立定位、移动端横向布局与具体工具卡片主题/微纹理；厂商卡片与具体工具卡片的悬停样式作用域隔离；工具卡片适合/不适合提示使用颜色竖线
@@ -36,19 +46,19 @@
 - [js/main.js](src/web/js/main.js) — 入口：共享状态、导航 switchView、全部事件绑定（DOMContentLoaded 先 applyStaticTranslations，工具分类索引由 tools.js 的 ToolDirectoryView 自管理）。导出: `currentView, switchView`
 - [js/catalog-interface.js](src/web/js/catalog-interface.js) — 浏览器侧五模块目录唯一 Interface（加载、查询、稳定引用解析）。导出: `catalog`
 - [js/vendor-cards.js](src/web/js/vendor-cards.js) — 厂商卡片模块。导出: 默认厂商卡渲染器
-- [js/tool-cards.js](src/web/js/tool-cards.js) — 工具卡片模块；导出: 默认工具卡渲染器；具体工具/API 模型在卡片右下角复用详情页对比按钮，套餐不显示该按钮。
-- [js/vendor-preview-level1.js](src/web/js/vendor-preview-level1.js) — 厂商一级预览模块。导出: 默认一级预览渲染器
+- [js/tool-cards.js](src/web/js/tool-cards.js) — 工具卡片模块；价格/访问状态多分支渲染，旧 `unknown` 使用中性“待核验”而不误报付费/受限；具体工具/API 模型复用详情页对比按钮。导出: `renderPriceTag, renderAccessTag`、默认工具卡渲染器。
+- [js/vendor-preview-level1.js](src/web/js/vendor-preview-level1.js) — 厂商一级预览模块；旧 unknown 状态显示中性待核验。导出: 默认一级预览渲染器
 - [js/vendor-preview-level2.js](src/web/js/vendor-preview-level2.js) — 厂商二级预览模块。导出: 默认二级预览渲染器
-- [js/tool-preview-level3.js](src/web/js/tool-preview-level3.js) — 厂商三级预览/工具详情模块。导出: `renderToolLevel3`、默认详情渲染器
+- [js/tool-preview-level3.js](src/web/js/tool-preview-level3.js) — 厂商三级预览/工具详情模块；严格场景对象、结构化 not_applicable、通用视频/图像/credit 计价与旧 token 价格兼容渲染。导出: `renderToolLevel3, renderScenario, renderRateCard, notApplicableHtml`、默认详情渲染器
 
 - [js/data.js](src/web/js/data.js) — 五模块目录领域查询、独立数据加载、过滤、平台元数据与通用工具；不再构造旧 `tools.json` / `tool-intelligence.json` 兼容投影。导出: 五模块查询函数、各数据状态与 setter、escapeHtml/timeAgo/formatPrice 等
 - [js/search.js](src/web/js/search.js) — AI 搜索全链路（首页/结果/处理/概念标记）。导出: `searchState, submitSearchHome, renderSearchResults...`
 - [js/tools.js](src/web/js/tools.js) — 工具库视图（厂商/工具 Toggle）由独立 `VendorDirectoryView` / `ToolDirectoryView` 控制器分别管理；工具卡片四类主题、分组和快速索引 + 滤选 + 单级详情弹窗；厂商一级/二级与工具/模型/套餐三级详情统一按稳定 ref 打开，仅 X 关闭。导出: `openDetail, closeModal, showModal, getToolsViewMode, toggleToolsViewMode, renderTools...`
-- [js/compare.js](src/web/js/compare.js) — 对比模式（工具与 API 模型由工具卡加入；订阅套餐由二级详情组加入；按详情类型使用访问、免费标签、价格、场景、资料来源和官方日期维度）。导出: `compareList, toggleCompareRef, compareGroupLeaves, quickCompare, renderCompare...`
-- [js/featured.js](src/web/js/featured.js) — 推荐视图（编辑精选通过工具 `tool_key` + 三级 `detail_ref` 导航，热门模型按正式工具卡 `detail_kind/theme` 分类）。导出: `renderFeatured, renderFeaturedTabs...`
+- [js/compare.js](src/web/js/compare.js) — 对比模式（工具与 API 模型由工具卡加入；订阅套餐由二级详情组加入；区分未知访问/价格，API 模型兼容通用计价单位、结构化 not_applicable 与旧 token 价格）。导出: `compareList, toggleCompareRef, compareGroupLeaves, quickCompare, renderCompare...`
+- [js/featured.js](src/web/js/featured.js) — 推荐视图（编辑精选通过工具 `tool_key` + 三级 `detail_ref` 导航，热门模型按正式工具卡 `detail_kind/theme` 分类；访问/资料状态使用中性未知语义，价格兼容通用计价单位）。导出: `renderFeatured, renderFeaturedTabs...`
 - [js/glossary.js](src/web/js/glossary.js) — AI 概念视图。导出: `activeGlossaryId, openGlossaryConcept, renderGlossary...`
 - [js/trending.js](src/web/js/trending.js) — AI 热点视图（文案走 t()、内容走 getLocalizedField；相关工具资源解析为正式工具卡和三级详情引用）。导出: `renderTrending, openHotspotDetail, reloadHotspots...`
-- [js/scenes.js](src/web/js/scenes.js) — 场景模式视图；任务引用正式工具 `tool_key`，具体模型推荐通过完整三级 `detail_ref` 打开。导出: `activeSceneId, renderScenes, renderSceneDetail...`
+- [js/scenes.js](src/web/js/scenes.js) — 场景模式视图；任务引用正式工具 `tool_key`，具体模型推荐通过完整三级 `detail_ref` 打开，复用工具卡价格/访问多状态标签避免 unknown 误报。导出: `activeSceneId, renderScenes, renderSceneDetail...`
 
 ## src/news/ — 新闻采集管线（CommonJS）
 ### core/ — 数据层（无网络副作用）
@@ -94,7 +104,7 @@
 - [catalog-draft-adapter.js](src/news/feedback/catalog-draft-adapter.js) — 将热点待补工具候选转换为 Seed，不直接写正式目录。导出: `pendingCandidateToSeed`
 
 ## docs/manual/ — 用户说明
-- [catalog-generator.md](docs/manual/catalog-generator.md) — 五模块目录生成器的手动使用流程、Seed 示例、DeepSeek 联网研究、Preview/Apply、恢复和安全规则。
+- [catalog-generator.md](docs/manual/catalog-generator.md) — schema v3 五模块目录生成器手册；CatalogProfile/OfficialSource/FieldCoverage/LayerPatch、plan/new/resume/review/apply、硬成本账本和恢复安全规则。
 
 - [generate-rss.js](src/content/generate-rss.js) — RSS 生成。导出: `getFeedItems, generateRss`
 - [generate-og-image.js](src/content/generate-og-image.js) — OG 图生成。导出: `generateOgImage`
@@ -112,17 +122,26 @@
 
 ## tests/ — 自动化回归
 - [catalog-interface.test.js](tests/catalog-interface.test.js) — 五模块目录 Interface、字段所有权、稳定引用、工具卡→三级详情以及场景/精选详情引用回归。
-- [catalog-generator.test.js](tests/catalog/catalog-generator.test.js) — DeepSeek 搜索请求、EvidenceBundle、一次修复、生成矩阵和 revision 回归。
-- [catalog-cli.test.js](tests/catalog/catalog-cli.test.js) — CLI 参数、热点 Seed、catalog 模块配置、DeepSeek 能力 fail-closed 和共享 transport 回归。
+- [catalog-generator.test.js](tests/catalog/catalog-generator.test.js) — v3 官方查询、单段 Synthesis Adapter、LayerPatch planner 和 revision 回归。
+- [catalog-synthesis-prompt.test.js](tests/catalog/catalog-synthesis-prompt.test.js) — 合成 prompt 按层分组、来源截断限量、跳过无正文来源与指令规则回归。
+- [catalog-adapters.test.js](tests/catalog/catalog-adapters.test.js) — Tavily 官方域名发现、清洗正文、能力探针与 DeepSeek 组合 Adapter 回归。
+- [deepseek-structured.test.js](tests/catalog/deepseek-structured.test.js) — DeepSeek 结构化 JSON 外壳、空/截断/非法响应、synthesis 预算预占与缺账本回归。
+- [catalog-profile-contract.test.js](tests/catalog/catalog-profile-contract.test.js) — CatalogProfile 适用性、video API 必需谓词、稳定目标与逐层 create/replace/noop 规划回归。
+- [catalog-research.test.js](tests/catalog/catalog-research.test.js) — 官方域名过滤、Tavily-only 成本、字段级 missing-only resume 和硬成本账本回归。
+- [catalog-synthesis.test.js](tests/catalog/catalog-synthesis.test.js) — 完整层字段合成、来源 provenance、字段级 Profile mismatch、占位/伪造覆盖拒绝和 noop 层回归。
+- [catalog-draft-envelope.test.js](tests/catalog/catalog-draft-envelope.test.js) — schema v3 Readiness 字段级重算、Source 校验与旧 Draft Apply 拒绝回归。
+- [catalog-pipeline-v3.test.js](tests/catalog/catalog-pipeline-v3.test.js) — Kling video API 完整/缺字段 dossier 全链 mock；五层 replace、非缺省字段、字段级 blocked 改类建议和 Assistant new/resume/review 回归。
+- [kling-video-dossier.js](tests/catalog/fixtures/kling-video-dossier.js) — 完全离线的 Kling video API 官方 dossier 与受约束单段合成 Adapter fixture。导出: `OFFICIAL_URL, EXACT_QUOTE, klingVideoSeed, createKlingDossierAdapters`
+- [catalog-cli.test.js](tests/catalog/catalog-cli.test.js) — CLI 参数、热点 Seed、catalog Tavily/DeepSeek 模块配置、Tavily 能力 fail-closed 和共享 DeepSeek transport 回归。
+- [tavily-client.test.js](tests/shared/tavily-client.test.js) — Tavily Search/Extract 请求、Key、URL canonicalization、失败响应和正文映射回归。
 - [ai-provider-registry.test.js](tests/shared/ai-provider-registry.test.js) — provider 协议、Key 环境变量映射和 Messages API fail-closed 回归。
-- [ai-config.test.js](tests/shared/ai-config.test.js) — 业务模块配置合并、旧 catalog 配置兼容和 protocol 校验回归。
-- [deepseek-websearch.test.js](tests/shared/deepseek-websearch.test.js) — 联网搜索模块回归：DeepSeek 两段式、OpenAI 单段、Messages 拒绝、URL 去重与标点清理。
+- [ai-config.test.js](tests/shared/ai-config.test.js) — 业务模块配置合并、Tavily retrieval 配置和 protocol 校验回归。
 - [collector-x-v2.test.js](tests/news/collector-x-v2.test.js) — X 请求级 credits 硬预算回归：窗外/空长文/重试/零预算/低配置/超量响应/直接门禁。
 - [news-pipeline-min.test.js](tests/news/news-pipeline-min.test.js) — v2 全链编排、总开关、采集状态汇总、credits→last-run 透传回归。
 - [validate-news-config.test.js](tests/maintenance/validate-news-config.test.js) — news-config-v2 安全字段与 last-run X credits/request schema 校验。
 
 ## scripts/ — 命令入口（薄包装；src/ 为纯逻辑）
-- [catalog-generator.js](scripts/catalog-generator.js) — 目录生成器 CLI；研究只生成 Preview，Apply 要求维护者确认。导出: `parseArgs, main`
+- [catalog-generator.js](scripts/catalog-generator.js) — schema v3 目录生成器 CLI；`plan/prepare` 零网络，`new/resume` 要求成本确认，Apply 要求维护者输入完整确认。导出: `parseArgs, main, readSeed`
 - [news-cli.js](scripts/news-cli.js) — CLI 分发入口（透传 src/news/cli/news-cli，含 **`min-review` 命令组**）
 - [validate.js](scripts/validate.js) — 校验聚合入口
 - [build-dist.js](scripts/build-dist.js) — src/web + public + data → dist/（维护者入口：bat/build-dist.bat）

@@ -7,7 +7,7 @@ const { readJson, writeJsonAtomic, acquireLock, releaseLock } = require('../news
 const { validateCatalogSnapshot } = require('./catalog-snapshot-validator');
 const { revisionOf } = require('./catalog-revision');
 const { loadCatalogSnapshot, FILE_BY_AREA } = require('./catalog-snapshot-store');
-const { planCatalogChange } = require('./catalog-change-planner');
+const { planCatalogPatches } = require('./catalog-change-planner');
 const { buildDist } = require('../../scripts/build-dist');
 
 function ensureDirs() {
@@ -99,7 +99,8 @@ function commitCatalogChange(seed, options = {}) {
     if (options.expectedRevision && before.revision !== options.expectedRevision) {
       return { ok: false, code: 'REVISION_CONFLICT', revision: before.revision };
     }
-    const plan = planCatalogChange(before.snapshot, seed, options.catalogDraft || {});
+    if (!Array.isArray(options.layerPatches)) return { ok: false, code: 'LAYER_PATCHES_REQUIRED', error: 'schema v3 Apply 必须提供 layerPatches' };
+    const plan = planCatalogPatches(before.snapshot, options.layerPatches);
     const targetRevision = revisionOf(plan.snapshot);
     const journal = {
       schema_version: 1,

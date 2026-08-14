@@ -1,0 +1,44 @@
+{
+  "detail_kind": "api_model",
+  "modality": "video",
+  "repair_layers": [
+    "vendor-card",
+    "vendor-level1",
+    "vendor-level2",
+    "tool-level3",
+    "tool-card"
+  ],
+  "name": "Kling 2.6 Pro",
+  "vendor_name": "可灵",
+  "vendor_key": "kling",
+  "tool_key": "kling-2-6-pro",
+  "official_url": "https://kling.ai/quickstart/klingai-video-26-audio-user-guide",
+  "placement": {
+    "existing_level1_ref": {
+      "kind": "vendor-level1",
+      "id": "vendor-level1:kling"
+    },
+    "existing_level2_ref": {
+      "kind": "vendor-level2",
+      "id": "vendor-level2:kling:models"
+    },
+    "new_group_title": "Models"
+  },
+  "known_fields": {
+    "theme": "media"
+  },
+  "discovery_sources": [
+    {
+      "url": "https://kling.ai/quickstart/klingai-video-26-audio-user-guide",
+      "kind": "official_hint"
+    },
+    {
+      "url": "https://kling.ai/release-note/release-notes/c605hp1tzd",
+      "kind": "official_hint"
+    },
+    {
+      "url": "https://ir.kuaishou.com/news-releases/news-release-details/kling-ai-launches-video-26-model-simultaneous-audio-visual",
+      "kind": "official_hint"
+    }
+  ]
+}
