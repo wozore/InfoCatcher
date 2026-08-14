@@ -76,7 +76,8 @@ docs/manual/**
 
 # ===== Obsidian =====
 # .obsidian 为符号链接，指向外部笔记库（MyNote/AI归档知识库），非工程交付物；
-# 整个目录忽略，取消历史误跟踪的配置（app.json 等）
+# 整个目录忽略（含符号链接文件形态与目录形态），取消历史误跟踪的配置（app.json 等）
+.obsidian
 .obsidian/
 
 # ===== 脚本生成的临时输出 =====
