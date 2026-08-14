@@ -75,13 +75,9 @@ docs/manual/**
 .claude/worktrees/
 
 # ===== Obsidian =====
-# 工作区状态每次打开都会变，忽略；其余配置（插件、外观等）可共享，保留跟踪
-.obsidian/workspace.json
-.obsidian/workspaces.json
-.obsidian/workspace-mobile.json
-# 第三方插件 bundle（main.js 等，含自带密钥检测正则等外部代码，非工程交付物），
-# 只解除版本跟踪，磁盘文件保留
-.obsidian/plugins/
+# .obsidian 为符号链接，指向外部笔记库（MyNote/AI归档知识库），非工程交付物；
+# 整个目录忽略，取消历史误跟踪的配置（app.json 等）
+.obsidian/
 
 # ===== 脚本生成的临时输出 =====
 # 分析脚本运行产生的中间/输出文件（若生成到这些位置）
