@@ -10,7 +10,6 @@
  *   node scripts/build-news.js --platforms x          # 分时采集：仅跑 X（R1：每日 14:00 / 0:00）
  *   node scripts/build-news.js --platforms youtube,x  # 双平台采集（默认同缺省）
  *   node scripts/build-news.js --fixture              # 注入 mock 采集器跑通全链（无网络、确定性）
- *   node scripts/build-news.js --min                  # 兼容 no-op（v2 已是默认，接受并忽略）
  */
 'use strict';
 
@@ -19,7 +18,7 @@
 const { loadDotEnv } = require('../src/shared/env');
 loadDotEnv();
 
-// ── 热点管线 v2 CLI 入口（默认 / --min 兼容 / --platforms 分时）────────────────
+// ── 热点管线 v2 CLI 入口（默认 / --platforms 分时）────────────────
 // 只做接线：调 runMin 编排，不重写任何 v2 模块。
 // 无 API key 时 YouTube/X 采集器各自降级返回空（coverage.status='failed'），
 // AI 步骤（分类/审核/总结/本地化）缺 DEEPSEEK_API_KEY 即时降级，管线不抛错。
@@ -52,7 +51,7 @@ async function mainMin(platforms) {
 
 /**
  * 解析 --platforms youtube|x[,x]（逗号分隔可选；也接受 --platforms=...）。
- * 缺省返回 undefined（runMin 按双平台缺省处理）。--min 兼容 no-op，不影响本解析。
+ * 缺省返回 undefined（runMin 按双平台缺省处理）。
  * @returns {string[]|undefined}
  */
 function parsePlatforms() {
@@ -67,7 +66,7 @@ function parsePlatforms() {
   return raw.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
 }
 
-/** --min --fixture 注入：mock 采集器 + 纯规则 AI 步骤（无网络、确定性、可复现）。 */
+/** --fixture 注入：mock 采集器 + 纯规则 AI 步骤（无网络、确定性、可复现）。 */
 function buildMinFixtureOptions() {
   const now = new Date('2026-08-05T12:00:00Z');
   const fetchedAt = now.toISOString();
@@ -162,7 +161,6 @@ function buildMinFixtureOptions() {
 }
 
 // require.main === module：仅作为主入口直接执行时才跑管线；被 require（复用实现）时不产生副作用。
-// 热点管线 v2 为默认；--min 为兼容 no-op（接受但忽略，行为不变）。
 if (require.main === module) {
   mainMin(parsePlatforms()).catch(error => {
     console.error(`❌ 热点构建 v2 失败：${error.message}`);

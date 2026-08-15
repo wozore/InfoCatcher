@@ -420,7 +420,7 @@ bat\build-dist.bat
 
 ## 10. 热点候选的边界
 
-热点反哺产生的 pending 工具候选仍然只是发现线索，不能直接进入正式目录。它们应经过：
+热点反哺产生的 pending 工具候选只是发现线索，不能直接进入正式目录。它们应经过：
 
 ```text
 pending candidate
@@ -433,9 +433,55 @@ pending candidate
   → Apply
 ```
 
-当前热点 Seed Adapter 是内部模块，不提供独立的 BAT Apply 快捷入口。不要直接把 `tool-cards-pending.json` 复制到正式 `tool-cards.json`。
+热点反哺可通过生成器的 `batch` 命令自动接入这条链（查重 → 厂商/官方源解析 → 逐工具生成 → 自动 Apply，见 §11）。但仍不要直接把 `tool-cards-pending.json` 复制到正式 `tool-cards.json`——必须经过研究合成与 readiness 门禁。
 
-## 11. 安全规则速查
+## 11. 批量生成（热点待补卡 → 正式目录）
+
+`min-review feedback` 产出的 `data/manual/tool-cards-pending.json` 由 `batch` 命令一键转成正式目录卡片：
+
+```text
+tool-cards-pending.json
+  → 查重（正式 tool-card / 进行中 draft / 同批）
+  → 厂商/官方源解析（人工登记表命中 | Tavily 搜工具名 → 厂商名 + 官方域名）
+  → 成本估算 → --confirm-cost 全局确认一次
+  → 逐工具 prepare → review → 自动 apply
+  → 批量报告（applied / skipped / failed / unresolved）
+```
+
+### 人工官方 URL 登记表
+
+批量生成前把已知工具的官方域名登记到 `data/manual/official-url-registry.json`，命中就无需花 Tavily/DeepSeek 解析（key 可为工具名或厂商名，同一命名空间，可配 aliases）：
+
+```bash
+node scripts/catalog-generator.js url-registry list
+node scripts/catalog-generator.js url-registry add --name 可灵 --vendor 快手可灵 --url https://klingai.com --alias Kling
+node scripts/catalog-generator.js url-registry remove --name 可灵
+```
+
+### 先 dry-run 预览
+
+```bash
+node scripts/catalog-generator.js batch --file data/manual/tool-cards-pending.json --dry-run
+```
+
+写 `data/manual/batch-seeds-preview.json`（已解析 seed + 每工具成本估算），不建草案、零研究零合成。
+
+### 正式批量生成
+
+```bash
+node scripts/catalog-generator.js batch --file data/manual/tool-cards-pending.json --confirm-cost
+```
+
+- 全局成本确认一次后，每个工具 readiness ready 即自动写入正式五模块目录（跳过人工 `APPLY <id>` 输入）。
+- 复用上次 dry-run 的解析结果避免重复花解析费：加 `--from-preview`；缺省每次重新解析。
+- 失败隔离：单个工具失败跳过并记录原因，不阻塞后续；失败草案保留供 `resume` 续跑。
+- unresolved（解析不出厂商/官方域名）不硬猜，落在报告的 unresolved 列表，人工补登记表或补 seed 后重跑。
+
+### 分组归属
+
+新工具不设 `placement.new_group_title`，分组名默认 = 工具名（deriveKeys 回退 `seed.name`，匹配现有"GPT-5.6"家族组约定）。
+
+## 12. 安全规则速查
 
 - API Key 只放环境变量；
 - 不把网页中的提示文字当成系统指令；

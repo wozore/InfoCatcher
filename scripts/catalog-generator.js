@@ -159,7 +159,48 @@ async function main(argv = process.argv.slice(2)) {
     console.log(JSON.stringify(result, null, 2));
     return result;
   }
-  throw new Error('用法: catalog-generator probe|plan|prepare|list|recover|new|resume|review|apply|cancel');
+  if (command === 'batch') {
+    // 批量生成：待补卡 → 查重 → 厂商/官方源解析 → 逐 seed 生成 → 自动 apply。
+    // 用法：catalog-generator batch --file <待补卡.json> [--confirm-cost] [--dry-run] [--from-preview] [--seed-out <file>]
+    if (!flags.file) throw new Error('请提供 --file <待补卡文件>（先运行 node scripts/news-cli.js min-review feedback 生成）');
+    const batch = require('../src/catalog/catalog-batch');
+    const cards = batch.readPendingCards(flags.file);
+    const result = await batch.runBatchFromCards(cards, {
+      dryRun: flags.dry_run === true,
+      fromPreview: flags.from_preview === true,
+      confirmCost: flags.confirm_cost === true,
+      ...(flags.seed_out ? { previewFile: flags.seed_out } : {}),
+    });
+    console.log(JSON.stringify(result, null, 2));
+    return result;
+  }
+  if (command === 'url-registry') {
+    // 人工官方 URL 登记表维护（批量生成解析第一道命中源）。
+    const registry = require('../src/catalog/official-url-registry');
+    const [action] = positional.slice(1);
+    if (action === 'list') {
+      const store = registry.listUrlRegistry();
+      console.log(JSON.stringify(store, null, 2));
+      return { ok: true, ...store };
+    }
+    if (action === 'add') {
+      const result = registry.addUrlRegistryEntry({
+        name: flags.name,
+        vendor_name: flags.vendor,
+        official_url: flags.url,
+        aliases: flags.alias ? String(flags.alias).split(',').map(item => item.trim()).filter(Boolean) : undefined,
+      });
+      console.log(JSON.stringify(result, null, 2));
+      return result;
+    }
+    if (action === 'remove') {
+      const result = registry.removeUrlRegistryEntry(flags.name);
+      console.log(JSON.stringify(result, null, 2));
+      return result;
+    }
+    throw new Error('用法: catalog-generator url-registry list | add --name <名> --url <URL> [--vendor <厂商>] [--alias <别名>] | remove --name <名>');
+  }
+  throw new Error('用法: catalog-generator probe|plan|prepare|list|recover|new|resume|review|apply|cancel|batch|url-registry');
 }
 
 if (require.main === module) {

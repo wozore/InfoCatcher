@@ -154,20 +154,13 @@ function validateLastRun(data, onError = fail) {
 // 第 4 组：hotspots.json — 前端热点投影引用完整性
 //
 // 核心约束：
-//   - items/events/provenance/assessments 均为数组
-//   - 每条内容有完整的 id/platform/content_type/url/title/日期
-//   - events 的 content_ids 必须引用存在的 items
-//   - provenance 的 content_id 必须引用存在的 items
-//   - 商业扣分(penalty>0)必须有 evidence 数组且至少一条证据
-//   - 异常调整(adjustment≠0 且非insufficient_sample)必须有 evidence
+//   - items 为数组，每条内容有完整的 id/platform/content_type/url/title/日期
+//   - 旧版 events/provenance/assessments 字段已随 v2 移除，不再校验
 // ═══════════════════════════════════════════════════════════════
 function validateHotspots(data) {
   if (!data || !Array.isArray(data.items)) {
     fail('hotspots.json.items 应为数组');
     return;
-  }
-  for (const key of ['events', 'provenance', 'assessments']) {
-    if (!Array.isArray(data[key])) fail(`hotspots.json.${key} 应为数组`);
   }
   const contentIds = new Set();
   for (let i = 0; i < data.items.length; i++) {
@@ -229,27 +222,8 @@ function validateHotspots(data) {
     fail('hotspots.json.heat_definition 应为字符串');
   }
 
-  for (const event of data.events || []) {
-    for (const contentId of event.content_ids || []) {
-      if (!contentIds.has(contentId)) fail(`hotspots.json event ${event.id} 引用了不存在的 content_id: ${contentId}`);
-    }
-  }
-  for (const relation of data.provenance || []) {
-    if (!contentIds.has(relation.content_id)) fail(`hotspots.json provenance 引用了不存在的 content_id: ${relation.content_id}`);
-  }
-  for (const assessment of data.assessments || []) {
-    if (!contentIds.has(assessment.content_id)) fail(`hotspots.json assessment 引用了不存在的 content_id: ${assessment.content_id}`);
-    const commercial = assessment.commercial_assessment;
-    if (commercial?.penalty > 0 && (!Array.isArray(commercial.evidence) || commercial.evidence.length === 0)) {
-      fail(`hotspots.json assessment ${assessment.content_id} 商业扣分缺少证据`);
-    }
-    const anomaly = assessment.anomaly_assessment;
-    if (anomaly?.status !== 'insufficient_sample' && anomaly?.adjustment !== 0 && (!anomaly.evidence || anomaly.evidence.length === 0)) {
-      fail(`hotspots.json assessment ${assessment.content_id} 异常调整缺少依据`);
-    }
-  }
   if (!data.coverage || typeof data.coverage !== 'object') fail('hotspots.json.coverage 缺失');
-  console.log(`  hotspots.json: ${data.items.length} 条内容 · ${(data.events || []).length} 个主题，通过`);
+  console.log(`  hotspots.json: ${data.items.length} 条内容，通过`);
 }
 
 // ═══════════════════════════════════════════════════════════════

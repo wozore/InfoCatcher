@@ -5,12 +5,11 @@
  * 调用；从 data/news/runtime/min-candidates.json（v2 单状态轴候选层）
  * 经公开资格门禁重建最终 hotspots.json 与 RSS feed。
  *
- * 候选层由采集管线（build-news.js）写入并附带投影快照（events/provenance/
- * assessments/coverage），因此本脚本不重新采集、不调用 AI、不消费额度。
+ * 候选层由采集管线（build-news.js）写入并附带投影快照（coverage），
+ * 因此本脚本不重新采集、不调用 AI、不消费额度。
  *
- * 用法：node scripts/publish-news.js [--dry-run] [--min]
+ * 用法：node scripts/publish-news.js [--dry-run]
  *   --dry-run：只打印将生成的条目数，不写文件。
- *   --min：兼容 no-op（v2 已是默认，接受并忽略）。
  *   默认走热点管线 v2：从 min-candidates.json（单状态轴）读候选，
  *     approved 按每日 top N 重建 hotspots.json（buildDailyProjection +
  *     enrichHotspotProjection + filterProjectionByWindow，与 runMin 第 10 步同构）。
@@ -37,14 +36,10 @@ function mainMin() {
   const store = readMinStore();
   const projection = buildDailyProjection(store, config, { now: new Date() });
   enrichHotspotProjection(projection.items);
-  const existing = readJson(OUTPUT_PATH, null) || {};
   const output = {
     schema_version: 1,
     generated_at: projection.generated_at,
     items: projection.items,
-    events: Array.isArray(existing.events) ? existing.events : [],
-    provenance: Array.isArray(existing.provenance) ? existing.provenance : [],
-    assessments: Array.isArray(existing.assessments) ? existing.assessments : [],
     coverage: { status: 'published_min', source: 'min-candidates.json', generated_at: projection.generated_at },
   };
   // 与 runMin 第 10 步同构：近期窗口一致过滤（第二道防线），缺省 30 天窗口。
@@ -70,14 +65,9 @@ function mainMin() {
   return { dry_run: false, items: filtered.items.length };
 }
 
-/** 默认入口（热点管线 v2）：只接线 mainMin；--min 为兼容 no-op（v2 已是默认）。 */
-function main() {
-  return mainMin();
-}
-
 if (require.main === module) {
-  try { main(); }
+  try { mainMin(); }
   catch (error) { console.error(`❌ ${error.message}`); process.exitCode = 1; }
 }
 
-module.exports = { main, mainMin };
+module.exports = { mainMin };

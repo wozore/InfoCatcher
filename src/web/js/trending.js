@@ -84,10 +84,9 @@ function renderTrendingStatus() {
   }
   const notes = [];
   const degraded = [];
-  // v1 结构 coverage.platforms；v2 结构 coverage.collectors.{youtube,x}。
-  // 双兼容：collectors 优先，缺省回退 platforms；两者皆无（如 publish-news --min 写入的
-  // coverage.status='published_min'，无平台明细）→ degraded 为空，落到中性「采集完成」。
-  const sources = coverage.collectors || coverage.platforms || {};
+  // v2 结构 coverage.collectors.{youtube,x}。publish-news 写入的 coverage 无平台明细
+  // （如 status='published_min'）→ degraded 为空，落到中性「采集完成」。
+  const sources = coverage.collectors || {};
   for (const [platform, info] of Object.entries(sources)) {
     if (info && (info.status === 'partial' || info.status === 'failed' || info.status === 'degraded')) {
       degraded.push(platform);

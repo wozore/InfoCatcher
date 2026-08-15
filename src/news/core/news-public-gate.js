@@ -92,8 +92,8 @@ function filterPublicItems(items, opts = {}) {
 
 /**
  * 对已构建的公开投影按近期窗口做一致过滤（决策 63/72）：
- * items 按窗口过滤；events / provenance / assessments 只保留引用到存活条目的记录，
- * 避免出现「事件/溯源/评分引用已被过滤掉的条目」的悬空引用。
+ * items 按窗口过滤。旧版 events / provenance / assessments 字段已随 v2 移除，
+ * 不再产出也不做悬空引用清理。
  * 供 build-news.js 与 publish-news.js 等公开出口复用，与 RSS 共用同一规则。
  */
 function filterProjectionByWindow(output, opts = {}) {
@@ -103,9 +103,6 @@ function filterProjectionByWindow(output, opts = {}) {
   return {
     ...output,
     items: output.items.filter(item => alive.has(item.id)),
-    events: (output.events || []).filter(event => (event.content_ids || []).some(id => alive.has(id))),
-    provenance: (output.provenance || []).filter(relation => alive.has(relation.content_id)),
-    assessments: (output.assessments || []).filter(assessment => alive.has(assessment.content_id)),
   };
 }
 

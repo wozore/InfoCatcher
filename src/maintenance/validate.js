@@ -116,9 +116,8 @@ try {
   } else {
     const claudeMd = fs.readFileSync(claudePath, 'utf8');
 
-    // 五模块工具卡数量一致（旧 tools.json 清单格式仍可识别，但不再要求）
-    const toolCountMatch = claudeMd.match(/tool-cards\.json\s+#\s*(\d+)\s*个工具/)
-      || claudeMd.match(/tools\.json\s+#\s*(\d+)\s*个工具/);
+    // 五模块工具卡数量一致（仅识别 tool-cards.json 清单；旧 tools.json 格式已随 v1 移除）
+    const toolCountMatch = claudeMd.match(/tool-cards\.json\s+#\s*(\d+)\s*个工具/);
     if (toolCountMatch) {
       const declared = parseInt(toolCountMatch[1], 10);
       if (declared !== validatedTools.length) console.warn(`  ⚠️  原则3: CLAUDE.md 声明 ${declared} 个工具，实际 ${validatedTools.length}（仅警告，不阻塞）`);

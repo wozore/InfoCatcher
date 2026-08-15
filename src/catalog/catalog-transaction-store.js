@@ -45,12 +45,38 @@ function copyCatalogFiles(targetDir) {
   for (const file of Object.values(FILE_BY_AREA)) fs.copyFileSync(file, path.join(targetDir, path.basename(file)));
 }
 
+/**
+ * 用 sourceDir 原子替换 targetDir（Windows 安全）。
+ * 旧做法先删除 targetDir 再 rename，Windows 上 rename 覆盖非空目录会 EPERM，
+ * 且删除失败被静默吞掉 → 目标目录可能被删而新目录未就位（曾导致 dist 丢失）。
+ * 现改为「旧目录改名腾位 → 新目录就位 → 删除旧目录」：
+ *   - target 在改名成功前始终存在（被占用时 rename 失败，target 保持原样，错误清晰）；
+ *   - 新目录就位失败时把旧目录改回，不丢数据。
+ */
 function replaceDirectory(sourceDir, targetDir) {
   const temp = `${targetDir}.txn.${process.pid}`;
   removeIfExists(temp);
   fs.cpSync(sourceDir, temp, { recursive: true });
-  removeIfExists(targetDir);
-  fs.renameSync(temp, targetDir);
+  if (!fs.existsSync(targetDir)) {
+    fs.renameSync(temp, targetDir);
+    return;
+  }
+  const old = `${targetDir}.old.${process.pid}`;
+  removeIfExists(old);
+  try {
+    fs.renameSync(targetDir, old);
+  } catch (error) {
+    removeIfExists(temp);
+    throw error;
+  }
+  try {
+    fs.renameSync(temp, targetDir);
+  } catch (error) {
+    try { fs.renameSync(old, targetDir); } catch {}
+    removeIfExists(temp);
+    throw error;
+  }
+  removeIfExists(old);
 }
 
 function replaceCatalogFiles(sourceDir) {

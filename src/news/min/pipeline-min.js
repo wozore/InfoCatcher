@@ -67,9 +67,8 @@ const { localizeCandidates } = require('../classify/content-localizer');
 const { runPool } = require('../classify/content-reviewer');
 const { dedupeItems, enrichHotspotProjection } = require('../pipeline/projection');
 const { filterProjectionByWindow } = require('../core/news-public-gate');
-const { readJson, writeJsonAtomic } = require('../core/news-storage');
+const { writeJsonAtomic } = require('../core/news-storage');
 const { NEWS_FILES } = require('../../shared/paths');
-
 const V2_CONFIG_PATH = '../../../data/news/config/news-config-v2.json';
 
 let cachedV2Config = null;
@@ -413,21 +412,15 @@ async function runMin(options = {}) {
   // ═══════════════════════════════════════════════════════════════
   // 10. 每日公开投影：approved 候选按天取 top N → 公开契约补充
   //     （hot_score/evidence_excerpt/related_resources）→ 近期窗口一致过滤 → 写 hotspots.json。
-  //     events/provenance/assessments 沿用旧文件已有值（本管线不构建），
-  //     经 filterProjectionByWindow 剔除悬空引用后一并保留，兼容前端 schema。
   // ═══════════════════════════════════════════════════════════════
   let publicItems = 0;
   try {
     const projection = buildDailyProjection(merged, config, { now });
     enrichHotspotProjection(projection.items);
-    const existing = readJson(NEWS_FILES.hotspots, null) || {};
     const output = {
       schema_version: 1,
       generated_at: projection.generated_at,
       items: projection.items,
-      events: Array.isArray(existing.events) ? existing.events : [],
-      provenance: Array.isArray(existing.provenance) ? existing.provenance : [],
-      assessments: Array.isArray(existing.assessments) ? existing.assessments : [],
       coverage,
     };
     const filtered = filterProjectionByWindow(output, { config, now: nowMs });

@@ -100,36 +100,21 @@ test('filterPublicItems 仅保留窗口内且字段完整的内容', () => {
   assert.deepEqual(passed.map(item => item.id), ['i1']);
 });
 
-test('filterProjectionByWindow 一致过滤投影并清理悬空引用', () => {
+test('filterProjectionByWindow 一致过滤投影', () => {
   const output = {
     items: [
       itemAt(new Date(NOW - 1 * DAY).toISOString(), { id: 'fresh' }),
       itemAt(new Date(NOW - 40 * DAY).toISOString(), { id: 'stale' }),
     ],
-    events: [
-      { id: 'e1', content_ids: ['fresh', 'stale'] },
-      { id: 'e2', content_ids: ['stale'] },
-    ],
-    provenance: [
-      { content_id: 'fresh', relation: 'original' },
-      { content_id: 'stale', relation: 'original' },
-    ],
-    assessments: [
-      { content_id: 'fresh', score: 80 },
-      { content_id: 'stale', score: 40 },
-    ],
     coverage: { status: 'complete' },
   };
   const filtered = filterProjectionByWindow(output, { config: null, now: NOW });
   assert.deepEqual(filtered.items.map(item => item.id), ['fresh']);
-  assert.deepEqual(filtered.events.map(event => event.id), ['e1']);
-  assert.deepEqual(filtered.provenance.map(relation => relation.content_id), ['fresh']);
-  assert.deepEqual(filtered.assessments.map(assessment => assessment.content_id), ['fresh']);
   assert.equal(filtered.coverage.status, 'complete');
 });
 
 test('filterProjectionByWindow 全在窗口内时返回原对象（不重建）', () => {
-  const output = { items: [itemAt(new Date(NOW - 1 * DAY).toISOString())], events: [], provenance: [], assessments: [] };
+  const output = { items: [itemAt(new Date(NOW - 1 * DAY).toISOString())] };
   const filtered = filterProjectionByWindow(output, { config: null, now: NOW });
   assert.equal(filtered, output);
 });

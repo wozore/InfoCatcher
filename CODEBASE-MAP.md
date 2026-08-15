@@ -37,7 +37,9 @@
 - [catalog/ai/deepseek-structured.js](src/catalog/ai/deepseek-structured.js) — DeepSeek Responses 结构化 JSON 深 Module；统一预算预占（ledger 必传，缺省 fail-closed）、JSON 外壳归一化、empty/incomplete/invalid/schema-invalid 分类和有限响应诊断。导出: `extractJsonValues, diagnosticsOf, requestStructuredJson`
 - [catalog/ai/deepseek-catalog-ai.js](src/catalog/ai/deepseek-catalog-ai.js) — DeepSeek 结构化 Catalog Adapter；单段式调用结构化深 Module，基于官方来源正文直接合成各层字段与来源 provenance。导出: `synthesizeLayerFields`
 - [catalog/ai/catalog-synthesis-prompt.js](src/catalog/ai/catalog-synthesis-prompt.js) — 目录合成 prompt 纯函数构建；按层分组官方来源正文（截断/限量）与字段清单，生成 instructions 与 input。导出: `DEFAULT_MAX_SOURCES_PER_LAYER, DEFAULT_MAX_SOURCE_CHARS, sourcesForLayer, buildSynthesisInput, buildSynthesisInstructions`
-- [catalog/ai/catalog-adapters.js](src/catalog/ai/catalog-adapters.js) — 目录检索/模型 Adapter 组合；Tavily 负责官方来源发现和清洗正文，DeepSeek 负责单段字段合成。导出: `buildOfficialDiscoveryQuery, discoverOfficialSources, acquireOfficialSources, probeCatalogCapabilities, createCatalogAiAdapters`
+- [catalog/ai/catalog-adapters.js](src/catalog/ai/catalog-adapters.js) — 目录检索/模型 Adapter 组合；Tavily 负责官方来源发现和清洗正文，DeepSeek 负责单段字段合成；另含批量生成前置的厂商/官方源解析（Tavily 搜工具名 → DeepSeek 提取厂商名+官方域名，fail-closed）。导出: `buildOfficialDiscoveryQuery, discoverOfficialSources, acquireOfficialSources, probeCatalogCapabilities, createCatalogAiAdapters, buildVendorResolutionInstructions, resolveOfficialSource`
+- [catalog-batch.js](src/catalog/catalog-batch.js) — **批量生成编排层（②→③ 链路）**：待补卡 → 三层查重（正式目录/进行中 draft/同批）→ 厂商/官方源解析（人工登记表 | Tavily）→ 成本估算/全局确认 → 逐 seed prepare→review→自动 apply → 批量报告；单 seed 失败跳过保留 draft 可 resume。导出: `readPendingCards, dedupeBatchCandidates, resolveBatchCandidates, planBatchCost, runCatalogBatch, runBatchFromCards`
+- [official-url-registry.js](src/catalog/official-url-registry.js) — 批量生成前置：人工官方 URL 登记表（data/manual/official-url-registry.json）读取/查找/增删，key 可工具名或厂商名同命名空间，命中免 Tavily 解析。导出: `normalizeKey, loadUrlRegistry, listUrlRegistry, lookupOfficialUrl, addUrlRegistryEntry, removeUrlRegistryEntry`
 
 ## src/web/ — 前端静态站（原生 ES module，无打包器；build-dist.js 原样复制到 dist/）
 - [css/style.css](src/web/css/style.css) — 全站样式；工具视图分类索引含极简编辑部科技风格、左侧独立定位、移动端横向布局与具体工具卡片主题/微纹理；厂商卡片与具体工具卡片的悬停样式作用域隔离；工具卡片适合/不适合提示使用颜色竖线
@@ -101,7 +103,7 @@
 
 ### feedback/ — 收尾环节：工具库/概念库反哺（独立于主链，只写待补卡文件）
 - [tool-feedback.js](src/news/feedback/tool-feedback.js) — 从 approved summary 提取 AI 工具/概念名（缺省正则 / options.llmExtract 注入），与五模块工具卡/glossary.json 比对，缺失写 tool-cards-pending.json / concept-cards-pending.json 待补卡，不直接改知识库。导出: `feedbackFromSummaries, extractEntities, toolExists, conceptExists`
-- [catalog-draft-adapter.js](src/news/feedback/catalog-draft-adapter.js) — 将热点待补工具候选转换为 Seed，不直接写正式目录。导出: `pendingCandidateToSeed`
+- [catalog-draft-adapter.js](src/news/feedback/catalog-draft-adapter.js) — 将热点待补工具候选转换为 Seed（接受解析结果 vendor_name/official_url；不设 new_group_title，分组名由 deriveKeys 回退 seed.name），不直接写正式目录。导出: `pendingCandidateToSeed`
 
 ## docs/manual/ — 用户说明
 - [catalog-generator.md](docs/manual/catalog-generator.md) — schema v3 五模块目录生成器手册；CatalogProfile/OfficialSource/FieldCoverage/LayerPatch、plan/new/resume/review/apply、硬成本账本和恢复安全规则。
@@ -125,6 +127,7 @@
 - [catalog-generator.test.js](tests/catalog/catalog-generator.test.js) — v3 官方查询、单段 Synthesis Adapter、LayerPatch planner 和 revision 回归。
 - [catalog-synthesis-prompt.test.js](tests/catalog/catalog-synthesis-prompt.test.js) — 合成 prompt 按层分组、来源截断限量、跳过无正文来源与指令规则回归。
 - [catalog-adapters.test.js](tests/catalog/catalog-adapters.test.js) — Tavily 官方域名发现、清洗正文、能力探针与 DeepSeek 组合 Adapter 回归。
+- [catalog-batch.test.js](tests/catalog/catalog-batch.test.js) — 批量生成编排回归：读卡、三层查重、登记表/解析/unresolved 三路、dry-run 预览、全局成本门禁、批量循环失败隔离、登记表增删。
 - [deepseek-structured.test.js](tests/catalog/deepseek-structured.test.js) — DeepSeek 结构化 JSON 外壳、空/截断/非法响应、synthesis 预算预占与缺账本回归。
 - [catalog-profile-contract.test.js](tests/catalog/catalog-profile-contract.test.js) — CatalogProfile 适用性、video API 必需谓词、稳定目标与逐层 create/replace/noop 规划回归。
 - [catalog-research.test.js](tests/catalog/catalog-research.test.js) — 官方域名过滤、Tavily-only 成本、字段级 missing-only resume 和硬成本账本回归。
@@ -141,11 +144,11 @@
 - [validate-news-config.test.js](tests/maintenance/validate-news-config.test.js) — news-config-v2 安全字段与 last-run X credits/request schema 校验。
 
 ## scripts/ — 命令入口（薄包装；src/ 为纯逻辑）
-- [catalog-generator.js](scripts/catalog-generator.js) — schema v3 目录生成器 CLI；`plan/prepare` 零网络，`new/resume` 要求成本确认，Apply 要求维护者输入完整确认。导出: `parseArgs, main, readSeed`
+- [catalog-generator.js](scripts/catalog-generator.js) — schema v3 目录生成器 CLI；`plan/prepare` 零网络，`new/resume` 要求成本确认，Apply 要求维护者输入完整确认；另有 `batch`（批量生成，`--confirm-cost` 全局确认自动 apply / `--dry-run` 预览 / `--from-preview` 复用解析）与 `url-registry`（人工官方 URL 登记表增删查）。导出: `parseArgs, main, readSeed`
 - [news-cli.js](scripts/news-cli.js) — CLI 分发入口（透传 src/news/cli/news-cli，含 **`min-review` 命令组**）
 - [validate.js](scripts/validate.js) — 校验聚合入口
 - [build-dist.js](scripts/build-dist.js) — src/web + public + data → dist/（维护者入口：bat/build-dist.bat）
-- [publish-news.js](scripts/publish-news.js) — 候选 → 公开投影 + RSS 发布（**默认走 v2：min-candidates approved 按每日 top 重建 hotspots.json**；`--min` 兼容 no-op）
+- [publish-news.js](scripts/publish-news.js) — 候选 → 公开投影 + RSS 发布（**默认走 v2：min-candidates approved 按每日 top 重建 hotspots.json**）
 - [run-after-first-review.js](scripts/run-after-first-review.js) — 首次审核结论落地后安全并行 `refine` 与 `ai-top`；任一失败仅终止本次记录子进程并整体失败。导出: `runAfterFirstReview`
 - [check-secrets.js](scripts/check-secrets.js) — 密钥/高熵扫描（validate.js 反向依赖）
 - [generate-og-image.js](scripts/generate-og-image.js) — OG 图生成入口

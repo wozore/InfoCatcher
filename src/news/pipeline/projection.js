@@ -2,24 +2,20 @@
  * projection.js —— 公开热点投影、关联与去重层
  *
  * 在热点管线中的位置：为写出 hotspots.json 前的最终投影补充公开契约字段
- * （hot_score / evidence_excerpt / related_resources），构建溯源关系（provenance）、
- * 事件聚合（events）与内容去重（dedupeItems）。
+ * （hot_score / evidence_excerpt / related_resources）与内容去重（dedupeItems）。
+ * 旧版 events/provenance/assessments 与就地迁移工具已随 v2 移除。
  *
  * 模块边界：
- *   - 只依赖 feed-parser.js（normalizeUrl/hash）与 scoring.js（interactionValue/HEAT_DEFINITION）；
- *   - 惰性加载工具目录 URL 索引 / 标题匹配词表（一次构建只读一次）；
- *   - upgradeHotspotsProjection / migrateContentTypeProjection 为就地迁移工具。
+ *   - 只依赖 feed-parser.js（normalizeUrl）与本地 interactionValue；
+ *   - 惰性加载工具目录 URL 索引 / 标题匹配词表（一次构建只读一次）。
  */
 
 'use strict';
 
-const fs = require('fs');
-const { readJson, writeJsonAtomic } = require('../core/news-storage');
-const { normalizeUrl, hash } = require('./feed-parser');
-const { NEWS_FILES, CATALOG_FILES } = require('../../shared/paths');
+const { readJson } = require('../core/news-storage');
+const { normalizeUrl } = require('./feed-parser');
+const { CATALOG_FILES } = require('../../shared/paths');
 const { catalog } = require('../../catalog-interface');
-
-const OUTPUT_PATH = NEWS_FILES.hotspots; // 前端热点投影（就地升级/迁移的目标文件）
 
 // ── 互动量级换算（自 v1 scoring.js 内联，v2 保留给 computeHotScores 使用）──
 /** 互动量级：对公开互动数据（浏览/点赞/评论/转发/回复）加权后取对数；无任何互动数据返回 null。 */
@@ -36,9 +32,6 @@ function interactionValue(item) {
   }
   return available ? Math.log10(total + 1) : null;
 }
-
-/** 热度定义文案（随 hotspots.json schema 记录，前端解释 hot_score 口径）。 */
-const HEAT_DEFINITION = 'hot_score 表示条目在其来源平台内的相对互动量级（0–100），由公开互动数据（浏览/点赞/评论/转发）的加权对数指数按平台归一化得到；仅在平台内可比，跨平台不构成权威综合热度。无互动数据时为 null，前端按"最近"时间回退排序。';
 
 // ═══════════════════════════════════════════════════════════════
 // 公开热点数据契约补充（B16 决策 74/77/78/85/88/89）
@@ -308,51 +301,6 @@ function enrichHotspotProjection(items, toolUrlIndex = null, relatedLexicon = nu
   return items;
 }
 
-/** 就地升级现有 hotspots.json 的公开投影（无需 API secrets，供开发/数据契约补齐使用）。 */
-function upgradeHotspotsProjection() {
-  const data = readJson(OUTPUT_PATH, null);
-  if (!data || !Array.isArray(data.items)) throw new Error('--upgrade-hotspots：无法读取现有 hotspots.json');
-  enrichHotspotProjection(data.items, getToolUrlIndex(), getRelatedLexicon());
-  data.schema_version = 2;
-  data.heat_definition = HEAT_DEFINITION;
-  writeJsonAtomic(OUTPUT_PATH, data, `upgrade-${Date.now()}`);
-  const filled = (data.items || []).filter(item => Array.isArray(item.related_resources) && item.related_resources.length).length;
-  console.log(`✅ hotspots.json 公开投影已升级：${data.items.length} 条内容（schema_version=${data.schema_version}；新增 hot_score/evidence_excerpt/related_resources；词边界标题匹配填充 ${filled} 条）`);
-}
-
-// B16 决策 65：内容类型枚举（决策 65 六类 + unclassified 占位）。
-const CONTENT_TYPE_VALUES = new Set([
-  'ai_tool', 'ai_product', 'ai_concept', 'ai_technology', 'ai_industry', 'other', 'unclassified'
-]);
-
-/**
- * 就地迁移现有 hotspots.json（B16 决策 65/66，路径 B）：
- *   - 旧 content_type（来源媒体类型，如 x_post/youtube_video）→ 移到 source_type；
- *   - content_type 统一置 unclassified + content_type_status=unclassified（AI 分类+审核确认未上线前的诚实占位）；
- *   - schema_version 2 → 3（content_type 语义变化）。
- * 幂等：source_type 已存在或 content_type 已是内容类型时不做重复迁移。
- */
-function migrateContentTypeProjection() {
-  const data = readJson(OUTPUT_PATH, null);
-  if (!data || !Array.isArray(data.items)) throw new Error('--migrate-content-type：无法读取现有 hotspots.json');
-  let changed = 0;
-  for (const item of data.items) {
-    if (!item.source_type && item.content_type && !CONTENT_TYPE_VALUES.has(item.content_type)) {
-      item.source_type = item.content_type;
-      item.content_type = 'unclassified';
-      item.content_type_status = 'unclassified';
-      changed += 1;
-    } else if (!item.source_type) {
-      // content_type 缺失或已是内容类型但无来源媒体类型 → source_type 置 unknown
-      item.source_type = 'unknown';
-      changed += 1;
-    }
-  }
-  data.schema_version = 3;
-  writeJsonAtomic(OUTPUT_PATH, data, `migrate-content-type-${Date.now()}`);
-  console.log(`✅ hotspots.json 内容类型字段已迁移：${changed} 条调整，content_type 统一置 unclassified（schema_version=${data.schema_version}）`);
-}
-
 // ═══════════════════════════════════════════════════════════════
 // 内容去重
 //
@@ -386,8 +334,6 @@ module.exports = {
   searchConceptKey,
   computeHotScores,
   enrichHotspotProjection,
-  upgradeHotspotsProjection,
-  migrateContentTypeProjection,
   dedupeItems,
   getRelatedLexicon,
   getToolUrlIndex,

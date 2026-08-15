@@ -26,9 +26,6 @@ let glossary = [];            // glossary.json 的完整内容
 let scenes = [];              // scenes.json 的场景、子任务和工具映射
 let hotspots = {              // hotspots.json 的前端投影
   items: [],                  //   热点内容条目
-  events: [],                 //   主题/事件聚合
-  provenance: [],             //   溯源关系 (转载/评论/引用)
-  assessments: [],            //   每条内容的评分详情
   coverage: null,             //   采集覆盖状态
   generated_at: null          //   构建时间
 };
@@ -519,7 +516,7 @@ async function loadData() {
     const nResp = await fetch('data/news/output/hotspots.json');
     hotspots = await nResp.json();
   } catch (e) {
-    hotspots = { items: [], events: [], provenance: [], assessments: [], coverage: null, generated_at: null };
+    hotspots = { items: [], coverage: null, generated_at: null };
     dataLoadFailures.add('hotspots');
   }
   try {
