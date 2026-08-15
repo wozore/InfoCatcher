@@ -15,6 +15,9 @@ const NEWS_CONFIG_DIR = path.join(NEWS_DIR, 'config');
 const NEWS_RUNTIME_DIR = path.join(NEWS_DIR, 'runtime');
 const NEWS_OUTPUT_DIR = path.join(NEWS_DIR, 'output');
 const ACQUISITION_DIR = path.join(DATA_DIR, 'acquisition');
+const ARCHIVE_DIR = path.join(DATA_DIR, 'manual', 'archive'); // 喂 AI 搜索的历史数据（缓存/登记表）
+const TOOLS_DIR = path.join(DATA_DIR, 'manual', 'tools'); // 工具链路工作目录
+const CONCEPTS_DIR = path.join(DATA_DIR, 'manual', 'concepts'); // 概念链路工作目录
 const FIXTURE_DIR = path.join(TESTS_DIR, 'fixtures');
 const AI_CONFIG_FILES = Object.freeze({
   local: path.join(PROJECT_DIR, 'config', 'catalog-generator.local.json'),
@@ -36,6 +39,10 @@ const DIRS = Object.freeze({
   newsOutput: NEWS_OUTPUT_DIR,
   acquisition: ACQUISITION_DIR,
   fixtures: FIXTURE_DIR,
+  archive: ARCHIVE_DIR, // 喂 AI 搜索的历史数据（缓存/登记表）
+  tools: TOOLS_DIR, // 工具链路工作目录（工具种子/草稿/工具待补卡）
+  concepts: CONCEPTS_DIR, // 概念链路工作目录（概念待补卡/合成预览）
+  manual: path.join(DATA_DIR, 'manual'), // 新闻人工清单（review/top/keyword-refine/transcript-requests）
 });
 
 const CATALOG_FILES = Object.freeze({
@@ -50,22 +57,24 @@ const CATALOG_FILES = Object.freeze({
 });
 
 const CATALOG_GENERATOR_FILES = Object.freeze({
-  draftsDir: path.join(DATA_DIR, 'manual', 'catalog-drafts'),
-  urlRegistry: path.join(DATA_DIR, 'manual', 'official-url-registry.json'), // 批量生成：人工官方 URL 登记表
-  batchSeedsPreview: path.join(DATA_DIR, 'manual', 'batch-seeds-preview.json'), // 批量生成：dry-run 解析预览
+  draftsDir: path.join(TOOLS_DIR, 'catalog-drafts'),
+  urlRegistry: path.join(ARCHIVE_DIR, 'official-url-registry.json'), // 人工官方 URL 登记表（批量解析第一道命中源）
+  batchSeedsPreview: path.join(TOOLS_DIR, 'batch-seeds-preview.json'), // 工具 batch dry-run 解析预览
+  pendingTools: path.join(TOOLS_DIR, 'tool-cards-pending.json'), // 工具待补卡（feedback 产物，batch 输入）
   localConfig: AI_CONFIG_FILES.local,
   exampleConfig: AI_CONFIG_FILES.example,
-  lock: path.join(DATA_DIR, 'catalog', '.catalog.lock'),
-  transactionDir: path.join(DATA_DIR, 'catalog', '.transactions'),
-  stagingDir: path.join(DATA_DIR, 'catalog', '.staging'),
-  backupDir: path.join(DATA_DIR, 'catalog', '.backup'),
-  journal: path.join(DATA_DIR, 'catalog', '.transactions', 'journal.json'),
-  audit: path.join(DATA_DIR, 'catalog', '.transactions', 'audit.json'),
+  lock: path.join(CATALOG_DIR, '.catalog.lock'),
+  transactionDir: path.join(CATALOG_DIR, '.transactions'),
+  stagingDir: path.join(CATALOG_DIR, '.staging'),
+  backupDir: path.join(CATALOG_DIR, '.backup'),
+  journal: path.join(CATALOG_DIR, '.transactions', 'journal.json'),
+  audit: path.join(CATALOG_DIR, '.transactions', 'audit.json'),
 });
 
 const CONCEPT_FILES = Object.freeze({
-  previews: path.join(DATA_DIR, 'manual', 'concept-previews.json'), // 概念批量：DeepSeek 合成预览（待维护者 apply）
-  vibeHubCache: path.join(DATA_DIR, 'manual', 'vibe-hub-cache.json'), // 概念批量：vibe-hub 概念页本地缓存（TTL 3 天）
+  previews: path.join(CONCEPTS_DIR, 'concept-previews.json'), // 概念批量：DeepSeek 合成预览（待维护者 apply）
+  vibeHubCache: path.join(ARCHIVE_DIR, 'vibe-hub-cache.json'), // 概念批量：vibe-hub 概念页本地缓存（TTL 3 天）
+  pendingConcepts: path.join(CONCEPTS_DIR, 'concept-cards-pending.json'), // 概念待补卡（feedback 产物，batch 输入）
 });
 
 const NEWS_FILES = Object.freeze({

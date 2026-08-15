@@ -13,7 +13,7 @@
 
 ## src/shared/ — 跨模块基础能力
 - [env.js](src/shared/env.js) — dotenv 子集解析 + 项目根目录。导出: `loadDotEnv, PROJECT_DIR`
-- [paths.js](src/shared/paths.js) — 目录、catalog 文件与生成器事务路径常量，以及统一 AI 配置文件路径（全仓唯一数据登记点，含五模块 catalog、草案、锁、staging、backup、journal 与概念链路 previews/vibeHubCache）。导出: `DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, CONCEPT_FILES, AI_CONFIG_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH`
+- [paths.js](src/shared/paths.js) — 目录、catalog 文件与生成器事务路径常量，以及统一 AI 配置文件路径（全仓唯一数据登记点，含五模块 catalog、草案、锁、staging、backup、journal 与概念链路 previews/vibeHubCache；data/manual 下分 archive 喂 AI 搜索历史 / tools 工具链路 / concepts 概念链路，待补卡路径已收拢为 CATALOG_GENERATOR_FILES.pendingTools / CONCEPT_FILES.pendingConcepts）。导出: `DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, CONCEPT_FILES, AI_CONFIG_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH`
 - [ai-provider-registry.js](src/shared/ai-provider-registry.js) — AI provider 注册表、Responses/Messages 协议枚举、provider 到 `.env` Key 字段映射和解析。导出: `AI_PROTOCOLS, AI_PROVIDERS, getProvider, resolveProvider, apiKeyForProvider`
 - [ai-config.js](src/shared/ai-config.js) — 按业务大模块读取、合并和校验 provider/model/protocol 与 Tavily retrieval 配置。导出: `DEFAULT_MODULE_CONFIGS, readAiConfig, loadAiModuleConfig, validateModuleConfig`
 - [deepseek-client.js](src/shared/deepseek-client.js) — provider-aware Responses transport、认证/HTTP/超时错误归一化；保留 DeepSeek 兼容包装。导出: `requestResponses, requestDeepSeek, textFromResponse`
@@ -41,7 +41,7 @@
 - [catalog/ai/concept-synthesis-prompt.js](src/catalog/ai/concept-synthesis-prompt.js) — 概念合成 prompt 纯函数构建；待补概念卡 + 证据（approved 摘要 + vibe-hub）→ input，分类枚举与硬规则（中文、禁编造、source.url 无把握只给 name）。导出: `DEFAULT_CONCEPT_CATEGORIES, buildConceptSynthesisInput, buildConceptSynthesisInstructions`
 - [catalog/ai/concept-synthesis-ai.js](src/catalog/ai/concept-synthesis-ai.js) — DeepSeek 概念合成 Adapter；单段式调用结构化深 Module，ledger 必传 fail-closed，合成次数预占，返回 7 字段 glossary 条目（term 以待补卡为准防改词）。导出: `validateConceptValue, normalizeConceptEntry, synthesizeConceptFields`
 - [catalog-batch.js](src/catalog/catalog-batch.js) — **批量生成编排层（②→③ 链路）**：待补卡 → 三层查重（正式目录/进行中 draft/同批）→ 厂商/官方源解析（人工登记表 | Tavily）→ 成本估算/全局确认 → 逐 seed prepare→review→自动 apply → 批量报告；单 seed 失败跳过保留 draft 可 resume。导出: `readPendingCards, dedupeBatchCandidates, resolveBatchCandidates, planBatchCost, runCatalogBatch, runBatchFromCards`
-- [official-url-registry.js](src/catalog/official-url-registry.js) — 批量生成前置：人工官方 URL 登记表（data/manual/official-url-registry.json）读取/查找/增删，key 可工具名或厂商名同命名空间，命中免 Tavily 解析。导出: `normalizeKey, loadUrlRegistry, listUrlRegistry, lookupOfficialUrl, addUrlRegistryEntry, removeUrlRegistryEntry`
+- [official-url-registry.js](src/catalog/official-url-registry.js) — 批量生成前置：人工官方 URL 登记表（data/manual/archive/official-url-registry.json）读取/查找/增删，key 可工具名或厂商名同命名空间，命中免 Tavily 解析。导出: `normalizeKey, loadUrlRegistry, listUrlRegistry, lookupOfficialUrl, addUrlRegistryEntry, removeUrlRegistryEntry`
 - [concept-batch.js](src/catalog/concept-batch.js) — **概念批量生成编排层（concept-cards-pending → 预览 → 人工 apply → glossary.json）**：查重（同批 + 正式 glossary）→ 回读 approved 摘要作主证据 + vibe-hub 自动补充 → 成本估算/确认 → 逐概念 DeepSeek 合成写预览文件 → 显式 `concept apply` 原子写 glossary（轻量，不套五层 Draft 事务）。导出: `readPendingConcepts, dedupeConceptCandidates, collectConceptEvidence, planConceptCost, runConceptBatch, readConceptPreviews, applyConceptPreviews`
 - [vibe-hub-evidence.js](src/catalog/vibe-hub-evidence.js) — vibe-hub.org 概念页提取与本地缓存（纯 HTTP 零 API 成本）：term→英文 kebab slug（含中文返回 null）、JSON-LD/正文结构化提取、缓存优先 + 串行 ≥500ms 节流、TTL 默认 3 天、过期重抓。导出: `vibeHubSlugOf, extractVibeHubText, loadVibeHubCache, saveVibeHubCache, fetchVibeHubDefinition, fetchPage, refreshStaleVibeHubCache`
 
@@ -100,13 +100,14 @@
 ### cli/ — 命令行
 - [news-cli.js](src/news/cli/news-cli.js) — **CLI 分发器 + 入口**（仅保留 v2 命令组）。导出: `parseArgs, main, minReviewCommand`
 - [cmd-content.js](src/news/cli/cmd-content.js) — `classify/localize preview` 子命令（纯函数预览；批量分类/本地化已由 v2 管线内建）。导出: `classifyCommand, localizeCommand`
-- [cmd-min.js](src/news/cli/cmd-min.js) — **v2 `min-review` 命令组**（操作 min-candidates.json；`refine` 从 approved 原文调 DeepSeek 生成关键词清单，`refine-apply` 校验 adopted_keywords 后原子幂等追加配置；`ai-top` 产物带 id；`top-apply` 应用 top_selected=true；`apply` 写回首审结论；`archive` 由维护者确认后把当前候选压缩为轻量历史、清空候选层，并重置 data/manual 当日人工清单）。维护者入口：bat/after-first-review.bat、bat/archive-min.bat。导出: `minReviewCommand, applyRefineKeywords, applyTopSelectedList, resolveAiTopConfig, removeManualLists, MANUAL_LIST_FILES`
+- [cmd-min.js](src/news/cli/cmd-min.js) — **v2 `min-review` 命令组**（操作 min-candidates.json；`feedback` 默认接入 LLM 实体提取，feedback.llm_extract=false 关 / LLM 失败降级正则；`refine` 从 approved 原文调 DeepSeek 生成关键词清单，`refine-apply` 校验 adopted_keywords 后原子幂等追加配置；`ai-top` 产物带 id；`top-apply` 应用 top_selected=true；`apply` 写回首审结论；`archive` 由维护者确认后把当前候选压缩为轻量历史、清空候选层，并重置 data/manual 当日人工清单）。维护者入口：bat/after-first-review.bat、bat/archive-min.bat。导出: `minReviewCommand, applyRefineKeywords, applyTopSelectedList, resolveAiTopConfig, removeManualLists, MANUAL_LIST_FILES`
 
 ### transcripts/ — 收尾环节：字幕人工获取通知（独立于主链，只写清单文件）
 - [transcript-notify.js](src/news/transcripts/transcript-notify.js) — 每日"待人工获取字幕"清单（min 候选层挑评分最高 notify_count 个 YouTube，写 transcript-requests.json 交人工，文件名固定去掉日期后缀、dateKey 北京时间；不碰主链/不调采集总结）。导出: `notifyTranscripts, parseNotifyCount, scoreOf`
 
 ### feedback/ — 收尾环节：工具库/概念库反哺（独立于主链，只写待补卡文件）
-- [tool-feedback.js](src/news/feedback/tool-feedback.js) — 从 approved summary 提取 AI 工具/概念名（缺省正则 / options.llmExtract 注入），与五模块工具卡/glossary.json 比对，缺失写 tool-cards-pending.json / concept-cards-pending.json 待补卡，不直接改知识库。导出: `feedbackFromSummaries, extractEntities, toolExists, conceptExists`
+- [tool-feedback.js](src/news/feedback/tool-feedback.js) — 从 approved summary 提取 AI 工具/概念名（默认正则 / options.llmExtract 注入 LLM），与五模块工具卡/glossary.json 比对，缺失写待补卡（data/manual/tools/tool-cards-pending.json、data/manual/concepts/concept-cards-pending.json，路径走 CATALOG_GENERATOR_FILES.pendingTools / CONCEPT_FILES.pendingConcepts），不直接改知识库。导出: `feedbackFromSummaries, extractEntities, toolExists, conceptExists`
+- [llm-entity-extract.js](src/news/feedback/llm-entity-extract.js) — 摘要 AI 实体提取（LLM 替代默认正则）：DeepSeek 找 AI 概念/工具/模型/API/套餐（完整名、排除泛称/人名/机构、检查遗漏、无则输出 []）；复用 requestStructuredJson + ledger fail-closed，缺 ledger 内部自建；调用失败抛错由 cmd-min 降级正则。导出: `buildEntityExtractInstructions, validateExtractOutput, toNameList, extractEntitiesWithLlm`
 - [catalog-draft-adapter.js](src/news/feedback/catalog-draft-adapter.js) — 将热点待补工具候选转换为 Seed（接受解析结果 vendor_name/official_url；不设 new_group_title，分组名由 deriveKeys 回退 seed.name），不直接写正式目录。导出: `pendingCandidateToSeed`
 
 ## docs/manual/ — 用户说明

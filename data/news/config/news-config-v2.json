@@ -115,7 +115,9 @@
   ],
   "feedback": {
     "tool_feedback": true,
-    "concept_feedback": true
+    "concept_feedback": true,
+    "llm_extract": true,
+    "llm_model": "deepseek-v4-flash"
   },
   "transcripts": {
     "notify_count": "3to5"

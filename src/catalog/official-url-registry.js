@@ -2,10 +2,10 @@
  * official-url-registry.js —— 批量生成前置：人工官方 URL 登记表
  *
  * 在批量生成链路（②→③）中的位置：厂商/官方源解析的第一道命中源。
- * 维护者把已知工具的官方域名人工登记到 data/manual/official-url-registry.json，
+ * 维护者把已知工具的官方域名人工登记到 data/manual/archive/official-url-registry.json，
  * 批量生成时优先查表，命中就不必花 Tavily/DeepSeek 去搜索解析。
  *
- * 数据形状（data/manual/official-url-registry.json）：
+ * 数据形状（data/manual/archive/official-url-registry.json）：
  *   { schema_version: 1, entries: { "<归一化名>": { vendor_name, official_url, aliases?: [] } } }
  *   归一化名 = 工具名或厂商名（同一命名空间），可配 aliases 别名扩展匹配。
  *

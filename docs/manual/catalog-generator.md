@@ -302,7 +302,7 @@ bat\catalog-generator.bat new --seed data\manual\catalog-seed.json --confirm-cos
 6. 验证每个字段引用的 source_id 真实存在，并校验记录完整性；
 7. 本地生成每层完整的 `create/replace/noop` LayerPatch，禁止空值、`null`、空数组和 `unknown/未知`；
 8. 校验 FutureSnapshot、revision 与 Preview hash；
-9. 将 schema v3 Draft 保存到 `data/manual/catalog-drafts/<draft-id>.json`；
+9. 将 schema v3 Draft 保存到 `data/manual/tools/catalog-drafts/<draft-id>.json`；
 10. 输出 Preview，不会写入正式 catalog。
 
 输出中的关键值：
@@ -437,7 +437,7 @@ pending candidate
 
 ## 11. 批量生成（热点待补卡 → 正式目录）
 
-`min-review feedback` 产出的 `data/manual/tool-cards-pending.json` 由 `batch` 命令一键转成正式目录卡片：
+`min-review feedback` 产出的 `data/manual/tools/tool-cards-pending.json` 由 `batch` 命令一键转成正式目录卡片：
 
 ```text
 tool-cards-pending.json
@@ -450,7 +450,7 @@ tool-cards-pending.json
 
 ### 人工官方 URL 登记表
 
-批量生成前把已知工具的官方域名登记到 `data/manual/official-url-registry.json`，命中就无需花 Tavily/DeepSeek 解析（key 可为工具名或厂商名，同一命名空间，可配 aliases）：
+批量生成前把已知工具的官方域名登记到 `data/manual/archive/official-url-registry.json`，命中就无需花 Tavily/DeepSeek 解析（key 可为工具名或厂商名，同一命名空间，可配 aliases）：
 
 ```bash
 node scripts/catalog-generator.js url-registry list
@@ -461,15 +461,15 @@ node scripts/catalog-generator.js url-registry remove --name 可灵
 ### 先 dry-run 预览
 
 ```bash
-node scripts/catalog-generator.js batch --file data/manual/tool-cards-pending.json --dry-run
+node scripts/catalog-generator.js batch --file data/manual/tools/tool-cards-pending.json --dry-run
 ```
 
-写 `data/manual/batch-seeds-preview.json`（已解析 seed + 每工具成本估算），不建草案、零研究零合成。
+写 `data/manual/tools/batch-seeds-preview.json`（已解析 seed + 每工具成本估算），不建草案、零研究零合成。
 
 ### 正式批量生成
 
 ```bash
-node scripts/catalog-generator.js batch --file data/manual/tool-cards-pending.json --confirm-cost
+node scripts/catalog-generator.js batch --file data/manual/tools/tool-cards-pending.json --confirm-cost
 ```
 
 - 全局成本确认一次后，每个工具 readiness ready 即自动写入正式五模块目录（跳过人工 `APPLY <id>` 输入）。
@@ -483,14 +483,14 @@ node scripts/catalog-generator.js batch --file data/manual/tool-cards-pending.js
 
 ## 12. 概念批量生成（热点待补概念 → glossary.json）
 
-`min-review feedback` 产出的 `data/manual/concept-cards-pending.json` 由**独立的 concept-generator 入口**转成正式 `data/catalog/glossary.json` 条目。概念生成产出的是 AI 概念知识库（glossary.json），不是五模块厂商/工具目录，故独立成入口，不挂在 catalog-generator 下。与工具批量链路（§11）不同，概念**不自动 apply**：batch 只合成出预览文件并停下，由维护者查看后再显式 `apply` 写入。
+`min-review feedback` 产出的 `data/manual/concepts/concept-cards-pending.json` 由**独立的 concept-generator 入口**转成正式 `data/catalog/glossary.json` 条目。概念生成产出的是 AI 概念知识库（glossary.json），不是五模块厂商/工具目录，故独立成入口，不挂在 catalog-generator 下。与工具批量链路（§11）不同，概念**不自动 apply**：batch 只合成出预览文件并停下，由维护者查看后再显式 `apply` 写入。
 
 ```text
 concept-cards-pending.json
   → 查重（同批 + 正式 glossary，term 大小写不敏感）
   → 回读 approved 摘要作主证据 + vibe-hub.org 自动补充证据
   → 成本估算 → --confirm-cost 确认一次
-  → 逐概念 DeepSeek 合成 → 写预览文件 data/manual/concept-previews.json
+  → 逐概念 DeepSeek 合成 → 写预览文件 data/manual/concepts/concept-previews.json
   → 维护者查看（preview）→ 显式 apply → 原子写 glossary.json
 ```
 
@@ -504,7 +504,7 @@ bat\concept-generator.bat ...
 ### 先 dry-run 预览（零 AI 零网络）
 
 ```bash
-node scripts/concept-generator.js batch --file data/manual/concept-cards-pending.json --dry-run
+node scripts/concept-generator.js batch --file data/manual/concepts/concept-cards-pending.json --dry-run
 ```
 
 只做查重 + 本地摘要证据 + 成本估算（每条概念 1 次合成），不抓 vibe-hub、不调 DeepSeek、不写文件。
@@ -512,7 +512,7 @@ node scripts/concept-generator.js batch --file data/manual/concept-cards-pending
 ### 正式合成预览
 
 ```bash
-node scripts/concept-generator.js batch --file data/manual/concept-cards-pending.json --confirm-cost
+node scripts/concept-generator.js batch --file data/manual/concepts/concept-cards-pending.json --confirm-cost
 ```
 
 - 合成前会尽力抓 `https://vibe-hub.org/<slug>` 补充证据（term 为纯 ASCII 才尝试，含中文自动跳过；404/网络失败静默跳过，approved 摘要始终是主证据）。
@@ -531,7 +531,7 @@ node scripts/concept-generator.js apply --terms 多智能体  # 只应用指定�
 
 ### vibe-hub 本地缓存与定时刷新
 
-vibe-hub 概念页正文会缓存到 `data/manual/vibe-hub-cache.json`（按 slug，`fetched_at` + TTL 默认 3 天）。命中缓存零请求；未命中/过期才串行抓取（≥500ms 节流）。缓存只省重复抓取、**永不挡新抓取**，也永不成为证据缺失的原因。已上架的**新概念术语**由 cache-miss 自动抓取跟上。
+vibe-hub 概念页正文会缓存到 `data/manual/archive/vibe-hub-cache.json`（按 slug，`fetched_at` + TTL 默认 3 天）。命中缓存零请求；未命中/过期才串行抓取（≥500ms 节流）。缓存只省重复抓取、**永不挡新抓取**，也永不成为证据缺失的原因。已上架的**新概念术语**由 cache-miss 自动抓取跟上。
 
 `.github/workflows/refresh-vibe-hub-cache.yml` 每 3 天（北京 19:00 / UTC 11:00，即 YouTube 采集北京 20:00 前 1h）刷新过期缓存条目并直接提交回 main；空缓存/全新鲜零网络。可手动触发：
 
@@ -561,5 +561,5 @@ node scripts/refresh-vibe-hub-cache.js
 - 订阅套餐不能有工具卡；
 - 正式 Apply 前必须人工确认；
 - 失败草案要保留，成功后才删除；
-- 不要提交 `data/manual/catalog-drafts/`、事务 staging 或本地配置；
+- 不要提交 `data/manual/tools/catalog-drafts/`、事务 staging 或本地配置；
 - 本流程不会自动提交或推送 Git。

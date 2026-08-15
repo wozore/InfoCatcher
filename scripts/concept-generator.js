@@ -10,7 +10,7 @@
  *   batch --file <待补概念卡.json> [--dry-run | --confirm-cost]
  *     dry-run        只查重 + 本地 approved 摘要证据 + 成本估算（零 AI 零网络）
  *     confirm-cost   抓 vibe-hub 补充证据 + DeepSeek 合成，写预览文件并停下
- *   preview          查看 data/manual/concept-previews.json（只读）
+ *   preview          查看 data/manual/concepts/concept-previews.json（只读）
  *   apply [--terms a,b]  把预览写入正式 glossary.json（默认全部 pending，--terms 指定子集）
  *
  * 两段式确认纪律：batch 只合成出预览文件，apply 等维护者人工确认后才原子写正式库。
@@ -49,14 +49,14 @@ async function main(argv = process.argv.slice(2)) {
     });
     console.log(JSON.stringify(result, null, 2));
     if (result.ok && !result.dry_run) {
-      console.log('\n✅ 概念预览已写入 data/manual/concept-previews.json；请查看后执行 `apply` 写入正式 glossary.json。');
+      console.log('\n✅ 概念预览已写入 data/manual/concepts/concept-previews.json；请查看后执行 `apply` 写入正式 glossary.json。');
     }
     return result;
   }
   if (command === 'preview') {
     const result = concept.readConceptPreviews();
     console.log(JSON.stringify(result, null, 2));
-    return { ok: true, ...(result || { message: '尚无概念预览文件 data/manual/concept-previews.json' }) };
+    return { ok: true, ...(result || { message: '尚无概念预览文件 data/manual/concepts/concept-previews.json' }) };
   }
   if (command === 'apply') {
     const terms = flags.terms ? String(flags.terms).split(',').map(item => item.trim()).filter(Boolean) : undefined;

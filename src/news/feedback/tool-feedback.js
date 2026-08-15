@@ -26,6 +26,7 @@ const fs = require('fs');
 const { readJson, writeJsonAtomic } = require('../core/news-storage');
 const { readMinStore } = require('../min/min-store');
 const { catalog } = require('../../catalog-interface');
+const { CATALOG_FILES, CATALOG_GENERATOR_FILES, CONCEPT_FILES } = require('../../shared/paths');
 const { beijingDateKey } = require('../../shared/beijing-time');
 
 // ═══════════════════════════════════════════════════════════════
@@ -174,7 +175,6 @@ async function feedbackFromSummaries(store, config, options = {}) {
   })();
   const glossary = options.glossary ?? readJson(CATALOG_FILES.glossary, []);
   const dateKey = dateKeyOf(options && options.now);
-  const manualFolder = (config && config.manual_folder) || 'data/manual';
 
   const toolsFound = [];
   const toolsPending = [];
@@ -210,9 +210,9 @@ async function feedbackFromSummaries(store, config, options = {}) {
     }
   }
 
-  fs.mkdirSync(manualFolder, { recursive: true });
   if (toolsPending.length > 0) {
-    const toolFile = path.join(manualFolder, 'tool-cards-pending.json');
+    const toolFile = CATALOG_GENERATOR_FILES.pendingTools;
+    fs.mkdirSync(path.dirname(toolFile), { recursive: true });
     writeJsonAtomic(toolFile, {
       schema_version: 1,
       kind: 'tool_cards_pending',
@@ -223,7 +223,8 @@ async function feedbackFromSummaries(store, config, options = {}) {
     }, 'tool-feedback');
   }
   if (conceptsPending.length > 0) {
-    const conceptFile = path.join(manualFolder, 'concept-cards-pending.json');
+    const conceptFile = CONCEPT_FILES.pendingConcepts;
+    fs.mkdirSync(path.dirname(conceptFile), { recursive: true });
     writeJsonAtomic(conceptFile, {
       schema_version: 1,
       kind: 'concept_cards_pending',

@@ -85,6 +85,8 @@ X 预算采用请求级预占：tweet attempt 先按 `x_tweets_per_request_max �
 |---|---|---|
 | `tool_feedback` | `true` | 从 approved summary 提取工具名 → 比对工具库 → 缺则待补卡 |
 | `concept_feedback` | `true` | 从 approved summary 提取概念名 → 比对概念库 → 缺则待补卡 |
+| `llm_extract` | `true` | 用 DeepSeek 提取实体（方案 A：整段摘要 + 完整名 + 排除泛称/人名/机构 + 检查遗漏；无明确名称输出空）。`false` 回退默认正则。需配置 `DEEPSEEK_API_KEY`，否则自动回退正则 |
+| `llm_model` | `deepseek-v4-flash` | LLM 提取用的模型（结构化 JSON，须支持 Responses 协议） |
 
 ## transcripts —— 字幕通知
 

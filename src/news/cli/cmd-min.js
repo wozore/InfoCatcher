@@ -69,6 +69,7 @@ const { feedbackFromSummaries } = require('../feedback/tool-feedback');
 const { refineKeywords } = require('../min/keyword-refine');
 const { buildReviewList, loadReviewList, applyReviewList, scoreOf, suggestReview } = require('../min/review-list');
 const { readJson, writeJsonAtomic } = require('../core/news-storage');
+const { CATALOG_GENERATOR_FILES, CONCEPT_FILES } = require('../../shared/paths');
 const { NEWS_FILES } = require('../../shared/paths');
 
 /** 读 news-config-v2.json；缺失时给最小兜底（manual_folder 等字段缺省值内置于各 v2 模块）。 */
@@ -80,14 +81,17 @@ function loadV2Config() {
   }
 }
 
-/** 每日收尾归档后重置的 data/manual 清单（文件名固定，去掉日期后缀）。 */
+/**
+ * 每日收尾归档后重置的 data/manual 新闻人工清单（文件名固定，去掉日期后缀）。
+ * 注意：工具/概念待补卡已移入 data/manual/tools/、data/manual/concepts/（路径见 paths.js
+ * CATALOG_GENERATOR_FILES.pendingTools / CONCEPT_FILES.pendingConcepts），由 batch/apply
+ * 消费，不随归档清理，故不在此白名单内。
+ */
 const MANUAL_LIST_FILES = [
   'review.json',
   'transcript-requests.json',
   'keyword-refine.json',
   'top.json',
-  'tool-cards-pending.json',
-  'concept-cards-pending.json',
 ];
 
 /** 删除当日人工清单（白名单内已存在的文件）。归档成功后才调用；任一删除失败整体抛错。 */
@@ -369,10 +373,24 @@ async function minReviewCommand(action, flags = {}) {
   }
 
   if (action === 'feedback') {
-    const result = await feedbackFromSummaries(undefined, config);
-    const folder = config.manual_folder || 'data/manual';
+    // LLM 提取：feedback.llm_extract !== false 且配置了 DEEPSEEK_API_KEY 时接入
+    // （方案 A + 检查遗漏；LLM 失败降级正则，宁多勿漏，不阻断反哺）。
+    const feedback = (config && config.feedback) || {};
+    const options = {};
+    if (feedback.llm_extract !== false && process.env.DEEPSEEK_API_KEY) {
+      const { extractEntitiesWithLlm } = require('../feedback/llm-entity-extract');
+      const { extractEntitiesDefault } = require('../feedback/tool-feedback');
+      options.llmExtract = async text => {
+        try {
+          return await extractEntitiesWithLlm(text, { model: feedback.llm_model });
+        } catch {
+          return extractEntitiesDefault(text);
+        }
+      };
+    }
+    const result = await feedbackFromSummaries(undefined, config, options);
     console.log(`✅ 反哺比对：工具已存在 ${result.toolsFound.length} / 待补 ${result.toolsPending.length}；概念已存在 ${result.conceptsFound.length} / 待补 ${result.conceptsPending.length}`);
-    console.log(`   待补卡写 ${folder}/tool-cards-pending-<YYYYMMDD>.json、concept-cards-pending-<YYYYMMDD>.json`);
+    console.log(`   待补卡写 ${CATALOG_GENERATOR_FILES.pendingTools}、${CONCEPT_FILES.pendingConcepts}`);
     for (const card of result.toolsPending) console.log(`  [待补工具] ${card.name}（${card.mentioned_in_summaries} 次提及）`);
     for (const card of result.conceptsPending) console.log(`  [待补概念] ${card.term}`);
     if (result.toolsPending.length === 0 && result.conceptsPending.length === 0) {

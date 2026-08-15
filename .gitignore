@@ -49,7 +49,7 @@ $RECYCLE.BIN/
 # 但 build-dist.js 不复制到 dist/（不发布到站点）。此目录无需忽略规则——
 # 空目录 git 不追踪，有文件即入库；留此注释说明意图，防误加忽略。
 # ===== 目录生成器临时文件 =====
-data/manual/catalog-drafts/
+data/manual/tools/catalog-drafts/
 config/catalog-generator.local.json
 data/catalog/.catalog.lock
 data/catalog/.transactions/
