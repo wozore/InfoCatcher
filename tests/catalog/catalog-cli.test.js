@@ -34,14 +34,24 @@ test('catalog module config maps snake_case limits to internal options', () => {
   assert.equal(options.maxRepairCalls, 1);
 });
 
-test('Tavily capability probe fails closed without a search key', async () => {
+test('Tavily capability probe succeeds via keyless without a search key', async () => {
   const result = await probeCatalogCapabilities({
     apiKey: 'test-key',
     searchApiKey: '',
     fetchImpl: async () => ({ ok: true, status: 200, json: async () => ({ results: [] }) }),
   });
+  assert.equal(result.ok, true);
+  assert.equal(result.retrieval_provider, 'tavily');
+});
+
+test('Tavily capability probe fails closed without a DeepSeek key', async () => {
+  const result = await probeCatalogCapabilities({
+    apiKey: '',
+    searchApiKey: '',
+    fetchImpl: async () => ({ ok: true, status: 200, json: async () => ({ results: [] }) }),
+  });
   assert.equal(result.ok, false);
-  assert.equal(result.code, 'TAVILY_SEARCH_AUTH_REQUIRED');
+  assert.equal(result.code, 'DEEPSEEK_AUTH_REQUIRED');
 });
 
 test('shared DeepSeek client classifies auth and rate limit errors', async () => {

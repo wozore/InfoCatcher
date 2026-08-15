@@ -9,7 +9,7 @@
 - Node.js；
 - 在项目根目录执行命令；
 - 目录模块配置的 DeepSeek provider 对应 API Key 环境变量（默认是 `DEEPSEEK_API_KEY`）；
-- 官方资料搜索和正文提取使用 Tavily，对应环境变量是 `TAVILY_API_KEY`；
+- 官方资料搜索和正文提取使用 Tavily。Search/Extract 默认走 **keyless**（免费、无需 `TAVILY_API_KEY`）；配置 `TAVILY_API_KEY` 仅用于 keyless 小时额度耗尽时的自动回退，以及 keyed 端点（map/crawl/research）。可选环境变量 `TAVILY_ACCESS_MODE=auto|keyless|keyed` 可一键强制认证模式；
 - 目录生成器不再使用 DeepSeek `web_search`。Tavily Search 负责发现官方来源，Tavily Extract 负责返回清洗后的正文，DeepSeek 单段式基于官方来源正文合成五层字段与来源 provenance（不再有 AtomicClaim 中间层）。
 
 API Key 只通过环境变量读取，不要写入 Seed、配置文件、BAT、草案或目录 JSON。
@@ -120,7 +120,7 @@ bat\catalog-generator.bat probe --confirm-cost
 
 常见失败：
 
-- `TAVILY_SEARCH_AUTH_REQUIRED`：当前终端没有 `TAVILY_API_KEY`；
+- `TAVILY_SEARCH_AUTH_REQUIRED`：keyed 模式（`TAVILY_ACCESS_MODE=keyed` 或 keyed 端点）下当前终端没有 `TAVILY_API_KEY`；
 - `TAVILY_SEARCH_RATE_LIMITED` / `TAVILY_SEARCH_FAILED`：Tavily Search 被限流或返回失败；
 - `TAVILY_EXTRACT_FAILED`：官方页面正文提取失败，来源会保留但字段合成证据不足；
 - `DEEPSEEK_AUTH_REQUIRED`：当前终端没有 `DEEPSEEK_API_KEY`；

@@ -40,6 +40,8 @@ async function discoverOfficialSources(input, options = {}) {
     apiKey: options.searchApiKey,
     fetchImpl: options.searchFetchImpl || options.fetchImpl,
     timeoutMs: options.searchTimeoutMs || options.timeoutMs,
+    accessMode: options.accessMode,
+    fallbackToKey: options.fallbackToKey,
     query: buildOfficialDiscoveryQuery(input),
     includeDomains: officialDomainsOf(input.plan),
     searchDepth: options.searchDepth || 'advanced',
@@ -73,6 +75,8 @@ async function acquireOfficialSources(input, options = {}) {
     apiKey: options.searchApiKey,
     fetchImpl: options.searchFetchImpl || options.fetchImpl,
     timeoutMs: options.searchTimeoutMs || options.timeoutMs,
+    accessMode: options.accessMode,
+    fallbackToKey: options.fallbackToKey,
     urls: sources.map(source => source.url),
     query: queryForScope(input),
     extractDepth: options.extractDepth || 'advanced',
@@ -98,6 +102,8 @@ async function probeCatalogCapabilities(options = {}) {
     apiKey: options.searchApiKey,
     fetchImpl: options.searchFetchImpl || options.fetchImpl,
     timeoutMs: options.searchTimeoutMs || options.timeoutMs,
+    accessMode: options.accessMode,
+    fallbackToKey: options.fallbackToKey,
   });
   if (!retrieval.ok) return retrieval;
   return {
@@ -154,6 +160,8 @@ async function resolveOfficialSource(name, options = {}) {
     apiKey: options.searchApiKey,
     fetchImpl: options.searchFetchImpl || options.fetchImpl,
     timeoutMs: options.searchTimeoutMs || options.timeoutMs,
+    accessMode: options.accessMode,
+    fallbackToKey: options.fallbackToKey,
     query: `${toolName} official site`,
     maxResults: options.maxSearchResults ?? 5,
     searchDepth: options.searchDepth || 'advanced',

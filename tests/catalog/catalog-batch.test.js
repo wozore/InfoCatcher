@@ -97,7 +97,10 @@ test('resolveOfficialSource fail-closed：缺 name / 缺 TAVILY key 均不抛错
   assert.equal(noName.code, 'VENDOR_RESOLUTION_NAME_REQUIRED');
   const noKey = await resolveOfficialSource('SomeTool', { searchApiKey: '', fetchImpl: async () => {} });
   assert.equal(noKey.ok, false);
-  assert.match(noKey.code, /TAVILY_.*_AUTH_REQUIRED/);
+  assert.equal(noKey.code, 'TAVILY_SEARCH_FAILED'); // 缺 key 走 keyless，mock fetchImpl 返回非法响应 → FAILED
+  const noKeyKeyed = await resolveOfficialSource('SomeTool', { searchApiKey: '', accessMode: 'keyed', fetchImpl: async () => {} });
+  assert.equal(noKeyKeyed.ok, false);
+  assert.match(noKeyKeyed.code, /TAVILY_.*_AUTH_REQUIRED/); // keyed 模式下缺 key 仍 fail-closed
 });
 
 // ── 第 4 组：批量顶层编排 ──────────────────────────────────────
