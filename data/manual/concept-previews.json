@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "kind": "concept_previews",
+  "generated_at": "2026-08-15T12:17:35.716Z",
+  "count": 2,
+  "cards": [
+    {
+      "term": "Chat UI",
+      "full_name": "聊天界面",
+      "category": "Agent",
+      "summary": "聊天界面（Chat UI）是用户与AI对话的交互外壳，主要负责消息列表、输入区、发送状态及错误反馈的展示。它需要清晰区分消息角色，支持长对话滚动，发送后显示等待或流式输出，失败时保留错误信息并提供重试。界面本身不包含模型或协议，其流畅性不代表回复准确性。",
+      "related_terms": [
+        "流式响应",
+        "输入框"
+      ],
+      "source": {
+        "name": "VibeHub 术语图鉴"
+      },
+      "relevance": "聊天界面是AI工具的直接交互入口，其状态反馈和错误处理直接影响用户对工具可靠性的判断和体验。",
+      "evidence_count": 1,
+      "status": "pending"
+    },
+    {
+      "term": "多智能体",
+      "full_name": "Multi-Agent",
+      "category": "Agent",
+      "summary": "多智能体是指由多个AI智能体协作组成的系统，通过角色划分与架构设计实现协同工作。相关实践指南系统讲解从零构建智能体团队的流程，并借用组织管理学与团队动力学理论优化系统设计。",
+      "related_terms": [
+        "AI智能体",
+        "多智能体协作架构",
+        "智能体团队",
+        "康威定律",
+        "RACI矩阵",
+        "塔克曼团队发展阶段模型"
+      ],
+      "source": {
+        "name": "如何构建智能体团队"
+      },
+      "relevance": "多智能体影响AI工具的选择，因为其架构设计和协作能力决定了工具能否满足复杂任务的需求。",
+      "evidence_count": 3,
+      "status": "pending"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "kind": "concept_cards_pending",
+  "generated_at": "2026-08-15T13:01:40.714Z",
+  "count": 2,
+  "cards": [
+    {
+      "term": "Chat UI",
+      "full_name": "",
+      "definition": "",
+      "category": "",
+      "source_hotspot": true,
+      "pending": true,
+      "mentioned_in_summaries": 1,
+      "generated_at": "2026-08-15T13:01:40.715Z"
+    },
+    {
+      "term": "多智能体",
+      "full_name": "",
+      "definition": "",
+      "category": "",
+      "source_hotspot": true,
+      "pending": true,
+      "mentioned_in_summaries": 6,
+      "generated_at": "2026-08-15T13:01:40.715Z"
+    }
+  ]
+}

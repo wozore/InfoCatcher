@@ -63,6 +63,11 @@ const CATALOG_GENERATOR_FILES = Object.freeze({
   audit: path.join(DATA_DIR, 'catalog', '.transactions', 'audit.json'),
 });
 
+const CONCEPT_FILES = Object.freeze({
+  previews: path.join(DATA_DIR, 'manual', 'concept-previews.json'), // 概念批量：DeepSeek 合成预览（待维护者 apply）
+  vibeHubCache: path.join(DATA_DIR, 'manual', 'vibe-hub-cache.json'), // 概念批量：vibe-hub 概念页本地缓存（TTL 3 天）
+});
+
 const NEWS_FILES = Object.freeze({
   configV2: path.join(NEWS_CONFIG_DIR, 'news-config-v2.json'), // 热点管线 v2：采集/评分/审核/收尾配置
   minCandidates: path.join(NEWS_RUNTIME_DIR, 'min-candidates.json'),  // 热点管线 v2：单状态轴候选层，不发布到 dist/
@@ -80,4 +85,4 @@ const ACQUISITION_FILES = Object.freeze({
 
 const RSS_FEED_PATH = path.join(PUBLIC_DIR, 'feed.xml');
 
-module.exports = { DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, AI_CONFIG_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH };
+module.exports = { DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, CONCEPT_FILES, AI_CONFIG_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH };

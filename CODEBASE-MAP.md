@@ -13,7 +13,7 @@
 
 ## src/shared/ — 跨模块基础能力
 - [env.js](src/shared/env.js) — dotenv 子集解析 + 项目根目录。导出: `loadDotEnv, PROJECT_DIR`
-- [paths.js](src/shared/paths.js) — 目录、catalog 文件与生成器事务路径常量，以及统一 AI 配置文件路径（全仓唯一数据登记点，含五模块 catalog、草案、锁、staging、backup、journal）。导出: `DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, AI_CONFIG_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH`
+- [paths.js](src/shared/paths.js) — 目录、catalog 文件与生成器事务路径常量，以及统一 AI 配置文件路径（全仓唯一数据登记点，含五模块 catalog、草案、锁、staging、backup、journal 与概念链路 previews/vibeHubCache）。导出: `DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, CONCEPT_FILES, AI_CONFIG_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH`
 - [ai-provider-registry.js](src/shared/ai-provider-registry.js) — AI provider 注册表、Responses/Messages 协议枚举、provider 到 `.env` Key 字段映射和解析。导出: `AI_PROTOCOLS, AI_PROVIDERS, getProvider, resolveProvider, apiKeyForProvider`
 - [ai-config.js](src/shared/ai-config.js) — 按业务大模块读取、合并和校验 provider/model/protocol 与 Tavily retrieval 配置。导出: `DEFAULT_MODULE_CONFIGS, readAiConfig, loadAiModuleConfig, validateModuleConfig`
 - [deepseek-client.js](src/shared/deepseek-client.js) — provider-aware Responses transport、认证/HTTP/超时错误归一化；保留 DeepSeek 兼容包装。导出: `requestResponses, requestDeepSeek, textFromResponse`
@@ -38,8 +38,12 @@
 - [catalog/ai/deepseek-catalog-ai.js](src/catalog/ai/deepseek-catalog-ai.js) — DeepSeek 结构化 Catalog Adapter；单段式调用结构化深 Module，基于官方来源正文直接合成各层字段与来源 provenance。导出: `synthesizeLayerFields`
 - [catalog/ai/catalog-synthesis-prompt.js](src/catalog/ai/catalog-synthesis-prompt.js) — 目录合成 prompt 纯函数构建；按层分组官方来源正文（截断/限量）与字段清单，生成 instructions 与 input。导出: `DEFAULT_MAX_SOURCES_PER_LAYER, DEFAULT_MAX_SOURCE_CHARS, sourcesForLayer, buildSynthesisInput, buildSynthesisInstructions`
 - [catalog/ai/catalog-adapters.js](src/catalog/ai/catalog-adapters.js) — 目录检索/模型 Adapter 组合；Tavily 负责官方来源发现和清洗正文，DeepSeek 负责单段字段合成；另含批量生成前置的厂商/官方源解析（Tavily 搜工具名 → DeepSeek 提取厂商名+官方域名，fail-closed）。导出: `buildOfficialDiscoveryQuery, discoverOfficialSources, acquireOfficialSources, probeCatalogCapabilities, createCatalogAiAdapters, buildVendorResolutionInstructions, resolveOfficialSource`
+- [catalog/ai/concept-synthesis-prompt.js](src/catalog/ai/concept-synthesis-prompt.js) — 概念合成 prompt 纯函数构建；待补概念卡 + 证据（approved 摘要 + vibe-hub）→ input，分类枚举与硬规则（中文、禁编造、source.url 无把握只给 name）。导出: `DEFAULT_CONCEPT_CATEGORIES, buildConceptSynthesisInput, buildConceptSynthesisInstructions`
+- [catalog/ai/concept-synthesis-ai.js](src/catalog/ai/concept-synthesis-ai.js) — DeepSeek 概念合成 Adapter；单段式调用结构化深 Module，ledger 必传 fail-closed，合成次数预占，返回 7 字段 glossary 条目（term 以待补卡为准防改词）。导出: `validateConceptValue, normalizeConceptEntry, synthesizeConceptFields`
 - [catalog-batch.js](src/catalog/catalog-batch.js) — **批量生成编排层（②→③ 链路）**：待补卡 → 三层查重（正式目录/进行中 draft/同批）→ 厂商/官方源解析（人工登记表 | Tavily）→ 成本估算/全局确认 → 逐 seed prepare→review→自动 apply → 批量报告；单 seed 失败跳过保留 draft 可 resume。导出: `readPendingCards, dedupeBatchCandidates, resolveBatchCandidates, planBatchCost, runCatalogBatch, runBatchFromCards`
 - [official-url-registry.js](src/catalog/official-url-registry.js) — 批量生成前置：人工官方 URL 登记表（data/manual/official-url-registry.json）读取/查找/增删，key 可工具名或厂商名同命名空间，命中免 Tavily 解析。导出: `normalizeKey, loadUrlRegistry, listUrlRegistry, lookupOfficialUrl, addUrlRegistryEntry, removeUrlRegistryEntry`
+- [concept-batch.js](src/catalog/concept-batch.js) — **概念批量生成编排层（concept-cards-pending → 预览 → 人工 apply → glossary.json）**：查重（同批 + 正式 glossary）→ 回读 approved 摘要作主证据 + vibe-hub 自动补充 → 成本估算/确认 → 逐概念 DeepSeek 合成写预览文件 → 显式 `concept apply` 原子写 glossary（轻量，不套五层 Draft 事务）。导出: `readPendingConcepts, dedupeConceptCandidates, collectConceptEvidence, planConceptCost, runConceptBatch, readConceptPreviews, applyConceptPreviews`
+- [vibe-hub-evidence.js](src/catalog/vibe-hub-evidence.js) — vibe-hub.org 概念页提取与本地缓存（纯 HTTP 零 API 成本）：term→英文 kebab slug（含中文返回 null）、JSON-LD/正文结构化提取、缓存优先 + 串行 ≥500ms 节流、TTL 默认 3 天、过期重抓。导出: `vibeHubSlugOf, extractVibeHubText, loadVibeHubCache, saveVibeHubCache, fetchVibeHubDefinition, fetchPage, refreshStaleVibeHubCache`
 
 ## src/web/ — 前端静态站（原生 ES module，无打包器；build-dist.js 原样复制到 dist/）
 - [css/style.css](src/web/css/style.css) — 全站样式；工具视图分类索引含极简编辑部科技风格、左侧独立定位、移动端横向布局与具体工具卡片主题/微纹理；厂商卡片与具体工具卡片的悬停样式作用域隔离；工具卡片适合/不适合提示使用颜色竖线
@@ -128,6 +132,8 @@
 - [catalog-synthesis-prompt.test.js](tests/catalog/catalog-synthesis-prompt.test.js) — 合成 prompt 按层分组、来源截断限量、跳过无正文来源与指令规则回归。
 - [catalog-adapters.test.js](tests/catalog/catalog-adapters.test.js) — Tavily 官方域名发现、清洗正文、能力探针与 DeepSeek 组合 Adapter 回归。
 - [catalog-batch.test.js](tests/catalog/catalog-batch.test.js) — 批量生成编排回归：读卡、三层查重、登记表/解析/unresolved 三路、dry-run 预览、全局成本门禁、批量循环失败隔离、登记表增删。
+- [concept-batch.test.js](tests/catalog/concept-batch.test.js) — 概念批量编排回归：读卡、双层查重、approved 摘要证据匹配与 K 上限、vibe-hub 补充/失败静默、成本估算、dry-run 零网络零写入、成本门禁、合成失败隔离、预览文件、apply 必填校验/去重/合并保序/terms 子集。
+- [vibe-hub-evidence.test.js](tests/catalog/vibe-hub-evidence.test.js) — vibe-hub 提取回归：term→slug（中文 null）、JSON-LD/正文结构化提取、缓存命中零网络、未命中 GET+写缓存、TTL 过期重抓、404/网络失败 null、串行节流、过期刷新与失败保留。
 - [deepseek-structured.test.js](tests/catalog/deepseek-structured.test.js) — DeepSeek 结构化 JSON 外壳、空/截断/非法响应、synthesis 预算预占与缺账本回归。
 - [catalog-profile-contract.test.js](tests/catalog/catalog-profile-contract.test.js) — CatalogProfile 适用性、video API 必需谓词、稳定目标与逐层 create/replace/noop 规划回归。
 - [catalog-research.test.js](tests/catalog/catalog-research.test.js) — 官方域名过滤、Tavily-only 成本、字段级 missing-only resume 和硬成本账本回归。
@@ -144,7 +150,9 @@
 - [validate-news-config.test.js](tests/maintenance/validate-news-config.test.js) — news-config-v2 安全字段与 last-run X credits/request schema 校验。
 
 ## scripts/ — 命令入口（薄包装；src/ 为纯逻辑）
-- [catalog-generator.js](scripts/catalog-generator.js) — schema v3 目录生成器 CLI；`plan/prepare` 零网络，`new/resume` 要求成本确认，Apply 要求维护者输入完整确认；另有 `batch`（批量生成，`--confirm-cost` 全局确认自动 apply / `--dry-run` 预览 / `--from-preview` 复用解析）与 `url-registry`（人工官方 URL 登记表增删查）。导出: `parseArgs, main, readSeed`
+- [catalog-generator.js](scripts/catalog-generator.js) — schema v3 五模块目录生成器 CLI；`plan/prepare` 零网络，`new/resume` 要求成本确认，Apply 要求维护者输入完整确认；另有 `batch`（工具批量生成，`--confirm-cost` 全局确认自动 apply / `--dry-run` 预览 / `--from-preview` 复用解析）与 `url-registry`（人工官方 URL 登记表增删查）。导出: `parseArgs, main, readSeed`
+- [concept-generator.js](scripts/concept-generator.js) — **AI 概念库生成器 CLI（与五模块目录生成器分离）**：`batch --file <待补概念卡> --dry-run/--confirm-cost` 合成预览 → `preview` → `apply [--terms]` 人工写 glossary。导出: `parseArgs, main`
+- [refresh-vibe-hub-cache.js](scripts/refresh-vibe-hub-cache.js) — 定时刷新 vibe-hub 概念缓存（CI 入口，由 refresh-vibe-hub-cache.yml 每 3 天北京 19:00 调用）；只刷 `fetched_at` 距今 > 3 天 TTL 的条目，空缓存/全新鲜零网络，纯 HTTP 不读任何 Key。导出: `main`
 - [news-cli.js](scripts/news-cli.js) — CLI 分发入口（透传 src/news/cli/news-cli，含 **`min-review` 命令组**）
 - [validate.js](scripts/validate.js) — 校验聚合入口
 - [build-dist.js](scripts/build-dist.js) — src/web + public + data → dist/（维护者入口：bat/build-dist.bat）
@@ -157,5 +165,6 @@
 - [after-first-review.bat](bat/after-first-review.bat) — 首次人工审核后：应用 review 清单，再安全并行生成关键词提纯与 AI top 清单。
 - [apply-keywords.bat](bat/apply-keywords.bat) — 应用维护者填写的 keyword-refine 清单；仅更新后续采集关键词，不发布或构建。
 - [apply-top.bat](bat/apply-top.bat) — 应用 top_selected 并发布公开投影。
-- [catalog-generator.bat](bat/catalog-generator.bat) — 目录生成器维护者入口，只转发 Node CLI，不包含凭据或业务逻辑。
+- [catalog-generator.bat](bat/catalog-generator.bat) — 五模块目录生成器维护者入口，只转发 Node CLI，不包含凭据或业务逻辑。
+- [concept-generator.bat](bat/concept-generator.bat) — AI 概念库生成器维护者入口（concept-cards-pending → glossary.json），只转发 Node CLI，不包含凭据或业务逻辑。
 - [build-dist.bat](bat/build-dist.bat) — 重建静态 dist。

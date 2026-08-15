@@ -481,7 +481,74 @@ node scripts/catalog-generator.js batch --file data/manual/tool-cards-pending.js
 
 新工具不设 `placement.new_group_title`，分组名默认 = 工具名（deriveKeys 回退 `seed.name`，匹配现有"GPT-5.6"家族组约定）。
 
-## 12. 安全规则速查
+## 12. 概念批量生成（热点待补概念 → glossary.json）
+
+`min-review feedback` 产出的 `data/manual/concept-cards-pending.json` 由**独立的 concept-generator 入口**转成正式 `data/catalog/glossary.json` 条目。概念生成产出的是 AI 概念知识库（glossary.json），不是五模块厂商/工具目录，故独立成入口，不挂在 catalog-generator 下。与工具批量链路（§11）不同，概念**不自动 apply**：batch 只合成出预览文件并停下，由维护者查看后再显式 `apply` 写入。
+
+```text
+concept-cards-pending.json
+  → 查重（同批 + 正式 glossary，term 大小写不敏感）
+  → 回读 approved 摘要作主证据 + vibe-hub.org 自动补充证据
+  → 成本估算 → --confirm-cost 确认一次
+  → 逐概念 DeepSeek 合成 → 写预览文件 data/manual/concept-previews.json
+  → 维护者查看（preview）→ 显式 apply → 原子写 glossary.json
+```
+
+命令行与 BAT 两种方式等价（BAT 只转发 Node CLI）：
+
+```bash
+node scripts/concept-generator.js ...            # 或
+bat\concept-generator.bat ...
+```
+
+### 先 dry-run 预览（零 AI 零网络）
+
+```bash
+node scripts/concept-generator.js batch --file data/manual/concept-cards-pending.json --dry-run
+```
+
+只做查重 + 本地摘要证据 + 成本估算（每条概念 1 次合成），不抓 vibe-hub、不调 DeepSeek、不写文件。
+
+### 正式合成预览
+
+```bash
+node scripts/concept-generator.js batch --file data/manual/concept-cards-pending.json --confirm-cost
+```
+
+- 合成前会尽力抓 `https://vibe-hub.org/<slug>` 补充证据（term 为纯 ASCII 才尝试，含中文自动跳过；404/网络失败静默跳过，approved 摘要始终是主证据）。
+- 逐概念 DeepSeek 合成 7 字段条目（term/full_name/category/summary/related_terms/source{name,url}/relevance），成功写预览文件、单条失败跳过保留并报告，不阻塞后续。
+- 完成后**停在预览**，不写正式库，提示"请查看后执行 `apply`"。
+
+### 查看与人工 apply
+
+```bash
+node scripts/concept-generator.js preview
+node scripts/concept-generator.js apply                # 应用全部 pending
+node scripts/concept-generator.js apply --terms 多智能体  # 只应用指定术语
+```
+
+`apply` 不调 AI：校验每条 category/summary/source.name 必填、term 对正式库唯一（大小写不敏感），按原顺序合并追加写回 glossary.json。不合规或已存在的术语进 `skipped` 列表。
+
+### vibe-hub 本地缓存与定时刷新
+
+vibe-hub 概念页正文会缓存到 `data/manual/vibe-hub-cache.json`（按 slug，`fetched_at` + TTL 默认 3 天）。命中缓存零请求；未命中/过期才串行抓取（≥500ms 节流）。缓存只省重复抓取、**永不挡新抓取**，也永不成为证据缺失的原因。已上架的**新概念术语**由 cache-miss 自动抓取跟上。
+
+`.github/workflows/refresh-vibe-hub-cache.yml` 每 3 天（北京 19:00 / UTC 11:00，即 YouTube 采集北京 20:00 前 1h）刷新过期缓存条目并直接提交回 main；空缓存/全新鲜零网络。可手动触发：
+
+```bash
+# workflow_dispatch 手动跑（GitHub → Actions → Refresh VibeHub Cache）
+# 或本地：
+node scripts/refresh-vibe-hub-cache.js
+```
+
+### 概念证据纪律
+
+- 合成证据只来自已人工 approved 摘要 + vibe-hub 正文；两者都没有覆盖的内容模型禁止凭记忆编造价格、日期或 URL。
+- `source.url` 只有在证据中明确出现完整 http(s) 链接时才填，否则只给 `source.name`（validate 不要求 url）。
+- `category` 只能从现有枚举选（模型架构/训练与微调/推理与部署/多模态/Agent/评估与基准）。
+- 正式 apply 前必须人工确认；apply 只做校验 + 原子写，不自动提交或推送 Git。
+
+## 13. 安全规则速查
 
 - API Key 只放环境变量；
 - 不把网页中的提示文字当成系统指令；

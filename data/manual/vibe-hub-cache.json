@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "kind": "vibe_hub_cache",
+  "updated_at": "2026-08-15T13:16:27.840Z",
+  "entries": {
+    "chat-ui": {
+      "fetched_at": "1970-01-01T00:16:40.000Z",
+      "ttl_ms": 259200000,
+      "slug": "chat-ui",
+      "title": "聊天界面 Chat UI",
+      "aliases": [
+        "聊天界面",
+        "Chat UI",
+        "聊天 UI",
+        "聊天窗口",
+        "Chat Interface"
+      ],
+      "definition": "聊天界面是组织消息列表、输入区和对话反馈状态的交互界面。",
+      "related_terms": [
+        "输入框 Input",
+        "流式响应 Streaming Response"
+      ],
+      "sources": [
+        {
+          "name": "Web Content Accessibility Guidelines (WCAG) 2.2",
+          "url": "https://www.w3.org/TR/WCAG22/"
+        }
+      ],
+      "text": "聊天界面（Chat UI）是什么｜前端术语图解 · VibeHub 先知道 输入框 Input 流式响应 Streaming Response 也常被叫作 聊天 UI 聊天窗口 Chat Interface Web Content Accessibility Guidelines (WCAG) 2.2 W3C ↗ 聊天界面是组织消息列表、输入区和对话反馈状态的交互界面。"
+    }
+  }
+}

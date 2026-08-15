@@ -34,7 +34,15 @@ echo.
 echo   recover
 echo     检查并恢复中断的目录事务；可能回滚未完成写入，请仅在异常中断后使用。
 echo.
-echo 注意：new、probe 可能产生 Tavily/DeepSeek API 费用；apply、cancel、recover 可能修改本地文件。
+echo   batch --file ^<待补工具卡.json^> [--confirm-cost^|--dry-run]
+echo     热点待补工具卡 → 查重/解析/逐工具生成 → 自动写正式五模块目录。
+echo.
+echo   url-registry list ^| add --name ^<名^> --url ^<URL^> ^| remove --name ^<名^>
+echo     人工官方 URL 登记表增删查（批量解析第一道命中源，免 Tavily/DeepSeek）。
+echo.
+echo 概念批量生成（concept-cards-pending → glossary.json）已拆到独立入口：bat\concept-generator.bat。
+echo.
+echo 注意：new、probe、batch 可能产生 Tavily/DeepSeek API 费用；apply、cancel、recover 可能修改本地文件。
 echo      API Key 只从 TAVILY_API_KEY、DEEPSEEK_API_KEY 环境变量读取，不要写入文件。
 echo.
 set /p "ARGS=请输入指令及参数（直接回车退出）: "

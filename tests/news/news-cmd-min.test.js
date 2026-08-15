@@ -172,8 +172,22 @@ test('removeManualLists：只删除白名单内已存在的人工清单，保留
 });
 
 test('removeManualLists：manual_folder 缺省回退 data/manual 且不报错', () => {
-  const removed = removeManualLists({});
-  assert.ok(Array.isArray(removed));
+  // 隔离：缺省 folder 是相对路径 'data/manual'，会解析到进程 cwd。临时 chdir 到
+  // 临时目录，避免真的删除项目 data/manual/ 下的人工清单（此前该测试会删除真实待补卡文件）。
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cmd-min-manual-default-'));
+  fs.mkdirSync(path.join(dir, 'data', 'manual'), { recursive: true });
+  fs.writeFileSync(path.join(dir, 'data', 'manual', 'review.json'), '{}');
+  const previous = process.cwd();
+  process.chdir(dir);
+  try {
+    const removed = removeManualLists({});
+    assert.ok(Array.isArray(removed));
+    assert.deepEqual(removed, ['review.json']);
+    assert.equal(fs.existsSync(path.join(dir, 'data', 'manual', 'review.json')), false);
+  } finally {
+    process.chdir(previous);
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
 });
 const KEYWORD_LIST = {
   kind: 'keyword_refine_candidates',
