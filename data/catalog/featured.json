@@ -1,21 +1,21 @@
 [
     {
         "category": "llm",
-        "tool_id": "chatgpt",
+        "tool_id": "gpt-5.6-sol",
         "detail_ref": "tool-level3:gpt-5.6-sol",
         "reason": "OpenAI 最强旗舰，原生 1M 上下文，API $5/$15（输入/输出）",
         "featured_until": "2026-08-27"
     },
     {
         "category": "llm",
-        "tool_id": "claude",
+        "tool_id": "claude-sonnet-5",
         "detail_ref": "tool-level3:claude-sonnet-5",
         "reason": "编码与通用能力均衡，引导价 $2/$10 至 8月底，1M 上下文",
         "featured_until": "2026-08-27"
     },
     {
         "category": "llm",
-        "tool_id": "deepseek",
+        "tool_id": "deepseek-v4-flash",
         "detail_ref": "tool-level3:deepseek-v4-flash",
         "reason": "国产性价比之王，¥1/百万tokens 输入，1M 上下文，中文扎实",
         "featured_until": "2026-08-27"
@@ -64,15 +64,8 @@
     },
     {
         "category": "video",
-        "tool_id": "hailuo",
-        "detail_ref": null,
-        "reason": "MiniMax 海螺AI，国产视频生成第一梯队，中文场景理解强",
-        "featured_until": "2026-08-27"
-    },
-    {
-        "category": "video",
-        "tool_id": "kling",
-        "detail_ref": null,
+        "tool_id": "kling-2-6-pro",
+        "detail_ref": "tool-level3:kling-2-6-pro",
         "reason": "快手可灵，国产视频生成第一梯队，中文场景理解强",
         "featured_until": "2026-08-27"
     },

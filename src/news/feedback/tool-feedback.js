@@ -42,6 +42,19 @@ const KNOWN_AI_NAMES = [
   'Runway', 'Suno', '可灵', 'Cerebras', 'Groq', 'Deep Research',
 ];
 
+// 产品/平台/模型家族笼统名：绝不生成待补工具卡（与已删除的笼统名卡保持一致）。
+// 精确匹配（大小写不敏感）；具体模型/工具名（如 "Kling 2.6 Pro"、"GitHub Copilot"）不受影响。
+const VAGUE_FAMILY_NAMES = new Set([
+  '通义千问', '腾讯混元', '豆包', 'kimi', '天工ai', '可灵',
+  'chatgpt', 'claude', 'gemini', 'deepseek', '智谱清言', '智谱',
+  '文心一言', '讯飞星火', '海螺ai', 'grok', 'mistral', 'cohere',
+]);
+
+/** 是否产品/平台/模型家族笼统名（精确匹配，大小写不敏感）。 */
+function isVagueName(name) {
+  return VAGUE_FAMILY_NAMES.has(String(name || '').trim().toLowerCase());
+}
+
 /** 从一段文本提取疑似 AI 工具/概念名（默认正则实现，去重保序）。 */
 function extractEntitiesDefault(text) {
   const lower = String(text || '').toLowerCase();
@@ -75,15 +88,36 @@ const COMMON_ENGLISH_WORDS = new Set([
 ]);
 
 /**
- * 提取总结文本里的疑似 AI 工具/概念名。
- * 默认正则实现；调用方可注入 options.llmExtract(text) → string[] 覆盖。
+ * 提取总结文本里的疑似 AI 工具/模型/概念实体（带类型）。
+ * 默认正则实现；调用方可注入 options.llmExtract(text) → [{name,type}]/string[] 覆盖。
+ * 返回 [{name, type}]，type ∈ tool/model/concept/vague。
  */
 async function extractEntities(text, options) {
   if (typeof options.llmExtract === 'function') {
     const result = await options.llmExtract(text);
-    return (result || []).filter(Boolean);
+    return normalizeEntities(result);
   }
-  return extractEntitiesDefault(text);
+  return extractEntitiesDefault(text).map(name => ({ name, type: isVagueName(name) ? 'vague' : 'tool' }));
+}
+
+/** 归一化提取结果为 [{name,type}]；兼容 [{name,type}]、裸 string[]（兜底 tool）与 {names|entities}。 */
+function normalizeEntities(result) {
+  const list = Array.isArray(result)
+    ? result
+    : (result && Array.isArray(result.names) ? result.names
+      : (result && Array.isArray(result.entities) ? result.entities : []));
+  const entities = [];
+  for (const item of list) {
+    if (item && typeof item === 'object' && typeof item.name === 'string') {
+      const type = ['tool', 'model', 'concept', 'vague'].includes(item.type) ? item.type : 'tool';
+      const name = item.name.trim();
+      if (name) entities.push({ name, type });
+    } else {
+      const name = String(item).trim();
+      if (name) entities.push({ name, type: 'tool' });
+    }
+  }
+  return entities;
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -159,13 +193,20 @@ async function feedbackFromSummaries(store, config, options = {}) {
     item => item && item.review_status === 'approved' && item.summary
   );
 
-  // 2. 汇总所有总结文本
+  // 2. 汇总所有总结文本（实体带类型，name -> {count, type}）
   const texts = approvedWithSummary.map(item => String(item.summary || '').trim()).filter(Boolean);
-  const allEntities = new Map(); // name -> count
+  const allEntities = new Map(); // name -> {count, type}
   for (const text of texts) {
     const entities = await extractEntities(text, options);
-    for (const name of entities) {
-      allEntities.set(name, (allEntities.get(name) || 0) + 1);
+    for (const entity of entities) {
+      const key = entity.name;
+      const existing = allEntities.get(key);
+      if (existing) {
+        existing.count += 1;
+        if (existing.type === 'vague' && entity.type !== 'vague') existing.type = entity.type;
+      } else {
+        allEntities.set(key, { name: entity.name, type: entity.type, count: 1 });
+      }
     }
   }
 
@@ -181,7 +222,26 @@ async function feedbackFromSummaries(store, config, options = {}) {
   const conceptsFound = [];
   const conceptsPending = [];
 
-  for (const [name, count] of allEntities) {
+  for (const [name, { count, type }] of allEntities) {
+    // 笼统名兜底拦截：即使 LLM/正则把笼统名标成 tool，也绝不生成待补工具卡
+    if (isVagueName(name) || type === 'vague') continue;
+    if (type === 'concept') {
+      if (feedback.concept_feedback !== false) {
+        if (conceptExists(name, glossary)) conceptsFound.push(name);
+        else conceptsPending.push({
+          term: name,
+          full_name: '',
+          definition: '', // 留空：待人工补全
+          category: '',
+          source_hotspot: true,
+          pending: true,
+          mentioned_in_summaries: count,
+          generated_at: new Date().toISOString(),
+        });
+      }
+      continue;
+    }
+    // tool / model：进待补工具卡；具体模型带 api_model 提示，供批量生成器定 detail_kind
     if (feedback.tool_feedback !== false) {
       if (toolExists(name, tools)) toolsFound.push(name);
       else toolsPending.push({
@@ -189,19 +249,7 @@ async function feedbackFromSummaries(store, config, options = {}) {
         name,
         url: '', // 占位：待人工补全
         description: '', // 留空：待人工补全
-        source_hotspot: true,
-        pending: true,
-        mentioned_in_summaries: count,
-        generated_at: new Date().toISOString(),
-      });
-    }
-    if (feedback.concept_feedback !== false) {
-      if (conceptExists(name, glossary)) conceptsFound.push(name);
-      else conceptsPending.push({
-        term: name,
-        full_name: '',
-        definition: '', // 留空：待人工补全
-        category: '',
+        detail_kind_hint: type === 'model' ? 'api_model' : 'tool',
         source_hotspot: true,
         pending: true,
         mentioned_in_summaries: count,
@@ -242,6 +290,8 @@ module.exports = {
   feedbackFromSummaries,
   extractEntities,
   extractEntitiesDefault,
+  normalizeEntities,
+  isVagueName,
   toolExists,
   conceptExists,
 };

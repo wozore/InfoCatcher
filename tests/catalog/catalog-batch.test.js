@@ -68,17 +68,17 @@ test('dedupeBatchCandidates 三层查重：目录已存在 / 进行中 draft / �
 // ── 第 3 组：厂商/官方源解析三路 ───────────────────────────────
 
 test('resolveBatchCandidates 三路：登记表命中 / 解析成功 / unresolved', async () => {
-  const registry = { schema_version: 1, entries: { 可灵: { vendor_name: '快手可灵', official_url: 'https://klingai.com/' } } };
+  const registry = { schema_version: 1, entries: { 'Kling 2.6 Pro': { vendor_name: '快手可灵', official_url: 'https://klingai.com/' } } };
   const resolveFn = async name => (name === 'Unknown Tool')
     ? { ok: false, code: 'VENDOR_RESOLUTION_NO_RESULTS', error: 'no results' }
     : { ok: true, vendor_name: 'Alpha', official_url: 'https://official.example.com' };
   const result = await resolveBatchCandidates(
-    [{ name: '可灵' }, { name: 'Some Tool' }, { name: 'Unknown Tool' }],
+    [{ name: 'Kling 2.6 Pro' }, { name: 'Some Tool' }, { name: 'Unknown Tool' }],
     { registry, resolveOfficialSource: resolveFn },
   );
   assert.equal(result.seeds.length, 2);
   const kling = result.seeds[0];
-  assert.equal(kling.name, '可灵');
+  assert.equal(kling.name, 'Kling 2.6 Pro');
   assert.equal(kling.vendor_name, '快手可灵');
   assert.equal(kling.official_url, canonicalizeUrl('https://klingai.com/'));
   assert.ok(kling.discovery_sources.some(source => source.kind === 'official_hint'));

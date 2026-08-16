@@ -10,23 +10,19 @@ import {
   tools,
   getToolLevel3Item,
   glossary,
-  scenes,
   hotspots,
   dataLoadFailures,
-  getSearchConcepts,
-  searchConceptKey,
   getToolSearchText,
-  setActiveGlossaryCategory,
+  getHotspotHeat,
   escapeHtml,
   timeAgo,
   safeExternalUrl,
   announceStatus,
 } from './data.js';
 import { switchView } from './main.js';
-import { openDetail } from './tools.js';
-import { openHotspotDetail } from './trending.js';
-import { openGlossaryConcept, setActiveGlossaryId } from './glossary.js';
-import { renderScenes, setActiveSceneId } from './scenes.js';
+import { openDetail, setToolsViewMode, clearToolFilters } from './tools.js';
+import { openGlossaryConcept } from './glossary.js';
+import { getLocalizedField } from './i18n.js';
 
 // P1-A：固定静态搜索状态。只在当前页面内存中存在，不写入 URL、localStorage 或后端。
 // 产品约束（MVP）：AI 搜索只支持 3 个固定示例查询（写论文/写代码/深度研究），
@@ -67,7 +63,7 @@ let searchState = {
 };
 
 // ═══ P1-A：静态搜索匹配适配器 ═══════════════════════════════════
-// 四个 getSearch*Matches 均为「归一化后子串包含（includes）」匹配，非语义匹配；
+// getSearchToolMatches 为「归一化后子串包含（includes）」匹配，非语义匹配；
 // 仅在命中 demo 查询时由 getSearchMatches 调用，非 demo 查询直接返回空数组。
 function getSearchToolMatches(query) {
   const text = String(query || '').trim().toLocaleLowerCase('zh-CN');
@@ -75,40 +71,7 @@ function getSearchToolMatches(query) {
   return tools.filter(tool => getToolSearchText(tool).toLocaleLowerCase('zh-CN').includes(text));
 }
 
-function getSearchSceneMatches(query) {
-  const text = String(query || '').trim().toLocaleLowerCase('zh-CN');
-  if (!text) return [];
-  return scenes.filter(scene => [
-    scene.name,
-    scene.description,
-    ...(scene.search_terms || []),
-    ...(scene.tasks || []).map(task => task.task)
-  ].filter(Boolean).join(' ').toLocaleLowerCase('zh-CN').includes(text));
-}
-
-function getSearchHotspotMatches(query) {
-  const text = String(query || '').trim().toLocaleLowerCase('zh-CN');
-  if (!text) return [];
-  return (hotspots.items || []).filter(item => [
-    item.title,
-    item.description,
-    item.author_name,
-    ...(item.source_tags || [])
-  ].filter(Boolean).join(' ').toLocaleLowerCase('zh-CN').includes(text));
-}
-
-function getSearchGlossaryMatches(query) {
-  const text = String(query || '').trim().toLocaleLowerCase('zh-CN');
-  if (!text) return [];
-  return getSearchConcepts().filter(concept => [
-    concept.term,
-    concept.fullName,
-    concept.summary,
-    ...concept.relatedTerms
-  ].filter(Boolean).join(' ').toLocaleLowerCase('zh-CN').includes(text));
-}
-
-// 匹配中枢：识别命中 demo、执行四路子串匹配、汇总数据加载失败项（unavailable）。
+// 匹配中枢：识别命中 demo、执行工具子串匹配、汇总数据加载失败项（unavailable）。
 // demoKey 为 null 表示查询不在 3 个固定示例内，上游据此进入「无对应示例」分支。
 function getSearchMatches(query) {
   const normalizedQuery = String(query || '').trim();
@@ -118,10 +81,7 @@ function getSearchMatches(query) {
     demoKey: demo?.key || null,
     demoHint: demo?.hint || '',
     tools: demo ? getSearchToolMatches(normalizedQuery) : [],
-    scenes: demo ? getSearchSceneMatches(normalizedQuery) : [],
-    hotspots: demo ? getSearchHotspotMatches(normalizedQuery) : [],
-    concepts: demo ? getSearchGlossaryMatches(normalizedQuery) : [],
-    unavailable: [...dataLoadFailures].filter(key => ['tools', 'scenes', 'hotspots', 'glossary'].includes(key))
+    unavailable: [...dataLoadFailures].filter(key => ['tools', 'hotspots', 'glossary'].includes(key))
   };
 }
 
@@ -179,217 +139,214 @@ function selectSearchExample(query) {
   input.focus();
 }
 
-// 结果可用性状态机：success / partial（部分静态资料未加载）/ no-match / error（所需资料全不可用）。
-// 决定结果页是渲染完整投影，还是只显示对应提示块。
+// 结果可用性状态机：success / no-match / error（所需资料全不可用）。
+// 决定结果页是渲染完整投影，还是只显示对应提示块。热点/概念数据缺失只隐藏对应栏，不算 partial。
 function getSearchResultAvailability(matches) {
   if (!matches.demoKey) return { type: 'no-match', message: '当前问题没有对应的固定静态示例。' };
-  const availableGroups = [matches.tools, matches.scenes, matches.hotspots, matches.concepts].filter(group => group.length > 0).length;
-  if (matches.unavailable.length && availableGroups === 0) {
-    return { type: 'error', message: '匹配所需的静态资料当前不可用，请刷新页面后重试。' };
+  if (matches.unavailable.includes('tools')) {
+    return { type: 'error', message: '匹配所需的工具资料当前不可用，请刷新页面后重试。' };
   }
-  if (availableGroups === 0) return { type: 'no-match', message: '当前固定示例没有匹配到可展示的静态资料。' };
-  if (matches.unavailable.length) {
-    const labels = { tools: '工具', scenes: '场景', hotspots: '热点', glossary: '概念' };
-    return { type: 'partial', message: '部分静态资料当前不可用：' + matches.unavailable.map(key => labels[key] || key).join('、') + '。以下结果只包含已成功加载的资料。' };
-  }
+  if (!matches.tools.length) return { type: 'no-match', message: '当前固定示例没有匹配到可展示的工具资料。' };
   return { type: 'success', message: '' };
 }
 
-// 将命中的静态资料投影为「来源列表 + 摘要段落」：首场景 + 前 3 个工具作为来源，
-// 段落按 场景描述/已收录任务/匹配工具 三块生成，每段携带 sourceIds 供 [n] 引用定位。
+// 将命中的工具投影为「工具列表」，供答案与 mini 卡使用（mini 卡复用工具卡数据子集，不另建投影）。
 function getSearchResultProjection(query) {
   const matches = getSearchMatches(query);
-  if (!matches.demoKey) return { matches, sources: [], paragraphs: [] };
-
-  const scene = matches.scenes[0] || null;
-  const selectedTools = matches.tools.slice(0, 3);
-  const sources = [];
-  if (scene) {
-    sources.push({
-      id: 'scene-' + scene.id,
-      type: '场景资料',
-      title: scene.name,
-      description: scene.description || '描述暂不可用',
-      updatedAt: null,
-      url: null
-    });
-  }
-  selectedTools.forEach(tool => {
-    sources.push({
-      id: 'tool-' + tool.id,
-      type: '工具资料',
-      title: tool.title,
-      description: tool.summary || '描述暂不可用',
-      updatedAt: tool.detail_ref ? (getToolLevel3Item(tool.vendor_key, tool.detail_ref.id)?.official_date || null) : null,
-      url: tool.detail_ref ? (getToolLevel3Item(tool.vendor_key, tool.detail_ref.id)?.official_url || null) : null
-    });
-  });
-
-  const paragraphs = [];
-  if (scene) {
-    paragraphs.push({
-      text: scene.description || '该场景的描述暂不可用。',
-      sourceIds: ['scene-' + scene.id]
-    });
-    const tasks = (scene.tasks || []).map(task => task.task).filter(Boolean);
-    if (tasks.length) {
-      paragraphs.push({
-        text: '已收录任务包括：' + tasks.join('、') + '。',
-        sourceIds: ['scene-' + scene.id]
-      });
-    }
-  }
-  if (selectedTools.length) {
-    paragraphs.push({
-      text: '当前资料中，与该问题直接匹配的工具包括：' + selectedTools.map(tool => tool.title).join('、') + '。',
-      sourceIds: selectedTools.map(tool => 'tool-' + tool.id)
-    });
-  }
-  return { matches, sources, paragraphs };
+  return { matches, tools: matches.demoKey ? matches.tools : [] };
 }
+
+// 决策（搜索结果页 v2）：答案句列出的工具名与 mini 卡展示数量上限。
+// 实测「写论文」匹配 11 个、「写代码」12 个，答案与卡片必须封顶，
+// 超出部分经「了解更多」进入工具库完整列表。
+const SEARCH_ANSWER_NAMES_LIMIT = 5;
+const SEARCH_TOOL_MINIS_LIMIT = 6;
 
 function renderSearchResults() {
   closeSearchConcept();
   const state = document.getElementById('searchResultState');
   const content = document.getElementById('searchResultContent');
   const summary = document.getElementById('searchSummaryContent');
-  const sourceList = document.getElementById('searchSourceList');
-  if (!state || !content || !summary || !sourceList) return;
+  if (!state || !content || !summary) return;
 
   const projection = getSearchResultProjection(searchState.query);
   const availability = getSearchResultAvailability(projection.matches);
-  if (availability.type === 'error' || availability.type === 'no-match' || !projection.sources.length || !projection.paragraphs.length) {
+  if (availability.type === 'error' || availability.type === 'no-match') {
     state.hidden = false;
     state.className = 'state ' + (availability.type === 'error' ? 'error' : 'info') + ' search-result-state';
-    state.innerHTML = '<strong>' + (availability.type === 'error' ? '静态资料处理失败' : '暂无可展示的静态整理结果') + '</strong><p>' + escapeHtml(availability.message || '当前问题没有足够的已收录资料，因此不会生成无依据摘要。') + '</p>';
+    state.innerHTML = '<strong>' + (availability.type === 'error' ? '工具资料处理失败' : '暂无可展示的静态整理结果') + '</strong><p>' + escapeHtml(availability.message || '当前问题没有足够的已收录资料，因此不会生成无依据摘要。') + '</p>';
     content.hidden = true;
     summary.innerHTML = '';
-    sourceList.innerHTML = '';
-    renderSearchMatches(projection.matches, false);
-    renderSearchContinue();
     renderSearchFeedback(false);
     return;
   }
 
-  if (availability.type === 'partial') {
-    state.hidden = false;
-    state.className = 'state warn search-result-state';
-    state.innerHTML = '<strong>部分资料暂不可用</strong><p>' + escapeHtml(availability.message) + '</p>';
-  } else {
-    state.hidden = true;
-  }
+  state.hidden = true;
   content.hidden = false;
   searchCitationOrigins.clear();
-  const sourceNumber = new Map(projection.sources.map((source, index) => [source.id, index + 1]));
-  summary.innerHTML = projection.paragraphs.map((paragraph, index) =>
-    '<p id="search-summary-' + (index + 1) + '" tabindex="-1" data-search-summary data-search-concept-text>' +
-      escapeHtml(paragraph.text) +
-      paragraph.sourceIds.map(sourceId => {
-        const number = sourceNumber.get(sourceId);
-        return '<button class="citation" type="button" data-search-citation="' + escapeHtml(sourceId) + '" aria-label="定位到来源 ' + number + '">[' + number + ']</button>';
-      }).join('') +
-    '</p>'
-  ).join('') +
-  // 决策 8.3：移动端“查看关键来源”快捷锚点（≤768px 显示）
-  '<div class="search-mobile-anchors"><button class="btn-link" type="button" data-search-anchor="sources">查看关键来源</button></div>';
 
-  // 决策 8.6：来源项内联展开“来源说明”（aria-expanded + aria-controls，同一时刻只展开一个）
-  const sourceItemHtml = (source, index) => {
-    const sourceUrl = source.url ? safeExternalUrl(source.url) : '#';
-    const validUrl = sourceUrl !== '#';
-    const relatedParagraph = projection.paragraphs.find(p => (p.sourceIds || []).includes(source.id));
-    const detailId = 'search-source-detail-' + escapeHtml(source.id);
-    return '<article class="search-source-item" id="search-source-' + escapeHtml(source.id) + '" tabindex="-1" data-search-source="' + escapeHtml(source.id) + '">' +
-      '<div class="search-source-heading"><span class="search-source-number">[' + (index + 1) + ']</span><span class="tag">' + escapeHtml(source.type) + '</span></div>' +
-      '<h3>' + escapeHtml(source.title) + '</h3>' +
-      '<p data-search-concept-text>' + escapeHtml(source.description) + '</p>' +
-      '<dl><div><dt>资料更新</dt><dd>' + escapeHtml(source.updatedAt || '待补充') + '</dd></div>' +
-      '<div><dt>原始链接</dt><dd>' + (validUrl
-        ? '<a href="' + escapeHtml(sourceUrl) + '" target="_blank" rel="noopener noreferrer">打开来源</a>'
-        : '暂不可用') + '</dd></div></dl>' +
-      '<button class="btn-link search-source-expand" type="button" aria-expanded="false" aria-controls="' + detailId + '" data-search-source-expand="' + escapeHtml(source.id) + '">来源说明</button>' +
-      '<div class="search-source-detail" id="' + detailId + '" hidden>' +
-        '<dl>' +
-          '<div><dt>支持的摘要位置</dt><dd>' + (relatedParagraph ? escapeHtml(relatedParagraph.text) : '无直接关联段落') + '</dd></div>' +
-          '<div><dt>资料更新</dt><dd>' + escapeHtml(source.updatedAt || '待补充') + '</dd></div>' +
-          '<div><dt>完整资料</dt><dd>' + (validUrl ? '<a href="' + escapeHtml(sourceUrl) + '" target="_blank" rel="noopener noreferrer">查看完整资料</a>' : '暂不可用') + '</dd></div>' +
-        '</dl>' +
-      '</div>' +
-      '<button class="btn-link search-source-back" type="button" data-search-source-back="' + escapeHtml(source.id) + '">返回引用位置</button>' +
-    '</article>';
-  };
-
-  // 决策 8.2/8.4：默认展示前 3 条关键来源，更多经“查看全部来源”展开
-  const sourceItems = projection.sources.map(sourceItemHtml);
-  const visibleCount = 3;
-  let sourceHtml = sourceItems.slice(0, visibleCount).join('');
-  if (projection.sources.length > visibleCount) {
-    sourceHtml += '<div class="search-more-sources" id="searchMoreSources" hidden>' + sourceItems.slice(visibleCount).join('') + '</div>' +
-      '<button class="btn-link search-sources-toggle" type="button" data-search-sources-toggle data-count="' + projection.sources.length + '" aria-expanded="false" aria-controls="searchMoreSources">查看全部来源（' + projection.sources.length + '）</button>';
-  }
-  // 决策 8.3：移动端“返回摘要”锚点（≤768px 显示）
-  sourceHtml += '<div class="search-mobile-anchors"><button class="btn-link" type="button" data-search-anchor="summary">返回摘要</button></div>';
-  sourceList.innerHTML = sourceHtml;
-  renderSearchMatches(projection.matches, true);
-  renderSearchContinue();
-  renderSearchFeedback(true);
-  // 决策 9.8：在摘要、来源与匹配项全部渲染后再扫描概念词，避免遗漏后渲染区域
+  const tools = projection.tools;
+  summary.innerHTML = buildSearchAnswer(searchState.query, tools).join('');
+  renderSearchToolMinis(tools);
+  renderSearchHotspots(getSearchHotspotRanking(searchState.query, 5));
+  // 决策 9.8：先包裹正文概念词，再收集左栏索引，保证与内嵌联动严格一致
   markSearchConcepts();
+  renderSearchConceptsRail(collectSearchConcepts());
+  renderSearchFeedback(true);
 }
 
-function searchMatchDescription(item, type) {
-  if (type === 'tools') return item.summary || '描述暂不可用';
-  if (type === 'scenes') return item.description || '描述暂不可用';
-  if (type === 'hotspots') return item.description || '描述暂不可用';
-  return item.summary || '描述暂不可用';
-}
+// 一句话答案：结论句 + 概览句，内嵌 [n] 引用按钮对应下方工具 mini 卡。
+// 工具为空时返回空数组（由 availability 的 no-match 分支兜底）。
+function buildSearchAnswer(query, tools) {
+  const citation = (tool, index) =>
+    '<button class="citation" type="button" data-search-citation="tool-' + escapeHtml(tool.id) +
+    '" aria-label="定位到工具 ' + (index + 1) + '">[' + (index + 1) + ']</button>';
 
-// 决策 9.1：每组“查看全部”的展开状态（当前页面内存）
-const searchMatchExpanded = new Set();
+  const shown = tools.slice(0, SEARCH_ANSWER_NAMES_LIMIT);
+  const list = shown.map((tool, i) => escapeHtml(tool.title) + citation(tool, i)).join('、');
+  const extra = tools.length > shown.length ? '、…等 ' + tools.length + ' 个相关工具' : '';
+  const conclusion = '针对「' + escapeHtml(query) + '」，已为你匹配到 ' + tools.length + ' 个相关工具：' + list + extra + '。';
 
-function renderSearchMatches(matches, visible) {
-  const section = document.getElementById('searchMatchesSection');
-  const container = document.getElementById('searchMatchGroups');
-  if (!section || !container) return;
-  if (!visible) {
-    section.hidden = true;
-    container.innerHTML = '';
-    return;
+  const best = tools[0];
+  let overview = '';
+  if (best) {
+    const bestName = escapeHtml(best.title) + citation(best, 0);
+    if (best.best_for_preview) {
+      overview = '综合已收录资料，' + bestName + ' 最适合' + escapeHtml(best.best_for_preview) + '，是这类任务的优先选择。';
+    } else if (best.summary) {
+      overview = '综合已收录资料，' + bestName + '：' + escapeHtml(best.summary) + '。';
+    } else {
+      overview = '综合已收录资料，' + bestName + ' 与该任务直接相关，可点击下方卡片查看详情与对比。';
+    }
   }
 
-  const groups = [
-    { key: 'tools', label: '工具', items: matches.tools, limit: 3, id: item => item.detail_ref.id, title: item => item.title },
-    { key: 'scenes', label: '场景', items: matches.scenes, limit: 2, id: item => item.id, title: item => item.name },
-    { key: 'hotspots', label: '热点', items: matches.hotspots, limit: 2, id: item => item.id, title: item => item.title },
-    { key: 'concepts', label: '概念', items: matches.concepts, limit: 2, id: item => item.term, title: item => item.term }
-  ];
+  return [
+    '<p id="search-summary-1" tabindex="-1" data-search-summary data-search-concept-text>' + conclusion + '</p>',
+    overview ? '<p id="search-summary-2" tabindex="-1" data-search-summary data-search-concept-text>' + overview + '</p>' : ''
+  ].filter(Boolean);
+}
 
-  // 决策 9.1：没有对应类型资料时隐藏该分组，不显示空容器；资料不可用时仍显示明确提示
-  const visibleGroups = groups.filter(group => {
-    const unavailable = matches.unavailable.includes(group.key === 'concepts' ? 'glossary' : group.key);
-    return unavailable || group.items.length > 0;
+// 相关工具 mini 卡行：复用工具卡数据子集（icon/title/summary），
+// 点击卡弹详情（留在搜索页），卡角 ↗ 外链仅在三级详情有 official_url 时显示。
+function renderSearchToolMinis(tools) {
+  const list = document.getElementById('searchToolMiniList');
+  if (!list) return;
+  const shown = tools.slice(0, SEARCH_TOOL_MINIS_LIMIT);
+  list.innerHTML = shown.map((tool, index) => {
+    const detail = tool.detail_ref ? getToolLevel3Item(tool.vendor_key, tool.detail_ref.id) : null;
+    const url = detail?.official_url ? safeExternalUrl(detail.official_url) : '#';
+    return '<article class="search-tool-mini" id="search-tool-' + escapeHtml(String(tool.id).replace(/[^a-zA-Z0-9_-]/g, '-')) + '"' +
+      ' data-search-tool="' + escapeHtml(tool.detail_ref?.id || '') + '"' +
+      ' data-search-source="tool-' + escapeHtml(tool.id) + '"' +
+      ' tabindex="0" role="button" aria-label="查看详情：' + escapeHtml(tool.title) + '">' +
+      (tool.icon ? '<span class="search-tool-mini-icon" aria-hidden="true">' + escapeHtml(tool.icon) + '</span>' : '') +
+      '<div class="search-tool-mini-body">' +
+        '<h3>' + escapeHtml(tool.title) + '</h3>' +
+        (tool.summary ? '<p data-search-concept-text>' + escapeHtml(tool.summary) + '</p>' : '') +
+      '</div>' +
+      (url !== '#' ? '<a class="search-tool-mini-link" href="' + escapeHtml(url) + '" target="_blank" rel="noopener noreferrer" aria-label="打开官网：' + escapeHtml(tool.title) + '"><svg class="icon" aria-hidden="true"><use href="#icon-external"/></svg></a>' : '') +
+    '</article>';
+  }).join('') +
+  (tools.length > SEARCH_TOOL_MINIS_LIMIT
+    ? '<button class="btn btn-small search-more-tools" type="button" data-search-more-tools>了解更多 · 查看全部 ' + tools.length + ' 个</button>'
+    : '');
+}
+
+// 右栏热点：最新、按相关度（query 子串在标题/描述/概要命中数）降序、再按发布时间降序，取前 limit。
+// 命中数为 0 也保留（靠时间排序兜底，故右栏在热点数据存在时恒有内容）。
+// 标题/描述/概要统一走本地化字段（zh）原文兜底，与热点视图 trending.js 一致，避免显示英文标题。
+function hotspotField(item, field) {
+  return getLocalizedField(item, field) || item[field] || '';
+}
+
+function getSearchHotspotRanking(query, limit = 5) {
+  const needle = String(query || '').trim().toLocaleLowerCase('zh-CN');
+  const ranked = (hotspots.items || []).map(item => {
+    const haystack = [hotspotField(item, 'title'), hotspotField(item, 'description'), hotspotField(item, 'summary')].filter(Boolean).join('\n').toLocaleLowerCase('zh-CN');
+    let score = 0;
+    if (needle) {
+      let idx = haystack.indexOf(needle);
+      while (idx >= 0) { score += 1; idx = haystack.indexOf(needle, idx + needle.length); }
+    }
+    const ts = new Date(item.published_at).getTime();
+    return { item, score, ts: Number.isFinite(ts) ? ts : 0 };
   });
-  if (!visibleGroups.length) {
-    section.hidden = true;
-    container.innerHTML = '';
-    return;
-  }
-  section.hidden = false;
-  container.innerHTML = visibleGroups.map(group => {
-    const unavailable = matches.unavailable.includes(group.key === 'concepts' ? 'glossary' : group.key);
-    const expanded = searchMatchExpanded.has(group.key);
-    const shown = expanded ? group.items : group.items.slice(0, group.limit);
-    const body = unavailable
-      ? '<p class="search-match-empty">该类静态资料暂不可用。</p>'
-      : shown.map(item => '<article class="search-match-item" data-search-match="' + group.key + '">' +
-            '<div><h4>' + escapeHtml(group.title(item)) + '</h4><p data-search-concept-text>' + escapeHtml(searchMatchDescription(item, group.key)) + '</p></div>' +
-            '<button class="btn btn-small" type="button" data-search-open="' + group.key + '" data-search-id="' + escapeHtml(group.id(item)) + '">查看资料</button>' +
-          '</article>').join('');
-    const expandControl = !unavailable && group.items.length > group.limit
-      ? '<div class="search-match-expand"><button class="btn-link" type="button" data-search-match-expand="' + group.key + '" data-count="' + group.items.length + '">' + (expanded ? '收起' : '查看全部 ' + group.items.length + ' 条') + '</button></div>'
-      : '';
-    return '<section class="search-match-group" aria-labelledby="search-match-' + group.key + '"><h3 id="search-match-' + group.key + '">' + group.label + '</h3>' + body + expandControl + '</section>';
+  ranked.sort((a, b) => b.score - a.score || b.ts - a.ts);
+  return ranked.slice(0, limit).map(entry => entry.item);
+}
+
+function renderSearchHotspots(items) {
+  const rail = document.getElementById('searchHotspotsRail');
+  const list = document.getElementById('searchHotspotsList');
+  const content = document.getElementById('searchResultContent');
+  if (!rail || !list || !content) return;
+  const hasItems = (items || []).length > 0;
+  rail.hidden = !hasItems;
+  content.classList.toggle('without-hotspots', !hasItems);
+  if (!hasItems) { list.innerHTML = ''; return; }
+  list.innerHTML = items.map(item => {
+    const heat = getHotspotHeat(item);
+    const title = hotspotField(item, 'title');
+    const summary = hotspotField(item, 'summary') || hotspotField(item, 'description');
+    return '<article class="search-hotspot-item" id="search-hotspot-' + escapeHtml(String(item.id).replace(/[^a-zA-Z0-9_-]/g, '-')) + '"' +
+      ' data-hotspot-id="' + escapeHtml(item.id) + '" tabindex="0" role="button" aria-label="查看热点：' + escapeHtml(title) + '">' +
+      '<h3 class="search-hotspot-title">' + escapeHtml(title) + '</h3>' +
+      (heat !== null ? '<span class="search-hotspot-score">热度 ' + escapeHtml(String(heat)) + '</span>' : '') +
+      '<p class="search-hotspot-summary">' + escapeHtml(summary) + '</p>' +
+      '<span class="search-hotspot-time">' + escapeHtml(timeAgo(item.published_at)) + '</span>' +
+    '</article>';
   }).join('');
+}
+
+// 概念左栏：收集主列 markConceptsIn 已包裹出的概念词（DOM 序去重），上限 10。
+// 必须在 markSearchConcepts() 之后调用。
+function collectSearchConcepts() {
+  const panel = document.getElementById('searchResultsPanel');
+  if (!panel) return [];
+  const seen = new Set();
+  const terms = [];
+  panel.querySelectorAll('.concept-link[data-search-concept]').forEach(button => {
+    const term = button.dataset.searchConcept;
+    if (term && !seen.has(term)) { seen.add(term); terms.push(term); }
+  });
+  return terms.slice(0, 10);
+}
+
+function renderSearchConceptsRail(terms) {
+  const rail = document.getElementById('searchConceptsRail');
+  const list = document.getElementById('searchConceptsList');
+  if (!rail || !list) return;
+  // 决策：无相关概念时仍保留该栏（避免主内容向左挤占），显示空态占位
+  rail.hidden = false;
+  // 概念词即 glossary.term，直接回查 summary 作为术语摘要；未收录的只显示术语名
+  const byTerm = new Map((glossary || []).map(g => [g && g.term, g]));
+  list.innerHTML = terms.length
+    ? terms.map(term => {
+        const entry = byTerm.get(term);
+        const summary = entry && entry.summary ? escapeHtml(entry.summary) : '';
+        return '<button class="search-concept-rail-item" type="button" data-search-concept-rail="' + escapeHtml(term) + '">' +
+          '<span class="search-concept-rail-term">' + escapeHtml(term) + '</span>' +
+          (summary ? '<span class="search-concept-rail-summary">' + summary + '</span>' : '') +
+        '</button>';
+      }).join('')
+    : '<p class="search-concept-empty">暂无相关概念</p>';
+}
+
+// 工具 mini 卡点击：留在搜索页弹详情，不切视图；关闭后回焦由 showModal/closeModal 管理。
+function openSearchToolDetail(id, trigger) {
+  openDetail(id, null, trigger || null);
+}
+
+// 「了解更多」：跳工具库视图 + 预填本次 query + 强制工具 toggle + 清筛选。
+function openSearchMoreTools() {
+  const input = document.getElementById('searchInput');
+  if (input) input.value = searchState.query;
+  const clear = document.getElementById('searchClear');
+  if (clear && searchState.query) clear.style.display = 'block'; // 程序赋值不触发 input 事件
+  clearToolFilters();       // 重置访问/价格筛选，保证跳转后按 query 全量展示
+  setToolsViewMode('tool'); // 强制工具目录视图（新增导出）
+  switchView('tools');      // 内部 renderTools() 读取 #searchInput.value 过滤
+  announceStatus('已跳转到工具库，并按「' + searchState.query + '」过滤');
 }
 
 function renderSearchFeedback(visible) {
@@ -401,61 +358,6 @@ function renderSearchFeedback(visible) {
     button.setAttribute('aria-pressed', String(button.dataset.searchFeedback === searchState.feedback));
   });
   status.textContent = searchState.feedback ? '反馈已记录在当前页面内存中。' : '';
-}
-
-// 决策 8.7：结果页末尾“继续探索 · 示例历史”（当前页面内存，点击恢复示例查询）
-function renderSearchContinue() {
-  const section = document.getElementById('searchContinueSection');
-  const list = document.getElementById('searchContinueList');
-  if (!section || !list) return;
-  const history = searchState.recent.filter(entry => entry.query !== searchState.query).slice(0, 3);
-  section.hidden = history.length === 0;
-  list.innerHTML = history.map(entry =>
-    '<article class="list-item">' +
-      '<div><h3>' + escapeHtml(entry.query) + '</h3><p>固定静态示例 · ' + escapeHtml(timeAgo(entry.ts)) + '</p></div>' +
-      '<button class="btn btn-small" type="button" data-search-example="' + escapeHtml(entry.query) + '">恢复示例</button>' +
-    '</article>'
-  ).join('');
-}
-
-function openSearchMatch(type, id, trigger) {
-  if (type === 'tools') {
-    switchView('tools');
-    const visibleTrigger = [...document.querySelectorAll('#toolGrid .detail-button')].find(button =>
-      button.getAttribute('onclick')?.includes("openDetail('" + id + "'")
-    ) || document.querySelector('#toolGrid .detail-button');
-    openDetail(id, null, visibleTrigger || null);
-    return;
-  }
-  if (type === 'scenes') {
-    const scene = scenes.find(item => item.id === id);
-    const input = document.getElementById('sceneSearch');
-    if (input) input.value = scene?.name || '';
-    setActiveSceneId(id);
-    switchView('scenes');
-    window.requestAnimationFrame(() => {
-      document.querySelector('.scene-pick-chip[data-scene-pick="' + CSS.escape(id) + '"]')?.focus();
-    });
-    return;
-  }
-  if (type === 'hotspots') {
-    // 决策 9.1/81：热点匹配项"查看资料"应打开对应热点详情对话框，不新增独立详情路由。
-    // switchView('trending') 已同步渲染热点列表；若能定位到对应卡片则以卡片为回焦锚点，否则以 null 回焦到模态内容。
-    switchView('trending');
-    window.requestAnimationFrame(() => {
-      const card = document.querySelector('#trendingGrid [data-hotspot-id="' + CSS.escape(id) + '"]');
-      openHotspotDetail(id, card || null);
-    });
-    return;
-  }
-  if (type === 'concepts') {
-    const input = document.getElementById('glossarySearch');
-    if (input) input.value = id;
-    setActiveGlossaryCategory('all');
-    setActiveGlossaryId(id);
-    switchView('glossary');
-    window.requestAnimationFrame(() => document.querySelector('.glossary-index-item[data-glossary-pick="' + CSS.escape(id) + '"]')?.focus());
-  }
 }
 
 function setSearchFeedback(value) {
@@ -644,14 +546,6 @@ function focusSearchSource(sourceId, citation = null) {
   highlightSearchReference(source);
 }
 
-function focusSearchCitation(sourceId) {
-  const citation = searchCitationOrigins.get(sourceId) || document.querySelector('[data-search-citation="' + CSS.escape(sourceId) + '"]');
-  if (!citation) return;
-  citation.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
-  citation.focus({ preventScroll: true });
-  highlightSearchReference(citation.closest('[data-search-summary]'));
-}
-
 // ═══════════════════════════════════════════════════════════════
 // 视图状态机：首页 / 处理中 / 结果页 / 编辑
 // ═══════════════════════════════════════════════════════════════
@@ -799,7 +693,6 @@ function startSearchProcessing() {
   clearTimeout(searchProcessingTimer);
   searchState.processing = true;
   searchState.processingStage = 0;
-  searchMatchExpanded.clear();
   renderSearchProcessing();
 
   const status = document.getElementById('searchFormStatus');
@@ -887,7 +780,6 @@ function submitSearchHome(query) {
 
 export {
   searchState,
-  searchMatchExpanded,
   searchConceptTrigger,
   searchConceptHoverTimer,
   searchConceptCloseTimer,
@@ -897,10 +789,8 @@ export {
   clearSearchHomeStates,
   selectSearchExample,
   renderSearchResults,
-  renderSearchMatches,
   renderSearchView,
   renderSearchProcessing,
-  renderSearchContinue,
   renderSearchFeedback,
   submitSearchHome,
   submitSearchEdit,
@@ -909,14 +799,14 @@ export {
   cancelSearchEditing,
   returnToSearchHome,
   cancelSearchProcessing,
-  openSearchMatch,
   setSearchFeedback,
   openSearchConcept,
   closeSearchConcept,
   scheduleSearchConceptOpen,
   scheduleSearchConceptClose,
   focusSearchSource,
-  focusSearchCitation,
   markConceptsIn,
   markSearchConcepts,
+  openSearchToolDetail,
+  openSearchMoreTools,
 };

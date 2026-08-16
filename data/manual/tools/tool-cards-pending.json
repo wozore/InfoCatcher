@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "kind": "tool_cards_pending",
+  "generated_at": "2026-08-16T08:55:27.000Z",
+  "date": "20260816",
+  "count": 10,
+  "cards": [
+    {
+      "id": "gpt-5-5",
+      "name": "GPT-5.5",
+      "url": "https://openai.com",
+      "description": "OpenAI 主领域 LLM 的次世代（上一代旗舰 GPT-5 系列的最新版）。",
+      "detail_kind_hint": "api_model",
+      "source_hotspot": false,
+      "pending": true,
+      "generated_at": "2026-08-16T08:55:27.000Z",
+      "vendor_key": "chatgpt"
+    },
+    {
+      "id": "gpt-realtime-2",
+      "name": "GPT-Realtime-2",
+      "url": "https://developers.openai.com/api/docs/models/gpt-realtime-2",
+      "description": "OpenAI 实时语音对话模型（实时类最新）。",
+      "detail_kind_hint": "api_model",
+      "source_hotspot": false,
+      "pending": true,
+      "generated_at": "2026-08-16T08:55:27.000Z",
+      "vendor_key": "chatgpt"
+    },
+    {
+      "id": "gpt-image-2",
+      "name": "gpt-image-2",
+      "url": "https://openai.com/index/image-generation-api",
+      "description": "OpenAI 图像生成模型（图像类最新）。",
+      "detail_kind_hint": "api_model",
+      "source_hotspot": false,
+      "pending": true,
+      "generated_at": "2026-08-16T08:55:27.000Z",
+      "vendor_key": "chatgpt"
+    },
+    {
+      "id": "claude-opus-5",
+      "name": "Claude Opus 5",
+      "url": "https://www.anthropic.com/news",
+      "description": "Anthropic 主领域 LLM 的当前 Opus 旗舰（2026-07 发布）。",
+      "detail_kind_hint": "api_model",
+      "source_hotspot": false,
+      "pending": true,
+      "generated_at": "2026-08-16T08:55:27.000Z",
+      "vendor_key": "claude"
+    },
+    {
+      "id": "gemini-3-1-pro",
+      "name": "Gemini 3.1 Pro",
+      "url": "https://ai.google.dev/gemini-api/docs/models",
+      "description": "Google 当前可用旗舰 Pro 模型（3.5 Pro 未发布）。",
+      "detail_kind_hint": "api_model",
+      "source_hotspot": false,
+      "pending": true,
+      "generated_at": "2026-08-16T08:55:27.000Z",
+      "vendor_key": "gemini"
+    },
+    {
+      "id": "spark-x2",
+      "name": "Spark X2",
+      "url": "https://xinghuo.xfyun.cn/sparkapi",
+      "description": "讯飞星火最新深度推理模型（LLM 前沿）。",
+      "detail_kind_hint": "api_model",
+      "source_hotspot": false,
+      "pending": true,
+      "generated_at": "2026-08-16T08:55:27.000Z",
+      "vendor_key": "xinghuo"
+    },
+    {
+      "id": "grok-4-6",
+      "name": "Grok 4.6",
+      "url": "https://docs.x.ai",
+      "description": "xAI 最新旗舰（2026-08-12 发布，主领域 LLM 前沿）。",
+      "detail_kind_hint": "api_model",
+      "source_hotspot": false,
+      "pending": true,
+      "generated_at": "2026-08-16T08:55:27.000Z",
+      "vendor_key": "grok"
+    },
+    {
+      "id": "command-a-plus",
+      "name": "Command A+",
+      "url": "https://docs.cohere.com/docs/models",
+      "description": "Cohere 最新前沿模型（2026-05 发布，Apache 2.0）。",
+      "detail_kind_hint": "api_model",
+      "source_hotspot": false,
+      "pending": true,
+      "generated_at": "2026-08-16T08:55:27.000Z",
+      "vendor_key": "cohere",
+      "tool_key": "command-a-plus"
+    },
+    {
+      "id": "minimax-h3",
+      "name": "MiniMax H3",
+      "url": "https://platform.minimax.io/docs/release-notes/models",
+      "description": "MiniMax 视频主领域前沿（海螺3.0，全模态视频模型）。",
+      "detail_kind_hint": "api_model",
+      "source_hotspot": false,
+      "pending": true,
+      "generated_at": "2026-08-16T08:55:27.000Z",
+      "vendor_key": "hailuo"
+    },
+    {
+      "id": "kling-3-0",
+      "name": "Kling 3.0",
+      "url": "https://klingai.com",
+      "description": "快手可灵视频主领域前沿（3.0 系列 All-in-one 多模态视频模型）。",
+      "detail_kind_hint": "api_model",
+      "source_hotspot": false,
+      "pending": true,
+      "generated_at": "2026-08-16T08:55:27.000Z",
+      "vendor_key": "kling"
+    }
+  ]
+}

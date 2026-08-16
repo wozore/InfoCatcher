@@ -23,14 +23,6 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:chatgpt:gpt-5.6"
-        },
-        {
-          "kind": "vendor-level2",
-          "id": "vendor-level2:chatgpt:codex"
-        },
-        {
-          "kind": "vendor-level2",
-          "id": "vendor-level2:chatgpt:openai-coding-plan"
         }
       ]
     },
@@ -253,7 +245,7 @@
       "level2_refs": [
         {
           "kind": "vendor-level2",
-          "id": "vendor-level2:hailuo:minimax-models"
+          "id": "vendor-level2:hailuo:minimax-h3"
         }
       ]
     },
@@ -286,7 +278,7 @@
       "level2_refs": [
         {
           "kind": "vendor-level2",
-          "id": "vendor-level2:grok:grok-models"
+          "id": "vendor-level2:grok:grok-4-6"
         }
       ]
     },

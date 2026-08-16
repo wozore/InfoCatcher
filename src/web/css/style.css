@@ -296,10 +296,23 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 .search-stage[data-status="complete"]::after { content: "已完成"; color: var(--good); font-size: 12px; font-weight: 600; }
 .search-stage[data-status="cancelled"] { color: var(--text-secondary); }
 .search-stage[data-status="cancelled"]::after { content: "已中止"; color: var(--warn); font-size: 12px; font-weight: 600; }
-.search-results-shell { max-width: var(--content-reading); margin: 26px auto 0; }
-.search-back-button { margin-bottom: 20px; }
+.search-results-shell { max-width: calc(100% - 48px); margin: 26px auto 0; }
+/* 根因修复：<main> 本身 max-width:1200px 会压住整个结果区，仅在搜索结果面板可见时放开限宽
+   （首页与其它视图仍保持 content-wide，不受影响）。
+   注意：:has() 是纯结构选择器，不感知祖先的 display:none —— 进入结果页后切到其它视图时，
+   面板仍无 hidden 属性（switchView 只切 .view 的 .active），旧写法会把 max-width:none
+   泄漏给所有页面。因此必须同时要求搜索视图处于 active，切走后不再匹配。 */
+main:has(#view-search.active):has(#searchResultsPanel:not([hidden])) { max-width: none; }
+/* 三栏加宽后，查询区/状态条/反馈保持窄读居中，不被拉伸铺满 */
+.search-query-panel, .search-result-state, #searchFeedbackSection { max-width: var(--content-reading); margin-left: auto; margin-right: auto; }
+/* 返回按钮：左偏移 = (容器宽 − 窄读列宽)/2，与下方查询区 margin:auto 落点一致，
+   使按钮左缘正好压在与搜索栏左缘同一线上；按钮保持内容宽，不居中、不撑满 */
+.search-back-button {
+  display: inline-block;
+  margin: 0 0 20px max(0px, calc((100% - var(--content-reading)) / 2));
+}
 /* B16 决策 8.1：结果页持久静态演示边界（轻量常驻，不随搜索状态隐藏） */
-.search-results-note { margin: 0 0 22px; padding: 11px 14px; }
+.state.search-results-note { margin: 0 auto 22px; padding: 11px 14px; max-width: var(--content-reading); }
 .search-query-panel { margin-top: 0; padding-top: 0; border-top: 0; }
 .search-query-readonly { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
 .search-query-readonly .page-title { margin-bottom: 0; overflow-wrap: anywhere; }
@@ -309,11 +322,43 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 .search-query-actions .btn { margin-bottom: 0; }
 .search-query-edit { margin-top: 14px; }
 .search-result-state { margin-top: 18px; }
-.search-result-layout { display: grid; grid-template-columns: minmax(0, 1fr) 310px; gap: 48px; align-items: start; margin-top: 34px; }
+/* 决策（搜索结果页 v2）：三栏答案引擎——左概念索引 / 中答案+工具 mini 卡 / 右最新热点。
+   结果区铺满视口宽（<main> 限宽在结果可见时放开）、侧栏封顶、主列吸收剩余宽度，
+   避免窄带居中造成“缩成一团”；隐藏一栏时用 without-* 修饰类重排列，避免留空轨道。 */
+.search-result-layout {
+  display: grid;
+  --rail-w: 340px; /* 右栏宽度：grid 占位列与 .search-hotspots-rail 宽度耦合，改这里两处同变 */
+  grid-template-columns: minmax(240px, 420px) minmax(0, 1fr) var(--rail-w);
+  grid-template-areas: "concepts main hotspots";
+  gap: 40px;
+  align-items: start;
+  margin-top: 34px;
+  /* sticky 行程保障：行高恒 ≥ 视口高-132px，两栏 max-height ≤ 视口高-162px，
+     栏恒矮于行高才能吸附（否则内容占满行、无移动空间）；vh 为 dvh 兜底 */
+  grid-template-rows: minmax(calc(100vh - 132px), auto);
+  grid-template-rows: minmax(calc(100dvh - 132px), auto);
+}
+/* 右栏热点行程补足：热点卡较高、常顶满栏上限，基础行高只给它 ~30px 吸附行程，
+   滚到吸附点之前就会离开（左栏内容矮、行程充足所以能正常吸附）。
+   热点栏可见时把行再撑高一段，让右栏在「热点标题碰顶」后能固定住；
+   卡片高度与条数不变，代价是结果区底部多出一点滚动行程空间。 */
+.search-result-layout:has(.search-hotspots-rail:not([hidden])) {
+  grid-template-rows: minmax(calc(100vh + 330px), auto);
+  grid-template-rows: minmax(calc(100dvh + 330px), auto);
+}
+.search-concepts-rail { grid-area: concepts; min-width: 0; position: sticky; top: 92px; max-height: calc(100vh - 162px); max-height: calc(100dvh - 162px); overflow: auto; }
+.search-main { grid-area: main; min-width: 0; }
+/* 决策（搜索结果页 v2）：右栏热点与左侧概念索引一致——sticky 吸附，自然位置起步，
+   滚到「最新热点」标题碰顶时吸附在 92px，滚回顶部回到自然位置，随结果区结束 */
+.search-hotspots-rail { grid-area: hotspots; min-width: 0; position: sticky; top: 92px; max-height: calc(100vh - 400px); max-height: calc(100dvh - 400px); overflow: auto; }
+.search-hotspots-rail[hidden] { display: none; }
+.search-result-layout.without-concepts { grid-template-columns: minmax(0, 1fr) var(--rail-w); grid-template-areas: "main hotspots"; }
+.search-result-layout.without-hotspots { grid-template-columns: minmax(240px, 400px) minmax(0, 1fr); grid-template-areas: "concepts main"; }
+.search-result-layout.without-concepts.without-hotspots { grid-template-columns: minmax(0, 1fr); grid-template-areas: "main"; }
 /* B16 决策 10.2：搜索摘要标题区与复制按钮同行 */
 .search-summary-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
 .search-summary-head .section-title { margin-bottom: 0; }
-.search-summary-content { color: var(--text); font-family: var(--font-serif); font-size: 16px; line-height: 1.9; }
+.search-summary-content { color: var(--text); font-family: var(--font-serif); font-size: 18px; line-height: 1.9; max-width: 78ch; }
 .search-summary-content p { margin: 0 0 22px; scroll-margin-top: 110px; }
 .citation {
   display: inline;
@@ -327,46 +372,58 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
   vertical-align: super;
   cursor: pointer;
 }
-.search-sources-sticky { position: sticky; top: 92px; }
-.search-source-list { border-top: 1px solid var(--border); }
-.search-source-item { padding: 16px 0; border-bottom: 1px solid var(--border); scroll-margin-top: 100px; }
-.search-source-heading { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
-.search-source-number { color: var(--link); font-size: 12px; font-weight: 700; }
-.search-source-item h3 { margin: 0 0 6px; font-size: 15px; }
-.search-source-item p { margin: 0 0 10px; color: var(--text-secondary); font-size: 12px; line-height: 1.6; }
-.search-source-item dl { display: grid; gap: 4px; margin: 0 0 9px; font-size: 12px; }
-.search-source-item dl div { display: grid; grid-template-columns: 66px minmax(0, 1fr); gap: 7px; }
-.search-source-item dt { color: var(--text-hint); }
-.search-source-item dd { margin: 0; overflow-wrap: anywhere; }
-/* B16 决策 8.6：来源说明内联展开 */
-.search-source-expand { margin-top: 2px; }
-.search-source-detail { margin-top: 8px; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); }
-.search-source-detail[hidden] { display: none; }
-.search-source-detail dl { display: grid; gap: 6px; margin: 0; font-size: 12px; }
-.search-source-detail dl div { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 8px; }
-.search-source-detail dt { color: var(--text-hint); }
-.search-source-detail dd { margin: 0; overflow-wrap: anywhere; color: var(--text-secondary); }
-/* B16 决策 8.2/8.4：查看全部来源折叠 */
-.search-more-sources { border-top: 1px solid var(--border); }
-.search-more-sources[hidden] { display: none; }
-.search-sources-toggle { margin-top: 10px; }
-/* B16 决策 8.3：移动端“查看关键来源 / 返回摘要”锚点（默认隐藏，窄屏显示） */
-.search-mobile-anchors { display: none; }
 .reference-highlight { animation: search-reference-highlight 1.4s ease; outline: 2px solid var(--link); outline-offset: 5px; }
 @keyframes search-reference-highlight {
   0%, 65% { background: var(--primary-light); }
   100% { background: transparent; }
 }
-.search-matches { margin-top: 44px; }
-.search-match-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
-.search-match-group { min-width: 0; border-top: 1px solid var(--border); }
-.search-match-group h3 { margin: 0; padding: 12px 0; font-family: var(--font-serif); font-size: 17px; }
-.search-match-item { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; padding: 13px 0; border-top: 1px solid var(--border-soft); }
-.search-match-item h4 { margin: 0 0 4px; font-size: 14px; }
-.search-match-item p { display: -webkit-box; margin: 0; overflow: hidden; color: var(--text-secondary); font-size: 12px; line-height: 1.55; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
-.search-match-item .btn { flex-shrink: 0; }
-.search-match-empty { margin: 0; padding: 13px 0; color: var(--text-hint); font-size: 12px; }
-.search-match-expand { padding-top: 10px; border-top: 1px solid var(--border-soft); }
+
+/* 相关工具 mini 卡行：复用工具卡数据子集（icon/名/概要） */
+.search-tool-mini-list { display: flex; flex-wrap: wrap; gap: 14px; align-items: stretch; }
+.search-tool-mini {
+  display: flex; align-items: flex-start; gap: 12px; min-width: 0; flex: 1 1 280px; max-width: 420px;
+  padding: 16px 18px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface); cursor: pointer; scroll-margin-top: 100px;
+}
+.search-tool-mini:hover { border-color: var(--primary); box-shadow: var(--shadow); }
+.search-tool-mini:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.search-tool-mini-icon { font-size: 28px; line-height: 1.2; flex: none; }
+.search-tool-mini-body { min-width: 0; }
+.search-tool-mini-body h3 { margin: 0 0 6px; font-size: 16px; }
+.search-tool-mini-body p { display: -webkit-box; margin: 0; overflow: hidden; color: var(--text-secondary); font-size: 13px; line-height: 1.6; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.search-tool-mini-link { flex: none; color: var(--link); display: inline-flex; }
+.search-tool-mini-link .icon { width: 16px; height: 16px; }
+.search-more-tools { flex: none; align-self: center; }
+
+/* 概念左栏索引：术语名 + 摘要（摘要取自 glossary.json 的 summary 字段，最多 2 行截断） */
+.search-concepts-list { display: grid; gap: 2px; }
+.search-concept-rail-item {
+  display: block; width: 100%; text-align: left; padding: 10px 12px;
+  border: 0; border-bottom: 1px solid var(--border-soft);
+  background: transparent; color: var(--link); cursor: pointer; font: inherit;
+}
+.search-concept-rail-item:hover,
+.search-concept-rail-item:focus-visible { background: var(--primary-light); }
+.search-concept-rail-term { display: block; font-size: 16px; font-weight: 650; }
+.search-concept-rail-summary {
+  margin-top: 3px; color: var(--text-secondary); font-size: 14px; line-height: 1.55;
+  display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.search-concept-empty { margin: 0; padding: 10px 12px; color: var(--text-hint); font-size: 13px; line-height: 1.6; }
+
+/* 最新热点右栏 */
+.search-hotspots-list { display: grid; gap: 12px; }
+.search-hotspot-item {
+  padding: 14px 16px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface); cursor: pointer; scroll-margin-top: 100px;
+}
+.search-hotspot-item:hover { border-color: var(--primary); }
+.search-hotspot-item:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.search-hotspot-title { margin: 0 0 8px; font-size: 15px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.search-hotspot-score { display: inline-block; margin-bottom: 8px; padding: 2px 8px; border-radius: 999px; background: var(--warning-wash); color: var(--warning); font-size: 12px; font-weight: 650; }
+.search-hotspot-summary { margin: 0 0 10px; color: var(--text-secondary); font-size: 13px; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.search-hotspot-time { color: var(--text-hint); font-size: 12px; }
+
 .search-feedback { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px 24px; align-items: center; }
 .search-feedback .section-title { margin-bottom: 4px; }
 .search-feedback-actions { display: flex; gap: 8px; }
@@ -1680,15 +1737,61 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
   .mobile-nav button.active { font-weight: 650; }
 }
 
+/* 中宽（769–1500px）：三栏横向会挤爆，改为概念索引横跨顶部一行、主列+热点两栏 */
+@media (max-width: 1500px) {
+  .search-result-layout {
+    --rail-w: 300px;
+    grid-template-columns: minmax(0, 1fr) var(--rail-w);
+    grid-template-areas: "concepts concepts" "main hotspots";
+    gap: 16px 24px;
+    /* 两行：概念行 auto，主列+热点行恒 ≥ 视口高-132px，保证右栏热点有吸附行程 */
+    grid-template-rows: auto minmax(calc(100vh - 132px), auto);
+    grid-template-rows: auto minmax(calc(100dvh - 132px), auto);
+  }
+  /* 中宽右栏行程补足：同桌面，热点栏可见时撑高第二行，让右栏能固定住 */
+  .search-result-layout:has(.search-hotspots-rail:not([hidden])) {
+    grid-template-rows: auto minmax(calc(100vh + 160px), auto);
+    grid-template-rows: auto minmax(calc(100dvh + 160px), auto);
+  }
+  .search-result-layout.without-concepts {
+    grid-template-columns: minmax(0, 1fr) var(--rail-w);
+    grid-template-areas: "main hotspots";
+  }
+  .search-result-layout.without-hotspots {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "concepts" "main";
+  }
+  .search-result-layout.without-concepts.without-hotspots {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "main";
+  }
+  .search-concepts-rail { grid-area: concepts; position: static; max-height: none; }
+  /* 概念横跨顶部一行时用自适应网格承载术语+摘要卡片（原 flex 胶囊仅适合纯术语） */
+  .search-concepts-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+  .search-concept-rail-item { border-bottom: 0; }
+}
+
 @media (max-width: 768px) {
-  .search-mobile-anchors { display: block; margin-top: 14px; text-align: left; }
+  /* 决策（搜索结果页 v2）：单列堆叠，答案优先，其次概念索引、最新热点 */
+  .search-result-layout,
+  .search-result-layout.without-concepts,
+  .search-result-layout.without-hotspots,
+  .search-result-layout.without-concepts.without-hotspots {
+    grid-template-columns: 1fr;
+    grid-template-areas: "main";
+    gap: 24px;
+    min-height: 0; /* 单列堆叠不再需要 sticky 行程，取消桌面/中宽 min-height 下限 */
+    grid-template-rows: auto; /* 重置桌面/中宽的显式行高 */
+  }
+  .search-main { order: 1; }
+  .search-concepts-rail { order: 2; }
+  .search-hotspots-rail { order: 3; }
+  .search-concepts-rail,
+  .search-hotspots-rail { position: static; max-height: none; }
   .tools-filter-toggle { display: inline-flex; }
   .tools-filters { display: none; }
   .tools-filters.open { display: grid; }
   .tools-filter-actions { display: flex; }
-  .search-result-layout { grid-template-columns: 1fr; gap: 28px; }
-  .search-sources-sticky { position: static; }
-  .search-match-groups { grid-template-columns: 1fr; }
   .search-feedback { grid-template-columns: 1fr; }
   .search-feedback .status-line { grid-column: 1; }
   .list-item { gap: 12px; }
@@ -1775,10 +1878,7 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
   .search-query-edit .btn { width: 100%; }
   .search-summary-head { display: block; }
   .search-summary-head .btn { margin-top: 8px; }
-  .search-result-layout { grid-template-columns: 1fr; gap: 28px; }
-  .search-sources-sticky { position: static; }
-  .search-match-item { display: block; }
-  .search-match-item .btn { width: 100%; margin-top: 10px; }
+  .search-result-layout { grid-template-columns: 1fr; gap: 24px; }
   .search-feedback-actions { display: grid; grid-template-columns: 1fr 1fr; }
   .concept-popover { inset: auto 10px 10px !important; width: auto !important; max-height: min(72dvh, 520px); }
   main { padding: 18px 18px 44px; }

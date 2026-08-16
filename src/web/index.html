@@ -50,7 +50,7 @@
 }
 </script>
 
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=4">
 <link rel="alternate" type="application/rss+xml" title="InfoCatcher AI 热点 RSS" href="https://wozore.github.io/InfoCatcher/feed.xml">
 </head>
 <body>
@@ -228,45 +228,38 @@
 
       <div class="state info search-result-state" id="searchResultState" role="status" hidden></div>
       <section class="search-result-layout" id="searchResultContent" aria-label="静态搜索整理结果" hidden>
-        <article class="search-summary" aria-labelledby="searchSummaryTitle">
-          <div class="search-summary-head">
-            <div>
-              <span class="eyebrow">搜索摘要 · 静态资料摘录</span>
-              <h2 class="section-title" id="searchSummaryTitle">已收录资料中的相关信息</h2>
-            </div>
-            <button class="btn btn-small" id="searchCopySummary" type="button">复制摘要</button>
-          </div>
-          <div class="search-summary-content" id="searchSummaryContent"></div>
-        </article>
-        <aside class="search-sources" aria-labelledby="searchSourcesTitle">
-          <div class="search-sources-sticky">
-            <span class="eyebrow">关键来源</span>
-            <h2 class="section-title" id="searchSourcesTitle">本页引用的静态资料</h2>
-            <div class="search-source-list" id="searchSourceList"></div>
-          </div>
+        <aside class="search-concepts-rail" id="searchConceptsRail" aria-labelledby="searchConceptsTitle" hidden>
+          <span class="eyebrow">本页概念</span>
+          <h2 class="section-title" id="searchConceptsTitle">相关概念索引</h2>
+          <div class="search-concepts-list" id="searchConceptsList"></div>
         </aside>
-      </section>
-
-      <section class="search-matches section-rule" id="searchMatchesSection" aria-labelledby="searchMatchesTitle" hidden>
-        <div class="search-section-heading">
-          <div>
-            <span class="eyebrow">继续探索</span>
-            <h2 class="section-title" id="searchMatchesTitle">按资料类型查看匹配项</h2>
-          </div>
-          <span class="faint">各类型独立展示，不代表统一排名</span>
+        <div class="search-main">
+          <article class="search-summary" aria-labelledby="searchSummaryTitle">
+            <div class="search-summary-head">
+              <div>
+                <span class="eyebrow">搜索摘要 · 静态资料摘录</span>
+                <h2 class="section-title" id="searchSummaryTitle">已收录资料中的相关信息</h2>
+              </div>
+              <button class="btn btn-small" id="searchCopySummary" type="button">复制摘要</button>
+            </div>
+            <div class="search-summary-content" id="searchSummaryContent"></div>
+          </article>
+          <section class="search-tool-minis section-rule" aria-labelledby="searchToolMinisTitle">
+            <div class="search-section-heading">
+              <div>
+                <span class="eyebrow">相关工具</span>
+                <h2 class="section-title" id="searchToolMinisTitle">直接匹配的工具</h2>
+              </div>
+              <span class="faint">点击卡片查看详情 · ↗ 打开官网</span>
+            </div>
+            <div class="search-tool-mini-list" id="searchToolMiniList"></div>
+          </section>
         </div>
-        <div class="search-match-groups" id="searchMatchGroups"></div>
-      </section>
-
-      <section class="search-continue section-rule" id="searchContinueSection" aria-labelledby="searchContinueTitle" hidden>
-        <div class="search-section-heading">
-          <div>
-            <span class="eyebrow">继续探索</span>
-            <h2 class="section-title" id="searchContinueTitle">示例历史</h2>
-          </div>
-          <span class="faint">当前页面示例 · 不会持久保存</span>
-        </div>
-        <div class="list search-recent-list" id="searchContinueList"></div>
+        <aside class="search-hotspots-rail" id="searchHotspotsRail" aria-labelledby="searchHotspotsTitle" hidden>
+          <span class="eyebrow">最新热点</span>
+          <h2 class="section-title" id="searchHotspotsTitle">热点快讯</h2>
+          <div class="search-hotspots-list" id="searchHotspotsList"></div>
+        </aside>
       </section>
 
       <section class="search-feedback section-rule" id="searchFeedbackSection" aria-labelledby="searchFeedbackTitle" hidden>

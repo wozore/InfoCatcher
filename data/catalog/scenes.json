@@ -23,18 +23,17 @@
                         {
                               "task": "论文初稿与结构梳理",
                               "tools": [
-                                    "claude",
-                                    "chatgpt",
-                                    "kimi"
+                                    "claude-sonnet-5",
+                                    "gpt-5.6-terra"
                               ],
                               "recommendations": [
                                     {
-                                          "tool_id": "claude",
+                                          "tool_id": "claude-sonnet-5",
                                           "detail_ref": "tool-level3:claude-sonnet-5",
                                           "reason": "通用写作、研究与整理任务优先展示能力与成本平衡的 Sonnet 5。"
                                     },
                                     {
-                                          "tool_id": "chatgpt",
+                                          "tool_id": "gpt-5.6-terra",
                                           "detail_ref": "tool-level3:gpt-5.6-terra",
                                           "reason": "通用工作优先展示智能与成本平衡的 GPT-5.6 Terra。"
                                     }
@@ -43,18 +42,17 @@
                         {
                               "task": "语言润色与翻译",
                               "tools": [
-                                    "gemini",
-                                    "deepseek",
-                                    "tongyi"
+                                    "gemini-3.5-flash",
+                                    "deepseek-v4-flash"
                               ],
                               "recommendations": [
                                     {
-                                          "tool_id": "gemini",
+                                          "tool_id": "gemini-3.5-flash",
                                           "detail_ref": "tool-level3:gemini-3.5-flash",
                                           "reason": "翻译、搜索与通用任务优先展示速度和 grounding 兼顾的 Gemini 3.5 Flash。"
                                     },
                                     {
-                                          "tool_id": "deepseek",
+                                          "tool_id": "deepseek-v4-flash",
                                           "detail_ref": "tool-level3:deepseek-v4-flash",
                                           "reason": "翻译与通用高频任务优先展示低成本 V4 Flash。"
                                     }
@@ -83,13 +81,11 @@
                         {
                               "task": "周报与工作总结",
                               "tools": [
-                                    "chatgpt",
-                                    "tongyi",
-                                    "doubao"
+                                    "gpt-5.6-terra"
                               ],
                               "recommendations": [
                                     {
-                                          "tool_id": "chatgpt",
+                                          "tool_id": "gpt-5.6-terra",
                                           "detail_ref": "tool-level3:gpt-5.6-terra",
                                           "reason": "通用工作优先展示智能与成本平衡的 GPT-5.6 Terra。"
                                     }
@@ -98,12 +94,11 @@
                         {
                               "task": "会议纪要与知识整理",
                               "tools": [
-                                    "kimi",
-                                    "claude"
+                                    "claude-fable-5"
                               ],
                               "recommendations": [
                                     {
-                                          "tool_id": "claude",
+                                          "tool_id": "claude-fable-5",
                                           "detail_ref": "tool-level3:claude-fable-5",
                                           "reason": "长时间复杂知识任务优先展示 Fable 5。"
                                     }
@@ -112,12 +107,11 @@
                         {
                               "task": "数据报告与结论提炼",
                               "tools": [
-                                    "gemini",
-                                    "grok"
+                                    "gemini-2.5-pro"
                               ],
                               "recommendations": [
                                     {
-                                          "tool_id": "gemini",
+                                          "tool_id": "gemini-2.5-pro",
                                           "detail_ref": "tool-level3:gemini-2.5-pro",
                                           "reason": "复杂推理与数据任务优先展示 Gemini 2.5 Pro。"
                                     }
@@ -169,11 +163,11 @@
                               "tools": [
                                     "claude-code",
                                     "copilot",
-                                    "deepseek"
+                                    "deepseek-v4-pro"
                               ],
                               "recommendations": [
                                     {
-                                          "tool_id": "deepseek",
+                                          "tool_id": "deepseek-v4-pro",
                                           "detail_ref": "tool-level3:deepseek-v4-pro",
                                           "reason": "编码、数学和逻辑任务优先展示 V4 Pro。"
                                     }
@@ -201,18 +195,17 @@
                         {
                               "task": "通用文档翻译",
                               "tools": [
-                                    "gemini",
-                                    "chatgpt",
-                                    "tongyi"
+                                    "gemini-3.5-flash",
+                                    "gpt-5.6-terra"
                               ],
                               "recommendations": [
                                     {
-                                          "tool_id": "gemini",
+                                          "tool_id": "gemini-3.5-flash",
                                           "detail_ref": "tool-level3:gemini-3.5-flash",
                                           "reason": "翻译、搜索与通用任务优先展示速度和 grounding 兼顾的 Gemini 3.5 Flash。"
                                     },
                                     {
-                                          "tool_id": "chatgpt",
+                                          "tool_id": "gpt-5.6-terra",
                                           "detail_ref": "tool-level3:gpt-5.6-terra",
                                           "reason": "通用工作优先展示智能与成本平衡的 GPT-5.6 Terra。"
                                     }
@@ -221,12 +214,11 @@
                         {
                               "task": "长文档与上下文翻译",
                               "tools": [
-                                    "claude",
-                                    "kimi"
+                                    "claude-fable-5"
                               ],
                               "recommendations": [
                                     {
-                                          "tool_id": "claude",
+                                          "tool_id": "claude-fable-5",
                                           "detail_ref": "tool-level3:claude-fable-5",
                                           "reason": "长时间复杂知识任务优先展示 Fable 5。"
                                     }
@@ -235,18 +227,17 @@
                         {
                               "task": "学术与技术表达润色",
                               "tools": [
-                                    "deepseek",
-                                    "claude",
-                                    "wenxin"
+                                    "deepseek-v4-flash",
+                                    "claude-sonnet-5"
                               ],
                               "recommendations": [
                                     {
-                                          "tool_id": "deepseek",
+                                          "tool_id": "deepseek-v4-flash",
                                           "detail_ref": "tool-level3:deepseek-v4-flash",
                                           "reason": "翻译与通用高频任务优先展示低成本 V4 Flash。"
                                     },
                                     {
-                                          "tool_id": "claude",
+                                          "tool_id": "claude-sonnet-5",
                                           "detail_ref": "tool-level3:claude-sonnet-5",
                                           "reason": "通用写作、研究与整理任务优先展示能力与成本平衡的 Sonnet 5。"
                                     }
@@ -273,20 +264,13 @@
                   ],
                   "tasks": [
                         {
-                              "task": "资料检索与来源追踪",
-                              "tools": [
-                                    "tiangong"
-                              ]
-                        },
-                        {
                               "task": "长文档阅读与知识整理",
                               "tools": [
-                                    "kimi",
-                                    "claude"
+                                    "claude-fable-5"
                               ],
                               "recommendations": [
                                     {
-                                          "tool_id": "claude",
+                                          "tool_id": "claude-fable-5",
                                           "detail_ref": "tool-level3:claude-fable-5",
                                           "reason": "长时间复杂知识任务优先展示 Fable 5。"
                                     }
@@ -295,26 +279,20 @@
                         {
                               "task": "数据分析与图表解读",
                               "tools": [
-                                    "chatgpt",
-                                    "gemini"
+                                    "gpt-5.6-sol",
+                                    "gemini-2.5-pro"
                               ],
                               "recommendations": [
                                     {
-                                          "tool_id": "chatgpt",
+                                          "tool_id": "gpt-5.6-sol",
                                           "detail_ref": "tool-level3:gpt-5.6-sol",
                                           "reason": "复杂专业任务优先展示旗舰变体 GPT-5.6 Sol。"
                                     },
                                     {
-                                          "tool_id": "gemini",
+                                          "tool_id": "gemini-2.5-pro",
                                           "detail_ref": "tool-level3:gemini-2.5-pro",
                                           "reason": "复杂推理与数据任务优先展示 Gemini 2.5 Pro。"
                                     }
-                              ]
-                        },
-                        {
-                              "task": "事实核查与多源对照",
-                              "tools": [
-                                    "grok"
                               ]
                         }
                   ]
@@ -357,8 +335,7 @@
                               "task": "中文创意与快速出图",
                               "tools": [
                                     "jimeng",
-                                    "nano-banana",
-                                    "hunyuan"
+                                    "nano-banana"
                               ]
                         }
                   ]
@@ -384,21 +361,20 @@
                         {
                               "task": "文生视频与创意短片",
                               "tools": [
-                                    "kling",
-                                    "hailuo",
+                                    "kling-2-6-pro",
                                     "jimeng"
                               ]
                         },
                         {
                               "task": "特效与专业后期",
                               "tools": [
-                                    "kling"
+                                    "kling-2-6-pro"
                               ]
                         },
                         {
                               "task": "数字人口播与营销视频",
                               "tools": [
-                                    "kling"
+                                    "kling-2-6-pro"
                               ]
                         }
                   ]
@@ -424,18 +400,17 @@
                         {
                               "task": "创意发散与选题",
                               "tools": [
-                                    "chatgpt",
-                                    "claude",
-                                    "doubao"
+                                    "gpt-5.6-terra",
+                                    "claude-sonnet-5"
                               ],
                               "recommendations": [
                                     {
-                                          "tool_id": "chatgpt",
+                                          "tool_id": "gpt-5.6-terra",
                                           "detail_ref": "tool-level3:gpt-5.6-terra",
                                           "reason": "通用工作优先展示智能与成本平衡的 GPT-5.6 Terra。"
                                     },
                                     {
-                                          "tool_id": "claude",
+                                          "tool_id": "claude-sonnet-5",
                                           "detail_ref": "tool-level3:claude-sonnet-5",
                                           "reason": "通用写作、研究与整理任务优先展示能力与成本平衡的 Sonnet 5。"
                                     }
@@ -444,23 +419,14 @@
                         {
                               "task": "多角度观点讨论",
                               "tools": [
-                                    "grok",
-                                    "gemini"
+                                    "gemini-3.5-flash"
                               ],
                               "recommendations": [
                                     {
-                                          "tool_id": "gemini",
+                                          "tool_id": "gemini-3.5-flash",
                                           "detail_ref": "tool-level3:gemini-3.5-flash",
                                           "reason": "翻译、搜索与通用任务优先展示速度和 grounding 兼顾的 Gemini 3.5 Flash。"
                                     }
-                              ]
-                        },
-                        {
-                              "task": "创意写作与内容策划",
-                              "tools": [
-                                    "doubao",
-                                    "hailuo",
-                                    "wenxin"
                               ]
                         }
                   ]
@@ -486,18 +452,17 @@
                         {
                               "task": "大纲与讲稿整理",
                               "tools": [
-                                    "chatgpt",
-                                    "claude",
-                                    "tongyi"
+                                    "gpt-5.6-terra",
+                                    "claude-sonnet-5"
                               ],
                               "recommendations": [
                                     {
-                                          "tool_id": "chatgpt",
+                                          "tool_id": "gpt-5.6-terra",
                                           "detail_ref": "tool-level3:gpt-5.6-terra",
                                           "reason": "通用工作优先展示智能与成本平衡的 GPT-5.6 Terra。"
                                     },
                                     {
-                                          "tool_id": "claude",
+                                          "tool_id": "claude-sonnet-5",
                                           "detail_ref": "tool-level3:claude-sonnet-5",
                                           "reason": "通用写作、研究与整理任务优先展示能力与成本平衡的 Sonnet 5。"
                                     }
@@ -535,33 +500,25 @@
                         {
                               "task": "知识答疑与概念讲解",
                               "tools": [
-                                    "chatgpt",
-                                    "tongyi",
-                                    "wenxin"
+                                    "gpt-5.6-luna"
                               ],
                               "recommendations": [
                                     {
-                                          "tool_id": "chatgpt",
+                                          "tool_id": "gpt-5.6-luna",
                                           "detail_ref": "tool-level3:gpt-5.6-luna",
                                           "reason": "学习和常规任务优先展示成本优化变体 GPT-5.6 Luna。"
                                     }
                               ]
                         },
                         {
-                              "task": "课程资料与笔记整理",
-                              "tools": [
-                                    "kimi"
-                              ]
-                        },
-                        {
                               "task": "编程与实践学习",
                               "tools": [
                                     "copilot",
-                                    "deepseek"
+                                    "deepseek-v4-flash"
                               ],
                               "recommendations": [
                                     {
-                                          "tool_id": "deepseek",
+                                          "tool_id": "deepseek-v4-flash",
                                           "detail_ref": "tool-level3:deepseek-v4-flash",
                                           "reason": "翻译与通用高频任务优先展示低成本 V4 Flash。"
                                     }
@@ -570,23 +527,23 @@
                         {
                               "task": "数学与逻辑解题",
                               "tools": [
-                                    "deepseek",
-                                    "gemini",
-                                    "chatgpt"
+                                    "deepseek-v4-pro",
+                                    "gemini-2.5-pro",
+                                    "gpt-5.6-terra"
                               ],
                               "recommendations": [
                                     {
-                                          "tool_id": "deepseek",
+                                          "tool_id": "deepseek-v4-pro",
                                           "detail_ref": "tool-level3:deepseek-v4-pro",
                                           "reason": "编码、数学和逻辑任务优先展示 V4 Pro。"
                                     },
                                     {
-                                          "tool_id": "gemini",
+                                          "tool_id": "gemini-2.5-pro",
                                           "detail_ref": "tool-level3:gemini-2.5-pro",
                                           "reason": "复杂推理与数据任务优先展示 Gemini 2.5 Pro。"
                                     },
                                     {
-                                          "tool_id": "chatgpt",
+                                          "tool_id": "gpt-5.6-terra",
                                           "detail_ref": "tool-level3:gpt-5.6-terra",
                                           "reason": "通用工作优先展示智能与成本平衡的 GPT-5.6 Terra。"
                                     }
@@ -648,20 +605,7 @@
                         "音色",
                         "朗读"
                   ],
-                  "tasks": [
-                        {
-                              "task": "视频旁白与专业配音",
-                              "tools": [
-                                    "xinghuo"
-                              ]
-                        },
-                        {
-                              "task": "有声书与长文本朗读",
-                              "tools": [
-                                    "xinghuo"
-                              ]
-                        }
-                  ]
+                  "tasks": []
             }
       ]
 }

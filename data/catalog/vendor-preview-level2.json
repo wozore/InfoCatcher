@@ -28,32 +28,6 @@
       ]
     },
     {
-      "id": "vendor-level2:chatgpt:codex",
-      "level1_ref": {
-        "kind": "vendor-level1",
-        "id": "vendor-level1:chatgpt"
-      },
-      "vendor_key": "chatgpt",
-      "title": "Codex",
-      "official_url": "https://help.openai.com/en/articles/20001354-gpt-56-in-chatgpt",
-      "summary": "OpenAI 的编码体验。已确认可使用 GPT-5.6，但不同产品和计划的可用模型不同；暂不展示未经核实的可比较子项。",
-      "status": "partial",
-      "detail_refs": []
-    },
-    {
-      "id": "vendor-level2:chatgpt:openai-coding-plan",
-      "level1_ref": {
-        "kind": "vendor-level1",
-        "id": "vendor-level1:chatgpt"
-      },
-      "vendor_key": "chatgpt",
-      "title": "套餐（Coding Plan）",
-      "official_url": "https://help.openai.com/en/articles/20001354-gpt-56-in-chatgpt",
-      "summary": "统一的导航分组名称，并非已核实的 OpenAI 正式套餐名。具体套餐、权益和 Codex 关系仍待按官方页面逐项核验。",
-      "status": "unknown",
-      "detail_refs": []
-    },
-    {
       "id": "vendor-level2:claude:claude-models",
       "level1_ref": {
         "kind": "vendor-level1",
@@ -198,14 +172,6 @@
         {
           "kind": "tool-level3",
           "id": "tool-level3:glm-5.1"
-        },
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:glm-5"
-        },
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:glm-4.7"
         }
       ]
     },
@@ -228,10 +194,6 @@
         {
           "kind": "tool-level3",
           "id": "tool-level3:ernie-5.0"
-        },
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:ernie-4.5-turbo"
         }
       ]
     },
@@ -262,50 +224,6 @@
       ]
     },
     {
-      "id": "vendor-level2:hailuo:minimax-models",
-      "level1_ref": {
-        "kind": "vendor-level1",
-        "id": "vendor-level1:hailuo"
-      },
-      "vendor_key": "hailuo",
-      "title": "MiniMax 模型",
-      "official_url": "https://minimax.io/pricing",
-      "summary": "当前已核实的 MiniMax API 模型。",
-      "status": "active",
-      "detail_refs": [
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:minimax-text-01"
-        },
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:minimax-vl-01"
-        }
-      ]
-    },
-    {
-      "id": "vendor-level2:grok:grok-models",
-      "level1_ref": {
-        "kind": "vendor-level1",
-        "id": "vendor-level1:grok"
-      },
-      "vendor_key": "grok",
-      "title": "Grok 模型",
-      "official_url": "https://x.ai/api/pricing",
-      "summary": "当前已核实的 Grok API 模型。",
-      "status": "active",
-      "detail_refs": [
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:grok-4.3"
-        },
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:grok-4.1-fast"
-        }
-      ]
-    },
-    {
       "id": "vendor-level2:mistral:mistral-models",
       "level1_ref": {
         "kind": "vendor-level1",
@@ -324,18 +242,6 @@
         {
           "kind": "tool-level3",
           "id": "tool-level3:mistral-large-3"
-        },
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:mistral-small-4"
-        },
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:devstral-2"
-        },
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:codestral"
         }
       ]
     },
@@ -354,18 +260,6 @@
         {
           "kind": "tool-level3",
           "id": "tool-level3:command-a"
-        },
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:command-r-plus"
-        },
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:command-r"
-        },
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:command-r7b"
         }
       ]
     },
@@ -384,6 +278,172 @@
         {
           "kind": "tool-level3",
           "id": "tool-level3:kling-2-6-pro"
+        },
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:kling-3-0"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:chatgpt:gpt-5-5",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:chatgpt"
+      },
+      "vendor_key": "chatgpt",
+      "title": "GPT-5.5",
+      "official_url": "https://developers.openai.com/api/docs/changelog",
+      "summary": "OpenAI 官方发布的模型 API 更新日志与产品发布信息，涵盖 GPT-5.5 系列及 API 功能更新。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:gpt-5-5"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:claude:claude-opus-5",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:claude"
+      },
+      "vendor_key": "claude",
+      "title": "Claude Opus 5",
+      "official_url": "https://www.anthropic.com/claude/opus",
+      "summary": "Claude Opus 5是Anthropic推出的最新Opus系列模型，在编码和知识工作方面表现优异，定价为每百万输入令牌5美元、每百万输出令牌25美元。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:claude-opus-5"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:gemini:gemini-3-1-pro",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:gemini"
+      },
+      "vendor_key": "gemini",
+      "title": "Gemini 3.1 Pro",
+      "official_url": "https://ai.google.dev/gemini-api/docs",
+      "summary": "Gemini API 是 Google AI 提供的开发者接口，提供 Gemini 系列模型的访问，涵盖文本、图像、音频、视频等多种模态能力。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:gemini-3-1-pro"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:grok:grok-4-6",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:grok"
+      },
+      "vendor_key": "grok",
+      "title": "Grok 4.6",
+      "official_url": "https://docs.x.ai/",
+      "summary": "xAI 官方文档中心，涵盖 Grok 系列模型、API 工具与开发者资源。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:grok-4-6"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:hailuo:minimax-h3",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:hailuo"
+      },
+      "vendor_key": "hailuo",
+      "title": "MiniMax H3",
+      "official_url": "https://platform.minimax.io/docs/guides/models-intro",
+      "summary": "MiniMax官方文档提供了多种AI模型，涵盖语言、视频、音频、图像和音乐等模态。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:minimax-h3"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:cohere:command-a",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:cohere"
+      },
+      "vendor_key": "cohere",
+      "title": "Command A+",
+      "official_url": "https://docs.cohere.com/docs/command-a-plus",
+      "summary": "Command A+ 是 Cohere 发布的 Command 系列最新模型，支持多模态输入、推理、翻译及智能体任务，采用混合专家架构，拥有 25B 活跃参数和 218B 总参数。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:command-a-plus"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:chatgpt:gpt-realtime-2",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:chatgpt"
+      },
+      "vendor_key": "chatgpt",
+      "title": "GPT-Realtime-2",
+      "official_url": "https://developers.openai.com/api/docs/models/gpt-realtime-2",
+      "summary": "OpenAI Realtime API 的模型系列，包括 GPT-Realtime-2 和 GPT-Realtime-2.1 等实时语音模型，支持语音到语音交互。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:gpt-realtime-2"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:chatgpt:gpt-image-2",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:chatgpt"
+      },
+      "vendor_key": "chatgpt",
+      "title": "gpt-image-2",
+      "official_url": "https://developers.openai.com/api/docs/changelog",
+      "summary": "OpenAI 官方 API 的变更日志，记录了图像生成模型 gpt-image-2 等新功能的发布。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:gpt-image-2"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:xinghuo:spark-x2",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:xinghuo"
+      },
+      "vendor_key": "xinghuo",
+      "title": "Spark X2",
+      "official_url": "https://xinghuo.xfyun.cn/",
+      "summary": "科大讯飞推出的星火大模型系列，提供文本生成、语音识别、语音合成等多种AI能力，面向开发者和企业提供API服务。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:spark-x2"
         }
       ]
     }

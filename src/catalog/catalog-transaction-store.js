@@ -66,8 +66,12 @@ function replaceDirectory(sourceDir, targetDir) {
   try {
     fs.renameSync(targetDir, old);
   } catch (error) {
+    // Windows：目标目录被占用（IDE/杀软监视持有目录句柄）时 rename 整目录会 EPERM，
+    // 但删除文件/重建可行（build-dist 同法）。回退删除重建；事务有 backup_dist 兜底回滚。
+    removeIfExists(targetDir);
+    fs.cpSync(temp, targetDir, { recursive: true });
     removeIfExists(temp);
-    throw error;
+    return;
   }
   try {
     fs.renameSync(temp, targetDir);

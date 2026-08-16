@@ -1,16 +1,24 @@
 'use strict';
 
 const { canonicalizeUrl } = require('../../shared/tavily-client');
+const { isVagueName } = require('./tool-feedback');
 
 /**
  * 将热点待补工具候选转换为 catalog-generator 的 Seed（schema v3）。
  *
  * 批量生成链路（②→③）用：待补卡 →（厂商/官方源解析）→ 本函数 → seed → 生成器。
  *
+ * detail_kind 由候选的 detail_kind_hint 决定：
+ *   - 'api_model' → 具体模型（Qwen3.8-Max、Kling 2.6 Pro）
+ *   - 缺省/'tool' → 具体工具（Cursor、Suno）
+ * 笼统名（可灵、通义千问 等模型家族/平台名）由 isVagueName 拒绝（PENDING_CANDIDATE_VAGUE），
+ * 保证批量生成绝不会把笼统名卡写进工具栏。
+ *
  * @param {object} candidate 待补工具候选
  *   - name/title    必填：工具名
  *   - vendor_name/vendor_label/vendor_key/tool_key  厂商信息（可选，解析可提供）
  *   - url/official_url                             官方 URL（可选，解析可提供）
+ *   - detail_kind_hint                             'api_model' | 'tool'（可选；feedback 层按实体类型填）
  *   - description/source_hotspot/source_url        展示与来源字段
  * @param {object} [resolution] 厂商/官方源解析结果（可省略）
  *   - { vendor_name, official_url }
@@ -20,6 +28,8 @@ function pendingCandidateToSeed(candidate, resolution = {}) {
   if (!candidate || typeof candidate !== 'object') throw new Error('PENDING_CANDIDATE_INVALID');
   const name = String(candidate.name || candidate.title || '').trim();
   if (!name) throw new Error('PENDING_CANDIDATE_NAME_REQUIRED');
+  // 笼统名防御：即使上游漏网，也拒绝转 seed（工具栏不出现笼统名卡）
+  if (isVagueName(name)) throw new Error('PENDING_CANDIDATE_VAGUE');
   const officialUrl = canonicalizeUrl(resolution.official_url || candidate.url || candidate.official_url || '') || null;
   const vendorName = String(resolution.vendor_name || candidate.vendor_name || candidate.vendor_label || '').trim() || name;
   const discoverySources = [];
@@ -27,7 +37,7 @@ function pendingCandidateToSeed(candidate, resolution = {}) {
   if (officialUrl) discoverySources.push({ url: officialUrl, kind: 'official_hint' });
   else if (candidate.source_url) discoverySources.push({ url: candidate.source_url, kind: 'hotspot' });
   return {
-    detail_kind: 'tool',
+    detail_kind: candidate.detail_kind_hint === 'api_model' ? 'api_model' : 'tool',
     name,
     vendor_name: vendorName,
     vendor_key: candidate.vendor_key || null,

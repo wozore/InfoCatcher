@@ -119,7 +119,6 @@ import {
 } from './featured.js';
 import {
   searchState,
-  searchMatchExpanded,
   searchConceptTrigger,
   searchConceptCloseTimer,
   renderSearchHome,
@@ -129,15 +128,11 @@ import {
   clearSearchHomeStates,
   cancelSearchProcessing,
   returnToSearchHome,
-  openSearchMatch,
   startSearchEditing,
   cancelSearchEditing,
   submitSearchEdit,
   clearSearchEditState,
   focusSearchSource,
-  focusSearchCitation,
-  renderSearchMatches,
-  getSearchMatches,
   markSearchConcepts,
   setSearchFeedback,
   scheduleSearchConceptOpen,
@@ -145,6 +140,8 @@ import {
   openSearchConcept,
   closeSearchConcept,
   selectSearchExample,
+  openSearchToolDetail,
+  openSearchMoreTools,
 } from './search.js';
 
 // ═══════════════════════════════════════════════════════════════
@@ -339,64 +336,53 @@ document.addEventListener('DOMContentLoaded', async () => {
       cancelSearchEditing();
     });
     document.getElementById('searchResultContent')?.addEventListener('click', event => {
+      // [n] 引用 → 平滑滚动+高亮对应工具 mini 卡
       const citation = event.target.closest('[data-search-citation]');
       if (citation) {
         focusSearchSource(citation.dataset.searchCitation, citation);
         return;
       }
-      const back = event.target.closest('[data-search-source-back]');
-      if (back) {
-        focusSearchCitation(back.dataset.searchSourceBack);
+      // mini 卡内 ↗ 外链直接放行（新标签打开），不触发 openDetail
+      if (event.target.closest('a')) return;
+      // 概念词按钮由全站概念联动（document 委托）处理，不触发所在卡片详情
+      if (event.target.closest('[data-search-concept]')) return;
+      // 工具 mini 卡 → 弹详情（留在搜索页）
+      const toolCard = event.target.closest('[data-search-tool]');
+      if (toolCard) {
+        openSearchToolDetail(toolCard.dataset.searchTool, toolCard);
         return;
       }
-      // 决策 8.2/8.4：查看全部来源折叠
-      const moreToggle = event.target.closest('[data-search-sources-toggle]');
-      if (moreToggle) {
-        const panel = document.getElementById('searchMoreSources');
-        if (panel) {
-          panel.hidden = !panel.hidden;
-          moreToggle.setAttribute('aria-expanded', String(!panel.hidden));
-          moreToggle.textContent = panel.hidden ? '查看全部来源（' + (moreToggle.dataset.count || '') + '）' : '收起更多来源';
-        }
+      // 了解更多 → 跳工具库 + 预填 query + 强制 tool toggle
+      const more = event.target.closest('[data-search-more-tools]');
+      if (more) {
+        openSearchMoreTools();
         return;
       }
-      // 决策 8.3：移动端“查看关键来源 / 返回摘要”锚点
-      const anchor = event.target.closest('[data-search-anchor]');
-      if (anchor) {
-        const target = document.getElementById(anchor.dataset.searchAnchor === 'sources' ? 'searchSourceList' : 'searchSummaryContent');
-        if (target) {
-          target.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
-        }
+      // 右栏热点 → 弹热点详情
+      const hotspot = event.target.closest('[data-hotspot-id]');
+      if (hotspot) {
+        openHotspotDetail(hotspot.dataset.hotspotId, hotspot);
         return;
       }
-      // 决策 8.6：来源项内联展开“来源说明”，同一时刻只展开一个
-      const expand = event.target.closest('[data-search-source-expand]');
-      if (expand) {
-        const detail = document.getElementById('search-source-detail-' + expand.dataset.searchSourceExpand);
-        if (!detail) return;
-        const shouldOpen = detail.hidden;
-        document.querySelectorAll('#searchSourceList .search-source-detail').forEach(item => { item.hidden = true; });
-        document.querySelectorAll('#searchSourceList [data-search-source-expand]').forEach(item => item.setAttribute('aria-expanded', 'false'));
-        if (shouldOpen) {
-          detail.hidden = false;
-          expand.setAttribute('aria-expanded', 'true');
-        }
+      // 左栏概念 → 进 AI 概念视图
+      const conceptRail = event.target.closest('[data-search-concept-rail]');
+      if (conceptRail) {
+        openGlossaryConcept(conceptRail.dataset.searchConceptRail);
         return;
       }
     });
-    document.getElementById('searchMatchesSection')?.addEventListener('click', event => {
-      const open = event.target.closest('[data-search-open]');
-      if (open) {
-        openSearchMatch(open.dataset.searchOpen, open.dataset.searchId, open);
+    document.getElementById('searchResultContent')?.addEventListener('keydown', event => {
+      if (event.target.closest('[data-search-concept]')) return; // 概念词 Enter 由概念按钮自身处理
+      const toolCard = event.target.closest('[data-search-tool]');
+      if (toolCard && !event.target.closest('a') && ['Enter', ' '].includes(event.key)) {
+        event.preventDefault();
+        openSearchToolDetail(toolCard.dataset.searchTool, toolCard);
         return;
       }
-      const expand = event.target.closest('[data-search-match-expand]');
-      if (expand) {
-        const key = expand.dataset.searchMatchExpand;
-        if (searchMatchExpanded.has(key)) searchMatchExpanded.delete(key);
-        else searchMatchExpanded.add(key);
-        renderSearchMatches(getSearchMatches(searchState.query), true);
-        markSearchConcepts();
+      const hotspot = event.target.closest('[data-hotspot-id]');
+      if (hotspot && ['Enter', ' '].includes(event.key)) {
+        event.preventDefault();
+        openHotspotDetail(hotspot.dataset.hotspotId, hotspot);
       }
     });
     document.getElementById('searchFeedbackSection')?.addEventListener('click', event => {

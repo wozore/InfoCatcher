@@ -8,6 +8,46 @@
         "Kling",
         "kling-ai"
       ]
+    },
+    "spark x2": {
+      "vendor_name": "科大讯飞",
+      "official_url": "https://xinghuo.xfyun.cn/sparkapi"
+    },
+    "gpt-5.5": {
+      "vendor_name": "OpenAI",
+      "official_url": "https://openai.com/"
+    },
+    "gpt-realtime-2": {
+      "vendor_name": "OpenAI",
+      "official_url": "https://developers.openai.com/api/docs/models/gpt-realtime-2"
+    },
+    "gpt-image-2": {
+      "vendor_name": "OpenAI",
+      "official_url": "https://openai.com/index/image-generation-api"
+    },
+    "claude opus 5": {
+      "vendor_name": "Anthropic",
+      "official_url": "https://www.anthropic.com/news"
+    },
+    "gemini 3.1 pro": {
+      "vendor_name": "Google",
+      "official_url": "https://ai.google.dev/gemini-api/docs/models"
+    },
+    "grok 4.6": {
+      "vendor_name": "xAI",
+      "official_url": "https://docs.x.ai/"
+    },
+    "command a+": {
+      "vendor_name": "Cohere",
+      "official_url": "https://docs.cohere.com/docs/models"
+    },
+    "minimax h3": {
+      "vendor_name": "MiniMax",
+      "official_url": "https://platform.minimax.io/docs/release-notes/models"
+    },
+    "kling 3.0": {
+      "vendor_name": "快手可灵",
+      "official_url": "https://kling.ai/"
     }
   }
 }

@@ -33,7 +33,6 @@ const path = require('path');
 const { readJson, writeJsonAtomic } = require('../news/core/news-storage');
 const { CATALOG_GENERATOR_FILES } = require('../shared/paths');
 const { catalog } = require('../catalog-interface');
-const { toolExists } = require('../news/feedback/tool-feedback');
 const { pendingCandidateToSeed } = require('../news/feedback/catalog-draft-adapter');
 const { listDrafts } = require('./catalog-draft-store');
 const {
@@ -97,7 +96,13 @@ function dedupeBatchCandidates(cards, options = {}) {
     try { key = slugify(name, 'tool_key'); } catch { key = name.toLowerCase(); }
     if (seenInBatch.has(key)) { result.duplicateInBatch.push({ name, reason: '同批重复' }); continue; }
     seenInBatch.add(key);
-    if (toolExists(name, tools)) { result.skippedExisting.push({ name, reason: '目录已存在' }); continue; }
+    // 精确匹配：title 或 tool_key 大小写不敏感相等（不用 toolExists 的双向子串，
+    // 避免 "Command A+" 被 "Command A" 子串误判为已存在）
+    const existsExact = (tools || []).some(tool =>
+      (tool.title && String(tool.title).toLowerCase() === name.toLowerCase()) ||
+      (tool.tool_key && String(tool.tool_key).toLowerCase() === name.toLowerCase())
+    );
+    if (existsExact) { result.skippedExisting.push({ name, reason: '目录已存在' }); continue; }
     const draftHit = (drafts || []).find(draft => {
       const seedName = draft?.seed && (draft.seed.name || draft.seed.title);
       return seedName && String(seedName).trim().toLowerCase() === name.toLowerCase();

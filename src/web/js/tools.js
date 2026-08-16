@@ -118,6 +118,15 @@ function toggleToolsViewMode() {
   return toolsViewMode;
 }
 
+// 决策（搜索结果页 v2）：外部（AI 搜索“了解更多”）强制切换到指定视图模式，
+// 不触发 renderTools（由调用方随后 switchView('tools') 渲染），只同步 toggle 控件。
+function setToolsViewMode(value) {
+  if (value !== 'vendor' && value !== 'tool') return toolsViewMode;
+  toolsViewMode = value;
+  syncToolsViewControls();
+  return toolsViewMode;
+}
+
 class VendorDirectoryView {
   constructor() {
     this.root = document.getElementById('vendorDirectoryView');
@@ -465,5 +474,6 @@ export {
   clearToolFilters,
   getToolsViewMode,
   toggleToolsViewMode,
+  setToolsViewMode,
   renderTools,
 };

@@ -9,7 +9,7 @@ const { catalog, resetCatalogForTests } = require('../src/catalog-interface');
 test.beforeEach(() => resetCatalogForTests());
 
 test('five catalog areas expose list data through one interface', () => {
-  for (const [area, expectedMinimum] of [['vendor-card', 11], ['tool-card', 62], ['vendor-level1', 11], ['vendor-level2', 15], ['tool-level3', 71]]) {
+  for (const [area, expectedMinimum] of [['vendor-card', 11], ['tool-card', 43], ['vendor-level1', 11], ['vendor-level2', 15], ['tool-level3', 52]]) {
     const result = catalog({ area, operation: 'list' });
     assert.equal(result.ok, true);
     assert.ok(result.data.length >= expectedMinimum);

@@ -2,140 +2,6 @@
   "schema_version": 1,
   "items": [
     {
-      "id": "tool-card:tongyi",
-      "tool_key": "tongyi",
-      "vendor_key": "tongyi",
-      "title": "通义千问",
-      "vendor_label": "阿里巴巴",
-      "icon": "☁️",
-      "summary": "中文顶级、阿里云生态集成、企业级安全合规、通义灵码(IDE插件)",
-      "theme": "general",
-      "scenes": [
-        "写论文",
-        "写周报",
-        "翻译文档",
-        "办公文档处理",
-        "学习辅导",
-        "国内企业用户",
-        "中文办公和学习场景",
-        "阿里云生态用户",
-        "纯英文或国际化场景",
-        "需要最强推理的任务"
-      ],
-      "best_for_preview": "国内企业用户",
-      "not_for_preview": "纯英文或国际化场景",
-      "price_badge": "free",
-      "access_level": "开放",
-      "search_terms": [
-        "通义千问",
-        "阿里巴巴",
-        "对话",
-        "写作",
-        "编程",
-        "翻译",
-        "办公",
-        "写论文",
-        "写周报",
-        "翻译文档",
-        "办公文档处理",
-        "学习辅导",
-        "中文顶级、阿里云生态集成、企业级安全合规、通义灵码(IDE插件)"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:tongyi"
-      },
-      "detail_kind": "tool"
-    },
-    {
-      "id": "tool-card:doubao",
-      "tool_key": "doubao",
-      "vendor_key": "doubao",
-      "title": "豆包",
-      "vendor_label": "字节跳动",
-      "icon": "🫘",
-      "summary": "完全免费、中文对话自然、多模态支持、字节生态(TikTok/抖音数据积累)",
-      "theme": "general",
-      "scenes": [
-        "写周报",
-        "头脑风暴",
-        "翻译文档",
-        "创意写作",
-        "日常闲聊",
-        "日常中文对话",
-        "创意和娱乐场景",
-        "零预算用户",
-        "复杂代码开发",
-        "深度学术研究"
-      ],
-      "best_for_preview": "日常中文对话",
-      "not_for_preview": "复杂代码开发",
-      "price_badge": "free",
-      "access_level": "开放",
-      "search_terms": [
-        "豆包",
-        "字节跳动",
-        "对话",
-        "写作",
-        "翻译",
-        "创意",
-        "写周报",
-        "头脑风暴",
-        "翻译文档",
-        "创意写作",
-        "日常闲聊",
-        "完全免费、中文对话自然、多模态支持、字节生态(TikTok/抖音数据积累)"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:doubao"
-      },
-      "detail_kind": "tool"
-    },
-    {
-      "id": "tool-card:kimi",
-      "tool_key": "kimi",
-      "vendor_key": "kimi",
-      "title": "Kimi",
-      "vendor_label": "月之暗面",
-      "icon": "🌙",
-      "summary": "超长上下文(200万字)、中文长文档分析最优、联网搜索、文件上传解析",
-      "theme": "general",
-      "scenes": [
-        "写论文",
-        "长文档分析",
-        "搜索研究",
-        "学习辅导",
-        "长文档分析(论文/合同/报告)",
-        "中文文献综述",
-        "需要联网搜索的研究",
-        "代码开发",
-        "需要多模态识别的任务"
-      ],
-      "best_for_preview": "长文档分析(论文/合同/报告)",
-      "not_for_preview": "代码开发",
-      "price_badge": "free",
-      "access_level": "开放",
-      "search_terms": [
-        "Kimi",
-        "月之暗面",
-        "对话",
-        "长文档",
-        "搜索",
-        "写作",
-        "写论文",
-        "长文档分析",
-        "搜索研究",
-        "学习辅导",
-        "超长上下文(200万字)、中文长文档分析最优、联网搜索、文件上传解析"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:kimi"
-      },
-      "detail_kind": "tool"
-    },
-    {
       "id": "tool-card:cursor",
       "tool_key": "cursor",
       "vendor_key": "cursor",
@@ -427,47 +293,6 @@
       "detail_kind": "tool"
     },
     {
-      "id": "tool-card:kling",
-      "tool_key": "kling",
-      "vendor_key": "kling",
-      "title": "可灵",
-      "vendor_label": "快手",
-      "icon": "🎥",
-      "summary": "视频质量国产最佳、物理规律模拟好、中文场景自然、国内可用、免费额度",
-      "theme": "media",
-      "scenes": [
-        "短视频制作",
-        "视频生成",
-        "创意表达",
-        "营销视频",
-        "短视频创作者",
-        "中文视频内容制作",
-        "营销视频批量生成",
-        "国际化视频项目",
-        "需要专业后期编辑的场景"
-      ],
-      "best_for_preview": "短视频创作者",
-      "not_for_preview": "国际化视频项目",
-      "price_badge": "free",
-      "access_level": "开放",
-      "search_terms": [
-        "可灵",
-        "快手",
-        "AI视频",
-        "AI创作",
-        "短视频制作",
-        "视频生成",
-        "创意表达",
-        "营销视频",
-        "视频质量国产最佳、物理规律模拟好、中文场景自然、国内可用、免费额度"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:kling"
-      },
-      "detail_kind": "tool"
-    },
-    {
       "id": "tool-card:suno",
       "tool_key": "suno",
       "vendor_key": "suno",
@@ -548,95 +373,6 @@
       "detail_ref": {
         "kind": "tool-level3",
         "id": "tool-level3:stable-diffusion"
-      },
-      "detail_kind": "tool"
-    },
-    {
-      "id": "tool-card:hunyuan",
-      "tool_key": "hunyuan",
-      "vendor_key": "hunyuan",
-      "title": "腾讯混元",
-      "vendor_label": "腾讯",
-      "icon": "💬",
-      "summary": "微信/QQ生态深度集成、多模态(文本+图像+视频)、企业级API价格低、合规性高",
-      "theme": "general",
-      "scenes": [
-        "写代码",
-        "办公文档处理",
-        "写周报",
-        "设计配图",
-        "学习辅导",
-        "微信/企业微信生态用户",
-        "需要多模态能力的国内企业",
-        "API开发(价格敏感)",
-        "追求独立AI助手的个人用户",
-        "国际场景"
-      ],
-      "best_for_preview": "微信/企业微信生态用户",
-      "not_for_preview": "追求独立AI助手的个人用户",
-      "price_badge": "free",
-      "access_level": "开放",
-      "search_terms": [
-        "腾讯混元",
-        "腾讯",
-        "对话",
-        "编程",
-        "图像",
-        "办公",
-        "写代码",
-        "办公文档处理",
-        "写周报",
-        "设计配图",
-        "学习辅导",
-        "微信/QQ生态深度集成、多模态(文本+图像+视频)、企业级API价格低、合规性高"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:hunyuan"
-      },
-      "detail_kind": "tool"
-    },
-    {
-      "id": "tool-card:tiangong",
-      "tool_key": "tiangong",
-      "vendor_key": "tiangong",
-      "title": "天工AI",
-      "vendor_label": "昆仑万维",
-      "icon": "🛠️",
-      "summary": "完全免费、AI搜索能力强、中文结果质量高、实时联网",
-      "theme": "general",
-      "scenes": [
-        "搜索研究",
-        "写论文",
-        "写周报",
-        "资料收集",
-        "事实核查",
-        "中文AI搜索",
-        "需要实时联网信息的研究",
-        "零预算用户",
-        "需要深度对话和推理的场景",
-        "多模态任务"
-      ],
-      "best_for_preview": "中文AI搜索",
-      "not_for_preview": "需要深度对话和推理的场景",
-      "price_badge": "free",
-      "access_level": "开放",
-      "search_terms": [
-        "天工AI",
-        "昆仑万维",
-        "AI搜索",
-        "对话",
-        "写作",
-        "搜索研究",
-        "写论文",
-        "写周报",
-        "资料收集",
-        "事实核查",
-        "完全免费、AI搜索能力强、中文结果质量高、实时联网"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:tiangong"
       },
       "detail_kind": "tool"
     },
@@ -1172,74 +908,6 @@
       "detail_kind": "api_model"
     },
     {
-      "id": "tool-card:glm-5",
-      "tool_key": "glm-5",
-      "vendor_key": "zhipu",
-      "title": "GLM-5",
-      "vendor_label": "智谱AI",
-      "icon": "🏛️",
-      "summary": "编程能力对齐 Claude Opus 4.5，擅长 Agentic 长程规划与执行。",
-      "theme": "general",
-      "scenes": [
-        "结构化思维链推理：在中文复杂推理场景表现最强，适合 Agentic 长程规划。",
-        "需要 1M 上下文：GLM-5 上下文为 200K，长文档需求应选 GLM-5.2。"
-      ],
-      "best_for_preview": "结构化思维链推理：在中文复杂推理场景表现最强，适合 Agentic 长程规划。",
-      "not_for_preview": "需要 1M 上下文：GLM-5 上下文为 200K，长文档需求应选 GLM-5.2。",
-      "price_badge": "paid",
-      "access_level": "开放",
-      "search_terms": [
-        "GLM-5",
-        "智谱AI",
-        "对话",
-        "写作",
-        "编程",
-        "企业应用",
-        "结构化思维链推理：在中文复杂推理场景表现最强，适合 Agentic 长程规划。",
-        "需要 1M 上下文：GLM-5 上下文为 200K，长文档需求应选 GLM-5.2。",
-        "编程能力对齐 Claude Opus 4.5，擅长 Agentic 长程规划与执行。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:glm-5"
-      },
-      "detail_kind": "api_model"
-    },
-    {
-      "id": "tool-card:glm-4.7",
-      "tool_key": "glm-4.7",
-      "vendor_key": "zhipu",
-      "title": "GLM-4.7",
-      "vendor_label": "智谱AI",
-      "icon": "🏛️",
-      "summary": "通用对话与推理升级版，编程更强更稳，审美更好。",
-      "theme": "general",
-      "scenes": [
-        "通用中文对话与写作：高性价比，适合中文内容生成和通用智能体任务。",
-        "需要最高编码能力：应比较 GLM-5.1 或 GLM-5.2。"
-      ],
-      "best_for_preview": "通用中文对话与写作：高性价比，适合中文内容生成和通用智能体任务。",
-      "not_for_preview": "需要最高编码能力：应比较 GLM-5.1 或 GLM-5.2。",
-      "price_badge": "paid",
-      "access_level": "开放",
-      "search_terms": [
-        "GLM-4.7",
-        "智谱AI",
-        "对话",
-        "写作",
-        "编程",
-        "企业应用",
-        "通用中文对话与写作：高性价比，适合中文内容生成和通用智能体任务。",
-        "需要最高编码能力：应比较 GLM-5.1 或 GLM-5.2。",
-        "通用对话与推理升级版，编程更强更稳，审美更好。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:glm-4.7"
-      },
-      "detail_kind": "api_model"
-    },
-    {
       "id": "tool-card:ernie-5.1",
       "tool_key": "ernie-5.1",
       "vendor_key": "wenxin",
@@ -1304,40 +972,6 @@
       "detail_ref": {
         "kind": "tool-level3",
         "id": "tool-level3:ernie-5.0"
-      },
-      "detail_kind": "api_model"
-    },
-    {
-      "id": "tool-card:ernie-4.5-turbo",
-      "tool_key": "ernie-4.5-turbo",
-      "vendor_key": "wenxin",
-      "title": "ERNIE 4.5 Turbo",
-      "vendor_label": "百度",
-      "icon": "📘",
-      "summary": "高性价比模型，¥0.8/MTok 输入、¥3.2/MTok 输出，128K 上下文。",
-      "theme": "general",
-      "scenes": [
-        "成本敏感的通用任务：追求更低入门成本的中文文本生成和理解场景。",
-        "要求最高模型能力：应比较 ERNIE 5.0 或 ERNIE 5.1。"
-      ],
-      "best_for_preview": "成本敏感的通用任务：追求更低入门成本的中文文本生成和理解场景。",
-      "not_for_preview": "要求最高模型能力：应比较 ERNIE 5.0 或 ERNIE 5.1。",
-      "price_badge": "paid",
-      "access_level": "开放",
-      "search_terms": [
-        "ERNIE 4.5 Turbo",
-        "百度",
-        "对话",
-        "写作",
-        "编程",
-        "搜索",
-        "成本敏感的通用任务：追求更低入门成本的中文文本生成和理解场景。",
-        "要求最高模型能力：应比较 ERNIE 5.0 或 ERNIE 5.1。",
-        "高性价比模型，¥0.8/MTok 输入、¥3.2/MTok 输出，128K 上下文。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:ernie-4.5-turbo"
       },
       "detail_kind": "api_model"
     },
@@ -1444,138 +1078,6 @@
       "detail_kind": "api_model"
     },
     {
-      "id": "tool-card:minimax-text-01",
-      "tool_key": "minimax-text-01",
-      "vendor_key": "hailuo",
-      "title": "MiniMax-Text-01",
-      "vendor_label": "MiniMax",
-      "icon": "🐚",
-      "summary": "MiniMax 旗舰文本模型，$0.30/MTok，极具性价比。",
-      "theme": "general",
-      "scenes": [
-        "成本敏感的企业级文本处理：极低 API 价格适合大规模文本生成和批量调用。",
-        "需要 1M 上下文窗口：请核实官方最新上下文窗口规格。"
-      ],
-      "best_for_preview": "成本敏感的企业级文本处理：极低 API 价格适合大规模文本生成和批量调用。",
-      "not_for_preview": "需要 1M 上下文窗口：请核实官方最新上下文窗口规格。",
-      "price_badge": "paid",
-      "access_level": "开放",
-      "search_terms": [
-        "MiniMax-Text-01",
-        "MiniMax",
-        "对话",
-        "写作",
-        "AI视频",
-        "成本敏感的企业级文本处理：极低 API 价格适合大规模文本生成和批量调用。",
-        "需要 1M 上下文窗口：请核实官方最新上下文窗口规格。",
-        "MiniMax 旗舰文本模型，$0.30/MTok，极具性价比。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:minimax-text-01"
-      },
-      "detail_kind": "api_model"
-    },
-    {
-      "id": "tool-card:minimax-vl-01",
-      "tool_key": "minimax-vl-01",
-      "vendor_key": "hailuo",
-      "title": "MiniMax-VL-01",
-      "vendor_label": "MiniMax",
-      "icon": "🐚",
-      "summary": "多模态视觉语言模型，按调用次数计费，$0.01/次。",
-      "theme": "general",
-      "scenes": [
-        "图像理解与视频生成：Hailuo 02 支持 1080p 10 秒视频生成。",
-        "纯文本处理：纯文本任务应使用 MiniMax-Text-01。"
-      ],
-      "best_for_preview": "图像理解与视频生成：Hailuo 02 支持 1080p 10 秒视频生成。",
-      "not_for_preview": "纯文本处理：纯文本任务应使用 MiniMax-Text-01。",
-      "price_badge": "paid",
-      "access_level": "开放",
-      "search_terms": [
-        "MiniMax-VL-01",
-        "MiniMax",
-        "对话",
-        "写作",
-        "AI视频",
-        "图像理解与视频生成：Hailuo 02 支持 1080p 10 秒视频生成。",
-        "纯文本处理：纯文本任务应使用 MiniMax-Text-01。",
-        "多模态视觉语言模型，按调用次数计费，$0.01/次。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:minimax-vl-01"
-      },
-      "detail_kind": "api_model"
-    },
-    {
-      "id": "tool-card:grok-4.3",
-      "tool_key": "grok-4.3",
-      "vendor_key": "grok",
-      "title": "Grok 4.3",
-      "vendor_label": "xAI",
-      "icon": "🚀",
-      "summary": "xAI 当前旗舰模型（2026-04），面向最大智能和生产级质量。",
-      "theme": "general",
-      "scenes": [
-        "高要求推理与生产任务：官方定位为最高智能旗舰，适合复杂推理和生产级应用。",
-        "成本敏感型批量调用：可选择 Grok 4.1 Fast 以降低费用。"
-      ],
-      "best_for_preview": "高要求推理与生产任务：官方定位为最高智能旗舰，适合复杂推理和生产级应用。",
-      "not_for_preview": "成本敏感型批量调用：可选择 Grok 4.1 Fast 以降低费用。",
-      "price_badge": "paid",
-      "access_level": "受限",
-      "search_terms": [
-        "Grok 4.3",
-        "xAI",
-        "对话",
-        "搜索",
-        "编程",
-        "高要求推理与生产任务：官方定位为最高智能旗舰，适合复杂推理和生产级应用。",
-        "成本敏感型批量调用：可选择 Grok 4.1 Fast 以降低费用。",
-        "xAI 当前旗舰模型（2026-04），面向最大智能和生产级质量。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:grok-4.3"
-      },
-      "detail_kind": "api_model"
-    },
-    {
-      "id": "tool-card:grok-4.1-fast",
-      "tool_key": "grok-4.1-fast",
-      "vendor_key": "grok",
-      "title": "Grok 4.1 Fast",
-      "vendor_label": "xAI",
-      "icon": "🚀",
-      "summary": "预算级模型，$0.20/$0.50 每百万 token，具备推理能力，2M 上下文。",
-      "theme": "general",
-      "scenes": [
-        "成本敏感的高频调用：目前最具性价比的具备推理能力的前沿模型之一。",
-        "要求最高智能水平：应比较 Grok 4.3。"
-      ],
-      "best_for_preview": "成本敏感的高频调用：目前最具性价比的具备推理能力的前沿模型之一。",
-      "not_for_preview": "要求最高智能水平：应比较 Grok 4.3。",
-      "price_badge": "paid",
-      "access_level": "受限",
-      "search_terms": [
-        "Grok 4.1 Fast",
-        "xAI",
-        "对话",
-        "搜索",
-        "编程",
-        "成本敏感的高频调用：目前最具性价比的具备推理能力的前沿模型之一。",
-        "要求最高智能水平：应比较 Grok 4.3。",
-        "预算级模型，$0.20/$0.50 每百万 token，具备推理能力，2M 上下文。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:grok-4.1-fast"
-      },
-      "detail_kind": "api_model"
-    },
-    {
       "id": "tool-card:mistral-medium-3.5",
       "tool_key": "mistral-medium-3.5",
       "vendor_key": "mistral",
@@ -1638,99 +1140,6 @@
       "detail_kind": "api_model"
     },
     {
-      "id": "tool-card:mistral-small-4",
-      "tool_key": "mistral-small-4",
-      "vendor_key": "mistral",
-      "title": "Mistral Small 4",
-      "vendor_label": "Mistral AI",
-      "icon": "🏔️",
-      "summary": "轻量多语言多模态模型，Apache 2.0 许可。",
-      "theme": "general",
-      "scenes": [
-        "成本敏感的批量处理：Apache 2.0 许可适合自由部署和商用。",
-        "高要求复杂工作：可选 Mistral Medium 3.5。"
-      ],
-      "best_for_preview": "成本敏感的批量处理：Apache 2.0 许可适合自由部署和商用。",
-      "not_for_preview": "高要求复杂工作：可选 Mistral Medium 3.5。",
-      "price_badge": "paid",
-      "access_level": "受限",
-      "search_terms": [
-        "Mistral Small 4",
-        "Mistral AI",
-        "对话",
-        "成本敏感的批量处理：Apache 2.0 许可适合自由部署和商用。",
-        "高要求复杂工作：可选 Mistral Medium 3.5。",
-        "轻量多语言多模态模型，Apache 2.0 许可。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:mistral-small-4"
-      },
-      "detail_kind": "api_model"
-    },
-    {
-      "id": "tool-card:devstral-2",
-      "tool_key": "devstral-2",
-      "vendor_key": "mistral",
-      "title": "Devstral 2",
-      "vendor_label": "Mistral AI",
-      "icon": "🏔️",
-      "summary": "开源编码代理模型，面向自主软件工程。",
-      "theme": "general",
-      "scenes": [
-        "AI 编程代理：官方定位为自主软件工程编码模型。",
-        "非编码工作：纯推理或写作可选 Medium 3.5。"
-      ],
-      "best_for_preview": "AI 编程代理：官方定位为自主软件工程编码模型。",
-      "not_for_preview": "非编码工作：纯推理或写作可选 Medium 3.5。",
-      "price_badge": "paid",
-      "access_level": "受限",
-      "search_terms": [
-        "Devstral 2",
-        "Mistral AI",
-        "对话",
-        "AI 编程代理：官方定位为自主软件工程编码模型。",
-        "非编码工作：纯推理或写作可选 Medium 3.5。",
-        "开源编码代理模型，面向自主软件工程。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:devstral-2"
-      },
-      "detail_kind": "api_model"
-    },
-    {
-      "id": "tool-card:codestral",
-      "tool_key": "codestral",
-      "vendor_key": "mistral",
-      "title": "Codestral",
-      "vendor_label": "Mistral AI",
-      "icon": "🏔️",
-      "summary": "低延迟编码模型，优化高频补全和代码生成。",
-      "theme": "general",
-      "scenes": [
-        "IDE 代码补全和 FIM：低延迟优化，适合高频编码交互。",
-        "长文本、多模态：Codestral 是纯编码模型。"
-      ],
-      "best_for_preview": "IDE 代码补全和 FIM：低延迟优化，适合高频编码交互。",
-      "not_for_preview": "长文本、多模态：Codestral 是纯编码模型。",
-      "price_badge": "paid",
-      "access_level": "受限",
-      "search_terms": [
-        "Codestral",
-        "Mistral AI",
-        "对话",
-        "IDE 代码补全和 FIM：低延迟优化，适合高频编码交互。",
-        "长文本、多模态：Codestral 是纯编码模型。",
-        "低延迟编码模型，优化高频补全和代码生成。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:codestral"
-      },
-      "detail_kind": "api_model"
-    },
-    {
       "id": "tool-card:command-a",
       "tool_key": "command-a",
       "vendor_key": "cohere",
@@ -1763,515 +1172,6 @@
         "id": "tool-level3:command-a"
       },
       "detail_kind": "api_model"
-    },
-    {
-      "id": "tool-card:command-r-plus",
-      "tool_key": "command-r-plus",
-      "vendor_key": "cohere",
-      "title": "Command R+",
-      "vendor_label": "Cohere",
-      "icon": "🔗",
-      "summary": "面向高级企业任务，$2.50/$10.00 每百万 token，128K 上下文。",
-      "theme": "general",
-      "scenes": [
-        "高级检索增强与多步工具使用：面向需要复杂推理和工具调用的企业级场景。",
-        "需要最新最强模型：应比较 Command A。"
-      ],
-      "best_for_preview": "高级检索增强与多步工具使用：面向需要复杂推理和工具调用的企业级场景。",
-      "not_for_preview": "需要最新最强模型：应比较 Command A。",
-      "price_badge": "paid",
-      "access_level": "受限",
-      "search_terms": [
-        "Command R+",
-        "Cohere",
-        "对话",
-        "写作",
-        "编程",
-        "企业应用",
-        "高级检索增强与多步工具使用：面向需要复杂推理和工具调用的企业级场景。",
-        "需要最新最强模型：应比较 Command A。",
-        "面向高级企业任务，$2.50/$10.00 每百万 token，128K 上下文。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:command-r-plus"
-      },
-      "detail_kind": "api_model"
-    },
-    {
-      "id": "tool-card:command-r",
-      "tool_key": "command-r",
-      "vendor_key": "cohere",
-      "title": "Command R",
-      "vendor_label": "Cohere",
-      "icon": "🔗",
-      "summary": "平衡性能与成本，$0.15/$0.60 每百万 token，128K 上下文。",
-      "theme": "general",
-      "scenes": [
-        "中等复杂度文本处理：在性能和成本之间取得良好平衡，与 GPT-4o Mini 同价。",
-        "要求最低成本：可选择 Command R7B。"
-      ],
-      "best_for_preview": "中等复杂度文本处理：在性能和成本之间取得良好平衡，与 GPT-4o Mini 同价。",
-      "not_for_preview": "要求最低成本：可选择 Command R7B。",
-      "price_badge": "paid",
-      "access_level": "受限",
-      "search_terms": [
-        "Command R",
-        "Cohere",
-        "对话",
-        "写作",
-        "编程",
-        "企业应用",
-        "中等复杂度文本处理：在性能和成本之间取得良好平衡，与 GPT-4o Mini 同价。",
-        "要求最低成本：可选择 Command R7B。",
-        "平衡性能与成本，$0.15/$0.60 每百万 token，128K 上下文。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:command-r"
-      },
-      "detail_kind": "api_model"
-    },
-    {
-      "id": "tool-card:command-r7b",
-      "tool_key": "command-r7b",
-      "vendor_key": "cohere",
-      "title": "Command R7B",
-      "vendor_label": "Cohere",
-      "icon": "🔗",
-      "summary": "最具性价比，$0.0375/$0.15 每百万 token，适合大容量简单任务。",
-      "theme": "general",
-      "scenes": [
-        "大容量简单任务与分类：追求极致性价比的场景，如批量文本分类、摘要和情感分析。",
-        "复杂推理或多步工具使用：应选择 Command R 或 Command R+。"
-      ],
-      "best_for_preview": "大容量简单任务与分类：追求极致性价比的场景，如批量文本分类、摘要和情感分析。",
-      "not_for_preview": "复杂推理或多步工具使用：应选择 Command R 或 Command R+。",
-      "price_badge": "paid",
-      "access_level": "受限",
-      "search_terms": [
-        "Command R7B",
-        "Cohere",
-        "对话",
-        "写作",
-        "编程",
-        "企业应用",
-        "大容量简单任务与分类：追求极致性价比的场景，如批量文本分类、摘要和情感分析。",
-        "复杂推理或多步工具使用：应选择 Command R 或 Command R+。",
-        "最具性价比，$0.0375/$0.15 每百万 token，适合大容量简单任务。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:command-r7b"
-      },
-      "detail_kind": "api_model"
-    },
-    {
-      "id": "tool-card:chatgpt",
-      "tool_key": "chatgpt",
-      "vendor_key": "chatgpt",
-      "title": "ChatGPT",
-      "vendor_label": "OpenAI",
-      "icon": "🤖",
-      "summary": "OpenAI 提供 ChatGPT、Codex 和 API 等 AI 产品入口；具体模型与套餐在下方按可核实范围单独展示。",
-      "theme": "general",
-      "scenes": [
-        "写论文",
-        "写周报",
-        "写代码",
-        "翻译文档",
-        "数据分析",
-        "头脑风暴",
-        "学习辅导"
-      ],
-      "best_for_preview": "写论文",
-      "not_for_preview": "",
-      "price_badge": "free",
-      "access_level": "受限",
-      "search_terms": [
-        "ChatGPT",
-        "OpenAI",
-        "chatgpt",
-        "写论文",
-        "写周报",
-        "写代码",
-        "翻译文档",
-        "数据分析",
-        "头脑风暴",
-        "学习辅导",
-        "OpenAI 提供 ChatGPT、Codex 和 API 等 AI 产品入口；具体模型与套餐在下方按可核实范围单独展示。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:chatgpt"
-      },
-      "detail_kind": "tool"
-    },
-    {
-      "id": "tool-card:claude",
-      "tool_key": "claude",
-      "vendor_key": "claude",
-      "title": "Claude",
-      "vendor_label": "Anthropic",
-      "icon": "🧠",
-      "summary": "Anthropic 的 Claude 产品入口覆盖对话产品与 API；具体模型和订阅套餐在下方独立展示。",
-      "theme": "general",
-      "scenes": [
-        "写论文",
-        "写周报",
-        "写代码",
-        "长文档分析",
-        "深度研究",
-        "头脑风暴"
-      ],
-      "best_for_preview": "写论文",
-      "not_for_preview": "",
-      "price_badge": "free",
-      "access_level": "受限",
-      "search_terms": [
-        "Claude",
-        "Anthropic",
-        "claude",
-        "写论文",
-        "写周报",
-        "写代码",
-        "长文档分析",
-        "深度研究",
-        "头脑风暴",
-        "Anthropic 的 Claude 产品入口覆盖对话产品与 API；具体模型和订阅套餐在下方独立展示。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:claude"
-      },
-      "detail_kind": "tool"
-    },
-    {
-      "id": "tool-card:gemini",
-      "tool_key": "gemini",
-      "vendor_key": "gemini",
-      "title": "Gemini",
-      "vendor_label": "Google",
-      "icon": "🌐",
-      "summary": "Google 的 Gemini 产品入口覆盖 API 模型与 Google AI 订阅；具体资料在下方按已核实范围展示。",
-      "theme": "general",
-      "scenes": [
-        "写论文",
-        "翻译文档",
-        "搜索研究",
-        "头脑风暴",
-        "数据分析"
-      ],
-      "best_for_preview": "写论文",
-      "not_for_preview": "",
-      "price_badge": "free",
-      "access_level": "受限",
-      "search_terms": [
-        "Gemini",
-        "Google",
-        "gemini",
-        "写论文",
-        "翻译文档",
-        "搜索研究",
-        "头脑风暴",
-        "数据分析",
-        "Google 的 Gemini 产品入口覆盖 API 模型与 Google AI 订阅；具体资料在下方按已核实范围展示。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:gemini"
-      },
-      "detail_kind": "tool"
-    },
-    {
-      "id": "tool-card:deepseek",
-      "tool_key": "deepseek",
-      "vendor_key": "deepseek",
-      "title": "DeepSeek",
-      "vendor_label": "深度求索",
-      "icon": "🔍",
-      "summary": "中国深度求索公司推出的开源大模型，以极致性价比和透明定价著称，V4 系列支持 1M 上下文。",
-      "theme": "general",
-      "scenes": [
-        "写代码",
-        "写论文",
-        "翻译文档",
-        "深度研究",
-        "数学解题"
-      ],
-      "best_for_preview": "写代码",
-      "not_for_preview": "",
-      "price_badge": "free",
-      "access_level": "开放",
-      "search_terms": [
-        "DeepSeek",
-        "深度求索",
-        "deepseek",
-        "写代码",
-        "写论文",
-        "翻译文档",
-        "深度研究",
-        "数学解题",
-        "中国深度求索公司推出的开源大模型，以极致性价比和透明定价著称，V4 系列支持 1M 上下文。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:deepseek"
-      },
-      "detail_kind": "tool"
-    },
-    {
-      "id": "tool-card:zhipu",
-      "tool_key": "zhipu",
-      "vendor_key": "zhipu",
-      "title": "智谱清言",
-      "vendor_label": "智谱AI",
-      "icon": "🏛️",
-      "summary": "清华大学孵化、港股上市的国产 AI 公司，提供 GLM 系列模型及全模态 API 服务，中文能力扎实。",
-      "theme": "general",
-      "scenes": [
-        "写论文",
-        "写代码",
-        "办公文档处理",
-        "企业应用开发"
-      ],
-      "best_for_preview": "写论文",
-      "not_for_preview": "",
-      "price_badge": "free",
-      "access_level": "开放",
-      "search_terms": [
-        "智谱清言",
-        "智谱AI",
-        "zhipu",
-        "写论文",
-        "写代码",
-        "办公文档处理",
-        "企业应用开发",
-        "清华大学孵化、港股上市的国产 AI 公司，提供 GLM 系列模型及全模态 API 服务，中文能力扎实。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:zhipu"
-      },
-      "detail_kind": "tool"
-    },
-    {
-      "id": "tool-card:wenxin",
-      "tool_key": "wenxin",
-      "vendor_key": "wenxin",
-      "title": "文心一言",
-      "vendor_label": "百度",
-      "icon": "📘",
-      "summary": "百度推出的文心大模型，通过千帆平台提供 ERNIE 系列 API，深度集成百度云生态。",
-      "theme": "general",
-      "scenes": [
-        "写论文",
-        "写周报",
-        "翻译文档",
-        "搜索研究",
-        "学习辅导",
-        "头脑风暴"
-      ],
-      "best_for_preview": "写论文",
-      "not_for_preview": "",
-      "price_badge": "free",
-      "access_level": "开放",
-      "search_terms": [
-        "文心一言",
-        "百度",
-        "wenxin",
-        "写论文",
-        "写周报",
-        "翻译文档",
-        "搜索研究",
-        "学习辅导",
-        "头脑风暴",
-        "百度推出的文心大模型，通过千帆平台提供 ERNIE 系列 API，深度集成百度云生态。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:wenxin"
-      },
-      "detail_kind": "tool"
-    },
-    {
-      "id": "tool-card:xinghuo",
-      "tool_key": "xinghuo",
-      "vendor_key": "xinghuo",
-      "title": "讯飞星火",
-      "vendor_label": "科大讯飞",
-      "icon": "🔥",
-      "summary": "科大讯飞推出的星火认知大模型，深耕语音与教育场景，Lite 版本 API 永久免费。",
-      "theme": "general",
-      "scenes": [
-        "写周报",
-        "办公文档处理",
-        "配音",
-        "学习辅导",
-        "翻译文档"
-      ],
-      "best_for_preview": "写周报",
-      "not_for_preview": "",
-      "price_badge": "free",
-      "access_level": "开放",
-      "search_terms": [
-        "讯飞星火",
-        "科大讯飞",
-        "xinghuo",
-        "写周报",
-        "办公文档处理",
-        "配音",
-        "学习辅导",
-        "翻译文档",
-        "科大讯飞推出的星火认知大模型，深耕语音与教育场景，Lite 版本 API 永久免费。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:xinghuo"
-      },
-      "detail_kind": "tool"
-    },
-    {
-      "id": "tool-card:hailuo",
-      "tool_key": "hailuo",
-      "vendor_key": "hailuo",
-      "title": "海螺AI",
-      "vendor_label": "MiniMax",
-      "icon": "🐚",
-      "summary": "MiniMax 推出的多模态 AI 平台，以海螺AI 视频生成和超低 API 文本价格著称。",
-      "theme": "media",
-      "scenes": [
-        "短视频制作",
-        "创意写作",
-        "头脑风暴",
-        "写周报",
-        "视频生成"
-      ],
-      "best_for_preview": "短视频制作",
-      "not_for_preview": "",
-      "price_badge": "free",
-      "access_level": "开放",
-      "search_terms": [
-        "海螺AI",
-        "MiniMax",
-        "hailuo",
-        "短视频制作",
-        "创意写作",
-        "头脑风暴",
-        "写周报",
-        "视频生成",
-        "MiniMax 推出的多模态 AI 平台，以海螺AI 视频生成和超低 API 文本价格著称。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:hailuo"
-      },
-      "detail_kind": "tool"
-    },
-    {
-      "id": "tool-card:grok",
-      "tool_key": "grok",
-      "vendor_key": "grok",
-      "title": "Grok",
-      "vendor_label": "xAI",
-      "icon": "🚀",
-      "summary": "Elon Musk 创办的 xAI 公司推出的 AI 模型，以实时 X 平台数据接入和推理能力见长，API 定价极具竞争力。",
-      "theme": "general",
-      "scenes": [
-        "搜索研究",
-        "写代码",
-        "头脑风暴",
-        "写周报",
-        "数据分析"
-      ],
-      "best_for_preview": "搜索研究",
-      "not_for_preview": "",
-      "price_badge": "free",
-      "access_level": "受限",
-      "search_terms": [
-        "Grok",
-        "xAI",
-        "grok",
-        "搜索研究",
-        "写代码",
-        "头脑风暴",
-        "写周报",
-        "数据分析",
-        "Elon Musk 创办的 xAI 公司推出的 AI 模型，以实时 X 平台数据接入和推理能力见长，API 定价极具竞争力。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:grok"
-      },
-      "detail_kind": "tool"
-    },
-    {
-      "id": "tool-card:mistral",
-      "tool_key": "mistral",
-      "vendor_key": "mistral",
-      "title": "Mistral AI（产品入口）",
-      "vendor_label": "Mistral AI",
-      "icon": "🏔️",
-      "summary": "法国 AI 公司，提供开放权重和商业许可的多种模型，覆盖文本、编码、推理和 OCR 场景。",
-      "theme": "general",
-      "scenes": [
-        "写代码",
-        "写论文",
-        "翻译文档"
-      ],
-      "best_for_preview": "写代码",
-      "not_for_preview": "",
-      "price_badge": "free",
-      "access_level": "受限",
-      "search_terms": [
-        "Mistral AI（产品入口）",
-        "Mistral AI",
-        "mistral",
-        "写代码",
-        "写论文",
-        "翻译文档",
-        "法国 AI 公司，提供开放权重和商业许可的多种模型，覆盖文本、编码、推理和 OCR 场景。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:mistral"
-      },
-      "detail_kind": "tool"
-    },
-    {
-      "id": "tool-card:cohere",
-      "tool_key": "cohere",
-      "vendor_key": "cohere",
-      "title": "Cohere（产品入口）",
-      "vendor_label": "Cohere",
-      "icon": "🔗",
-      "summary": "加拿大 AI 公司，以企业级检索增强生成（RAG）、文本嵌入和重排序模型见长，Command 系列覆盖通用对话和编码。",
-      "theme": "general",
-      "scenes": [
-        "写代码",
-        "写论文",
-        "翻译文档",
-        "企业应用开发"
-      ],
-      "best_for_preview": "写代码",
-      "not_for_preview": "",
-      "price_badge": "free",
-      "access_level": "受限",
-      "search_terms": [
-        "Cohere（产品入口）",
-        "Cohere",
-        "cohere",
-        "写代码",
-        "写论文",
-        "翻译文档",
-        "企业应用开发",
-        "加拿大 AI 公司，以企业级检索增强生成（RAG）、文本嵌入和重排序模型见长，Command 系列覆盖通用对话和编码。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:cohere"
-      },
-      "detail_kind": "tool"
     },
     {
       "id": "tool-card:kling-2-6-pro",
@@ -2308,6 +1208,360 @@
       "detail_ref": {
         "kind": "tool-level3",
         "id": "tool-level3:kling-2-6-pro"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:gpt-5-5",
+      "tool_key": "gpt-5-5",
+      "vendor_key": "chatgpt",
+      "title": "GPT-5.5",
+      "vendor_label": "OpenAI",
+      "icon": "🤖",
+      "summary": "GPT-5.5 是 OpenAI 最新旗舰模型，支持 1M 上下文窗口，适用于复杂专业工作、智能体编码、知识工作与科研。",
+      "theme": "general",
+      "scenes": [
+        "智能体编码",
+        "日常对话",
+        "知识工作",
+        "科研分析"
+      ],
+      "best_for_preview": "复杂多步骤任务与智能体场景",
+      "not_for_preview": "不适用于需极高精度且成本敏感的生产环境",
+      "price_badge": "paid",
+      "access_level": "受限",
+      "search_terms": [
+        "GPT-5.5",
+        "OpenAI",
+        "gpt-5-5",
+        "智能体编码",
+        "日常对话",
+        "知识工作",
+        "科研分析"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:gpt-5-5"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:claude-opus-5",
+      "tool_key": "claude-opus-5",
+      "vendor_key": "claude",
+      "title": "Claude Opus 5",
+      "vendor_label": "Anthropic",
+      "icon": "🤖",
+      "summary": "Claude Opus 5是Anthropic于2026年7月24日发布的混合推理模型，在编码和知识工作评估中达到新水平，具备1M上下文窗口，定价为每百万输入令牌5美元、每百万输出令牌25美元。",
+      "theme": "general",
+      "scenes": [
+        "生产级代码编写",
+        "复杂AI代理",
+        "企业工作流",
+        "金融建模",
+        "科学研究"
+      ],
+      "best_for_preview": "推荐用于生产级代码、复杂AI代理和企业级多日项目。",
+      "not_for_preview": "不推荐用于长期自主生物研究，因为模型在此类任务上有明显局限。",
+      "price_badge": "paid",
+      "access_level": "开放",
+      "search_terms": [
+        "Claude Opus 5",
+        "Anthropic",
+        "claude-opus-5",
+        "生产级代码编写",
+        "复杂AI代理",
+        "企业工作流",
+        "金融建模",
+        "科学研究"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:claude-opus-5"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:gemini-3-1-pro",
+      "tool_key": "gemini-3-1-pro",
+      "vendor_key": "gemini",
+      "title": "Gemini 3.1 Pro",
+      "vendor_label": "Google",
+      "icon": "🤖",
+      "summary": "Gemini 3.1 Pro Preview 是 Gemini 3 系列的最新迭代，提供更强的推理能力、改进的 token 效率和更准确的 grounding，针对软件工程和 agentic 工作流优化。",
+      "theme": "general",
+      "scenes": [
+        "复杂推理",
+        "代码生成与执行",
+        "Agentic 工作流",
+        "多模态理解",
+        "函数调用",
+        "搜索 grounding"
+      ],
+      "best_for_preview": [
+        "使用 Gemini 3.1 Pro Preview 进行复杂问题求解和高级编码任务",
+        "构建需要可靠多步骤执行的 agentic 工作流"
+      ],
+      "not_for_preview": [
+        "实时对话应用，因为不支持 Live API",
+        "图像生成场景，因为该模型不支持图像生成"
+      ],
+      "price_badge": "freemium",
+      "access_level": "受限",
+      "search_terms": [
+        "Gemini 3.1 Pro",
+        "Google",
+        "gemini-3-1-pro",
+        "复杂推理",
+        "代码生成与执行",
+        "Agentic 工作流",
+        "多模态理解",
+        "函数调用",
+        "搜索 grounding"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:gemini-3-1-pro"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:grok-4-6",
+      "tool_key": "grok-4-6",
+      "vendor_key": "grok",
+      "title": "Grok 4.6",
+      "vendor_label": "xAI",
+      "icon": "🤖",
+      "summary": "Grok 4.6 是 xAI 的前沿模型，支持文本和图像输入、文本输出，具备 500k 上下文窗口，用于编程、智能体任务和知识工作。",
+      "theme": "general",
+      "scenes": [
+        "编程与代码修复",
+        "智能体任务自动化",
+        "知识密集型问答"
+      ],
+      "best_for_preview": "编程与代码修复",
+      "not_for_preview": "图像生成与视频处理",
+      "price_badge": "paid",
+      "access_level": "开放",
+      "search_terms": [
+        "Grok 4.6",
+        "xAI",
+        "grok-4-6",
+        "编程与代码修复",
+        "智能体任务自动化",
+        "知识密集型问答"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:grok-4-6"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:minimax-h3",
+      "tool_key": "minimax-h3",
+      "vendor_key": "hailuo",
+      "title": "MiniMax H3",
+      "vendor_label": "MiniMax",
+      "icon": "🤖",
+      "summary": "MiniMax H3是新一代开源通用多模态视频生成模型，支持文本、图像、视频和音频输入，可生成4-15秒的768P或2K视频。",
+      "theme": "general",
+      "scenes": [
+        "视频生成",
+        "参考生成",
+        "视频编辑"
+      ],
+      "best_for_preview": "创意视频制作",
+      "not_for_preview": "低分辨率快速预览",
+      "price_badge": "paid",
+      "access_level": "开放",
+      "search_terms": [
+        "MiniMax H3",
+        "MiniMax",
+        "minimax-h3",
+        "视频生成",
+        "参考生成",
+        "视频编辑"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:minimax-h3"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:command-a-plus",
+      "tool_key": "command-a-plus",
+      "vendor_key": "cohere",
+      "title": "Command A+",
+      "vendor_label": "Cohere",
+      "icon": "🤖",
+      "summary": "Command A+ 是 Cohere 的首款混合专家模型，支持文本和图像输入，具备推理、翻译和多语言处理能力，支持 48 种语言，适用于复杂智能体任务。",
+      "theme": "general",
+      "scenes": [
+        "复杂多模态智能体任务",
+        "多语言翻译与处理",
+        "企业级高效部署"
+      ],
+      "best_for_preview": "需要处理复杂多模态智能体任务的企业用户，以及需要多语言支持和高吞吐低延迟场景",
+      "not_for_preview": "对模型本地部署有严格限制且无法接受云服务依赖的场景",
+      "price_badge": "freemium",
+      "access_level": "开放",
+      "search_terms": [
+        "Command A+",
+        "Cohere",
+        "command-a-plus",
+        "复杂多模态智能体任务",
+        "多语言翻译与处理",
+        "企业级高效部署"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:command-a-plus"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:gpt-realtime-2",
+      "tool_key": "gpt-realtime-2",
+      "vendor_key": "chatgpt",
+      "title": "GPT-Realtime-2",
+      "vendor_label": "OpenAI",
+      "icon": "🤖",
+      "summary": "GPT-Realtime-2 是 OpenAI 最强大的实时语音模型，支持语音到语音交互，可配置推理努力。",
+      "theme": "general",
+      "scenes": [
+        "实时语音助手",
+        "语音客服系统",
+        "语音翻译与转录",
+        "复杂语音代理工作流"
+      ],
+      "best_for_preview": "需要高精度实时语音交互与语音代理的场景。",
+      "not_for_preview": "以文本为主的对话或包含视频输入的场景。",
+      "price_badge": "usage_based",
+      "access_level": "受限",
+      "search_terms": [
+        "GPT-Realtime-2",
+        "OpenAI",
+        "gpt-realtime-2",
+        "实时语音助手",
+        "语音客服系统",
+        "语音翻译与转录",
+        "复杂语音代理工作流"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:gpt-realtime-2"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:gpt-image-2",
+      "tool_key": "gpt-image-2",
+      "vendor_key": "chatgpt",
+      "title": "gpt-image-2",
+      "vendor_label": "OpenAI",
+      "icon": "🤖",
+      "summary": "gpt-image-2 是 OpenAI 的图像生成模型，支持高质量图像生成与编辑，提供多种尺寸和质量选项。",
+      "theme": "general",
+      "scenes": [
+        "图像生成",
+        "图像编辑",
+        "图形设计",
+        "营销素材",
+        "电商产品图"
+      ],
+      "best_for_preview": "需要高质量图像生成与编辑的场景，如广告、品牌视觉、产品目录等。",
+      "not_for_preview": "不支持透明背景，且对超 2K 分辨率的输出视为实验性。",
+      "price_badge": "usage_based",
+      "access_level": "开放",
+      "search_terms": [
+        "gpt-image-2",
+        "OpenAI",
+        "gpt-image-2",
+        "图像生成",
+        "图像编辑",
+        "图形设计",
+        "营销素材",
+        "电商产品图"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:gpt-image-2"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:spark-x2",
+      "tool_key": "spark-x2",
+      "vendor_key": "xinghuo",
+      "title": "Spark X2",
+      "vendor_label": "科大讯飞",
+      "icon": "🤖",
+      "summary": "讯飞星火大模型是科大讯飞推出的AI大语言模型，提供多种能力，包括深度推理、文本生成、语音识别等，支持API调用。",
+      "theme": "general",
+      "scenes": [
+        "知识问答",
+        "数学推理",
+        "办公辅助",
+        "角色扮演",
+        "聊天陪伴",
+        "营销素材生成"
+      ],
+      "best_for_preview": "深度推理模型Spark X2，适合复杂推理任务；超拟人语音合成MOS分4.5，适合语音交互。",
+      "not_for_preview": "语音识别大模型、多语种识别模型可能不适用于纯文本场景。",
+      "price_badge": "freemium",
+      "access_level": "开放",
+      "search_terms": [
+        "Spark X2",
+        "科大讯飞",
+        "spark-x2",
+        "知识问答",
+        "数学推理",
+        "办公辅助",
+        "角色扮演",
+        "聊天陪伴",
+        "营销素材生成"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:spark-x2"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:kling-3-0",
+      "tool_key": "kling-3-0",
+      "vendor_key": "kling",
+      "title": "Kling 3.0",
+      "vendor_label": "可灵",
+      "icon": "🤖",
+      "summary": "Kling VIDEO 3.0 是统一多模态视频生成模型，支持原生4K、15秒视频、多镜头叙事、原生音频、多语言及口音，并通过API提供文本生视频、图像生视频等多种功能。",
+      "theme": "general",
+      "scenes": [
+        "视频创作",
+        "影视制作",
+        "广告营销",
+        "内容生成",
+        "教育视频"
+      ],
+      "best_for_preview": "最适合影视级视频创作、广告制作、社交媒体内容生产等专业场景。",
+      "not_for_preview": "不适合实时视频渲染或需要精细控制每一帧的传统动画制作场景。",
+      "price_badge": "paid",
+      "access_level": "开放",
+      "search_terms": [
+        "Kling 3.0",
+        "快手可灵",
+        "kling-3-0",
+        "视频创作",
+        "影视制作",
+        "广告营销",
+        "内容生成",
+        "教育视频"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:kling-3-0"
       },
       "detail_kind": "api_model"
     }
