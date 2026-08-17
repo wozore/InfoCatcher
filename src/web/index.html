@@ -143,7 +143,34 @@
 
   <!-- AI 搜索首页：仅提交固定静态示例，不联网或动态生成 -->
   <section id="view-search" class="view active" aria-labelledby="searchViewTitle">
-    <div class="search-shell" id="searchHomePanel">
+    <div class="search-layout" id="searchHomePanel">
+      <aside class="search-guide" aria-labelledby="searchGuideTitle">
+        <h2 class="section-title" id="searchGuideTitle">怎么用这个搜索</h2>
+        <ol class="search-guide-steps">
+          <li class="search-guide-step">
+            <span class="search-guide-step-num">1</span>
+            <div>
+              <h3>把任务写成一句话</h3>
+              <p>想清楚你要完成的事，越具体越好。</p>
+            </div>
+          </li>
+          <li class="search-guide-step">
+            <span class="search-guide-step-num">2</span>
+            <div>
+              <h3>点示例看看怎么匹配</h3>
+              <p>拿不准怎么写？直接点示例按钮体验匹配过程。</p>
+            </div>
+          </li>
+          <li class="search-guide-step">
+            <span class="search-guide-step-num">3</span>
+            <div>
+              <h3>结果页继续深入</h3>
+              <p>点工具卡看详情与对比，点概念词看解释。</p>
+            </div>
+          </li>
+        </ol>
+      </aside>
+      <div class="search-shell search-layout-main">
       <header class="page-header search-home-header">
         <span class="eyebrow">AI 信息搜索 · 静态演示</span>
         <h1 class="page-title" id="searchViewTitle">把你想了解的事，说清楚一点</h1>
@@ -188,8 +215,8 @@
 
       <section class="search-home-section section-rule" aria-labelledby="searchExamplesTitle">
         <h2 class="section-title" id="searchExamplesTitle">你可以试试</h2>
-        <div class="chip-row search-example-list" id="searchExampleList"></div>
-        <p class="search-rewrite-hint">问题越具体越容易匹配。可以先写任务，例如“写论文”“写代码”或“深度研究”。</p>
+        <div class="search-example-list" id="searchExampleList"></div>
+        <p class="search-rewrite-hint">问题越具体越容易匹配；不确定怎么写，也可以直接点下面的示例试一试。</p>
       </section>
 
       <section class="search-home-section section-rule" id="searchRecentSection" aria-labelledby="searchRecentTitle" hidden>
@@ -199,6 +226,7 @@
         </div>
         <div class="list search-recent-list" id="searchRecentList"></div>
       </section>
+      </div>
     </div>
 
     <div class="search-results-shell" id="searchResultsPanel" hidden>

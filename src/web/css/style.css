@@ -245,6 +245,41 @@ a { color: var(--link); }
 main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space-page) 56px; }
 .view { display: none; }
 .view.active { display: block; }
+
+/* B16 决策（搜索首页 v3）：左中右布局——左「怎么用」引导栏 / 中搜索主区原样 / 右留白。
+   与结果页同法：搜索首页可见时放开 <main> 限宽（:has 结构选择器，切走即复原）。 */
+main:has(#view-search.active):has(#searchHomePanel:not([hidden])) { max-width: none; }
+.search-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, var(--content-reading)) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.search-layout-main { grid-column: 2; min-width: 0; }
+.search-guide {
+  grid-column: 1;
+  justify-self: end;
+  width: calc(100% - 24px);
+  max-width: 300px;
+  margin-right: 24px; /* 向左挪：与中间主区留出呼吸，不贴列边 */
+  padding-top: 96px;  /* 向下挪：对齐主区大标题中段，避免顶在眉题线上 */
+  text-align: left;
+  min-width: 0;
+}
+.search-guide-steps { list-style: none; margin: 0; padding: 0; }
+.search-guide-step {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 13px 0; border-top: 1px solid var(--border);
+}
+.search-guide-step:first-child { border-top: 0; }
+.search-guide-step-num {
+  flex: 0 0 26px; height: 26px; display: grid; place-items: center;
+  border-radius: 50%; background: var(--primary-light); color: var(--primary);
+  font-size: 13px; font-weight: 700;
+}
+.search-guide-step h3 { margin: 1px 0 3px; font-size: 14px; font-weight: 600; }
+.search-guide-step p { margin: 0; color: var(--text-secondary); font-size: 12.5px; }
+
 .search-shell { max-width: var(--content-reading); margin: 56px auto 0; text-align: center; }
 .search-home-header { margin-inline: auto; }
 .search-shell .page-lead { margin-inline: auto; }
@@ -254,8 +289,26 @@ main { max-width: var(--content-wide); margin: 0 auto; padding: 24px var(--space
 .search-home-state,
 .search-shell-note { max-width: 680px; margin: 14px auto 0; text-align: left; }
 .search-home-section { text-align: left; }
-.search-example-list { justify-content: center; }
-.search-example-list .chip { min-height: 40px; }
+/* B16 决策（搜索首页 v3）：示例按钮为自然语言问句，两列网格圆角卡，点击整句填入输入框 */
+.search-example-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+  justify-content: center;
+}
+.search-example-list .search-example {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: left;
+}
 .search-rewrite-hint { margin: 12px 0 0; color: var(--text-hint); font-size: 12px; text-align: center; }
 .search-section-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
 .search-recent-list { border-bottom: 1px solid var(--border); }
@@ -470,7 +523,8 @@ main:has(#view-search.active):has(#searchResultsPanel:not([hidden])) { max-width
 .concept-popover p { margin: 12px 0 15px; color: var(--text-secondary); font-size: 13px; line-height: 1.7; }
 .concept-popover-close { display: grid; place-items: center; width: 36px; height: 36px; border: 0; background: transparent; color: var(--text-secondary); font-size: 24px; cursor: pointer; }
 .search-results-shell[hidden],
-.search-shell[hidden] { display: none; }
+.search-shell[hidden],
+.search-layout[hidden] { display: none; }
 
 /* ═══ B16 共享排版与组件原语 ═══════════════════════════════════
    后续视图迁移优先组合这些类，避免复制页面专属的硬编码样式。 */
@@ -1875,8 +1929,7 @@ main:has(#view-search.active):has(#searchResultsPanel:not([hidden])) { max-width
   .capability-note strong { display: block; }
   .mobile-nav:not([hidden]) { grid-template-columns: 1fr; }
   .search-shell { margin-top: 34px; }
-  .search-example-list { justify-content: flex-start; }
-  .search-example-list .chip { width: 100%; text-align: left; }
+  .search-example-list { grid-template-columns: 1fr; }
   .search-rewrite-hint { text-align: left; }
   .search-section-heading { display: block; }
   .search-section-heading .faint { display: block; margin-top: -8px; }
@@ -2177,4 +2230,18 @@ main:has(#view-search.active):has(#searchResultsPanel:not([hidden])) { max-width
   .trending-source-meta { grid-template-columns: 1fr; }
   .hotspot-detail-meta,
   .hotspot-source-meta { grid-template-columns: 1fr; }
+}
+
+/* 搜索首页左中右布局：窄视口收起为单列，引导栏移到主区上方 */
+@media (max-width: 1150px) {
+  .search-layout { grid-template-columns: 1fr; }
+  .search-guide {
+    grid-column: auto;
+    justify-self: auto;
+    width: auto;
+    max-width: var(--content-reading);
+    margin: 44px auto 0;
+    padding-top: 0;
+  }
+  .search-layout-main { grid-column: auto; }
 }

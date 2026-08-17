@@ -7,6 +7,7 @@
                   "icon": "📝",
                   "category": "writing",
                   "description": "从选题调研、文献整理到初稿撰写和语言润色，找到适合学术写作各阶段的工具。",
+                  "example": "帮我把选题思路整理成一篇论文初稿",
                   "search_terms": [
                         "论文",
                         "学术",
@@ -66,6 +67,7 @@
                   "icon": "📋",
                   "category": "office",
                   "description": "整理工作进展、会议材料和数据结论，快速生成结构清晰的周报、总结与项目报告。",
+                  "example": "总结本周工作进展，生成一份周报",
                   "search_terms": [
                         "周报",
                         "报告",
@@ -125,6 +127,7 @@
                   "icon": "💻",
                   "category": "coding",
                   "description": "覆盖代码生成、项目开发、调试修复和代码审查，按不同编程任务选择合适的AI工具。",
+                  "example": "写一个登录页面，并检查代码有没有问题",
                   "search_terms": [
                         "代码",
                         "编程",
@@ -181,6 +184,7 @@
                   "icon": "🌍",
                   "category": "writing",
                   "description": "处理多语言互译、长文档翻译和学术表达，在保留原意的同时改善术语与行文质量。",
+                  "example": "把这封英文邮件翻译成中文",
                   "search_terms": [
                         "翻译",
                         "互译",
@@ -251,6 +255,7 @@
                   "icon": "🔬",
                   "category": "research",
                   "description": "围绕复杂问题进行资料检索、来源核验、长文档分析和数据解读，形成可追溯的研究结论。",
+                  "example": "查一下几家厂商的资料，整理成对比结论",
                   "search_terms": [
                         "研究",
                         "调研",
@@ -303,6 +308,7 @@
                   "icon": "🎨",
                   "category": "design",
                   "description": "生成插画、海报、概念图和营销视觉，并根据风格、文字表现与可控性选择创作工具。",
+                  "example": "给文章配一张科技感的插画",
                   "search_terms": [
                         "设计",
                         "配图",
@@ -346,6 +352,7 @@
                   "icon": "🎬",
                   "category": "video",
                   "description": "从文生视频、短视频创作到数字人口播和后期特效，匹配不同制作流程所需的工具。",
+                  "example": "对比几款视频生成模型，选一个合适的",
                   "search_terms": [
                         "视频",
                         "短视频",
@@ -385,6 +392,7 @@
                   "icon": "💡",
                   "category": "learning",
                   "description": "围绕主题发散创意、比较不同观点并整理思路，适合选题、策划和问题拆解。",
+                  "example": "帮我头脑风暴几个选题方向",
                   "search_terms": [
                         "头脑风暴",
                         "创意",
@@ -437,6 +445,7 @@
                   "icon": "📊",
                   "category": "office",
                   "description": "从大纲、文案到版式和演示成稿，快速完成课程展示、方案汇报和项目路演。",
+                  "example": "把这周的进展整理成一份汇报 PPT",
                   "search_terms": [
                         "PPT",
                         "演示",
@@ -484,6 +493,7 @@
                   "icon": "📚",
                   "category": "learning",
                   "description": "用于知识答疑、习题讲解、资料整理和个性化学习，在理解过程而不只是得到答案。",
+                  "example": "辅导我梳理复习计划，讲讲学习难点",
                   "search_terms": [
                         "学习",
                         "辅导",
@@ -557,6 +567,7 @@
                   "icon": "🎵",
                   "category": "audio",
                   "description": "生成完整歌曲、背景音乐和配乐素材，覆盖灵感试听、风格探索与内容配乐需求。",
+                  "example": "帮我生成一段适合宣传片的背景音乐",
                   "search_terms": [
                         "音乐",
                         "歌曲",
@@ -594,6 +605,7 @@
                   "icon": "🎙️",
                   "category": "audio",
                   "description": "制作视频旁白、有声书、播客和多语言配音，兼顾自然度、音色选择与制作效率。",
+                  "example": "给宣传片配一段自然的旁白",
                   "search_terms": [
                         "配音",
                         "语音",

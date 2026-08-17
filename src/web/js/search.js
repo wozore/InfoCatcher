@@ -215,11 +215,14 @@ function renderSearchHome() {
   const recentList = document.getElementById('searchRecentList');
   if (!examples || !recentSection || !recentList) return;
 
-  examples.innerHTML = scenes.map(scene =>
-    '<button class="chip" type="button" data-search-example="' + escapeHtml(scene.name) + '">' +
-      escapeHtml(scene.name) +
-    '</button>'
-  ).join('');
+  // B16 决策（搜索首页 v3）：示例按钮用场景的自然语言示例问句（scene.example）渲染，
+  // 整句填入输入框即按现有索引命中对应场景，不在展示区暴露裸关键词；无 example 时回退场景名。
+  examples.innerHTML = scenes.map(scene => {
+    const text = scene.example || scene.name;
+    return '<button class="chip search-example" type="button" data-search-example="' + escapeHtml(text) + '">' +
+      escapeHtml(text) +
+    '</button>';
+  }).join('');
 
   recentSection.hidden = searchState.recent.length === 0;
   recentList.innerHTML = searchState.recent.map(entry =>

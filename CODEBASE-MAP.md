@@ -8,6 +8,7 @@
 - [vendor-preview-level1.json](data/catalog/vendor-preview-level1.json) — 厂商一级预览数据；标题、描述、状态、特点和二级稳定引用由一级模块拥有。
 - [vendor-preview-level2.json](data/catalog/vendor-preview-level2.json) — 厂商二级分组预览数据；通过 `detail_refs` 指向三级详情，不重复保存来源或三级子卡片投影。
 - [tool-preview-level3.json](data/catalog/tool-preview-level3.json) — 厂商三级预览/工具详情唯一数据源；由 `detail_kind` 区分工具、API 模型和订阅套餐，层级由二级 `detail_refs` 表达，价格/访问/场景与来源信息由详情拥有。
+- [scenes.json](data/catalog/scenes.json) — 场景演示数据（AI 搜索示例 + 场景模式共用）；`name`/`search_terms` 为关键词索引词表，`description` 为场景导语，`example` 为搜索首页「你可以试试」的自然语言示例问句（点击整句填入输入框，按关键词索引命中对应场景）。
 ## 根领域文档
 - [CONTEXT.md](CONTEXT.md) — catalog 领域词汇表；定义 CatalogProfile、ResearchScope、OfficialSource、FieldCoverage、DerivedField、LayerPatch、CatalogDraft、Readiness 与 Apply。
 
@@ -48,7 +49,8 @@
 - [vibe-hub-evidence.js](src/catalog/vibe-hub-evidence.js) — vibe-hub.org 概念页提取与本地缓存（纯 HTTP 零 API 成本）：term→英文 kebab slug（含中文返回 null）、JSON-LD/正文结构化提取、缓存优先 + 串行 ≥500ms 节流、TTL 默认 3 天、过期重抓。导出: `vibeHubSlugOf, extractVibeHubText, loadVibeHubCache, saveVibeHubCache, fetchVibeHubDefinition, fetchPage, refreshStaleVibeHubCache`
 
 ## src/web/ — 前端静态站（原生 ES module，无打包器；build-dist.js 原样复制到 dist/）
-- [css/style.css](src/web/css/style.css) — 全站样式；工具视图分类索引含极简编辑部科技风格、左侧独立定位、移动端横向布局与具体工具卡片主题/微纹理；厂商卡片与具体工具卡片的悬停样式作用域隔离；工具卡片适合/不适合提示使用颜色竖线；搜索主区热点概念层知识块（热点在上、概念在下）
+- [index.html](src/web/index.html) — 页面骨架与八视图 HTML 结构；AI 搜索首页为左中右布局（左侧「怎么用」三步引导栏 + 中间原样搜索主区 + 右侧留白），结果页三栏答案引擎。
+- [css/style.css](src/web/css/style.css) — 全站样式；工具视图分类索引含极简编辑部科技风格、左侧独立定位、移动端横向布局与具体工具卡片主题/微纹理；厂商卡片与具体工具卡片的悬停样式作用域隔离；工具卡片适合/不适合提示使用颜色竖线；搜索主区热点概念层知识块（热点在上、概念在下）；搜索首页左中右引导栏布局（<main> 限宽按 :has 条件放开，窄视口收起为单列）
 - [i18n/zh.js](src/web/i18n/zh.js) — 语言字典（试点：trending 视图 + 共享工具；未来加 en.js 等）。导出: `messages`
 - [js/i18n.js](src/web/js/i18n.js) — **前端 i18n 框架核心**（两层：UI 文案 t() + 内容数据 getLocalizedField）。导出: `t, setLang, getCurrentLang, getLocalizedField, applyStaticTranslations`
 - [js/main.js](src/web/js/main.js) — 入口：共享状态、导航 switchView、全部事件绑定（DOMContentLoaded 先 applyStaticTranslations，工具分类索引由 tools.js 的 ToolDirectoryView 自管理）。导出: `currentView, switchView`
@@ -60,7 +62,7 @@
 - [js/tool-preview-level3.js](src/web/js/tool-preview-level3.js) — 厂商三级预览/工具详情模块；严格场景对象、结构化 not_applicable、通用视频/图像/credit 计价与旧 token 价格兼容渲染。导出: `renderToolLevel3, renderScenario, renderRateCard, notApplicableHtml`、默认详情渲染器
 
 - [js/data.js](src/web/js/data.js) — 五模块目录领域查询、独立数据加载、过滤、平台元数据与通用工具；不再构造旧 `tools.json` / `tool-intelligence.json` 兼容投影。导出: 五模块查询函数、各数据状态与 setter、escapeHtml/timeAgo/formatPrice 等
-- [js/search.js](src/web/js/search.js) — AI 搜索视图（四层关键词索引答案引擎）：首页/处理/结果三态；统一提取器 extractKeywords 从混杂查询提取关键词（≥2 字符、长词优先），三层词表依次命中——场景层（复用 scenes.json 场景搜索词，与场景模式共用映射）→ 内容层（工具卡 title/vendor_label/search_terms + 品牌短形式派生，如 gpt→GPT-5.5）→ 热点概念层（glossary 词 + 热点标题英文 token），命中后主区渲染含知识块（热点在上、概念在下）；一句话答案（内嵌 [n] 引用→工具 mini 卡）+ 左栏本页概念索引 + 右栏最新热点；「了解更多」跳工具库按 query 过滤 + 强制 tool toggle；概念词全站联动。导出: `searchState, submitSearchHome, renderSearchResults, renderSearchView, openSearchToolDetail, openSearchMoreTools...`
+- [js/search.js](src/web/js/search.js) — AI 搜索视图（四层关键词索引答案引擎）：首页/处理/结果三态；首页为左中右布局（左侧「怎么用」三步引导栏 + 中间主区），「你可以试试」示例按钮用场景自然语言问句渲染（scene.example）；统一提取器 extractKeywords 从混杂查询提取关键词（≥2 字符、长词优先），三层词表依次命中——场景层（复用 scenes.json 场景搜索词，与场景模式共用映射）→ 内容层（工具卡 title/vendor_label/search_terms + 品牌短形式派生，如 gpt→GPT-5.5）→ 热点概念层（glossary 词 + 热点标题英文 token），命中后主区渲染含知识块（热点在上、概念在下）；一句话答案（内嵌 [n] 引用→工具 mini 卡）+ 左栏本页概念索引 + 右栏最新热点；「了解更多」跳工具库按 query 过滤 + 强制 tool toggle；概念词全站联动。导出: `searchState, submitSearchHome, renderSearchResults, renderSearchView, openSearchToolDetail, openSearchMoreTools...`
 - [js/tools.js](src/web/js/tools.js) — 工具库视图（厂商/工具 Toggle）由独立 `VendorDirectoryView` / `ToolDirectoryView` 控制器分别管理；工具卡片四类主题、分组和快速索引 + 滤选 + 单级详情弹窗；厂商一级/二级与工具/模型/套餐三级详情统一按稳定 ref 打开，仅 X 关闭。导出: `openDetail, closeModal, showModal, getToolsViewMode, toggleToolsViewMode, setToolsViewMode, clearToolFilters, renderTools...`
 - [js/compare.js](src/web/js/compare.js) — 对比模式（工具与 API 模型由工具卡加入；订阅套餐由二级详情组加入；区分未知访问/价格，API 模型兼容通用计价单位、结构化 not_applicable 与旧 token 价格）。导出: `compareList, toggleCompareRef, compareGroupLeaves, quickCompare, renderCompare...`
 - [js/featured.js](src/web/js/featured.js) — 推荐视图（编辑精选通过工具 `tool_key` + 三级 `detail_ref` 导航，热门模型按正式工具卡 `detail_kind/theme` 分类；访问/资料状态使用中性未知语义，价格兼容通用计价单位）。导出: `renderFeatured, renderFeaturedTabs...`
