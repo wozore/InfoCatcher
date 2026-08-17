@@ -28,6 +28,7 @@
 const { requestStructuredJson } = require('../../catalog/ai/deepseek-structured');
 const { createCostLedger } = require('../../catalog/catalog-research');
 const { loadGeneratorConfig } = require('../../catalog/catalog-assistant');
+const { LOCAL_API_BASE } = require('../../shared/llm-endpoints');
 
 const DEFAULT_MAX_OUTPUT_TOKENS = 600;
 
@@ -117,6 +118,7 @@ async function extractEntitiesWithLlm(text, options = {}) {
     apiKey: options.apiKey,
     fetchImpl: options.fetchImpl,
     timeoutMs: options.timeoutMs,
+    endpoint: options.endpoint || LOCAL_API_BASE,
   });
   if (!result.ok) {
     const error = new Error(result.error || result.code || 'ENTITY_EXTRACT_FAILED');

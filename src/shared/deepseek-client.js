@@ -41,7 +41,9 @@ async function requestResponses(payload, options = {}) {
   const endpoint = options.endpoint || provider.responsesEndpoint;
   if (!apiKey) return { ok: false, code: `${prefix}_AUTH_REQUIRED`, error: `缺少 ${provider.apiKeyEnv}` };
   if (!fetchImpl) return { ok: false, code: `${prefix}_NETWORK_ERROR`, error: '当前运行环境无 fetch' };
-  if (!/^https:\/\//.test(endpoint)) return { ok: false, code: `${prefix}_ENDPOINT_INVALID`, error: 'AI endpoint 必须使用 HTTPS' };
+  if (!/^https:\/\//.test(endpoint) && !/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?(\/|$)/.test(endpoint)) {
+    return { ok: false, code: `${prefix}_ENDPOINT_INVALID`, error: 'AI endpoint 必须使用 HTTPS 或本地 localhost' };
+  }
 
   let response;
   try {

@@ -2,6 +2,7 @@
 
 const { getProvider, resolveProvider, apiKeyForProvider } = require('../../shared/ai-provider-registry');
 const { canonicalizeUrl, searchTavily, extractTavily, probeTavily } = require('../../shared/tavily-client');
+const { LOCAL_API_BASE } = require('../../shared/llm-endpoints');
 const { synthesizeLayerFields } = require('./deepseek-catalog-ai');
 const { requestStructuredJson } = require('./deepseek-structured');
 
@@ -191,6 +192,7 @@ async function resolveOfficialSource(name, options = {}) {
     model: options.model || getProvider('deepseek')?.defaultModel,
     apiKey: extractionKey,
     timeoutMs: options.timeoutMs,
+    endpoint: options.endpoint || LOCAL_API_BASE,
   });
   if (!extracted.ok) return extracted;
 

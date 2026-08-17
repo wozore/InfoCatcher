@@ -11,6 +11,7 @@
  */
 
 const { requestStructuredJson } = require('./deepseek-structured');
+const { LOCAL_API_BASE } = require('../../shared/llm-endpoints');
 const {
   buildConceptSynthesisInput,
   buildConceptSynthesisInstructions,
@@ -68,7 +69,7 @@ async function synthesizeConceptFields(input = {}, options = {}) {
     maxOutputTokens: options.maxOutputTokens || 1500,
     ledger,
     validate: validateConceptValue,
-  }, options);
+  }, { ...options, endpoint: options.endpoint || LOCAL_API_BASE });
   if (!result.ok) return result;
   return { ok: true, value: normalizeConceptEntry(result.value, input.card), usage: result.usage };
 }

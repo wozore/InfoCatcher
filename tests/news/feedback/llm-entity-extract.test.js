@@ -84,8 +84,12 @@ test('extractEntitiesWithLlm 成功返回带类型实体，请求带 Bearer', as
   ]);
   assert.equal(captured.headers.Authorization, 'Bearer test-key');
   assert.equal(captured.body.model, 'deepseek-v4-flash');
-  assert.match(captured.body.instructions, /订阅套餐/);
-  assert.equal(captured.body.input, JSON.stringify({ text: 'Claude Code 和 Qwen3.8-Max 都很强。' }));
+  // 本地 Bonsai 分支：instructions/input 折叠为 system/user messages，带关闭思维链
+  assert.equal(captured.body.messages[0].role, 'system');
+  assert.match(captured.body.messages[0].content, /订阅套餐/);
+  assert.equal(captured.body.messages[1].role, 'user');
+  assert.equal(captured.body.messages[1].content, JSON.stringify({ text: 'Claude Code 和 Qwen3.8-Max 都很强。' }));
+  assert.deepEqual(captured.body.chat_template_kwargs, { enable_thinking: false });
 });
 
 test('extractEntitiesWithLlm 模型输出 {names} 旧格式也能归一化', async () => {

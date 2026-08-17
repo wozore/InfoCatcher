@@ -1,6 +1,7 @@
 'use strict';
 
 const { requestResponses, textFromResponse } = require('../../shared/deepseek-client');
+const { ensureLocalModel } = require('../../shared/local-model');
 
 const MAX_OUTPUT_PREVIEW = 1200;
 
@@ -80,18 +81,45 @@ function failure(kind, code, error, diagnostics = {}) {
   return { ok: false, code: `DEEPSEEK_${kind.toUpperCase()}_${code}`, error, ...diagnostics };
 }
 
+// 本地 Bonsai 模型走 OpenAI 兼容 Chat Completions 端点：不带 reasoning / text.format
+// （兼容端点会忽略或报错），并把 instructions/input 折叠为 system/user messages；
+// 必须带 chat_template_kwargs 关闭思维链，否则思考过程会吃光 max_tokens 预算。
+function toChatCompletionsPayload({ model, instructions, input, maxOutputTokens }) {
+  return {
+    model,
+    messages: [
+      ...(instructions ? [{ role: 'system', content: instructions }] : []),
+      { role: 'user', content: typeof input === 'string' ? input : JSON.stringify(input) },
+    ],
+    max_tokens: maxOutputTokens,
+    stream: false,
+    chat_template_kwargs: { enable_thinking: false },
+  };
+}
+
 async function requestStructuredJson({ kind, instructions, input, maxOutputTokens, ledger, validate }, options = {}) {
+  const isLocal = /^http:\/\/(localhost|127\.0\.0\.1)/.test(options.endpoint || '');
+  if (isLocal) {
+    const localReady = await ensureLocalModel({ fetchImpl: options.fetchImpl });
+    if (!localReady.ok) {
+      console.error(`[local-model] ${localReady.error}`);
+      return { ok: false, code: 'LOCAL_MODEL_UNAVAILABLE', error: localReady.error };
+    }
+  }
   const reserved = reserveResponses(ledger);
   if (!reserved.ok) return { ok: false, code: reserved.code, error: 'DeepSeek 结构化调用预算不足' };
-  const response = await requestResponses({
-    model: options.model,
-    instructions,
-    input,
-    max_output_tokens: maxOutputTokens,
-    stream: false,
-    reasoning: { effort: 'none' },
-    text: { format: { type: 'json_object' } },
-  }, options);
+  const payload = isLocal
+    ? toChatCompletionsPayload({ model: options.model, instructions, input, maxOutputTokens })
+    : {
+        model: options.model,
+        instructions,
+        input,
+        max_output_tokens: maxOutputTokens,
+        stream: false,
+        reasoning: { effort: 'none' },
+        text: { format: { type: 'json_object' } },
+      };
+  const response = await requestResponses(payload, options);
   if (!response.ok) return response;
 
   const text = textFromResponse(response.data);

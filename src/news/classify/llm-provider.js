@@ -21,6 +21,8 @@
 'use strict';
 
 const { requestDeepSeek } = require('../../shared/deepseek-client');
+const { LOCAL_API_BASE, LOCAL_MODEL } = require('../../shared/llm-endpoints');
+const { ensureLocalModel } = require('../../shared/local-model');
 
 // ═══════════════════════════════════════════════════════════════
 // 常量
@@ -291,7 +293,7 @@ async function classifyWithDeepSeek(item, options = {}) {
  * @param {string} [model]
  * @returns {object} chat completions payload
  */
-function buildSummaryPayload(item, model = DEFAULT_MODEL) {
+function buildSummaryPayload(item, model = LOCAL_MODEL) {
   const title = String(item.title || '').slice(0, TITLE_MAX);
   const description = String(item.description || '').slice(0, DESC_MAX);
   const transcript = String(item.transcript || '')
@@ -311,6 +313,7 @@ function buildSummaryPayload(item, model = DEFAULT_MODEL) {
     temperature: 0,
     max_tokens: SUMMARY_MAX_TOKENS,
     stream: false,
+    chat_template_kwargs: { enable_thinking: false },
   };
 }
 
@@ -364,6 +367,9 @@ async function summarizeWithDeepSeek(item, options = {}) {
     return { ok: false, error: '当前运行环境无 fetch', code: 'no_fetch' };
   }
 
+  const localGate = await ensureLocalModelOrError(fetchImpl);
+  if (localGate) return localGate;
+
   let payload;
   try {
     payload = buildSummaryPayload(item, options.model);
@@ -372,7 +378,7 @@ async function summarizeWithDeepSeek(item, options = {}) {
   }
 
   try {
-    const response = await fetchImpl(API_BASE, {
+    const response = await fetchImpl(LOCAL_API_BASE, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -418,7 +424,7 @@ async function summarizeWithDeepSeek(item, options = {}) {
  * @param {string} [model]
  * @returns {object} chat completions payload
  */
-function buildReviewPayload(item, model = DEFAULT_MODEL) {
+function buildReviewPayload(item, model = LOCAL_MODEL) {
   const title = String(item.title || '').slice(0, TITLE_MAX);
   const description = String(item.description || '').slice(0, DESC_MAX);
   const transcript = String(item.transcript || '')
@@ -440,6 +446,7 @@ function buildReviewPayload(item, model = DEFAULT_MODEL) {
     temperature: 0,
     max_tokens: REVIEW_MAX_TOKENS,
     stream: false,
+    chat_template_kwargs: { enable_thinking: false },
   };
 }
 
@@ -495,6 +502,9 @@ async function reviewWithDeepSeek(item, options = {}) {
     return { ok: false, error: '当前运行环境无 fetch', code: 'no_fetch' };
   }
 
+  const localGate = await ensureLocalModelOrError(fetchImpl);
+  if (localGate) return localGate;
+
   let payload;
   try {
     payload = buildReviewPayload(item, options.model);
@@ -503,7 +513,7 @@ async function reviewWithDeepSeek(item, options = {}) {
   }
 
   try {
-    const response = await fetchImpl(API_BASE, {
+    const response = await fetchImpl(LOCAL_API_BASE, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -549,7 +559,7 @@ async function reviewWithDeepSeek(item, options = {}) {
  * @param {string} [model]
  * @returns {object} chat completions payload
  */
-function buildLocalizePayload(item, model = DEFAULT_MODEL) {
+function buildLocalizePayload(item, model = LOCAL_MODEL) {
   const title = String(item.title || '').slice(0, TITLE_MAX);
   const description = String(item.description || '').slice(0, DESC_MAX);
   const prompt = LOCALIZE_USER_PROMPT_TEMPLATE
@@ -564,6 +574,7 @@ function buildLocalizePayload(item, model = DEFAULT_MODEL) {
     temperature: 0,
     max_tokens: LOCALIZE_MAX_TOKENS,
     stream: false,
+    chat_template_kwargs: { enable_thinking: false },
   };
 }
 
@@ -614,6 +625,9 @@ async function localizeWithDeepSeek(item, options = {}) {
     return { ok: false, error: '当前运行环境无 fetch', code: 'no_fetch' };
   }
 
+  const localGate = await ensureLocalModelOrError(fetchImpl);
+  if (localGate) return localGate;
+
   let payload;
   try {
     payload = buildLocalizePayload(item, options.model);
@@ -622,7 +636,7 @@ async function localizeWithDeepSeek(item, options = {}) {
   }
 
   try {
-    const response = await fetchImpl(API_BASE, {
+    const response = await fetchImpl(LOCAL_API_BASE, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -674,7 +688,7 @@ const SELECT_TOP_MAX_TOKENS = 600;
  * @param {string} [model]
  * @returns {object} chat completions payload
  */
-function buildSelectTopPayload(candidates, minCount, maxCount, model = DEFAULT_MODEL) {
+function buildSelectTopPayload(candidates, minCount, maxCount, model = LOCAL_MODEL) {
   const list = (candidates || []).map((c, i) =>
     `${i + 1}. [${c.id}] (评分 ${c.score ?? '-'}) ${String(c.summary || '').slice(0, 120)}`
   ).join('\n');
@@ -688,6 +702,8 @@ function buildSelectTopPayload(candidates, minCount, maxCount, model = DEFAULT_M
     ],
     max_tokens: SELECT_TOP_MAX_TOKENS,
     temperature: 0.3,
+    stream: false,
+    chat_template_kwargs: { enable_thinking: false },
   };
 }
 
@@ -732,6 +748,9 @@ async function selectTopWithDeepSeek(candidates, options = {}) {
     return { ok: false, error: '无 approved 候选可供挑选', code: 'empty_candidates' };
   }
 
+  const localGate = await ensureLocalModelOrError(fetchImpl);
+  if (localGate) return localGate;
+
   let payload;
   try {
     payload = buildSelectTopPayload(candidates, options.min ?? 3, options.max ?? 5, options.model);
@@ -740,7 +759,7 @@ async function selectTopWithDeepSeek(candidates, options = {}) {
   }
 
   try {
-    const response = await fetchImpl(API_BASE, {
+    const response = await fetchImpl(LOCAL_API_BASE, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
       body: JSON.stringify(payload),
@@ -784,7 +803,7 @@ const ENGLISH_KEYWORD_RE = /^[A-Za-z][A-Za-z0-9 .+/#-]*$/;
  * @param {string[]} existingKeywords
  * @param {string} [model]
  */
-function buildKeywordRefinePayload(approvedItems, ruleCandidates, existingKeywords, model = DEFAULT_MODEL) {
+function buildKeywordRefinePayload(approvedItems, ruleCandidates, existingKeywords, model = LOCAL_MODEL) {
   const sourceItems = (approvedItems || []).map(item => ({
     id: String(item.id || ''),
     title: String(item.title || '').slice(0, TITLE_MAX),
@@ -825,6 +844,8 @@ ${JSON.stringify(sourceItems)}`;
     ],
     max_tokens: KEYWORD_REFINE_MAX_TOKENS,
     temperature: 0.1,
+    stream: false,
+    chat_template_kwargs: { enable_thinking: false },
   };
 }
 
@@ -876,6 +897,9 @@ async function refineKeywordsWithDeepSeek(approvedItems, ruleCandidates, options
     return { ok: false, error: '无 approved 候选可供提纯', code: 'empty_candidates' };
   }
 
+  const localGate = await ensureLocalModelOrError(fetchImpl);
+  if (localGate) return localGate;
+
   let payload;
   try {
     payload = buildKeywordRefinePayload(approvedItems, ruleCandidates, options.existingKeywords, options.model);
@@ -884,7 +908,7 @@ async function refineKeywordsWithDeepSeek(approvedItems, ruleCandidates, options
   }
 
   try {
-    const response = await fetchImpl(API_BASE, {
+    const response = await fetchImpl(LOCAL_API_BASE, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
       body: JSON.stringify(payload),
@@ -911,9 +935,22 @@ async function refineKeywordsWithDeepSeek(approvedItems, ruleCandidates, options
   }
 }
 
+/**
+ * 本地 AI 门：确保本地服务在线（离线自动启动），失败输出报错并返回降级对象。
+ * 注入自定义 fetchImpl（测试 mock）时 ensureLocalModel 直接放行，不探测不启动。
+ */
+async function ensureLocalModelOrError(fetchImpl) {
+  const state = await ensureLocalModel({ fetchImpl });
+  if (state.ok) return null;
+  console.error(`[local-model] ${state.error}`);
+  return { ok: false, error: state.error, code: state.code };
+}
+
 module.exports = {
   DEFAULT_MODEL,
   API_BASE,
+  LOCAL_API_BASE,
+  LOCAL_MODEL,
   buildDeepSeekPayload,
   normalizeLabel,
   classifyWithDeepSeek,
