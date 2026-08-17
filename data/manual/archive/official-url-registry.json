@@ -1,53 +1,145 @@
 {
   "schema_version": 1,
   "entries": {
-    "可灵": {
-      "vendor_name": "快手可灵",
-      "official_url": "https://klingai.com/",
-      "aliases": [
-        "Kling",
-        "kling-ai"
-      ]
-    },
-    "spark x2": {
-      "vendor_name": "科大讯飞",
-      "official_url": "https://xinghuo.xfyun.cn/sparkapi"
-    },
-    "gpt-5.5": {
+    "openai": {
       "vendor_name": "OpenAI",
-      "official_url": "https://openai.com/"
+      "official_urls": ["https://platform.openai.com/docs", "https://platform.openai.com", "https://chatgpt.com/pricing/"],
+      "model_prefixes": ["gpt", "tts", "daybreak", "text-embedding"]
     },
-    "gpt-realtime-2": {
-      "vendor_name": "OpenAI",
-      "official_url": "https://developers.openai.com/api/docs/models/gpt-realtime-2"
-    },
-    "gpt-image-2": {
-      "vendor_name": "OpenAI",
-      "official_url": "https://openai.com/index/image-generation-api"
-    },
-    "claude opus 5": {
+    "anthropic": {
       "vendor_name": "Anthropic",
-      "official_url": "https://www.anthropic.com/news"
+      "official_urls": ["https://docs.anthropic.com", "https://platform.claude.com/docs/en/about-claude/models/overview", "https://platform.claude.com/docs/en/about-claude/pricing", "https://code.claude.com/docs/en/overview"],
+      "model_prefixes": ["claude", "haiku", "sonnet", "opus", "fable", "mythos"]
     },
-    "gemini 3.1 pro": {
+    "google": {
       "vendor_name": "Google",
-      "official_url": "https://ai.google.dev/gemini-api/docs/models"
+      "official_urls": ["https://ai.google.dev/gemini-api/docs", "https://ai.google.dev/gemini-api/docs/models"],
+      "model_prefixes": ["gemini", "nano banana", "veo", "lyria"]
     },
-    "grok 4.6": {
-      "vendor_name": "xAI",
-      "official_url": "https://docs.x.ai/"
+    "deepseek": {
+      "vendor_name": "深度求索",
+      "official_url": "https://api-docs.deepseek.com",
+      "model_prefixes": ["deepseek", "flash", "pro"]
     },
-    "command a+": {
-      "vendor_name": "Cohere",
-      "official_url": "https://docs.cohere.com/docs/models"
+    "zhipu": {
+      "vendor_name": "智谱 AI（Z.ai）",
+      "official_urls": ["https://docs.z.ai/guides/overview/pricing", "https://docs.z.ai/guides/overview/overview", "https://docs.bigmodel.cn/cn/guide/start/model-overview", "https://open.bigmodel.cn/pricing"],
+      "model_prefixes": ["glm", "cogview", "cogvideox", "vidu"]
     },
-    "minimax h3": {
+    "baidu": {
+      "vendor_name": "百度（文心）",
+      "official_urls": ["https://qianfan.cloud.baidu.com", "https://cloud.baidu.com/doc/qianfan/s/rmh4stp0j", "https://cloud.baidu.com/doc/qianfan/s/imlg0beiu"],
+      "model_prefixes": ["ernie", "intervl"]
+    },
+    "xunfei": {
+      "vendor_name": "科大讯飞",
+      "official_url": "https://xinghuo.xfyun.cn/sparkapi",
+      "model_prefixes": ["spark"]
+    },
+    "minimax": {
       "vendor_name": "MiniMax",
-      "official_url": "https://platform.minimax.io/docs/release-notes/models"
+      "official_urls": ["https://platform.minimax.io/docs", "https://platform.minimax.io/docs/token-plan/intro", "https://platform.minimax.io/docs/guides/pricing-speech", "https://platform.minimax.io/docs/guides/pricing-paygo"],
+      "model_prefixes": ["minimax", "speech-", "music-"]
     },
-    "kling 3.0": {
-      "vendor_name": "快手可灵",
-      "official_url": "https://kling.ai/"
+    "xai": {
+      "vendor_name": "xAI",
+      "official_urls": ["https://docs.x.ai", "https://docs.x.ai/developers/models", "https://docs.x.ai/developers/pricing"],
+      "model_prefixes": ["grok", "speech to"]
+    },
+    "mistral": {
+      "vendor_name": "Mistral AI",
+      "official_urls": ["https://docs.mistral.ai", "https://docs.mistral.ai/models", "https://docs.mistral.ai/inference/pricing"],
+      "model_prefixes": ["mistral", "ministral", "voxtral"]
+    },
+    "cohere": {
+      "vendor_name": "Cohere",
+      "official_urls": ["https://docs.cohere.com", "https://docs.cohere.com/docs/models", "https://docs.cohere.com/v2/changelog", "https://cohere.com/pricing"],
+      "model_prefixes": ["command", "embed-", "rerank-", "cohere", "tiny-aya", "c4ai-aya"]
+    },
+    "tencent": {
+      "vendor_name": "腾讯（混元）",
+      "official_urls": ["https://hunyuan.tencent.com/model/hy-model", "https://hunyuan.tencent.com/model/open-source-model", "https://cloud.tencent.com.cn/document/product/1759/127342"],
+      "model_prefixes": ["hy", "hunyuan"]
+    },
+    "bytedance": {
+      "vendor_name": "字节跳动（豆包）",
+      "official_urls": ["https://docs.volcengine.com/docs/82379", "https://docs.volcengine.com/docs/82379/1330310", "https://docs.volcengine.com/docs/82379/1544106"],
+      "model_prefixes": ["doubao", "seed", "seedance", "seedream", "seed3d", "embedding"]
+    },
+    "moonshot": {
+      "vendor_name": "月之暗面（Kimi）",
+      "official_urls": ["https://platform.kimi.com/docs", "https://platform.kimi.com/docs/models", "https://platform.kimi.com/docs/pricing"],
+      "model_prefixes": ["kimi", "moonshot"]
+    },
+    "meta": {
+      "vendor_name": "Meta（Llama）",
+      "official_urls": ["https://www.llama.com/docs", "https://developer.meta.com/ai/docs/model-cards-and-prompt-formats/"],
+      "model_prefixes": ["llama", "code llama"]
+    },
+    "xiaomi": {
+      "vendor_name": "小米（MiMo）",
+      "official_urls": ["https://mimo.mi.com/docs", "https://mimo.mi.com/docs/quick-start/summary/model", "https://mimo.mi.com/docs/tokenplan", "https://mimo.mi.com/docs/price/pay-as-you-go", "https://mimo.mi.com/docs/updates/model"],
+      "model_prefixes": ["mimo"]
+    },
+    "thinking-machines": {
+      "vendor_name": "Thinking Machines Lab",
+      "official_urls": ["https://tinker-docs.thinkingmachines.ai/tinker/", "https://tinker-docs.thinkingmachines.ai/tinker/models/"],
+      "model_prefixes": ["inkling"]
+    },
+    "upstage": {
+      "vendor_name": "Upstage",
+      "official_urls": ["https://console.upstage.ai/docs", "https://console.upstage.ai/docs/models"],
+      "model_prefixes": ["solar", "syn"]
+    },
+    "nvidia": {
+      "vendor_name": "Nvidia（NIM）",
+      "official_urls": ["https://huggingface.co/nvidia", "https://build.nvidia.com", "https://docs.api.nvidia.com/nim/reference/llm-apis", "https://docs.api.nvidia.com/nim/reference/retrieval-apis", "https://docs.api.nvidia.com/nim/reference/visual-models-apis", "https://docs.api.nvidia.com/nim/reference/multimodal-apis", "https://docs.api.nvidia.com/nim/reference/healthcare-apis", "https://docs.api.nvidia.com/nim/reference/route-optimization-apis"],
+      "model_prefixes": ["nvidia","gliner", "llama", "memotron", "memoguard", "riva", "usdcode", "nv", "cuopt"]
+    },
+    "alibaba": {
+      "vendor_name": "阿里巴巴（通义千问）",
+      "official_urls": ["https://help.aliyun.com/zh/model-studio", "https://help.aliyun.com/zh/model-studio/models", "https://help.aliyun.com/zh/model-studio/coding-plan"],
+      "model_prefixes": ["qwen", "tongyi-"]
+    },
+    "perplexity": {
+      "vendor_name": "Perplexity",
+      "official_urls": ["https://huggingface.co/perplexity-ai", "https://docs.perplexity.ai", "https://docs.perplexity.ai/docs/getting-started/pricing"],
+      "model_prefixes": ["perplexity", "pplxp", "sonar"]
+    },
+    "microsoft": {
+      "vendor_name": "Microsoft（Azure AI Foundry）",
+      "official_url": "https://huggingface.co/microsoft/collections",
+      "model_prefixes": ["microsoft","fara", "harc", "frog", "magentic", "mage", "gridsfm", "skala", "vibevoice", "msr", "chatbench", "mediphi", "dayhoff", "naturelm", "paza", "nextcoder", "phi-", "bitnet", "cosa", "speecht5", "llm2lip", "tapex", "table-transformer", "layoutlm", "layoutxlm", "orca", "udop", "mocapart", "florence"]
+    },
+    "reve": {
+      "vendor_name": "Reve",
+      "official_urls": ["https://app.reve.com", "https://app.reve.com/pricing", "https://app.reve.com/model"],
+      "model_prefixes": ["reve"]
+    },
+    "luma": {
+      "vendor_name": "Luma AI",
+      "official_urls": ["https://docs.lumalabs.ai", "https://lumalabs.ai/pricing", "https://huggingface.co/lumaai"],
+      "model_prefixes": ["luma", "ray"]
+    },
+    "black-forest-labs": {
+      "vendor_name": "Black Forest Labs（FLUX）",
+      "official_urls": ["https://huggingface.co/black-forest-labs/collections", "https://docs.bfl.ai", "https://docs.bfl.ai/quick_start/pricing", "https://bfl.ai/pricing", "https://dashboard.bfl.a/licensing"],
+      "model_prefixes": ["flux", "black-forest-labs"]
+    },
+    "kuaishou": {
+      "vendor_name": "可灵（快手）",
+      "official_urls": ["https://klingai.com/document-api", "https://huggingface.co/KlingTeam/models", "https://klingai.com/document-api/pricing/base/video", "https://klingai.com/document-api/pricing/base/image", "https://klingai.com/document-api/updates/api", "https://klingai.com/document-api/guides/capability-map/video"],
+      "model_prefixes": ["kling"]
+    },
+    "antgroup": {
+      "vendor_name": "灵光（蚂蚁集团）",
+      "official_url": "https://www.lingguang.com",
+      "model_prefixes": []
+    },
+    "shengshu": {
+      "vendor_name": "vidu",
+      "official_urls": ["https://platform.vidu.cn", "https://platform.vidu.cn/docs/model-map", "https://platform.vidu.cn/docs/pricing"],
+      "model_prefixes": ["vidu"]
     }
   }
 }

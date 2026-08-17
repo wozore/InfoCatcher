@@ -10,17 +10,17 @@
   ],
   "name": "Kling 2.6 Pro",
   "vendor_name": "可灵",
-  "vendor_key": "kling",
+  "vendor_key": "kuaishou",
   "tool_key": "kling-2-6-pro",
   "official_url": "https://kling.ai/quickstart/klingai-video-26-audio-user-guide",
   "placement": {
     "existing_level1_ref": {
       "kind": "vendor-level1",
-      "id": "vendor-level1:kling"
+      "id": "vendor-level1:kuaishou"
     },
     "existing_level2_ref": {
       "kind": "vendor-level2",
-      "id": "vendor-level2:kling:models"
+      "id": "vendor-level2:kuaishou:models"
     },
     "new_group_title": "Models"
   },

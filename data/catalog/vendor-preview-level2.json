@@ -2,12 +2,12 @@
   "schema_version": 1,
   "items": [
     {
-      "id": "vendor-level2:chatgpt:gpt-5.6",
+      "id": "vendor-level2:openai:gpt-5.6",
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:chatgpt"
+        "id": "vendor-level1:openai"
       },
-      "vendor_key": "chatgpt",
+      "vendor_key": "openai",
       "title": "GPT-5.6",
       "official_url": "https://openai.com/index/gpt-5-6",
       "summary": "GPT-5.6 模型家族；Sol、Terra 与 Luna 分别对应旗舰、平衡和高效率层级。",
@@ -28,12 +28,12 @@
       ]
     },
     {
-      "id": "vendor-level2:claude:claude-models",
+      "id": "vendor-level2:anthropic:claude-models",
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:claude"
+        "id": "vendor-level1:anthropic"
       },
-      "vendor_key": "claude",
+      "vendor_key": "anthropic",
       "title": "Claude 模型",
       "official_url": "https://docs.anthropic.com/en/docs/about-claude/models/overview",
       "summary": "当前已核实的 Claude API 模型。",
@@ -58,12 +58,12 @@
       ]
     },
     {
-      "id": "vendor-level2:claude:claude-coding-plan",
+      "id": "vendor-level2:anthropic:claude-coding-plan",
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:claude"
+        "id": "vendor-level1:anthropic"
       },
-      "vendor_key": "claude",
+      "vendor_key": "anthropic",
       "title": "套餐（Coding Plan）",
       "official_url": "https://support.anthropic.com/en/articles/11049762-choosing-a-claude-ai-plan",
       "summary": "Claude 订阅套餐的统一导航分组；具体价格、周期和权益以叶节点的官方条件为准。",
@@ -84,12 +84,12 @@
       ]
     },
     {
-      "id": "vendor-level2:gemini:gemini-models",
+      "id": "vendor-level2:google:gemini-models",
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:gemini"
+        "id": "vendor-level1:google"
       },
-      "vendor_key": "gemini",
+      "vendor_key": "google",
       "title": "Gemini 模型",
       "official_url": "https://ai.google.dev/gemini-api/docs/pricing",
       "summary": "当前已核实的 Gemini API 模型。",
@@ -106,12 +106,12 @@
       ]
     },
     {
-      "id": "vendor-level2:gemini:gemini-coding-plan",
+      "id": "vendor-level2:google:gemini-coding-plan",
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:gemini"
+        "id": "vendor-level1:google"
       },
-      "vendor_key": "gemini",
+      "vendor_key": "google",
       "title": "套餐（Coding Plan）",
       "official_url": "https://gemini.google/about",
       "summary": "Google AI 订阅套餐的统一导航分组；官方页面未稳定完整列出所有模型包含关系。",
@@ -176,12 +176,12 @@
       ]
     },
     {
-      "id": "vendor-level2:wenxin:ernie-models",
+      "id": "vendor-level2:baidu:ernie-models",
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:wenxin"
+        "id": "vendor-level1:baidu"
       },
-      "vendor_key": "wenxin",
+      "vendor_key": "baidu",
       "title": "ERNIE 模型",
       "official_url": "https://cloud.baidu.com/doc/qianfan/s/wmh4sv6ya",
       "summary": "当前已核实的百度 ERNIE API 模型。",
@@ -198,12 +198,12 @@
       ]
     },
     {
-      "id": "vendor-level2:xinghuo:spark-models",
+      "id": "vendor-level2:xunfei:spark-models",
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:xinghuo"
+        "id": "vendor-level1:xunfei"
       },
-      "vendor_key": "xinghuo",
+      "vendor_key": "xunfei",
       "title": "星火模型",
       "official_url": "https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html",
       "summary": "当前已核实的讯飞星火 API 模型。",
@@ -264,12 +264,12 @@
       ]
     },
     {
-      "id": "vendor-level2:kling:models",
+      "id": "vendor-level2:kuaishou:models",
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:kling"
+        "id": "vendor-level1:kuaishou"
       },
-      "vendor_key": "kling",
+      "vendor_key": "kuaishou",
       "title": "Models",
       "official_url": "https://kling.ai",
       "summary": "Kling AI 是快手科技推出的 AI 创作平台，提供视频、图像和音频生成工具。",
@@ -286,12 +286,12 @@
       ]
     },
     {
-      "id": "vendor-level2:chatgpt:gpt-5-5",
+      "id": "vendor-level2:openai:gpt-5-5",
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:chatgpt"
+        "id": "vendor-level1:openai"
       },
-      "vendor_key": "chatgpt",
+      "vendor_key": "openai",
       "title": "GPT-5.5",
       "official_url": "https://developers.openai.com/api/docs/changelog",
       "summary": "OpenAI 官方发布的模型 API 更新日志与产品发布信息，涵盖 GPT-5.5 系列及 API 功能更新。",
@@ -304,12 +304,12 @@
       ]
     },
     {
-      "id": "vendor-level2:claude:claude-opus-5",
+      "id": "vendor-level2:anthropic:claude-opus-5",
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:claude"
+        "id": "vendor-level1:anthropic"
       },
-      "vendor_key": "claude",
+      "vendor_key": "anthropic",
       "title": "Claude Opus 5",
       "official_url": "https://www.anthropic.com/claude/opus",
       "summary": "Claude Opus 5是Anthropic推出的最新Opus系列模型，在编码和知识工作方面表现优异，定价为每百万输入令牌5美元、每百万输出令牌25美元。",
@@ -322,12 +322,12 @@
       ]
     },
     {
-      "id": "vendor-level2:gemini:gemini-3-1-pro",
+      "id": "vendor-level2:google:gemini-3-1-pro",
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:gemini"
+        "id": "vendor-level1:google"
       },
-      "vendor_key": "gemini",
+      "vendor_key": "google",
       "title": "Gemini 3.1 Pro",
       "official_url": "https://ai.google.dev/gemini-api/docs",
       "summary": "Gemini API 是 Google AI 提供的开发者接口，提供 Gemini 系列模型的访问，涵盖文本、图像、音频、视频等多种模态能力。",
@@ -340,12 +340,12 @@
       ]
     },
     {
-      "id": "vendor-level2:grok:grok-4-6",
+      "id": "vendor-level2:xai:grok-4-6",
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:grok"
+        "id": "vendor-level1:xai"
       },
-      "vendor_key": "grok",
+      "vendor_key": "xai",
       "title": "Grok 4.6",
       "official_url": "https://docs.x.ai/",
       "summary": "xAI 官方文档中心，涵盖 Grok 系列模型、API 工具与开发者资源。",
@@ -358,12 +358,12 @@
       ]
     },
     {
-      "id": "vendor-level2:hailuo:minimax-h3",
+      "id": "vendor-level2:minimax:minimax-h3",
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:hailuo"
+        "id": "vendor-level1:minimax"
       },
-      "vendor_key": "hailuo",
+      "vendor_key": "minimax",
       "title": "MiniMax H3",
       "official_url": "https://platform.minimax.io/docs/guides/models-intro",
       "summary": "MiniMax官方文档提供了多种AI模型，涵盖语言、视频、音频、图像和音乐等模态。",
@@ -394,12 +394,12 @@
       ]
     },
     {
-      "id": "vendor-level2:chatgpt:gpt-realtime-2",
+      "id": "vendor-level2:openai:gpt-realtime-2",
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:chatgpt"
+        "id": "vendor-level1:openai"
       },
-      "vendor_key": "chatgpt",
+      "vendor_key": "openai",
       "title": "GPT-Realtime-2",
       "official_url": "https://developers.openai.com/api/docs/models/gpt-realtime-2",
       "summary": "OpenAI Realtime API 的模型系列，包括 GPT-Realtime-2 和 GPT-Realtime-2.1 等实时语音模型，支持语音到语音交互。",
@@ -412,12 +412,12 @@
       ]
     },
     {
-      "id": "vendor-level2:chatgpt:gpt-image-2",
+      "id": "vendor-level2:openai:gpt-image-2",
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:chatgpt"
+        "id": "vendor-level1:openai"
       },
-      "vendor_key": "chatgpt",
+      "vendor_key": "openai",
       "title": "gpt-image-2",
       "official_url": "https://developers.openai.com/api/docs/changelog",
       "summary": "OpenAI 官方 API 的变更日志，记录了图像生成模型 gpt-image-2 等新功能的发布。",
@@ -430,12 +430,12 @@
       ]
     },
     {
-      "id": "vendor-level2:xinghuo:spark-x2",
+      "id": "vendor-level2:xunfei:spark-x2",
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:xinghuo"
+        "id": "vendor-level1:xunfei"
       },
-      "vendor_key": "xinghuo",
+      "vendor_key": "xunfei",
       "title": "Spark X2",
       "official_url": "https://xinghuo.xfyun.cn/",
       "summary": "科大讯飞推出的星火大模型系列，提供文本生成、语音识别、语音合成等多种AI能力，面向开发者和企业提供API服务。",

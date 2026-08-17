@@ -2,8 +2,8 @@
   "schema_version": 1,
   "items": [
     {
-      "id": "vendor-level1:chatgpt",
-      "vendor_key": "chatgpt",
+      "id": "vendor-level1:openai",
+      "vendor_key": "openai",
       "title": "OpenAI",
       "icon": "🤖",
       "official_url": "https://chatgpt.com",
@@ -22,13 +22,13 @@
       "level2_refs": [
         {
           "kind": "vendor-level2",
-          "id": "vendor-level2:chatgpt:gpt-5.6"
+          "id": "vendor-level2:openai:gpt-5.6"
         }
       ]
     },
     {
-      "id": "vendor-level1:claude",
-      "vendor_key": "claude",
+      "id": "vendor-level1:anthropic",
+      "vendor_key": "anthropic",
       "title": "Anthropic",
       "icon": "🧠",
       "official_url": "https://claude.ai",
@@ -47,17 +47,17 @@
       "level2_refs": [
         {
           "kind": "vendor-level2",
-          "id": "vendor-level2:claude:claude-models"
+          "id": "vendor-level2:anthropic:claude-models"
         },
         {
           "kind": "vendor-level2",
-          "id": "vendor-level2:claude:claude-coding-plan"
+          "id": "vendor-level2:anthropic:claude-coding-plan"
         }
       ]
     },
     {
-      "id": "vendor-level1:gemini",
-      "vendor_key": "gemini",
+      "id": "vendor-level1:google",
+      "vendor_key": "google",
       "title": "Google",
       "icon": "🌐",
       "official_url": "https://gemini.google.com",
@@ -76,11 +76,11 @@
       "level2_refs": [
         {
           "kind": "vendor-level2",
-          "id": "vendor-level2:gemini:gemini-models"
+          "id": "vendor-level2:google:gemini-models"
         },
         {
           "kind": "vendor-level2",
-          "id": "vendor-level2:gemini:gemini-coding-plan"
+          "id": "vendor-level2:google:gemini-coding-plan"
         }
       ]
     },
@@ -151,8 +151,8 @@
       ]
     },
     {
-      "id": "vendor-level1:wenxin",
-      "vendor_key": "wenxin",
+      "id": "vendor-level1:baidu",
+      "vendor_key": "baidu",
       "title": "百度",
       "icon": "📘",
       "official_url": "https://yiyan.baidu.com",
@@ -179,13 +179,13 @@
       "level2_refs": [
         {
           "kind": "vendor-level2",
-          "id": "vendor-level2:wenxin:ernie-models"
+          "id": "vendor-level2:baidu:ernie-models"
         }
       ]
     },
     {
-      "id": "vendor-level1:xinghuo",
-      "vendor_key": "xinghuo",
+      "id": "vendor-level1:xunfei",
+      "vendor_key": "xunfei",
       "title": "科大讯飞",
       "icon": "🔥",
       "official_url": "https://xinghuo.xfyun.cn",
@@ -212,13 +212,13 @@
       "level2_refs": [
         {
           "kind": "vendor-level2",
-          "id": "vendor-level2:xinghuo:spark-models"
+          "id": "vendor-level2:xunfei:spark-models"
         }
       ]
     },
     {
-      "id": "vendor-level1:hailuo",
-      "vendor_key": "hailuo",
+      "id": "vendor-level1:minimax",
+      "vendor_key": "minimax",
       "title": "MiniMax",
       "icon": "🐚",
       "official_url": "https://hailuoai.com",
@@ -245,13 +245,13 @@
       "level2_refs": [
         {
           "kind": "vendor-level2",
-          "id": "vendor-level2:hailuo:minimax-h3"
+          "id": "vendor-level2:minimax:minimax-h3"
         }
       ]
     },
     {
-      "id": "vendor-level1:grok",
-      "vendor_key": "grok",
+      "id": "vendor-level1:xai",
+      "vendor_key": "xai",
       "title": "xAI",
       "icon": "🚀",
       "official_url": "https://grok.com",
@@ -278,7 +278,7 @@
       "level2_refs": [
         {
           "kind": "vendor-level2",
-          "id": "vendor-level2:grok:grok-4-6"
+          "id": "vendor-level2:xai:grok-4-6"
         }
       ]
     },
@@ -349,8 +349,8 @@
       ]
     },
     {
-      "id": "vendor-level1:kling",
-      "vendor_key": "kling",
+      "id": "vendor-level1:kuaishou",
+      "vendor_key": "kuaishou",
       "title": "可灵",
       "icon": "🎬",
       "official_url": "https://kling.ai",
@@ -381,7 +381,7 @@
       "level2_refs": [
         {
           "kind": "vendor-level2",
-          "id": "vendor-level2:kling:models"
+          "id": "vendor-level2:kuaishou:models"
         }
       ]
     }

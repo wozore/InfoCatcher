@@ -30,12 +30,17 @@ function pendingCandidateToSeed(candidate, resolution = {}) {
   if (!name) throw new Error('PENDING_CANDIDATE_NAME_REQUIRED');
   // 笼统名防御：即使上游漏网，也拒绝转 seed（工具栏不出现笼统名卡）
   if (isVagueName(name)) throw new Error('PENDING_CANDIDATE_VAGUE');
-  const officialUrl = canonicalizeUrl(resolution.official_url || candidate.url || candidate.official_url || '') || null;
+  // 官方 URL 优先级：登记表多 URL official_urls > 登记表单 official_url > 候选自带 url；去重保序，全部作 official_hint。
+  const officialUrls = [...new Set([
+    ...(Array.isArray(resolution.official_urls) ? resolution.official_urls : []),
+    ...(resolution.official_url ? [resolution.official_url] : []),
+    ...(candidate.url || candidate.official_url ? [candidate.url || candidate.official_url] : []),
+  ].map(canonicalizeUrl).filter(Boolean))];
+  const officialUrl = officialUrls[0] || null;
   const vendorName = String(resolution.vendor_name || candidate.vendor_name || candidate.vendor_label || '').trim() || name;
-  const discoverySources = [];
-  // official_hint 参与生成器研究信任根；无官方域名时回落热点原文链接（hotspot 不进信任根）。
-  if (officialUrl) discoverySources.push({ url: officialUrl, kind: 'official_hint' });
-  else if (candidate.source_url) discoverySources.push({ url: candidate.source_url, kind: 'hotspot' });
+  const discoverySources = officialUrls.map(url => ({ url, kind: 'official_hint' }));
+  // official_hint 参与生成器研究信任根（多个可扩展 includeDomains）；无官方域名时回落热点原文链接（hotspot 不进信任根）。
+  if (!officialUrl && candidate.source_url) discoverySources.push({ url: candidate.source_url, kind: 'hotspot' });
   return {
     detail_kind: candidate.detail_kind_hint === 'api_model' ? 'api_model' : 'tool',
     name,

@@ -2,8 +2,8 @@
   "schema_version": 1,
   "items": [
     {
-      "id": "vendor-card:chatgpt",
-      "vendor_key": "chatgpt",
+      "id": "vendor-card:OpenAI",
+      "vendor_key": "OpenAI",
       "title": "OpenAI",
       "icon": "🤖",
       "summary": "OpenAI 提供 ChatGPT、Codex 和 API 等 AI 产品入口；具体模型与套餐在下方按可核实范围单独展示。",
@@ -26,12 +26,12 @@
       ],
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:chatgpt"
+        "id": "vendor-level1:openai"
       }
     },
     {
-      "id": "vendor-card:claude",
-      "vendor_key": "claude",
+      "id": "vendor-card:Anthropic",
+      "vendor_key": "Anthropic",
       "title": "Anthropic",
       "icon": "🧠",
       "summary": "Anthropic 的 Claude 产品入口覆盖对话产品与 API；具体模型和订阅套餐在下方独立展示。",
@@ -54,12 +54,12 @@
       ],
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:claude"
+        "id": "vendor-level1:anthropic"
       }
     },
     {
-      "id": "vendor-card:gemini",
-      "vendor_key": "gemini",
+      "id": "vendor-card:Google",
+      "vendor_key": "Google",
       "title": "Google",
       "icon": "🌐",
       "summary": "Google 的 Gemini 产品入口覆盖 API 模型与 Google AI 订阅；具体资料在下方按已核实范围展示。",
@@ -82,7 +82,7 @@
       ],
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:gemini"
+        "id": "vendor-level1:google"
       }
     },
     {
@@ -150,7 +150,8 @@
       "search_terms": [
         "智谱AI",
         "zhipu",
-        "智谱清言"
+        "智谱清言",
+        "GLM"
       ],
       "level1_ref": {
         "kind": "vendor-level1",
@@ -158,9 +159,9 @@
       }
     },
     {
-      "id": "vendor-card:wenxin",
-      "vendor_key": "wenxin",
-      "title": "百度",
+      "id": "vendor-card:baidu",
+      "vendor_key": "baidu",
+      "title": "文心(百度)",
       "icon": "📘",
       "summary": "百度推出的文心大模型，通过千帆平台提供 ERNIE 系列 API，深度集成百度云生态。",
       "feature_preview": [
@@ -190,12 +191,12 @@
       ],
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:wenxin"
+        "id": "vendor-level1:baidu"
       }
     },
     {
-      "id": "vendor-card:xinghuo",
-      "vendor_key": "xinghuo",
+      "id": "vendor-card:iflytek",
+      "vendor_key": "iflytek",
       "title": "科大讯飞",
       "icon": "🔥",
       "summary": "科大讯飞推出的星火认知大模型，深耕语音与教育场景，Lite 版本 API 永久免费。",
@@ -226,12 +227,12 @@
       ],
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:xinghuo"
+        "id": "vendor-level1:xunfei"
       }
     },
     {
-      "id": "vendor-card:hailuo",
-      "vendor_key": "hailuo",
+      "id": "vendor-card:minimax",
+      "vendor_key": "minimax",
       "title": "MiniMax",
       "icon": "🐚",
       "summary": "MiniMax 推出的多模态 AI 平台，以海螺AI 视频生成和超低 API 文本价格著称。",
@@ -262,12 +263,12 @@
       ],
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:hailuo"
+        "id": "vendor-level1:minimax"
       }
     },
     {
-      "id": "vendor-card:grok",
-      "vendor_key": "grok",
+      "id": "vendor-card:xai",
+      "vendor_key": "xai",
       "title": "xAI",
       "icon": "🚀",
       "summary": "Elon Musk 创办的 xAI 公司推出的 AI 模型，以实时 X 平台数据接入和推理能力见长，API 定价极具竞争力。",
@@ -298,7 +299,7 @@
       ],
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:grok"
+        "id": "vendor-level1:xai"
       }
     },
     {
@@ -374,9 +375,9 @@
       }
     },
     {
-      "id": "vendor-card:kling",
-      "vendor_key": "kling",
-      "title": "可灵",
+      "id": "vendor-card:kuaishou",
+      "vendor_key": "kuaishou",
+      "title": "可灵(快手)",
       "icon": "🎬",
       "summary": "Kling AI 官方提供视频生成模型，支持文本和图像输入生成视频。",
       "feature_preview": [
@@ -409,7 +410,7 @@
       ],
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:kling"
+        "id": "vendor-level1:kuaishou"
       }
     }
   ]

@@ -182,7 +182,7 @@ test('official-url-registry add/lookup/remove（内存注入，不落盘）', ()
     { registry: store },
   );
   assert.equal(added.ok, true);
-  assert.equal(added.entry.official_url, 'https://klingai.com/');
+  assert.deepEqual(added.entry.official_urls, ['https://klingai.com/']);
 
   const byTool = lookupOfficialUrl('可灵', { registry: store });
   assert.equal(byTool.ok, true);
@@ -195,4 +195,73 @@ test('official-url-registry add/lookup/remove（内存注入，不落盘）', ()
   assert.equal(removed.ok, true);
   assert.equal(removed.count, 0);
   assert.equal(lookupOfficialUrl('Kling', { registry: store }).ok, false);
+});
+
+test('official-url-registry 厂商前缀匹配：变体模型名命中厂商（无视大小写），add 支持 model_prefixes', () => {
+  const store = { schema_version: 1, entries: {} };
+  addUrlRegistryEntry(
+    { name: 'openai', vendor_name: 'OpenAI', official_url: 'https://platform.openai.com/docs', model_prefixes: ['gpt', 'o1', 'o3'] },
+    { registry: store },
+  );
+  addUrlRegistryEntry(
+    { name: 'anthropic', vendor_name: 'Anthropic', official_url: 'https://docs.anthropic.com', model_prefixes: ['claude'] },
+    { registry: store },
+  );
+  addUrlRegistryEntry(
+    { name: 'cohere', vendor_name: 'Cohere', official_url: 'https://docs.cohere.com', model_prefixes: ['command', 'embed', 'rerank'] },
+    { registry: store },
+  );
+
+  // 变体/大小写/首尾空白均命中厂商前缀
+  assert.equal(lookupOfficialUrl('GPT-5.5 Pro', { registry: store }).vendor_name, 'OpenAI');
+  assert.equal(lookupOfficialUrl('gpt-5.5pro', { registry: store }).vendor_name, 'OpenAI');
+  assert.equal(lookupOfficialUrl('  Gpt-image-2 ', { registry: store }).vendor_name, 'OpenAI');
+  assert.equal(lookupOfficialUrl('Claude Opus 5', { registry: store }).vendor_name, 'Anthropic');
+  assert.equal(lookupOfficialUrl('COMMAND A+', { registry: store }).vendor_name, 'Cohere');
+
+  // 前缀未覆盖 → miss
+  assert.equal(lookupOfficialUrl('LLaMA 4', { registry: store }).ok, false);
+  assert.equal(lookupOfficialUrl('', { registry: store }).ok, false);
+
+  // 防御：空前缀不误命中所有名字
+  const emptyPrefix = { schema_version: 1, entries: { x: { vendor_name: 'X', official_url: 'https://x.example.com', model_prefixes: [''] } } };
+  assert.equal(lookupOfficialUrl('anything', { registry: emptyPrefix }).ok, false);
+});
+
+test('official-url-registry 多官方 URL：official_urls 数组全作 official_hint 进 seed', async () => {
+  const store = { schema_version: 1, entries: {} };
+  addUrlRegistryEntry(
+    { name: 'kuaishou', vendor_name: '可灵', official_urls: ['https://klingai.com/document-api', 'https://kling.ai'], model_prefixes: ['kling'] },
+    { registry: store },
+  );
+
+  // lookup 返回主 URL + 全部 URL
+  const hit = lookupOfficialUrl('Kling 3.0', { registry: store });
+  assert.equal(hit.ok, true);
+  assert.equal(hit.official_url, 'https://klingai.com/document-api');
+  assert.deepEqual(hit.official_urls, ['https://klingai.com/document-api', 'https://kling.ai/']);
+
+  // 批量解析命中登记表，两个官方 URL 都进 discovery_sources 作 official_hint
+  const resolveFn = async () => { throw new Error('不应走到网络解析'); };
+  const result = await resolveBatchCandidates(
+    [{ name: 'Kling 3.0' }],
+    { registry: store, resolveOfficialSource: resolveFn },
+  );
+  assert.equal(result.seeds.length, 1);
+  const seed = result.seeds[0];
+  assert.equal(seed.official_url, 'https://klingai.com/document-api');
+  const hints = seed.discovery_sources.filter(source => source.kind === 'official_hint');
+  assert.equal(hints.length, 2);
+  assert.deepEqual(hints.map(h => h.url).sort(), ['https://kling.ai/', 'https://klingai.com/document-api'].sort());
+});
+
+test('official-url-registry 兼容 official_url 单数字段填数组（防手误）', () => {
+  const store = { schema_version: 1, entries: {} };
+  addUrlRegistryEntry(
+    { name: 'anthropic', vendor_name: 'Anthropic', official_url: ['https://docs.anthropic.com', 'https://platform.claude.com/docs'], model_prefixes: ['claude'] },
+    { registry: store },
+  );
+  const hit = lookupOfficialUrl('Claude Opus 5', { registry: store });
+  assert.equal(hit.ok, true);
+  assert.deepEqual(hit.official_urls, ['https://docs.anthropic.com/', 'https://platform.claude.com/docs']);
 });

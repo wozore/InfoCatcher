@@ -632,7 +632,7 @@
     },
     {
       "id": "tool-level3:gpt-5.6-sol",
-      "vendor_key": "chatgpt",
+      "vendor_key": "openai",
       "detail_kind": "api_model",
       "theme": "general",
       "title": "GPT-5.6 Sol",
@@ -713,7 +713,7 @@
     },
     {
       "id": "tool-level3:gpt-5.6-terra",
-      "vendor_key": "chatgpt",
+      "vendor_key": "openai",
       "detail_kind": "api_model",
       "theme": "general",
       "title": "GPT-5.6 Terra",
@@ -780,7 +780,7 @@
     },
     {
       "id": "tool-level3:gpt-5.6-luna",
-      "vendor_key": "chatgpt",
+      "vendor_key": "openai",
       "detail_kind": "api_model",
       "theme": "general",
       "title": "GPT-5.6 Luna",
@@ -847,7 +847,7 @@
     },
     {
       "id": "tool-level3:chatgpt-go",
-      "vendor_key": "chatgpt",
+      "vendor_key": "openai",
       "detail_kind": "subscription_plan",
       "title": "ChatGPT Go",
       "vendor_label": "OpenAI",
@@ -905,7 +905,7 @@
     },
     {
       "id": "tool-level3:chatgpt-plus",
-      "vendor_key": "chatgpt",
+      "vendor_key": "openai",
       "detail_kind": "subscription_plan",
       "title": "ChatGPT Plus",
       "vendor_label": "OpenAI",
@@ -965,7 +965,7 @@
     },
     {
       "id": "tool-level3:chatgpt-pro",
-      "vendor_key": "chatgpt",
+      "vendor_key": "openai",
       "detail_kind": "subscription_plan",
       "title": "ChatGPT Pro",
       "vendor_label": "OpenAI",
@@ -1025,7 +1025,7 @@
     },
     {
       "id": "tool-level3:claude-fable-5",
-      "vendor_key": "claude",
+      "vendor_key": "anthropic",
       "detail_kind": "api_model",
       "theme": "general",
       "title": "Claude Fable 5",
@@ -1087,7 +1087,7 @@
     },
     {
       "id": "tool-level3:claude-opus-4.8",
-      "vendor_key": "claude",
+      "vendor_key": "anthropic",
       "detail_kind": "api_model",
       "theme": "general",
       "title": "Claude Opus 4.8",
@@ -1149,7 +1149,7 @@
     },
     {
       "id": "tool-level3:claude-sonnet-5",
-      "vendor_key": "claude",
+      "vendor_key": "anthropic",
       "detail_kind": "api_model",
       "theme": "general",
       "title": "Claude Sonnet 5",
@@ -1220,7 +1220,7 @@
     },
     {
       "id": "tool-level3:claude-haiku-4.5",
-      "vendor_key": "claude",
+      "vendor_key": "anthropic",
       "detail_kind": "api_model",
       "theme": "general",
       "title": "Claude Haiku 4.5",
@@ -1282,7 +1282,7 @@
     },
     {
       "id": "tool-level3:claude-pro",
-      "vendor_key": "claude",
+      "vendor_key": "anthropic",
       "detail_kind": "subscription_plan",
       "title": "Claude Pro",
       "vendor_label": "Anthropic",
@@ -1336,7 +1336,7 @@
     },
     {
       "id": "tool-level3:claude-max-5x",
-      "vendor_key": "claude",
+      "vendor_key": "anthropic",
       "detail_kind": "subscription_plan",
       "title": "Claude Max 5x",
       "vendor_label": "Anthropic",
@@ -1386,7 +1386,7 @@
     },
     {
       "id": "tool-level3:claude-max-20x",
-      "vendor_key": "claude",
+      "vendor_key": "anthropic",
       "detail_kind": "subscription_plan",
       "title": "Claude Max 20x",
       "vendor_label": "Anthropic",
@@ -1436,7 +1436,7 @@
     },
     {
       "id": "tool-level3:gemini-3.5-flash",
-      "vendor_key": "gemini",
+      "vendor_key": "google",
       "detail_kind": "api_model",
       "theme": "general",
       "title": "Gemini 3.5 Flash",
@@ -1502,7 +1502,7 @@
     },
     {
       "id": "tool-level3:gemini-2.5-pro",
-      "vendor_key": "gemini",
+      "vendor_key": "google",
       "detail_kind": "api_model",
       "theme": "general",
       "title": "Gemini 2.5 Pro",
@@ -1573,7 +1573,7 @@
     },
     {
       "id": "tool-level3:google-ai-pro",
-      "vendor_key": "gemini",
+      "vendor_key": "google",
       "detail_kind": "subscription_plan",
       "title": "Google AI Pro",
       "vendor_label": "Google",
@@ -1625,7 +1625,7 @@
     },
     {
       "id": "tool-level3:google-ai-ultra-5x",
-      "vendor_key": "gemini",
+      "vendor_key": "google",
       "detail_kind": "subscription_plan",
       "title": "Google AI Ultra 5x",
       "vendor_label": "Google",
@@ -1671,7 +1671,7 @@
     },
     {
       "id": "tool-level3:google-ai-ultra-20x",
-      "vendor_key": "gemini",
+      "vendor_key": "google",
       "detail_kind": "subscription_plan",
       "title": "Google AI Ultra 20x",
       "vendor_label": "Google",
@@ -1984,7 +1984,7 @@
     },
     {
       "id": "tool-level3:ernie-5.1",
-      "vendor_key": "wenxin",
+      "vendor_key": "baidu",
       "detail_kind": "api_model",
       "theme": "general",
       "title": "ERNIE 5.1",
@@ -2037,7 +2037,7 @@
     },
     {
       "id": "tool-level3:ernie-5.0",
-      "vendor_key": "wenxin",
+      "vendor_key": "baidu",
       "detail_kind": "api_model",
       "theme": "general",
       "title": "ERNIE 5.0",
@@ -2090,7 +2090,7 @@
     },
     {
       "id": "tool-level3:spark-ultra",
-      "vendor_key": "xinghuo",
+      "vendor_key": "xunfei",
       "detail_kind": "api_model",
       "theme": "general",
       "title": "Spark 4.0 Ultra",
@@ -2144,7 +2144,7 @@
     },
     {
       "id": "tool-level3:spark-pro",
-      "vendor_key": "xinghuo",
+      "vendor_key": "xunfei",
       "detail_kind": "api_model",
       "theme": "general",
       "title": "Spark Pro",
@@ -2198,7 +2198,7 @@
     },
     {
       "id": "tool-level3:spark-lite",
-      "vendor_key": "xinghuo",
+      "vendor_key": "xunfei",
       "detail_kind": "api_model",
       "theme": "general",
       "title": "Spark Lite",
@@ -2401,7 +2401,7 @@
       "official_date": "2025-03-13"
     },
     {
-      "vendor_key": "kling",
+      "vendor_key": "kuaishou",
       "detail_kind": "api_model",
       "title": "Kling 2.6 Pro",
       "vendor_label": "可灵",
@@ -2495,7 +2495,7 @@
       "id": "tool-level3:kling-2-6-pro"
     },
     {
-      "vendor_key": "chatgpt",
+      "vendor_key": "openai",
       "detail_kind": "api_model",
       "title": "GPT-5.5",
       "vendor_label": "OpenAI",
@@ -2578,7 +2578,7 @@
       "id": "tool-level3:gpt-5-5"
     },
     {
-      "vendor_key": "claude",
+      "vendor_key": "anthropic",
       "detail_kind": "api_model",
       "title": "Claude Opus 5",
       "vendor_label": "Anthropic",
@@ -2649,7 +2649,7 @@
       "id": "tool-level3:claude-opus-5"
     },
     {
-      "vendor_key": "gemini",
+      "vendor_key": "google",
       "detail_kind": "api_model",
       "title": "Gemini 3.1 Pro",
       "vendor_label": "Google",
@@ -2812,7 +2812,7 @@
       "id": "tool-level3:gemini-3-1-pro"
     },
     {
-      "vendor_key": "grok",
+      "vendor_key": "xai",
       "detail_kind": "api_model",
       "title": "Grok 4.6",
       "vendor_label": "xAI",
@@ -2919,7 +2919,7 @@
       "id": "tool-level3:grok-4-6"
     },
     {
-      "vendor_key": "hailuo",
+      "vendor_key": "minimax",
       "detail_kind": "api_model",
       "title": "MiniMax H3",
       "vendor_label": "MiniMax",
@@ -3088,7 +3088,7 @@
       "id": "tool-level3:command-a-plus"
     },
     {
-      "vendor_key": "chatgpt",
+      "vendor_key": "openai",
       "detail_kind": "api_model",
       "title": "GPT-Realtime-2",
       "vendor_label": "OpenAI",
@@ -3229,7 +3229,7 @@
       "id": "tool-level3:gpt-realtime-2"
     },
     {
-      "vendor_key": "chatgpt",
+      "vendor_key": "openai",
       "detail_kind": "api_model",
       "title": "gpt-image-2",
       "vendor_label": "OpenAI",
@@ -3354,7 +3354,7 @@
       "id": "tool-level3:gpt-image-2"
     },
     {
-      "vendor_key": "xinghuo",
+      "vendor_key": "xunfei",
       "detail_kind": "api_model",
       "title": "Spark X2",
       "vendor_label": "科大讯飞",
@@ -3440,7 +3440,7 @@
       "id": "tool-level3:spark-x2"
     },
     {
-      "vendor_key": "kling",
+      "vendor_key": "kuaishou",
       "detail_kind": "api_model",
       "title": "Kling 3.0",
       "vendor_label": "可灵",
