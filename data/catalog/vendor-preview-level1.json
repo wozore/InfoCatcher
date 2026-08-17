@@ -227,7 +227,7 @@
       "features": [
         {
           "tone": "positive",
-          "text": "MiniMax-Text-01 在 /usr/bin/bash.30/MTok 价位极具性价比"
+          "text": "MiniMax-Text-01 在 $0.30/MTok 价位极具性价比"
         },
         {
           "tone": "positive",
@@ -260,7 +260,7 @@
       "features": [
         {
           "tone": "positive",
-          "text": "Grok 4.1 Fast 在 /usr/bin/bash.20//usr/bin/bash.50 价位具备推理能力，同价位性价比领先"
+          "text": "Grok 4.1 Fast 在 $0.20/$0.50 价位具备推理能力，同价位性价比领先"
         },
         {
           "tone": "positive",

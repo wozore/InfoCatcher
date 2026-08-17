@@ -12,7 +12,7 @@
   "vendor_name": "可灵",
   "vendor_key": "kuaishou",
   "tool_key": "kling-2-6-pro",
-  "official_url": "https://kling.ai/quickstart/klingai-video-26-audio-user-guide",
+  "official_url": "https://klingai.com/document-api",
   "placement": {
     "existing_level1_ref": {
       "kind": "vendor-level1",
@@ -29,15 +29,15 @@
   },
   "discovery_sources": [
     {
-      "url": "https://kling.ai/quickstart/klingai-video-26-audio-user-guide",
+      "url": "https://klingai.com/document-api",
       "kind": "official_hint"
     },
     {
-      "url": "https://kling.ai/release-note/release-notes/c605hp1tzd",
+      "url": "https://klingai.com/document-api/guides/capability-map/video",
       "kind": "official_hint"
     },
     {
-      "url": "https://ir.kuaishou.com/news-releases/news-release-details/kling-ai-launches-video-26-model-simultaneous-audio-visual",
+      "url": "https://klingai.com/document-api/pricing/base/video",
       "kind": "official_hint"
     }
   ]

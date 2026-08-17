@@ -11,6 +11,7 @@ import {
   getToolLevel3Item,
   glossary,
   hotspots,
+  scenes,
   dataLoadFailures,
   getToolSearchText,
   getHotspotHeat,
@@ -25,13 +26,8 @@ import { openGlossaryConcept } from './glossary.js';
 import { getLocalizedField } from './i18n.js';
 
 // P1-A：固定静态搜索状态。只在当前页面内存中存在，不写入 URL、localStorage 或后端。
-// 产品约束（MVP）：AI 搜索只支持 3 个固定示例查询（写论文/写代码/深度研究），
-// 只有命中 SEARCH_DEMOS 的查询才产出结果，其余查询一律走「无对应示例」提示。
-const SEARCH_DEMOS = Object.freeze([
-  Object.freeze({ key: 'writing', query: '写论文', hint: '适合查找论文写作、资料整理和研究辅助工具。' }),
-  Object.freeze({ key: 'coding', query: '写代码', hint: '适合查找编程开发、代码补全和命令行工具。' }),
-  Object.freeze({ key: 'research', query: '深度研究', hint: '适合查找深度研究、搜索和长文档分析工具。' })
-]);
+// 分层关键词索引：场景层复用 scenes.json 的场景搜索词（与场景模式共用映射词），
+// 命中场景后用场景词匹配工具；后续内容层、热点概念层在此基础上扩展。
 const SEARCH_PROCESSING_STAGES = Object.freeze([
   '正在整理你的问题',
   '匹配已收录资料',
@@ -62,27 +58,141 @@ let searchState = {
   lastQuery: null
 };
 
-// ═══ P1-A：静态搜索匹配适配器 ═══════════════════════════════════
-// getSearchToolMatches 为「归一化后子串包含（includes）」匹配，非语义匹配；
-// 仅在命中 demo 查询时由 getSearchMatches 调用，非 demo 查询直接返回空数组。
-function getSearchToolMatches(query) {
-  const text = String(query || '').trim().toLocaleLowerCase('zh-CN');
-  if (!text) return [];
-  return tools.filter(tool => getToolSearchText(tool).toLocaleLowerCase('zh-CN').includes(text));
+// ═══ 分层关键词索引：统一提取器 ═══════════════════════════════════
+// 从查询中提取命中的关键词（子串包含、≥2 字符、去重、长词优先）。
+// 三层共用：词表由各层构建后传入，source 记录词归属对象（场景/工具卡等）。
+function extractKeywords(query, wordTable) {
+  const needle = String(query || '').trim().toLocaleLowerCase('zh-CN').normalize('NFKC');
+  if (!needle) return [];
+  const seen = new Set();
+  const hits = [];
+  for (const entry of wordTable || []) {
+    const word = String(entry?.word || '').trim();
+    if (!word || word.length < 2) continue;
+    const key = word.toLocaleLowerCase('zh-CN').normalize('NFKC');
+    if (seen.has(key)) continue;
+    if (needle.includes(key)) {
+      seen.add(key);
+      hits.push(entry);
+    }
+  }
+  return hits.sort((a, b) => String(b.word).length - String(a.word).length);
 }
 
-// 匹配中枢：识别命中 demo、执行工具子串匹配、汇总数据加载失败项（unavailable）。
-// demoKey 为 null 表示查询不在 3 个固定示例内，上游据此进入「无对应示例」分支。
+// ═══ 分层关键词索引：场景层 ═══════════════════════════════════
+// 场景词表：复用场景模式的映射词（scenes.json 的 name + search_terms），
+// 与场景模式共用一套关键词，维护 scenes.json 一处、两侧搜索受益。
+function buildSceneWordTable() {
+  const table = [];
+  for (const scene of scenes || []) {
+    for (const word of [scene.name, ...(scene.search_terms || [])]) {
+      if (word && String(word).trim().length >= 2) table.push({ word, source: scene });
+    }
+  }
+  return table;
+}
+
+// 用关键词数组匹配工具：任一关键词命中工具搜索文本即入选（并集），按命中关键词数排序。
+// 关键词与工具搜索文本统一小写，避免「GPT」匹配小写文本失败。
+function matchToolsByKeywords(keywords) {
+  if (!keywords.length) return [];
+  const needles = keywords.map(word => String(word).toLocaleLowerCase('zh-CN').normalize('NFKC')).filter(Boolean);
+  return tools
+    .map(tool => {
+      const text = getToolSearchText(tool);
+      const hits = needles.filter(needle => text.includes(needle));
+      return { tool, score: hits.length };
+    })
+    .filter(entry => entry.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .map(entry => entry.tool);
+}
+
+// ═══ 分层关键词索引：内容层 ═══════════════════════════════════
+// 词形派生：完整词 + 首段短形式（GPT-5.5 → gpt；Claude Opus 5 → claude），
+// 让用户用品牌前缀（gpt/claude）也能命中，无需人工维护短词。
+function deriveWordForms(word) {
+  const text = String(word || '').trim();
+  if (!text || text.length < 2) return [];
+  const first = text.split(/[\s\-_.:/·,，、（）()]+/)[0].trim();
+  const forms = [text];
+  if (first && first.length >= 2 && first !== text) forms.push(first);
+  return forms;
+}
+
+// 工具词表：title + vendor_label + search_terms 及各词的短形式。
+function buildToolWordTable() {
+  const table = [];
+  for (const tool of tools || []) {
+    for (const word of [tool.title, tool.vendor_label, ...(tool.search_terms || [])]) {
+      for (const form of deriveWordForms(word)) {
+        if (form.length >= 2) table.push({ word: form, source: tool });
+      }
+    }
+  }
+  return table;
+}
+
+// ═══ 分层关键词索引：热点概念层 ═══════════════════════════════════
+// 概念词表：glossary 的 term + full_name。
+function buildConceptWordTable() {
+  const table = [];
+  for (const concept of glossary || []) {
+    for (const word of [concept.term, concept.full_name]) {
+      if (word && String(word).trim().length >= 2) table.push({ word, source: concept });
+    }
+  }
+  return table;
+}
+
+// 热点词表：提取热点标题中的英文/数字 token（≥3 字符，含连字符）。
+// 热点标题多为中英混排长文，按标点拆段会把英文专有名词夹在中文整段里；
+// 直接正则提取连续字母/数字段，保证 cloudflare/kitesurf/agent 等可命中。
+function buildHotspotWordTable() {
+  const table = [];
+  for (const item of hotspots.items || []) {
+    const title = String(hotspotField(item, 'title') || '');
+    const tokens = title.match(/[A-Za-z0-9][A-Za-z0-9-]*/g) || [];
+    for (const token of new Set(tokens)) {
+      if (token.length >= 3) table.push({ word: token, source: item });
+    }
+  }
+  return table;
+}
+
+// 匹配中枢（三层）：场景层 → 内容层 → 热点概念层。
+// layer 标识命中层级；demoKey 为命中标识（场景 id 或层级常量）；null 表示全部未命中。
 function getSearchMatches(query) {
   const normalizedQuery = String(query || '').trim();
-  const demo = SEARCH_DEMOS.find(item => item.query === normalizedQuery) || null;
-  return {
-    query: normalizedQuery,
-    demoKey: demo?.key || null,
-    demoHint: demo?.hint || '',
-    tools: demo ? getSearchToolMatches(normalizedQuery) : [],
-    unavailable: [...dataLoadFailures].filter(key => ['tools', 'hotspots', 'glossary'].includes(key))
-  };
+  const unavailable = [...dataLoadFailures].filter(key => ['tools', 'hotspots', 'glossary'].includes(key));
+  if (!normalizedQuery) return { query: normalizedQuery, layer: null, demoKey: null, demoHint: '', keywords: [], tools: [], unavailable };
+
+  // ① 场景层：复用场景模式映射词
+  const sceneHits = extractKeywords(normalizedQuery, buildSceneWordTable());
+  if (sceneHits.length) {
+    const scene = sceneHits[0].source;
+    const keywords = sceneHits.map(hit => hit.word);
+    return { query: normalizedQuery, layer: 'scene', demoKey: scene.id, demoHint: scene.description || '', keywords, scene, tools: matchToolsByKeywords(keywords), unavailable };
+  }
+
+  // ② 内容层：工具卡词表（含品牌短形式）
+  const contentHits = extractKeywords(normalizedQuery, buildToolWordTable());
+  if (contentHits.length) {
+    const keywords = contentHits.map(hit => hit.word);
+    return { query: normalizedQuery, layer: 'content', demoKey: 'content', demoHint: '', keywords, tools: matchToolsByKeywords(keywords), unavailable };
+  }
+
+  // ③ 热点概念层：概念词 + 热点标题段
+  const conceptHits = extractKeywords(normalizedQuery, buildConceptWordTable());
+  const hotspotHits = extractKeywords(normalizedQuery, buildHotspotWordTable());
+  if (conceptHits.length || hotspotHits.length) {
+    const concepts = [...new Set(conceptHits.map(hit => hit.source))];
+    const hotspotItems = [...new Set(hotspotHits.map(hit => hit.source))];
+    const keywords = [...new Set([...conceptHits, ...hotspotHits].map(hit => hit.word))];
+    return { query: normalizedQuery, layer: 'knowledge', demoKey: 'knowledge', demoHint: '', keywords, concepts, hotspots: hotspotItems, tools: [], unavailable };
+  }
+
+  return { query: normalizedQuery, layer: null, demoKey: null, demoHint: '', keywords: [], tools: [], unavailable };
 }
 
 function resetSearchState() {
@@ -105,9 +215,9 @@ function renderSearchHome() {
   const recentList = document.getElementById('searchRecentList');
   if (!examples || !recentSection || !recentList) return;
 
-  examples.innerHTML = SEARCH_DEMOS.map(demo =>
-    '<button class="chip" type="button" data-search-example="' + escapeHtml(demo.query) + '">' +
-      escapeHtml(demo.query) +
+  examples.innerHTML = scenes.map(scene =>
+    '<button class="chip" type="button" data-search-example="' + escapeHtml(scene.name) + '">' +
+      escapeHtml(scene.name) +
     '</button>'
   ).join('');
 
@@ -142,18 +252,19 @@ function selectSearchExample(query) {
 // 结果可用性状态机：success / no-match / error（所需资料全不可用）。
 // 决定结果页是渲染完整投影，还是只显示对应提示块。热点/概念数据缺失只隐藏对应栏，不算 partial。
 function getSearchResultAvailability(matches) {
-  if (!matches.demoKey) return { type: 'no-match', message: '当前问题没有对应的固定静态示例。' };
+  if (!matches.layer) return { type: 'no-match', message: '当前问题没有匹配到已收录的场景、工具或概念资料。' };
+  if (matches.layer === 'knowledge') return { type: 'success', message: '' };
   if (matches.unavailable.includes('tools')) {
     return { type: 'error', message: '匹配所需的工具资料当前不可用，请刷新页面后重试。' };
   }
-  if (!matches.tools.length) return { type: 'no-match', message: '当前固定示例没有匹配到可展示的工具资料。' };
+  if (!matches.tools.length) return { type: 'no-match', message: '当前场景没有匹配到可展示的工具资料。' };
   return { type: 'success', message: '' };
 }
 
 // 将命中的工具投影为「工具列表」，供答案与 mini 卡使用（mini 卡复用工具卡数据子集，不另建投影）。
 function getSearchResultProjection(query) {
   const matches = getSearchMatches(query);
-  return { matches, tools: matches.demoKey ? matches.tools : [] };
+  return { matches, tools: matches.layer === 'scene' || matches.layer === 'content' ? matches.tools : [] };
 }
 
 // 决策（搜索结果页 v2）：答案句列出的工具名与 mini 卡展示数量上限。
@@ -185,8 +296,17 @@ function renderSearchResults() {
   content.hidden = false;
   searchCitationOrigins.clear();
 
+  if (projection.matches.layer === 'knowledge') {
+    summary.innerHTML = buildKnowledgeAnswer(projection.matches).join('');
+    renderSearchKnowledge(projection.matches);
+    markSearchConcepts();
+    renderSearchConceptsRail(collectSearchConcepts());
+    renderSearchFeedback(true);
+    return;
+  }
+
   const tools = projection.tools;
-  summary.innerHTML = buildSearchAnswer(searchState.query, tools).join('');
+  summary.innerHTML = buildSearchAnswer(searchState.query, tools, projection.matches).join('');
   renderSearchToolMinis(tools);
   renderSearchHotspots(getSearchHotspotRanking(searchState.query, 5));
   // 决策 9.8：先包裹正文概念词，再收集左栏索引，保证与内嵌联动严格一致
@@ -197,7 +317,7 @@ function renderSearchResults() {
 
 // 一句话答案：结论句 + 概览句，内嵌 [n] 引用按钮对应下方工具 mini 卡。
 // 工具为空时返回空数组（由 availability 的 no-match 分支兜底）。
-function buildSearchAnswer(query, tools) {
+function buildSearchAnswer(query, tools, matches = {}) {
   const citation = (tool, index) =>
     '<button class="citation" type="button" data-search-citation="tool-' + escapeHtml(tool.id) +
     '" aria-label="定位到工具 ' + (index + 1) + '">[' + (index + 1) + ']</button>';
@@ -205,7 +325,9 @@ function buildSearchAnswer(query, tools) {
   const shown = tools.slice(0, SEARCH_ANSWER_NAMES_LIMIT);
   const list = shown.map((tool, i) => escapeHtml(tool.title) + citation(tool, i)).join('、');
   const extra = tools.length > shown.length ? '、…等 ' + tools.length + ' 个相关工具' : '';
-  const conclusion = '针对「' + escapeHtml(query) + '」，已为你匹配到 ' + tools.length + ' 个相关工具：' + list + extra + '。';
+  const conclusion = matches.layer === 'content' && (matches.keywords || []).length
+    ? '已找到 ' + tools.length + ' 个与 ' + matches.keywords.slice(0, 2).map(keyword => '「' + escapeHtml(keyword) + '」').join('、') + ' 相关的模型与工具：' + list + extra + '。'
+    : '针对「' + escapeHtml(query) + '」，已为你匹配到 ' + tools.length + ' 个相关工具：' + list + extra + '。';
 
   const best = tools[0];
   let overview = '';
@@ -273,6 +395,56 @@ function getSearchHotspotRanking(query, limit = 5) {
   });
   ranked.sort((a, b) => b.score - a.score || b.ts - a.ts);
   return ranked.slice(0, limit).map(entry => entry.item);
+}
+
+// 热点概念层：结论句（无直接工具匹配时，提示进入热点/概念索引）。
+function buildKnowledgeAnswer(matches) {
+  const keywordText = (matches.keywords || []).slice(0, 2).map(keyword => '「' + escapeHtml(keyword) + '」').join('、');
+  const conclusion = keywordText
+    ? '没有直接匹配的工具，为你找到与 ' + keywordText + ' 相关的热点与概念资料。'
+    : '没有直接匹配的工具，为你找到相关热点与概念资料。';
+  return ['<p id="search-summary-1" tabindex="-1" data-search-summary data-search-concept-text>' + conclusion + '</p>'];
+}
+
+// 热点概念层：主区「相关热点与概念」——热点在上、概念在下（上下关系）。
+// 热点卡复用 [data-hotspot-id] 委托（main.js 打开热点详情）；概念卡复用 [data-search-concept-rail] 委托进入概念视图。
+function renderSearchKnowledge(matches) {
+  const section = document.querySelector('.search-tool-minis');
+  const title = document.getElementById('searchToolMinisTitle');
+  const list = document.getElementById('searchToolMiniList');
+  if (!list) return;
+  if (title) title.textContent = '相关热点与概念';
+  const eyebrow = section && section.querySelector('.eyebrow');
+  if (eyebrow) eyebrow.textContent = '资料索引';
+  const faint = section && section.querySelector('.faint');
+  if (faint) faint.hidden = true;
+
+  const hotspotsHtml = (matches.hotspots || []).length
+    ? '<div class="search-knowledge-block"><h3 class="search-knowledge-title">相关热点</h3>' +
+      matches.hotspots.slice(0, 5).map(item => {
+        const htitle = hotspotField(item, 'title');
+        const heat = getHotspotHeat(item);
+        return '<article class="search-hotspot-item search-knowledge-hotspot" data-hotspot-id="' + escapeHtml(item.id) + '" tabindex="0" role="button" aria-label="查看热点：' + escapeHtml(htitle) + '">' +
+          '<h3 class="search-hotspot-title">' + escapeHtml(htitle) + '</h3>' +
+          (heat !== null ? '<span class="search-hotspot-score">热度 ' + escapeHtml(String(heat)) + '</span>' : '') +
+          '<p class="search-hotspot-summary">' + escapeHtml(hotspotField(item, 'summary') || hotspotField(item, 'description') || '') + '</p>' +
+          '<span class="search-hotspot-time">' + escapeHtml(timeAgo(item.published_at)) + '</span>' +
+        '</article>';
+      }).join('') + '</div>'
+    : '';
+
+  const conceptsHtml = (matches.concepts || []).length
+    ? '<div class="search-knowledge-block"><h3 class="search-knowledge-title">相关概念</h3>' +
+      matches.concepts.slice(0, 8).map(concept =>
+        '<button class="search-knowledge-concept" type="button" data-search-concept-rail="' + escapeHtml(concept.term) + '">' +
+          '<b>' + escapeHtml(concept.term) + '</b>' +
+          (concept.full_name && concept.full_name !== concept.term ? '<span class="search-knowledge-full">' + escapeHtml(concept.full_name) + '</span>' : '') +
+          (concept.summary ? '<p class="search-knowledge-summary">' + escapeHtml(concept.summary) + '</p>' : '') +
+        '</button>'
+      ).join('') + '</div>'
+    : '';
+
+  list.innerHTML = hotspotsHtml + conceptsHtml;
 }
 
 function renderSearchHotspots(items) {
@@ -626,7 +798,7 @@ function submitSearchEdit(query) {
   const matches = getSearchMatches(normalizedQuery);
   if (!matches.demoKey) {
     input?.setAttribute('aria-invalid', 'true');
-    if (status) status.textContent = '暂无对应静态示例，请改为“写论文”“写代码”或“深度研究”。';
+    if (status) status.textContent = '暂无匹配的场景或工具资料，请换用论文、代码、配图、视频等关键词。';
     input?.focus();
     return false;
   }
@@ -767,7 +939,7 @@ function submitSearchHome(query) {
   if (!matches.demoKey) {
     resetSearchProcessing();
     if (unsupportedState) unsupportedState.hidden = false;
-    if (status) status.textContent = '暂无对应静态示例，请改写问题。';
+    if (status) status.textContent = '暂无匹配的场景或工具资料，请换用论文、代码、配图、视频等关键词。';
     return false;
   }
 
