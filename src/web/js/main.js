@@ -92,6 +92,9 @@ import {
 import {
   updateCompareCount,
   renderCompare,
+  renderCompareView,
+  setCompareTab,
+  getCompareTab,
   toggleCompareRef,
   renderAddCompare,
   openAddComparePanel,
@@ -100,6 +103,7 @@ import {
   removeCompare,
   quickCompare,
 } from './compare.js';
+import { bindModelCompareEvents } from './compare-models.js';
 import { renderScenes, setActiveSceneId, toggleSceneToolCard } from './scenes.js';
 import {
   renderTrending,
@@ -241,7 +245,7 @@ function switchView(view) {
   announceStatus((target.querySelector('h1')?.textContent || '页面') + '已显示');
 
   if (view === 'scenes') renderScenes();
-  if (view === 'compare') renderCompare();
+  if (view === 'compare') renderCompareView();
   if (view === 'tools') renderTools();
   if (view === 'glossary') renderGlossary();
   if (view === 'trending') renderTrending();
@@ -714,6 +718,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // 决策 92：对比页“添加工具”选择器（委托绑定在 DOMContentLoaded，与模态监听并列）
   document.getElementById('addCompareBtn')?.addEventListener('click', () => openAddComparePanel());
+
+  // 对比双 tab 切换（模型对比 / 工具对比）
+  document.getElementById('compareTabModel')?.addEventListener('click', () => setCompareTab('model'));
+  document.getElementById('compareTabTool')?.addEventListener('click', () => setCompareTab('tool'));
+  // 模型对比事件（选择器/维度/变体圆圈/视图切换，委托在模型面板内）
+  bindModelCompareEvents();
+  // 模型选择变化 → 同步目录侧 api_model 卡 +对比 按钮态
+  document.addEventListener('cmp-model-selection', () => renderTools());
   document.getElementById('modalOverlay').addEventListener('click', event => {
     const cat = event.target.closest('#addCompareCats [data-add-cat]');
     if (cat) {

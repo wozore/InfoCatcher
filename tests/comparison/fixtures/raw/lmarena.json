@@ -1,0 +1,62 @@
+{
+  "fetched_at": "2026-08-19T00:00:00Z",
+  "configs": {
+    "agent": [
+      { "model_name": "Claude Opus 5 (High)", "organization": "anthropic", "license": "Proprietary", "score": 0.1219, "score_ci_lower": 0.1074, "score_ci_upper": 0.1364, "observation_count": 2246557, "session_count": 19739, "rank": 3, "category": "overall", "leaderboard_publish_date": "2026-08-13" },
+      { "model_name": "Claude Opus 5 (XHigh)", "organization": "anthropic", "license": "Proprietary", "score": 0.11, "score_ci_lower": 0.095, "score_ci_upper": 0.125, "observation_count": 1800000, "session_count": 16000, "rank": 5, "category": "overall", "leaderboard_publish_date": "2026-08-13" },
+      { "model_name": "GPT-5.6 Sol (High)", "organization": "openai", "license": "Proprietary", "score": 0.09, "score_ci_lower": 0.075, "score_ci_upper": 0.105, "observation_count": 2000000, "session_count": 18000, "rank": 8, "category": "overall", "leaderboard_publish_date": "2026-08-13" },
+      { "model_name": "Qwen3.8 27B (High)", "organization": "qwen", "license": "Apache-2.0", "score": 0.085, "score_ci_lower": 0.07, "score_ci_upper": 0.1, "observation_count": 1500000, "session_count": 14000, "rank": 9, "category": "overall", "leaderboard_publish_date": "2026-08-13" },
+      { "model_name": "DeepSeek V4 Flash (High)", "organization": "deepseek", "license": "MIT", "score": 0.075, "score_ci_lower": 0.06, "score_ci_upper": 0.09, "observation_count": 1200000, "session_count": 11000, "rank": 12, "category": "overall", "leaderboard_publish_date": "2026-08-13" }
+    ],
+    "text": [
+      { "model_name": "Claude Opus 5 (High)", "organization": "anthropic", "license": "Proprietary", "rating": 1380, "rating_lower": 1370, "rating_upper": 1390, "variance": 8.1, "vote_count": 82000, "rank": 4, "category": "overall", "leaderboard_publish_date": "2026-08-13" },
+      { "model_name": "Claude Opus 5 (XHigh)", "organization": "anthropic", "license": "Proprietary", "rating": 1350, "rating_lower": 1340, "rating_upper": 1360, "variance": 8.4, "vote_count": 71000, "rank": 5, "category": "overall", "leaderboard_publish_date": "2026-08-13" },
+      { "model_name": "GPT-5.6 Sol (High)", "organization": "openai", "license": "Proprietary", "rating": 1320, "rating_lower": 1310, "rating_upper": 1330, "variance": 8.0, "vote_count": 76000, "rank": 6, "category": "overall", "leaderboard_publish_date": "2026-08-13" },
+      { "model_name": "Qwen3.8 27B (High)", "organization": "qwen", "license": "Apache-2.0", "rating": 1300, "rating_lower": 1290, "rating_upper": 1310, "variance": 8.8, "vote_count": 61000, "rank": 8, "category": "overall", "leaderboard_publish_date": "2026-08-13" },
+      { "model_name": "DeepSeek V4 Flash (High)", "organization": "deepseek", "license": "MIT", "rating": 1280, "rating_lower": 1270, "rating_upper": 1290, "variance": 9.0, "vote_count": 55000, "rank": 10, "category": "overall", "leaderboard_publish_date": "2026-08-13" }
+    ],
+    "vision": [
+      { "model_name": "Claude Opus 5 (High)", "organization": "anthropic", "license": "Proprietary", "rating": 1340, "rating_lower": 1330, "rating_upper": 1350, "variance": 9.2, "vote_count": 32000, "rank": 4, "category": "overall", "leaderboard_publish_date": "2026-08-13" },
+      { "model_name": "GPT-5.6 Sol (High)", "organization": "openai", "license": "Proprietary", "rating": 1280, "rating_lower": 1270, "rating_upper": 1290, "variance": 9.0, "vote_count": 29000, "rank": 7, "category": "overall", "leaderboard_publish_date": "2026-08-13" },
+      { "model_name": "DeepSeek V4 Flash (High)", "organization": "deepseek", "license": "MIT", "rating": 1210, "rating_lower": 1200, "rating_upper": 1220, "variance": 10.1, "vote_count": 24000, "rank": 14, "category": "overall", "leaderboard_publish_date": "2026-08-13" }
+    ],
+    "webdev": [
+      { "model_name": "GPT-5.6 Sol (High)", "organization": "openai", "license": "Proprietary", "rating": 1290, "rating_lower": 1280, "rating_upper": 1300, "variance": 10.4, "vote_count": 12000, "rank": 4, "category": "overall", "leaderboard_publish_date": "2026-08-13" },
+      { "model_name": "Qwen3.8 27B (High)", "organization": "qwen", "license": "Apache-2.0", "rating": 1250, "rating_lower": 1240, "rating_upper": 1260, "variance": 11.0, "vote_count": 10000, "rank": 11, "category": "overall", "leaderboard_publish_date": "2026-08-13" }
+    ],
+    "search": [
+      { "model_name": "GPT-5.6 Sol (High)", "organization": "openai", "license": "Proprietary", "rating": 1260, "rating_lower": 1250, "rating_upper": 1270, "variance": 10.8, "vote_count": 9000, "rank": 3, "category": "overall", "leaderboard_publish_date": "2026-08-13" }
+    ],
+    "text_to_image": [
+      { "model_name": "Midjourney v7", "organization": "midjourney", "license": "Proprietary", "rating": 1310, "rating_lower": 1300, "rating_upper": 1320, "variance": 10.6, "vote_count": 18000, "rank": 2, "category": "overall", "leaderboard_publish_date": "2026-08-13" }
+    ],
+    "image_edit": [
+      { "model_name": "Midjourney v7", "organization": "midjourney", "license": "Proprietary", "rating": 1270, "rating_lower": 1260, "rating_upper": 1280, "variance": 11.2, "vote_count": 9000, "rank": 3, "category": "overall", "leaderboard_publish_date": "2026-08-13" }
+    ],
+    "image_to_video": [
+      { "model_name": "Runway Gen-4", "organization": "runway", "license": "Proprietary", "rating": 1250, "rating_lower": 1240, "rating_upper": 1260, "variance": 11.5, "vote_count": 5000, "rank": 2, "category": "overall", "leaderboard_publish_date": "2026-08-13" }
+    ],
+    "text_to_video": [
+      { "model_name": "Runway Gen-4", "organization": "runway", "license": "Proprietary", "rating": 1260, "rating_lower": 1250, "rating_upper": 1270, "variance": 11.3, "vote_count": 6000, "rank": 2, "category": "overall", "leaderboard_publish_date": "2026-08-13" }
+    ],
+    "video_edit": [
+      { "model_name": "Runway Gen-4", "organization": "runway", "license": "Proprietary", "rating": 1220, "rating_lower": 1210, "rating_upper": 1230, "variance": 12.0, "vote_count": 3000, "rank": 3, "category": "overall", "leaderboard_publish_date": "2026-08-13" }
+    ],
+    "agent_praise_complaint": [
+      { "model_name": "Claude Opus 5 (High)", "organization": "anthropic", "license": "Proprietary", "score": 0.1926, "score_ci_lower": 0.14, "score_ci_upper": 0.25, "observation_count": 100000, "session_count": 3000, "rank": 2, "category": "overall", "leaderboard_publish_date": "2026-08-13" },
+      { "model_name": "GPT-5.6 Sol (High)", "organization": "openai", "license": "Proprietary", "score": 0.15, "score_ci_lower": 0.1, "score_ci_upper": 0.2, "observation_count": 90000, "session_count": 2800, "rank": 5, "category": "overall", "leaderboard_publish_date": "2026-08-13" }
+    ],
+    "agent_steerability": [
+      { "model_name": "Claude Opus 5 (High)", "organization": "anthropic", "license": "Proprietary", "score": 0.1134, "score_ci_lower": 0.08, "score_ci_upper": 0.15, "observation_count": 80000, "session_count": 2500, "rank": 3, "category": "overall", "leaderboard_publish_date": "2026-08-13" }
+    ],
+    "agent_bash_recovery_steps": [
+      { "model_name": "Claude Opus 5 (High)", "organization": "anthropic", "license": "Proprietary", "score": 0.1389, "score_ci_lower": 0.1, "score_ci_upper": 0.18, "observation_count": 60000, "session_count": 2000, "rank": 4, "category": "overall", "leaderboard_publish_date": "2026-08-13" }
+    ],
+    "agent_tool_hallucination": [
+      { "model_name": "Claude Opus 5 (High)", "organization": "anthropic", "license": "Proprietary", "score": 0.0113, "score_ci_lower": 0.008, "score_ci_upper": 0.015, "observation_count": 50000, "session_count": 1800, "rank": 2, "category": "overall", "leaderboard_publish_date": "2026-08-13" }
+    ],
+    "agent_task_outcome_explicit": [
+      { "model_name": "Claude Opus 5 (High)", "organization": "anthropic", "license": "Proprietary", "score": 0.1535, "score_ci_lower": 0.12, "score_ci_upper": 0.19, "observation_count": 70000, "session_count": 2200, "rank": 3, "category": "overall", "leaderboard_publish_date": "2026-08-13" }
+    ]
+  }
+}

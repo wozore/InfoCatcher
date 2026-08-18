@@ -438,40 +438,104 @@
     </section>
   </section>
 
-  <!-- 对比模式视图 -->
+  <!-- 对比模式视图（双 tab：模型对比读 integrated/，工具对比读 catalog） -->
   <section id="view-compare" class="view compare-view" aria-labelledby="compareViewTitle">
     <header class="page-header compare-header">
-      <span class="eyebrow">并排核对</span>
-      <h1 class="page-title" id="compareViewTitle">比较同一层级的工具与方案</h1>
-      <p class="page-lead">选择 2–5 个同类型项目并排阅读。具体工具、API 模型和订阅套餐分别比较，不把不同口径混成一个结论。</p>
+      <span class="eyebrow" id="compareViewEyebrow" data-i18n="compare.viewEyebrow">并排核对</span>
+      <h1 class="page-title" id="compareViewTitle" data-i18n="compare.viewTitle">比较同一层级的工具与方案</h1>
+      <p class="page-lead" id="compareViewLead" data-i18n="compare.viewLead">模型对比读取公开评测数据（综合分按来源加权），工具对比逐项并排阅读；不同口径不混成一个结论。</p>
     </header>
 
-    <section class="compare-workspace panel" aria-labelledby="compareSelectionTitle">
-      <div class="compare-workspace-heading">
-        <div>
-          <h2 class="section-title" id="compareSelectionTitle">已选项目</h2>
-          <p class="muted">可从工具库、场景或详情中加入对比，也可使用下方快捷组合。</p>
+    <div class="compare-tabs" role="tablist" aria-label="对比视图切换" data-i18n-aria="compare.tabsAria">
+      <button class="compare-tab active" id="compareTabModel" type="button" role="tab" aria-selected="true" aria-controls="compareModelPanel" data-i18n="compare.tab.model">模型对比</button>
+      <button class="compare-tab" id="compareTabTool" type="button" role="tab" aria-selected="false" aria-controls="compareToolPanel" data-i18n="compare.tab.tool">工具对比</button>
+    </div>
+
+    <!-- 模型对比 tab（integrated/） -->
+    <section id="compareModelPanel" class="compare-model-panel" role="tabpanel" aria-labelledby="compareTabModel">
+      <div class="cmp-layout">
+        <aside class="cmp-selector panel" aria-labelledby="cmpSelectorTitle">
+          <div class="cmp-selector-head">
+            <h2 class="section-title" id="cmpSelectorTitle" data-i18n="compare.selectorTitle">选择模型</h2>
+            <p class="muted" data-i18n="compare.selectorLead">按综合分排序；可搜索、按类别筛选。</p>
+            <div class="search-box cmp-search-box">
+              <label class="sr-only" for="cmpModelSearch" data-i18n="compare.searchModel">搜索模型或厂商</label>
+              <input type="text" id="cmpModelSearch" placeholder="搜索模型或厂商" autocomplete="off">
+              <button id="cmpModelSearchClear" class="clear-btn" type="button" style="display:none" aria-label="清除模型搜索"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg></button>
+            </div>
+            <div class="cmp-cats" id="cmpFilterCats" aria-label="模型类别筛选" data-i18n-aria="compare.filterCatsAria"></div>
+            <p class="faint cmp-sort-hint" data-i18n="compare.sortHint">默认按综合分降序</p>
+          </div>
+          <div class="cmp-model-list" id="cmpModelList" aria-live="polite"></div>
+        </aside>
+
+        <div class="cmp-main">
+          <section class="cmp-selection panel" aria-labelledby="cmpSelectionTitle">
+            <div class="cmp-selection-head">
+              <div>
+                <h2 class="section-title" id="cmpSelectionTitle" data-i18n="compare.selectionTitle">已选模型</h2>
+                <p class="muted" id="cmpSelectionLead" data-i18n="compare.selectionLead">点模型图标切换程度变体；上限来自展示配置。</p>
+              </div>
+              <span class="compare-limit" id="cmpCount">0 / 5</span>
+            </div>
+            <div class="cmp-chips" id="cmpChips" aria-live="polite"></div>
+            <p class="status-line cmp-status" id="cmpStatus" role="status" aria-live="polite"></p>
+          </section>
+
+          <section class="cmp-config panel" aria-labelledby="cmpConfigTitle">
+            <div class="cmp-config-head">
+              <div>
+                <h2 class="section-title" id="cmpConfigTitle" data-i18n="compare.configTitle">对比维度</h2>
+                <p class="muted" data-i18n="compare.configLead">勾选可量化维度，每维度一个图块；数据不足的维度不画柱。</p>
+              </div>
+            </div>
+            <div class="cmp-dims" id="cmpDims"></div>
+            <div class="cmp-mode-row">
+              <div class="cmp-tabset" role="tablist" aria-label="模型对比视图模式" data-i18n-aria="compare.viewTabsAria">
+                <button class="cmp-tabset-btn active" type="button" data-cmp-view="chart" aria-selected="true" data-i18n="compare.view.chart">图表</button>
+                <button class="cmp-tabset-btn" type="button" data-cmp-view="table" aria-selected="false" data-i18n="compare.view.table">表格</button>
+              </div>
+              <div class="cmp-tabset cmp-chart-tabs" role="tablist" aria-label="图表类型切换" data-i18n-aria="compare.chartTabsAria">
+                <button class="cmp-tabset-btn active" type="button" data-cmp-chart="bar" aria-selected="true" data-i18n="compare.chart.bar">柱状图</button>
+                <button class="cmp-tabset-btn" type="button" data-cmp-chart="radar" aria-selected="false" data-i18n="compare.chart.radar">雷达图</button>
+              </div>
+            </div>
+          </section>
+
+          <div class="cmp-results" id="cmpResults" aria-live="polite"></div>
         </div>
-        <div class="compare-heading-actions">
-          <span class="compare-limit">2–5 项 · 仅限同类型</span>
-          <button class="btn btn-small" type="button" id="addCompareBtn">添加工具</button>
-        </div>
-      </div>
-      <div id="compareSelection" class="compare-selection" aria-live="polite">
-        <p class="hint">在工具库中点击 <b>+对比</b> 按钮添加工具，或点击下方快捷选择。</p>
       </div>
     </section>
 
-    <section class="compare-results section-rule" aria-labelledby="compareResultsTitle">
-      <div class="directory-heading">
-        <div>
-          <span class="eyebrow">对比结果</span>
-          <h2 class="section-title" id="compareResultsTitle">按维度阅读</h2>
+    <!-- 工具对比 tab（catalog；旧 compare.js 工作区迁移至此） -->
+    <section id="compareToolPanel" class="compare-tool-panel" role="tabpanel" aria-labelledby="compareTabTool" hidden>
+      <section class="compare-workspace panel" aria-labelledby="compareSelectionTitle">
+        <div class="compare-workspace-heading">
+          <div>
+            <h2 class="section-title" id="compareSelectionTitle">已选项目</h2>
+            <p class="muted">可从工具库、场景或详情中加入对比，也可使用下方快捷组合。</p>
+          </div>
+          <div class="compare-heading-actions">
+            <span class="compare-limit">2–5 项 · 仅限同类型</span>
+            <button class="btn btn-small" type="button" id="addCompareBtn">添加工具</button>
+          </div>
         </div>
-        <p class="faint">暂无、未知、不适用与过期资料保持原义，不按数值 0 处理。</p>
-      </div>
-      <p class="status-line" id="compareStatus" role="status" aria-live="polite"></p>
-      <div class="compare-table-wrap" id="compareTable" aria-live="polite"></div>
+        <div id="compareSelection" class="compare-selection" aria-live="polite">
+          <p class="hint">在工具库中点击 <b>+对比</b> 按钮添加工具，或点击下方快捷选择。</p>
+        </div>
+      </section>
+
+      <section class="compare-results section-rule" aria-labelledby="compareResultsTitle">
+        <div class="directory-heading">
+          <div>
+            <span class="eyebrow">对比结果</span>
+            <h2 class="section-title" id="compareResultsTitle">按维度阅读</h2>
+          </div>
+          <p class="faint">暂无、未知、不适用与过期资料保持原义，不按数值 0 处理。</p>
+        </div>
+        <p class="status-line" id="compareStatus" role="status" aria-live="polite"></p>
+        <div class="compare-table-wrap" id="compareTable" aria-live="polite"></div>
+      </section>
     </section>
   </section>
 

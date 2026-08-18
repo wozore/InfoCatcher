@@ -28,6 +28,19 @@ function buildDist(options = {}) {
   fs.mkdirSync(path.join(dataDist, 'news'), { recursive: true });
   fs.cpSync(catalogDir, path.join(dataDist, 'catalog'), { recursive: true });
   fs.cpSync(hotspotsDir, path.join(dataDist, 'news', 'output'), { recursive: true });
+  // 模型对比数据（data/comparison）：只发布前端入口层 integrated/ + view-config + models-alias；
+  // raw/ 快照与 refresh-config 为管线/维护者产物，不发布到站点。
+  const comparisonSrc = options.comparisonDir || path.join(DIRS.data, 'comparison');
+  if (fs.existsSync(comparisonSrc)) {
+    const comparisonDist = path.join(dataDist, 'comparison');
+    fs.mkdirSync(path.join(comparisonDist, 'integrated'), { recursive: true });
+    for (const name of ['view-config.json', 'models-alias.json']) {
+      const file = path.join(comparisonSrc, name);
+      if (fs.existsSync(file)) fs.copyFileSync(file, path.join(comparisonDist, name));
+    }
+    const integratedSrc = path.join(comparisonSrc, 'integrated');
+    if (fs.existsSync(integratedSrc)) fs.cpSync(integratedSrc, path.join(comparisonDist, 'integrated'), { recursive: true });
+  }
   return { outputDir, fileCount: countFiles(outputDir) };
 }
 

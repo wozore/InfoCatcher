@@ -31,6 +31,7 @@ const path = require('path');
 const { DIRS } = require('../shared/paths');
 const catalog = require('./validate-catalog');
 const news = require('./validate-news');
+const comparison = require('./validate-comparison');
 
 const SRC_DIR = DIRS.src;
 let failed = false;
@@ -59,6 +60,9 @@ news.validateNews();
 // 热点管线 v2 候选层（min-candidates.json，单状态轴；文件不存在优雅跳过）
 // 失败经 news.failed 计入聚合退出码，与 validate-news 域一致。
 news.validateMinNews();
+
+// 模型对比域（data/comparison：integrated + view-config + models-alias + raw）
+comparison.validateComparison();
 
 // index.html（DOM 契约校验函数在 catalog 域模块中）
 try {
@@ -204,7 +208,7 @@ try {
 } catch (e) { fail(`原则6 检查异常: ${e.message}`); }
 
 // 汇总两个域的失败状态 + 本文件原则门禁的失败状态
-failed = failed || catalog.failed || news.failed;
+failed = failed || catalog.failed || news.failed || comparison.failed;
 
 console.log(failed ? '\n❌ 校验未通过，请修复上述错误后重试\n' : '\n✅ 全部通过\n');
 process.exit(failed ? 1 : 0);

@@ -1418,6 +1418,149 @@ main:has(#view-search.active):has(#searchResultsPanel:not([hidden])) { max-width
 .compare-provenance-name { flex: 0 0 auto; font-weight: 650; }
 .compare-provenance-text { overflow-wrap: anywhere; }
 
+/* ═══ 对比视图 · 模型对比（compare-models.js，读 data/comparison/integrated） ═══
+   双 tab 结构：.compare-tabs 切模型/工具；模型面板为左选择器 + 右内容。
+   雷达图开启时放开 <main> 限宽（:has 结构选择器，同搜索页；切走即复原）。 */
+.compare-tabs { display: flex; gap: 4px; margin-bottom: 18px; border-bottom: 1px solid var(--border); }
+.compare-tab {
+  padding: 9px 18px; border: 0; background: none; cursor: pointer;
+  font-size: 14px; font-weight: 650; color: var(--text-secondary);
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+}
+.compare-tab:hover { color: var(--text); }
+.compare-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+main:has(#view-compare.active.cmp-radar-active) { max-width: none; }
+
+.cmp-layout { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 20px; align-items: start; }
+.cmp-selector { padding: 18px; position: sticky; top: 92px; max-height: calc(100vh - 120px); display: flex; flex-direction: column; }
+.cmp-selector-head .section-title { margin-bottom: 3px; }
+.cmp-search-box { margin: 12px 0 8px; }
+.cmp-cats { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+.cmp-sort-hint { font-size: 12px; }
+.cmp-model-list { margin-top: 10px; overflow-y: auto; display: grid; gap: 6px; }
+.cmp-model-item {
+  display: flex; align-items: center; gap: 8px; padding: 8px 10px;
+  border: 1px solid var(--border); background: var(--surface); border-radius: var(--radius-sm);
+  cursor: pointer; text-align: left; width: 100%;
+}
+.cmp-model-item:hover { border-color: var(--primary); }
+.cmp-model-item.selected { border-color: var(--primary); background: var(--primary-light); }
+.cmp-model-icon { font-size: 18px; flex: 0 0 auto; }
+.cmp-model-text { display: flex; flex-direction: column; min-width: 0; flex: 1 1 auto; }
+.cmp-model-name { font-size: 13px; font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cmp-model-vendor { font-size: 11px; color: var(--text-hint); }
+.cmp-coverage { font-size: 11px; color: var(--text-secondary); flex: 0 0 auto; }
+.cmp-score { font-size: 12px; font-weight: 700; color: var(--primary); flex: 0 0 auto; }
+.cmp-score-na { color: var(--text-hint); font-weight: 500; }
+
+.cmp-main { display: grid; gap: 18px; min-width: 0; }
+.cmp-selection { padding: 18px; }
+.cmp-selection-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+.cmp-selection-head .section-title { margin-bottom: 3px; }
+.cmp-chips { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; }
+.cmp-chips .hint { color: var(--text-hint); font-size: 13px; }
+.cmp-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 8px; border: 1px solid var(--border); background: var(--surface);
+  border-radius: 999px; font-size: 13px;
+}
+.cmp-chip-icon {
+  width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border);
+  background: var(--primary-light); cursor: pointer; font-size: 15px; display: inline-flex;
+  align-items: center; justify-content: center; padding: 0;
+}
+.cmp-chip-icon:hover { border-color: var(--primary); }
+.cmp-chip-body { display: flex; flex-direction: column; line-height: 1.3; }
+.cmp-chip-name { font-weight: 650; }
+.cmp-chip-degrees { font-size: 11px; color: var(--text-secondary); }
+.cmp-chip-remove { border: 0; background: none; cursor: pointer; color: var(--text-hint); font-size: 15px; padding: 2px 4px; }
+.cmp-chip-remove:hover { color: var(--danger); }
+.cmp-status { margin-top: 8px; font-size: 12px; }
+
+.cmp-config { padding: 18px; }
+.cmp-config-head .section-title { margin-bottom: 3px; }
+.cmp-dims { margin-top: 10px; display: grid; gap: 10px; }
+.cmp-dim-group { display: flex; flex-direction: column; gap: 6px; }
+.cmp-dim-group-label { font-size: 12px; font-weight: 700; color: var(--text-secondary); }
+.cmp-dim-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.cmp-dim-chip {
+  display: inline-flex; align-items: center; gap: 5px; padding: 4px 9px;
+  border: 1px solid var(--border); border-radius: 999px; font-size: 12px; cursor: pointer;
+}
+.cmp-dim-chip:hover { border-color: var(--primary); }
+.cmp-dim-chip.checked { background: var(--primary); color: var(--on-solid); border-color: var(--primary); }
+.cmp-dim-chip input { margin: 0; accent-color: var(--primary); }
+.cmp-dim-chip.checked input { accent-color: var(--on-solid); }
+.cmp-mode-row {
+  margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+}
+.cmp-tabset { display: inline-flex; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+.cmp-tabset-btn { border: 0; background: var(--surface); padding: 7px 16px; font-size: 13px; cursor: pointer; color: var(--text-secondary); }
+.cmp-tabset-btn + .cmp-tabset-btn { border-left: 1px solid var(--border); }
+.cmp-tabset-btn.active { background: var(--primary); color: var(--on-solid); }
+
+.cmp-results { display: grid; gap: 18px; }
+.cmp-block { padding: 18px; border: 1px solid var(--border); background: var(--surface); }
+.cmp-block-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+.cmp-block-head h3 { margin: 0; font-family: var(--font-serif); font-size: 18px; }
+.cmp-block-note { color: var(--text-hint); font-size: 12px; }
+.cmp-bars { display: grid; gap: 8px; }
+.cmp-bar-item { display: grid; grid-template-columns: 150px minmax(0, 1fr) 56px; gap: 10px; align-items: center; }
+.cmp-bar-name { color: var(--text-secondary); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cmp-bar-track { height: 16px; border: 1px solid var(--border); background: var(--bg); border-radius: var(--radius-sm); overflow: hidden; }
+.cmp-bar-track-empty { display: flex; align-items: center; padding: 0 8px; color: var(--text-hint); font-size: 11px; }
+.cmp-bar-fill { display: block; height: 100%; background: var(--primary); }
+.cmp-bar-value { font-size: 12px; font-weight: 650; text-align: right; white-space: nowrap; }
+.cmp-bar-value-na { color: var(--text-hint); font-weight: 500; }
+.cmp-source-footer {
+  margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border);
+  display: flex; justify-content: flex-end; gap: 14px; flex-wrap: wrap;
+  font-size: 12px; color: var(--text-secondary);
+}
+.cmp-source-footer a { color: var(--link); text-decoration: underline; }
+.cmp-listed-price { color: var(--warn); font-size: 11px; }
+
+.cmp-radar { padding: 18px; border: 1px solid var(--border); background: var(--surface); position: relative; }
+.cmp-radar-svg { display: block; width: 100%; max-width: 680px; margin: 0 auto; }
+.cmp-radar-grid { fill: none; stroke: var(--border); stroke-width: 1; }
+.cmp-radar-axis { stroke: var(--border); stroke-width: 1; stroke-dasharray: 3 3; }
+.cmp-radar-label { font-size: 12px; fill: var(--text-secondary); }
+.cmp-radar-shape { fill-opacity: 0.22; stroke-width: 2; }
+.cmp-radar-shape-a { fill: var(--primary); stroke: var(--primary); }
+.cmp-radar-shape-b { fill: var(--accent); stroke: var(--accent); }
+.cmp-radar-model { position: absolute; top: 18px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.cmp-radar-model-left { left: 18px; }
+.cmp-radar-model-right { right: 18px; }
+.cmp-radar-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.cmp-radar-warn { margin-top: 10px; text-align: center; font-size: 12px; color: var(--warn); }
+
+.cmp-table-wrap { overflow-x: auto; padding: 18px; border: 1px solid var(--border); background: var(--surface); }
+.cmp-table { width: 100%; min-width: 640px; border-collapse: collapse; font-size: 13px; }
+.cmp-table th, .cmp-table td { padding: 10px 14px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+.cmp-table th { font-weight: 650; }
+.cmp-table .dim { color: var(--text-secondary); font-weight: 650; white-space: nowrap; }
+.cmp-generated { margin-top: 10px; font-size: 12px; }
+
+/* 变体圆圈：icon 周围顺时针 360° 平分（compare-models.renderVariantPopover） */
+.cmp-variant-popover {
+  position: absolute; z-index: 60; background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  box-shadow: var(--shadow-lg); padding: 10px 12px; width: 224px; text-align: center;
+}
+.cmp-variant-popover .cmp-variant-close { position: absolute; top: 4px; right: 6px; border: 0; background: none; color: var(--text-hint); cursor: pointer; font-size: 14px; }
+.cmp-variant-hint { font-size: 11px; color: var(--text-hint); margin-bottom: 2px; }
+.cmp-variant-svg { width: 200px; height: 200px; display: block; margin: 0 auto; }
+.cmp-variant-sector { cursor: pointer; }
+.cmp-variant-sector path { fill: var(--primary-light); stroke: var(--border); stroke-width: 1; }
+.cmp-variant-sector text { fill: var(--text-secondary); font-size: 12px; font-weight: 650; }
+.cmp-variant-sector:hover path { fill: var(--accent); }
+.cmp-variant-sector:hover text { fill: var(--on-solid); }
+.cmp-variant-sector.selected path { fill: var(--primary); }
+.cmp-variant-sector.selected text { fill: var(--on-solid); }
+.cmp-variant-sector:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: -2px; }
+
 /* ═══ Modal ═════════════════════════════════════════════════════
    工具详情弹窗：全屏遮罩 + 居中面板。
    评分四维网格、价格层级列表、优劣势/最适不适合场景 */
@@ -1964,6 +2107,16 @@ main:has(#view-search.active):has(#searchResultsPanel:not([hidden])) { max-width
   .compare-bars-heading { align-items: flex-start; flex-direction: column; gap: 6px; }
   .compare-bars-note { text-align: left; }
   .compare-bar-row { grid-template-columns: 1fr; gap: 8px; }
+  /* 模型对比移动端：选择器不再 sticky，转单列堆叠；雷达图模型标签收拢到图上方 */
+  .cmp-layout { grid-template-columns: 1fr; gap: 14px; }
+  .cmp-selector { position: static; max-height: none; }
+  .cmp-model-list { max-height: 320px; }
+  .cmp-bar-item { grid-template-columns: 108px minmax(0, 1fr) 48px; }
+  .cmp-radar-model { position: static; justify-content: center; margin-bottom: 4px; }
+  .cmp-radar-model-right { margin-bottom: 10px; }
+  .cmp-mode-row { flex-direction: column; align-items: stretch; }
+  .cmp-tabset { display: grid; grid-template-columns: 1fr 1fr; }
+  .cmp-tabset-btn { padding: 9px 12px; }
   .compare-bar-item { grid-template-columns: 84px minmax(0, 1fr) 76px; }
   .tools-controls { padding: 16px; }
   .tools-header-row { gap: 14px; }

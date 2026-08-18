@@ -26,6 +26,37 @@ import {
 } from './data.js';
 import { renderTools, closeModal, showModal } from './tools.js';
 import { currentView, switchView } from './main.js';
+import { routeApiModelToCompare, canonicalForTool, modelCompareIsSelected, renderModelCompare } from './compare-models.js';
+
+// ═══════════════════════════════════════════════════════════════
+// 对比视图双 tab：模型对比（integrated/，见 compare-models.js）↔ 工具对比（catalog，本模块）
+// ═══════════════════════════════════════════════════════════════
+let compareTab = 'model'; // 'model' | 'tool'
+
+function getCompareTab() {
+  return compareTab;
+}
+
+/** 切换对比 tab（模型/工具），并渲染对应内容。 */
+function setCompareTab(tab) {
+  compareTab = tab === 'tool' ? 'tool' : 'model';
+  const modelTabBtn = document.getElementById('compareTabModel');
+  const toolTabBtn = document.getElementById('compareTabTool');
+  const modelPanel = document.getElementById('compareModelPanel');
+  const toolPanel = document.getElementById('compareToolPanel');
+  if (modelTabBtn) { modelTabBtn.classList.toggle('active', compareTab === 'model'); modelTabBtn.setAttribute('aria-selected', String(compareTab === 'model')); }
+  if (toolTabBtn) { toolTabBtn.classList.toggle('active', compareTab === 'tool'); toolTabBtn.setAttribute('aria-selected', String(compareTab === 'tool')); }
+  if (modelPanel) modelPanel.hidden = compareTab !== 'model';
+  if (toolPanel) toolPanel.hidden = compareTab !== 'tool';
+  if (compareTab === 'model') renderModelCompare();
+  else renderCompare();
+}
+
+/** 对比视图渲染入口（switchView('compare') 时调用）。 */
+function renderCompareView() {
+  if (compareTab === 'model') renderModelCompare();
+  else renderCompare();
+}
 
 // ═══════════════════════════════════════════════════════════════
 // 对比状态 —— 共享谓词与列表
@@ -46,6 +77,9 @@ function isComparableLeaf(toolId, itemId) {
 }
 
 function isCompareSelected(toolId, itemId = null) {
+  // 路由（契约 §8）：api_model 对齐到 integrated 模型 → 选中态看模型对比选择。
+  const canonical = canonicalForTool(toolId, itemId);
+  if (canonical && modelCompareIsSelected(canonical)) return true;
   return compareList.some(ref => compareKey(ref) === compareKey({ toolId, itemId }));
 }
 
@@ -76,6 +110,34 @@ function toggleCompareRef(toolId, itemId = null, btn) {
   const ref = { toolId, itemId };
   const target = resolveCompareTarget(ref);
   if (!target) return;
+  // 路由（契约 §8）：api_model 对齐到 integrated 模型 → 模型对比 tab；否则工具对比兜底。
+  if (target.kind === 'api_model') {
+    const card = getToolCardItems().find(cardItem => cardItem.detail_ref?.id === target.item.id);
+    if (card) {
+      routeApiModelToCompare(card).then(canonical => {
+        if (canonical) {
+          const nowSelected = modelCompareIsSelected(canonical);
+          if (btn) {
+            btn.classList.toggle('selected', nowSelected);
+            btn.setAttribute('aria-pressed', String(nowSelected));
+            btn.textContent = nowSelected ? '已选' : '+对比';
+          }
+          // 从详情弹窗路由时关闭弹窗，避免叠加在对比视图上
+          closeModal();
+          setCompareTab('model');
+          if (currentView !== 'compare') switchView('compare');
+          renderTools();
+        } else {
+          addToToolCompare(ref, target, btn);
+        }
+      });
+      return;
+    }
+  }
+  addToToolCompare(ref, target, btn);
+}
+
+function addToToolCompare(ref, target, btn) {
   const key = compareKey(ref);
   const idx = compareList.findIndex(candidate => compareKey(candidate) === key);
   if (idx >= 0) {
@@ -96,7 +158,7 @@ function toggleCompareRef(toolId, itemId = null, btn) {
   }
   updateCompareCount();
   renderTools();
-  if (currentView === 'compare') renderCompare();
+  if (currentView === 'compare') renderCompareView();
 }
 
 function compareGroupLeaves(toolId, groupId) {
@@ -116,6 +178,7 @@ function compareGroupLeaves(toolId, groupId) {
   updateCompareCount();
   renderTools();
   closeModal();
+  setCompareTab('tool');
   switchView('compare');
 }
 
@@ -366,12 +429,16 @@ function quickCompare(ids) {
   }).filter(Boolean).slice(0, 5);
   updateCompareCount();
   renderTools();
+  setCompareTab('tool');
   renderCompare();
 }
 
 export {
   compareList,
   compareKey,
+  getCompareTab,
+  setCompareTab,
+  renderCompareView,
   isComparableRootTool,
   isComparableLeaf,
   isCompareSelected,

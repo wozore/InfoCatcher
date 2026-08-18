@@ -1,0 +1,54 @@
+name: Refresh Model Comparison Data
+
+on:
+  schedule:
+    # GitHub Actions cron 固定按 UTC；北京时间 = UTC + 8h。
+    # 每 2 天源（OpenRouter / LMArena / llm-stats）与月源（LiveBench）各自按
+    # refresh-config.json 的 interval_hours 判断是否到期；每日跑一次即可。
+    # 每日北京 05:17 → UTC 21:17。
+    - cron: '17 21 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-comparison
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Fetch due sources and rebuild integrated
+        # 单源失败 WARN 隔离不阻塞其余源；任一源未就绪则跳过重建（保留旧 integrated）。
+        # 失败本身不终止工作流——真正的门禁是下一步 validate（数据坏了才红）。
+        run: |
+          node scripts/fetch-comparison.js run || echo "⚠️ 本次部分源抓取失败或未重建（旧数据保留）"
+
+      - name: Validate data and scan secrets
+        run: |
+          node scripts/validate.js
+          node scripts/check-secrets.js
+
+      - name: Commit updated comparison data
+        run: |
+          if git diff --quiet -- data/comparison; then
+            echo "No comparison data changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/comparison
+          git commit -m "chore(data): refresh model comparison data"
+          git push

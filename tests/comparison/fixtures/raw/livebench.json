@@ -1,0 +1,11 @@
+{
+  "fetched_at": "2026-08-19T00:00:00Z",
+  "release": "2026-06-25",
+  "groups": [
+    { "model": "o3-mini-high", "reasoning": 88, "coding": 84, "math": 94, "language": 70, "instruction_following": 75, "data_analysis": 66, "agentic_coding": 60 },
+    { "model": "o3-mini-low", "reasoning": 72, "coding": 66, "math": 82, "language": 62, "instruction_following": 68, "data_analysis": 55, "agentic_coding": 50 },
+    { "model": "claude-opus-5-high", "reasoning": 82, "coding": 78, "math": 80, "language": 85, "instruction_following": 76, "data_analysis": 70, "agentic_coding": 79 },
+    { "model": "gpt-5.6-sol-high", "reasoning": 84, "coding": 86, "math": 83, "language": 80, "instruction_following": 79, "data_analysis": 75, "agentic_coding": 82 },
+    { "model": "deepseek-v4-flash", "reasoning": 78, "coding": 80, "math": 88, "language": 72, "instruction_following": 76, "data_analysis": 68, "agentic_coding": 74 }
+  ]
+}

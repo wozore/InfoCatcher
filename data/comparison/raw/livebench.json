@@ -1,0 +1,446 @@
+{
+  "fetched_at": "2026-08-18T17:10:46.765Z",
+  "release": "2026-06-25",
+  "groups": [
+    {
+      "model": "claude-opus-4-5-20251101-thinking-64k-high-effort",
+      "reasoning": 80.0865,
+      "coding": 79.654,
+      "math": 90.38900000000001,
+      "language": 81.26100000000001,
+      "instruction_following": 62.54599999999999,
+      "data_analysis": 74.44166666666666,
+      "agentic_coding": 39.697
+    },
+    {
+      "model": "claude-opus-4-6-thinking-auto-high-effort",
+      "reasoning": 88.673,
+      "coding": 78.1845,
+      "math": 89.31700000000001,
+      "language": 83.26966666666667,
+      "instruction_following": 63.3125,
+      "data_analysis": 69.893,
+      "agentic_coding": 48.989666666666665
+    },
+    {
+      "model": "claude-opus-4-7-xhigh-effort",
+      "reasoning": 87.19225,
+      "coding": 82.088,
+      "math": 92.85374999999999,
+      "language": 77.914,
+      "instruction_following": 66.7375,
+      "data_analysis": 78.26366666666667,
+      "agentic_coding": 50.65633333333333
+    },
+    {
+      "model": "claude-sonnet-4-6-thinking-auto-medium-effort",
+      "reasoning": 84.76925,
+      "coding": 79.2715,
+      "math": 86.994,
+      "language": 76.10266666666666,
+      "instruction_following": 63.22075,
+      "data_analysis": 77.946,
+      "agentic_coding": 42.626
+    },
+    {
+      "model": "claude-sonnet-5-xhigh-effort",
+      "reasoning": 88.69225,
+      "coding": 80.68,
+      "math": 92.94225,
+      "language": 74.97033333333333,
+      "instruction_following": 63.85850000000001,
+      "data_analysis": 71.74066666666666,
+      "agentic_coding": 59.394000000000005
+    },
+    {
+      "model": "deepseek-v4-flash",
+      "reasoning": 70.58175,
+      "coding": 69.22800000000001,
+      "math": 79.64750000000001,
+      "language": 70.12400000000001,
+      "instruction_following": 63.137499999999996,
+      "data_analysis": 68.02300000000001,
+      "agentic_coding": 37.626
+    },
+    {
+      "model": "deepseek-v4-pro",
+      "reasoning": 82.69225,
+      "coding": 69.994,
+      "math": 90.6755,
+      "language": 78.13033333333333,
+      "instruction_following": 62.35,
+      "data_analysis": 74.53766666666667,
+      "agentic_coding": 42.626
+    },
+    {
+      "model": "gemini-3.1-pro-preview-high",
+      "reasoning": 84.00475,
+      "coding": 76.4545,
+      "math": 91.04499999999999,
+      "language": 85.37599999999999,
+      "instruction_following": 79.1,
+      "data_analysis": 78.54133333333334,
+      "agentic_coding": 44.141333333333336
+    },
+    {
+      "model": "gemini-3.5-flash-high",
+      "reasoning": 82.00475,
+      "coding": 78.1845,
+      "math": 88.24375,
+      "language": 84.58433333333333,
+      "instruction_following": 75.6,
+      "data_analysis": 64.85733333333333,
+      "agentic_coding": 48.989666666666665
+    },
+    {
+      "model": "glm-5.2",
+      "reasoning": 78.625,
+      "coding": 79.654,
+      "math": 89.78125,
+      "language": 76.24166666666666,
+      "instruction_following": 62.29175000000001,
+      "data_analysis": 73.73966666666666,
+      "agentic_coding": 51.76766666666666
+    },
+    {
+      "model": "gpt-5.2-2025-12-11-high",
+      "reasoning": 83.2115,
+      "coding": 76.0715,
+      "math": 93.166,
+      "language": 79.809,
+      "instruction_following": 61.77074999999999,
+      "data_analysis": 78.16333333333334,
+      "agentic_coding": 50.25266666666667
+    },
+    {
+      "model": "gpt-5.2-codex",
+      "reasoning": 77.7115,
+      "coding": 83.61949999999999,
+      "math": 88.77375,
+      "language": 73.67833333333333,
+      "instruction_following": 66.44574999999999,
+      "data_analysis": 78.204,
+      "agentic_coding": 49.394000000000005
+    },
+    {
+      "model": "gpt-5.4-mini-xhigh",
+      "reasoning": 71.32375,
+      "coding": 71.624,
+      "math": 78.462,
+      "language": 70.95166666666667,
+      "instruction_following": 59.804,
+      "data_analysis": 70.78566666666667,
+      "agentic_coding": 41.666666666666664
+    },
+    {
+      "model": "gpt-5.4-nano-xhigh",
+      "reasoning": 81.09700000000001,
+      "coding": 70.83850000000001,
+      "math": 90.977,
+      "language": 62.507000000000005,
+      "instruction_following": 67.20475,
+      "data_analysis": 67.64266666666667,
+      "agentic_coding": 46.76766666666666
+    },
+    {
+      "model": "gpt-5.4-xhigh",
+      "reasoning": 88.1155,
+      "coding": 77.5415,
+      "math": 94.148,
+      "language": 82.63366666666667,
+      "instruction_following": 70.21674999999999,
+      "data_analysis": 79.31333333333333,
+      "agentic_coding": 53.83833333333333
+    },
+    {
+      "model": "gpt-5.5-xhigh",
+      "reasoning": 89.65375,
+      "coding": 82.14949999999999,
+      "math": 95.85725,
+      "language": 87.363,
+      "instruction_following": 70.72925000000001,
+      "data_analysis": 81.57566666666666,
+      "agentic_coding": 53.989666666666665
+    },
+    {
+      "model": "grok-4.3",
+      "reasoning": 70.822,
+      "coding": 69.9325,
+      "math": 84.339,
+      "language": 73.58,
+      "instruction_following": 62.75,
+      "data_analysis": 55.77266666666666,
+      "agentic_coding": 18.535333333333334
+    },
+    {
+      "model": "grok-4.5",
+      "reasoning": 87.173,
+      "coding": 68.5855,
+      "math": 90.8245,
+      "language": 82.79533333333333,
+      "instruction_following": 71.52925,
+      "data_analysis": 73.03766666666667,
+      "agentic_coding": 56.464666666666666
+    },
+    {
+      "model": "grok-build-0.1",
+      "reasoning": 76.37025,
+      "coding": 65.38550000000001,
+      "math": 78.42875000000001,
+      "language": 72.46,
+      "instruction_following": 65.22075000000001,
+      "data_analysis": 70.794,
+      "agentic_coding": 45.808
+    },
+    {
+      "model": "kimi-k2.6-thinking",
+      "reasoning": 79.375,
+      "coding": 78.56700000000001,
+      "math": 84.27625,
+      "language": 75.14133333333334,
+      "instruction_following": 64.35825,
+      "data_analysis": 65.13433333333334,
+      "agentic_coding": 46.919333333333334
+    },
+    {
+      "model": "kimi-k2.7-code",
+      "reasoning": 82.80775,
+      "coding": 73.959,
+      "math": 79.60425000000001,
+      "language": 77.90566666666666,
+      "instruction_following": 56.29175,
+      "data_analysis": 62.65733333333333,
+      "agentic_coding": 45.65633333333333
+    },
+    {
+      "model": "minimax-m3",
+      "reasoning": 74.48075,
+      "coding": 68.2025,
+      "math": 76.94749999999999,
+      "language": 76.83566666666667,
+      "instruction_following": 57.50825,
+      "data_analysis": 76.16633333333334,
+      "agentic_coding": 40.65633333333333
+    },
+    {
+      "model": "qwen3.6-27b",
+      "reasoning": 70.28375,
+      "coding": 71.785,
+      "math": 79.8685,
+      "language": 63.30433333333334,
+      "instruction_following": 53.229,
+      "data_analysis": 70.42666666666666,
+      "agentic_coding": 39.29266666666667
+    },
+    {
+      "model": "qwen3.6-plus",
+      "reasoning": 75.827,
+      "coding": 78.1845,
+      "math": 83.72475,
+      "language": 74.98933333333333,
+      "instruction_following": 58.342,
+      "data_analysis": 69.91166666666668,
+      "agentic_coding": 41.36366666666667
+    },
+    {
+      "model": "qwen3.7-max",
+      "reasoning": 83.3365,
+      "coding": 74.219,
+      "math": 85.24825,
+      "language": 79.73899999999999,
+      "instruction_following": 74.0415,
+      "data_analysis": 71.786,
+      "agentic_coding": 43.586000000000006
+    },
+    {
+      "model": "gpt-5.6-sol-max",
+      "reasoning": 91.65375,
+      "coding": 83.941,
+      "math": 96.19775,
+      "language": 87.68366666666667,
+      "instruction_following": 71.846,
+      "data_analysis": 79.84066666666666,
+      "agentic_coding": 56.211999999999996
+    },
+    {
+      "model": "gpt-5.6-terra-max",
+      "reasoning": 90.6345,
+      "coding": 78.24549999999999,
+      "math": 94.90825000000001,
+      "language": 82.89266666666667,
+      "instruction_following": 64.6165,
+      "data_analysis": 79.30666666666667,
+      "agentic_coding": 54.949666666666666
+    },
+    {
+      "model": "gpt-5.6-luna-max",
+      "reasoning": 85.64425,
+      "coding": 82.91499999999999,
+      "math": 87.20075,
+      "language": 72.567,
+      "instruction_following": 60.120999999999995,
+      "data_analysis": 78.03333333333333,
+      "agentic_coding": 48.434333333333335
+    },
+    {
+      "model": "claude-fable-5-max-effort",
+      "reasoning": 89.65375,
+      "coding": 85.992,
+      "math": 95.98575,
+      "language": 90.68400000000001,
+      "instruction_following": 75.77074999999999,
+      "data_analysis": 80.53766666666667,
+      "agentic_coding": 62.17166666666666
+    },
+    {
+      "model": "muse-spark-1.1-xhigh",
+      "reasoning": 87.73075,
+      "coding": 77.1585,
+      "math": 87.14474999999999,
+      "language": 74.342,
+      "instruction_following": 69.6375,
+      "data_analysis": 72.548,
+      "agentic_coding": 58.535333333333334
+    },
+    {
+      "model": "kimi-k3",
+      "reasoning": 90.673,
+      "coding": 81.4455,
+      "math": 84.43675,
+      "language": 85.528,
+      "instruction_following": 71.36275,
+      "data_analysis": 78.73366666666668,
+      "agentic_coding": 62.17166666666666
+    },
+    {
+      "model": "inkling-xhigh",
+      "reasoning": 78.34625,
+      "coding": 71.0195,
+      "math": 88.36474999999999,
+      "language": 73.45866666666667,
+      "instruction_following": 70.09575000000001,
+      "data_analysis": 72.778,
+      "agentic_coding": 49.394000000000005
+    },
+    {
+      "model": "gemini-3.5-flash-lite-high",
+      "reasoning": 60.1875,
+      "coding": 76.0715,
+      "math": 73.73949999999999,
+      "language": 71.82033333333334,
+      "instruction_following": 67.23774999999999,
+      "data_analysis": 53.24966666666666,
+      "agentic_coding": 45.25266666666667
+    },
+    {
+      "model": "gemini-3.6-flash-high",
+      "reasoning": 85.149,
+      "coding": 77.863,
+      "math": 86.4025,
+      "language": 83.89766666666667,
+      "instruction_following": 75.36675,
+      "data_analysis": 62.99933333333333,
+      "agentic_coding": 43.434333333333335
+    },
+    {
+      "model": "claude-opus-5-max-effort",
+      "reasoning": 91.2115,
+      "coding": 81.4455,
+      "math": 95.731,
+      "language": 88.68799999999999,
+      "instruction_following": 63.76650000000001,
+      "data_analysis": 74.55033333333334,
+      "agentic_coding": 65.202
+    },
+    {
+      "model": "claude-opus-4-8-max-effort",
+      "reasoning": 89.19225,
+      "coding": 81.828,
+      "math": 94.31649999999999,
+      "language": 79.65933333333334,
+      "instruction_following": 72.0335,
+      "data_analysis": 66.03333333333333,
+      "agentic_coding": 50.504999999999995
+    },
+    {
+      "model": "deepseek-v4-flash-0731",
+      "reasoning": 86.6345,
+      "coding": 74.9845,
+      "math": 86.78975,
+      "language": 79.175,
+      "instruction_following": 65.51675,
+      "data_analysis": 79.32733333333333,
+      "agentic_coding": 46.76766666666666
+    },
+    {
+      "model": "qwen3.8-max",
+      "reasoning": 88.2115,
+      "coding": 72.872,
+      "math": 91.31225,
+      "language": 79.68733333333334,
+      "instruction_following": 74.08349999999999,
+      "data_analysis": 78.413,
+      "agentic_coding": 64.64666666666666
+    },
+    {
+      "model": "muse-spark-1.2-xhigh",
+      "reasoning": 90.00475,
+      "coding": 77.5415,
+      "math": 91.20349999999999,
+      "language": 78.57466666666666,
+      "instruction_following": 74.325,
+      "data_analysis": 76.45833333333333,
+      "agentic_coding": 57.57566666666667
+    },
+    {
+      "model": "smaug-agentic",
+      "reasoning": 90.274,
+      "coding": 82.471,
+      "math": 83.9195,
+      "language": 84.35666666666667,
+      "instruction_following": 70.99175,
+      "data_analysis": 79.89833333333333,
+      "agentic_coding": 64.64666666666666
+    },
+    {
+      "model": "deepseek-v4-pro-0813",
+      "reasoning": 85.84125,
+      "coding": 77.1585,
+      "math": 95.08624999999999,
+      "language": 82.074,
+      "instruction_following": 67.69999999999999,
+      "data_analysis": 79.24333333333334,
+      "agentic_coding": 54.949666666666666
+    },
+    {
+      "model": "grok-4.6",
+      "reasoning": 90.5095,
+      "coding": 76.77600000000001,
+      "math": 92.56799999999998,
+      "language": 83.697,
+      "instruction_following": 71.8665,
+      "data_analysis": 73.857,
+      "agentic_coding": 57.02
+    },
+    {
+      "model": "gemini-3.7-flash-high",
+      "reasoning": 87.798,
+      "coding": 78.8885,
+      "math": 93.46799999999999,
+      "language": 85.455,
+      "instruction_following": 79.92525,
+      "data_analysis": 67.96433333333333,
+      "agentic_coding": 58.282999999999994
+    },
+    {
+      "model": "qwen3.8-27b",
+      "reasoning": 65.84625,
+      "coding": 65.2635,
+      "math": 72.76875,
+      "language": 48.08233333333334,
+      "instruction_following": 57,
+      "data_analysis": 42.711999999999996,
+      "agentic_coding": 61.36366666666667
+    }
+  ]
+}

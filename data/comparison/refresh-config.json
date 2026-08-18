@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "sources": {
+    "openrouter": {
+      "interval_hours": 48,
+      "full_every": 10,
+      "count": 0,
+      "last_run": null,
+      "url": "https://openrouter.ai/api/v1/models"
+    },
+    "lmarena": {
+      "interval_hours": 48,
+      "full_every": 10,
+      "count": 0,
+      "last_run": null
+    },
+    "livebench": {
+      "interval_hours": 720,
+      "full_every": 2,
+      "count": 0,
+      "last_run": null,
+      "release": "2026-06-25"
+    },
+    "llm_stats": {
+      "interval_hours": 48,
+      "full_every": 10,
+      "count": 0,
+      "last_run": null,
+      "url": "https://llm-stats.com/leaderboards/open-llm-leaderboard"
+    }
+  }
+}
