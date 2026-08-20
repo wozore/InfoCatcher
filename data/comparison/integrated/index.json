@@ -1,22 +1,22 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-19T21:38:15.411Z",
-  "model_count": 1024,
+  "generated_at": "2026-08-20T21:42:09.180Z",
+  "model_count": 1031,
   "sources": {
     "openrouter": {
-      "fetched_at": "2026-08-18T16:52:30.988Z",
-      "count": 413
+      "fetched_at": "2026-08-20T21:41:54.122Z",
+      "count": 418
     },
     "lmarena": {
-      "fetched_at": "2026-08-18T17:28:58.469Z",
-      "count": 1112
+      "fetched_at": "2026-08-20T21:42:08.910Z",
+      "count": 1121
     },
     "livebench": {
       "fetched_at": "2026-08-18T17:10:46.765Z",
       "count": 44
     },
     "llm_stats": {
-      "fetched_at": "2026-08-18T16:52:56.596Z",
+      "fetched_at": "2026-08-20T21:42:09.139Z",
       "count": 358
     }
   },
@@ -480,7 +480,7 @@
       "vendor": "anthropic",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 83.7,
+      "composite_score": 83.1,
       "degrees": {
         "lmarena": [
           "High"
@@ -957,7 +957,7 @@
       "vendor": "anthropic",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 73.8,
+      "composite_score": 73.2,
       "degrees": {},
       "sources": [
         "openrouter",
@@ -984,7 +984,7 @@
       "vendor": "anthropic",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 76.3,
+      "composite_score": 76.2,
       "degrees": {
         "lmarena": [
           "High"
@@ -1028,7 +1028,7 @@
       "vendor": "anthropic",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 79.6,
+      "composite_score": 79.1,
       "degrees": {
         "lmarena": [
           "High"
@@ -1072,7 +1072,7 @@
       "vendor": "anthropic",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 82.9,
+      "composite_score": 83.2,
       "degrees": {
         "lmarena": [
           "High",
@@ -1311,7 +1311,7 @@
       "vendor": "anthropic",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 66.2,
+      "composite_score": 65.8,
       "degrees": {},
       "sources": [
         "openrouter",
@@ -1338,7 +1338,7 @@
       "vendor": "anthropic",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 74.9,
+      "composite_score": 74.2,
       "degrees": {
         "lmarena": [
           "High"
@@ -1507,8 +1507,7 @@
       "composite_score": null,
       "degrees": {},
       "sources": [
-        "openrouter",
-        "lmarena"
+        "openrouter"
       ],
       "file": "data.json"
     },
@@ -1980,7 +1979,7 @@
       "vendor": "deepseek",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 59.1,
+      "composite_score": 65.5,
       "degrees": {},
       "sources": [
         "openrouter",
@@ -2023,7 +2022,7 @@
       "vendor": "deepseek",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 68.1,
+      "composite_score": 68,
       "degrees": {
         "lmarena": [
           "20260731"
@@ -2079,7 +2078,7 @@
       "vendor": "deepseek",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 64.2,
+      "composite_score": 64.1,
       "degrees": {},
       "sources": [
         "openrouter",
@@ -2100,6 +2099,23 @@
         "openrouter",
         "livebench",
         "llm_stats"
+      ],
+      "file": "data.json"
+    },
+    {
+      "canonical": "deepseek-v4-pro-high",
+      "display": "DeepSeek V4 Pro (High)",
+      "vendor": "deepseek",
+      "theme": "general",
+      "has_composite": true,
+      "composite_score": 72.5,
+      "degrees": {
+        "lmarena": [
+          "0813"
+        ]
+      },
+      "sources": [
+        "lmarena"
       ],
       "file": "data.json"
     },
@@ -3029,7 +3045,7 @@
       "vendor": "google",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 43,
+      "composite_score": 41.7,
       "degrees": {
         "lmarena": [
           "thinking-minimal"
@@ -3284,7 +3300,7 @@
       "vendor": "google",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 65.4,
+      "composite_score": 64.8,
       "degrees": {
         "livebench": [
           "high"
@@ -3330,7 +3346,7 @@
       "vendor": "google",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 64.7,
+      "composite_score": 64.2,
       "degrees": {
         "lmarena": [
           "High",
@@ -3393,7 +3409,7 @@
       "vendor": "google",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 47.9,
+      "composite_score": 47.3,
       "degrees": {
         "livebench": [
           "high"
@@ -3439,7 +3455,7 @@
       "vendor": "google",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 61.7,
+      "composite_score": 60.8,
       "degrees": {
         "lmarena": [
           "High"
@@ -3488,7 +3504,7 @@
       "vendor": "google",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 71.3,
+      "composite_score": 70.9,
       "degrees": {
         "lmarena": [
           "High"
@@ -3835,7 +3851,7 @@
       "vendor": "google",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 22.2,
+      "composite_score": 20.4,
       "degrees": {},
       "sources": [
         "lmarena"
@@ -4072,7 +4088,7 @@
       "vendor": "zai-org",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 66.2,
+      "composite_score": 65.4,
       "degrees": {},
       "sources": [
         "openrouter",
@@ -4087,7 +4103,7 @@
       "vendor": "zai-org",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 75.9,
+      "composite_score": 75.1,
       "degrees": {
         "lmarena": [
           "Max"
@@ -4149,7 +4165,21 @@
       "composite_score": 93.3,
       "degrees": {},
       "sources": [
+        "openrouter",
         "llm_stats"
+      ],
+      "file": "data.json"
+    },
+    {
+      "canonical": "glm-5.3-max",
+      "display": "glm-5.3-max",
+      "vendor": "zai",
+      "theme": "general",
+      "has_composite": false,
+      "composite_score": null,
+      "degrees": {},
+      "sources": [
+        "lmarena"
       ],
       "file": "data.json"
     },
@@ -4178,6 +4208,19 @@
       "degrees": {},
       "sources": [
         "lmarena"
+      ],
+      "file": "data.json"
+    },
+    {
+      "canonical": "glm-latest",
+      "display": "GLM Latest",
+      "vendor": "z-ai",
+      "theme": "general",
+      "has_composite": false,
+      "composite_score": null,
+      "degrees": {},
+      "sources": [
+        "openrouter"
       ],
       "file": "data.json"
     },
@@ -5519,7 +5562,7 @@
       "vendor": "openai",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 78.6,
+      "composite_score": 78.1,
       "degrees": {
         "lmarena": [
           "xHigh",
@@ -5658,7 +5701,7 @@
       "vendor": "openai",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 70.3,
+      "composite_score": 70,
       "degrees": {
         "lmarena": [
           "xHigh"
@@ -5737,7 +5780,7 @@
       "vendor": "openai",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 81.5,
+      "composite_score": 80,
       "degrees": {
         "lmarena": [
           "xHigh"
@@ -5816,7 +5859,7 @@
       "vendor": "openai",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 71.2,
+      "composite_score": 70.4,
       "degrees": {
         "lmarena": [
           "xHigh"
@@ -6610,7 +6653,7 @@
       "vendor": "xai",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 49.8,
+      "composite_score": 49.1,
       "degrees": {
         "lmarena": [
           "High"
@@ -6630,7 +6673,7 @@
       "vendor": "xai",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 73.6,
+      "composite_score": 73.5,
       "degrees": {},
       "sources": [
         "openrouter",
@@ -6674,7 +6717,7 @@
       "vendor": "x-ai",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 50.9,
+      "composite_score": 50.4,
       "degrees": {},
       "sources": [
         "openrouter",
@@ -6705,6 +6748,23 @@
       "has_composite": false,
       "composite_score": null,
       "degrees": {},
+      "sources": [
+        "lmarena"
+      ],
+      "file": "data.json"
+    },
+    {
+      "canonical": "grok-imagine-image-2.0",
+      "display": "grok-imagine-image-2.0",
+      "vendor": "xai",
+      "theme": "general",
+      "has_composite": false,
+      "composite_score": null,
+      "degrees": {
+        "lmarena": [
+          "low"
+        ]
+      },
       "sources": [
         "lmarena"
       ],
@@ -7144,12 +7204,38 @@
       "file": "data.json"
     },
     {
+      "canonical": "hy-mt2-1.8b",
+      "display": "Hy-MT2-1.8B",
+      "vendor": "tencent",
+      "theme": "general",
+      "has_composite": false,
+      "composite_score": null,
+      "degrees": {},
+      "sources": [
+        "openrouter"
+      ],
+      "file": "data.json"
+    },
+    {
+      "canonical": "hy-mt2-30b-a3b",
+      "display": "Hy-MT2-30B-A3B",
+      "vendor": "tencent",
+      "theme": "general",
+      "has_composite": false,
+      "composite_score": null,
+      "degrees": {},
+      "sources": [
+        "openrouter"
+      ],
+      "file": "data.json"
+    },
+    {
       "canonical": "hy3",
       "display": "Hy3",
       "vendor": "tencent",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 65.1,
+      "composite_score": 63.7,
       "degrees": {},
       "sources": [
         "openrouter",
@@ -7268,7 +7354,7 @@
       "vendor": "thinkingmachines",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 55.6,
+      "composite_score": 54.8,
       "degrees": {
         "livebench": [
           "xhigh"
@@ -7300,10 +7386,11 @@
       "vendor": "thinking-machines",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 74.3,
+      "composite_score": 56.3,
       "degrees": {},
       "sources": [
         "openrouter",
+        "lmarena",
         "llm_stats"
       ],
       "file": "data.json"
@@ -7370,21 +7457,7 @@
       "composite_score": 18.8,
       "degrees": {},
       "sources": [
-        "lmarena",
         "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "jamba-large-1.7",
-      "display": "Jamba Large 1.7",
-      "vendor": "ai21",
-      "theme": "general",
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "openrouter"
       ],
       "file": "data.json"
     },
@@ -7669,7 +7742,7 @@
       "vendor": "moonshotai",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 66.6,
+      "composite_score": 65.9,
       "degrees": {},
       "sources": [
         "openrouter",
@@ -7697,7 +7770,7 @@
       "vendor": "moonshotai",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 67.2,
+      "composite_score": 66.6,
       "degrees": {},
       "sources": [
         "openrouter",
@@ -7726,7 +7799,7 @@
       "vendor": "moonshotai",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 83.7,
+      "composite_score": 83.5,
       "degrees": {
         "lmarena": [
           "Max"
@@ -8042,6 +8115,19 @@
       "file": "data.json"
     },
     {
+      "canonical": "lfm-2.5-2.6b-free",
+      "display": "LFM2.5-2.6B (free)",
+      "vendor": "liquid",
+      "theme": "general",
+      "has_composite": false,
+      "composite_score": null,
+      "degrees": {},
+      "sources": [
+        "openrouter"
+      ],
+      "file": "data.json"
+    },
+    {
       "canonical": "lfm-2.5-vl-3b",
       "display": "LFM2.5-VL-3B",
       "vendor": "liquid",
@@ -8183,7 +8269,6 @@
       "degrees": {},
       "sources": [
         "openrouter",
-        "lmarena",
         "llm_stats"
       ],
       "file": "data.json"
@@ -8730,6 +8815,19 @@
       "file": "data.json"
     },
     {
+      "canonical": "mai-image-2.6-preview",
+      "display": "mai-image-2.6-preview",
+      "vendor": "microsoft-ai",
+      "theme": "general",
+      "has_composite": false,
+      "composite_score": null,
+      "degrees": {},
+      "sources": [
+        "lmarena"
+      ],
+      "file": "data.json"
+    },
+    {
       "canonical": "mai-thinking-1",
       "display": "MAI-Thinking-1",
       "vendor": "microsoft",
@@ -8851,7 +8949,7 @@
       "vendor": "xiaomi",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 56.4,
+      "composite_score": 56,
       "degrees": {},
       "sources": [
         "openrouter",
@@ -9028,7 +9126,7 @@
       "vendor": "minimax",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 49.4,
+      "composite_score": 48.5,
       "degrees": {},
       "sources": [
         "openrouter",
@@ -9043,7 +9141,7 @@
       "vendor": "minimax",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 64.3,
+      "composite_score": 63.8,
       "degrees": {},
       "sources": [
         "openrouter",
@@ -9197,15 +9295,15 @@
       "file": "data.json"
     },
     {
-      "canonical": "ministral-8b-2410",
-      "display": "ministral-8b-2410",
-      "vendor": "mistral",
+      "canonical": "ministral-8b",
+      "display": "Ministral 8B",
+      "vendor": "mistralai",
       "theme": "general",
       "has_composite": false,
       "composite_score": null,
       "degrees": {},
       "sources": [
-        "lmarena"
+        "openrouter"
       ],
       "file": "data.json"
     },
@@ -9464,7 +9562,7 @@
       "vendor": "mistral",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 45.9,
+      "composite_score": 44.8,
       "degrees": {},
       "sources": [
         "lmarena"
@@ -9807,7 +9905,7 @@
       "vendor": "meta",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 66.9,
+      "composite_score": 66.6,
       "degrees": {
         "livebench": [
           "xhigh"
@@ -9943,7 +10041,7 @@
       "vendor": "nvidia",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 30.7,
+      "composite_score": 29.3,
       "degrees": {},
       "sources": [
         "lmarena"
@@ -10752,6 +10850,19 @@
       "degrees": {},
       "sources": [
         "lmarena"
+      ],
+      "file": "data.json"
+    },
+    {
+      "canonical": "ox-alpha",
+      "display": "Ox Alpha",
+      "vendor": "stealth",
+      "theme": "general",
+      "has_composite": false,
+      "composite_score": null,
+      "degrees": {},
+      "sources": [
+        "openrouter"
       ],
       "file": "data.json"
     },
@@ -12273,7 +12384,7 @@
       "vendor": "qwen",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 60.4,
+      "composite_score": 58.5,
       "degrees": {},
       "sources": [
         "openrouter",
@@ -12314,7 +12425,7 @@
       "vendor": "qwen",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 56,
+      "composite_score": 55,
       "degrees": {},
       "sources": [
         "openrouter",
@@ -12375,7 +12486,7 @@
       "vendor": "qwen",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 81.1,
+      "composite_score": 79.2,
       "degrees": {},
       "sources": [
         "openrouter",
@@ -13134,7 +13245,7 @@
       "vendor": "upstage",
       "theme": "general",
       "has_composite": true,
-      "composite_score": 39.8,
+      "composite_score": 38.4,
       "degrees": {},
       "sources": [
         "lmarena"
@@ -13832,19 +13943,6 @@
       "degrees": {},
       "sources": [
         "lmarena"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "weaver",
-      "display": "Weaver (alpha)",
-      "vendor": "mancer",
-      "theme": "general",
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "openrouter"
       ],
       "file": "data.json"
     },
