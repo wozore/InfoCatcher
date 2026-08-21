@@ -114,6 +114,7 @@ import {
 } from './trending.js';
 import { renderGlossary, openGlossaryConcept, setActiveGlossaryId } from './glossary.js';
 import { applyStaticTranslations } from './i18n.js';
+import { loadIcons } from './brand-icons.js';
 import {
   renderFeatured,
   activeEditorCat,
@@ -292,7 +293,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // （render 内文案用 t()，语言切换时重新 applyStaticTranslations + 重渲染即可）。
   applyStaticTranslations();
   renderSkeletons();
-  await loadData();
+  await Promise.all([loadData(), loadIcons()]);
   renderTools();
   renderScenes();
   updateCompareCount();

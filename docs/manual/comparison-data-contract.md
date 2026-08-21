@@ -1,6 +1,6 @@
 # 对比页数据契约（integrated 层）
 
-> 版本：2026-08-19 v1 草案。配合 `comparison-data-sources.md`（设计决策）阅读。本文定义 `data/comparison/` 的**数据文件契约**与**前端渲染规则映射**，是数据管线与前端共同的唯一事实源。设计决策如有冲突，以本文为准并回写设计文档。
+> 版本：2026-08-20 v2。配合 `comparison-data-sources.md`（设计决策）阅读。本文定义 `data/comparison/` 的**数据文件契约**与**前端渲染规则映射**，是数据管线与前端共同的唯一事实源。设计决策如有冲突，以本文为准并回写设计文档。
 
 ## 1. 文件布局
 
@@ -53,14 +53,14 @@ data/comparison/
 - LMArena 其余 9 榜为 Elo rating（实测），与 agent 量纲不同 → **按 config 内 min-max 归一化到 0-100**（单值退化为 100）。
 - llm-stats index 任一（含 index_general、reasoning/math/code/…）：`(x+20)/80×100`（-20→0、60→100），clamp 0-100。
 - benchmark（aime_2025/hle/gpqa/swe_bench_*/mmmu_pro 均为 0-1 accuracy）：`x×100`。
-- `value`：`加权综合分 ÷ ((input+output)/2 每 M 价)` → 再按全表 min-max 归一化 0-100。
+- `value`：`ln(加权综合分 ÷ ((input+output)/2 每 M 价))` → 再按全表 min-max 归一化 0-100（价格/性能比跨数量级，先 ln 压缩再 min-max，避免超低价开源模型主导线性尺度、旗舰模型全贴 0；单调保序）。
 - 所有维度**存原始值 raw + 归一化值 value**；前端只用 `value`。
 
 ## 3. integrated/index.json 契约
 
 ```json
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "generated_at": "2026-08-19T00:00:00Z",
   "model_count": 460,
   "sources": {
@@ -71,13 +71,18 @@ data/comparison/
   },
   "models": [
     {
-      "canonical": "gpt-5.6-sol",
+      "canonical": "openai--gpt-5.6-sol",
+      "identity": "gpt-5.6-sol",
+      "family": "gpt-5.6",
+      "revisions": [],
+      "evaluation_profiles": ["codex-harness"],
+      "offerings": { "openrouter": [{ "kind": "batch", "raw_name": "openai/gpt-5.6-sol:batch" }] },
       "display": "GPT-5.6 Sol",
       "vendor": "openai",
       "theme": "general",
       "has_composite": true,
       "composite_score": 73.7,
-      "degrees": { "lmarena": ["High", "XHigh"], "livebench": ["high"] },
+      "degrees": { "lmarena": ["high", "xhigh"], "livebench": ["high"] },
       "sources": ["openrouter", "lmarena", "livebench", "llm_stats"],
       "file": "data.json"
     }
@@ -85,9 +90,14 @@ data/comparison/
 }
 ```
 
-- `canonical`：主键 = 统一格式 Model 部分 slug（无 vendor 前缀）；`vendor` 单列。
+- `canonical`：v2 的选择器主键 = `<vendor>--<identity>`；若原始记录有明确发布日期，则为 `<vendor>--<identity>@<revision>`。`vendor` 不再只是展示字段，而是身份的一部分。
+- `identity`：不含厂商和修订版的模型身份；必须保留产品等级、参数/MoE 规格、Base/Instruct/Thinking、模态和专用产品线。`family` 只用于搜索/归类，不能用于合并。
+- `revisions`：该记录实际合并的明确修订版数组；带不同明确日期的记录绝不混算综合分。
+- `evaluation_profiles`：已识别的评测运行环境，例如 `codex-harness`。它们不属于模型 identity，也不属于 `degrees`，因此不能生成选择器行或推理挡位圆圈。
+- `offerings`：按源收拢的供应服务变体（`batch` / `free` / `fast` / `latest`）；它们不是选择器中的独立模型。
+- `display`：面向选择器的唯一名称。只剥离发布日期、供应方式与已经解析为评测挡位的 token；参数规模、MoE、Base/Instruct/Thinking、模态等身份字段不得删除。相同厂商下规范化后的 display 必须唯一。
 - `composite_score`：可空（无综合分显示 null）——放这里让**选择器无需拉 data.json 即可按综合分排序**。
-- `degrees`：该模型各源可选程度变体（供变体圆圈）；无变体则源缺失或空数组。
+- `degrees`：该模型各源可选程度变体（供变体圆圈）；无变体则源缺失或空数组。它与 `offerings`、模型身份规格严格分离。
 - `file`：完整数据所在文件，当前全部 `data.json`（分块时改此指针）。
 - `sources`：有数据的源列表（前端标「仅 X 源」）。
 
@@ -95,11 +105,16 @@ data/comparison/
 
 ```json
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "generated_at": "2026-08-19T00:00:00Z",
   "models": [
     {
-      "canonical": "gpt-5.6-sol",
+      "canonical": "openai--gpt-5.6-sol",
+      "identity": "gpt-5.6-sol",
+      "family": "gpt-5.6",
+      "revisions": [],
+      "evaluation_profiles": ["codex-harness"],
+      "offerings": { "openrouter": [{ "kind": "batch", "raw_name": "openai/gpt-5.6-sol:batch" }] },
       "display": "GPT-5.6 Sol",
       "vendor": "openai",
       "theme": "general",
@@ -109,12 +124,13 @@ data/comparison/
       "context_length": 400000,
       "modalities": ["text", "image"],
       "single_source": false,
-      "degrees": { "lmarena": ["High", "XHigh"], "livebench": ["high"] },
-      "default_degree": { "lmarena": "High", "livebench": "high" },
+      "degrees": { "lmarena": ["high", "xhigh"], "livebench": ["high"] },
+      "default_degree": { "lmarena": "high", "livebench": "high" },
       "composite": {
         "score": 73.7,
         "weights": { "lmarena": 0.45, "livebench": 0.30, "llm_stats": 0.25 },
         "method": "proportional_redistribute",
+        "available": { "lmarena": 77.8, "livebench": 80.2, "llm_stats": 86.6 },
         "note": null
       },
       "dimensions": {
@@ -143,7 +159,7 @@ data/comparison/
         "openrouter": { "prompt": 5e-6, "completion": 15e-6, "input_cache_read": 1e-6, "currency": "USD", "is_listed_price": true },
         "llm_stats":  { "input_per_m": 3.0, "output_per_m": 12.0 }
       },
-      "value": { "score": 82.0, "raw": 1.9e-5, "note": "综合分/平均每M价" }
+      "value": { "score": 82.0, "raw": 1.52, "note": "ln(综合分/平均每M价)" }
     }
   ]
 }
@@ -151,10 +167,11 @@ data/comparison/
 
 **规则**：
 - `dimensions`：**只放该模型有值的维度**；缺该维度的键 = 数据不足（前端显示「数据不足」，不画 0 柱）。`value` 0-100、`raw` 原始值、`source` 来源源 key、`note` 用的具体 benchmark/口径（如 "GPQA"/"aime_2025"/"挂牌参考价"）。
-- `composite`：rebuild 预计算；`weights` = **实际应用权重**（缺源按比例重分配后），`method` ∈ `proportional_redistribute` | `missing`（无任何源 → composite 整体缺）。`score` 0-100。
-- `lmarena_scores` / `livebench_scores`：**按程度变体的源级原始数据**，供变体圆圈切换时更新对应源显示。merged 维度与 composite 用 `default_degree` 预计算；v1 切换变体只更新**源级可见分数 + 文字说明**，不重算 merged/composite。
+- `composite`：rebuild 预计算；`weights` = **实际应用权重**（缺源按比例重分配后），`method` ∈ `proportional_redistribute` | `missing`（无任何源 → composite 整体缺）。`score` 0-100。`available` = **源级可用归一化分**（`lmarena`=agent 比例分、`livebench`=LB 七组均值、`llm_stats`=index_general；仅含实际可用源）——供前端切挡位时重算综合分（llm_stats 恒定，lmarena/livebench 随挡位变）。
+- `lmarena_scores` / `livebench_scores`：**按程度变体的源级原始数据**，供变体圆圈切换时更新对应源显示。`lmarena_scores` 只存默认评测环境可用的分数；评测环境专用结果进入 `lmarena_profiles`，以 `config → evaluation_profile → degree → {score,rank}` 保留，既不覆盖默认分数也不制造模型行。merged 维度与 composite 用 `default_degree` 预计算；v1 切换变体只更新**源级可见分数 + 文字说明**，不重算 merged/composite。
 - `single_source`：仅一源有数据（如图像/视频模型只有 lmarena）→ 前端标「仅 X 源」、综合分 N/A。
 - `pricing`：`openrouter` 为 USD/token（挂牌参考价，`is_listed_price: true`）；`llm_stats` 为每百万 USD。表格行展示具体值。
+- `source_names`：各源实际参与当前记录的原始名称，供审计；`offerings` 记录被收拢的服务变体，二者均不由前端拿来做实体合并。
 - 前端**不显示 `raw`**（仅留档/校验），不显示 `value` 以外任何中间态。
 
 ## 5. view-config.json（前端展示配置，维护者改）
@@ -162,31 +179,46 @@ data/comparison/
 ```json
 {
   "schema_version": 1,
-  "default_dimensions": ["composite", "reasoning", "coding", "math_reasoning"],
+  "default_dimensions": ["composite", "value"],
   "radar_dimension_cap": 12,
   "model_cap": 5
 }
 ```
 
+- `default_dimensions` 为前端**默认勾选**的维度（当前仅综合栏：综合分 + 性价比），其余维度浏览态可手动勾选，维护者可调整。选择模型后勾选面板**只公开所选模型共有且不缺省（有值）的维度**，未公开维度强制不勾选、不可勾选；取消选择回到浏览态恢复全部维度。图块渲染是实时的：无选择时显示各维度 Top N 排行，选择模型后仅显示「所有已选模型都有数据」的维度。
+
 ## 6. models-alias.json（主键对齐人工登记表）
 
 ```json
 {
-  "schema_version": 1,
+  "schema_version": 2,
+  "vendor_aliases": {
+    "mistral": ["mistral", "mistralai"],
+    "qwen": ["qwen", "alibaba"]
+  },
   "entries": [
     {
-      "canonical": "some-base-model",
+      "model_key": "anthropic--claude-opus-4.8",
+      "display": "Claude Opus 4.8",
       "aliases": {
-        "openrouter": ["vendor/raw-id-1", "vendor/raw-id-2"],
-        "lmarena": ["Raw Brand Name (High)"],
-        "livebench": ["raw-lb-name-high"],
-        "llm_stats": ["raw_model_id"]
+        "openrouter": ["anthropic/claude-opus-4.8"],
+        "lmarena": ["claude-opus-4-8-high"],
+        "livebench": ["claude-opus-4-8-max-effort"],
+        "llm_stats": ["claude-opus-4-8"]
       }
     }
-  ]
+  ],
+  "never_merge": [["qwen--qwen3-8b", "qwen--qwen3-32b"]]
 }
 ```
-自动归一化（去程度/日期后缀、大小写与分隔符统一、vendor 前缀匹配）失败/歧义时，维护者在此登记；合并时命中优先于自动规则。
+
+自动规则只处理无歧义格式差异：大小写、空格/下划线/连字符、位于版本位置的点号/连字符、已识别的日期和服务方式。它**不得**删除或互并参数规模、MoE 规格、Base/Instruct/Thinking、模态、Codex/Realtime 等身份字段。
+
+自动归一化仍无法可靠判断、或来源名缺少关键规格时，维护者必须在此登记精确 alias；命中人工 alias 优先于自动规则。`never_merge` 用于永久保护容易被误并的型号。一个 `(source, raw alias)` 只能登记到一个 `model_key`。
+
+### 歧义命名 AI 审计
+
+AI 审计不参与 `rebuild`，也不得直接写入 `models-alias.json`。确定性解析 Module 先输出无法分类的 token；离线审计再使用本地 Bonsai API 生成受 JSON schema 约束的建议，只有本地结果低置信、输出不合法、跨源冲突、或建议会触及既有合并/`never_merge` 时才升级到 DeepSeek。所有建议均须人工确认，确认后的规则才可写入人工登记表；因此正式 `integrated` 始终可复现。
 
 ## 7. raw/ 快照形状（管线写）
 
@@ -202,12 +234,12 @@ data/comparison/
 
 | UI 区块 | 数据源 | 规则 |
 |---|---|---|
-| 模型选择器（模型 tab 顶部） | `index.json` models | 搜索 `display`+`vendor`；类别筛选 `theme`；默认按 `composite_score` 降序（null 排后）；展示 `display` + 源覆盖标记 |
+| 模型选择器（模型 tab 顶部） | `index.json` models | 搜索 `display` + `vendor` + `family` + `identity`；类别筛选 `theme`；默认按 `composite_score` 降序（null 排后）；展示 `display` + 源覆盖标记。前端不得按名称去重或合并实体。 |
 | 已选 chips | 选择器结果 | 上限 `model_cap`；每 chip 内模型 icon 可点 → **变体圆圈** |
-| 变体圆圈 | `data.json` 对应模型 `degrees`/`lmarena_scores`/`livebench_scores` | 点 icon → icon 周围顺时针 360° 平分圆圈（union 各源 degrees，去重）；点圈 → 源级分数更新 + 文字说明（如「已切换至 Claude Opus 5 (High)：LMArena agent 分 0.122→0.110」）；merged/composite 不重算 |
+| 变体圆圈 | `data.json` 对应模型 `degrees`/`lmarena_scores`/`livebench_scores` | 点 icon → icon 周围顺时针 360° 平分圆圈（**仅列「有 ≥2 个挡位」的源的挡位并集**；单挡位源不是可切换变体不列圈，避免点了只搭别源上次挡位导致得分随历史漂移）；点圈 → **按所选挡位重算并实时反映**：源级维度（lmarena agent 子维比例分 / Elo 榜按全模型 min-max；livebench 组 → reasoning/coding/communication/instruction_following/agentic_coding/math_reasoning）+ composite（`composite.available` 底座，lmarena/livebench 源级分换挡，缺源按比例重分配）+ value（全表 min-max），然后重渲染图表/表格；状态说明如「已切换至 Claude Opus 5 (High)：LMArena agent 分 0.122→0.110」 |
 | 综合分块（默认勾选） | `dimensions.composite.value` | 柱状图块：每模型一行 icon+横向柱+数值 |
-| 维度块（每勾选一个维度一块） | `dimensions[key].value` | 同综合分块；缺失键 → 显示「数据不足」不画柱 |
-| 柱状图 ↔ 雷达图 | 同一组 toggle | 柱状图默认；雷达图仅 2 模型可用（≥3 提示）；N = 勾选维度数 ≤ `radar_dimension_cap`（12）；雷达为经典单 N 边形，模型1 标签左/模型2 右，**开启时放开页面限宽** |
+| 维度块（实时渲染） | `dimensions[key].value` | 默认仅勾选综合分与性价比（`view-config.default_dimensions`）；无选择 → 每维度显示 Top N 排行（浏览态，勾选面板显示全部维度）；选择后 → 勾选面板**只公开所选模型共有且不缺省的维度**（未公开强制不勾选、不可勾选），图块仅当**所有已选模型**都有该维度数据时显示（缺任一即不显示，无「数据不足」行）；`value` 维走 `model.value.score`。柱状图为**竖柱状图**：每模型一簇、簇内各维度柱相连无缝、柱顶标真实数值、右上角图例（颜色=维度，同一维度跨模型同色）；每维度统一满高——该维度在图表内最大值顶到满高，其余按 `value/最大值` 比例量化（柱顶数值仍为真实 value） |
+| 柱状图 ↔ 雷达图 | 同一组 toggle | 柱状图默认；雷达图仅 2 模型可用（≥3 提示）；N = 勾选维度数 ≤ `radar_dimension_cap`（12）；雷达为经典单 N 边形，模型1 标签左/模型2 右；**图表模式（柱状图/雷达图）均放开页面限宽**（`main:has(#view-compare.active.cmp-chart-active){max-width:none}`，柱状图 SVG 随容器等比放大，窄屏回退定高 280px；表格视图仍受限宽） |
 | 表格视图（独立、不参与 toggle） | `data.json` 模型记录 | 行：license / open_source / vendor / modalities / is_moe / context_length / pricing（具体值）|
 | 来源 footer | 每可视化块 | 块下右对齐「来源：平台名（许可证）+ 链接」；OpenRouter 参与的块加「挂牌参考价」 |
 | 单源/无综合分模型 | 记录 `single_source`/`composite` | 标「仅 X 源」；综合分显示 N/A，不画 0 柱 |
@@ -223,5 +255,5 @@ data/comparison/
 2. 综合分 rebuild 预计算：缺源按比例重分配，无源则缺。
 3. 调度：GitHub Actions cron 每日 + workflow_dispatch；全绿才重建 integrated；auto-commit `data/comparison/`。
 4. AA 二期，本期不做（aa-internal.json 不建）。
-5. 校验接入 validate.js：integrated 一致性 / canonical 唯一 / composite 与 raw 可复算 / raw schema。网络抽检延后。
+5. 校验接入 validate.js：integrated 一致性 / canonical 唯一 / 同厂商可见 display 唯一 / alias 一对一 / 不同明确修订版不混分 / composite 与 raw 可复算 / raw schema。网络抽检延后。
 6. 前端零依赖：柱状图 CSS、雷达图手写 SVG；对比页文案走 i18n。

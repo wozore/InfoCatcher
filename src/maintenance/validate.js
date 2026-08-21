@@ -42,6 +42,44 @@ function fail(msg) {
   failed = true;
 }
 
+function validateBrandIcons() {
+  const iconsDir = path.join(SRC_DIR, 'web', 'icons');
+  const manifestPath = path.join(iconsDir, 'manifest.json');
+  try {
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+    const buckets = new Set(['vendor', 'tool', 'series', 'model']);
+    for (const [bucket, entries] of Object.entries(manifest || {})) {
+      if (!buckets.has(bucket)) { fail(`品牌图标: 未知分组 ${bucket}`); continue; }
+      if (!entries || typeof entries !== 'object' || Array.isArray(entries)) {
+        fail(`品牌图标: ${bucket} 必须是对象`);
+        continue;
+      }
+      for (const [key, entry] of Object.entries(entries)) {
+        const relativePath = typeof entry === 'string' ? entry : entry?.path;
+        const color = typeof entry === 'object' && entry ? entry.color : undefined;
+        if (!key.trim() || typeof relativePath !== 'string' || !/^[a-zA-Z0-9._/-]+$/.test(relativePath) || relativePath.startsWith('/') || relativePath.includes('..')) {
+          fail(`品牌图标: ${bucket}.${key} 路径非法`);
+          continue;
+        }
+        if (color !== undefined && (typeof color !== 'string' || !/^#[0-9a-f]{3,8}$/i.test(color))) {
+          fail(`品牌图标: ${bucket}.${key} 颜色必须是十六进制色值`);
+          continue;
+        }
+        const filePath = path.join(iconsDir, relativePath);
+        if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) fail(`品牌图标: ${bucket}.${key} 文件不存在（${relativePath}）`);
+      }
+    }
+    for (const bucket of buckets) {
+      if (manifest?.[bucket] !== undefined && (!manifest[bucket] || typeof manifest[bucket] !== 'object' || Array.isArray(manifest[bucket]))) {
+        fail(`品牌图标: ${bucket} 必须是对象`);
+      }
+    }
+    console.log('  品牌图标 manifest: 通过');
+  } catch (e) {
+    fail(`品牌图标 manifest 读取失败: ${e.message}`);
+  }
+}
+
 // ═══════════════════════════════════════════════════════════════
 // 入口：按顺序校验所有数据文件 + HTML
 //
@@ -53,6 +91,9 @@ console.log('\n📋 InfoCatcher MVP 数据校验\n');
 
 // catalog 域（tools / tool-intelligence / glossary / scenes / featured）
 const validatedTools = catalog.validateCatalog();
+
+// 前端品牌图标 manifest（手工维护，文件存在性门禁）
+validateBrandIcons();
 
 // news 域（news-sources → hotspots）
 news.validateNews();

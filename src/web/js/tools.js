@@ -414,7 +414,7 @@ function renderConcreteToolLeaf(card, backRef = null) {
   if (!detail) return '<div class="intelligence-unavailable">该工具详情不存在。</div>';
   const comparable = detail.detail_kind !== 'subscription_plan';
   const selected = comparable && isCompareSelected(detail.id, detail.id);
-  return renderToolLevel3({ detail, showCompare: comparable, compareSelected: selected, backRef });
+  return renderToolLevel3({ detail, toolKey: card.tool_key, showCompare: comparable, compareSelected: selected, backRef });
 }
 
 function openDetail(id, selectedItemId = null, trigger = null, backRef = null) {

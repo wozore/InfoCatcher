@@ -20,8 +20,13 @@ const {
   LLM_STATS_FIELDS,
   LIVEBENCH_GROUP_FIELDS,
 } = require('../comparison/compare-schema');
+const { normalizedDisplayKey } = require('../comparison/model-identity');
 
 let failed = false;
+
+function resetComparisonValidationForTests() {
+  failed = false;
+}
 
 function fail(message) {
   console.error('❌', message);
@@ -37,6 +42,7 @@ function has(file) {
 }
 
 const RAW_KEY_MAP = { openrouter: 'rawOpenRouter', lmarena: 'rawLmarena', livebench: 'rawLivebench', llm_stats: 'rawLlmStats' };
+const EVALUATION_PROFILE_TOKENS = new Set(['codex-harness']);
 function rawKeyOf(source) {
   return RAW_KEY_MAP[source];
 }
@@ -58,16 +64,52 @@ function validateViewConfig(data) {
 
 function validateModelsAlias(data) {
   if (!data || typeof data !== 'object' || Array.isArray(data)) { fail('models-alias.json 顶层应为对象'); return; }
+  if (![1, 2].includes(data.schema_version)) fail('models-alias.json.schema_version 应为 1 或 2');
   if (!Array.isArray(data.entries)) { fail('models-alias.json.entries 应为数组'); return; }
+
+  const aliasesSeen = new Map();
   for (let i = 0; i < data.entries.length; i++) {
     const entry = data.entries[i];
     if (!entry || typeof entry !== 'object') { fail(`models-alias.json.entries[${i}] 应为对象`); continue; }
-    if (!entry.canonical || typeof entry.canonical !== 'string') fail(`models-alias.json.entries[${i}].canonical 应为非空字符串`);
+    const modelKey = entry.model_key || entry.canonical;
+    if (!modelKey || typeof modelKey !== 'string') fail(`models-alias.json.entries[${i}] 缺少非空 model_key`);
+    if (data.schema_version >= 2 && !String(modelKey || '').includes('--')) fail(`models-alias.json.entries[${i}].model_key 应为 <vendor>--<identity>`);
     const aliases = entry.aliases;
     if (!aliases || typeof aliases !== 'object') { fail(`models-alias.json.entries[${i}].aliases 应为对象`); continue; }
     for (const source of Object.keys(aliases)) {
-      if (!SOURCES.includes(source)) fail(`models-alias.json.entries[${i}].aliases.${source} 未知源`);
-      else if (!Array.isArray(aliases[source]) || !aliases[source].every(alias => typeof alias === 'string')) fail(`models-alias.json.entries[${i}].aliases.${source} 应为字符串数组`);
+      if (!SOURCES.includes(source)) { fail(`models-alias.json.entries[${i}].aliases.${source} 未知源`); continue; }
+      if (!Array.isArray(aliases[source]) || !aliases[source].every(alias => typeof alias === 'string')) {
+        fail(`models-alias.json.entries[${i}].aliases.${source} 应为字符串数组`);
+        continue;
+      }
+      for (const alias of aliases[source]) {
+        const key = `${source}:${alias.trim().toLowerCase()}`;
+        const previous = aliasesSeen.get(key);
+        if (previous && previous !== modelKey) fail(`models-alias.json ${key} 同时映射到 ${previous} 与 ${modelKey}`);
+        aliasesSeen.set(key, modelKey);
+      }
+    }
+  }
+
+  if (data.schema_version >= 2) {
+    if (!data.vendor_aliases || typeof data.vendor_aliases !== 'object' || Array.isArray(data.vendor_aliases)) fail('models-alias.json.vendor_aliases 应为对象');
+    else {
+      const vendorAliasSeen = new Map();
+      for (const [vendor, aliases] of Object.entries(data.vendor_aliases)) {
+        if (!Array.isArray(aliases) || !aliases.every(alias => typeof alias === 'string')) {
+          fail(`models-alias.json.vendor_aliases.${vendor} 应为字符串数组`);
+          continue;
+        }
+        for (const alias of [vendor, ...aliases]) {
+          const key = alias.trim().toLowerCase();
+          const previous = vendorAliasSeen.get(key);
+          if (previous && previous !== vendor) fail(`models-alias.json vendor alias ${alias} 同时映射到 ${previous} 与 ${vendor}`);
+          vendorAliasSeen.set(key, vendor);
+        }
+      }
+    }
+    if (data.never_merge !== undefined && (!Array.isArray(data.never_merge) || !data.never_merge.every(pair => Array.isArray(pair) && pair.length === 2 && pair.every(key => typeof key === 'string')))) {
+      fail('models-alias.json.never_merge 应为两个 model_key 构成的数组');
     }
   }
   console.log(`  models-alias.json: ${data.entries.length} 条登记，通过`);
@@ -78,11 +120,12 @@ function validateModelsAlias(data) {
 // ═══════════════════════════════════════════════════════════════
 function validateIndex(index) {
   if (!index || typeof index !== 'object' || Array.isArray(index)) { fail('integrated/index.json 顶层应为对象'); return; }
-  if (index.schema_version !== 1) fail('integrated/index.json.schema_version 应为 1');
+  if (![1, 2].includes(index.schema_version)) fail('integrated/index.json.schema_version 应为 1 或 2');
   if (!Array.isArray(index.models)) { fail('integrated/index.json.models 应为数组'); return; }
   if (typeof index.model_count === 'number' && index.model_count !== index.models.length) fail(`integrated/index.json.model_count (${index.model_count}) 与 models 长度 (${index.models.length}) 不一致`);
 
   const seen = new Set();
+  const visibleNames = new Map();
   for (let i = 0; i < index.models.length; i++) {
     const model = index.models[i];
     if (!model || typeof model !== 'object') { fail(`integrated/index.json.models[${i}] 应为对象`); continue; }
@@ -90,12 +133,31 @@ function validateIndex(index) {
     if (seen.has(model.canonical)) fail(`integrated/index.json.models[${i}].canonical 重复: ${model.canonical}`);
     seen.add(model.canonical);
     if (typeof model.display !== 'string' || !model.display) fail(`integrated/index.json.models[${i}].display 缺失`);
+    const visibleKey = `${model.vendor || 'unknown'}::${normalizedDisplayKey(model.display)}`;
+    const priorCanonical = visibleNames.get(visibleKey);
+    if (priorCanonical && priorCanonical !== model.canonical) fail(`integrated/index.json 同厂商可见模型重名: ${model.display} (${priorCanonical}, ${model.canonical})`);
+    visibleNames.set(visibleKey, model.canonical);
+    if (index.schema_version >= 2) {
+      if (!model.canonical.includes('--')) fail(`integrated/index.json.models[${i}].canonical 应为 <vendor>--<identity>`);
+      if (typeof model.identity !== 'string' || !model.identity) fail(`integrated/index.json.models[${i}].identity 缺失`);
+      if (typeof model.family !== 'string' || !model.family) fail(`integrated/index.json.models[${i}].family 缺失`);
+      if (!Array.isArray(model.revisions) || !model.revisions.every(value => typeof value === 'string')) fail(`integrated/index.json.models[${i}].revisions 应为字符串数组`);
+      if (!Array.isArray(model.evaluation_profiles) || !model.evaluation_profiles.every(value => typeof value === 'string')) fail(`integrated/index.json.models[${i}].evaluation_profiles 应为字符串数组`);
+      if (!model.offerings || typeof model.offerings !== 'object' || Array.isArray(model.offerings)) fail(`integrated/index.json.models[${i}].offerings 应为对象`);
+    }
     if (typeof model.has_composite !== 'boolean') fail(`integrated/index.json.models[${i}].has_composite 应为布尔`);
     if (model.has_composite && !(typeof model.composite_score === 'number' && model.composite_score >= 0 && model.composite_score <= 100)) fail(`integrated/index.json.models[${i}].composite_score 应为 0-100 数值`);
     if (!model.has_composite && model.composite_score != null) fail(`integrated/index.json.models[${i}].composite_score 在无综合分时应为 null`);
     if (!Array.isArray(model.sources) || !model.sources.every(source => SOURCES.includes(source))) fail(`integrated/index.json.models[${i}].sources 应为已知源数组`);
     if (model.file !== 'data.json') fail(`integrated/index.json.models[${i}].file 应为 data.json`);
     if (model.degrees && typeof model.degrees !== 'object') fail(`integrated/index.json.models[${i}].degrees 应为对象`);
+    else {
+      for (const degrees of Object.values(model.degrees || {})) {
+        for (const degree of Array.isArray(degrees) ? degrees : []) {
+          if (EVALUATION_PROFILE_TOKENS.has(String(degree).toLowerCase())) fail(`integrated/index.json ${model.canonical} 将评测环境误写为 degree: ${degree}`);
+        }
+      }
+    }
   }
 
   if (index.sources) {
@@ -113,11 +175,13 @@ function validateIndex(index) {
 // ═══════════════════════════════════════════════════════════════
 function validateData(data, index) {
   if (!data || typeof data !== 'object' || Array.isArray(data)) { fail('integrated/data.json 顶层应为对象'); return; }
+  if (data.schema_version !== index.schema_version) fail(`integrated/data.json.schema_version (${data.schema_version}) 与 index (${index.schema_version}) 不一致`);
   if (!Array.isArray(data.models)) { fail('integrated/data.json.models 应为数组'); return; }
 
   const indexCanonicals = new Set((index.models || []).map(model => model.canonical));
   const dataCanonicals = new Set();
   const seen = new Set();
+  const visibleNames = new Map();
 
   for (let i = 0; i < data.models.length; i++) {
     const model = data.models[i];
@@ -126,6 +190,18 @@ function validateData(data, index) {
     dataCanonicals.add(model.canonical);
     if (seen.has(model.canonical)) fail(`integrated/data.json.models[${i}].canonical 重复: ${model.canonical}`);
     seen.add(model.canonical);
+    if (data.schema_version >= 2) {
+      if (!model.canonical.includes('--')) fail(`integrated/data.json.models[${i}].canonical 应为 <vendor>--<identity>`);
+      if (typeof model.identity !== 'string' || !model.identity) fail(`integrated/data.json.models[${i}].identity 缺失`);
+      if (typeof model.family !== 'string' || !model.family) fail(`integrated/data.json.models[${i}].family 缺失`);
+      if (!Array.isArray(model.revisions) || !model.revisions.every(value => typeof value === 'string')) fail(`integrated/data.json.models[${i}].revisions 应为字符串数组`);
+      if (!Array.isArray(model.evaluation_profiles) || !model.evaluation_profiles.every(value => typeof value === 'string')) fail(`integrated/data.json.models[${i}].evaluation_profiles 应为字符串数组`);
+      if (!model.offerings || typeof model.offerings !== 'object' || Array.isArray(model.offerings)) fail(`integrated/data.json.models[${i}].offerings 应为对象`);
+      const visibleKey = `${model.vendor || 'unknown'}::${normalizedDisplayKey(model.display)}`;
+      const priorCanonical = visibleNames.get(visibleKey);
+      if (priorCanonical && priorCanonical !== model.canonical) fail(`integrated/data.json 同厂商可见模型重名: ${model.display} (${priorCanonical}, ${model.canonical})`);
+      visibleNames.set(visibleKey, model.canonical);
+    }
 
     // composite 一致性
     if (model.composite) {
@@ -166,6 +242,7 @@ function validateData(data, index) {
     if (model.single_source !== undefined && typeof model.single_source !== 'boolean') fail(`integrated/data.json ${model.canonical}.single_source 应为布尔`);
     if (model.pricing && typeof model.pricing !== 'object') fail(`integrated/data.json ${model.canonical}.pricing 应为对象`);
     if (model.lmarena_scores && typeof model.lmarena_scores !== 'object') fail(`integrated/data.json ${model.canonical}.lmarena_scores 应为对象`);
+    if (model.lmarena_profiles !== undefined && (!model.lmarena_profiles || typeof model.lmarena_profiles !== 'object' || Array.isArray(model.lmarena_profiles))) fail(`integrated/data.json ${model.canonical}.lmarena_profiles 应为对象`);
     if (model.livebench_scores && typeof model.livebench_scores !== 'object') fail(`integrated/data.json ${model.canonical}.livebench_scores 应为对象`);
   }
 
@@ -243,5 +320,6 @@ module.exports = {
   validateModelsAlias,
   validateIndex,
   validateData,
+  resetComparisonValidationForTests,
   get failed() { return failed; },
 };

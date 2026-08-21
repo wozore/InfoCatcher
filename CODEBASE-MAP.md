@@ -63,7 +63,10 @@
 - [fetch-lmarena.js](src/comparison/fetch-lmarena.js) — LMArena 官方数据集抓取（datasets-server rows API 直取 JSON，零依赖；实测 filter 参数无效 → 每 config 限量 3 页取各榜 top + 客户端收敛 overall）。导出: `fetchLmarena`
 - [fetch-livebench.js](src/comparison/fetch-livebench.js) — LiveBench 官方 CSV（table_<release>.csv + categories_<release>.json，类别分=类别内 task 均值聚合），零依赖 CSV 解析。导出: `fetchLivebench, parseCsv, aggregateGroups`
 - [fetch-llm-stats.js](src/comparison/fetch-llm-stats.js) — llm-stats RSC flight payload 确定性解析（initialData 数组），字段白名单 + 值域校验 fail-closed。导出: `fetchLlmStats, extractFlightChunks, extractInitialData`
-- [rebuild-comparison.js](src/comparison/rebuild-comparison.js) — **integrated 重建核心**：主键对齐（统一 slug 保留点号 + models-alias 兜底）→ 合并 4 源 → 维度归一化（merged 维度优先级收敛）→ 综合分缺源按比例重分配 → 性价比 min-max → 写 index/data.json。导出: `rebuildIntegrated, buildModelRecord, slugify, buildAliasMap, livebenchParse`
+- [model-identity.js](src/comparison/model-identity.js) — 模型身份解析深 Module：安全统一厂商、跨源格式、服务方式、评测挡位与评测环境（如 `codex-harness`），保留参数/MoE/模式等实体差异；唯一返回 model_key/revision/offering/degree/evaluation_profile，人工 alias 命中优先且别名冲突 fail-closed。导出: `resolveModelIdentity, createModelIdentityResolver, parseModelNameMetadata, normalizeVendor`
+- [identity-review.js](src/comparison/identity-review.js) — 名称歧义离线审计 Module：只收集确定性解析未分类 token，协调本地 Bonsai 建议与按阈值升级的 DeepSeek 复核；所有结果强制人工确认，不写正式 alias/数据。导出: `collectReviewCandidates, shouldEscalate, reviewCandidates`
+- [identity-review-ai.js](src/comparison/identity-review-ai.js) — 名称歧义 AI 建议 Adapter：复用结构化 JSON transport，本地 Bonsai 默认、DeepSeek 可显式升级；统一 prompt/schema，ledger 缺失 fail-closed。导出: `suggestIdentityReview`
+- [rebuild-comparison.js](src/comparison/rebuild-comparison.js) — **integrated 重建核心**：只消费统一模型身份解析（厂商限定 `model_key` + 明确 revision 隔离）→ 收拢服务 offering、degree 与 evaluation profile → 合并 4 源 → 维度归一化 → 综合分缺源按比例重分配 → 性价比；profile 分数进入 `lmarena_profiles`，不生成选择器行，同厂商同展示名最终强制追加身份消歧，写 index/data.json。导出: `rebuildIntegrated, buildModelRecord, slugify, buildAliasMap, livebenchParse, cleanModelDisplay`
 - [run-comparison.js](src/comparison/run-comparison.js) — 抓取编排（cron 每日）：每源独立计数全量 + 失败隔离 WARN + 全绿才重建。导出: `runComparison, fetchSource, isFresh, readConfig`
 
 ## src/web/ — 前端静态站（原生 ES module，无打包器；build-dist.js 原样复制到 dist/）
@@ -72,6 +75,8 @@
 - [i18n/zh.js](src/web/i18n/zh.js) — 语言字典（试点：trending 视图 + 共享工具；未来加 en.js 等）。导出: `messages`
 - [js/i18n.js](src/web/js/i18n.js) — **前端 i18n 框架核心**（两层：UI 文案 t() + 内容数据 getLocalizedField）。导出: `t, setLang, getCurrentLang, getLocalizedField, applyStaticTranslations`
 - [js/main.js](src/web/js/main.js) — 入口：共享状态、导航 switchView、全部事件绑定（DOMContentLoaded 先 applyStaticTranslations，工具分类索引由 tools.js 的 ToolDirectoryView 自管理）。导出: `currentView, switchView`
+- [js/brand-icons.js](src/web/js/brand-icons.js) — 手工品牌图标清单加载与统一渲染；按模型→系列→工具→厂商→emoji 兜底，系列图标通过二级 detail_refs 反查应用到其全部三级详情。导出: `loadIcons, resolveSeriesKey, resolveBrandIcon, brandIconHtml`
+- [icons/](src/web/icons/) — 手工维护的品牌图标资产与 `manifest.json` 映射；build-dist 原样复制到 dist/icons，二级系列 icon 不直接渲染，仅供其三级详情继承。
 - [js/catalog-interface.js](src/web/js/catalog-interface.js) — 浏览器侧五模块目录唯一 Interface（加载、查询、稳定引用解析）。导出: `catalog`
 - [js/vendor-cards.js](src/web/js/vendor-cards.js) — 厂商卡片模块。导出: 默认厂商卡渲染器
 - [js/tool-cards.js](src/web/js/tool-cards.js) — 工具卡片模块；价格/访问状态多分支渲染，旧 `unknown` 使用中性“待核验”而不误报付费/受限；具体工具/API 模型复用详情页对比按钮。导出: `renderPriceTag, renderAccessTag`、默认工具卡渲染器。
@@ -83,7 +88,7 @@
 - [js/search.js](src/web/js/search.js) — AI 搜索视图（四层关键词索引答案引擎）：首页/处理/结果三态；首页为左中右布局（左侧「怎么用」三步引导栏 + 中间主区），「你可以试试」示例按钮用场景自然语言问句渲染（scene.example）；统一提取器 extractKeywords 从混杂查询提取关键词（≥2 字符、长词优先），三层词表依次命中——场景层（复用 scenes.json 场景搜索词，与场景模式共用映射）→ 内容层（工具卡 title/vendor_label/search_terms + 品牌短形式派生，如 gpt→GPT-5.5）→ 热点概念层（glossary 词 + 热点标题英文 token），命中后主区渲染含知识块（热点在上、概念在下）；一句话答案（内嵌 [n] 引用→工具 mini 卡）+ 左栏本页概念索引 + 右栏最新热点；「了解更多」跳工具库按 query 过滤 + 强制 tool toggle；概念词全站联动。导出: `searchState, submitSearchHome, renderSearchResults, renderSearchView, openSearchToolDetail, openSearchMoreTools...`
 - [js/tools.js](src/web/js/tools.js) — 工具库视图（厂商/工具 Toggle）由独立 `VendorDirectoryView` / `ToolDirectoryView` 控制器分别管理；工具卡片四类主题、分组和快速索引 + 滤选 + 单级详情弹窗；厂商一级/二级与工具/模型/套餐三级详情统一按稳定 ref 打开，仅 X 关闭。导出: `openDetail, closeModal, showModal, getToolsViewMode, toggleToolsViewMode, setToolsViewMode, clearToolFilters, renderTools...`
 - [js/compare.js](src/web/js/compare.js) — 对比视图双 tab（模型对比 ↔ 工具对比）+ 工具对比（catalog）引擎；api_model 卡 +对比 经标题→canonical 桥接路由到模型 tab、tool/套餐路由到工具 tab；isCompareSelected 模型感知。导出: `compareList, getCompareTab, setCompareTab, renderCompareView, compareKey, isCompareSelected, toggleCompareRef, compareGroupLeaves, updateCompareCount, renderCompare, removeCompare, quickCompare...`
-- [js/compare-models.js](src/web/js/compare-models.js) — **模型对比引擎（读 integrated/ + view-config + models-alias）**：选择器（搜索/类别/综合分排序、仅 X 源标记）、已选 chips（上限 model_cap）、变体圆圈（点 icon → 360° 平分、源级分数切换 + 文字说明）、维度勾选（默认 view-config）、柱状图 ↔ 雷达图 toggle（雷达仅 2 模型、≤ radar_dimension_cap、开启放开限宽）、表格视图（license/open_source/vendor/modalities/is_moe/context/pricing）、每块右对齐来源 footer（平台名+许可证+链接，OpenRouter 标挂牌参考价）；前端只用归一化 value、外部字段 escapeHtml。导出: `renderModelCompare, bindModelCompareEvents, bridgeToCanonical, canonicalForTool, modelCompareIsSelected, modelCap, routeApiModelToCompare`
+- [js/compare-models.js](src/web/js/compare-models.js) — **模型对比引擎（读 integrated/ + view-config + models-alias）**：选择器搜索 `display/vendor/family/identity`、模型卡 `tool_key` 通过 v2 identity 和 alias 桥接到 canonical；前端只消费管线已消歧的记录，绝不按名称合并。其余：变体圆圈、综合分/性价比图表与表格能力同现有契约。导出: `renderModelCompare, bindModelCompareEvents, bridgeToCanonical, canonicalForTool, modelCompareIsSelected, modelCap, routeApiModelToCompare`
 - [js/featured.js](src/web/js/featured.js) — 推荐视图（编辑精选通过工具 `tool_key` + 三级 `detail_ref` 导航，热门模型按正式工具卡 `detail_kind/theme` 分类；访问/资料状态使用中性未知语义，价格兼容通用计价单位）。导出: `renderFeatured, renderFeaturedTabs...`
 - [js/glossary.js](src/web/js/glossary.js) — AI 概念视图。导出: `activeGlossaryId, openGlossaryConcept, renderGlossary...`
 - [js/trending.js](src/web/js/trending.js) — AI 热点视图（文案走 t()、内容走 getLocalizedField；相关工具资源解析为正式工具卡和三级详情引用）。导出: `renderTrending, openHotspotDetail, reloadHotspots...`
@@ -137,6 +142,7 @@
 - [catalog-generator.md](docs/manual/catalog-generator.md) — schema v3 五模块目录生成器手册；CatalogProfile/OfficialSource/FieldCoverage/LayerPatch、plan/new/resume/review/apply、硬成本账本和恢复安全规则。
 - [comparison-data-sources.md](docs/manual/comparison-data-sources.md) — 对比页数据源选型核实记录；AA/SWE-bench/LiveBench/HF Leaderboard/OpenRouter 可用通路、LMArena 仅第三方快照、DeepSWE 抓站、HF 网络镜像坑与推荐组合。
 - [comparison-data-contract.md](docs/manual/comparison-data-contract.md) — 对比页数据契约（integrated 层）：文件布局、维度键枚举与归一化口径、index.json/data.json/view-config/models-alias 契约、raw 快照形状、前端渲染规则映射、i18n 键、管线实现红线。
+- [icons.md](docs/manual/icons.md) — 品牌图标资产维护说明：官方 logo 获取、Simple Icons 备选、manifest 键规则和三级模型按系列继承/单模型覆盖。
 
 - [generate-rss.js](src/content/generate-rss.js) — RSS 生成。导出: `getFeedItems, generateRss`
 - [generate-og-image.js](src/content/generate-og-image.js) — OG 图生成。导出: `generateOgImage`
@@ -151,7 +157,7 @@
 - [validate.js](src/maintenance/validate.js) — **校验聚合入口（require 即运行 + process.exit 0/1）**。scripts/validate.js 直接引用，CI 三处工作流依赖
 - [validate-catalog.js](src/maintenance/validate-catalog.js) — catalog 数据校验。导出: `validateCatalog, validateHtml`
 - [validate-news.js](src/maintenance/validate-news.js) — news 数据校验（news-config-v2 采集安全配置 + last-run X credits/request 账本 + hotspots + v2 候选层 min-candidates）。导出: `validateNews, validateMinNews, validateNewsConfig, validateLastRun`
-- [validate-comparison.js](src/maintenance/validate-comparison.js) — 模型对比数据校验（integrated index/data 交叉一致性、canonical 唯一、composite 与 raw 自洽、维度 0-100、view-config/models-alias 契约形状；raw 快照存在则 schema 校验、缺失优雅跳过）。导出: `validateComparison, validateIndex, validateData`
+- [validate-comparison.js](src/maintenance/validate-comparison.js) — 模型对比数据校验（integrated index/data 交叉一致性、canonical/同厂商 display 唯一、identity/evaluation_profiles 契约、degree 不得伪装评测环境、composite 与 raw 自洽、维度 0-100、view-config/models-alias 契约形状；raw 快照存在则 schema 校验、缺失优雅跳过）。导出: `validateComparison, validateIndex, validateData`
 
 ## tests/ — 自动化回归
 - [catalog-interface.test.js](tests/catalog-interface.test.js) — 五模块目录 Interface、字段所有权、稳定引用、工具卡→三级详情以及场景/精选详情引用回归。
@@ -183,7 +189,8 @@
 - [concept-generator.js](scripts/concept-generator.js) — **AI 概念库生成器 CLI（与五模块目录生成器分离）**：`batch --file <待补概念卡> --dry-run/--confirm-cost` 合成预览 → `preview` → `apply [--terms]` 人工写 glossary。导出: `parseArgs, main`
 - [refresh-vibe-hub-cache.js](scripts/refresh-vibe-hub-cache.js) — 定时刷新 vibe-hub 概念缓存（CI 入口，由 refresh-vibe-hub-cache.yml 每 3 天北京 19:00 调用）；只刷 `fetched_at` 距今 > 3 天 TTL 的条目，空缓存/全新鲜零网络，纯 HTTP 不读任何 Key。导出: `main`
 - [news-cli.js](scripts/news-cli.js) — CLI 分发入口（透传 src/news/cli/news-cli，含 **`min-review` 命令组**）
-- [fetch-comparison.js](scripts/fetch-comparison.js) — 模型对比数据管线 CLI（run 定时抓取+全绿重建 / fetch <source> 手动单跑 / rebuild / status）；`.github/workflows/refresh-comparison.yml` 每日 cron 调用。
+- [fetch-comparison.js](scripts/fetch-comparison.js) — 模型对比数据管线 CLI（run 定时抓取+全绿重建 / fetch <source> 手动单跑 / rebuild / review 输出零网络零写入的待人工名称歧义清单 / status）；`.github/workflows/refresh-comparison.yml` 每日 cron 调用。
+- [identity-review.bat](bat/identity-review.bat) — 模型身份歧义审计维护入口；双击调用 `fetch-comparison.js review`，只生成待人工确认清单，不调用 AI、不写正式数据。
 - [validate.js](scripts/validate.js) — 校验聚合入口
 - [build-dist.js](scripts/build-dist.js) — src/web + public + data → dist/（维护者入口：bat/build-dist.bat）
 - [publish-news.js](scripts/publish-news.js) — 候选 → 公开投影 + RSS 发布（**默认走 v2：min-candidates approved 按每日 top 重建 hotspots.json**）

@@ -1068,6 +1068,24 @@ main:has(#view-search.active):has(#searchResultsPanel:not([hidden])) { max-width
 .tool-card-fit .fit-neg { color: var(--danger); border-color: var(--danger); }
 .tool-card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
 .tool-card-name { font-size: 17px; line-height: 1.35; font-weight: 700; letter-spacing: -.01em; }
+.brand-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  flex: none;
+  margin-right: .3em;
+  padding: .06em;
+  box-sizing: border-box;
+  border-radius: .22em;
+  object-fit: contain;
+  background: #fff;
+  vertical-align: -.14em;
+}
+.brand-icon-emoji { display: inline-block; margin-right: .3em; vertical-align: -.08em; }
+.search-tool-mini-icon .brand-icon { width: 28px; height: 28px; margin-right: 0; }
+.scene-tool-button-icon .brand-icon { width: 1.05em; height: 1.05em; margin-right: 0; }
+.cmp-model-icon .brand-icon { width: 18px; height: 18px; margin-right: 0; }
+.cmp-chip-icon .brand-icon { width: 18px; height: 18px; margin-right: 0; border-radius: 50%; }
 .tool-card-vendor { font-size: 12px; line-height: 1.45; color: var(--text-hint); margin-bottom: 8px; }
 .tool-card-desc { font-size: 13px; line-height: 1.55; color: var(--text-secondary); margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .tool-card-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 12px; }
@@ -1420,7 +1438,7 @@ main:has(#view-search.active):has(#searchResultsPanel:not([hidden])) { max-width
 
 /* ═══ 对比视图 · 模型对比（compare-models.js，读 data/comparison/integrated） ═══
    双 tab 结构：.compare-tabs 切模型/工具；模型面板为左选择器 + 右内容。
-   雷达图开启时放开 <main> 限宽（:has 结构选择器，同搜索页；切走即复原）。 */
+   图表模式（柱状图/雷达图）与表格视图开启时均放开 <main> 限宽（:has 结构选择器，同搜索页；切走即复原）。 */
 .compare-tabs { display: flex; gap: 4px; margin-bottom: 18px; border-bottom: 1px solid var(--border); }
 .compare-tab {
   padding: 9px 18px; border: 0; background: none; cursor: pointer;
@@ -1430,8 +1448,9 @@ main:has(#view-search.active):has(#searchResultsPanel:not([hidden])) { max-width
 .compare-tab:hover { color: var(--text); }
 .compare-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
 
-main:has(#view-compare.active.cmp-radar-active) { max-width: none; }
+main:has(#view-compare.active.cmp-wide-active) { max-width: none; }
 
+.compare-model-panel { position: relative; } /* 变体圆圈弹窗的绝对定位锚点 */
 .cmp-layout { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 20px; align-items: start; }
 .cmp-selector { padding: 18px; position: sticky; top: 92px; max-height: calc(100vh - 120px); display: flex; flex-direction: column; }
 .cmp-selector-head .section-title { margin-bottom: 3px; }
@@ -1481,6 +1500,7 @@ main:has(#view-compare.active.cmp-radar-active) { max-width: none; }
 .cmp-config { padding: 18px; }
 .cmp-config-head .section-title { margin-bottom: 3px; }
 .cmp-dims { margin-top: 10px; display: grid; gap: 10px; }
+.cmp-dim-hint { margin: 0; font-size: 12px; color: var(--text-secondary); }
 .cmp-dim-group { display: flex; flex-direction: column; gap: 6px; }
 .cmp-dim-group-label { font-size: 12px; font-weight: 700; color: var(--text-secondary); }
 .cmp-dim-chips { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -1502,18 +1522,18 @@ main:has(#view-compare.active.cmp-radar-active) { max-width: none; }
 .cmp-tabset-btn.active { background: var(--primary); color: var(--on-solid); }
 
 .cmp-results { display: grid; gap: 18px; }
-.cmp-block { padding: 18px; border: 1px solid var(--border); background: var(--surface); }
-.cmp-block-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
-.cmp-block-head h3 { margin: 0; font-family: var(--font-serif); font-size: 18px; }
+.cmp-browse-lead { color: var(--text-hint); font-size: 13px; margin: 0; }
+.cmp-vchart { padding: 18px; border: 1px solid var(--border); background: var(--surface); }
+.cmp-vchart-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
+.cmp-vchart-head h3 { margin: 0; font-family: var(--font-serif); font-size: 18px; }
 .cmp-block-note { color: var(--text-hint); font-size: 12px; }
-.cmp-bars { display: grid; gap: 8px; }
-.cmp-bar-item { display: grid; grid-template-columns: 150px minmax(0, 1fr) 56px; gap: 10px; align-items: center; }
-.cmp-bar-name { color: var(--text-secondary); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.cmp-bar-track { height: 16px; border: 1px solid var(--border); background: var(--bg); border-radius: var(--radius-sm); overflow: hidden; }
-.cmp-bar-track-empty { display: flex; align-items: center; padding: 0 8px; color: var(--text-hint); font-size: 11px; }
-.cmp-bar-fill { display: block; height: 100%; background: var(--primary); }
-.cmp-bar-value { font-size: 12px; font-weight: 650; text-align: right; white-space: nowrap; }
-.cmp-bar-value-na { color: var(--text-hint); font-weight: 500; }
+.cmp-vchart-svg { display: block; width: 100%; height: auto; max-height: 560px; margin-top: 4px; }
+.cmp-bar-base { stroke: var(--border); stroke-width: 1; }
+.cmp-bar-val { font-size: 11px; font-weight: 700; }
+.cmp-bar-name { font-size: 7px; fill: var(--text-secondary); }
+.cmp-legend { display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: 12px; color: var(--text-secondary); align-items: center; }
+.cmp-legend-item { display: inline-flex; align-items: center; gap: 5px; }
+.cmp-legend-swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
 .cmp-source-footer {
   margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border);
   display: flex; justify-content: flex-end; gap: 14px; flex-wrap: wrap;
@@ -1547,11 +1567,11 @@ main:has(#view-compare.active.cmp-radar-active) { max-width: none; }
 .cmp-variant-popover {
   position: absolute; z-index: 60; background: var(--surface);
   border: 1px solid var(--border); border-radius: var(--radius);
-  box-shadow: var(--shadow-lg); padding: 10px 12px; width: 224px; text-align: center;
+  box-shadow: var(--shadow-lg); padding: 10px 12px; width: 306px; text-align: center;
 }
 .cmp-variant-popover .cmp-variant-close { position: absolute; top: 4px; right: 6px; border: 0; background: none; color: var(--text-hint); cursor: pointer; font-size: 14px; }
 .cmp-variant-hint { font-size: 11px; color: var(--text-hint); margin-bottom: 2px; }
-.cmp-variant-svg { width: 200px; height: 200px; display: block; margin: 0 auto; }
+.cmp-variant-svg { width: 280px; height: 280px; display: block; margin: 0 auto; }
 .cmp-variant-sector { cursor: pointer; }
 .cmp-variant-sector path { fill: var(--primary-light); stroke: var(--border); stroke-width: 1; }
 .cmp-variant-sector text { fill: var(--text-secondary); font-size: 12px; font-weight: 650; }
@@ -2111,7 +2131,8 @@ main:has(#view-compare.active.cmp-radar-active) { max-width: none; }
   .cmp-layout { grid-template-columns: 1fr; gap: 14px; }
   .cmp-selector { position: static; max-height: none; }
   .cmp-model-list { max-height: 320px; }
-  .cmp-bar-item { grid-template-columns: 108px minmax(0, 1fr) 48px; }
+  /* 窄屏柱状图回退定高（height:auto 会随窄宽塌缩柱高，定高 + meet 居中保持柱高稳定） */
+  .cmp-vchart-svg { height: 280px; max-height: none; }
   .cmp-radar-model { position: static; justify-content: center; margin-bottom: 4px; }
   .cmp-radar-model-right { margin-bottom: 10px; }
   .cmp-mode-row { flex-direction: column; align-items: stretch; }

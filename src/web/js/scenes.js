@@ -20,6 +20,7 @@ import {
 import { isComparableLeaf, isCompareSelected } from './compare.js';
 import { markConceptsIn } from './search.js';
 import { renderPriceTag, renderAccessTag } from './tool-cards.js';
+import { brandIconHtml } from './brand-icons.js';
 
 const scenePalette = {
   writing: { accent: '#d97706', border: '#92400e' },
@@ -53,7 +54,7 @@ function renderSceneToolCard(tool, selectedDetailRef = null) {
   const dateLabel = detail?.detail_kind === 'tool' ? '更新时间' : '发布时间';
   return '<div class="tool-card scene-tool-card" onclick="openDetail(\'' + escapeHtml(detailRef) + '\')">' +
     '<div class="tool-card-header">' +
-      '<div><div class="tool-card-name">' + escapeHtml((tool.icon || '') + ' ' + title) + '</div>' +
+      '<div><div class="tool-card-name">' + brandIconHtml({ vendorKey: tool.vendor_key, toolKey: tool.tool_key, modelKey: detail?.detail_kind === 'api_model' ? detail.id.split(':').pop() : null, emoji: tool.icon }) + ' ' + escapeHtml(title) + '</div>' +
       (specificLabel ? '<div class="scene-specific-recommendation">具体推荐：' + escapeHtml(specificLabel) + '</div>' : '') +
       '<div class="tool-card-vendor">' + escapeHtml(tool.vendor_label) + '</div></div>' +
       '' /* 决策 98：场景工具卡默认区不显示评分，评分保留在详情模态 */ +
@@ -125,7 +126,7 @@ function renderSceneDetail() {
       const recommendation = recommendationByTool.get(tool.tool_key);
       const label = recommendation ? getToolLevel3Item(tool.vendor_key, recommendation.detail_ref)?.title : null;
       return '<button class="scene-tool-button" type="button" aria-pressed="false" aria-controls="scene-tool-preview-' + escapeHtml(scene.id) + '-' + taskIndex + '" onclick="toggleSceneToolCard(\'' + escapeHtml(scene.id) + '\',' + taskIndex + ',\'' + escapeHtml(tool.tool_key) + '\',' + (recommendation ? '\'' + escapeHtml(recommendation.detail_ref) + '\'' : 'null') + ',this)">' +
-        '<span class="scene-tool-button-icon" aria-hidden="true">' + escapeHtml(tool.icon) + '</span>' +
+        '<span class="scene-tool-button-icon" aria-hidden="true">' + brandIconHtml({ vendorKey: tool.vendor_key, toolKey: tool.tool_key, modelKey: tool.detail_kind === 'api_model' ? tool.tool_key : null, emoji: tool.icon }) + '</span>' +
         '<span>' + escapeHtml(label || tool.title) + '</span>' +
       '</button>';
     }).join('');

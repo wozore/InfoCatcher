@@ -179,11 +179,15 @@ export const messages = {
     selectionTitle: '已选模型',
     selectionLead: '点模型图标切换程度变体；上限来自展示配置。',
     configTitle: '对比维度',
-    configLead: '勾选可量化维度，每维度一个图块；数据不足的维度不画柱。',
+    configLead: '默认勾选综合分与性价比；选择模型后仅公开所选模型共有且不缺省的维度。',
+    dimsOnlyCommon: '已按所选模型共有且不缺省的维度收敛显示，未公开维度不可选。',
+    browseLead: '未选择模型：以下为各维度 Top {n} 排行。选择模型后，图块实时收敛到所选模型都有数据的维度。',
+    noSharedDims: '所选模型没有共同覆盖的维度',
     viewTabsAria: '模型对比视图模式',
     chartTabsAria: '图表类型切换',
     view: { chart: '图表', table: '表格' },
     chart: { bar: '柱状图', radar: '雷达图' },
+    barChartTitle: '得分对比',
     // 维度键（契约 §2；每键一条，前端 t('compare.dimension.<key>')）
     dimension: {
       composite: '综合分',
@@ -240,7 +244,7 @@ export const messages = {
     variantHint: '共 {n} 个程度变体，点圈切换',
     radarRequireTwo: '雷达图需要恰好 2 个模型（当前 {n} 个）',
     radarCapExceed: '已选 {n} 个维度，雷达图仅显示前 {cap} 个',
-    radarSkipInsufficient: '部分维度数据不足已跳过',
+    radarSkipInsufficient: '部分所选模型未覆盖的维度已跳过',
     barSort: '按数值降序',
     table: {
       row: '维度',

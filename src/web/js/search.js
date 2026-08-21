@@ -24,6 +24,7 @@ import { switchView } from './main.js';
 import { openDetail, setToolsViewMode, clearToolFilters } from './tools.js';
 import { openGlossaryConcept } from './glossary.js';
 import { getLocalizedField } from './i18n.js';
+import { brandIconHtml } from './brand-icons.js';
 
 // P1-A：固定静态搜索状态。只在当前页面内存中存在，不写入 URL、localStorage 或后端。
 // 分层关键词索引：场景层复用 scenes.json 的场景搜索词（与场景模式共用映射词），
@@ -364,7 +365,7 @@ function renderSearchToolMinis(tools) {
       ' data-search-tool="' + escapeHtml(tool.detail_ref?.id || '') + '"' +
       ' data-search-source="tool-' + escapeHtml(tool.id) + '"' +
       ' tabindex="0" role="button" aria-label="查看详情：' + escapeHtml(tool.title) + '">' +
-      (tool.icon ? '<span class="search-tool-mini-icon" aria-hidden="true">' + escapeHtml(tool.icon) + '</span>' : '') +
+      (tool.icon ? '<span class="search-tool-mini-icon" aria-hidden="true">' + brandIconHtml({ vendorKey: tool.vendor_key, toolKey: tool.tool_key, modelKey: tool.detail_kind === 'api_model' ? tool.tool_key : null, emoji: tool.icon }) + '</span>' : '') +
       '<div class="search-tool-mini-body">' +
         '<h3>' + escapeHtml(tool.title) + '</h3>' +
         (tool.summary ? '<p data-search-concept-text>' + escapeHtml(tool.summary) + '</p>' : '') +

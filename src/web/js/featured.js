@@ -17,6 +17,7 @@ import {
   escapeHtml,
 } from './data.js';
 import { renderAccessTag } from './tool-cards.js';
+import { brandIconHtml } from './brand-icons.js';
 
 const FEATURED_CATEGORIES = [
   { key: 'llm', label: 'LLM 模型' },
@@ -132,6 +133,10 @@ function renderEditorPicksForCat() {
   }
   grid.innerHTML = picks.map(pick => {
     const name = getFeaturedDisplayName(pick.tool_id, pick.detail_ref);
+    const detail = resolveFeaturedDetail(pick.tool_id, pick.detail_ref);
+    const nameHtml = detail
+      ? brandIconHtml({ vendorKey: pick.tool.vendor_key, toolKey: pick.tool.tool_key, modelKey: detail.id.split(':').pop(), emoji: pick.tool.icon }) + ' ' + escapeHtml(detail.title)
+      : escapeHtml(name);
     const vendor = getFeaturedVendor(pick.tool_id);
     const pricing = getFeaturedPricing(pick.tool_id, pick.detail_ref);
     const summary = getFeaturedSummary(pick.tool_id, pick.detail_ref);
@@ -140,7 +145,7 @@ function renderEditorPicksForCat() {
     return '<article class="featured-card featured-pick" tabindex="0" role="button" aria-label="查看 ' + escapeHtml(name) + ' 详情" onclick="' + onclick + '" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();' + onclick + '}">' +
       '<div class="featured-pick-badge">编辑精选</div>' +
       '<div class="featured-pick-header">' +
-        '<div><h3>' + escapeHtml(name) + '</h3><span class="featured-pick-vendor">' + escapeHtml(vendor) + '</span>' + badge + '</div>' +
+        '<div><h3>' + nameHtml + '</h3><span class="featured-pick-vendor">' + escapeHtml(vendor) + '</span>' + badge + '</div>' +
         (pricing ? '<div class="featured-pick-pricing">API ' + escapeHtml(pricing) + '</div>' : '') +
       '</div>' +
       '<p class="featured-pick-reason">' + escapeHtml(pick.reason) + '</p>' +
@@ -170,7 +175,7 @@ function renderHotRankingForCat() {
     return '<article class="featured-card featured-hot" tabindex="0" role="button" aria-label="查看 ' + escapeHtml(leaf.title) + ' 详情" onclick="' + onclick + '" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();' + onclick + '}">' +
       '<div class="featured-hot-rank">' + rankEmoji[i] + '</div>' +
       '<div class="featured-hot-body">' +
-        '<div class="featured-hot-header"><h4>' + escapeHtml(tool.icon + ' ' + leaf.title) + '</h4>' + badge + '<span class="featured-hot-vendor">' + escapeHtml(tool.vendor_label) + '</span></div>' +
+        '<div class="featured-hot-header"><h4>' + brandIconHtml({ vendorKey: tool.vendor_key, toolKey: tool.tool_key, modelKey: leaf.id.split(':').pop(), emoji: tool.icon }) + ' ' + escapeHtml(leaf.title) + '</h4>' + badge + '<span class="featured-hot-vendor">' + escapeHtml(tool.vendor_label) + '</span></div>' +
         '<p class="featured-hot-desc">' + escapeHtml(leaf.summary || '') + '</p>' +
         '<div class="featured-hot-meta">' +
           (pricing ? '<span>API ' + escapeHtml(pricing) + '</span>' : '') +

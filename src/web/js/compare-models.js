@@ -8,8 +8,12 @@
  * 功能：
  *   - 模型选择器（搜索 / theme 类别筛选 / 综合分排序，单源模型标「仅 X 源」）
  *   - 已选 chips（上限 model_cap）；点模型 icon → 变体圆圈（360° 平分，顺时针）
- *   - 维度勾选（默认 read view-config.default_dimensions；数据不足不画 0 柱）
- *   - 柱状图 ↔ 雷达图 toggle（雷达仅 2 模型、维度 ≤ radar_dimension_cap、开启放开限宽）
+ *   - 维度实时渲染（默认仅勾选综合栏：综合分 + 性价比）：无选择显示各维度 Top N 排行；
+ *     选择后图块实时收敛到「所有已选模型都有数据」的维度（缺任一即不显示，无「数据不足」噪声）；
+ *     勾选面板同步收敛——选择模型后仅公开所选模型共有且不缺省的维度，未公开维度强制不勾选
+ *   - 柱状图 ↔ 雷达图 toggle（柱状图 = 竖柱状图：每模型一簇、簇内各维度柱相连无缝、柱顶标真实值、
+ *     右上角图例；每维度统一满高——该维度图表内最大值顶到满高，其余按比例量化；
+ *     雷达仅 2 模型、维度 ≤ radar_dimension_cap；图表（柱状图/雷达图）与表格视图均放开页面限宽）
  *   - 表格视图（独立，license/open_source/vendor/modalities/is_moe/context/pricing）
  *   - 每图块右对齐来源 footer（平台名 + 许可证 + 链接；OpenRouter 标挂牌参考价）
  *   - 路由桥接：catalog api_model +对比 → 标题→canonical（tool_key → slug → display → alias）
@@ -20,6 +24,7 @@
 import { escapeHtml, safeExternalUrl, renderState } from './data.js';
 import { t } from './i18n.js';
 import { getToolCardItems, getToolLevel3Item } from './data.js';
+import { brandIconHtml } from './brand-icons.js';
 
 // ═══════════════════════════════════════════════════════════════
 // 源元数据（平台名 + 许可证 + 链接；许可证仅知名可再分发源填，其余留空）
@@ -43,6 +48,22 @@ const DIM_GROUPS = [
   { key: 'lmarena', dims: ['text', 'vision', 'webdev', 'search', 'text_to_image', 'image_edit', 'image_to_video', 'text_to_video', 'video_edit'] },
   { key: 'agent', dims: ['agent_praise_complaint', 'agent_steerability', 'agent_bash_recovery_steps', 'agent_tool_hallucination', 'agent_task_outcome_explicit'] },
 ];
+
+// 全量维度（浏览态可全部勾选；默认勾选由 view-config.default_dimensions 决定；
+// 选择模型后勾选面板收敛到所选模型共有维度，未公开维度强制不勾选）
+const ALL_DIMS = DIM_GROUPS.flatMap(group => group.dims);
+
+// 维度调色板（按维度稳定取色：同一维度跨模型同色，图例与柱色共用；暖白浅色主题下可读）
+const DIM_PALETTE = [
+  '#4a6fa5', '#c05621', '#2f7d6b', '#9c3d54', '#7a6bb5', '#b8860b',
+  '#3d7a4f', '#a85a32', '#456d91', '#8a5a9e', '#5d7a3a', '#b04a5a',
+];
+function dimColor(dim) {
+  const index = ALL_DIMS.indexOf(dim);
+  return DIM_PALETTE[(index >= 0 ? index : 0) % DIM_PALETTE.length];
+}
+// 无选择浏览态：每维度 Top N 排行
+const BROWSE_TOP_N = 10;
 
 const VENDOR_ICONS = {
   openai: '🤖', anthropic: '✦', google: '✨', meta: '🦙', deepseek: '🐋',
@@ -89,9 +110,10 @@ async function loadEntry() {
     aliasEntries = Array.isArray(aliasPayload.entries) ? aliasPayload.entries : [];
     indexModels = Array.isArray(indexData.models) ? indexData.models : [];
     indexMap = new Map(indexModels.map(model => [model.canonical, model]));
-    activeDims = Array.isArray(viewConfig.default_dimensions)
+    // 默认勾选来自 view-config（当前仅综合栏：综合分 + 性价比）；其余维度浏览态可手动勾选
+    activeDims = Array.isArray(viewConfig.default_dimensions) && viewConfig.default_dimensions.length
       ? [...viewConfig.default_dimensions]
-      : ['composite', 'reasoning', 'coding', 'math_reasoning'];
+      : [...ALL_DIMS];
     comparisonReady = true;
   } catch (error) {
     comparisonFailed = true;
@@ -144,7 +166,7 @@ function aliasCanonicalFor(toolKey, title) {
   for (const entry of aliasEntries) {
     for (const source of SOURCE_ORDER) {
       const aliases = entry.aliases?.[source] || [];
-      if (aliases.some(alias => needles.includes(String(alias).toLowerCase().replace(/^[^/]+\//, '')))) return entry.canonical;
+      if (aliases.some(alias => needles.includes(String(alias).toLowerCase().replace(/^[^/]+\//, '')))) return entry.model_key || entry.canonical;
     }
   }
   return null;
@@ -155,6 +177,8 @@ export function bridgeToCanonical(title, toolKey) {
   if (toolKey && indexMap.has(toolKey)) return toolKey;
   const slug = slugifyModelName(title);
   if (slug && indexMap.has(slug)) return slug;
+  const identityMatch = indexModels.find(model => [toolKey, slug].filter(Boolean).includes(model.identity));
+  if (identityMatch) return identityMatch.canonical;
   const displayMatch = indexModels.find(model => String(model.display).toLowerCase() === String(title).trim().toLowerCase());
   if (displayMatch) return displayMatch.canonical;
   return aliasCanonicalFor(toolKey, title);
@@ -178,9 +202,17 @@ export function modelCap() {
 }
 
 function modelIcon(model) {
-  const catalogCard = getToolCardItems().find(card => card.tool_key === model.canonical);
+  const catalogCard = getToolCardItems().find(card => card.tool_key === model.canonical || card.tool_key === model.identity);
   if (catalogCard?.icon) return catalogCard.icon;
   return VENDOR_ICONS[model.vendor] || THEME_ICONS[model.theme] || '🧠';
+}
+
+function modelIconHtml(model) {
+  return brandIconHtml({
+    vendorKey: model.vendor,
+    modelKey: model.identity || model.canonical,
+    emoji: modelIcon(model),
+  });
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -211,10 +243,13 @@ function sourcePrimaryScore(model, source, degree) {
   return null;
 }
 
+/** 可选变体圆圈 = 各「有 ≥2 个挡位」的源并集；单挡位源（如 opus-5 的 livebench
+ * 只有 max-effort）不是可切换变体，不列圈——否则点了它只搭着别源上次的挡位，得分随历史漂移。 */
 function unionDegrees(model) {
   const seen = new Map();
   for (const source of SOURCE_ORDER) {
     const degrees = model.degrees?.[source] || [];
+    if (degrees.length < 2) continue;
     for (const degree of degrees) {
       const key = String(degree).toLowerCase();
       if (!seen.has(key)) seen.set(key, { degree, sources: [] });
@@ -230,7 +265,8 @@ function setActiveVariants(model, degree) {
     const sourceDegrees = model.degrees?.[source] || [];
     const match = sourceDegrees.find(item => String(item).toLowerCase() === String(degree).toLowerCase());
     if (!match) continue;
-    const previous = activeVariants[model.canonical]?.[source];
+    // 未显式切换过时退回该源默认挡位（data 记录带 default_degree；index 记录没有）
+    const previous = activeVariants[model.canonical]?.[source] ?? model.default_degree?.[source];
     if (previous === match) continue;
     const beforeScore = sourcePrimaryScore(model, source, previous);
     const afterScore = sourcePrimaryScore(model, source, match);
@@ -253,12 +289,162 @@ function variantNoteFor(model, changes) {
 }
 
 // ═══════════════════════════════════════════════════════════════
+// 挡位切换重算（契约为 default_degree 预计算；切挡后按所选挡位的源级数据
+// 重算源级维度 + composite + value，写回 dataMap 记录，图表实时反映）
+// ═══════════════════════════════════════════════════════════════
+const LB_GROUPS = ['reasoning', 'coding', 'math', 'language', 'instruction_following', 'data_analysis', 'agentic_coding'];
+const AGENT_CONFIGS = new Set(['agent', 'agent_praise_complaint', 'agent_steerability', 'agent_bash_recovery_steps', 'agent_tool_hallucination', 'agent_task_outcome_explicit']);
+
+function round1(x) { return Math.round(Number(x) * 10) / 10; }
+function hasNum(x) { return x != null && String(x).trim() !== '' && Number.isFinite(Number(x)); }
+function normalizeEloRange(x, bounds) {
+  if (!bounds || bounds.max <= bounds.min) return 100;
+  return Math.max(0, Math.min(100, ((x - bounds.min) / (bounds.max - bounds.min)) * 100));
+}
+
+/** LMArena Elo 各榜 min-max 界（跨全部模型/挡位，与管线一致；挡位无关，缓存一次）。 */
+let eloBoundsCache = null;
+function lmarenaEloBounds() {
+  if (eloBoundsCache) return eloBoundsCache;
+  const bounds = {};
+  for (const model of dataMap.values()) {
+    const scores = model.lmarena_scores || {};
+    for (const config of Object.keys(scores)) {
+      if (AGENT_CONFIGS.has(config)) continue;
+      for (const entry of Object.values(scores[config] || {})) {
+        if (!hasNum(entry.score)) continue;
+        const cur = bounds[config] || (bounds[config] = { min: Infinity, max: -Infinity });
+        if (entry.score < cur.min) cur.min = entry.score;
+        if (entry.score > cur.max) cur.max = entry.score;
+      }
+    }
+  }
+  eloBoundsCache = bounds;
+  return bounds;
+}
+
+/** 按当前 activeVariants 挡位重算单模型维度/composite/value（写回 dataMap 记录）。 */
+function recomputeDegreesFor(model) {
+  if (!model) return;
+  const active = activeVariants[model.canonical] || {};
+  const lmDegree = active.lmarena || model.default_degree?.lmarena || null;
+  const lbDegree = active.livebench || model.default_degree?.livebench || null;
+  const dims = { ...model.dimensions };
+  const scores = model.lmarena_scores || {};
+  const bounds = lmarenaEloBounds();
+  const entryFor = (config, degree) => {
+    const map = scores[config] || {};
+    return map[degree] || map[String(degree).toLowerCase()] || null;
+  };
+
+  // 1) LMArena 各榜维度（agent 子维度比例分、Elo 榜 min-max）
+  if (lmDegree) {
+    for (const config of Object.keys(scores)) {
+      if (config === 'agent') continue;
+      const entry = entryFor(config, lmDegree);
+      if (entry && hasNum(entry.score)) {
+        const value = AGENT_CONFIGS.has(config)
+          ? normalizeLmarena(entry.score)
+          : normalizeEloRange(Number(entry.score), bounds[config]);
+        dims[config] = { value: round1(value), source: 'lmarena', raw: entry.score };
+      } else {
+        delete dims[config];
+      }
+    }
+  }
+
+  // 2) LiveBench 组 → merged 维度（LB 优先；communication/math 保持 llm_stats 优先原优先级）
+  const lb = lbDegree ? model.livebench_scores?.[lbDegree] : null;
+  if (lb) {
+    const addLb = (key, dim) => {
+      if (hasNum(lb[key])) dims[dim] = { value: round1(Number(lb[key])), source: 'livebench', raw: Number(lb[key]) };
+    };
+    addLb('reasoning', 'reasoning');
+    addLb('coding', 'coding');
+    addLb('instruction_following', 'instruction_following');
+    addLb('agentic_coding', 'agentic_coding');
+    if (!dims.communication || dims.communication.source !== 'llm_stats') addLb('language', 'communication');
+    if (!dims.math_reasoning || dims.math_reasoning.source !== 'llm_stats') addLb('math', 'math_reasoning');
+  }
+
+  // 3) composite：底座 available（llm_stats 恒定）+ 切挡后的 lmarena/livebench 源级分
+  const available = { ...(model.composite?.available || {}) };
+  const agentEntry = lmDegree ? entryFor('agent', lmDegree) : null;
+  if (agentEntry && hasNum(agentEntry.score)) {
+    available.lmarena = normalizeLmarena(agentEntry.score);
+  } else if (lmDegree) {
+    // 该挡位无 agent 分 → 丢弃源（不沿用旧 available，否则综合分会回显上一挡的分数）
+    delete available.lmarena;
+  }
+  if (lb) {
+    const groups = LB_GROUPS.map(key => lb[key]).filter(hasNum).map(Number);
+    if (groups.length) available.livebench = groups.reduce((a, b) => a + b, 0) / groups.length;
+    else delete available.livebench;
+  } else if (lbDegree) {
+    delete available.livebench;
+  }
+  const baseWeights = (model.open_source && available.llm_stats != null)
+    ? { lmarena: 0.45, livebench: 0.30, llm_stats: 0.25 }
+    : { lmarena: 0.65, livebench: 0.35 };
+  const usable = SOURCE_ORDER.filter(source => available[source] != null && baseWeights[source] != null);
+  if (usable.length) {
+    const total = usable.reduce((sum, source) => sum + baseWeights[source], 0);
+    const weights = {};
+    usable.forEach(source => { weights[source] = Math.round((baseWeights[source] / total) * 10000) / 10000; });
+    const score = usable.reduce((sum, source) => sum + weights[source] * available[source], 0);
+    model.composite = {
+      score: round1(score),
+      weights,
+      method: 'proportional_redistribute',
+      available,
+      note: usable.length !== Object.keys(baseWeights).length ? '缺源，权重按比例重分配' : null,
+    };
+    dims.composite = { value: model.composite.score, source: 'composite', raw: model.composite.score };
+  }
+
+  model.dimensions = dims;
+  recomputeValues();
+}
+
+/** 性价比：综合分 ÷ 平均每 M 价，全表 min-max（切挡只改该模型 composite，其余记录也随之微调）。 */
+function priceAvgPerM(model) {
+  const or = model.pricing?.openrouter;
+  if (or && (or.prompt || or.completion)) {
+    return (Number(or.prompt) * 1e6 + Number(or.completion) * 1e6) / 2;
+  }
+  const ls = model.pricing?.llm_stats;
+  if (ls && (ls.input_per_m != null || ls.output_per_m != null)) {
+    const nums = [ls.input_per_m, ls.output_per_m].filter(Number.isFinite);
+    return nums.length ? nums.reduce((a, b) => a + b, 0) / nums.length : null;
+  }
+  return null;
+}
+
+function recomputeValues() {
+  const rows = [];
+  for (const model of dataMap.values()) {
+    if (!model.composite) continue;
+    const avg = priceAvgPerM(model);
+    if (avg == null || avg <= 0) continue;
+    rows.push({ model, raw: Math.log(model.composite.score / avg) }); // 与管线口径一致：ln 后 min-max
+  }
+  if (!rows.length) return;
+  const values = rows.map(row => row.raw);
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  for (const row of rows) {
+    const score = max > min ? ((row.raw - min) / (max - min)) * 100 : 100;
+    row.model.value = { score: round1(score), raw: row.raw, note: 'ln(综合分/平均每M价)' };
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
 // 渲染入口（模型 tab 激活时调用）
 // ═══════════════════════════════════════════════════════════════
 export function renderModelCompare() {
   const panel = document.getElementById('compareModelPanel');
   if (!panel) return;
-  syncRadarClass();
+  syncChartClass();
   if (!comparisonReady && !comparisonFailed) return; // 加载中：loadingPromise 完成后再渲染
   if (comparisonFailed) {
     document.getElementById('cmpModelList').innerHTML = renderState({ icon: '⚠️', title: t('compare.empty.loadFailed'), message: t('compare.empty.notBuilt'), type: 'error' });
@@ -274,8 +460,9 @@ export function renderModelCompare() {
   renderResults();
 }
 
-function syncRadarClass() {
-  document.getElementById('view-compare')?.classList.toggle('cmp-radar-active', viewMode === 'chart' && chartMode === 'radar');
+function syncChartClass() {
+  // 图表模式（柱状图/雷达图）与表格视图均放开页面限宽（同搜索页 :has 法；切走视图由 .active 复原）
+  document.getElementById('view-compare')?.classList.add('cmp-wide-active');
 }
 
 // ── 选择器 ─────────────────────────────────────────────────────
@@ -292,7 +479,7 @@ function filteredModels() {
   const list = indexModels.filter(model => {
     if (filterTheme !== 'all' && model.theme !== filterTheme) return false;
     if (!query) return true;
-    return [model.display, model.vendor].join(' ').toLowerCase().includes(query);
+    return [model.display, model.vendor, model.family, model.identity].filter(Boolean).join(' ').toLowerCase().includes(query);
   });
   list.sort((a, b) => {
     const scoreA = Number.isFinite(a.composite_score) ? a.composite_score : -1;
@@ -321,7 +508,7 @@ function renderModelList() {
       ? '<span class="cmp-score">' + Number(model.composite_score).toFixed(1) + '</span>'
       : '<span class="cmp-score cmp-score-na">' + t('compare.noComposite') + '</span>';
     return '<button class="cmp-model-item' + (isSelected ? ' selected' : '') + '" type="button" data-cmp-pick="' + escapeHtml(model.canonical) + '" aria-pressed="' + isSelected + '">' +
-      '<span class="cmp-model-icon" aria-hidden="true">' + escapeHtml(modelIcon(model)) + '</span>' +
+      '<span class="cmp-model-icon" aria-hidden="true">' + modelIconHtml(model) + '</span>' +
       '<span class="cmp-model-text"><span class="cmp-model-name">' + escapeHtml(model.display) + '</span>' +
       '<span class="cmp-model-vendor">' + escapeHtml(model.vendor) + '</span></span>' +
       coverage + score +
@@ -353,7 +540,7 @@ function renderChips() {
     const index = indexMap.get(canonical);
     if (!index) return '';
     return '<span class="cmp-chip">' +
-      '<button class="cmp-chip-icon" type="button" data-cmp-variant="' + escapeHtml(canonical) + '" aria-label="' + escapeHtml(t('compare.variantOf') + index.display) + '" aria-expanded="' + (variantOpenFor === canonical) + '">' + escapeHtml(modelIcon(index)) + '</button>' +
+      '<button class="cmp-chip-icon" type="button" data-cmp-variant="' + escapeHtml(canonical) + '" aria-label="' + escapeHtml(t('compare.variantOf') + index.display) + '" aria-expanded="' + (variantOpenFor === canonical) + '">' + modelIconHtml(index) + '</button>' +
       '<span class="cmp-chip-body"><span class="cmp-chip-name">' + escapeHtml(index.display) + '</span>' +
       '<span class="cmp-chip-degrees">' + escapeHtml(degreeLabelFor(index)) + '</span></span>' +
       '<button class="cmp-chip-remove" type="button" data-cmp-remove="' + escapeHtml(canonical) + '" aria-label="' + escapeHtml(t('compare.removeModel')) + '">×</button>' +
@@ -362,11 +549,24 @@ function renderChips() {
 }
 
 // ── 维度勾选 ───────────────────────────────────────────────────
+/** 所选模型共同拥有且不缺省（有值）的维度；无选择或数据未就绪返回全量。 */
+function availableDims() {
+  const models = selected.map(getModelData).filter(Boolean);
+  if (!models.length || models.length !== selected.length) return ALL_DIMS;
+  return ALL_DIMS.filter(dim => models.every(model => dimensionValue(model, dim) !== null));
+}
+
 function renderDimPicker() {
   const box = document.getElementById('cmpDims');
   if (!box) return;
-  box.innerHTML = DIM_GROUPS.map(group => {
-    const chips = group.dims.map(dim => {
+  const available = availableDims();
+  const hint = available.length < ALL_DIMS.length
+    ? '<p class="cmp-dim-hint" role="note">' + escapeHtml(t('compare.dimsOnlyCommon')) + '</p>'
+    : '';
+  box.innerHTML = hint + DIM_GROUPS.map(group => {
+    const visible = group.dims.filter(dim => available.includes(dim));
+    if (!visible.length) return '';
+    const chips = visible.map(dim => {
       const checked = activeDims.includes(dim);
       return '<label class="cmp-dim-chip' + (checked ? ' checked' : '') + '">' +
         '<input type="checkbox" data-cmp-dim="' + escapeHtml(dim) + '"' + (checked ? ' checked' : '') + '>' +
@@ -396,11 +596,16 @@ function renderResults() {
   const out = document.getElementById('cmpResults');
   const status = document.getElementById('cmpStatus');
   if (status) status.textContent = '';
-  if (!selected.length) {
-    out.innerHTML = renderState({ icon: '↔', title: t('compare.empty.noSelection'), message: t('compare.viewLead'), type: 'empty' });
-    return;
-  }
   ensureData().then(() => {
+    if (comparisonFailed) {
+      out.innerHTML = renderState({ icon: '⚠️', title: t('compare.empty.loadFailed'), message: t('compare.empty.notBuilt'), type: 'error' });
+      return;
+    }
+    // 未选择模型：默认显示全部维度的实时排行（浏览态）
+    if (!selected.length) {
+      out.innerHTML = renderBrowse(activeDims);
+      return;
+    }
     const models = selected.map(getModelData).filter(Boolean);
     if (models.length !== selected.length) {
       out.innerHTML = renderState({ icon: '⚠️', title: t('compare.empty.loadFailed'), message: '', type: 'error' });
@@ -418,8 +623,35 @@ function renderResults() {
       out.innerHTML = renderRadar(models, activeDims);
       return;
     }
-    out.innerHTML = renderBars(models, activeDims);
+    const bars = renderBars(models, activeDims);
+    out.innerHTML = bars || renderState({ icon: '↔', title: t('compare.noSharedDims'), message: t('compare.viewLead'), type: 'empty' });
   });
+}
+
+// ── 无选择浏览态：每维度 Top N 排行（数据由 dataMap 实时聚合；竖柱状图） ──
+function renderBrowse(dims) {
+  const lead = '<p class="cmp-browse-lead" role="note">' + escapeHtml(t('compare.browseLead', { n: BROWSE_TOP_N })) + '</p>';
+  const blocks = dims.map(dimension => {
+    const label = t('compare.dimension.' + dimension);
+    const ranked = [...dataMap.values()]
+      .map(model => ({ model, value: dimensionValue(model, dimension) }))
+      .filter(item => item.value !== null)
+      .sort((a, b) => b.value - a.value)
+      .slice(0, BROWSE_TOP_N);
+    if (!ranked.length) return '';
+    const groups = ranked.map(item => ({
+      label: item.model.display,
+      icon: modelIcon(item.model),
+      bars: [{ dim: dimension, value: item.value }],
+    }));
+    return '<section class="cmp-vchart">' +
+      '<div class="cmp-vchart-head"><h3>' + escapeHtml(label) + '</h3>' +
+      '<span class="cmp-block-note">' + escapeHtml(t('compare.barSort')) + '</span></div>' +
+      renderVerticalPlot(groups) +
+      sourceFooterHtml(sourcesForDimension(dimension, ranked.map(item => item.model))) +
+    '</section>';
+  }).join('');
+  return lead + blocks;
 }
 
 // ── 来源 footer（每可视化块下右对齐；契约 §8） ─────────────────
@@ -460,31 +692,90 @@ function sourceFooterHtml(sources) {
   return '<div class="cmp-source-footer">' + items.join('') + '</div>';
 }
 
-// ── 柱状图（每勾选维度一个图块；数据不足不画 0 柱） ────────────
-function renderBars(models, dims) {
-  return dims.map(dimension => {
-    const dimLabel = t('compare.dimension.' + dimension);
-    const rows = models.map(model => {
-      const value = dimensionValue(model, dimension);
-      if (value === null) {
-        return '<div class="cmp-bar-item">' +
-          '<span class="cmp-bar-name">' + escapeHtml(modelIcon(model)) + ' ' + escapeHtml(model.display) + '</span>' +
-          '<span class="cmp-bar-track cmp-bar-track-empty">' + escapeHtml(t('compare.dataInsufficient')) + '</span>' +
-          '<span class="cmp-bar-value cmp-bar-value-na">—</span></div>';
-      }
-      const pct = Math.max(0, Math.min(100, value));
-      return '<div class="cmp-bar-item">' +
-        '<span class="cmp-bar-name">' + escapeHtml(modelIcon(model)) + ' ' + escapeHtml(model.display) + '</span>' +
-        '<span class="cmp-bar-track" role="img" aria-label="' + escapeHtml(model.display + ' ' + dimLabel + ' ' + value.toFixed(1)) + '"><span class="cmp-bar-fill" style="width:' + pct + '%"></span></span>' +
-        '<span class="cmp-bar-value">' + value.toFixed(1) + '</span></div>';
+/** 合并多个维度的来源 footer 集合（竖柱状图为单图，来源统一归并到图下）。 */
+function sourcesForDims(dims, models) {
+  const sources = new Set();
+  for (const dim of dims) sourcesForDimension(dim, models).forEach(source => sources.add(source));
+  return sources;
+}
+
+// ── 竖柱状图（选中模型对比）：多簇并排（每簇一个模型），簇内各维度柱相连无缝；
+//    每维度统一最高高度（该维度图表内最大值 = 满高，其余按比例量化），柱顶标真实数值；右上角图例 ──
+function renderLegend(dims) {
+  const items = dims.map(dim =>
+    '<span class="cmp-legend-item" role="listitem"><span class="cmp-legend-swatch" style="background:' + dimColor(dim) + '"></span>' + escapeHtml(t('compare.dimension.' + dim)) + '</span>'
+  ).join('');
+  return '<div class="cmp-legend" role="list">' + items + '</div>';
+}
+
+/** 竖柱状图绘图区（SVG）：groups = [{label, icon, bars:[{dim, value}]}]；每维度最大值顶到统一满高。 */
+function renderVerticalPlot(groups) {
+  const H = 280;
+  const leftPad = 4;
+  const rightPad = 8;
+  const plotTop = 30;   // 顶部留白（柱顶数值）
+  const plotBottom = 250; // 基线
+  const labelY = 268;   // 簇底模型名
+  const plotH = plotBottom - plotTop;
+  const barW = 22;
+  const clusterPad = 10;
+  const gap = 30;
+  const maxDims = Math.max(1, ...groups.map(group => group.bars.length));
+  const groupW = maxDims * barW + clusterPad * 2;
+  const totalW = leftPad + groups.length * groupW + Math.max(0, groups.length - 1) * gap + rightPad;
+
+  // 每维度统一满高：该维度在图表内的最大值映射到 plotTop，其余按 value/最大值 比例量化
+  const dimMax = {};
+  for (const group of groups) {
+    for (const bar of group.bars) {
+      if (bar.value == null) continue;
+      dimMax[bar.dim] = Math.max(dimMax[bar.dim] || -Infinity, bar.value);
+    }
+  }
+  const barY = (value, dim) => {
+    const max = dimMax[dim] || 0;
+    const ratio = max > 0 ? Math.max(0, Math.min(100, (value / max) * 100)) : 0;
+    return plotBottom - (ratio / 100) * plotH;
+  };
+
+  const baseline = '<line class="cmp-bar-base" x1="' + leftPad + '" y1="' + plotBottom + '" x2="' + totalW + '" y2="' + plotBottom + '"></line>';
+
+  const groupsSvg = groups.map((group, gi) => {
+    const groupStart = leftPad + gi * (groupW + gap);
+    const n = group.bars.length;
+    const barsStart = groupStart + (groupW - n * barW) / 2; // 柱在簇内居中
+    const bars = group.bars.map((bar, bi) => {
+      const x = barsStart + bi * barW;
+      const y = barY(bar.value, bar.dim);
+      const h = plotBottom - y;
+      const color = dimColor(bar.dim);
+      const dimLabel = t('compare.dimension.' + bar.dim);
+      return '<rect class="cmp-bar-rect" x="' + x.toFixed(2) + '" y="' + y.toFixed(2) + '" width="' + barW + '" height="' + h.toFixed(2) + '" fill="' + color + '">' +
+          '<title>' + escapeHtml(group.label + ' ' + dimLabel + ' ' + bar.value) + '</title></rect>' +
+        '<text class="cmp-bar-val" x="' + (x + barW / 2).toFixed(2) + '" y="' + (y - 5).toFixed(2) + '" text-anchor="middle" fill="' + color + '">' + bar.value.toFixed(1) + '</text>';
     }).join('');
-    return '<section class="cmp-block" aria-labelledby="cmp-block-' + escapeHtml(dimension) + '">' +
-      '<div class="cmp-block-head"><h3 id="cmp-block-' + escapeHtml(dimension) + '">' + escapeHtml(dimLabel) + '</h3>' +
-      '<span class="cmp-block-note">' + escapeHtml(t('compare.barSort')) + '</span></div>' +
-      '<div class="cmp-bars">' + rows + '</div>' +
-      sourceFooterHtml(sourcesForDimension(dimension, models)) +
-    '</section>';
+    const cx = groupStart + groupW / 2;
+    return bars +
+      '<text class="cmp-bar-name" x="' + cx.toFixed(2) + '" y="' + labelY + '" text-anchor="middle">' + escapeHtml(group.icon ? group.icon + ' ' : '') + escapeHtml(group.label) + '</text>';
   }).join('');
+
+  return '<svg class="cmp-vchart-svg" viewBox="0 0 ' + totalW + ' ' + H + '" preserveAspectRatio="xMidYMid meet" role="img" aria-label="' + escapeHtml(t('compare.barChartTitle')) + '">' +
+    baseline + groupsSvg + '</svg>';
+}
+
+function renderBars(models, dims) {
+  const plotDims = dims.filter(dim => models.every(model => dimensionValue(model, dim) !== null));
+  if (!plotDims.length) return '';
+  const groups = models.map(model => ({
+    label: model.display,
+    icon: modelIcon(model),
+    bars: plotDims.map(dim => ({ dim, value: dimensionValue(model, dim) })),
+  }));
+  return '<section class="cmp-vchart" aria-label="' + escapeHtml(t('compare.barChartTitle')) + '">' +
+    '<div class="cmp-vchart-head"><h3>' + escapeHtml(t('compare.barChartTitle')) + '</h3>' + renderLegend(plotDims) + '</div>' +
+    renderVerticalPlot(groups) +
+    sourceFooterHtml(sourcesForDims(plotDims, models)) +
+  '</section>';
 }
 
 // ── 雷达图（经典单 N 边形；模型1 左 / 模型2 右；仅两端有值维度） ──
@@ -609,12 +900,13 @@ function renderVariantPopover(trigger, canonical) {
 
   const pop = document.createElement('div');
   pop.id = 'cmpVariantPopover';
+  pop.dataset.model = canonical;
   pop.className = 'cmp-variant-popover';
   pop.setAttribute('role', 'dialog');
   pop.setAttribute('aria-label', t('compare.variantOf') + model.display);
 
   const N = circle.length;
-  const size = 200;
+  const size = 280; // SVG 画布：容纳挡位标签（原 200 时 0°/90° 标签落在画布外被裁剪）
   const cx = size / 2;
   const cy = size / 2;
   const inner = 34;
@@ -644,7 +936,7 @@ function renderVariantPopover(trigger, canonical) {
     '<svg class="cmp-variant-svg" viewBox="0 0 ' + size + ' ' + size + '" role="img" aria-label="' + escapeHtml(model.display + ' 变体选择') + '">' + sectors + '</svg>';
 
   document.getElementById('compareModelPanel').appendChild(pop);
-  positionPopover(pop, trigger, size);
+  positionPopover(pop, trigger, 306); // 弹窗宽 = SVG 280 + 水平 padding 24 + 边距
 }
 
 function positionPopover(pop, trigger, size) {
@@ -691,7 +983,17 @@ function selectModel(canonical) {
 function renderAll() {
   renderChips();
   renderModelList();
+  syncActiveDimsToSelection();
   renderResults();
+}
+
+/** 选择变化后把勾选集收敛到所选模型共有维度（未公开维度强制不勾选），并重绘勾选面板。 */
+function syncActiveDimsToSelection() {
+  ensureData().then(() => {
+    const available = availableDims();
+    activeDims = activeDims.filter(dim => available.includes(dim));
+    renderDimPicker();
+  });
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -764,8 +1066,10 @@ export function bindModelCompareEvents() {
         variantOpenFor = null;
       } else {
         variantOpenFor = canonical;
-        renderChips();
+        // 先弹窗并定位（用仍挂载的 trigger 取坐标），再重建 chips 反映展开态；
+        // 顺序颠倒会先销毁 trigger，getBoundingClientRect 返回 0 导致弹窗定位到左上角。
         renderVariantPopover(variantTrigger, canonical);
+        renderChips();
       }
       return;
     }
@@ -773,15 +1077,19 @@ export function bindModelCompareEvents() {
     if (slot) {
       const canonical = slot.dataset.cmpVariantModel;
       const degree = slot.dataset.cmpVariantSlot;
-      const model = indexMap.get(canonical);
+      // 用 data 记录（含源级分数）计算说明与重算；未加载则退回 index 记录
+      const model = getModelData(canonical) || indexMap.get(canonical);
+      let note = '';
       if (model) {
         const changes = setActiveVariants(model, degree);
-        const note = variantNoteFor(model, changes);
-        if (note) setCompareModelStatus(note);
+        note = variantNoteFor(model, changes);
+        if (dataMap.has(canonical)) recomputeDegreesFor(dataMap.get(canonical));
       }
       variantOpenFor = null;
       document.getElementById('cmpVariantPopover')?.remove();
       renderChips();
+      renderResults(); // 重渲染图表/表格，反映新挡位分数
+      if (note) setCompareModelStatus(note); // renderResults 会清空状态行，说明置后避免被吞
       return;
     }
     const close = event.target.closest('[data-cmp-variant-close]');
@@ -802,7 +1110,7 @@ export function bindModelCompareEvents() {
     const viewBtn = event.target.closest('[data-cmp-view]');
     if (viewBtn) {
       viewMode = viewBtn.dataset.cmpView;
-      syncRadarClass();
+      syncChartClass();
       syncModeButtons();
       renderResults();
       return;
@@ -810,7 +1118,7 @@ export function bindModelCompareEvents() {
     const chartBtn = event.target.closest('[data-cmp-chart]');
     if (chartBtn) {
       chartMode = chartBtn.dataset.cmpChart;
-      syncRadarClass();
+      syncChartClass();
       syncModeButtons();
       renderResults();
       return;

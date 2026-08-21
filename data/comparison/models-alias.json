@@ -1,14 +1,57 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
+  "vendor_aliases": {
+    "qwen": ["qwen", "alibaba", "alibabacloud"],
+    "mistral": ["mistral", "mistralai"],
+    "zai": ["zai", "z-ai", "zai-org", "zhipu", "zhipuai"],
+    "moonshotai": ["moonshot", "moonshotai"],
+    "kling": ["kling", "kuaishou"],
+    "xunfei": ["xunfei", "iflytek"]
+  },
   "entries": [
     {
-      "canonical": "gpt-5.6-sol",
+      "model_key": "openai--gpt-5.6-sol",
+      "display": "GPT-5.6 Sol",
       "aliases": {
-        "openrouter": ["openai/gpt-5.6-sol", "openai/gpt-5.6-sol-20260814"],
-        "lmarena": ["GPT-5.6 Sol"],
-        "livebench": ["gpt-5.6-sol-high"],
+        "openrouter": ["openai/gpt-5.6-sol"],
+        "lmarena": ["gpt-5.6-sol-xhigh"],
+        "livebench": ["gpt-5.6-sol-max"],
         "llm_stats": ["gpt-5.6-sol"]
       }
+    },
+    {
+      "model_key": "anthropic--claude-opus-4.8",
+      "display": "Claude Opus 4.8",
+      "aliases": {
+        "openrouter": ["anthropic/claude-opus-4.8"],
+        "lmarena": ["claude-opus-4-8", "claude-opus-4-8-high"],
+        "livebench": ["claude-opus-4-8-max-effort"],
+        "llm_stats": ["claude-opus-4-8"]
+      }
+    },
+    {
+      "model_key": "anthropic--claude-opus-4.7",
+      "display": "Claude Opus 4.7",
+      "aliases": {
+        "openrouter": ["anthropic/claude-opus-4.7"],
+        "lmarena": ["claude-opus-4-7", "claude-opus-4-7-high"],
+        "livebench": ["claude-opus-4-7-xhigh-effort"],
+        "llm_stats": ["claude-opus-4-7"]
+      }
+    },
+    {
+      "model_key": "qwen--qwen3-235b-a22b-instruct",
+      "display": "Qwen3 235B A22B Instruct",
+      "aliases": {
+        "openrouter": ["qwen/qwen3-235b-a22b-2507"],
+        "lmarena": ["qwen3-235b-a22b-instruct-2507"]
+      }
     }
+  ],
+  "never_merge": [
+    ["qwen--qwen3-8b", "qwen--qwen3-32b"],
+    ["qwen--qwen3-32b", "qwen--qwen3-235b-a22b"],
+    ["qwen--qwen3-235b-a22b", "qwen--qwen3-235b-a22b-thinking"],
+    ["mistral--ministral-3-3b-instruct", "mistral--ministral-3-8b-instruct"]
   ]
 }

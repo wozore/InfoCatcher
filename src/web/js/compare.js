@@ -27,6 +27,7 @@ import {
 import { renderTools, closeModal, showModal } from './tools.js';
 import { currentView, switchView } from './main.js';
 import { routeApiModelToCompare, canonicalForTool, modelCompareIsSelected, renderModelCompare } from './compare-models.js';
+import { brandIconHtml } from './brand-icons.js';
 
 // ═══════════════════════════════════════════════════════════════
 // 对比视图双 tab：模型对比（integrated/，见 compare-models.js）↔ 工具对比（catalog，本模块）
@@ -103,7 +104,20 @@ function resolveCompareTarget(ref) {
   const card = getToolCardItems().find(item => item.detail_ref?.id === detail.id) || null;
   // 套餐没有工具卡，只允许通过厂商二级详情的同类组入口加入。
   if (!card && detail.detail_kind !== 'subscription_plan') return null;
-  return { type: detail.detail_kind === 'tool' ? 'root' : 'leaf', kind: detail.detail_kind, tool: card, item: detail, name: detail.title, icon: detail.icon || card?.icon || '' };
+  return {
+    type: detail.detail_kind === 'tool' ? 'root' : 'leaf',
+    kind: detail.detail_kind,
+    tool: card,
+    item: detail,
+    name: detail.title,
+    icon: detail.icon || card?.icon || '',
+    iconContext: {
+      vendorKey: detail.vendor_key || card?.vendor_key,
+      toolKey: card?.tool_key,
+      modelKey: detail.detail_kind === 'api_model' ? String(detail.id).split(':').pop() : null,
+      emoji: detail.icon || card?.icon || '',
+    },
+  };
 }
 
 function toggleCompareRef(toolId, itemId = null, btn) {
@@ -190,15 +204,19 @@ function compareTargetLabel(target) {
   return target.icon + ' ' + target.name;
 }
 
+function compareTargetLabelHtml(target) {
+  return brandIconHtml(target.iconContext) + ' ' + escapeHtml(target.name);
+}
+
 function renderCompareProvenance(targets) {
   const rows = targets.map(target => {
     const titles = (target.item?.sources || []).map(source => source.title).filter(Boolean);
     const dateLabel = target.kind === 'tool' ? '更新时间' : target.kind === 'subscription_plan' ? '' : '发布时间';
     const date = target.item?.official_date ? ' · ' + dateLabel + ' ' + target.item.official_date : '';
-    return { name: compareTargetLabel(target), text: '资料来源：' + (titles.length ? titles.join('、') : '来源待补充') + date };
+    return { name: compareTargetLabel(target), nameHtml: compareTargetLabelHtml(target), text: '资料来源：' + (titles.length ? titles.join('、') : '来源待补充') + date };
   });
   return '<div class="compare-provenance" aria-label="对比数据来源与官方日期">' +
-    rows.map(row => '<div class="compare-provenance-row"><span class="compare-provenance-name">' + escapeHtml(row.name) + '</span><span class="compare-provenance-text">' + escapeHtml(row.text) + '</span></div>').join('') +
+    rows.map(row => '<div class="compare-provenance-row"><span class="compare-provenance-name">' + row.nameHtml + '</span><span class="compare-provenance-text">' + escapeHtml(row.text) + '</span></div>').join('') +
   '</div>';
 }
 
@@ -227,7 +245,7 @@ function renderCompareBars(targets) {
         const valid = p.price !== null;
         const pct = valid ? Math.max(0, Math.min(100, p.price / maxPrice * 100)) : 0;
         return '<div class="compare-bar-item">' +
-          '<span class="compare-bar-name">' + escapeHtml(compareTargetLabel(p.target)) + '</span>' +
+          '<span class="compare-bar-name">' + compareTargetLabelHtml(p.target) + '</span>' +
           '<div class="compare-bar-track" role="img" aria-label="' + escapeHtml(compareTargetLabel(p.target) + (valid ? ' ' + symbol + Number(p.price).toLocaleString('zh-CN') + unit : ' 暂无可比数据')) + '">' +
             (valid ? '<span class="compare-bar-fill" style="width:' + pct + '%"></span>' : '<span class="compare-bar-empty">暂无可比数据</span>') +
           '</div>' +
@@ -252,7 +270,7 @@ function renderRootToolCompare(targets) {
     { key: 'access_level', label: '国内访问', format: value => ({ '开放': '可访问', '受限': '访问受限', '区域限制': '区域限制' }[value] || '访问待核验') },
     { key: 'price_badge', label: '价格状态', format: value => ({ free: '免费', paid: '仅付费', freemium: '含免费额度', usage_based: '按量计费' }[value] || '价格待核验') }
   ];
-  return '<table class="compare-table"><thead><tr><th>维度</th>' + targets.map(target => '<th>' + escapeHtml(compareTargetLabel(target)) + '</th>').join('') + '</tr></thead><tbody>' +
+  return '<table class="compare-table"><thead><tr><th>维度</th>' + targets.map(target => '<th>' + compareTargetLabelHtml(target) + '</th>').join('') + '</tr></thead><tbody>' +
     dims.map(dimension => '<tr><td class="dim">' + dimension.label + '</td>' + targets.map(target => {
       const value = target.tool?.[dimension.key];
       return '<td>' + escapeHtml(dimension.format(value)) + '</td>';
@@ -289,7 +307,7 @@ function renderApiModelCompare(targets) {
     { label: '适用说明', format: item => Array.isArray(item.applicable_scenarios) ? item.applicable_scenarios.filter(scene => scene && typeof scene === 'object').map(scene => scene.title + '：' + scene.description).join('；') || '资料结构待修复' : '暂无可比数据' },
     { label: '官方日期', format: item => item.official_date || '资料待核验' }
   ];
-  return '<table class="compare-table"><thead><tr><th>维度</th>' + targets.map(target => '<th>' + escapeHtml(compareTargetLabel(target)) + '</th>').join('') + '</tr></thead><tbody>' +
+  return '<table class="compare-table"><thead><tr><th>维度</th>' + targets.map(target => '<th>' + compareTargetLabelHtml(target) + '</th>').join('') + '</tr></thead><tbody>' +
     rows.map(row => '<tr><td class="dim">' + row.label + '</td>' + targets.map(target => '<td>' + escapeHtml(row.format(target.item)) + '</td>').join('') + '</tr>').join('') +
   '</tbody></table>';
 }
@@ -301,7 +319,7 @@ function renderPlanCompare(targets) {
     { label: '主要模型', format: item => item.plan?.included_models_status === 'not_listed' ? '官方未列出' : item.plan?.included_models?.length ? item.plan.included_models.join('、') : '官方未明确列出全部模型' },
     { label: '条件/限制', format: item => item.plan?.conditions || '暂无可比数据' }
   ];
-  return '<table class="compare-table"><thead><tr><th>维度</th>' + targets.map(target => '<th>' + escapeHtml(compareTargetLabel(target)) + '</th>').join('') + '</tr></thead><tbody>' +
+  return '<table class="compare-table"><thead><tr><th>维度</th>' + targets.map(target => '<th>' + compareTargetLabelHtml(target) + '</th>').join('') + '</tr></thead><tbody>' +
     rows.map(row => '<tr><td class="dim">' + row.label + '</td>' + targets.map(target => '<td>' + escapeHtml(row.format(target.item)) + '</td>').join('') + '</tr>').join('') +
   '</tbody></table>';
 }
@@ -314,7 +332,7 @@ function renderCompare() {
 
   sel.innerHTML = targets.length === 0
     ? '<div class="compare-empty-copy"><strong>尚未选择对比项目</strong><p class="hint">在工具库中打开具体工具或模型后点击 <b>+对比</b>。</p></div>'
-    : '<div class="selected-tools">' + targets.map(target => '<span class="selected-tool-chip">' + escapeHtml(compareTargetLabel(target)) +
+    : '<div class="selected-tools">' + targets.map(target => '<span class="selected-tool-chip">' + compareTargetLabelHtml(target) +
         ' <button class="remove-chip" aria-label="移除 ' + escapeHtml(target.name) + '" onclick="removeCompare(\'' + escapeHtml(target.item.id) + '\',\'' + escapeHtml(target.item.id) + '\')">' + ICON_CLOSE + '</button></span>').join('') + '</div>';
 
   if (targets.length === 0) {
@@ -407,7 +425,7 @@ function renderAddCompare() {
     const selected = isCompareSelected(t.toolId, t.itemId);
     const kindLabel = t.kind === 'tool' ? '具体工具' : t.kind === 'api_model' ? 'API 模型' : '产品变体';
     return '<div class="add-compare-item">' +
-      '<div><div class="add-compare-name">' + escapeHtml(t.tool.icon + ' ' + t.name) + '</div>' +
+      '<div><div class="add-compare-name">' + brandIconHtml({ vendorKey: t.tool.vendor_key, toolKey: t.tool.tool_key, modelKey: t.kind === 'api_model' ? t.tool.tool_key : null, emoji: t.tool.icon }) + ' ' + escapeHtml(t.name) + '</div>' +
       '<div class="add-compare-meta">' + escapeHtml(kindLabel + ' · ' + t.tool.vendor_label) + '</div></div>' +
       '<button class="btn btn-small compare-toggle ' + (selected ? 'selected' : '') + '" type="button" aria-pressed="' + selected + '" data-add-pick="' + escapeHtml(t.toolId) + '"' + (t.itemId ? ' data-add-item="' + escapeHtml(t.itemId) + '"' : '') + (selected ? ' disabled' : '') + '>' + (selected ? '已选' : '加入对比') + '</button>' +
     '</div>';

@@ -1,4 +1,5 @@
 import { escapeHtml } from './data.js';
+import { brandIconHtml } from './brand-icons.js';
 
 function renderPriceTag(value) {
   const labels = {
@@ -49,7 +50,7 @@ function toolCards(request = {}) {
     : '';
   return `<div class="tool-card tool-card--${escapeHtml(card.theme || 'general')}" onclick="${openCard}">
     <div class="tool-card-header"><div>
-      <div class="tool-card-name">${card.icon || ''} ${escapeHtml(card.title || '')}</div>
+      <div class="tool-card-name">${brandIconHtml({ vendorKey: card.vendor_key, toolKey: card.tool_key, detailId: card.detail_ref?.id, detailKind: card.detail_kind, emoji: card.icon })} ${escapeHtml(card.title || '')}</div>
       <div class="tool-card-vendor">${escapeHtml(card.vendor_label || '')}</div>
     </div></div>
     <div class="tool-card-desc">${escapeHtml(card.summary || '')}</div>

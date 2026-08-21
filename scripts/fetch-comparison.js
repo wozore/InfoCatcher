@@ -7,15 +7,19 @@
  *   node scripts/fetch-comparison.js run                 # 定时抓取 + 全绿重建（cron）
  *   node scripts/fetch-comparison.js fetch <source>      # 单源抓取（手动，不计 count）
  *   node scripts/fetch-comparison.js rebuild             # 直接重建 integrated
+ *   node scripts/fetch-comparison.js review              # 输出待人工确认的名称歧义清单（零网络/零写入）
  *   node scripts/fetch-comparison.js status              # 打印 4 源快照新鲜度
  *
  * 本地代理：`NODE_USE_ENV_PROXY=1 HTTPS_PROXY=http://127.0.0.1:7897 node ...`
  * CI 不设代理走直连。
  */
 
+const fs = require('fs');
+const { COMPARISON_FILES } = require('../src/shared/paths');
 const { runComparison, fetchSource, isFresh, readConfig } = require('../src/comparison/run-comparison');
 const { readRawSnapshot } = require('../src/comparison/compare-store');
 const { rebuildIntegrated } = require('../src/comparison/rebuild-comparison');
+const { collectReviewCandidates } = require('../src/comparison/identity-review');
 
 function printStatus() {
   const config = readConfig();
@@ -29,6 +33,21 @@ function printStatus() {
     console.log(`  ${source}: ${snapshot ? `快照 ${snapshot.fetched_at}（${age}h 前）` : '无快照'} · ${fresh ? 'fresh' : 'STALE'} · count=${cfg.count} · 间隔 ${cfg.interval_hours}h`);
   }
   console.log(`  当前时间：${now}`);
+}
+
+function printIdentityReviewCandidates() {
+  const snapshots = Object.fromEntries(['openrouter', 'lmarena', 'livebench', 'llm_stats']
+    .map(source => [source, readRawSnapshot(source)]));
+  const registry = fs.existsSync(COMPARISON_FILES.modelsAlias)
+    ? JSON.parse(fs.readFileSync(COMPARISON_FILES.modelsAlias, 'utf8'))
+    : { schema_version: 2, entries: [] };
+  const candidates = collectReviewCandidates(snapshots, registry);
+  console.log(JSON.stringify({
+    generated_at: new Date().toISOString(),
+    candidate_count: candidates.length,
+    requires_human_approval: true,
+    candidates,
+  }, null, 2));
 }
 
 async function main() {
@@ -60,11 +79,15 @@ async function main() {
     process.exit(1);
     return;
   }
+  if (command === 'review') {
+    printIdentityReviewCandidates();
+    return;
+  }
   if (command === 'status') {
     printStatus();
     return;
   }
-  console.error('未知命令。用法：run | fetch <source> | rebuild | status');
+  console.error('未知命令。用法：run | fetch <source> | rebuild | review | status');
   process.exit(1);
 }
 

@@ -19,6 +19,13 @@ const {
   normalizeIndex,
   normalizeBenchmark,
 } = require('./compare-schema');
+const {
+  normalizeVendor,
+  parseModelNameMetadata,
+  stripRevision,
+  createModelIdentityResolver,
+  normalizedDisplayKey,
+} = require('./model-identity');
 
 const SOURCE_ORDER = ['openrouter', 'lmarena', 'livebench', 'llm_stats'];
 const CONFIG_DIMS = new Set(LMARENA_CONFIGS.filter(config => config !== 'agent'));
@@ -83,36 +90,63 @@ function slugify(name) {
     .replace(/^-+|-+$/g, '');
 }
 
+// 日期 token 剥离（尾部或中缀，如 -2025-02-27 / 20250326 / 2025-02 / 202506 / 08-2024 / 26-01-10 / 02-15；
+// 分隔符兼容连字符/下划线/空格——lmarena 空格分隔日期如 'Amazon Nova ... 10-09' 也命中）。
+// 多版本取最新：同 base 日期变体合并到同一 canonical，先到先得。
+function stripCanonicalDates(model) {
+  return String(model || '')
+    .replace(/[-_\s]\d{4}-\d{2}-\d{2}(?=[-_\s:]|$)/, '')
+    .replace(/[-_\s]\d{8}(?=[-_\s:]|$)/, '')
+    .replace(/[-_\s]\d{4}-\d{2}(?=[-_\s:]|$)/, '')
+    .replace(/[-_\s]\d{6}(?=[-_\s:]|$)/, '')
+    .replace(/[-_\s]\d{2}-\d{4}(?=[-_\s:]|$)/, '')
+    .replace(/[-_\s]\d{2}-\d{2}-\d{2}(?=[-_\s:]|$)/, '')
+    .replace(/[-_\s]\d{2}-\d{2}(?=[-_\s:]|$)/, '');
+}
+
 function openrouterCanonical(id) {
-  let model = String(id).split('/').pop() || '';
-  model = model
-    .replace(/-\d{4}-\d{2}-\d{2}$/, '') // 日期后缀多版本取最新
-    .replace(/-\d{8}$/, '');
-  return slugify(model);
+  const model = String(id).split('/').pop() || '';
+  return slugify(stripCanonicalDates(model));
+}
+
+// llm-stats model_id 常带日期（如 amazon-nova-experimental-chat-10-09），统一剥离对齐。
+function llmStatsCanonical(modelId) {
+  return slugify(stripCanonicalDates(modelId));
 }
 
 function openrouterVendor(id) {
   return slugify(String(id).split('/')[0]);
 }
 
-function lmarenaParse(name) {
-  const match = /^(.*?)\s*\(([^)]+)\)\s*$/.exec(String(name));
-  if (match) return { base: match[1].trim(), degree: match[2].trim() };
-  return { base: String(name).trim(), degree: null };
+// 展示名仅移除发布日期、供应方式与已解析的评测挡位；参数规模、MoE、模式和模态均属于模型身份，必须保留。
+function cleanModelDisplay(raw) {
+  if (raw == null) return null;
+  let name = String(raw).trim();
+  if (!name) return null;
+  name = name.replace(/\s*\((?:high|low|medium|xhigh|auto|max)(?:-effort)?\)\s*$/i, '');
+  name = name.replace(/\s*\((?:\d{4}-\d{2}-\d{2}|\d{2}-\d{4})\)\s*$/i, '');
+  name = stripRevision(name);
+  name = name.replace(/(?:[-_\s]+)(?:batch|free|fast|latest)\s*$/i, '');
+  name = name.replace(/[-_\s]{2,}/g, ' ').replace(/^[-_\s]+|[-_\s]+$/g, '').trim();
+  return name || null;
 }
 
-const LB_DEGREE_RE = /-(high|low|medium|max|xhigh|auto)(?:-effort)?(?:-\d+k)?$/i;
+function lmarenaParse(name) {
+  const parsed = parseModelNameMetadata('lmarena', name);
+  return {
+    base: parsed.model_name,
+    degree: parsed.degree,
+    evaluation_profile: parsed.evaluation_profile,
+  };
+}
+
 function livebenchParse(name) {
-  let n = String(name);
-  let degree = null;
-  const match = LB_DEGREE_RE.exec(n);
-  if (match) {
-    degree = match[0].replace(/^-/, '');
-    n = n.slice(0, match.index);
-  }
-  n = n.replace(/-\d{4}-\d{2}-\d{2}$/, '') // 2025-12-11 日期多版本取最新
-    .replace(/-\d{8}$/, '');                 // 20251101 紧凑日期
-  return { base: slugify(n), degree };
+  const parsed = parseModelNameMetadata('livebench', name);
+  return {
+    base: slugify(stripRevision(parsed.model_name)),
+    degree: parsed.degree,
+    evaluation_profile: parsed.evaluation_profile,
+  };
 }
 
 function buildAliasMap(entries) {
@@ -132,38 +166,79 @@ function resolveCanonical(aliasMap, source, rawName, autoCanonical) {
 }
 
 // ── 源记录收集 ─────────────────────────────────────────────────
-function collectSourceRecords(snapshots, aliasMap) {
-  const records = {}; // canonical → { sources: {...} }
-  const get = canonical => {
-    if (!records[canonical]) records[canonical] = { canonical, sources: {} };
-    return records[canonical];
+function addIdentityMetadata(record, resolved, source, rawName) {
+  if (resolved.revision) record.revisions.add(resolved.revision);
+  if (resolved.evaluation_profile) record.evaluation_profiles.add(resolved.evaluation_profile);
+  if (!record.source_names[source]) record.source_names[source] = [];
+  if (!record.source_names[source].includes(rawName)) record.source_names[source].push(rawName);
+  for (const offering of resolved.offerings) {
+    if (!record.offerings[source]) record.offerings[source] = [];
+    if (!record.offerings[source].some(entry => entry.kind === offering && entry.raw_name === rawName)) {
+      record.offerings[source].push({ kind: offering, raw_name: rawName });
+    }
+  }
+}
+
+function collectSourceRecords(snapshots, identityRegistry = {}) {
+  const registry = Array.isArray(identityRegistry) ? { schema_version: 1, entries: identityRegistry } : identityRegistry;
+  const resolveIdentity = createModelIdentityResolver(registry);
+  const records = {}; // model_key[@revision] → { identity, vendor, sources }
+  const get = resolved => {
+    const recordKey = resolved.revision ? `${resolved.model_key}@${resolved.revision}` : resolved.model_key;
+    if (!records[recordKey]) {
+      records[recordKey] = {
+        canonical: recordKey,
+        identity: resolved.identity,
+        family: resolved.family,
+        vendor: resolved.vendor,
+        revisions: new Set(),
+        evaluation_profiles: new Set(),
+        offerings: {},
+        source_names: {},
+        sources: {},
+      };
+    }
+    return records[recordKey];
   };
 
-  // openrouter（无 degree）
+  // openrouter（无 degree；Batch/Free/Fast/Latest 收拢到主模型）
   for (const item of snapshots.openrouter?.data || []) {
-    const canonical = resolveCanonical(aliasMap, 'openrouter', item.id, openrouterCanonical(item.id));
-    if (!canonical) continue;
-    const rec = get(canonical);
-    if (!rec.sources.openrouter) rec.sources.openrouter = { ...item, vendor: openrouterVendor(item.id) };
+    const resolved = resolveIdentity({ source: 'openrouter', rawName: item.id });
+    if (resolved.kind !== 'model') continue;
+    const rec = get(resolved);
+    addIdentityMetadata(rec, resolved, 'openrouter', item.id);
+    const current = rec.sources.openrouter;
+    const currentOfferingCount = Number(current?._identityOfferingCount || 0);
+    if (!current || resolved.offerings.length < currentOfferingCount ||
+      (resolved.offerings.length === currentOfferingCount && Number(item.created || 0) > Number(current.created || 0))) {
+      rec.sources.openrouter = { ...item, vendor: resolved.vendor, _identityOfferingCount: resolved.offerings.length };
+    }
   }
 
   // lmarena（per config × degree；agent 榜用 score 比例分，其余 9 榜用 rating Elo）
   for (const config of LMARENA_CONFIGS) {
     const scoreField = LMARENA_AGENT_CONFIGS.includes(config) ? 'score' : 'rating';
     for (const row of snapshots.lmarena?.configs?.[config] || []) {
-      const parsed = lmarenaParse(row.model_name);
-      const canonical = resolveCanonical(aliasMap, 'lmarena', row.model_name, slugify(parsed.base));
-      if (!canonical) continue;
+      const resolved = resolveIdentity({ source: 'lmarena', rawName: row.model_name, vendorHint: row.organization });
+      if (resolved.kind !== 'model') continue;
       const rawScore = row[scoreField];
-      if (!Number.isFinite(Number(rawScore))) continue;
-      const rec = get(canonical);
-      const lmarena = rec.sources.lmarena || (rec.sources.lmarena = { configs: {}, organization: row.organization, license: row.license, degreeOrder: {}, baseName: null });
-      if (!lmarena.baseName) lmarena.baseName = parsed.base;
-      const degree = parsed.degree || 'base';
-      lmarena.configs[config] = lmarena.configs[config] || {};
-      if (!lmarena.configs[config][degree]) {
-        lmarena.configs[config][degree] = { score: Number(rawScore), rank: row.rank };
+      if (!hasNum(rawScore)) continue;
+      const rec = get(resolved);
+      addIdentityMetadata(rec, resolved, 'lmarena', row.model_name);
+      const lmarena = rec.sources.lmarena || (rec.sources.lmarena = {
+        configs: {}, profiles: {}, organization: resolved.vendor, license: row.license, degreeOrder: {}, baseName: null,
+      });
+      if (!lmarena.baseName) lmarena.baseName = resolved.display;
+      const degree = resolved.degree || 'base';
+      const score = { score: Number(rawScore), rank: row.rank };
+      if (resolved.evaluation_profile) {
+        const profiles = lmarena.profiles[config] || (lmarena.profiles[config] = {});
+        const profileScores = profiles[resolved.evaluation_profile] || (profiles[resolved.evaluation_profile] = {});
+        if (!profileScores[degree]) profileScores[degree] = score;
+        continue;
       }
+      lmarena.configs[config] = lmarena.configs[config] || {};
+      if (!lmarena.configs[config][degree]) lmarena.configs[config][degree] = score;
       if (!lmarena.degreeOrder[config]) lmarena.degreeOrder[config] = [];
       if (!lmarena.degreeOrder[config].includes(degree)) lmarena.degreeOrder[config].push(degree);
     }
@@ -171,25 +246,26 @@ function collectSourceRecords(snapshots, aliasMap) {
 
   // livebench（per degree 组分数）
   for (const row of snapshots.livebench?.groups || []) {
-    const parsed = livebenchParse(row.model);
-    const canonical = resolveCanonical(aliasMap, 'livebench', row.model, parsed.base);
-    if (!canonical) continue;
-    const rec = get(canonical);
+    const resolved = resolveIdentity({ source: 'livebench', rawName: row.model });
+    if (resolved.kind !== 'model') continue;
+    const rec = get(resolved);
+    addIdentityMetadata(rec, resolved, 'livebench', row.model);
     const livebench = rec.sources.livebench || (rec.sources.livebench = { scores: {}, degreeOrder: [] });
-    const degree = parsed.degree || 'base';
+    const degree = resolved.degree || 'base';
     if (!livebench.scores[degree]) livebench.scores[degree] = {};
     for (const key of ['reasoning', 'coding', 'math', 'language', 'instruction_following', 'data_analysis', 'agentic_coding']) {
-      if (Number.isFinite(Number(row[key]))) livebench.scores[degree][key] = Number(row[key]);
+      if (hasNum(row[key])) livebench.scores[degree][key] = Number(row[key]);
     }
     if (!livebench.degreeOrder.includes(degree)) livebench.degreeOrder.push(degree);
   }
 
-  // llm_stats（无 degree）
+  // llm_stats（无 degree；model_id 常带日期，统一剥离对齐）
   for (const model of snapshots.llm_stats?.models || []) {
-    const canonical = resolveCanonical(aliasMap, 'llm_stats', model.model_id, slugify(model.model_id));
-    if (!canonical) continue;
-    const rec = get(canonical);
-    if (!rec.sources.llm_stats) rec.sources.llm_stats = model;
+    const resolved = resolveIdentity({ source: 'llm_stats', rawName: model.model_id, vendorHint: model.organization_id || model.organization });
+    if (resolved.kind !== 'model') continue;
+    const rec = get(resolved);
+    addIdentityMetadata(rec, resolved, 'llm_stats', model.model_id);
+    if (!rec.sources.llm_stats || !resolved.revision) rec.sources.llm_stats = model;
   }
 
   return records;
@@ -198,6 +274,11 @@ function collectSourceRecords(snapshots, aliasMap) {
 // ── 维度归一化与优先级 ──────────────────────────────────────────
 function round1(x) {
   return Math.round(Number(x) * 10) / 10;
+}
+
+/** 严格数值判有：null/undefined/空串/纯空白 视为无值（规避 Number(null)===0 把缺失字段当真值 0）。 */
+function hasNum(x) {
+  return x != null && String(x).trim() !== '' && Number.isFinite(Number(x));
 }
 
 function meanOf(values) {
@@ -240,7 +321,7 @@ function normalizeEloRange(x, bounds) {
 }
 
 function buildModelRecord(entry, lmarenaEloBounds = {}) {
-  const { canonical, sources } = entry;
+  const { canonical, identity, family, vendor: recordVendor, revisions, evaluation_profiles: evaluationProfiles, offerings, source_names: sourceNames, sources } = entry;
   const lmarena = sources.lmarena;
   const livebench = sources.livebench;
   const llm = sources.llm_stats;
@@ -257,10 +338,16 @@ function buildModelRecord(entry, lmarenaEloBounds = {}) {
   };
   const livebenchScores = livebench && livebench.scores[lbDegree] ? livebench.scores[lbDegree] : {};
   const lbAvg = meanOf(['reasoning', 'coding', 'math', 'language', 'instruction_following', 'data_analysis', 'agentic_coding']
-    .map(key => Number(livebenchScores[key])).filter(Number.isFinite));
+    .map(key => livebenchScores[key]).filter(hasNum).map(Number));
 
-  const display = (llm && llm.name) || (or && or.name ? String(or.name).replace(/^[^:]+:\s*/, '') : null) || (lmarena && lmarena.baseName) || canonical;
-  const vendor = (llm && llm.organization_id) || (or && or.vendor) || (lmarena && lmarena.organization) || slugify(canonical);
+  const baseDisplay = cleanModelDisplay(
+    (llm && llm.name) ||
+    (or && or.name ? String(or.name).replace(/^[^:]+:\s*/, '') : null) ||
+    (lmarena && lmarena.baseName) ||
+    identity || canonical
+  );
+  const display = revisions?.size ? `${baseDisplay} (${[...revisions].sort().join(', ')})` : baseDisplay;
+  const vendor = normalizeVendor(recordVendor || (llm && llm.organization_id) || (or && or.vendor) || (lmarena && lmarena.organization) || 'unknown');
   const licenseRaw = (llm && llm.license) || (lmarena && lmarena.license) || null;
   const license = normalizeLicense(licenseRaw);
 
@@ -303,7 +390,7 @@ function buildModelRecord(entry, lmarenaEloBounds = {}) {
   // LMArena 各榜（agent 5 子维度用比例分公式；text/vision/... 用 Elo min-max）
   for (const config of CONFIG_DIMS) {
     const score = lmarenaScore(config, lmDegree);
-    if (score && Number.isFinite(Number(score.score))) {
+    if (score && hasNum(score.score)) {
       const value = LMARENA_AGENT_CONFIGS.includes(config)
         ? normalizeLmarena(score.score)
         : normalizeEloRange(score.score, lmarenaEloBounds[config]);
@@ -314,10 +401,9 @@ function buildModelRecord(entry, lmarenaEloBounds = {}) {
   // LiveBench 组 → merged 维度
   if (livebench && lbDegree) {
     const addLb = (key, dim, note) => {
+      if (!hasNum(livebenchScores[key])) return;
       const value = Number(livebenchScores[key]);
-      if (Number.isFinite(value)) {
-        dims[dim] = { value: round1(value), source: 'livebench', raw: value, ...(note ? { note } : {}) };
-      }
+      dims[dim] = { value: round1(value), source: 'livebench', raw: value, ...(note ? { note } : {}) };
     };
     addLb('reasoning', 'reasoning');
     addLb('coding', 'coding');
@@ -327,10 +413,10 @@ function buildModelRecord(entry, lmarenaEloBounds = {}) {
 
   // llm-stats index → merged 维度（优先级低于 LB 的 reasoning/coding 走 pick 覆盖）
   if (llm) {
-    const idx = key => (Number.isFinite(Number(llm[key])) ? normalizeIndex(llm[key]) : null);
-    const idxRaw = key => (Number.isFinite(Number(llm[key])) ? llm[key] : null);
-    const bench = key => (Number.isFinite(Number(llm[key])) ? normalizeBenchmark(llm[key]) : null);
-    const benchRaw = key => (Number.isFinite(Number(llm[key])) ? llm[key] : null);
+    const idx = key => (hasNum(llm[key]) ? normalizeIndex(llm[key]) : null);
+    const idxRaw = key => (hasNum(llm[key]) ? llm[key] : null);
+    const bench = key => (hasNum(llm[key]) ? normalizeBenchmark(llm[key]) : null);
+    const benchRaw = key => (hasNum(llm[key]) ? llm[key] : null);
 
     // 推理/编码：LB 优先、idx 兜底
     for (const [lbKey, dim, idxKey] of [['reasoning', 'reasoning', 'index_reasoning'], ['coding', 'coding', 'index_code']]) {
@@ -339,7 +425,7 @@ function buildModelRecord(entry, lmarenaEloBounds = {}) {
     // 沟通/语言：idx 优先、LB language 兜底
     if (!dims.communication) {
       if (idx('index_communication') != null) dims.communication = { value: round1(idx('index_communication')), source: 'llm_stats', raw: idxRaw('index_communication'), note: 'index_communication' };
-      else if (Number.isFinite(Number(livebenchScores.language))) dims.communication = { value: round1(Number(livebenchScores.language)), source: 'livebench', raw: Number(livebenchScores.language) };
+      else if (hasNum(livebenchScores.language)) dims.communication = { value: round1(Number(livebenchScores.language)), source: 'livebench', raw: Number(livebenchScores.language) };
     }
     // 工具调用 / 长上下文（idx 独有）
     for (const [idxKey, dim] of [['index_tool_calling', 'tool_calling'], ['index_long_context', 'long_context']]) {
@@ -352,7 +438,7 @@ function buildModelRecord(entry, lmarenaEloBounds = {}) {
     // benchmark 四维
     const mathCandidates = [
       bench('aime_2025_score') != null ? { value: bench('aime_2025_score'), source: 'llm_stats', raw: benchRaw('aime_2025_score'), note: 'aime_2025' } : null,
-      Number.isFinite(Number(livebenchScores.math)) ? { value: round1(Number(livebenchScores.math)), source: 'livebench', raw: Number(livebenchScores.math), note: 'livebench math' } : null,
+      hasNum(livebenchScores.math) ? { value: round1(Number(livebenchScores.math)), source: 'livebench', raw: Number(livebenchScores.math), note: 'livebench math' } : null,
       idx('index_math') != null ? { value: idx('index_math'), source: 'llm_stats', raw: idxRaw('index_math'), note: 'index_math' } : null,
     ];
     const math = pick(mathCandidates);
@@ -383,9 +469,9 @@ function buildModelRecord(entry, lmarenaEloBounds = {}) {
   // ── 综合分（缺源按比例重分配） ──
   const lmAgentScore = lmarenaScore('agent', lmDegree);
   const available = {};
-  if (lmAgentScore && Number.isFinite(Number(lmAgentScore.score))) available.lmarena = normalizeLmarena(lmAgentScore.score);
+  if (lmAgentScore && hasNum(lmAgentScore.score)) available.lmarena = normalizeLmarena(lmAgentScore.score);
   if (lbAvg != null) available.livebench = lbAvg;
-  if (llm && Number.isFinite(Number(llm.index_general))) available.llm_stats = normalizeIndex(llm.index_general);
+  if (llm && hasNum(llm.index_general)) available.llm_stats = normalizeIndex(llm.index_general);
 
   let composite = null;
   const baseWeights = (openSource && available.llm_stats != null)
@@ -401,6 +487,7 @@ function buildModelRecord(entry, lmarenaEloBounds = {}) {
       score: round1(score),
       weights,
       method: 'proportional_redistribute',
+      available, // 源级可用归一化分（前端切挡位重算综合分用；lmarena/livebench 随挡位变，llm_stats 恒定）
       note: usable.length !== Object.keys(baseWeights).length ? '缺源，权重按比例重分配' : null,
     };
   }
@@ -435,6 +522,18 @@ function buildModelRecord(entry, lmarenaEloBounds = {}) {
       lmarenaScores[config] = perDegree;
     }
   }
+  const lmarenaProfiles = {};
+  if (lmarena) {
+    for (const [config, profiles] of Object.entries(lmarena.profiles || {})) {
+      lmarenaProfiles[config] = {};
+      for (const [profile, degrees] of Object.entries(profiles)) {
+        lmarenaProfiles[config][profile] = {};
+        for (const [degree, value] of Object.entries(degrees)) {
+          lmarenaProfiles[config][profile][degree] = { score: value.score, rank: value.rank };
+        }
+      }
+    }
+  }
   const livebenchScoresOut = {};
   if (livebench) {
     for (const [degree, groups] of Object.entries(livebench.scores)) livebenchScoresOut[degree] = groups;
@@ -442,6 +541,12 @@ function buildModelRecord(entry, lmarenaEloBounds = {}) {
 
   const record = {
     canonical,
+    identity: identity || canonical,
+    family: family || identity || canonical,
+    revisions: [...(revisions || [])].sort(),
+    evaluation_profiles: [...(evaluationProfiles || [])].sort(),
+    offerings: offerings || {},
+    source_names: sourceNames || {},
     display,
     vendor,
     theme: VENDOR_THEMES[vendor] || 'general',
@@ -456,6 +561,7 @@ function buildModelRecord(entry, lmarenaEloBounds = {}) {
     composite,
     dimensions: dims,
     lmarena_scores: lmarenaScores,
+    lmarena_profiles: lmarenaProfiles,
     livebench_scores: livebenchScoresOut,
     pricing,
     value: null,
@@ -485,7 +591,9 @@ function computeValues(records) {
     if (!record.composite) continue;
     const avg = priceAvgPerM(record);
     if (avg == null || avg <= 0) continue;
-    record._valueRaw = record.composite.score / avg;
+    // 价格/性能比跨数量级（单价差数百倍），线性 min-max 会被超低价模型主导，
+    // 旗舰模型全贴 0；先 ln 压缩再 min-max，中段拉开、单调保序。
+    record._valueRaw = Math.log(record.composite.score / avg);
     rawValues.push(record._valueRaw);
   }
   if (!rawValues.length) return;
@@ -494,9 +602,33 @@ function computeValues(records) {
   for (const record of records) {
     if (record._valueRaw == null) continue;
     const score = max > min ? ((record._valueRaw - min) / (max - min)) * 100 : 100;
-    record.value = { score: round1(score), raw: record._valueRaw, note: '综合分/平均每M价' };
+    record.value = { score: round1(score), raw: record._valueRaw, note: 'ln(综合分/平均每M价)' };
     delete record._valueRaw;
   }
+}
+
+function enforceUniqueDisplays(models) {
+  const groups = new Map();
+  for (const model of models) {
+    const key = `${model.vendor}::${normalizedDisplayKey(model.display)}`;
+    const group = groups.get(key) || [];
+    group.push(model);
+    groups.set(key, group);
+  }
+  const collisions = [];
+  for (const group of groups.values()) {
+    if (group.length < 2) continue;
+    for (const model of group) {
+      model.display = `${model.display} (${model.identity})`;
+    }
+    collisions.push({
+      vendor: group[0].vendor,
+      before: group[0].display.replace(/ \([^)]*\)$/, ''),
+      canonicals: group.map(model => model.canonical),
+      resolved: true,
+    });
+  }
+  return collisions;
 }
 
 // ── 入口 ───────────────────────────────────────────────────────
@@ -513,11 +645,13 @@ function rebuildIntegrated(options = {}) {
     errors.push(`raw 快照缺失：${missing.join(', ')}（全绿才重建，待修源见上）`);
     return { ok: false, models: [], errors };
   }
-  const aliasEntries = options.aliasEntries || readJson(COMPARISON_FILES.modelsAlias)?.entries || [];
-  const aliasMap = buildAliasMap(aliasEntries);
-  const records = collectSourceRecords(snapshots, aliasMap);
+  const identityRegistry = options.identityRegistry || options.aliasRegistry || readJson(COMPARISON_FILES.modelsAlias) || { schema_version: 2, entries: [] };
+  const aliasEntries = options.aliasEntries || identityRegistry.entries || [];
+  const registry = options.aliasEntries ? { ...identityRegistry, entries: aliasEntries } : identityRegistry;
+  const records = collectSourceRecords(snapshots, registry);
   const lmarenaEloBounds = computeLmarenaEloBounds(records);
   const models = Object.values(records).map(record => buildModelRecord(record, lmarenaEloBounds));
+  const displayCollisions = enforceUniqueDisplays(models);
   computeValues(models);
 
   // 确定性排序：canonical 字典序（前端再按综合分排序）
@@ -532,6 +666,11 @@ function rebuildIntegrated(options = {}) {
 
   const indexModels = models.map(model => ({
     canonical: model.canonical,
+    identity: model.identity,
+    family: model.family,
+    revisions: model.revisions,
+    evaluation_profiles: model.evaluation_profiles,
+    offerings: model.offerings,
     display: model.display,
     vendor: model.vendor,
     theme: model.theme,
@@ -543,18 +682,25 @@ function rebuildIntegrated(options = {}) {
   }));
 
   const index = {
-    schema_version: 1,
+    schema_version: 2,
     generated_at: generatedAt,
     model_count: models.length,
     sources: sourcesMeta,
     models: indexModels,
   };
-  const data = { schema_version: 1, generated_at: generatedAt, models };
+  const data = { schema_version: 2, generated_at: generatedAt, models };
 
   if (options.write !== false) {
     writeIntegrated(index, data);
   }
-  return { ok: true, models, errors, index, data };
+  return {
+    ok: true,
+    models,
+    errors,
+    diagnostics: { display_collisions_resolved: displayCollisions },
+    index,
+    data,
+  };
 }
 
 /** 数据记录是否含某源数据。 */
@@ -580,8 +726,10 @@ module.exports = {
   computeLmarenaEloBounds,
   slugify,
   openrouterCanonical,
+  llmStatsCanonical,
   lmarenaParse,
   livebenchParse,
   buildAliasMap,
   loadInputs,
+  cleanModelDisplay,
 };

@@ -1,0 +1,57 @@
+{
+  "vendor": {
+    "anthropic": {
+      "path": "vendor/anthropic.svg",
+      "color": "#D97757"
+    },
+    "google": {
+      "path": "vendor/google.svg",
+      "color": "#4285F4"
+    },
+    "deepseek": {
+      "path": "vendor/deepseek.svg",
+      "color": "#4D6BFE"
+    },
+    "baidu": {
+      "path": "vendor/baidu.svg",
+      "color": "#2932E1"
+    },
+    "mistral": {
+      "path": "vendor/mistralai.svg",
+      "color": "#FF7000"
+    },
+    "minimax": {
+      "path": "vendor/minimax.svg",
+      "color": "#111111"
+    },
+    "kuaishou": {
+      "path": "vendor/kuaishou.svg",
+      "color": "#FF4906"
+    },
+    "openai": {
+      "path":"vendor/openai.svg",
+      "color": "#000"
+    },
+    "zhipu": {
+      "path":"vendor/zai.svg",
+      "color": "#000"
+    },
+    "xunfei": {
+      "path":"vendor/iflytekcloud-color.svg"
+    },
+    "xai": {
+      "path":"vendor/xai.svg"
+    },
+    "cohere": {
+      "path":"vendor/cohere-color.svg"
+    }
+  },
+  "tool": {},
+  "series": {
+    "grok-4-6": {
+      "path":"series/grok.svg",
+      "color": "#000"
+    }
+  },
+  "model": {}
+}

@@ -1,4 +1,5 @@
 import { escapeHtml } from './data.js';
+import { brandIconHtml } from './brand-icons.js';
 
 // 兼容已带「优点：/限制：」前缀的旧数据：标签由渲染端统一加，前缀先剥离避免重复
 function stripTonePrefix(text) {
@@ -26,7 +27,7 @@ function vendorCards(request = {}) {
     : '';
   return `<div class="tool-card collection-card" onclick="openDetail('${escapeHtml(card.level1_ref.id)}',null,this)">
     <div class="tool-card-header"><div>
-      <div class="tool-card-name">${card.icon || ''} ${escapeHtml(card.title || '')}</div>
+      <div class="tool-card-name">${brandIconHtml({ vendorKey: card.vendor_key, emoji: card.icon, cls: 'brand-icon' })} ${escapeHtml(card.title || '')}</div>
       <div class="tool-card-vendor">厂商总览</div>
     </div></div>
     <div class="tool-card-desc">${escapeHtml(description)}</div>

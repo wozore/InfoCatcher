@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "default_dimensions": ["composite", "reasoning", "coding", "math_reasoning"],
+  "default_dimensions": ["composite", "value"],
   "radar_dimension_cap": 12,
   "model_cap": 5
 }

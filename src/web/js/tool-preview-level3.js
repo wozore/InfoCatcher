@@ -1,4 +1,5 @@
 import { escapeHtml, safeExternalUrl, formatPrice, renderTimelinessBadge, ICON_ARROW_LEFT, ICON_EXTERNAL } from './data.js';
+import { brandIconHtml } from './brand-icons.js';
 
 function notApplicableHtml(title, value) {
   return value?.status === 'not_applicable'
@@ -26,7 +27,7 @@ function renderRateCard(rate) {
 }
 
 function renderToolLevel3(request = {}) {
-  const { detail, showCompare = false, compareSelected = false, backRef = null } = request;
+  const { detail, toolKey = null, showCompare = false, compareSelected = false, backRef = null } = request;
   if (!detail) return '<div class="intelligence-unavailable">工具详情暂不可用。</div>';
   const kindLabel = detail.detail_kind === 'api_model' ? '模型' : detail.detail_kind === 'subscription_plan' ? '套餐' : detail.detail_kind === 'product_variant' ? '变体' : '工具';
   const dateLabel = detail.detail_kind === 'tool' ? '更新时间' : detail.detail_kind === 'subscription_plan' ? '' : '发布时间';
@@ -64,8 +65,15 @@ function renderToolLevel3(request = {}) {
   const vendorHtml = detail.vendor_label
     ? escapeHtml(detail.vendor_label) + ' · '
     : '';
+  const detailIcon = brandIconHtml({
+    vendorKey: detail.vendor_key,
+    toolKey,
+    detailId: detail.id,
+    detailKind: detail.detail_kind,
+    emoji: detail.icon,
+  });
   return '<div class="model-index-page model-leaf-page">' + backHtml +
-    '<section class="node-overview model-index-overview"><h2>' + escapeHtml((detail.icon || '') + ' ' + detail.title) + '</h2><div class="vendor">' + vendorHtml + '<a href="' + escapeHtml(safeExternalUrl(detail.official_url)) + '" target="_blank" rel="noopener noreferrer">官网 ' + ICON_EXTERNAL + '</a></div></section>' +
+    '<section class="node-overview model-index-overview"><h2>' + detailIcon + ' ' + escapeHtml(detail.title) + '</h2><div class="vendor">' + vendorHtml + '<a href="' + escapeHtml(safeExternalUrl(detail.official_url)) + '" target="_blank" rel="noopener noreferrer">官网 ' + ICON_EXTERNAL + '</a></div></section>' +
     '<div class="model-leaf-panel"><div class="model-panel-heading"><div><span class="node-kind-badge leaf">具体' + kindLabel + '</span><h4>' + escapeHtml(detail.title) + '</h4>' + (detail.official_date ? renderTimelinessBadge(detail.official_date) : '') + '</div>' + compareHtml + '</div>' +
     '<div class="intelligence-item-body"><p>' + escapeHtml(detail.summary || '') + '</p>' + contextHtml + pricingHtml + planHtml + renderScenario('适用场景及说明', detail.applicable_scenarios) + renderScenario('不适用场景及说明', detail.inapplicable_scenarios) + sourceHtml + '</div></div></div>';
 }
