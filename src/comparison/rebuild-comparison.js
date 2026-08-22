@@ -26,6 +26,7 @@ const {
   createModelIdentityResolver,
   normalizedDisplayKey,
 } = require('./model-identity');
+const { readSeriesConfig, attachSeriesMetadata, validateSeriesProjection } = require('./model-series');
 
 const SOURCE_ORDER = ['openrouter', 'lmarena', 'livebench', 'llm_stats'];
 const CONFIG_DIMS = new Set(LMARENA_CONFIGS.filter(config => config !== 'agent'));
@@ -539,7 +540,7 @@ function buildModelRecord(entry, lmarenaEloBounds = {}) {
     for (const [degree, groups] of Object.entries(livebench.scores)) livebenchScoresOut[degree] = groups;
   }
 
-  const record = {
+  const result = {
     canonical,
     identity: identity || canonical,
     family: family || identity || canonical,
@@ -566,7 +567,7 @@ function buildModelRecord(entry, lmarenaEloBounds = {}) {
     pricing,
     value: null,
   };
-  return record;
+  return result;
 }
 
 // ── 性价比（综合分 ÷ 平均每 M 价，全表 min-max 归一化） ────────
@@ -653,8 +654,12 @@ function rebuildIntegrated(options = {}) {
   const models = Object.values(records).map(record => buildModelRecord(record, lmarenaEloBounds));
   const displayCollisions = enforceUniqueDisplays(models);
   computeValues(models);
+  const seriesConfig = options.seriesConfig || readSeriesConfig(options.seriesConfigFile);
+  const seriesProjection = attachSeriesMetadata(models, seriesConfig);
+  const seriesErrors = validateSeriesProjection(seriesProjection.series, models);
+  if (seriesErrors.length) errors.push(...seriesErrors);
 
-  // 确定性排序：canonical 字典序（前端再按综合分排序）
+  // 确定性排序：canonical 字典序（前端再按系列/综合分排序）
   models.sort((a, b) => String(a.canonical).localeCompare(String(b.canonical)));
 
   const generatedAt = new Date().toISOString();
@@ -674,6 +679,12 @@ function rebuildIntegrated(options = {}) {
     display: model.display,
     vendor: model.vendor,
     theme: model.theme,
+    series_key: model.series_key,
+    series_display: model.series_display,
+    member_key: model.member_key,
+    member_display: model.member_display,
+    member_order: model.member_order,
+    member_variant_count: seriesProjection.memberMeta.get(model.canonical)?.member.variant_count || 1,
     has_composite: Boolean(model.composite),
     composite_score: model.composite ? model.composite.score : null,
     degrees: model.degrees,
@@ -685,7 +696,9 @@ function rebuildIntegrated(options = {}) {
     schema_version: 2,
     generated_at: generatedAt,
     model_count: models.length,
+    series_count: seriesProjection.series.length,
     sources: sourcesMeta,
+    series: seriesProjection.series,
     models: indexModels,
   };
   const data = { schema_version: 2, generated_at: generatedAt, models };
@@ -694,10 +707,10 @@ function rebuildIntegrated(options = {}) {
     writeIntegrated(index, data);
   }
   return {
-    ok: true,
+    ok: errors.length === 0,
     models,
     errors,
-    diagnostics: { display_collisions_resolved: displayCollisions },
+    diagnostics: { display_collisions_resolved: displayCollisions, series_count: seriesProjection.series.length },
     index,
     data,
   };

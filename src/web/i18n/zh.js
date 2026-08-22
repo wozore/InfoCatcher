@@ -168,7 +168,7 @@ export const messages = {
       tool: '工具对比',
     },
     selectorTitle: '选择模型',
-    selectorLead: '按综合分排序；可搜索、按类别筛选。',
+    selectorLead: '先选系列，再展开选择具体成员；评测挡位与修订版在成员内切换。',
     filterCatsAria: '模型类别筛选',
     sortHint: '默认按综合分降序',
     searchModel: '搜索模型或厂商',

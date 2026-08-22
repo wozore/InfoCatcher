@@ -21,6 +21,7 @@ const {
   LIVEBENCH_GROUP_FIELDS,
 } = require('../comparison/compare-schema');
 const { normalizedDisplayKey } = require('../comparison/model-identity');
+const { validateSeriesProjection } = require('../comparison/model-series');
 
 let failed = false;
 
@@ -157,6 +158,20 @@ function validateIndex(index) {
           if (EVALUATION_PROFILE_TOKENS.has(String(degree).toLowerCase())) fail(`integrated/index.json ${model.canonical} 将评测环境误写为 degree: ${degree}`);
         }
       }
+    }
+  }
+
+  if (index.series !== undefined) {
+    if (!Array.isArray(index.series)) fail('integrated/index.json.series 应为数组');
+    else {
+      if (index.series_count !== undefined && index.series_count !== index.series.length) fail('integrated/index.json.series_count 与 series 长度不一致');
+      for (const model of index.models) {
+        if (typeof model.series_key !== 'string' || !model.series_key) fail(`integrated/index.json ${model.canonical}.series_key 缺失`);
+        if (typeof model.series_display !== 'string' || !model.series_display) fail(`integrated/index.json ${model.canonical}.series_display 缺失`);
+        if (typeof model.member_key !== 'string' || !model.member_key) fail(`integrated/index.json ${model.canonical}.member_key 缺失`);
+        if (typeof model.member_display !== 'string' || !model.member_display) fail(`integrated/index.json ${model.canonical}.member_display 缺失`);
+      }
+      validateSeriesProjection(index.series, index.models).forEach(error => fail(`integrated/index.json 系列投影：${error}`));
     }
   }
 

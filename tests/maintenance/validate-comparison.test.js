@@ -75,3 +75,37 @@ test('comparison 校验：评测环境不能被写入 degree', () => {
   comparisonValidation.validateIndex(validIndex([record]));
   assert.equal(comparisonValidation.failed, true);
 });
+
+test('comparison 校验：系列投影引用现有 canonical 且成员不能为空', () => {
+  comparisonValidation.resetComparisonValidationForTests();
+  const record = model('openai--gpt-5.5', 'gpt-5.5', 'GPT-5.5');
+  Object.assign(record, {
+    series_key: 'openai--gpt-5.5',
+    series_display: 'GPT-5.5',
+    member_key: 'openai--gpt-5.5',
+    member_display: '基础版',
+    member_order: 0,
+    member_variant_count: 1,
+  });
+  const index = validIndex([record]);
+  index.series_count = 1;
+  index.series = [{
+    series_key: 'openai--gpt-5.5',
+    display: 'GPT-5.5',
+    vendor: 'openai',
+    members: [{
+      member_key: 'openai--gpt-5.5',
+      display: '基础版',
+      default_canonical: 'openai--gpt-5.5',
+      variant_count: 1,
+      variants: [{ canonical: 'openai--gpt-5.5', revision: null }],
+    }],
+  }];
+  comparisonValidation.validateIndex(index);
+  assert.equal(comparisonValidation.failed, false);
+
+  comparisonValidation.resetComparisonValidationForTests();
+  index.series[0].members[0].default_canonical = 'openai--missing';
+  comparisonValidation.validateIndex(index);
+  assert.equal(comparisonValidation.failed, true);
+});

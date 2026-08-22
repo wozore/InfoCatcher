@@ -14,6 +14,7 @@
 - [refresh-config.json](data/comparison/refresh-config.json) — 抓取编排配置（每源 interval_hours/full_every/count/last_run，管线专用）。
 - [view-config.json](data/comparison/view-config.json) — 前端展示配置（默认维度/雷达上限/模型上限，维护者可改，管线不覆盖）。
 - [models-alias.json](data/comparison/models-alias.json) — 主键对齐人工登记表（canonical → 各源原始名别名，管线读取）。
+- [model-series.json](data/comparison/model-series.json) — 模型系列人工登记与成员展示规则；只组织现有 canonical，不改变跨源实体或评测分数。
 - [integrated/index.json](data/comparison/integrated/index.json) — 前端唯一入口层（小）：模型列表 + composite_score + degrees + sources + `file` 指针。
 - [integrated/data.json](data/comparison/integrated/data.json) — 前端懒加载完整层：dimensions/lmarena_scores/livebench_scores/composite/pricing/value。
 ## 根领域文档
@@ -64,6 +65,7 @@
 - [fetch-livebench.js](src/comparison/fetch-livebench.js) — LiveBench 官方 CSV（table_<release>.csv + categories_<release>.json，类别分=类别内 task 均值聚合），零依赖 CSV 解析。导出: `fetchLivebench, parseCsv, aggregateGroups`
 - [fetch-llm-stats.js](src/comparison/fetch-llm-stats.js) — llm-stats RSC flight payload 确定性解析（initialData 数组），字段白名单 + 值域校验 fail-closed。导出: `fetchLlmStats, extractFlightChunks, extractInitialData`
 - [model-identity.js](src/comparison/model-identity.js) — 模型身份解析深 Module：安全统一厂商、跨源格式、服务方式、评测挡位与评测环境（如 `codex-harness`），保留参数/MoE/模式等实体差异；唯一返回 model_key/revision/offering/degree/evaluation_profile，人工 alias 命中优先且别名冲突 fail-closed。导出: `resolveModelIdentity, createModelIdentityResolver, parseModelNameMetadata, normalizeVendor`
+- [model-series.js](src/comparison/model-series.js) — 模型系列分组深 Module：读取人工系列登记，按 series/member/configuration 三层生成稳定系列投影；revision 聚合为成员变体，canonical 不被系列合并。导出: `readSeriesConfig, seriesInfoFor, memberInfoFor, attachSeriesMetadata, validateSeriesProjection`
 - [identity-review.js](src/comparison/identity-review.js) — 名称歧义离线审计 Module：只收集确定性解析未分类 token，协调本地 Bonsai 建议与按阈值升级的 DeepSeek 复核；所有结果强制人工确认，不写正式 alias/数据。导出: `collectReviewCandidates, shouldEscalate, reviewCandidates`
 - [identity-review-ai.js](src/comparison/identity-review-ai.js) — 名称歧义 AI 建议 Adapter：复用结构化 JSON transport，本地 Bonsai 默认、DeepSeek 可显式升级；统一 prompt/schema，ledger 缺失 fail-closed。导出: `suggestIdentityReview`
 - [rebuild-comparison.js](src/comparison/rebuild-comparison.js) — **integrated 重建核心**：只消费统一模型身份解析（厂商限定 `model_key` + 明确 revision 隔离）→ 收拢服务 offering、degree 与 evaluation profile → 合并 4 源 → 维度归一化 → 综合分缺源按比例重分配 → 性价比；profile 分数进入 `lmarena_profiles`，不生成选择器行，同厂商同展示名最终强制追加身份消歧，写 index/data.json。导出: `rebuildIntegrated, buildModelRecord, slugify, buildAliasMap, livebenchParse, cleanModelDisplay`
@@ -157,7 +159,7 @@
 - [validate.js](src/maintenance/validate.js) — **校验聚合入口（require 即运行 + process.exit 0/1）**。scripts/validate.js 直接引用，CI 三处工作流依赖
 - [validate-catalog.js](src/maintenance/validate-catalog.js) — catalog 数据校验。导出: `validateCatalog, validateHtml`
 - [validate-news.js](src/maintenance/validate-news.js) — news 数据校验（news-config-v2 采集安全配置 + last-run X credits/request 账本 + hotspots + v2 候选层 min-candidates）。导出: `validateNews, validateMinNews, validateNewsConfig, validateLastRun`
-- [validate-comparison.js](src/maintenance/validate-comparison.js) — 模型对比数据校验（integrated index/data 交叉一致性、canonical/同厂商 display 唯一、identity/evaluation_profiles 契约、degree 不得伪装评测环境、composite 与 raw 自洽、维度 0-100、view-config/models-alias 契约形状；raw 快照存在则 schema 校验、缺失优雅跳过）。导出: `validateComparison, validateIndex, validateData`
+- [validate-comparison.js](src/maintenance/validate-comparison.js) — 模型对比数据校验（integrated index/data 交叉一致性、canonical/同厂商 display 唯一、series/member 引用完整性、identity/evaluation_profiles 契约、degree 不得伪装评测环境、composite 与 raw 自洽、维度 0-100、view-config/models-alias 契约形状；raw 快照存在则 schema 校验、缺失优雅跳过）。导出: `validateComparison, validateIndex, validateData`
 
 ## tests/ — 自动化回归
 - [catalog-interface.test.js](tests/catalog-interface.test.js) — 五模块目录 Interface、字段所有权、稳定引用、工具卡→三级详情以及场景/精选详情引用回归。
@@ -182,6 +184,7 @@
 - [news-pipeline-min.test.js](tests/news/news-pipeline-min.test.js) — v2 全链编排、总开关、采集状态汇总、credits→last-run 透传回归。
 - [validate-news-config.test.js](tests/maintenance/validate-news-config.test.js) — news-config-v2 安全字段与 last-run X credits/request schema 校验。
 - [rebuild-comparison.test.js](tests/comparison/rebuild-comparison.test.js) — 模型对比管线回归：4 源对齐/合并、models-alias 覆盖、维度归一化、综合分缺源重分配、性价比、单源/无综合分模型、LiveBench CSV 聚合、llm-stats RSC 解析、LMArena 快照 fail-closed。
+- [model-series.test.js](tests/comparison/model-series.test.js) — 系列投影回归：系列/成员/修订变体聚合、人工成员展示名与重叠登记优先级。
 - [fixtures/raw/](tests/comparison/fixtures/raw/) — 模型对比管线测试 raw 快照 fixtures（openrouter/lmarena/livebench/llm-stats 各源小样本）。
 
 ## scripts/ — 命令入口（薄包装；src/ 为纯逻辑）

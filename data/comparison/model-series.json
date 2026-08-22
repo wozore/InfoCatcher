@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "series": [
+    {
+      "series_key": "openai--gpt-5.5",
+      "display": "GPT-5.5",
+      "vendor": "openai",
+      "order": 10,
+      "match": { "vendor": "openai", "identity_prefix": "gpt-5.5" },
+      "member_rules": [
+        { "identity": "gpt-5.5", "display": "基础版", "order": 0 },
+        { "identity_prefix": "gpt-5.5-instant", "display": "Instant", "order": 10 },
+        { "identity_prefix": "gpt-5.5-pro", "display": "Pro", "order": 20 },
+        { "identity_prefix": "gpt-5.5-search", "display": "Search", "order": 30 }
+      ]
+    },
+    {
+      "series_key": "deepseek--deepseek-v4",
+      "display": "DeepSeek V4",
+      "vendor": "deepseek",
+      "order": 20,
+      "match": { "vendor": "deepseek", "identity_prefix": "deepseek-v4" },
+      "member_rules": [
+        { "identity": "deepseek-v4-flash-high-preview", "display": "Flash High Preview", "order": 15 },
+        { "identity_prefix": "deepseek-v4-flash-max", "display": "Flash Max", "order": 20 },
+        { "identity_prefix": "deepseek-v4-flash", "display": "Flash", "order": 10 },
+        { "identity": "deepseek-v4-pro-high-preview", "display": "Pro High Preview", "order": 35 },
+        { "identity_prefix": "deepseek-v4-pro-high", "display": "Pro High", "order": 36 },
+        { "identity_prefix": "deepseek-v4-pro-max", "display": "Pro Max", "order": 40 },
+        { "identity_prefix": "deepseek-v4-pro", "display": "Pro", "order": 30 }
+      ]
+    },
+    {
+      "series_key": "anthropic--claude-opus-4.8",
+      "display": "Claude Opus 4.8",
+      "vendor": "anthropic",
+      "order": 30,
+      "match": { "vendor": "anthropic", "identity_prefix": "claude-opus-4.8" }
+    },
+    {
+      "series_key": "anthropic--claude-opus-4.5",
+      "display": "Claude Opus 4.5",
+      "vendor": "anthropic",
+      "order": 31,
+      "match": { "vendor": "anthropic", "identity_prefix": "claude-opus-4.5" }
+    },
+    {
+      "series_key": "anthropic--claude-opus-4.1",
+      "display": "Claude Opus 4.1",
+      "vendor": "anthropic",
+      "order": 32,
+      "match": { "vendor": "anthropic", "identity_prefix": "claude-opus-4.1" }
+    },
+    {
+      "series_key": "anthropic--claude-opus-4",
+      "display": "Claude Opus 4",
+      "vendor": "anthropic",
+      "order": 33,
+      "match": { "vendor": "anthropic", "identity_prefix": "claude-opus-4" }
+    },
+    {
+      "series_key": "anthropic--claude-sonnet-4.6",
+      "display": "Claude Sonnet 4.6",
+      "vendor": "anthropic",
+      "order": 40,
+      "match": { "vendor": "anthropic", "identity_prefix": "claude-sonnet-4.6" }
+    },
+    {
+      "series_key": "anthropic--claude-sonnet-4.5",
+      "display": "Claude Sonnet 4.5",
+      "vendor": "anthropic",
+      "order": 41,
+      "match": { "vendor": "anthropic", "identity_prefix": "claude-sonnet-4.5" }
+    },
+    {
+      "series_key": "anthropic--claude-sonnet-4",
+      "display": "Claude Sonnet 4",
+      "vendor": "anthropic",
+      "order": 42,
+      "match": { "vendor": "anthropic", "identity_prefix": "claude-sonnet-4" }
+    }
+  ]
+}

@@ -77,6 +77,7 @@ const THEME_ICONS = { vision: '🎨', media: '🎬', dev: '💻', general: '🧠
 let viewConfig = null;
 let indexData = null;
 let indexModels = [];
+let indexSeries = [];
 let indexMap = new Map();
 let dataMap = new Map();
 let aliasEntries = [];
@@ -91,6 +92,7 @@ let activeVariants = {};        // canonical → { source: degree }
 let variantOpenFor = null;
 let searchQuery = '';
 let filterTheme = 'all';
+let expandedSeries = new Set();
 
 const loadingPromise = loadEntry();
 
@@ -109,6 +111,7 @@ async function loadEntry() {
     const aliasPayload = await aliasResp.json();
     aliasEntries = Array.isArray(aliasPayload.entries) ? aliasPayload.entries : [];
     indexModels = Array.isArray(indexData.models) ? indexData.models : [];
+    indexSeries = Array.isArray(indexData.series) ? indexData.series : buildFallbackSeries(indexModels);
     indexMap = new Map(indexModels.map(model => [model.canonical, model]));
     // 默认勾选来自 view-config（当前仅综合栏：综合分 + 性价比）；其余维度浏览态可手动勾选
     activeDims = Array.isArray(viewConfig.default_dimensions) && viewConfig.default_dimensions.length
@@ -125,7 +128,31 @@ async function loadEntry() {
   }
 }
 
-/** 懒加载 data.json（首次需要完整记录时触发；选择器只需要 index）。 */
+function buildFallbackSeries(models) {
+  const groups = new Map();
+  for (const model of models || []) {
+    const key = model.series_key || `${model.vendor || 'unknown'}--${model.family || model.identity || model.canonical}`;
+    const group = groups.get(key) || { series_key: key, display: model.series_display || model.family || model.display, vendor: model.vendor, theme: model.theme, member_count: 0, model_count: 0, max_composite_score: null, members: [] };
+    const memberKey = model.member_key || model.canonical;
+    let member = group.members.find(item => item.member_key === memberKey);
+    if (!member) {
+      member = { member_key: memberKey, display: model.member_display || model.display, order: model.member_order || 9999, default_canonical: model.canonical, variant_count: 0, variants: [] };
+      group.members.push(member);
+    }
+    member.variant_count += 1;
+    member.variants.push({ canonical: model.canonical, display: model.display, revision: (model.revisions || []).join(', ') || null, composite_score: model.composite_score ?? null, sources: model.sources || [] });
+    group.model_count += 1;
+    group.max_composite_score = Math.max(group.max_composite_score ?? -Infinity, model.composite_score ?? -Infinity);
+    groups.set(key, group);
+  }
+  for (const group of groups.values()) {
+    group.member_count = group.members.length;
+    for (const member of group.members) member.variants.sort((a, b) => (a.revision ? 1 : -1) - (b.revision ? 1 : -1));
+  }
+  return [...groups.values()];
+}
+
+
 let dataLoading = null;
 function ensureData() {
   if (dataMap.size || comparisonFailed) return Promise.resolve();
@@ -201,6 +228,10 @@ export function modelCap() {
   return viewConfig && Number.isInteger(viewConfig.model_cap) ? viewConfig.model_cap : 5;
 }
 
+function comparisonSeriesIconKey(value) {
+  return String(value || '').split('--').pop().replace(/\./g, '-');
+}
+
 function modelIcon(model) {
   const catalogCard = getToolCardItems().find(card => card.tool_key === model.canonical || card.tool_key === model.identity);
   if (catalogCard?.icon) return catalogCard.icon;
@@ -210,6 +241,7 @@ function modelIcon(model) {
 function modelIconHtml(model) {
   return brandIconHtml({
     vendorKey: model.vendor,
+    seriesKey: comparisonSeriesIconKey(model.series_key || model.family),
     modelKey: model.identity || model.canonical,
     emoji: modelIcon(model),
   });
@@ -469,50 +501,85 @@ function syncChartClass() {
 function renderFilterCats() {
   const box = document.getElementById('cmpFilterCats');
   if (!box) return;
-  const themes = [...new Set(indexModels.map(model => model.theme).filter(Boolean))];
+  const themes = [...new Set(indexSeries.map(series => series.theme).filter(Boolean))];
   box.innerHTML = '<button class="filter-chip' + (filterTheme === 'all' ? ' active' : '') + '" type="button" data-cmp-cat="all" aria-pressed="' + (filterTheme === 'all') + '">全部</button>' +
     themes.map(theme => '<button class="filter-chip' + (filterTheme === theme ? ' active' : '') + '" type="button" data-cmp-cat="' + escapeHtml(theme) + '" aria-pressed="' + (filterTheme === theme) + '">' + escapeHtml(theme) + '</button>').join('');
 }
 
-function filteredModels() {
+function selectedCountForSeries(series) {
+  return series.members.reduce((count, member) => count + (member.variants.some(variant => selected.includes(variant.canonical)) ? 1 : 0), 0);
+}
+
+function visibleMembersForSeries(series) {
   const query = searchQuery.trim().toLowerCase();
-  const list = indexModels.filter(model => {
-    if (filterTheme !== 'all' && model.theme !== filterTheme) return false;
+  if (!query) return series.members;
+  const seriesText = [series.display, series.series_key, series.vendor].filter(Boolean).join(' ').toLowerCase();
+  if (seriesText.includes(query)) return series.members;
+  return series.members.filter(member => {
+    const memberText = [member.display, member.member_key, ...member.variants.flatMap(variant => [variant.display, variant.canonical])].filter(Boolean).join(' ').toLowerCase();
+    return memberText.includes(query);
+  });
+}
+
+function filteredSeries() {
+  const query = searchQuery.trim().toLowerCase();
+  const list = indexSeries.filter(series => {
+    if (filterTheme !== 'all' && series.theme !== filterTheme) return false;
     if (!query) return true;
-    return [model.display, model.vendor, model.family, model.identity].filter(Boolean).join(' ').toLowerCase().includes(query);
+    return visibleMembersForSeries(series).length > 0;
   });
   list.sort((a, b) => {
-    const scoreA = Number.isFinite(a.composite_score) ? a.composite_score : -1;
-    const scoreB = Number.isFinite(b.composite_score) ? b.composite_score : -1;
+    const scoreA = Number.isFinite(a.max_composite_score) ? a.max_composite_score : -1;
+    const scoreB = Number.isFinite(b.max_composite_score) ? b.max_composite_score : -1;
     if (scoreB !== scoreA) return scoreB - scoreA;
     return String(a.display).localeCompare(String(b.display), 'zh-CN');
   });
   return list;
 }
 
+function renderMemberVariantSelect(member) {
+  if (member.variant_count <= 1) return '';
+  const selectedVariant = member.variants.find(variant => selected.includes(variant.canonical));
+  return '<select class="cmp-member-revision" data-cmp-revision="' + escapeHtml(member.member_key) + '" aria-label="选择修订版">' +
+    member.variants.map(variant => '<option value="' + escapeHtml(variant.canonical) + '"' + (variant.canonical === (selectedVariant?.canonical || member.default_canonical) ? ' selected' : '') + '>' + escapeHtml(variant.revision || '默认') + '</option>').join('') +
+    '</select>';
+}
+
 function renderModelList() {
   const list = document.getElementById('cmpModelList');
   if (!list) return;
-  const models = filteredModels();
-  if (!models.length) {
+  const groups = filteredSeries();
+  if (!groups.length) {
     list.innerHTML = renderState({ icon: '⌕', title: t('compare.empty.noMatch'), message: '', type: 'no-match' });
     return;
   }
-  list.innerHTML = models.map(model => {
-    const isSelected = selected.includes(model.canonical);
-    const singleSource = Array.isArray(model.sources) && model.sources.length === 1;
-    const coverage = singleSource
-      ? '<span class="cmp-coverage">' + escapeHtml(t('compare.onlySource', { source: SOURCE_META[model.sources[0]]?.label || model.sources[0] })) + '</span>'
-      : '<span class="cmp-coverage">' + (model.sources || []).length + ' 源</span>';
-    const score = Number.isFinite(model.composite_score)
-      ? '<span class="cmp-score">' + Number(model.composite_score).toFixed(1) + '</span>'
-      : '<span class="cmp-score cmp-score-na">' + t('compare.noComposite') + '</span>';
-    return '<button class="cmp-model-item' + (isSelected ? ' selected' : '') + '" type="button" data-cmp-pick="' + escapeHtml(model.canonical) + '" aria-pressed="' + isSelected + '">' +
-      '<span class="cmp-model-icon" aria-hidden="true">' + modelIconHtml(model) + '</span>' +
-      '<span class="cmp-model-text"><span class="cmp-model-name">' + escapeHtml(model.display) + '</span>' +
-      '<span class="cmp-model-vendor">' + escapeHtml(model.vendor) + '</span></span>' +
-      coverage + score +
-    '</button>';
+  list.innerHTML = groups.map(series => {
+    const members = visibleMembersForSeries(series);
+    const expanded = expandedSeries.has(series.series_key);
+    const selectedCount = selectedCountForSeries(series);
+    const memberHtml = expanded ? '<div class="cmp-series-members">' + members.map(member => {
+      const isSelected = member.variants.some(variant => selected.includes(variant.canonical));
+      const canonical = member.variants.find(variant => selected.includes(variant.canonical))?.canonical || member.default_canonical;
+      const model = indexMap.get(canonical) || indexMap.get(member.default_canonical);
+      const coverage = model && model.sources?.length ? '<span class="cmp-coverage">' + model.sources.length + ' 源</span>' : '';
+      return '<div class="cmp-model-member' + (isSelected ? ' selected' : '') + '">' +
+        '<button class="cmp-model-item" type="button" data-cmp-pick="' + escapeHtml(canonical) + '" aria-pressed="' + isSelected + '">' +
+          '<span class="cmp-model-icon" aria-hidden="true">' + (model ? modelIconHtml(model) : '') + '</span>' +
+          '<span class="cmp-model-text"><span class="cmp-model-name">' + escapeHtml(member.display) + '</span>' +
+          '<span class="cmp-model-vendor">' + escapeHtml(model?.display || '') + '</span></span>' +
+          coverage +
+        '</button>' + renderMemberVariantSelect(member) +
+      '</div>';
+    }).join('') + '</div>' : '';
+    const score = Number.isFinite(series.max_composite_score) ? Number(series.max_composite_score).toFixed(1) : t('compare.noComposite');
+    return '<section class="cmp-series' + (expanded ? ' expanded' : '') + '" data-cmp-series="' + escapeHtml(series.series_key) + '">' +
+      '<button class="cmp-series-toggle" type="button" data-cmp-series-toggle="' + escapeHtml(series.series_key) + '" aria-expanded="' + expanded + '">' +
+        '<span class="cmp-model-icon" aria-hidden="true">' + brandIconHtml({ vendorKey: series.vendor, seriesKey: comparisonSeriesIconKey(series.series_key) }) + '</span>' +
+        '<span class="cmp-series-text"><span class="cmp-series-name">' + escapeHtml(series.display) + '</span><span class="cmp-series-meta">' + selectedCount + ' / ' + series.member_count + ' 已选 · ' + series.member_count + ' 个成员</span></span>' +
+        '<span class="cmp-score' + (Number.isFinite(series.max_composite_score) ? '' : ' cmp-score-na') + '">' + escapeHtml(score) + '</span>' +
+        '<span class="cmp-series-chevron" aria-hidden="true">' + (expanded ? '⌃' : '⌄') + '</span>' +
+      '</button>' + memberHtml +
+    '</section>';
   }).join('');
 }
 
@@ -592,6 +659,15 @@ function syncModeButtons() {
 // ═══════════════════════════════════════════════════════════════
 // 结果渲染（图表 / 表格；图表 = 柱状图 ↔ 雷达图）
 // ═══════════════════════════════════════════════════════════════
+function renderUnselectedState() {
+  const query = searchQuery.trim();
+  const series = filteredSeries();
+  const description = query
+    ? `已找到 ${series.length} 个匹配系列。请在左侧展开系列并选择具体成员，再查看图表或表格。`
+    : '请在左侧展开系列并选择具体成员，再查看图表或表格。';
+  return renderState({ icon: '⌕', title: '选择要对比的模型', message: description, type: 'empty' });
+}
+
 function renderResults() {
   const out = document.getElementById('cmpResults');
   const status = document.getElementById('cmpStatus');
@@ -601,9 +677,10 @@ function renderResults() {
       out.innerHTML = renderState({ icon: '⚠️', title: t('compare.empty.loadFailed'), message: t('compare.empty.notBuilt'), type: 'error' });
       return;
     }
-    // 未选择模型：默认显示全部维度的实时排行（浏览态）
+    // 左侧搜索只负责筛选系列；未选择具体 canonical 时不渲染 Top N 浏览柱图，
+    // 避免多结果被 SVG 压缩成一排竖线而误当作搜索结果。
     if (!selected.length) {
-      out.innerHTML = renderBrowse(activeDims);
+      out.innerHTML = renderUnselectedState();
       return;
     }
     const models = selected.map(getModelData).filter(Boolean);
@@ -980,6 +1057,23 @@ function selectModel(canonical) {
   dispatchModelSelection();
 }
 
+function selectSeriesVariant(memberKey, canonical) {
+  if (!indexMap.has(canonical)) return;
+  const series = indexSeries.find(item => item.members.some(member => member.member_key === memberKey));
+  const member = series?.members.find(item => item.member_key === memberKey);
+  if (!member) return;
+  const previous = member.variants.find(variant => selected.includes(variant.canonical))?.canonical;
+  if (previous && previous !== canonical) {
+    selected = selected.map(item => item === previous ? canonical : item);
+    delete activeVariants[previous];
+    activeVariants[canonical] = { ...(indexMap.get(canonical).default_degree || {}) };
+    renderAll();
+    dispatchModelSelection();
+    return;
+  }
+  if (!previous) selectModel(canonical);
+}
+
 function renderAll() {
   renderChips();
   renderModelList();
@@ -1018,6 +1112,8 @@ export async function routeApiModelToCompare(card) {
     delete activeVariants[canonical];
     document.getElementById('cmpVariantPopover')?.remove();
   }
+  const seriesKey = indexMap.get(canonical)?.series_key;
+  if (seriesKey) expandedSeries.add(seriesKey);
   renderAll();
   dispatchModelSelection();
   return true;
@@ -1035,18 +1131,33 @@ export function bindModelCompareEvents() {
   let timer;
   cmpSearch?.addEventListener('input', () => {
     clearTimeout(timer);
-    timer = setTimeout(() => { searchQuery = cmpSearch.value; renderModelList(); }, 150);
+    timer = setTimeout(() => {
+      searchQuery = cmpSearch.value;
+      expandedSeries.clear();
+      renderModelList();
+      renderResults();
+    }, 150);
     cmpSearchClear.style.display = cmpSearch.value ? 'block' : 'none';
   });
   cmpSearchClear?.addEventListener('click', () => {
     cmpSearch.value = '';
     searchQuery = '';
+    expandedSeries.clear();
     cmpSearchClear.style.display = 'none';
     renderModelList();
+    renderResults();
     cmpSearch.focus();
   });
 
   panel.addEventListener('click', event => {
+    const seriesToggle = event.target.closest('[data-cmp-series-toggle]');
+    if (seriesToggle) {
+      const key = seriesToggle.dataset.cmpSeriesToggle;
+      if (expandedSeries.has(key)) expandedSeries.delete(key);
+      else expandedSeries.add(key);
+      renderModelList();
+      return;
+    }
     const pick = event.target.closest('[data-cmp-pick]');
     if (pick) {
       selectModel(pick.dataset.cmpPick);
@@ -1126,10 +1237,16 @@ export function bindModelCompareEvents() {
     const cat = event.target.closest('[data-cmp-cat]');
     if (cat) {
       filterTheme = cat.dataset.cmpCat;
+      expandedSeries.clear();
       renderFilterCats();
       renderModelList();
+      renderResults();
       return;
     }
+  });
+  panel.addEventListener('change', event => {
+    const revision = event.target.closest('[data-cmp-revision]');
+    if (revision) selectSeriesVariant(revision.dataset.cmpRevision, revision.value);
   });
   // 变体圆圈键盘可达（Enter/空格 触发选择）
   panel.addEventListener('keydown', event => {

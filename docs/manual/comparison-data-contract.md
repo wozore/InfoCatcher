@@ -1,6 +1,6 @@
 # 对比页数据契约（integrated 层）
 
-> 版本：2026-08-20 v2。配合 `comparison-data-sources.md`（设计决策）阅读。本文定义 `data/comparison/` 的**数据文件契约**与**前端渲染规则映射**，是数据管线与前端共同的唯一事实源。设计决策如有冲突，以本文为准并回写设计文档。
+> 版本：2026-08-22 v2.1。配合 `comparison-data-sources.md`（设计决策）阅读。本文定义 `data/comparison/` 的**数据文件契约**与**前端渲染规则映射**，是数据管线与前端共同的唯一事实源。设计决策如有冲突，以本文为准并回写设计文档。
 
 ## 1. 文件布局
 
@@ -9,6 +9,7 @@ data/comparison/
 ├── refresh-config.json          # 抓取编排配置（频率/fullEvery/config 清单/count 状态）——管线专用
 ├── view-config.json             # 前端展示配置（维护者可改，管线不覆盖）
 ├── models-alias.json            # 主键对齐人工登记表（管线读取）
+├── model-series.json            # 系列/成员人工登记与展示顺序（管线读取）
 ├── aa-internal.json             # AA 内部参考（二期，本期不建）
 ├── raw/                         # 4 源快照（管线写，前端不读）
 │   ├── openrouter.json
@@ -16,13 +17,13 @@ data/comparison/
 │   ├── livebench.json
 │   └── llm-stats.json
 └── integrated/                  # 前端唯一入口层（管线重建，前端只读）
-    ├── index.json               # 小：模型列表 + 指针 + 综合分（选择器用）
+    ├── index.json               # 小：系列投影 + 模型列表 + 指针 + 综合分（选择器用）
     └── data.json                # 大：完整分数/定价/上下文/综合分（懒加载）
 ```
 
 **关键约定**：
 - 源 key 统一：`openrouter` / `lmarena` / `livebench` / `llm_stats`（JSON 内不用连字符，避免前端方括号访问）。
-- `integrated/` 由 `rebuild-comparison.js` 全量重建；`view-config.json` / `models-alias.json` / `refresh-config.json` 为维护者手工维护，**管线不得覆盖**。
+- `integrated/` 由 `rebuild-comparison.js` 全量重建；`view-config.json` / `models-alias.json` / `model-series.json` / `refresh-config.json` 为维护者手工维护，**管线不得覆盖**。
 - 前端相对路径 fetch：`data/comparison/view-config.json`、`data/comparison/integrated/index.json`、`data/comparison/integrated/data.json`。
 
 ## 2. 维度键枚举（dimension keys，唯一）
@@ -63,6 +64,25 @@ data/comparison/
   "schema_version": 2,
   "generated_at": "2026-08-19T00:00:00Z",
   "model_count": 460,
+  "series_count": 120,
+  "series": [
+    {
+      "series_key": "openai--gpt-5.6",
+      "display": "GPT-5.6",
+      "vendor": "openai",
+      "member_count": 4,
+      "model_count": 4,
+      "members": [
+        {
+          "member_key": "openai--gpt-5.6-sol",
+          "display": "基础版",
+          "default_canonical": "openai--gpt-5.6-sol",
+          "variant_count": 1,
+          "variants": [{ "canonical": "openai--gpt-5.6-sol", "revision": null }]
+        }
+      ]
+    }
+  ],
   "sources": {
     "openrouter": { "fetched_at": "2026-08-19T00:00:00Z", "count": 414 },
     "lmarena":   { "fetched_at": "2026-08-19T00:00:00Z", "count": 320 },
@@ -80,6 +100,12 @@ data/comparison/
       "display": "GPT-5.6 Sol",
       "vendor": "openai",
       "theme": "general",
+      "series_key": "openai--gpt-5.6",
+      "series_display": "GPT-5.6",
+      "member_key": "openai--gpt-5.6-sol",
+      "member_display": "基础版",
+      "member_order": 0,
+      "member_variant_count": 1,
       "has_composite": true,
       "composite_score": 73.7,
       "degrees": { "lmarena": ["high", "xhigh"], "livebench": ["high"] },
@@ -100,8 +126,33 @@ data/comparison/
 - `degrees`：该模型各源可选程度变体（供变体圆圈）；无变体则源缺失或空数组。它与 `offerings`、模型身份规格严格分离。
 - `file`：完整数据所在文件，当前全部 `data.json`（分块时改此指针）。
 - `sources`：有数据的源列表（前端标「仅 X 源」）。
+- `series`：轻量系列投影；只保存系列、成员与 canonical 变体引用，不复制完整分数。`series_key` 是选择器分组键，`member_key` 是系列内具体产品键。
+- `series_key` / `series_display`：人工登记优先的系列归属与展示名；自动回退只用于组织未登记模型，不能用于 canonical 合并。
+- `member_key` / `member_display`：系列内具体产品/模型的稳定键与短名；同一 `member_key` 的多个明确 revision 收拢到 `series.members[].variants`，选择器默认只显示一个成员行。
+- `degree`、`evaluation_profile`、`offering` 与 revision：配置层信息，不生成系列成员；degree 仍由模型完整数据中的 `degrees` 提供，revision 通过成员变体选择。
 
-## 4. integrated/data.json 契约
+## 3.1 model-series.json（系列人工登记）
+
+```json
+{
+  "schema_version": 1,
+  "series": [
+    {
+      "series_key": "openai--gpt-5.6",
+      "display": "GPT-5.6",
+      "vendor": "openai",
+      "match": { "vendor": "openai", "identity_prefix": "gpt-5.5" },
+      "member_rules": [
+        { "identity": "gpt-5.5", "display": "基础版", "order": 0 },
+        { "identity_prefix": "gpt-5.5-pro", "display": "Pro", "order": 20 }
+      ]
+    }
+  ]
+}
+```
+
+人工登记只影响系列容器和展示顺序，不改变 `canonical`、源级分数或综合分。匹配重叠时以登记数组中更具体的规则优先；无法安全判断的模型回退为独立的 `<vendor>--<family>` 系列。
+
 
 ```json
 {
@@ -234,7 +285,7 @@ AI 审计不参与 `rebuild`，也不得直接写入 `models-alias.json`。确�
 
 | UI 区块 | 数据源 | 规则 |
 |---|---|---|
-| 模型选择器（模型 tab 顶部） | `index.json` models | 搜索 `display` + `vendor` + `family` + `identity`；类别筛选 `theme`；默认按 `composite_score` 降序（null 排后）；展示 `display` + 源覆盖标记。前端不得按名称去重或合并实体。 |
+| 模型选择器（模型 tab 顶部） | `index.json` series + models | 先按 `series` 渲染系列容器，再展开 `members` 选择具体 canonical；搜索同时匹配系列、成员、vendor、canonical/display，命中成员时只突出该成员；类别筛选按系列 theme；系列按最高有效 `max_composite_score` 排序，成员按人工 order；前端不得按名称去重或合并实体。revision 只在成员内的 `variants` 下拉选择，degree/profile/offering 不生成成员行。 |
 | 已选 chips | 选择器结果 | 上限 `model_cap`；每 chip 内模型 icon 可点 → **变体圆圈** |
 | 变体圆圈 | `data.json` 对应模型 `degrees`/`lmarena_scores`/`livebench_scores` | 点 icon → icon 周围顺时针 360° 平分圆圈（**仅列「有 ≥2 个挡位」的源的挡位并集**；单挡位源不是可切换变体不列圈，避免点了只搭别源上次挡位导致得分随历史漂移）；点圈 → **按所选挡位重算并实时反映**：源级维度（lmarena agent 子维比例分 / Elo 榜按全模型 min-max；livebench 组 → reasoning/coding/communication/instruction_following/agentic_coding/math_reasoning）+ composite（`composite.available` 底座，lmarena/livebench 源级分换挡，缺源按比例重分配）+ value（全表 min-max），然后重渲染图表/表格；状态说明如「已切换至 Claude Opus 5 (High)：LMArena agent 分 0.122→0.110」 |
 | 综合分块（默认勾选） | `dimensions.composite.value` | 柱状图块：每模型一行 icon+横向柱+数值 |

@@ -1452,12 +1452,31 @@ main:has(#view-compare.active.cmp-wide-active) { max-width: none; }
 
 .compare-model-panel { position: relative; } /* 变体圆圈弹窗的绝对定位锚点 */
 .cmp-layout { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 20px; align-items: start; }
-.cmp-selector { padding: 18px; position: sticky; top: 92px; max-height: calc(100vh - 120px); display: flex; flex-direction: column; }
+.cmp-selector { padding: 18px; position: sticky; top: 92px; height: calc(100vh - 120px); min-height: 0; display: flex; flex-direction: column; }
+.cmp-selector-head { flex: 0 0 auto; }
 .cmp-selector-head .section-title { margin-bottom: 3px; }
 .cmp-search-box { margin: 12px 0 8px; }
 .cmp-cats { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
 .cmp-sort-hint { font-size: 12px; }
-.cmp-model-list { margin-top: 10px; overflow-y: auto; display: grid; gap: 6px; }
+.cmp-model-list { margin-top: 10px; min-height: 0; flex: 1 1 auto; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; align-items: stretch; gap: 8px; }
+.cmp-series { min-width: 0; min-height: 46px; flex: 0 0 auto; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); overflow: hidden; }
+.cmp-series.expanded { border-color: var(--primary); }
+.cmp-series-toggle {
+  display: flex; align-items: center; gap: 8px; min-width: 0; min-height: 48px; width: 100%; padding: 10px;
+  border: 0; background: transparent; cursor: pointer; text-align: left; color: var(--text);
+}
+.cmp-series-toggle:hover { background: var(--primary-light); }
+.cmp-series-text { display: flex; flex-direction: column; min-width: 0; flex: 1 1 auto; }
+.cmp-series-name { font-size: 13px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cmp-series-meta { font-size: 11px; color: var(--text-hint); margin-top: 2px; }
+.cmp-series-chevron { color: var(--text-secondary); font-size: 15px; width: 16px; text-align: center; }
+.cmp-series-members { display: grid; align-content: start; gap: 4px; padding: 0 6px 6px 18px; border-top: 1px solid var(--border); }
+.cmp-model-member { display: grid; grid-template-columns: minmax(0, 1fr) auto; min-width: 0; min-height: 42px; gap: 4px; align-items: center; border-radius: var(--radius-sm); }
+.cmp-model-member.selected { background: var(--primary-light); }
+.cmp-model-member .cmp-model-item { min-width: 0; min-height: 40px; border-color: transparent; background: transparent; padding: 7px 4px; }
+.cmp-model-member .cmp-model-item:hover { border-color: var(--primary); background: var(--surface); }
+.cmp-member-revision { max-width: 80px; border: 1px solid var(--border); background: var(--surface); color: var(--text-secondary); border-radius: var(--radius-sm); padding: 4px 2px; font-size: 11px; }
+.cmp-member-revision:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 1px; }
 .cmp-model-item {
   display: flex; align-items: center; gap: 8px; padding: 8px 10px;
   border: 1px solid var(--border); background: var(--surface); border-radius: var(--radius-sm);
@@ -2129,8 +2148,8 @@ main:has(#view-compare.active.cmp-wide-active) { max-width: none; }
   .compare-bar-row { grid-template-columns: 1fr; gap: 8px; }
   /* 模型对比移动端：选择器不再 sticky，转单列堆叠；雷达图模型标签收拢到图上方 */
   .cmp-layout { grid-template-columns: 1fr; gap: 14px; }
-  .cmp-selector { position: static; max-height: none; }
-  .cmp-model-list { max-height: 320px; }
+  .cmp-selector { position: static; height: auto; max-height: none; }
+  .cmp-model-list { max-height: 320px; flex: 0 1 auto; }
   /* 窄屏柱状图回退定高（height:auto 会随窄宽塌缩柱高，定高 + meet 居中保持柱高稳定） */
   .cmp-vchart-svg { height: 280px; max-height: none; }
   .cmp-radar-model { position: static; justify-content: center; margin-bottom: 4px; }

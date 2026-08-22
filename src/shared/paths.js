@@ -104,6 +104,7 @@ const COMPARISON_FILES = Object.freeze({
   refreshConfig: path.join(COMPARISON_DIR, 'refresh-config.json'), // 抓取编排配置（频率/fullEvery/config 清单/count 状态）
   viewConfig: path.join(COMPARISON_DIR, 'view-config.json'),       // 前端展示配置（维护者可改，管线不覆盖）
   modelsAlias: path.join(COMPARISON_DIR, 'models-alias.json'),     // 主键对齐人工登记表（管线读取）
+  modelSeries: path.join(COMPARISON_DIR, 'model-series.json'),     // 系列分组人工登记与成员展示规则
   rawOpenRouter: path.join(COMPARISON_RAW_DIR, 'openrouter.json'),
   rawLmarena: path.join(COMPARISON_RAW_DIR, 'lmarena.json'),
   rawLivebench: path.join(COMPARISON_RAW_DIR, 'livebench.json'),
