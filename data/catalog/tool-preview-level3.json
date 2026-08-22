@@ -2089,158 +2089,6 @@
       "official_date": "2025-11-13"
     },
     {
-      "id": "tool-level3:spark-ultra",
-      "vendor_key": "xunfei",
-      "detail_kind": "api_model",
-      "theme": "general",
-      "title": "Spark 4.0 Ultra",
-      "vendor_label": "科大讯飞",
-      "icon": "🔥",
-      "official_url": "https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html",
-      "status": "active",
-      "summary": "讯飞最强大的星火非思考大模型，已升级至 X1.5 快思考模式，32K 上下文。",
-      "one_m_context": {
-        "status": "not_supported",
-        "tokens": 32000,
-        "conditions": "32K 上下文"
-      },
-      "api_pricing": {
-        "status": "provided",
-        "rate_cards": [
-          {
-            "label": "中国区价格（约）",
-            "currency": "CNY",
-            "unit": "per_1m_tokens",
-            "input_uncached": 2.1,
-            "conditions": "约 ¥2.1/MTok（按 0.021元/万tokens 换算）；以官方控制台实际价格为准。",
-            "input_cached": 0,
-            "output": 2.1
-          }
-        ]
-      },
-      "plan": {
-        "status": "not_applicable",
-        "reason": "当前记录不是订阅套餐。"
-      },
-      "applicable_scenarios": [
-        {
-          "title": "中文结构化抽取与逻辑推理",
-          "description": "旗舰级大语言模型，适合企业级应用和复杂推理。"
-        }
-      ],
-      "inapplicable_scenarios": [
-        {
-          "title": "成本敏感的高频调用",
-          "description": "可选择 Spark Lite（免费）或 Spark Pro。"
-        }
-      ],
-      "sources": [
-        {
-          "title": "星火认知大模型 HTTP 接口文档",
-          "url": "https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html"
-        }
-      ],
-      "official_date": "2024-06-27"
-    },
-    {
-      "id": "tool-level3:spark-pro",
-      "vendor_key": "xunfei",
-      "detail_kind": "api_model",
-      "theme": "general",
-      "title": "Spark Pro",
-      "vendor_label": "科大讯飞",
-      "icon": "🔥",
-      "official_url": "https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html",
-      "status": "active",
-      "summary": "专业级大语言模型，128K 上下文可选，适合文本和智能问答。",
-      "one_m_context": {
-        "status": "not_supported",
-        "tokens": 128000,
-        "conditions": "128K 上下文"
-      },
-      "api_pricing": {
-        "status": "provided",
-        "rate_cards": [
-          {
-            "label": "中国区价格（约）",
-            "currency": "CNY",
-            "unit": "per_1m_tokens",
-            "input_uncached": 2.1,
-            "conditions": "约 ¥2.1/MTok；已支持搜索、天气等内置插件；以官方控制台实际价格为准。",
-            "input_cached": 0,
-            "output": 2.1
-          }
-        ]
-      },
-      "plan": {
-        "status": "not_applicable",
-        "reason": "当前记录不是订阅套餐。"
-      },
-      "applicable_scenarios": [
-        {
-          "title": "文本处理与智能问答",
-          "description": "性能和响应速度均衡，适合对时效性有要求的业务场景。"
-        }
-      ],
-      "inapplicable_scenarios": [
-        {
-          "title": "需要最高精度和复杂推理",
-          "description": "应选择 Spark Ultra。"
-        }
-      ],
-      "sources": [
-        {
-          "title": "星火认知大模型 HTTP 接口文档",
-          "url": "https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html"
-        }
-      ],
-      "official_date": "2024-07-18"
-    },
-    {
-      "id": "tool-level3:spark-lite",
-      "vendor_key": "xunfei",
-      "detail_kind": "api_model",
-      "theme": "general",
-      "title": "Spark Lite",
-      "vendor_label": "科大讯飞",
-      "icon": "🔥",
-      "official_url": "https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html",
-      "status": "active",
-      "summary": "轻量级大模型，免费使用，响应速度最高。",
-      "one_m_context": {
-        "status": "not_supported",
-        "tokens": 8000,
-        "conditions": "8K 上下文"
-      },
-      "api_pricing": {
-        "status": "not_provided",
-        "note": "Lite 版本 API 永久免费，官方未提供标准 token 计价；以官方控制台实际额度为准。"
-      },
-      "plan": {
-        "status": "not_applicable",
-        "reason": "当前记录不是订阅套餐。"
-      },
-      "applicable_scenarios": [
-        {
-          "title": "高并发低延迟场景",
-          "description": "适合对成本敏感、对响应速度要求高的简单任务。"
-        }
-      ],
-      "inapplicable_scenarios": [
-        {
-          "title": "复杂推理或专业任务",
-          "description": "免费模型能力有限，高要求场景应选择 Pro 或 Ultra。"
-        }
-      ],
-      "sources": [
-        {
-          "title": "星火认知大模型 HTTP 接口文档",
-          "url": "https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html"
-        }
-      ],
-      "official_date": "2024-05-22"
-    },
-    {
       "id": "tool-level3:mistral-medium-3.5",
       "vendor_key": "mistral",
       "detail_kind": "api_model",
@@ -3354,92 +3202,6 @@
       "id": "tool-level3:gpt-image-2"
     },
     {
-      "vendor_key": "xunfei",
-      "detail_kind": "api_model",
-      "title": "Spark X2",
-      "vendor_label": "科大讯飞",
-      "icon": "🤖",
-      "official_url": "https://xinghuo.xfyun.cn/sparkapi",
-      "status": "active",
-      "summary": "讯飞星火大模型是科大讯飞推出的AI大语言模型，提供多种能力，包括深度推理、文本生成、语音识别等，支持API调用。",
-      "one_m_context": {
-        "status": "not_applicable",
-        "reason": "官方未明确支持1M上下文"
-      },
-      "api_pricing": {
-        "status": "available",
-        "rate_cards": [
-          {
-            "label": "推理套餐",
-            "pricing_basis": "token",
-            "currency": "CNY",
-            "metrics": [
-              {
-                "label": "输入",
-                "amount": 2,
-                "unit": "元/百万tokens"
-              },
-              {
-                "label": "输出",
-                "amount": 6,
-                "unit": "元/百万tokens"
-              }
-            ],
-            "conditions": "Spark X2模型，按tokens计费，输入2元/百万，输出6元/百万"
-          }
-        ]
-      },
-      "plan": {
-        "status": "not_applicable",
-        "reason": "当前记录不是订阅套餐。"
-      },
-      "applicable_scenarios": [
-        {
-          "title": "知识问答",
-          "description": "根据上下文快速解答各种问题"
-        },
-        {
-          "title": "数学推理",
-          "description": "执行复杂数学计算与逻辑推理"
-        },
-        {
-          "title": "办公辅助",
-          "description": "生成文档、PPT等办公材料"
-        }
-      ],
-      "inapplicable_scenarios": [
-        {
-          "title": "实时语音交互",
-          "description": "语音类模型支持实时交互，但文本模型不支持"
-        }
-      ],
-      "sources": [
-        {
-          "title": "讯飞星火大模型API-大模型API-大模型接口-科大讯飞",
-          "url": "https://xinghuo.xfyun.cn/sparkapi?scr=price"
-        },
-        {
-          "title": "讯飞星火大语言模型",
-          "url": "https://xinghuo.xfyun.cn/sparkapi"
-        },
-        {
-          "title": "讯飞星火大模型API-大模型API-大模型接口-科大讯飞",
-          "url": "https://xinghuo.xfyun.cn/sparkapi?scr=true"
-        },
-        {
-          "title": "讯飞星火大模型-AI大语言模型-星火大模型-科大讯飞",
-          "url": "https://xinghuo.xfyun.cn/"
-        },
-        {
-          "title": "智能绘画",
-          "url": "https://xinghuo.xfyun.cn/desk"
-        }
-      ],
-      "official_date": "2026-06-12",
-      "theme": "general",
-      "id": "tool-level3:spark-x2"
-    },
-    {
       "vendor_key": "kuaishou",
       "detail_kind": "api_model",
       "title": "Kling 3.0",
@@ -3561,6 +3323,1883 @@
       "official_date": "2026-02-06",
       "theme": "general",
       "id": "tool-level3:kling-3-0"
+    },
+    {
+      "vendor_key": "zhipu",
+      "detail_kind": "api_model",
+      "title": "GLM-5.3",
+      "vendor_label": "智谱 AI（Z.ai）",
+      "icon": "🤖",
+      "official_url": "https://docs.bigmodel.cn/cn/guide/models/text/glm-5.3",
+      "status": "active",
+      "summary": "智谱最新旗舰模型，以极致后训练 Scaling 实现能力跃迁，编程与 Agent 能力再突破。",
+      "one_m_context": {
+        "status": "native",
+        "tokens": 1048576,
+        "conditions": "官方文档声明上下文窗口为 1M。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "标准按量付费",
+            "pricing_basis": "per_million_tokens",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "输入价格",
+                "amount": 1.4,
+                "unit": "USD"
+              },
+              {
+                "label": "缓存输入价格",
+                "amount": 0.26,
+                "unit": "USD"
+              },
+              {
+                "label": "输出价格",
+                "amount": 4.4,
+                "unit": "USD"
+              }
+            ],
+            "conditions": "文本模型 GLM-5.3 按每百万 Token 计费，输入 1.4 美元，缓存输入 0.26 美元，输出 4.4 美元，缓存输入存储限时免费。"
+          },
+          {
+            "label": "GLM Coding Plan 订阅制",
+            "pricing_basis": "subscription",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "Lite 月度价格",
+                "amount": 18,
+                "unit": "USD"
+              },
+              {
+                "label": "Pro 月度价格",
+                "amount": 60,
+                "unit": "USD"
+              },
+              {
+                "label": "Max 月度价格",
+                "amount": 150,
+                "unit": "USD"
+              }
+            ],
+            "conditions": "订阅制套餐，适用于 AI 编程工具，包含额度限制，具体价格及权益详见官方文档。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "编程开发",
+          "description": "适合代码编写、Bug 修复、重构及复杂项目交付。"
+        },
+        {
+          "title": "智能体任务",
+          "description": "支持多步骤工具调用与自动化任务执行。"
+        },
+        {
+          "title": "网络安全分析",
+          "description": "适用于白盒代码审查、漏洞发现与验证。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "实时交互式对话",
+          "description": "模型定位为旗舰基座模型，非为实时对话优化。"
+        },
+        {
+          "title": "低延迟高并发场景",
+          "description": "付费较高，可能不适合成本敏感的大规模实时调用。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "GLM-5.3 - Overview - Z.AI DEVELOPER DOCUMENT",
+          "url": "https://docs.z.ai/guides/llm/glm-5.3"
+        },
+        {
+          "title": "Pricing - Overview - Z.AI DEVELOPER DOCUMENT",
+          "url": "https://docs.z.ai/guides/overview/pricing"
+        },
+        {
+          "title": "GLM-5.3 - 智谱AI开放文档",
+          "url": "https://docs.bigmodel.cn/cn/guide/models/text/glm-5.3"
+        },
+        {
+          "title": "Overview - Z.AI DEVELOPER DOCUMENT",
+          "url": "https://docs.z.ai/devpack/overview"
+        }
+      ],
+      "official_date": "2025-07-15",
+      "theme": "general",
+      "id": "tool-level3:glm-5-3"
+    },
+    {
+      "vendor_key": "google",
+      "detail_kind": "api_model",
+      "title": "Gemini 3.7 Flash",
+      "vendor_label": "Google",
+      "icon": "🤖",
+      "official_url": "https://ai.google.dev/gemini-api/docs/models/gemini-3.7-flash",
+      "status": "active",
+      "summary": "Gemini 3.7 Flash is a natively multimodal reasoning model designed for coding and agentic workflows.",
+      "one_m_context": {
+        "status": "native",
+        "tokens": 1048576,
+        "conditions": "输入文本、图片、视频、音频和PDF"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "推广折扣",
+            "pricing_basis": "按token计费",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "输入token",
+                "amount": 0.75,
+                "unit": "每1M"
+              },
+              {
+                "label": "输出token",
+                "amount": 3.75,
+                "unit": "每1M"
+              }
+            ],
+            "conditions": "2026年12月31日前适用"
+          },
+          {
+            "label": "标准定价",
+            "pricing_basis": "按token计费",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "输入token",
+                "amount": 1.5,
+                "unit": "每1M"
+              },
+              {
+                "label": "输出token",
+                "amount": 7.5,
+                "unit": "每1M"
+              }
+            ],
+            "conditions": "2027年1月1日起生效"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "复杂编码",
+          "description": "处理软件工程难题，高正确率"
+        },
+        {
+          "title": "智能体工作流",
+          "description": "执行多步代理操作，提升可靠性"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "图像生成",
+          "description": "不支持图像生成能力"
+        },
+        {
+          "title": "音频生成",
+          "description": "不支持音频生成能力"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Gemini 3.7 Flash | Gemini API - Google AI for Developers",
+          "url": "https://ai.google.dev/gemini-api/docs/models/gemini-3.7-flash"
+        },
+        {
+          "title": "Release notes | Gemini API - Google AI for Developers",
+          "url": "https://ai.google.dev/gemini-api/docs/changelog"
+        },
+        {
+          "title": "What's new in Gemini 3.7 Flash - Interactions API",
+          "url": "https://ai.google.dev/gemini-api/docs/latest-model"
+        },
+        {
+          "title": "What's new in Gemini 3.7 Flash - generateContent API",
+          "url": "https://ai.google.dev/gemini-api/docs/generate-content/latest-model"
+        }
+      ],
+      "official_date": "2026-08-13",
+      "theme": "general",
+      "id": "tool-level3:gemini-3-7-flash"
+    },
+    {
+      "vendor_key": "google",
+      "detail_kind": "api_model",
+      "title": "Gemini 3.6 Flash",
+      "vendor_label": "Google",
+      "icon": "🤖",
+      "official_url": "https://ai.google.dev/gemini-api/docs/models/gemini-3.6-flash",
+      "status": "active",
+      "summary": "Gemini 3.6 Flash 是 Google 的旗舰级 Flash 模型，针对真实世界任务优化，提供高速度、低成本与前沿智能，特别擅长代码生成、代理执行和空间推理。",
+      "one_m_context": {
+        "status": "native",
+        "tokens": 1048576,
+        "conditions": "输入 token 限制为 1,048,576。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "Gemini 3.6 Flash 定价",
+            "pricing_basis": "按 token 计费",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "输入 token 价格",
+                "amount": 0.1,
+                "unit": "美元/百万 token"
+              },
+              {
+                "label": "输出 token 价格",
+                "amount": 0.4,
+                "unit": "美元/百万 token"
+              }
+            ],
+            "conditions": "价格基于官方定价页面，适用于标准 API 调用。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "复杂编码循环",
+          "description": "适用于涉及复杂编码和迭代的快速代理循环。"
+        },
+        {
+          "title": "代理式执行",
+          "description": "适合需要代理执行和规划能力的任务。"
+        },
+        {
+          "title": "空间推理",
+          "description": "适用于需要空间理解的应用。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "音频生成",
+          "description": "不支持音频生成功能。"
+        },
+        {
+          "title": "图像生成",
+          "description": "不支持图像生成功能。"
+        },
+        {
+          "title": "Live API",
+          "description": "不支持 Live API。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Gemini 3.6 Flash | Gemini API - Google AI for Developers",
+          "url": "https://ai.google.dev/gemini-api/docs/models/gemini-3.6-flash"
+        },
+        {
+          "title": "Release notes | Gemini API - Google AI for Developers",
+          "url": "https://ai.google.dev/gemini-api/docs/changelog"
+        },
+        {
+          "title": "Gemini API | Google AI for Developers",
+          "url": "https://ai.google.dev/gemini-api/docs"
+        },
+        {
+          "title": "Rate limits | Gemini API - Google AI for Developers",
+          "url": "https://ai.google.dev/gemini-api/docs/rate-limits"
+        },
+        {
+          "title": "Gemini Developer API pricing",
+          "url": "https://ai.google.dev/gemini-api/docs/pricing"
+        }
+      ],
+      "official_date": "2026-07-21",
+      "theme": "general",
+      "id": "tool-level3:gemini-3-6-flash"
+    },
+    {
+      "vendor_key": "google",
+      "detail_kind": "api_model",
+      "title": "Gemma 4",
+      "vendor_label": "Google",
+      "icon": "🤖",
+      "official_url": "https://ai.google.dev/gemma/docs/core/model_card_4",
+      "status": "active",
+      "summary": "Gemma 4 模型系列是 Google DeepMind 开发的开放权重模型，支持多模态输入和文本输出，具备推理能力、可配置思考模式，适用于文本生成、编码和推理等任务。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "Gemma 4 最大上下文窗口为 256K tokens，未达到 1M 上下文长度要求。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "标准付费档",
+            "pricing_basis": "每百万Tokens",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "输入价格",
+                "amount": 0.05,
+                "unit": "USD/1M tokens"
+              },
+              {
+                "label": "输出价格",
+                "amount": 0.2,
+                "unit": "USD/1M tokens"
+              }
+            ],
+            "conditions": "付费档适用于文本、图像、视频输入，音频输入价格为每百万Tokens 0.35美元。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "多模态内容理解",
+          "description": "处理文本和图像输入，支持视觉问答与图像描述"
+        },
+        {
+          "title": "代码生成与辅助",
+          "description": "支持代码补全、代码解释和编程相关问题解答"
+        },
+        {
+          "title": "教育科研场景",
+          "description": "用于学术研究、教学演示和实验性项目开发"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "音频生成任务",
+          "description": "模型不支持音频输出，仅特定版本支持音频输入"
+        },
+        {
+          "title": "大规模实时推理",
+          "description": "本地部署时对硬件要求较高，不适用于低资源环境"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Release notes | Gemini API - Google AI for Developers",
+          "url": "https://ai.google.dev/gemini-api/docs/changelog"
+        },
+        {
+          "title": "Gemma 4 model card  |  Google AI for Developers",
+          "url": "https://ai.google.dev/gemma/docs/core/model_card_4"
+        },
+        {
+          "title": "Gemini Developer API pricing",
+          "url": "https://ai.google.dev/gemini-api/docs/pricing"
+        },
+        {
+          "title": "404  |  找不到网页  |  Google AI for Developers",
+          "url": "https://ai.google.dev/gemini-api/docs/models/gemini-2.5-flash-image-preview?hl=zh-cn"
+        },
+        {
+          "title": "Run Gemma with the Gemini API | Google AI for Developers",
+          "url": "https://ai.google.dev/gemma/docs/core/gemma_on_gemini_api"
+        }
+      ],
+      "official_date": "2026-04-02",
+      "theme": "general",
+      "id": "tool-level3:gemma-4"
+    },
+    {
+      "vendor_key": "minimax",
+      "detail_kind": "api_model",
+      "title": "MiniMax M3",
+      "vendor_label": "MiniMax",
+      "icon": "🤖",
+      "official_url": "https://platform.minimax.io/docs/token-plan/intro",
+      "status": "active",
+      "summary": "MiniMax M3 文本模型，支持 1M 上下文窗口，提供订阅和按量付费两种计费方式。",
+      "one_m_context": {
+        "status": "native",
+        "tokens": 1000000,
+        "conditions": "所有订阅计划均包含 1M 上下文窗口。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "Pay-as-you-go Standard",
+            "pricing_basis": "per_token",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "输入 ≤512k tokens",
+                "amount": 0.3,
+                "unit": "per 1M tokens"
+              },
+              {
+                "label": "输出 ≤512k tokens",
+                "amount": 1.2,
+                "unit": "per 1M tokens"
+              },
+              {
+                "label": "输入 >512k tokens",
+                "amount": 0.6,
+                "unit": "per 1M tokens"
+              },
+              {
+                "label": "输出 >512k tokens",
+                "amount": 2.4,
+                "unit": "per 1M tokens"
+              }
+            ],
+            "conditions": "标准服务层，输入超过 512k tokens 时单价更高。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "个人项目与原型开发",
+          "description": "适合使用 Plus 计划进行轻量级开发调试。"
+        },
+        {
+          "title": "日常专业编码",
+          "description": "Max 计划提供大额 token 配额，满足高频调用。"
+        },
+        {
+          "title": "高频团队工作流",
+          "description": "Ultra 计划支持多 agent 并发，适合重度使用。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "小规模低频使用",
+          "description": "订阅费用可能高于实际成本，按需付费更优。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Token Plan Overview - Models - MiniMax API Docs",
+          "url": "https://platform.minimax.io/docs/token-plan/intro"
+        },
+        {
+          "title": "Token Plan - MiniMax API Platform",
+          "url": "https://platform.minimax.io/subscribe/token-plan"
+        },
+        {
+          "title": "Pay as You Go - Models - MiniMax API Docs",
+          "url": "https://platform.minimax.io/docs/guides/pricing-paygo"
+        },
+        {
+          "title": "Token Plan - Models - MiniMax API Docs",
+          "url": "https://platform.minimax.io/docs/guides/pricing-token-plan"
+        },
+        {
+          "title": "Token Plan Migration Guide - Models - MiniMax API Docs",
+          "url": "https://platform.minimax.io/docs/token-plan/migration"
+        },
+        {
+          "title": "API Overview - Models - MiniMax API Docs",
+          "url": "https://platform.minimax.io/docs/api-reference/api-overview"
+        }
+      ],
+      "official_date": "2026-08-20",
+      "theme": "general",
+      "id": "tool-level3:minimax-m3"
+    },
+    {
+      "vendor_key": "minimax",
+      "detail_kind": "api_model",
+      "title": "MiniMax M2.7",
+      "vendor_label": "MiniMax",
+      "icon": "🤖",
+      "official_url": "https://platform.minimax.io/docs/guides/pricing-paygo",
+      "status": "active",
+      "summary": "MiniMax M2.7 是新一代多模态语言模型，支持 1M 上下文窗口，提供标准和高高速版本，适用于智能体、编码和多模态工作流。",
+      "one_m_context": {
+        "status": "native",
+        "tokens": 1000000,
+        "conditions": "适用于 Token Plan 订阅和 Pay as You Go 模式，支持长文档与大型代码库处理。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "Pay as You Go 标准版",
+            "pricing_basis": "token",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "输入",
+                "amount": 0.3,
+                "unit": "per million tokens"
+              },
+              {
+                "label": "输出",
+                "amount": 1.2,
+                "unit": "per million tokens"
+              }
+            ],
+            "conditions": "标准服务层级，按实际用量计费，支持提示缓存。"
+          },
+          {
+            "label": "Pay as You Go 优先版",
+            "pricing_basis": "token",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "输入",
+                "amount": 0.6,
+                "unit": "per million tokens"
+              },
+              {
+                "label": "输出",
+                "amount": 2.4,
+                "unit": "per million tokens"
+              }
+            ],
+            "conditions": "优先服务层级（service_tier=priority），价格为标准的1.5倍，提供更快响应。"
+          },
+          {
+            "label": "Token Plan 订阅",
+            "pricing_basis": "monthly",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "Plus",
+                "amount": 20,
+                "unit": "per month"
+              },
+              {
+                "label": "Max",
+                "amount": 50,
+                "unit": "per month"
+              },
+              {
+                "label": "Ultra",
+                "amount": 120,
+                "unit": "per month"
+              }
+            ],
+            "conditions": "订阅计划提供月度配额，包含多模态资源，按固定月费计费。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "智能体开发",
+          "description": "支持长上下文和并发智能体的复杂工作流"
+        },
+        {
+          "title": "编码辅助",
+          "description": "集成主流编码工具，辅助代码生成与理解"
+        },
+        {
+          "title": "多模态处理",
+          "description": "同时处理文本、图像、语音和视频等多模态输入"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "低延迟实时交互",
+          "description": "标准版不适合需要极低延迟的场景，但高速版可缓解"
+        },
+        {
+          "title": "预算受限项目",
+          "description": "按量付费模式下高用量可能成本较高，订阅模式更适合长期稳定使用"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Pay as You Go - Models - MiniMax API Docs",
+          "url": "https://platform.minimax.io/docs/guides/pricing-paygo"
+        },
+        {
+          "title": "Token Plan Migration Guide - Models - MiniMax API Docs",
+          "url": "https://platform.minimax.io/docs/token-plan/migration"
+        },
+        {
+          "title": "Token Plan Overview - Models - MiniMax API Docs",
+          "url": "https://platform.minimax.io/docs/token-plan/intro"
+        },
+        {
+          "title": "Token Plan - Models - MiniMax API Docs",
+          "url": "https://platform.minimax.io/docs/guides/pricing-token-plan"
+        },
+        {
+          "title": "Token Plan - MiniMax API Platform",
+          "url": "https://platform.minimax.io/subscribe/token-plan"
+        }
+      ],
+      "official_date": "2026-02-01",
+      "theme": "general",
+      "id": "tool-level3:minimax-m2-7"
+    },
+    {
+      "vendor_key": "xai",
+      "detail_kind": "api_model",
+      "title": "Grok 4.5",
+      "vendor_label": "xAI",
+      "icon": "🤖",
+      "official_url": "https://docs.x.ai/developers/models/grok-4.5",
+      "status": "active",
+      "summary": "Grok 4.5 是 SpaceXAI 面向编码、智能体任务和知识工作的模型，支持函数调用、结构化输出和推理，上下文窗口为 50 万 tokens。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "上下文窗口原生为 500,000 tokens，不支持 1M 上下文。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "输入",
+            "pricing_basis": "按 tokens 计费",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "每 1M 输入 tokens",
+                "amount": 2,
+                "unit": "USD"
+              }
+            ],
+            "conditions": "标准输入费率，适用于所有请求。"
+          },
+          {
+            "label": "缓存输入",
+            "pricing_basis": "按 tokens 计费",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "每 1M 缓存 tokens",
+                "amount": 0.3,
+                "unit": "USD"
+              }
+            ],
+            "conditions": "仅当使用缓存输入 tokens 时适用。"
+          },
+          {
+            "label": "输出",
+            "pricing_basis": "按 tokens 计费",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "每 1M 输出 tokens",
+                "amount": 6,
+                "unit": "USD"
+              }
+            ],
+            "conditions": "标准输出费率，适用于所有请求。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "智能体软件开发",
+          "description": "支持 agentic software 任务，如自动编码和工具调用。"
+        },
+        {
+          "title": "推理任务",
+          "description": "支持 Reasoning 能力，可进行多步骤推理。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "1M 超长上下文任务",
+          "description": "上下文窗口为 500,000 tokens，不支持 1M 上下文。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Release Notes | SpaceXAI Docs - Grok API Documentation",
+          "url": "https://docs.x.ai/developers/release-notes"
+        },
+        {
+          "title": "Grok 4.5 | SpaceXAI Docs",
+          "url": "https://docs.x.ai/developers/models/grok-4.5"
+        }
+      ],
+      "official_date": "2025-07-08",
+      "theme": "general",
+      "id": "tool-level3:grok-4-5"
+    },
+    {
+      "vendor_key": "moonshot",
+      "detail_kind": "api_model",
+      "title": "Kimi K3",
+      "vendor_label": "月之暗面（Kimi）",
+      "icon": "🤖",
+      "official_url": "https://platform.kimi.com/docs/guide/kimi-k3-quickstart",
+      "status": "active",
+      "summary": "Kimi K3 是 Kimi 迄今能力最强的旗舰模型，上下文 1M tokens，原生支持视觉理解，面向软件工程、知识工作和深度推理场景",
+      "one_m_context": {
+        "status": "native",
+        "tokens": 1000000,
+        "conditions": "原生支持 1M token 上下文"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "Kimi K3 统一单价",
+            "pricing_basis": "按量付费",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "输入（缓存未命中）",
+                "amount": "未明确",
+                "unit": "元/百万 tokens"
+              },
+              {
+                "label": "输入（缓存命中）",
+                "amount": "未明确",
+                "unit": "元/百万 tokens"
+              },
+              {
+                "label": "输出",
+                "amount": "未明确",
+                "unit": "元/百万 tokens"
+              }
+            ],
+            "conditions": "所有用量均按量付费，输入区分缓存命中与未命中，与输出分别按统一单价计费，不按上下文长度分段"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "编程 Agent",
+          "description": "适合 Claude Code 等编程 Agent 场景"
+        },
+        {
+          "title": "知识工作",
+          "description": "面向知识工作场景"
+        },
+        {
+          "title": "深度推理",
+          "description": "面向深度推理场景"
+        },
+        {
+          "title": "视觉理解",
+          "description": "原生支持视觉理解"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "超低成本场景",
+          "description": "对成本敏感时可选择 kimi-k2.6"
+        },
+        {
+          "title": "无需视觉超长场景",
+          "description": "简单对话场景可用较小模型"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Kimi K3 - Kimi API 开放平台",
+          "url": "https://platform.kimi.com/docs/guide/kimi-k3-quickstart"
+        },
+        {
+          "title": "模型列表",
+          "url": "https://platform.kimi.com/docs/models"
+        },
+        {
+          "title": "快速开始- Kimi API 开放平台",
+          "url": "https://platform.kimi.com/docs/overview"
+        },
+        {
+          "title": "列出模型",
+          "url": "https://platform.kimi.com/docs/api/list-models"
+        },
+        {
+          "title": "账号与财务 - Kimi API 开放平台",
+          "url": "https://platform.kimi.com/docs/guide/account-and-payments"
+        },
+        {
+          "title": "模型推理价格说明 - Kimi API 开放平台",
+          "url": "https://platform.kimi.com/docs/pricing/chat"
+        }
+      ],
+      "official_date": "2026-05-25",
+      "theme": "general",
+      "id": "tool-level3:kimi-k3"
+    },
+    {
+      "vendor_key": "alibaba",
+      "detail_kind": "api_model",
+      "title": "Qwen3.8 Max",
+      "vendor_label": "阿里巴巴（通义千问）",
+      "icon": "🤖",
+      "official_url": "https://help.aliyun.com/en/model-studio/qwen3-8-max",
+      "status": "active",
+      "summary": "Qwen3.8-Max是千问系列2.4T参数的MoE旗舰模型，在代码、办公等场景能力提升，支持原生视觉理解和超长文档解析，适合法律、金融、设计等专业任务。",
+      "one_m_context": {
+        "status": "native",
+        "tokens": 1000000,
+        "conditions": "原生支持100万tokens上下文窗口，最大输入长度991808，最大输出长度131072。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "按量付费-北京",
+            "pricing_basis": "按Token用量计费",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "输入",
+                "amount": 12,
+                "unit": "每百万tokens"
+              },
+              {
+                "label": "输出",
+                "amount": 36,
+                "unit": "每百万tokens"
+              },
+              {
+                "label": "输入（隐式缓存）",
+                "amount": 1.5,
+                "unit": "每百万tokens"
+              },
+              {
+                "label": "显式缓存创建",
+                "amount": 15,
+                "unit": "每百万tokens"
+              },
+              {
+                "label": "显式缓存读取",
+                "amount": 1,
+                "unit": "每百万tokens"
+              },
+              {
+                "label": "批量文件输入",
+                "amount": 6,
+                "unit": "每百万tokens"
+              },
+              {
+                "label": "批量文件输出",
+                "amount": 18,
+                "unit": "每百万tokens"
+              },
+              {
+                "label": "批量对话输入",
+                "amount": 12,
+                "unit": "每百万tokens"
+              },
+              {
+                "label": "批量对话输出",
+                "amount": 36,
+                "unit": "每百万tokens"
+              }
+            ],
+            "conditions": "中国（北京）地域，默认计费，不包括限时促销。"
+          },
+          {
+            "label": "按量付费-新加坡",
+            "pricing_basis": "按Token用量计费",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "输入",
+                "amount": 14.988,
+                "unit": "每百万tokens"
+              },
+              {
+                "label": "输出",
+                "amount": 44.965,
+                "unit": "每百万tokens"
+              },
+              {
+                "label": "输入（隐式缓存）",
+                "amount": 1.874,
+                "unit": "每百万tokens"
+              },
+              {
+                "label": "显式缓存创建",
+                "amount": 18.736,
+                "unit": "每百万tokens"
+              },
+              {
+                "label": "显式缓存读取",
+                "amount": 1.274,
+                "unit": "每百万tokens"
+              }
+            ],
+            "conditions": "新加坡地域，国际部署范围。"
+          },
+          {
+            "label": "按量付费-东京",
+            "pricing_basis": "按Token用量计费",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "输入",
+                "amount": 12,
+                "unit": "每百万tokens"
+              },
+              {
+                "label": "输出",
+                "amount": 36,
+                "unit": "每百万tokens"
+              },
+              {
+                "label": "输入（隐式缓存）",
+                "amount": 1.5,
+                "unit": "每百万tokens"
+              },
+              {
+                "label": "显式缓存创建",
+                "amount": 15,
+                "unit": "每百万tokens"
+              },
+              {
+                "label": "显式缓存读取",
+                "amount": 1,
+                "unit": "每百万tokens"
+              }
+            ],
+            "conditions": "日本（东京）地域，全球部署范围。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "代码生成与工程",
+          "description": "用于编程辅助、代码审查和自动生成，支持全栈开发场景。"
+        },
+        {
+          "title": "企业办公自动化",
+          "description": "用于生成报告、表格处理、流程自动化等办公场景。"
+        },
+        {
+          "title": "专业领域分析",
+          "description": "适用于法律、金融和设计等对专业能力要求较高的任务。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "实时语音交互",
+          "description": "仅支持文本和视觉，不适用语音场景。"
+        },
+        {
+          "title": "简单快速任务",
+          "description": "低延迟场景下可优先考虑Flash或Plus系列。"
+        },
+        {
+          "title": "图像生成",
+          "description": "不支持图像生成，需使用专用模型。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "大模型服务平台百炼(Model Studio) - 阿里云文档",
+          "url": "https://help.aliyun.com/zh/model-studio/what-is-model-studio"
+        },
+        {
+          "title": "[Ended] Qwen3.8-Max-Preview Limited-Time Offer - 阿里云文档",
+          "url": "https://help.aliyun.com/en/lingma/qwen3-8-max-preview-limited-time-offer"
+        },
+        {
+          "title": "Release notes-MaxCompute(MaxCompute)-阿里云帮助中心",
+          "url": "https://help.aliyun.com/en/maxcompute/user-guide/maxframe-release-notes"
+        },
+        {
+          "title": "Model Studio release notes and feature updates - 阿里云帮助文档",
+          "url": "https://help.aliyun.com/en/model-studio/model-release-notes"
+        },
+        {
+          "title": "深度思考模型的用法-大模型服务平台百炼(Model Studio)-阿里云帮助中心",
+          "url": "https://help.aliyun.com/zh/model-studio/deep-thinking"
+        },
+        {
+          "title": "首次调用千问API - 阿里云文档",
+          "url": "https://help.aliyun.com/zh/model-studio/first-api-call-to-qwen"
+        },
+        {
+          "title": "qwen3.8-max - 阿里云帮助文档",
+          "url": "https://help.aliyun.com/en/model-studio/qwen3-8-max"
+        },
+        {
+          "title": "Token Plan (Personal Edition)-Alibaba Cloud Model Studio(Model Studio)-阿里云帮助中心",
+          "url": "https://help.aliyun.com/en/model-studio/token-plan-personal-overview"
+        },
+        {
+          "title": "Model inference pricing - 阿里云文档",
+          "url": "https://help.aliyun.com/en/model-studio/model-pricing"
+        },
+        {
+          "title": "What is Alibaba Cloud Model Studio? - 阿里云文档",
+          "url": "https://help.aliyun.com/en/model-studio/what-is-model-studio"
+        },
+        {
+          "title": "文本生成-大模型服务平台百炼(Model Studio)-阿里云帮助中心",
+          "url": "https://help.aliyun.com/zh/model-studio/text-generation"
+        }
+      ],
+      "official_date": "2026-07-19",
+      "theme": "general",
+      "id": "tool-level3:qwen3-8-max"
+    },
+    {
+      "vendor_key": "tencent",
+      "detail_kind": "api_model",
+      "title": "混元 Hy3",
+      "vendor_label": "腾讯（混元）",
+      "icon": "🤖",
+      "official_url": "https://cloud.tencent.com.cn/product/tclm",
+      "status": "active",
+      "summary": "腾讯混元大模型是由腾讯公司全链路自研的通用与多模态大模型家族，覆盖文本、图像、视频、语音、3D等模态，面向内容生产、知识问答、业务自动化等场景提供企业级服务。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "来源未提供上下文窗口长度信息"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "按量计费",
+            "pricing_basis": "token",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "输入价格",
+                "amount": 0.005,
+                "unit": "元/千token"
+              }
+            ],
+            "conditions": "不同模型和调用量的价格可能不同，需参考腾讯云官方定价页面。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "内容创作",
+          "description": "支持文学创作、文本摘要、图像生成、视频生成等，适用于新闻、广告、社交媒体等内容生产场景。"
+        },
+        {
+          "title": "知识问答",
+          "description": "基于自然语言对话，提供知识问答服务，适用于客服、教育、咨询等行业。"
+        },
+        {
+          "title": "业务自动化",
+          "description": "支持智能体开发，适用于流程自动化、智能助手等企业级应用。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "私有化部署",
+          "description": "需要本地化部署和高度定制化模型场景，混元大模型可能不提供此类服务。"
+        },
+        {
+          "title": "离线应用",
+          "description": "需要完全离线运行的应用，混元大模型可能依赖云端服务。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "腾讯混元大模型_大语言模型_自然语言大模型- 腾讯云",
+          "url": "https://cloud.tencent.com.cn/product/tclm"
+        }
+      ],
+      "official_date": "2024-12-18",
+      "theme": "general",
+      "id": "tool-level3:hy3"
+    },
+    {
+      "vendor_key": "meta",
+      "detail_kind": "api_model",
+      "title": "Muse Spark 1.2",
+      "vendor_label": "Meta（Llama）",
+      "icon": "🤖",
+      "official_url": "https://developer.meta.com/ai/models/muse-spark",
+      "status": "active",
+      "summary": "Muse Spark 1.2 是编码优化模型，支持 1M 上下文，提升编码准确性与工具调用可靠性。",
+      "one_m_context": {
+        "status": "native",
+        "tokens": 1048576,
+        "conditions": "模型原生支持 1M 上下文窗口。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "标准 Muse Spark 1.2",
+            "pricing_basis": "按 token 计费",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "输入 (非缓存)",
+                "amount": 1.25,
+                "unit": "每 1M token"
+              },
+              {
+                "label": "缓存输入",
+                "amount": 0.15,
+                "unit": "每 1M token"
+              },
+              {
+                "label": "输出",
+                "amount": 4.25,
+                "unit": "每 1M token"
+              }
+            ],
+            "conditions": "标准 API 计费，按量付费，数据不用于改进产品。"
+          },
+          {
+            "label": "贡献者价格",
+            "pricing_basis": "按 token 计费",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "输入 (非缓存)",
+                "amount": 0.1,
+                "unit": "每 1M token"
+              },
+              {
+                "label": "缓存输入",
+                "amount": 0.002,
+                "unit": "每 1M token"
+              },
+              {
+                "label": "输出",
+                "amount": 0.2,
+                "unit": "每 1M token"
+              }
+            ],
+            "conditions": "使用 muse-spark-1.2-contributor 模型，数据可能用于改进产品，按 token 计费。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "编码代理开发",
+          "description": "构建编码代理，利用其高准确率和可靠工具调用实现自动化编程。"
+        },
+        {
+          "title": "长任务处理",
+          "description": "处理多文件重构、长调试会话等跨多步骤任务。"
+        },
+        {
+          "title": "代码审查与交付",
+          "description": "用于代码审查、自动补全和质量保证工作。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "本地轻量部署",
+          "description": "模型较大，不适合在资源受限的边缘设备或普通消费级硬件上运行。"
+        },
+        {
+          "title": "非编码通用任务",
+          "description": "主要聚焦编码，通用文本生成能力非其核心优势。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Muse Spark 1.2",
+          "url": "https://developer.meta.com/ai/models/muse-spark"
+        },
+        {
+          "title": "Llama 3.2 | Model Cards and Prompt formats - Meta for Developers",
+          "url": "https://developer.meta.com/ai/docs/model-cards-and-prompt-formats/llama3_2"
+        },
+        {
+          "title": "Llama Guard 4 | Model Cards and Prompt formats - Meta for Developers",
+          "url": "https://developer.meta.com/ai/docs/model-cards-and-prompt-formats/llama-guard-4"
+        },
+        {
+          "title": "Meta Llama 2 | Model Cards and Prompt formats",
+          "url": "https://developer.meta.com/ai/docs/model-cards-and-prompt-formats/meta-llama-2"
+        },
+        {
+          "title": "Meta Code Llama | Model Cards and Prompt formats",
+          "url": "https://www.llama.com/docs/model-cards-and-prompt-formats/meta-code-llama"
+        },
+        {
+          "title": "Llama 3 | Model Cards and Prompt formats",
+          "url": "https://developer.meta.com/ai/docs/model-cards-and-prompt-formats/meta-llama-3"
+        },
+        {
+          "title": "Meta Llama Guard 1 | Model Cards and Prompt formats",
+          "url": "https://www.llama.com/docs/model-cards-and-prompt-formats/meta-llama-guard-1"
+        },
+        {
+          "title": "Developer Docs & Resources | Meta",
+          "url": "https://developer.meta.com/ai/docs/overview"
+        },
+        {
+          "title": "Meta Code Llama 70B | Model Cards and Prompt formats",
+          "url": "https://www.llama.com/docs/model-cards-and-prompt-formats/meta-code-llama-70b"
+        },
+        {
+          "title": "Meta Model API",
+          "url": "https://developer.meta.com/ai/products/meta-model-api"
+        },
+        {
+          "title": "Products & Solutions for AI Developers | Meta",
+          "url": "https://developer.meta.com/ai"
+        },
+        {
+          "title": "Meet Muse Spark 1.2 and Muse Code",
+          "url": "https://developer.meta.com/ai/resources/blog/build-with-muse-code"
+        }
+      ],
+      "official_date": "2026-08-05",
+      "theme": "general",
+      "id": "tool-level3:muse-spark-1-2"
+    },
+    {
+      "vendor_key": "stepfun",
+      "detail_kind": "api_model",
+      "title": "Step-3.5-Flash",
+      "vendor_label": "阶跃星辰",
+      "icon": "🤖",
+      "official_url": "https://static.stepfun.com/blog/step-3.7-flash/",
+      "status": "active",
+      "summary": "Step 3.7 Flash 是高效的 Flash 模型，适用于真实世界 Agent。",
+      "one_m_context": {
+        "status": "native",
+        "tokens": 1000000,
+        "conditions": "原生支持 1M token 上下文。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "按量付费",
+            "pricing_basis": "按 token 计费",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "输入",
+                "amount": 0.000001,
+                "unit": "元/token"
+              },
+              {
+                "label": "输出",
+                "amount": 0.000002,
+                "unit": "元/token"
+              }
+            ],
+            "conditions": "按实际使用的 token 数计费，输入与输出单价不同。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "Agent 应用",
+          "description": "多步推理和工具调用。"
+        },
+        {
+          "title": "编程辅助",
+          "description": "代码生成与审查。"
+        },
+        {
+          "title": "多模态理解",
+          "description": "结合视觉和文本的输入。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "超长上下文",
+          "description": "不支持超过 1M token。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Chat Completions API - StepFun 开放平台文档中心",
+          "url": "https://platform.stepfun.com/docs/zh/api-reference/chat/chat-completion-create"
+        },
+        {
+          "title": "快速开始 - StepFun 开放平台文档中心",
+          "url": "https://platform.stepfun.com/docs/zh/quickstart/overview"
+        },
+        {
+          "title": "从 OpenAI 迁移至阶跃星辰 - StepFun 开放平台文档中心",
+          "url": "https://platform.stepfun.com/docs/zh/guides/developer/openai"
+        },
+        {
+          "title": "推理模型接入 - StepFun 开放平台文档中心",
+          "url": "https://platform.stepfun.com/docs/zh/step-plan/integrations/reasoning-api"
+        },
+        {
+          "title": "https://platform.stepfun.com/docs/zh/step-plan/quick-start",
+          "url": "https://platform.stepfun.com/docs/zh/step-plan/quick-start"
+        },
+        {
+          "title": "https://platform.stepfun.com/docs/zh/guides/pricing/details",
+          "url": "https://platform.stepfun.com/docs/zh/guides/pricing/details"
+        },
+        {
+          "title": "https://static.stepfun.com/blog/step-3.7-flash/",
+          "url": "https://static.stepfun.com/blog/step-3.7-flash/"
+        }
+      ],
+      "official_date": "2026-05-29",
+      "theme": "general",
+      "id": "tool-level3:step-3-5-flash"
+    },
+    {
+      "vendor_key": "stepfun",
+      "detail_kind": "api_model",
+      "title": "Step-3.7-Flash",
+      "vendor_label": "阶跃星辰",
+      "icon": "🤖",
+      "official_url": "https://static.stepfun.com/blog/step-3.7-flash/",
+      "status": "active",
+      "summary": "Step 3.7 Flash 是 StepFun 推出的高效能 Flash 模型，面向真实世界智能体，支持多模态理解与行动、网络与视觉搜索增强、可靠工具使用与编排，以及智能体生态兼容。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "官方资料未提及支持 1M 上下文，未找到相关说明。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "Step 3.7 Flash 按量计费",
+            "pricing_basis": "usage",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "输入",
+                "amount": "2",
+                "unit": "元/百万tokens"
+              },
+              {
+                "label": "输出",
+                "amount": "8",
+                "unit": "元/百万tokens"
+              }
+            ],
+            "conditions": "模型按 tokens 用量计费，输入和输出分别计价。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "智能体开发",
+          "description": "为真实世界智能体提供高效执行能力，支持工具使用与编排。"
+        },
+        {
+          "title": "多模态理解",
+          "description": "结合视觉与文本信息进行理解和行动，适用于多模态任务。"
+        },
+        {
+          "title": "搜索增强",
+          "description": "增强网络搜索和视觉搜索能力，提升信息获取效率。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "超长上下文任务",
+          "description": "模型不支持 1M 上下文，可能不适合需要处理超长文本的场景。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "https://platform.stepfun.com/docs/zh/step-plan/quick-start",
+          "url": "https://platform.stepfun.com/docs/zh/step-plan/quick-start"
+        },
+        {
+          "title": "https://platform.stepfun.com/docs/zh/api-reference/chat/chat-completion-create",
+          "url": "https://platform.stepfun.com/docs/zh/api-reference/chat/chat-completion-create"
+        },
+        {
+          "title": "https://platform.stepfun.com/docs/zh/guides/pricing/details",
+          "url": "https://platform.stepfun.com/docs/zh/guides/pricing/details"
+        },
+        {
+          "title": "https://static.stepfun.com/blog/step-3.7-flash/",
+          "url": "https://static.stepfun.com/blog/step-3.7-flash/"
+        }
+      ],
+      "official_date": "2026-05-29",
+      "theme": "general",
+      "id": "tool-level3:step-3-7-flash"
+    },
+    {
+      "vendor_key": "xiaomi",
+      "detail_kind": "api_model",
+      "title": "MiMo-V2.5",
+      "vendor_label": "小米（MiMo）",
+      "icon": "🤖",
+      "official_url": "https://mimo.mi.com/docs",
+      "status": "active",
+      "summary": "Xiaomi MiMo-V2.5 模型，属于小米 MiMo 系列，支持文本处理。",
+      "one_m_context": {
+        "status": "native",
+        "tokens": 1000000,
+        "conditions": "模型原生支持 1M 上下文窗口"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "按量付费",
+            "pricing_basis": "按 token 计费",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "输入价格",
+                "amount": 2.2,
+                "unit": "CNY/百万 token"
+              }
+            ],
+            "conditions": "适用于所有用户，按实际用量计费，价格可能随模型版本变化。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "长文档分析",
+          "description": "处理大量文本数据"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "低延迟场景",
+          "description": "不适合对响应速度有极高要求的应用"
+        }
+      ],
+      "sources": [
+        {
+          "title": "https://mimo.mi.com/docs",
+          "url": "https://mimo.mi.com/docs"
+        },
+        {
+          "title": "https://mimo.mi.com/docs/quick-start/summary/model",
+          "url": "https://mimo.mi.com/docs/quick-start/summary/model"
+        },
+        {
+          "title": "https://mimo.mi.com/docs/tokenplan",
+          "url": "https://mimo.mi.com/docs/tokenplan"
+        },
+        {
+          "title": "https://mimo.mi.com/docs/price/pay-as-you-go",
+          "url": "https://mimo.mi.com/docs/price/pay-as-you-go"
+        },
+        {
+          "title": "https://mimo.mi.com/docs/updates/model",
+          "url": "https://mimo.mi.com/docs/updates/model"
+        },
+        {
+          "title": "https://mimo.mi.com/models/en-US/mimo-v2.5",
+          "url": "https://mimo.mi.com/models/en-US/mimo-v2.5"
+        }
+      ],
+      "official_date": "2026-06-30",
+      "theme": "general",
+      "id": "tool-level3:mimo-v2-5"
+    },
+    {
+      "vendor_key": "nvidia",
+      "detail_kind": "api_model",
+      "title": "Nemotron 3 Ultra",
+      "vendor_label": "Nvidia（NIM）",
+      "icon": "🤖",
+      "official_url": "https://docs.api.nvidia.com/nim/reference/llm-apis",
+      "status": "active",
+      "summary": "NVIDIA NIM LLM API 提供自然语言生成服务，支持多种顶级模型。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "正文未提及 1M 上下文"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "标准 API 服务",
+            "pricing_basis": "按用量计费",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "请求",
+                "amount": 0,
+                "unit": "次"
+              }
+            ],
+            "conditions": "官方文档未提供具体价格，需联系 NVIDIA 获取报价"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "对话式应用",
+          "description": "构建聊天机器人和虚拟助手"
+        },
+        {
+          "title": "文本处理",
+          "description": "进行摘要、问答和创意写作"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "实时低延迟场景",
+          "description": "未提供性能保证"
+        },
+        {
+          "title": "离线部署",
+          "description": "需要网络连接"
+        }
+      ],
+      "sources": [
+        {
+          "title": "https://docs.api.nvidia.com/nim/reference/llm-apis",
+          "url": "https://docs.api.nvidia.com/nim/reference/llm-apis"
+        },
+        {
+          "title": "https://docs.api.nvidia.com/nim/reference/retrieval-apis",
+          "url": "https://docs.api.nvidia.com/nim/reference/retrieval-apis"
+        },
+        {
+          "title": "https://docs.api.nvidia.com/nim/reference/visual-models-apis",
+          "url": "https://docs.api.nvidia.com/nim/reference/visual-models-apis"
+        },
+        {
+          "title": "https://docs.api.nvidia.com/nim/reference/multimodal-apis",
+          "url": "https://docs.api.nvidia.com/nim/reference/multimodal-apis"
+        },
+        {
+          "title": "https://docs.api.nvidia.com/nim/reference/healthcare-apis",
+          "url": "https://docs.api.nvidia.com/nim/reference/healthcare-apis"
+        },
+        {
+          "title": "https://docs.api.nvidia.com/nim/reference/route-optimization-apis",
+          "url": "https://docs.api.nvidia.com/nim/reference/route-optimization-apis"
+        }
+      ],
+      "official_date": "2026-08-21",
+      "theme": "general",
+      "id": "tool-level3:nemotron-3-ultra"
+    },
+    {
+      "vendor_key": "nvidia",
+      "detail_kind": "api_model",
+      "title": "Nemotron 3 Super",
+      "vendor_label": "Nvidia（NIM）",
+      "icon": "🤖",
+      "official_url": "https://docs.api.nvidia.com/nim/reference/llm-apis",
+      "status": "active",
+      "summary": "NVIDIA NIM 提供LLM API，支持自然语言生成式AI，适用于聊天、指令跟随、问答、摘要和创意文本生成。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "正文未提供上下文长度信息，因此不支持原生1M上下文。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "标准用量",
+            "pricing_basis": "按请求",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "每次请求",
+                "amount": 0.001,
+                "unit": "request"
+              }
+            ],
+            "conditions": "实际价格由NVIDIA定价页面确定，启用NIM API后按调用量计费。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "聊天机器人",
+          "description": "构建自然语言对话应用。"
+        },
+        {
+          "title": "企业知识检索",
+          "description": "结合检索API实现企业数据语义搜索。"
+        },
+        {
+          "title": "多模态内容生成",
+          "description": "通过视觉和生成模型生成图像或处理图文。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "低延迟实时推理",
+          "description": "云API可能引入网络延迟。"
+        },
+        {
+          "title": "全私有化部署",
+          "description": "需要自托管NIM容器才能完全本地化。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "https://docs.api.nvidia.com/nim/reference/llm-apis",
+          "url": "https://docs.api.nvidia.com/nim/reference/llm-apis"
+        },
+        {
+          "title": "https://docs.api.nvidia.com/nim/reference/retrieval-apis",
+          "url": "https://docs.api.nvidia.com/nim/reference/retrieval-apis"
+        },
+        {
+          "title": "https://docs.api.nvidia.com/nim/reference/visual-models-apis",
+          "url": "https://docs.api.nvidia.com/nim/reference/visual-models-apis"
+        },
+        {
+          "title": "https://docs.api.nvidia.com/nim/reference/multimodal-apis",
+          "url": "https://docs.api.nvidia.com/nim/reference/multimodal-apis"
+        },
+        {
+          "title": "https://docs.api.nvidia.com/nim/reference/healthcare-apis",
+          "url": "https://docs.api.nvidia.com/nim/reference/healthcare-apis"
+        },
+        {
+          "title": "https://docs.api.nvidia.com/nim/reference/route-optimization-apis",
+          "url": "https://docs.api.nvidia.com/nim/reference/route-optimization-apis"
+        },
+        {
+          "title": "https://docs.api.nvidia.com/nim/reference/nvidia-nemotron-3-super-120b-a12b",
+          "url": "https://docs.api.nvidia.com/nim/reference/nvidia-nemotron-3-super-120b-a12b"
+        }
+      ],
+      "official_date": "2026-08-21",
+      "theme": "general",
+      "id": "tool-level3:nemotron-3-super"
+    },
+    {
+      "vendor_key": "nvidia",
+      "detail_kind": "api_model",
+      "title": "Nemotron 3.5",
+      "vendor_label": "Nvidia（NIM）",
+      "icon": "🤖",
+      "official_url": "https://docs.api.nvidia.com/nim/reference/llm-apis",
+      "status": "active",
+      "summary": "NVIDIA NIM LLM API 提供对顶尖模型的统一访问，支持多种自然语言处理任务。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "未在官方来源中找到支持 1M 上下文的信息。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "按用量付费",
+            "pricing_basis": "usage",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "请求数",
+                "amount": 0,
+                "unit": "请求"
+              }
+            ],
+            "conditions": "API 按实际调用量计费，具体费率需查看官方定价页面。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "聊天机器人",
+          "description": "构建自然语言对话交互的应用。"
+        },
+        {
+          "title": "文本摘要",
+          "description": "自动生成长文档的简洁摘要。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "离线推理",
+          "description": "需要完全离线环境，无网络连接。"
+        },
+        {
+          "title": "高度定制微调",
+          "description": "需要对模型进行专属微调，而API不提供。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "https://docs.api.nvidia.com/nim/reference/llm-apis",
+          "url": "https://docs.api.nvidia.com/nim/reference/llm-apis"
+        },
+        {
+          "title": "https://docs.api.nvidia.com/nim/reference/retrieval-apis",
+          "url": "https://docs.api.nvidia.com/nim/reference/retrieval-apis"
+        },
+        {
+          "title": "https://docs.api.nvidia.com/nim/reference/visual-models-apis",
+          "url": "https://docs.api.nvidia.com/nim/reference/visual-models-apis"
+        },
+        {
+          "title": "https://docs.api.nvidia.com/nim/reference/multimodal-apis",
+          "url": "https://docs.api.nvidia.com/nim/reference/multimodal-apis"
+        },
+        {
+          "title": "https://docs.api.nvidia.com/nim/reference/healthcare-apis",
+          "url": "https://docs.api.nvidia.com/nim/reference/healthcare-apis"
+        },
+        {
+          "title": "https://docs.api.nvidia.com/nim/reference/route-optimization-apis",
+          "url": "https://docs.api.nvidia.com/nim/reference/route-optimization-apis"
+        }
+      ],
+      "official_date": "2026-08-21",
+      "theme": "general",
+      "id": "tool-level3:nemotron-3-5"
+    },
+    {
+      "vendor_key": "xiaomi",
+      "detail_kind": "api_model",
+      "title": "MiMo-V2.5 Pro",
+      "vendor_label": "小米（MiMo）",
+      "icon": "🤖",
+      "official_url": "https://mimo.mi.com/docs",
+      "status": "active",
+      "summary": "MiMo-V2.5 系列模型是小米推出的顶级旗舰模型，支持文本处理，提供强大的生产力。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "官方文档未提及该模型支持 100 万 token 的上下文长度。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "Token Plan",
+            "pricing_basis": "预付费套餐",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "Token 数量",
+                "amount": "按套餐规定",
+                "unit": "token"
+              }
+            ],
+            "conditions": "一次购买 Token 套餐即可使用 MiMo-V2.5 全部模型，具体价格与套餐档位以官网为准。"
+          },
+          {
+            "label": "TTS 模型",
+            "pricing_basis": "套餐",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "用量",
+                "amount": "限时免费",
+                "unit": "套餐"
+              }
+            ],
+            "conditions": "TTS 模型全档位套餐限时免费，活动截止时间以官网公告为准。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "智能客服",
+          "description": "利用自然语言理解能力提供自动化客户支持。"
+        },
+        {
+          "title": "内容创作",
+          "description": "辅助撰写文章、报告等文本内容。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "图像识别",
+          "description": "不支持视觉处理任务。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "https://mimo.mi.com/docs",
+          "url": "https://mimo.mi.com/docs"
+        },
+        {
+          "title": "https://mimo.mi.com/docs/quick-start/summary/model",
+          "url": "https://mimo.mi.com/docs/quick-start/summary/model"
+        },
+        {
+          "title": "https://mimo.mi.com/docs/tokenplan",
+          "url": "https://mimo.mi.com/docs/tokenplan"
+        },
+        {
+          "title": "https://mimo.mi.com/docs/price/pay-as-you-go",
+          "url": "https://mimo.mi.com/docs/price/pay-as-you-go"
+        },
+        {
+          "title": "https://mimo.mi.com/docs/updates/model",
+          "url": "https://mimo.mi.com/docs/updates/model"
+        },
+        {
+          "title": "https://mimo.mi.com/docs/en-US/price/pay-as-you-go",
+          "url": "https://mimo.mi.com/docs/en-US/price/pay-as-you-go"
+        }
+      ],
+      "official_date": "2026-06-30",
+      "theme": "general",
+      "id": "tool-level3:mimo-v2-5-pro"
     }
   ]
 }

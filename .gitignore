@@ -51,6 +51,7 @@ $RECYCLE.BIN/
 # ===== 目录生成器临时文件 =====
 data/manual/tools/catalog-drafts/
 config/catalog-generator.local.json
+config/browser.local.json
 data/catalog/.catalog.lock
 data/catalog/.transactions/
 data/catalog/.staging/

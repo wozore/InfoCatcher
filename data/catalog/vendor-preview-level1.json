@@ -23,6 +23,18 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:openai:gpt-5.6"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:openai:gpt-5-5"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:openai:gpt-realtime-2"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:openai:gpt-image-2"
         }
       ]
     },
@@ -52,6 +64,10 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:anthropic:claude-coding-plan"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:anthropic:claude-opus-5"
         }
       ]
     },
@@ -81,6 +97,14 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:google:gemini-coding-plan"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:google:gemini-3-1-pro"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:google:gemma-4"
         }
       ]
     },
@@ -184,39 +208,6 @@
       ]
     },
     {
-      "id": "vendor-level1:xunfei",
-      "vendor_key": "xunfei",
-      "title": "科大讯飞",
-      "icon": "🔥",
-      "official_url": "https://xinghuo.xfyun.cn",
-      "description": "科大讯飞推出的星火认知大模型，深耕语音与教育场景，Lite 版本 API 永久免费。",
-      "status": "partial",
-      "features": [
-        {
-          "tone": "positive",
-          "text": "Spark Lite API 永久免费，适合高并发低成本的简单任务"
-        },
-        {
-          "tone": "positive",
-          "text": "内置搜索、天气、日期等插件，开箱即用"
-        },
-        {
-          "tone": "negative",
-          "text": "官方未公开详细 token 计价，缓存和输出定价不透明"
-        },
-        {
-          "tone": "negative",
-          "text": "Max 版本已下线合并，API 版本稳定性有不确定性"
-        }
-      ],
-      "level2_refs": [
-        {
-          "kind": "vendor-level2",
-          "id": "vendor-level2:xunfei:spark-models"
-        }
-      ]
-    },
-    {
       "id": "vendor-level1:minimax",
       "vendor_key": "minimax",
       "title": "MiniMax",
@@ -246,6 +237,14 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:minimax:minimax-h3"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:minimax:minimax-m3"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:minimax:minimax-m2-7"
         }
       ]
     },
@@ -279,6 +278,10 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:xai:grok-4-6"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:xai:grok-4-5"
         }
       ]
     },
@@ -345,6 +348,10 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:cohere:command-models"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:cohere:command-a"
         }
       ]
     },
@@ -382,6 +389,261 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:kuaishou:models"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level1:moonshot",
+      "vendor_key": "moonshot",
+      "title": "月之暗面（Kimi）",
+      "icon": "🤖",
+      "official_url": "https://platform.kimi.com",
+      "description": "Kimi 开放平台由北京月之暗面科技有限公司提供，致力于研发先进的大语言模型，并通过 API 为开发者和企业提供智能服务。",
+      "status": "verified",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "Kimi 迄今能力最强的模型"
+        },
+        {
+          "tone": "positive",
+          "text": "原生支持视觉理解"
+        },
+        {
+          "tone": "positive",
+          "text": "拥有 100 万 token 上下文窗口"
+        },
+        {
+          "tone": "positive",
+          "text": "面向软件工程场景设计"
+        },
+        {
+          "tone": "positive",
+          "text": "面向知识工作场景设计"
+        },
+        {
+          "tone": "positive",
+          "text": "面向深度推理场景设计"
+        }
+      ],
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:moonshot:kimi-k3"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level1:alibaba",
+      "vendor_key": "alibaba",
+      "title": "阿里巴巴（通义千问）",
+      "icon": "🤖",
+      "official_url": "https://help.aliyun.com/zh/model-studio/what-is-model-studio",
+      "description": "阿里云百炼提供开箱即用的模型服务，支持千问全系列及DeepSeek、Kimi等第三方模型，涵盖文本生成、视觉理解、图像生成等能力。平台支持模型调优、部署和评测，并提供可视化和高代码应用构建，以及知识库、插件等扩展功能。计费方面，开通无需费用，调用和部署时按量付费，新用户有免费额度。",
+      "status": "verified",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "兼容OpenAI接口，迁移成本低"
+        },
+        {
+          "tone": "positive",
+          "text": "提供可视化应用构建，无需代码"
+        },
+        {
+          "tone": "positive",
+          "text": "支持模型微调和部署，满足定制需求"
+        },
+        {
+          "tone": "positive",
+          "text": "提供多区域服务，降低网络延迟"
+        },
+        {
+          "tone": "positive",
+          "text": "支持按量付费，新用户有免费额度"
+        }
+      ],
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:alibaba:qwen3-8-max"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level1:tencent",
+      "vendor_key": "tencent",
+      "title": "腾讯（混元）",
+      "icon": "🤖",
+      "official_url": "https://cloud.tencent.com.cn/product/tclm",
+      "description": "腾讯混元大模型（Tencent HY）是由腾讯公司全链路自研的通用与多模态大模型家族，覆盖文本、图像、视频、语音、3D等模态，面向内容生产、知识问答、业务自动化等场景提供企业级服务。",
+      "status": "verified",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "全链路自研"
+        },
+        {
+          "tone": "positive",
+          "text": "多模态覆盖"
+        },
+        {
+          "tone": "positive",
+          "text": "企业级服务"
+        }
+      ],
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:tencent:hy3"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level1:meta",
+      "vendor_key": "meta",
+      "title": "Meta（Llama）",
+      "icon": "🤖",
+      "official_url": "https://developer.meta.com/ai/models/muse-spark",
+      "description": "Muse Spark 1.2 是 Meta 推出的编码优化模型，专注于真实编码工作流，具备更高的一次性准确率和更可靠的工具调用能力。它支持 1M 上下文窗口，使长任务能在单次会话中完整执行。模型在代码编写、审查和交付方面步骤更少、延迟更低，适用于构建编码代理或作为开发伙伴使用。",
+      "status": "verified",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "针对真实编码工作流优化"
+        },
+        {
+          "tone": "positive",
+          "text": "更高的首次尝试准确率"
+        },
+        {
+          "tone": "positive",
+          "text": "更可靠的工具调用"
+        },
+        {
+          "tone": "positive",
+          "text": "1M 上下文支持长任务"
+        },
+        {
+          "tone": "positive",
+          "text": "代码编写步骤更少延迟更低"
+        }
+      ],
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:meta:muse-spark-1-2"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level1:stepfun",
+      "vendor_key": "stepfun",
+      "title": "阶跃星辰",
+      "icon": "🤖",
+      "official_url": "https://www.stepfun.com/",
+      "description": "阶跃星辰（StepFun）是一家 AI 公司，其开放平台提供多种大语言模型及 API 服务，包括 Chat Completions 接口，并支持从 OpenAI 迁移的兼容性。",
+      "status": "verified",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "提供 OpenAI 兼容的 API 接口"
+        },
+        {
+          "tone": "positive",
+          "text": "支持多模态理解与生成"
+        },
+        {
+          "tone": "positive",
+          "text": "提供高效推理的 Flash 模型"
+        },
+        {
+          "tone": "positive",
+          "text": "支持企业级应用和 Agent 场景"
+        }
+      ],
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:stepfun:step-3-5-flash"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:stepfun:step-3-7-flash"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level1:xiaomi",
+      "vendor_key": "xiaomi",
+      "title": "小米（MiMo）",
+      "icon": "🤖",
+      "official_url": "https://mimo.mi.com",
+      "description": "小米 MiMo API 开放平台为全球用户提供 MiMo-V2.5 系列等顶级模型的 API 服务，支持多种使用方式，官方文档与工具齐备。",
+      "status": "verified",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "提供 MiMo-V2.5 系列旗舰模型"
+        },
+        {
+          "tone": "positive",
+          "text": "提供 Token Plan 套餐"
+        },
+        {
+          "tone": "positive",
+          "text": "支持按量付费等计费模式"
+        },
+        {
+          "tone": "neutral",
+          "text": "V2 系列已下线"
+        }
+      ],
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:xiaomi:mimo-v2-5"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:xiaomi:mimo-v2-5-pro"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level1:nvidia",
+      "vendor_key": "nvidia",
+      "title": "Nvidia（NIM）",
+      "icon": "🤖",
+      "official_url": "https://docs.api.nvidia.com/nim/reference/llm-apis",
+      "description": "NVIDIA NIM 是 NVIDIA 推出的推理微服务集合，为多种生成式 AI 模型提供优化容器和 API，支持在云端或本地灵活部署，覆盖聊天、检索、视觉和多模态等场景。",
+      "status": "verified",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "提供优化容器简化部署"
+        },
+        {
+          "tone": "positive",
+          "text": "支持本地、云端灵活部署"
+        },
+        {
+          "tone": "positive",
+          "text": "覆盖文本、视觉、检索等多模态"
+        }
+      ],
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:nvidia:nemotron-3-ultra"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:nvidia:nemotron-3-super"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:nvidia:nemotron-3-5"
         }
       ]
     }

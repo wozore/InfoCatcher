@@ -11,7 +11,7 @@ function videoSeed(overrides = {}) {
     modality: 'video',
     name: 'Kling 2.6 Pro',
     vendor_name: '可灵',
-    vendor_key: 'kling',
+    vendor_key: 'kuaishou',
     tool_key: 'kling-2-6-pro',
     placement: { new_group_title: 'Models' },
     known_fields: { theme: 'media' },
@@ -21,8 +21,8 @@ function videoSeed(overrides = {}) {
 
 function existingVendorSnapshot() {
   const snapshot = emptySnapshot();
-  snapshot['vendor-card'].push({ id: 'vendor-card:kling', vendor_key: 'kling' });
-  snapshot['vendor-level1'].push({ id: 'vendor-level1:kling', vendor_key: 'kling', level2_refs: [] });
+  snapshot['vendor-card'].push({ id: 'vendor-card:kuaishou', vendor_key: 'kuaishou' });
+  snapshot['vendor-level1'].push({ id: 'vendor-level1:kuaishou', vendor_key: 'kuaishou', level2_refs: [] });
   return snapshot;
 }
 
@@ -38,10 +38,11 @@ test('video API profile requires API/access/pricing facts and marks text context
   assert.equal(plan.applicability.api_pricing, 'required');
 });
 
-test('existing healthy vendor layers are noop while missing model layers are created', () => {
+test('existing vendor links a new group without re-researching vendor fields', () => {
   const plan = planCatalogResearch(videoSeed(), existingVendorSnapshot());
   assert.equal(plan.layer_plan['vendor-card'].operation, 'noop');
-  assert.equal(plan.layer_plan['vendor-level1'].operation, 'noop');
+  assert.equal(plan.layer_plan['vendor-level1'].operation, 'replace');
+  assert.equal(plan.layer_plan['vendor-level1'].link_only, true);
   assert.equal(plan.layer_plan['vendor-level2'].operation, 'create');
   assert.equal(plan.layer_plan['tool-level3'].operation, 'create');
   assert.equal(plan.layer_plan['tool-card'].operation, 'create');
@@ -49,11 +50,33 @@ test('existing healthy vendor layers are noop while missing model layers are cre
   assert.equal(plan.research_scopes.some(scope => scope.kind === 'detail'), true);
 });
 
+test('existing group links a new detail without re-researching group fields', () => {
+  const snapshot = existingVendorSnapshot();
+  snapshot['vendor-level1'][0].level2_refs = [{ kind: 'vendor-level2', id: 'vendor-level2:kuaishou:models' }];
+  snapshot['vendor-level2'].push({ id: 'vendor-level2:kuaishou:models', vendor_key: 'kuaishou', detail_refs: [] });
+  const plan = planCatalogResearch(videoSeed({ placement: { existing_level2_ref: { kind: 'vendor-level2', id: 'vendor-level2:kuaishou:models' } } }), snapshot);
+  assert.equal(plan.layer_plan['vendor-level1'].operation, 'noop');
+  assert.equal(plan.layer_plan['vendor-level2'].operation, 'replace');
+  assert.equal(plan.layer_plan['vendor-level2'].link_only, true);
+  assert.equal(plan.research_scopes.some(scope => scope.kind === 'group'), false);
+  assert.equal(plan.research_scopes.some(scope => scope.kind === 'detail'), true);
+});
+test('existing group links an existing orphan detail without creating a research scope', () => {
+  const snapshot = existingVendorSnapshot();
+  snapshot['vendor-level1'][0].level2_refs = [{ kind: 'vendor-level2', id: 'vendor-level2:kuaishou:models' }];
+  snapshot['vendor-level2'].push({ id: 'vendor-level2:kuaishou:models', vendor_key: 'kuaishou', detail_refs: [] });
+  snapshot['tool-level3'].push({ id: 'tool-level3:kling-2-6-pro', vendor_key: 'kuaishou', detail_kind: 'api_model' });
+  snapshot['tool-card'].push({ id: 'tool-card:kling-2-6-pro', vendor_key: 'kuaishou', tool_key: 'kling-2-6-pro' });
+  const plan = planCatalogResearch(videoSeed({ placement: { existing_level2_ref: { kind: 'vendor-level2', id: 'vendor-level2:kuaishou:models' } } }), snapshot);
+  assert.equal(plan.layer_plan['vendor-level2'].operation, 'replace');
+  assert.equal(plan.layer_plan['vendor-level2'].link_only, true);
+  assert.deepEqual(plan.research_scopes, []);
+});
 test('repair layers replace only explicitly targeted existing records', () => {
   const snapshot = existingVendorSnapshot();
-  snapshot['vendor-level2'].push({ id: 'vendor-level2:kling:models', vendor_key: 'kling', detail_refs: [] });
-  snapshot['tool-level3'].push({ id: 'tool-level3:kling-2-6-pro', vendor_key: 'kling', detail_kind: 'api_model' });
-  snapshot['tool-card'].push({ id: 'tool-card:kling-2-6-pro', vendor_key: 'kling', tool_key: 'kling-2-6-pro' });
+  snapshot['vendor-level2'].push({ id: 'vendor-level2:kuaishou:models', vendor_key: 'kuaishou', detail_refs: [] });
+  snapshot['tool-level3'].push({ id: 'tool-level3:kling-2-6-pro', vendor_key: 'kuaishou', detail_kind: 'api_model' });
+  snapshot['tool-card'].push({ id: 'tool-card:kling-2-6-pro', vendor_key: 'kuaishou', tool_key: 'kling-2-6-pro' });
   const plan = planCatalogResearch(videoSeed({ repair_layers: ['vendor-card', 'vendor-level1', 'vendor-level2', 'tool-level3', 'tool-card'] }), snapshot);
   for (const area of ['vendor-card', 'vendor-level1', 'vendor-level2', 'tool-level3', 'tool-card']) {
     assert.equal(plan.layer_plan[area].operation, 'replace');

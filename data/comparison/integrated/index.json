@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-22T02:05:17.561Z",
-  "model_count": 941,
-  "series_count": 450,
+  "generated_at": "2026-08-22T16:40:37.761Z",
+  "model_count": 885,
+  "series_count": 435,
   "sources": {
     "openrouter": {
       "fetched_at": "2026-08-20T21:41:54.122Z",
@@ -743,6 +743,7 @@
               "revision": null,
               "composite_score": 78,
               "sources": [
+                "openrouter",
                 "lmarena",
                 "livebench",
                 "llm_stats"
@@ -857,195 +858,6 @@
       ]
     },
     {
-      "series_key": "anthropic--claude-opus-4",
-      "display": "Claude Opus 4",
-      "vendor": "anthropic",
-      "theme": "general",
-      "order": 33,
-      "member_count": 9,
-      "model_count": 10,
-      "max_composite_score": 76.3,
-      "members": [
-        {
-          "member_key": "anthropic--claude-opus-4",
-          "display": "Claude Opus 4",
-          "order": 9999,
-          "default_canonical": "anthropic--claude-opus-4",
-          "variant_count": 2,
-          "variants": [
-            {
-              "canonical": "anthropic--claude-opus-4",
-              "display": "Claude Opus 4",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "openrouter"
-              ]
-            },
-            {
-              "canonical": "anthropic--claude-opus-4@20250514",
-              "display": "Claude Opus 4 (20250514)",
-              "revision": "20250514",
-              "composite_score": null,
-              "sources": [
-                "lmarena",
-                "llm_stats"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "anthropic--claude-opus-4-search",
-          "display": "Claude Opus 4 Search",
-          "order": 9999,
-          "default_canonical": "anthropic--claude-opus-4-search",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "anthropic--claude-opus-4-search",
-              "display": "Claude Opus 4 Search",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "lmarena"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "anthropic--claude-opus-4-thinking-16k",
-          "display": "Claude Opus 4 Thinking 16k",
-          "order": 9999,
-          "default_canonical": "anthropic--claude-opus-4-thinking-16k@20250514",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "anthropic--claude-opus-4-thinking-16k@20250514",
-              "display": "Claude Opus 4 Thinking 16k (20250514)",
-              "revision": "20250514",
-              "composite_score": null,
-              "sources": [
-                "lmarena"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "anthropic--claude-opus-4.6",
-          "display": "Claude Opus 4.6",
-          "order": 9999,
-          "default_canonical": "anthropic--claude-opus-4.6",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "anthropic--claude-opus-4.6",
-              "display": "Claude Opus 4.6",
-              "revision": null,
-              "composite_score": 73.2,
-              "sources": [
-                "openrouter",
-                "lmarena",
-                "llm_stats"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "anthropic--claude-opus-4.6-search",
-          "display": "Claude Opus 4.6 Search",
-          "order": 9999,
-          "default_canonical": "anthropic--claude-opus-4.6-search",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "anthropic--claude-opus-4.6-search",
-              "display": "Claude Opus 4.6 Search",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "lmarena"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "anthropic--claude-opus-4.6-thinking",
-          "display": "Claude Opus 4.6 Thinking",
-          "order": 9999,
-          "default_canonical": "anthropic--claude-opus-4.6-thinking",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "anthropic--claude-opus-4.6-thinking",
-              "display": "Claude Opus 4.6 Thinking",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "lmarena"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "anthropic--claude-opus-4.7",
-          "display": "Claude Opus 4.7",
-          "order": 9999,
-          "default_canonical": "anthropic--claude-opus-4.7",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "anthropic--claude-opus-4.7",
-              "display": "Claude Opus 4.7",
-              "revision": null,
-              "composite_score": 76.3,
-              "sources": [
-                "openrouter",
-                "lmarena",
-                "livebench",
-                "llm_stats"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "anthropic--claude-opus-4.7-thinking",
-          "display": "Claude Opus 4.7 Thinking",
-          "order": 9999,
-          "default_canonical": "anthropic--claude-opus-4.7-thinking",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "anthropic--claude-opus-4.7-thinking",
-              "display": "Claude Opus 4.7 Thinking",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "lmarena"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "anthropic--claude-opus-4.6-thinking-auto",
-          "display": "claude-opus-4.6-thinking-auto",
-          "order": 9999,
-          "default_canonical": "anthropic--claude-opus-4.6-thinking-auto",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "anthropic--claude-opus-4.6-thinking-auto",
-              "display": "claude-opus-4.6-thinking-auto",
-              "revision": null,
-              "composite_score": 74.5,
-              "sources": [
-                "livebench"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
       "series_key": "zai--glm-5.2",
       "display": "Glm 5.2",
       "vendor": "zai",
@@ -1071,158 +883,6 @@
                 "openrouter",
                 "lmarena",
                 "livebench",
-                "llm_stats"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "series_key": "openai--gpt-5.2",
-      "display": "Gpt 5.2",
-      "vendor": "openai",
-      "theme": "general",
-      "order": 9999,
-      "member_count": 6,
-      "model_count": 9,
-      "max_composite_score": 74.6,
-      "members": [
-        {
-          "member_key": "openai--gpt-5.2-search",
-          "display": "GPT 5.2 Search",
-          "order": 9999,
-          "default_canonical": "openai--gpt-5.2-search",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "openai--gpt-5.2-search",
-              "display": "GPT 5.2 Search",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "lmarena"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "openai--gpt-5.2-search-non-reasoning",
-          "display": "GPT 5.2 Search Non Reasoning",
-          "order": 9999,
-          "default_canonical": "openai--gpt-5.2-search-non-reasoning",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "openai--gpt-5.2-search-non-reasoning",
-              "display": "GPT 5.2 Search Non Reasoning",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "lmarena"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "openai--gpt-5.2",
-          "display": "GPT-5.2",
-          "order": 9999,
-          "default_canonical": "openai--gpt-5.2",
-          "variant_count": 2,
-          "variants": [
-            {
-              "canonical": "openai--gpt-5.2",
-              "display": "GPT-5.2",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "openrouter",
-                "lmarena"
-              ]
-            },
-            {
-              "canonical": "openai--gpt-5.2@2025-12-11",
-              "display": "GPT-5.2 (2025-12-11)",
-              "revision": "2025-12-11",
-              "composite_score": 74.6,
-              "sources": [
-                "livebench",
-                "llm_stats"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "openai--gpt-5.2-chat",
-          "display": "GPT-5.2 Chat",
-          "order": 9999,
-          "default_canonical": "openai--gpt-5.2-chat",
-          "variant_count": 2,
-          "variants": [
-            {
-              "canonical": "openai--gpt-5.2-chat",
-              "display": "GPT-5.2 Chat",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "openrouter"
-              ]
-            },
-            {
-              "canonical": "openai--gpt-5.2-chat@20260210",
-              "display": "GPT 5.2 Chat (20260210)",
-              "revision": "20260210",
-              "composite_score": null,
-              "sources": [
-                "lmarena"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "openai--gpt-5.2-codex",
-          "display": "GPT-5.2 Codex",
-          "order": 9999,
-          "default_canonical": "openai--gpt-5.2-codex",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "openai--gpt-5.2-codex",
-              "display": "GPT-5.2 Codex",
-              "revision": null,
-              "composite_score": 74,
-              "sources": [
-                "openrouter",
-                "lmarena",
-                "livebench",
-                "llm_stats"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "openai--gpt-5.2-pro",
-          "display": "GPT-5.2 Pro",
-          "order": 9999,
-          "default_canonical": "openai--gpt-5.2-pro",
-          "variant_count": 2,
-          "variants": [
-            {
-              "canonical": "openai--gpt-5.2-pro",
-              "display": "GPT-5.2 Pro",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "openrouter"
-              ]
-            },
-            {
-              "canonical": "openai--gpt-5.2-pro@2025-12-11",
-              "display": "GPT-5.2 Pro (2025-12-11)",
-              "revision": "2025-12-11",
-              "composite_score": null,
-              "sources": [
                 "llm_stats"
               ]
             }
@@ -1482,206 +1142,10 @@
               "revision": null,
               "composite_score": 73.5,
               "sources": [
-                "lmarena",
-                "livebench",
-                "llm_stats"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "series_key": "anthropic--claude-sonnet-4.6",
-      "display": "Claude Sonnet 4.6",
-      "vendor": "anthropic",
-      "theme": "general",
-      "order": 40,
-      "member_count": 3,
-      "model_count": 3,
-      "max_composite_score": 73,
-      "members": [
-        {
-          "member_key": "anthropic--claude-sonnet-4.6",
-          "display": "Claude Sonnet 4.6",
-          "order": 9999,
-          "default_canonical": "anthropic--claude-sonnet-4.6",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "anthropic--claude-sonnet-4.6",
-              "display": "Claude Sonnet 4.6",
-              "revision": null,
-              "composite_score": 65.8,
-              "sources": [
-                "openrouter",
-                "lmarena",
-                "llm_stats"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "anthropic--claude-sonnet-4.6-search",
-          "display": "Claude Sonnet 4.6 Search",
-          "order": 9999,
-          "default_canonical": "anthropic--claude-sonnet-4.6-search",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "anthropic--claude-sonnet-4.6-search",
-              "display": "Claude Sonnet 4.6 Search",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "lmarena"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "anthropic--claude-sonnet-4.6-thinking-auto",
-          "display": "claude-sonnet-4.6-thinking-auto",
-          "order": 9999,
-          "default_canonical": "anthropic--claude-sonnet-4.6-thinking-auto",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "anthropic--claude-sonnet-4.6-thinking-auto",
-              "display": "claude-sonnet-4.6-thinking-auto",
-              "revision": null,
-              "composite_score": 73,
-              "sources": [
-                "livebench"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "series_key": "openai--gpt-5.4",
-      "display": "Gpt 5.4",
-      "vendor": "openai",
-      "theme": "general",
-      "order": 9999,
-      "member_count": 6,
-      "model_count": 6,
-      "max_composite_score": 72.8,
-      "members": [
-        {
-          "member_key": "openai--gpt-5.4-search",
-          "display": "GPT 5.4 Search",
-          "order": 9999,
-          "default_canonical": "openai--gpt-5.4-search",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "openai--gpt-5.4-search",
-              "display": "GPT 5.4 Search",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "lmarena"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "openai--gpt-5.4",
-          "display": "GPT-5.4",
-          "order": 9999,
-          "default_canonical": "openai--gpt-5.4",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "openai--gpt-5.4",
-              "display": "GPT-5.4",
-              "revision": null,
-              "composite_score": 72.8,
-              "sources": [
                 "openrouter",
                 "lmarena",
                 "livebench",
                 "llm_stats"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "openai--gpt-5.4-image-2",
-          "display": "GPT-5.4 Image 2",
-          "order": 9999,
-          "default_canonical": "openai--gpt-5.4-image-2",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "openai--gpt-5.4-image-2",
-              "display": "GPT-5.4 Image 2",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "openrouter"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "openai--gpt-5.4-mini",
-          "display": "GPT-5.4 mini",
-          "order": 9999,
-          "default_canonical": "openai--gpt-5.4-mini",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "openai--gpt-5.4-mini",
-              "display": "GPT-5.4 mini",
-              "revision": null,
-              "composite_score": 66.4,
-              "sources": [
-                "openrouter",
-                "lmarena",
-                "livebench",
-                "llm_stats"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "openai--gpt-5.4-nano",
-          "display": "GPT-5.4 nano",
-          "order": 9999,
-          "default_canonical": "openai--gpt-5.4-nano",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "openai--gpt-5.4-nano",
-              "display": "GPT-5.4 nano",
-              "revision": null,
-              "composite_score": 69.6,
-              "sources": [
-                "openrouter",
-                "lmarena",
-                "livebench",
-                "llm_stats"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "openai--gpt-5.4-pro",
-          "display": "GPT-5.4 Pro",
-          "order": 9999,
-          "default_canonical": "openai--gpt-5.4-pro",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "openai--gpt-5.4-pro",
-              "display": "GPT-5.4 Pro",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "openrouter"
               ]
             }
           ]
@@ -1856,38 +1320,6 @@
               "composite_score": 71.9,
               "sources": [
                 "livebench"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "series_key": "minimax--minimax-m2.5",
-      "display": "Minimax M2.5",
-      "vendor": "minimax",
-      "theme": "general",
-      "order": 9999,
-      "member_count": 1,
-      "model_count": 1,
-      "max_composite_score": 71.9,
-      "members": [
-        {
-          "member_key": "minimax--minimax-m2.5",
-          "display": "MiniMax M2.5",
-          "order": 9999,
-          "default_canonical": "minimax--minimax-m2.5",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "minimax--minimax-m2.5",
-              "display": "MiniMax M2.5",
-              "revision": null,
-              "composite_score": 71.9,
-              "sources": [
-                "openrouter",
-                "lmarena",
-                "llm_stats"
               ]
             }
           ]
@@ -2356,100 +1788,6 @@
       ]
     },
     {
-      "series_key": "meituan--longcat-flash",
-      "display": "Longcat Flash",
-      "vendor": "meituan",
-      "theme": "general",
-      "order": 9999,
-      "member_count": 4,
-      "model_count": 5,
-      "max_composite_score": 70,
-      "members": [
-        {
-          "member_key": "meituan--longcat-flash-chat-exp",
-          "display": "Longcat Flash Chat Exp",
-          "order": 9999,
-          "default_canonical": "meituan--longcat-flash-chat-exp@2602",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "meituan--longcat-flash-chat-exp@2602",
-              "display": "Longcat Flash Chat Exp (2602)",
-              "revision": "2602",
-              "composite_score": null,
-              "sources": [
-                "lmarena"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "meituan--longcat-flash-chat",
-          "display": "LongCat-Flash-Chat",
-          "order": 9999,
-          "default_canonical": "meituan--longcat-flash-chat",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "meituan--longcat-flash-chat",
-              "display": "LongCat-Flash-Chat",
-              "revision": null,
-              "composite_score": 50.4,
-              "sources": [
-                "lmarena",
-                "llm_stats"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "meituan--longcat-flash-lite",
-          "display": "LongCat-Flash-Lite",
-          "order": 9999,
-          "default_canonical": "meituan--longcat-flash-lite",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "meituan--longcat-flash-lite",
-              "display": "LongCat-Flash-Lite",
-              "revision": null,
-              "composite_score": 49.1,
-              "sources": [
-                "llm_stats"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "meituan--longcat-flash-thinking",
-          "display": "LongCat-Flash-Thinking",
-          "order": 9999,
-          "default_canonical": "meituan--longcat-flash-thinking",
-          "variant_count": 2,
-          "variants": [
-            {
-              "canonical": "meituan--longcat-flash-thinking",
-              "display": "LongCat-Flash-Thinking",
-              "revision": null,
-              "composite_score": 61.4,
-              "sources": [
-                "llm_stats"
-              ]
-            },
-            {
-              "canonical": "meituan--longcat-flash-thinking@2601",
-              "display": "LongCat-Flash-Thinking (2601)",
-              "revision": "2601",
-              "composite_score": 70,
-              "sources": [
-                "llm_stats"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
       "series_key": "meta--muse-glimmer",
       "display": "Muse Glimmer",
       "vendor": "meta",
@@ -2608,112 +1946,6 @@
               "sources": [
                 "openrouter",
                 "lmarena",
-                "llm_stats"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "series_key": "deepseek--deepseek-v3.2",
-      "display": "Deepseek V3.2",
-      "vendor": "deepseek",
-      "theme": "general",
-      "order": 9999,
-      "member_count": 5,
-      "model_count": 5,
-      "max_composite_score": 68.2,
-      "members": [
-        {
-          "member_key": "deepseek--deepseek-v3.2-exp-thinking",
-          "display": "Deepseek V3.2 Exp Thinking",
-          "order": 9999,
-          "default_canonical": "deepseek--deepseek-v3.2-exp-thinking",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "deepseek--deepseek-v3.2-exp-thinking",
-              "display": "Deepseek V3.2 Exp Thinking",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "lmarena"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "deepseek--deepseek-v3.2-thinking",
-          "display": "Deepseek V3.2 Thinking",
-          "order": 9999,
-          "default_canonical": "deepseek--deepseek-v3.2-thinking",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "deepseek--deepseek-v3.2-thinking",
-              "display": "Deepseek V3.2 Thinking (deepseek-v3.2-thinking)",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "lmarena"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "deepseek--deepseek-v3.2",
-          "display": "DeepSeek-V3.2",
-          "order": 9999,
-          "default_canonical": "deepseek--deepseek-v3.2",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "deepseek--deepseek-v3.2",
-              "display": "DeepSeek-V3.2",
-              "revision": null,
-              "composite_score": 67.1,
-              "sources": [
-                "openrouter",
-                "lmarena",
-                "llm_stats"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "deepseek--deepseek-v3.2-exp",
-          "display": "DeepSeek-V3.2-Exp",
-          "order": 9999,
-          "default_canonical": "deepseek--deepseek-v3.2-exp",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "deepseek--deepseek-v3.2-exp",
-              "display": "DeepSeek-V3.2-Exp",
-              "revision": null,
-              "composite_score": 61,
-              "sources": [
-                "openrouter",
-                "lmarena",
-                "llm_stats"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "deepseek--deepseek-v3.2-speciale",
-          "display": "DeepSeek-V3.2-Speciale",
-          "order": 9999,
-          "default_canonical": "deepseek--deepseek-v3.2-speciale",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "deepseek--deepseek-v3.2-speciale",
-              "display": "DeepSeek-V3.2-Speciale",
-              "revision": null,
-              "composite_score": 68.2,
-              "sources": [
                 "llm_stats"
               ]
             }
@@ -2959,36 +2191,6 @@
       ]
     },
     {
-      "series_key": "deepseek--deepseek-reasoner",
-      "display": "Deepseek Reasoner",
-      "vendor": "deepseek",
-      "theme": "general",
-      "order": 9999,
-      "member_count": 1,
-      "model_count": 1,
-      "max_composite_score": 66.4,
-      "members": [
-        {
-          "member_key": "deepseek--deepseek-reasoner",
-          "display": "DeepSeek-V3.2 (Thinking)",
-          "order": 9999,
-          "default_canonical": "deepseek--deepseek-reasoner",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "deepseek--deepseek-reasoner",
-              "display": "DeepSeek-V3.2 (Thinking) (deepseek-reasoner)",
-              "revision": null,
-              "composite_score": 66.4,
-              "sources": [
-                "llm_stats"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
       "series_key": "qwen--qwen3.6-35b",
       "display": "Qwen3.6 35b",
       "vendor": "qwen",
@@ -3013,55 +2215,6 @@
               "sources": [
                 "openrouter",
                 "llm_stats"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "series_key": "minimax--minimax-m2.1",
-      "display": "Minimax M2.1",
-      "vendor": "minimax",
-      "theme": "general",
-      "order": 9999,
-      "member_count": 2,
-      "model_count": 2,
-      "max_composite_score": 65.6,
-      "members": [
-        {
-          "member_key": "minimax--minimax-m2.1",
-          "display": "MiniMax M2.1",
-          "order": 9999,
-          "default_canonical": "minimax--minimax-m2.1",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "minimax--minimax-m2.1",
-              "display": "MiniMax M2.1",
-              "revision": null,
-              "composite_score": 65.6,
-              "sources": [
-                "openrouter",
-                "llm_stats"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "minimax--minimax-m2.1-preview",
-          "display": "Minimax M2.1 Preview",
-          "order": 9999,
-          "default_canonical": "minimax--minimax-m2.1-preview",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "minimax--minimax-m2.1-preview",
-              "display": "Minimax M2.1 Preview",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "lmarena"
               ]
             }
           ]
@@ -3393,110 +2546,6 @@
               "composite_score": 64.1,
               "sources": [
                 "openrouter",
-                "lmarena",
-                "llm_stats"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "series_key": "xiaomi--mimo-v2",
-      "display": "Mimo V2",
-      "vendor": "xiaomi",
-      "theme": "general",
-      "order": 9999,
-      "member_count": 5,
-      "model_count": 5,
-      "max_composite_score": 64,
-      "members": [
-        {
-          "member_key": "xiaomi--mimo-v2-flash-non-thinking",
-          "display": "Mimo V2 Flash Non Thinking",
-          "order": 9999,
-          "default_canonical": "xiaomi--mimo-v2-flash-non-thinking",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "xiaomi--mimo-v2-flash-non-thinking",
-              "display": "Mimo V2 Flash Non Thinking",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "lmarena"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "xiaomi--mimo-v2-flash-thinking",
-          "display": "Mimo V2 Flash Thinking",
-          "order": 9999,
-          "default_canonical": "xiaomi--mimo-v2-flash-thinking",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "xiaomi--mimo-v2-flash-thinking",
-              "display": "Mimo V2 Flash Thinking",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "lmarena"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "xiaomi--mimo-v2-flash",
-          "display": "MiMo-V2-Flash",
-          "order": 9999,
-          "default_canonical": "xiaomi--mimo-v2-flash",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "xiaomi--mimo-v2-flash",
-              "display": "MiMo-V2-Flash",
-              "revision": null,
-              "composite_score": 64,
-              "sources": [
-                "llm_stats"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "xiaomi--mimo-v2-omni",
-          "display": "MiMo-V2-Omni",
-          "order": 9999,
-          "default_canonical": "xiaomi--mimo-v2-omni",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "xiaomi--mimo-v2-omni",
-              "display": "MiMo-V2-Omni",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "lmarena",
-                "llm_stats"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "xiaomi--mimo-v2-pro",
-          "display": "MiMo-V2-Pro",
-          "order": 9999,
-          "default_canonical": "xiaomi--mimo-v2-pro",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "xiaomi--mimo-v2-pro",
-              "display": "MiMo-V2-Pro",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
                 "lmarena",
                 "llm_stats"
               ]
@@ -4166,36 +3215,6 @@
       ]
     },
     {
-      "series_key": "stepfun--step3-vl",
-      "display": "Step3 Vl",
-      "vendor": "stepfun",
-      "theme": "general",
-      "order": 9999,
-      "member_count": 1,
-      "model_count": 1,
-      "max_composite_score": 58.2,
-      "members": [
-        {
-          "member_key": "stepfun--step3-vl-10b",
-          "display": "Step3-VL-10B",
-          "order": 9999,
-          "default_canonical": "stepfun--step3-vl-10b",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "stepfun--step3-vl-10b",
-              "display": "Step3-VL-10B",
-              "revision": null,
-              "composite_score": 58.2,
-              "sources": [
-                "llm_stats"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
       "series_key": "sarvamai--sarvam-105b",
       "display": "Sarvam 105b",
       "vendor": "sarvamai",
@@ -4306,176 +3325,6 @@
               "revision": "05-2026",
               "composite_score": 56.1,
               "sources": [
-                "llm_stats"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "series_key": "deepseek--deepseek-r1",
-      "display": "Deepseek R1",
-      "vendor": "deepseek",
-      "theme": "general",
-      "order": 9999,
-      "member_count": 8,
-      "model_count": 9,
-      "max_composite_score": 56.1,
-      "members": [
-        {
-          "member_key": "deepseek--deepseek-r1-distill-llama-70b",
-          "display": "DeepSeek R1 Distill Llama 70B",
-          "order": 9999,
-          "default_canonical": "deepseek--deepseek-r1-distill-llama-70b",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "deepseek--deepseek-r1-distill-llama-70b",
-              "display": "DeepSeek R1 Distill Llama 70B",
-              "revision": null,
-              "composite_score": 43.6,
-              "sources": [
-                "openrouter",
-                "llm_stats"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "deepseek--deepseek-r1-distill-llama-8b",
-          "display": "DeepSeek R1 Distill Llama 8B",
-          "order": 9999,
-          "default_canonical": "deepseek--deepseek-r1-distill-llama-8b",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "deepseek--deepseek-r1-distill-llama-8b",
-              "display": "DeepSeek R1 Distill Llama 8B",
-              "revision": null,
-              "composite_score": 34.5,
-              "sources": [
-                "llm_stats"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "deepseek--deepseek-r1-distill-qwen-1.5b",
-          "display": "DeepSeek R1 Distill Qwen 1.5B",
-          "order": 9999,
-          "default_canonical": "deepseek--deepseek-r1-distill-qwen-1.5b",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "deepseek--deepseek-r1-distill-qwen-1.5b",
-              "display": "DeepSeek R1 Distill Qwen 1.5B",
-              "revision": null,
-              "composite_score": 22.2,
-              "sources": [
-                "llm_stats"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "deepseek--deepseek-r1-distill-qwen-14b",
-          "display": "DeepSeek R1 Distill Qwen 14B",
-          "order": 9999,
-          "default_canonical": "deepseek--deepseek-r1-distill-qwen-14b",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "deepseek--deepseek-r1-distill-qwen-14b",
-              "display": "DeepSeek R1 Distill Qwen 14B",
-              "revision": null,
-              "composite_score": 39.3,
-              "sources": [
-                "llm_stats"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "deepseek--deepseek-r1-distill-qwen-32b",
-          "display": "DeepSeek R1 Distill Qwen 32B",
-          "order": 9999,
-          "default_canonical": "deepseek--deepseek-r1-distill-qwen-32b",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "deepseek--deepseek-r1-distill-qwen-32b",
-              "display": "DeepSeek R1 Distill Qwen 32B",
-              "revision": null,
-              "composite_score": 41.9,
-              "sources": [
-                "llm_stats"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "deepseek--deepseek-r1-distill-qwen-7b",
-          "display": "DeepSeek R1 Distill Qwen 7B",
-          "order": 9999,
-          "default_canonical": "deepseek--deepseek-r1-distill-qwen-7b",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "deepseek--deepseek-r1-distill-qwen-7b",
-              "display": "DeepSeek R1 Distill Qwen 7B",
-              "revision": null,
-              "composite_score": 36.3,
-              "sources": [
-                "llm_stats"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "deepseek--deepseek-r1-zero",
-          "display": "DeepSeek R1 Zero",
-          "order": 9999,
-          "default_canonical": "deepseek--deepseek-r1-zero",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "deepseek--deepseek-r1-zero",
-              "display": "DeepSeek R1 Zero",
-              "revision": null,
-              "composite_score": 45.4,
-              "sources": [
-                "llm_stats"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "deepseek--deepseek-r1",
-          "display": "DeepSeek-R1",
-          "order": 9999,
-          "default_canonical": "deepseek--deepseek-r1",
-          "variant_count": 2,
-          "variants": [
-            {
-              "canonical": "deepseek--deepseek-r1",
-              "display": "DeepSeek-R1",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "openrouter",
-                "lmarena",
-                "llm_stats"
-              ]
-            },
-            {
-              "canonical": "deepseek--deepseek-r1@0528",
-              "display": "DeepSeek-R1 (0528)",
-              "revision": "0528",
-              "composite_score": 56.1,
-              "sources": [
-                "openrouter",
-                "lmarena",
                 "llm_stats"
               ]
             }
@@ -5067,6 +3916,7 @@
               "revision": null,
               "composite_score": 50.4,
               "sources": [
+                "openrouter",
                 "lmarena",
                 "livebench"
               ]
@@ -5586,6 +4436,7 @@
               "revision": null,
               "composite_score": 49.1,
               "sources": [
+                "openrouter",
                 "lmarena",
                 "livebench",
                 "llm_stats"
@@ -8896,6 +7747,82 @@
       ]
     },
     {
+      "series_key": "anthropic--claude-opus-4",
+      "display": "Claude Opus 4",
+      "vendor": "anthropic",
+      "theme": "general",
+      "order": 33,
+      "member_count": 3,
+      "model_count": 4,
+      "max_composite_score": null,
+      "members": [
+        {
+          "member_key": "anthropic--claude-opus-4",
+          "display": "Claude Opus 4",
+          "order": 9999,
+          "default_canonical": "anthropic--claude-opus-4",
+          "variant_count": 2,
+          "variants": [
+            {
+              "canonical": "anthropic--claude-opus-4",
+              "display": "Claude Opus 4",
+              "revision": null,
+              "composite_score": null,
+              "sources": [
+                "openrouter"
+              ]
+            },
+            {
+              "canonical": "anthropic--claude-opus-4@20250514",
+              "display": "Claude Opus 4 (20250514)",
+              "revision": "20250514",
+              "composite_score": null,
+              "sources": [
+                "lmarena",
+                "llm_stats"
+              ]
+            }
+          ]
+        },
+        {
+          "member_key": "anthropic--claude-opus-4-search",
+          "display": "Claude Opus 4 Search",
+          "order": 9999,
+          "default_canonical": "anthropic--claude-opus-4-search",
+          "variant_count": 1,
+          "variants": [
+            {
+              "canonical": "anthropic--claude-opus-4-search",
+              "display": "Claude Opus 4 Search",
+              "revision": null,
+              "composite_score": null,
+              "sources": [
+                "lmarena"
+              ]
+            }
+          ]
+        },
+        {
+          "member_key": "anthropic--claude-opus-4-thinking-16k",
+          "display": "Claude Opus 4 Thinking 16k",
+          "order": 9999,
+          "default_canonical": "anthropic--claude-opus-4-thinking-16k@20250514",
+          "variant_count": 1,
+          "variants": [
+            {
+              "canonical": "anthropic--claude-opus-4-thinking-16k@20250514",
+              "display": "Claude Opus 4 Thinking 16k (20250514)",
+              "revision": "20250514",
+              "composite_score": null,
+              "sources": [
+                "lmarena"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "series_key": "anthropic--claude-sonnet-4.5",
       "display": "Claude Sonnet 4.5",
       "vendor": "anthropic",
@@ -10102,8 +9029,8 @@
       "vendor": "deepseek",
       "theme": "general",
       "order": 9999,
-      "member_count": 3,
-      "model_count": 3,
+      "member_count": 2,
+      "model_count": 2,
       "max_composite_score": null,
       "members": [
         {
@@ -10138,25 +9065,6 @@
               "composite_score": null,
               "sources": [
                 "openrouter"
-              ]
-            }
-          ]
-        },
-        {
-          "member_key": "deepseek--deepseek-chat",
-          "display": "DeepSeek-V3.2",
-          "order": 9999,
-          "default_canonical": "deepseek--deepseek-chat",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "deepseek--deepseek-chat",
-              "display": "DeepSeek-V3.2 (Non-thinking)",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "openrouter",
-                "llm_stats"
               ]
             }
           ]
@@ -12864,9 +11772,9 @@
       ]
     },
     {
-      "series_key": "x-ai--grok",
+      "series_key": "xai--grok",
       "display": "Grok",
-      "vendor": "x-ai",
+      "vendor": "xai",
       "theme": "general",
       "order": 9999,
       "member_count": 1,
@@ -12874,14 +11782,14 @@
       "max_composite_score": null,
       "members": [
         {
-          "member_key": "x-ai--grok",
+          "member_key": "xai--grok",
           "display": "Grok",
           "order": 9999,
-          "default_canonical": "x-ai--grok",
+          "default_canonical": "xai--grok",
           "variant_count": 1,
           "variants": [
             {
-              "canonical": "x-ai--grok",
+              "canonical": "xai--grok",
               "display": "Grok",
               "revision": null,
               "composite_score": null,
@@ -13392,24 +12300,24 @@
       ]
     },
     {
-      "series_key": "x-ai--grok-4.20",
+      "series_key": "xai--grok-4.20",
       "display": "Grok 4.20",
-      "vendor": "x-ai",
+      "vendor": "xai",
       "theme": "general",
       "order": 9999,
-      "member_count": 2,
-      "model_count": 2,
+      "member_count": 6,
+      "model_count": 6,
       "max_composite_score": null,
       "members": [
         {
-          "member_key": "x-ai--grok-4.20",
+          "member_key": "xai--grok-4.20",
           "display": "Grok 4.20",
           "order": 9999,
-          "default_canonical": "x-ai--grok-4.20",
+          "default_canonical": "xai--grok-4.20",
           "variant_count": 1,
           "variants": [
             {
-              "canonical": "x-ai--grok-4.20",
+              "canonical": "xai--grok-4.20",
               "display": "Grok 4.20",
               "revision": null,
               "composite_score": null,
@@ -13419,36 +12327,6 @@
             }
           ]
         },
-        {
-          "member_key": "x-ai--grok-4.20-multi-agent",
-          "display": "Grok 4.20 Multi-Agent",
-          "order": 9999,
-          "default_canonical": "x-ai--grok-4.20-multi-agent",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "x-ai--grok-4.20-multi-agent",
-              "display": "Grok 4.20 Multi-Agent",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "openrouter"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "series_key": "xai--grok-4.20",
-      "display": "Grok 4.20",
-      "vendor": "xai",
-      "theme": "general",
-      "order": 9999,
-      "member_count": 4,
-      "model_count": 4,
-      "max_composite_score": null,
-      "members": [
         {
           "member_key": "xai--grok-4.20-beta1",
           "display": "Grok 4.20 Beta1",
@@ -13463,6 +12341,24 @@
               "composite_score": null,
               "sources": [
                 "lmarena"
+              ]
+            }
+          ]
+        },
+        {
+          "member_key": "xai--grok-4.20-multi-agent",
+          "display": "Grok 4.20 Multi-Agent",
+          "order": 9999,
+          "default_canonical": "xai--grok-4.20-multi-agent",
+          "variant_count": 1,
+          "variants": [
+            {
+              "canonical": "xai--grok-4.20-multi-agent",
+              "display": "Grok 4.20 Multi-Agent",
+              "revision": null,
+              "composite_score": null,
+              "sources": [
+                "openrouter"
               ]
             }
           ]
@@ -13519,126 +12415,6 @@
               "sources": [
                 "lmarena",
                 "llm_stats"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "series_key": "x-ai--grok-4.3",
-      "display": "Grok 4.3",
-      "vendor": "x-ai",
-      "theme": "general",
-      "order": 9999,
-      "member_count": 1,
-      "model_count": 1,
-      "max_composite_score": null,
-      "members": [
-        {
-          "member_key": "x-ai--grok-4.3",
-          "display": "Grok 4.3",
-          "order": 9999,
-          "default_canonical": "x-ai--grok-4.3",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "x-ai--grok-4.3",
-              "display": "Grok 4.3",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "openrouter"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "series_key": "x-ai--grok-4.5",
-      "display": "Grok 4.5",
-      "vendor": "x-ai",
-      "theme": "general",
-      "order": 9999,
-      "member_count": 1,
-      "model_count": 1,
-      "max_composite_score": null,
-      "members": [
-        {
-          "member_key": "x-ai--grok-4.5",
-          "display": "Grok 4.5",
-          "order": 9999,
-          "default_canonical": "x-ai--grok-4.5",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "x-ai--grok-4.5",
-              "display": "Grok 4.5",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "openrouter"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "series_key": "x-ai--grok-4.6",
-      "display": "Grok 4.6",
-      "vendor": "x-ai",
-      "theme": "general",
-      "order": 9999,
-      "member_count": 1,
-      "model_count": 1,
-      "max_composite_score": null,
-      "members": [
-        {
-          "member_key": "x-ai--grok-4.6",
-          "display": "Grok 4.6",
-          "order": 9999,
-          "default_canonical": "x-ai--grok-4.6",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "x-ai--grok-4.6",
-              "display": "Grok 4.6",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "openrouter"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "series_key": "x-ai--grok-build",
-      "display": "Grok Build",
-      "vendor": "x-ai",
-      "theme": "general",
-      "order": 9999,
-      "member_count": 1,
-      "model_count": 1,
-      "max_composite_score": null,
-      "members": [
-        {
-          "member_key": "x-ai--grok-build-0.1",
-          "display": "Grok Build 0.1",
-          "order": 9999,
-          "default_canonical": "x-ai--grok-build-0.1",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "x-ai--grok-build-0.1",
-              "display": "Grok Build 0.1",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "openrouter"
               ]
             }
           ]
@@ -16513,6 +15289,56 @@
               "revision": null,
               "composite_score": null,
               "sources": [
+                "llm_stats"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "series_key": "xiaomi--mimo-v2",
+      "display": "Mimo V2",
+      "vendor": "xiaomi",
+      "theme": "general",
+      "order": 9999,
+      "member_count": 2,
+      "model_count": 2,
+      "max_composite_score": null,
+      "members": [
+        {
+          "member_key": "xiaomi--mimo-v2-omni",
+          "display": "MiMo-V2-Omni",
+          "order": 9999,
+          "default_canonical": "xiaomi--mimo-v2-omni",
+          "variant_count": 1,
+          "variants": [
+            {
+              "canonical": "xiaomi--mimo-v2-omni",
+              "display": "MiMo-V2-Omni",
+              "revision": null,
+              "composite_score": null,
+              "sources": [
+                "lmarena",
+                "llm_stats"
+              ]
+            }
+          ]
+        },
+        {
+          "member_key": "xiaomi--mimo-v2-pro",
+          "display": "MiMo-V2-Pro",
+          "order": 9999,
+          "default_canonical": "xiaomi--mimo-v2-pro",
+          "variant_count": 1,
+          "variants": [
+            {
+              "canonical": "xiaomi--mimo-v2-pro",
+              "display": "MiMo-V2-Pro",
+              "revision": null,
+              "composite_score": null,
+              "sources": [
+                "lmarena",
                 "llm_stats"
               ]
             }
@@ -23584,188 +22410,6 @@
       "file": "data.json"
     },
     {
-      "canonical": "anthropic--claude-opus-4.6",
-      "identity": "claude-opus-4.6",
-      "family": "claude-opus",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {
-        "openrouter": [
-          {
-            "kind": "batch",
-            "raw_name": "anthropic/claude-opus-4.6:batch"
-          }
-        ]
-      },
-      "display": "Claude Opus 4.6",
-      "vendor": "anthropic",
-      "theme": "general",
-      "series_key": "anthropic--claude-opus-4",
-      "series_display": "Claude Opus 4",
-      "member_key": "anthropic--claude-opus-4.6",
-      "member_display": "Claude Opus 4.6",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 73.2,
-      "degrees": {
-        "lmarena": [
-          "high"
-        ]
-      },
-      "sources": [
-        "openrouter",
-        "lmarena",
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "anthropic--claude-opus-4.6-search",
-      "identity": "claude-opus-4.6-search",
-      "family": "claude-opus",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Claude Opus 4.6 Search",
-      "vendor": "anthropic",
-      "theme": "general",
-      "series_key": "anthropic--claude-opus-4",
-      "series_display": "Claude Opus 4",
-      "member_key": "anthropic--claude-opus-4.6-search",
-      "member_display": "Claude Opus 4.6 Search",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "lmarena"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "anthropic--claude-opus-4.6-thinking",
-      "identity": "claude-opus-4.6-thinking",
-      "family": "claude-opus",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Claude Opus 4.6 Thinking",
-      "vendor": "anthropic",
-      "theme": "general",
-      "series_key": "anthropic--claude-opus-4",
-      "series_display": "Claude Opus 4",
-      "member_key": "anthropic--claude-opus-4.6-thinking",
-      "member_display": "Claude Opus 4.6 Thinking",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "lmarena"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "anthropic--claude-opus-4.6-thinking-auto",
-      "identity": "claude-opus-4.6-thinking-auto",
-      "family": "claude-opus",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "claude-opus-4.6-thinking-auto",
-      "vendor": "anthropic",
-      "theme": "general",
-      "series_key": "anthropic--claude-opus-4",
-      "series_display": "Claude Opus 4",
-      "member_key": "anthropic--claude-opus-4.6-thinking-auto",
-      "member_display": "claude-opus-4.6-thinking-auto",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 74.5,
-      "degrees": {
-        "livebench": [
-          "high"
-        ]
-      },
-      "sources": [
-        "livebench"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "anthropic--claude-opus-4.7",
-      "identity": "claude-opus-4.7",
-      "family": "claude-opus",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {
-        "openrouter": [
-          {
-            "kind": "fast",
-            "raw_name": "anthropic/claude-opus-4.7-fast"
-          },
-          {
-            "kind": "batch",
-            "raw_name": "anthropic/claude-opus-4.7:batch"
-          }
-        ]
-      },
-      "display": "Claude Opus 4.7",
-      "vendor": "anthropic",
-      "theme": "general",
-      "series_key": "anthropic--claude-opus-4",
-      "series_display": "Claude Opus 4",
-      "member_key": "anthropic--claude-opus-4.7",
-      "member_display": "Claude Opus 4.7",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 76.3,
-      "degrees": {
-        "lmarena": [
-          "high"
-        ],
-        "livebench": [
-          "xhigh"
-        ]
-      },
-      "sources": [
-        "openrouter",
-        "lmarena",
-        "livebench",
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "anthropic--claude-opus-4.7-thinking",
-      "identity": "claude-opus-4.7-thinking",
-      "family": "claude-opus",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Claude Opus 4.7 Thinking",
-      "vendor": "anthropic",
-      "theme": "general",
-      "series_key": "anthropic--claude-opus-4",
-      "series_display": "Claude Opus 4",
-      "member_key": "anthropic--claude-opus-4.7-thinking",
-      "member_display": "Claude Opus 4.7 Thinking",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "lmarena"
-      ],
-      "file": "data.json"
-    },
-    {
       "canonical": "anthropic--claude-opus-4.8",
       "identity": "claude-opus-4.8",
       "family": "claude-opus",
@@ -24093,91 +22737,6 @@
       "sources": [
         "lmarena",
         "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "anthropic--claude-sonnet-4.6",
-      "identity": "claude-sonnet-4.6",
-      "family": "claude-sonnet",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {
-        "openrouter": [
-          {
-            "kind": "batch",
-            "raw_name": "anthropic/claude-sonnet-4.6:batch"
-          }
-        ]
-      },
-      "display": "Claude Sonnet 4.6",
-      "vendor": "anthropic",
-      "theme": "general",
-      "series_key": "anthropic--claude-sonnet-4.6",
-      "series_display": "Claude Sonnet 4.6",
-      "member_key": "anthropic--claude-sonnet-4.6",
-      "member_display": "Claude Sonnet 4.6",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 65.8,
-      "degrees": {},
-      "sources": [
-        "openrouter",
-        "lmarena",
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "anthropic--claude-sonnet-4.6-search",
-      "identity": "claude-sonnet-4.6-search",
-      "family": "claude-sonnet",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Claude Sonnet 4.6 Search",
-      "vendor": "anthropic",
-      "theme": "general",
-      "series_key": "anthropic--claude-sonnet-4.6",
-      "series_display": "Claude Sonnet 4.6",
-      "member_key": "anthropic--claude-sonnet-4.6-search",
-      "member_display": "Claude Sonnet 4.6 Search",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "lmarena"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "anthropic--claude-sonnet-4.6-thinking-auto",
-      "identity": "claude-sonnet-4.6-thinking-auto",
-      "family": "claude-sonnet",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "claude-sonnet-4.6-thinking-auto",
-      "vendor": "anthropic",
-      "theme": "general",
-      "series_key": "anthropic--claude-sonnet-4.6",
-      "series_display": "Claude Sonnet 4.6",
-      "member_key": "anthropic--claude-sonnet-4.6-thinking-auto",
-      "member_display": "claude-sonnet-4.6-thinking-auto",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 73,
-      "degrees": {
-        "livebench": [
-          "medium"
-        ]
-      },
-      "sources": [
-        "livebench"
       ],
       "file": "data.json"
     },
@@ -25896,31 +24455,6 @@
       "file": "data.json"
     },
     {
-      "canonical": "deepseek--deepseek-chat",
-      "identity": "deepseek-chat",
-      "family": "deepseek-chat",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "DeepSeek-V3.2 (Non-thinking)",
-      "vendor": "deepseek",
-      "theme": "general",
-      "series_key": "deepseek--deepseek-chat",
-      "series_display": "Deepseek Chat",
-      "member_key": "deepseek--deepseek-chat",
-      "member_display": "DeepSeek-V3.2",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "openrouter",
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
       "canonical": "deepseek--deepseek-chat-v3.1",
       "identity": "deepseek-chat-v3.1",
       "family": "deepseek-chat",
@@ -25991,252 +24525,6 @@
       "degrees": {},
       "sources": [
         "lmarena"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "deepseek--deepseek-r1",
-      "identity": "deepseek-r1",
-      "family": "deepseek-r1",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "DeepSeek-R1",
-      "vendor": "deepseek",
-      "theme": "general",
-      "series_key": "deepseek--deepseek-r1",
-      "series_display": "Deepseek R1",
-      "member_key": "deepseek--deepseek-r1",
-      "member_display": "DeepSeek-R1",
-      "member_order": 9999,
-      "member_variant_count": 2,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "openrouter",
-        "lmarena"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "deepseek--deepseek-r1-distill-llama-70b",
-      "identity": "deepseek-r1-distill-llama-70b",
-      "family": "deepseek-r1",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "DeepSeek R1 Distill Llama 70B",
-      "vendor": "deepseek",
-      "theme": "general",
-      "series_key": "deepseek--deepseek-r1",
-      "series_display": "Deepseek R1",
-      "member_key": "deepseek--deepseek-r1-distill-llama-70b",
-      "member_display": "DeepSeek R1 Distill Llama 70B",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 43.6,
-      "degrees": {},
-      "sources": [
-        "openrouter",
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "deepseek--deepseek-r1-distill-llama-8b",
-      "identity": "deepseek-r1-distill-llama-8b",
-      "family": "deepseek-r1",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "DeepSeek R1 Distill Llama 8B",
-      "vendor": "deepseek",
-      "theme": "general",
-      "series_key": "deepseek--deepseek-r1",
-      "series_display": "Deepseek R1",
-      "member_key": "deepseek--deepseek-r1-distill-llama-8b",
-      "member_display": "DeepSeek R1 Distill Llama 8B",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 34.5,
-      "degrees": {},
-      "sources": [
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "deepseek--deepseek-r1-distill-qwen-1.5b",
-      "identity": "deepseek-r1-distill-qwen-1.5b",
-      "family": "deepseek-r1",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "DeepSeek R1 Distill Qwen 1.5B",
-      "vendor": "deepseek",
-      "theme": "general",
-      "series_key": "deepseek--deepseek-r1",
-      "series_display": "Deepseek R1",
-      "member_key": "deepseek--deepseek-r1-distill-qwen-1.5b",
-      "member_display": "DeepSeek R1 Distill Qwen 1.5B",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 22.2,
-      "degrees": {},
-      "sources": [
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "deepseek--deepseek-r1-distill-qwen-14b",
-      "identity": "deepseek-r1-distill-qwen-14b",
-      "family": "deepseek-r1",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "DeepSeek R1 Distill Qwen 14B",
-      "vendor": "deepseek",
-      "theme": "general",
-      "series_key": "deepseek--deepseek-r1",
-      "series_display": "Deepseek R1",
-      "member_key": "deepseek--deepseek-r1-distill-qwen-14b",
-      "member_display": "DeepSeek R1 Distill Qwen 14B",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 39.3,
-      "degrees": {},
-      "sources": [
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "deepseek--deepseek-r1-distill-qwen-32b",
-      "identity": "deepseek-r1-distill-qwen-32b",
-      "family": "deepseek-r1",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "DeepSeek R1 Distill Qwen 32B",
-      "vendor": "deepseek",
-      "theme": "general",
-      "series_key": "deepseek--deepseek-r1",
-      "series_display": "Deepseek R1",
-      "member_key": "deepseek--deepseek-r1-distill-qwen-32b",
-      "member_display": "DeepSeek R1 Distill Qwen 32B",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 41.9,
-      "degrees": {},
-      "sources": [
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "deepseek--deepseek-r1-distill-qwen-7b",
-      "identity": "deepseek-r1-distill-qwen-7b",
-      "family": "deepseek-r1",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "DeepSeek R1 Distill Qwen 7B",
-      "vendor": "deepseek",
-      "theme": "general",
-      "series_key": "deepseek--deepseek-r1",
-      "series_display": "Deepseek R1",
-      "member_key": "deepseek--deepseek-r1-distill-qwen-7b",
-      "member_display": "DeepSeek R1 Distill Qwen 7B",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 36.3,
-      "degrees": {},
-      "sources": [
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "deepseek--deepseek-r1-zero",
-      "identity": "deepseek-r1-zero",
-      "family": "deepseek-r1",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "DeepSeek R1 Zero",
-      "vendor": "deepseek",
-      "theme": "general",
-      "series_key": "deepseek--deepseek-r1",
-      "series_display": "Deepseek R1",
-      "member_key": "deepseek--deepseek-r1-zero",
-      "member_display": "DeepSeek R1 Zero",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 45.4,
-      "degrees": {},
-      "sources": [
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "deepseek--deepseek-r1@0528",
-      "identity": "deepseek-r1",
-      "family": "deepseek-r1",
-      "revisions": [
-        "0528"
-      ],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "DeepSeek-R1 (0528)",
-      "vendor": "deepseek",
-      "theme": "general",
-      "series_key": "deepseek--deepseek-r1",
-      "series_display": "Deepseek R1",
-      "member_key": "deepseek--deepseek-r1",
-      "member_display": "DeepSeek-R1",
-      "member_order": 9999,
-      "member_variant_count": 2,
-      "has_composite": true,
-      "composite_score": 56.1,
-      "degrees": {},
-      "sources": [
-        "openrouter",
-        "lmarena",
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "deepseek--deepseek-reasoner",
-      "identity": "deepseek-reasoner",
-      "family": "deepseek-reasoner",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "DeepSeek-V3.2 (Thinking) (deepseek-reasoner)",
-      "vendor": "deepseek",
-      "theme": "general",
-      "series_key": "deepseek--deepseek-reasoner",
-      "series_display": "Deepseek Reasoner",
-      "member_key": "deepseek--deepseek-reasoner",
-      "member_display": "DeepSeek-V3.2 (Thinking)",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 66.4,
-      "degrees": {},
-      "sources": [
-        "llm_stats"
       ],
       "file": "data.json"
     },
@@ -26404,130 +24692,6 @@
       "series_display": "Deepseek V3.1",
       "member_key": "deepseek--deepseek-v3.1-thinking",
       "member_display": "Deepseek V3.1 Thinking",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "lmarena"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "deepseek--deepseek-v3.2",
-      "identity": "deepseek-v3.2",
-      "family": "deepseek-v3.2",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "DeepSeek-V3.2",
-      "vendor": "deepseek",
-      "theme": "general",
-      "series_key": "deepseek--deepseek-v3.2",
-      "series_display": "Deepseek V3.2",
-      "member_key": "deepseek--deepseek-v3.2",
-      "member_display": "DeepSeek-V3.2",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 67.1,
-      "degrees": {},
-      "sources": [
-        "openrouter",
-        "lmarena",
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "deepseek--deepseek-v3.2-exp",
-      "identity": "deepseek-v3.2-exp",
-      "family": "deepseek-v3.2",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "DeepSeek-V3.2-Exp",
-      "vendor": "deepseek",
-      "theme": "general",
-      "series_key": "deepseek--deepseek-v3.2",
-      "series_display": "Deepseek V3.2",
-      "member_key": "deepseek--deepseek-v3.2-exp",
-      "member_display": "DeepSeek-V3.2-Exp",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 61,
-      "degrees": {},
-      "sources": [
-        "openrouter",
-        "lmarena",
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "deepseek--deepseek-v3.2-exp-thinking",
-      "identity": "deepseek-v3.2-exp-thinking",
-      "family": "deepseek-v3.2",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Deepseek V3.2 Exp Thinking",
-      "vendor": "deepseek",
-      "theme": "general",
-      "series_key": "deepseek--deepseek-v3.2",
-      "series_display": "Deepseek V3.2",
-      "member_key": "deepseek--deepseek-v3.2-exp-thinking",
-      "member_display": "Deepseek V3.2 Exp Thinking",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "lmarena"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "deepseek--deepseek-v3.2-speciale",
-      "identity": "deepseek-v3.2-speciale",
-      "family": "deepseek-v3.2",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "DeepSeek-V3.2-Speciale",
-      "vendor": "deepseek",
-      "theme": "general",
-      "series_key": "deepseek--deepseek-v3.2",
-      "series_display": "Deepseek V3.2",
-      "member_key": "deepseek--deepseek-v3.2-speciale",
-      "member_display": "DeepSeek-V3.2-Speciale",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 68.2,
-      "degrees": {},
-      "sources": [
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "deepseek--deepseek-v3.2-thinking",
-      "identity": "deepseek-v3.2-thinking",
-      "family": "deepseek-v3.2",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Deepseek V3.2 Thinking (deepseek-v3.2-thinking)",
-      "vendor": "deepseek",
-      "theme": "general",
-      "series_key": "deepseek--deepseek-v3.2",
-      "series_display": "Deepseek V3.2",
-      "member_key": "deepseek--deepseek-v3.2-thinking",
-      "member_display": "Deepseek V3.2 Thinking",
       "member_order": 9999,
       "member_variant_count": 1,
       "has_composite": false,
@@ -30532,131 +28696,6 @@
       "file": "data.json"
     },
     {
-      "canonical": "meituan--longcat-flash-chat",
-      "identity": "longcat-flash-chat",
-      "family": "longcat-flash",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "LongCat-Flash-Chat",
-      "vendor": "meituan",
-      "theme": "general",
-      "series_key": "meituan--longcat-flash",
-      "series_display": "Longcat Flash",
-      "member_key": "meituan--longcat-flash-chat",
-      "member_display": "LongCat-Flash-Chat",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 50.4,
-      "degrees": {},
-      "sources": [
-        "lmarena",
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "meituan--longcat-flash-chat-exp@2602",
-      "identity": "longcat-flash-chat-exp",
-      "family": "longcat-flash",
-      "revisions": [
-        "2602"
-      ],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Longcat Flash Chat Exp (2602)",
-      "vendor": "meituan",
-      "theme": "general",
-      "series_key": "meituan--longcat-flash",
-      "series_display": "Longcat Flash",
-      "member_key": "meituan--longcat-flash-chat-exp",
-      "member_display": "Longcat Flash Chat Exp",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "lmarena"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "meituan--longcat-flash-lite",
-      "identity": "longcat-flash-lite",
-      "family": "longcat-flash",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "LongCat-Flash-Lite",
-      "vendor": "meituan",
-      "theme": "general",
-      "series_key": "meituan--longcat-flash",
-      "series_display": "Longcat Flash",
-      "member_key": "meituan--longcat-flash-lite",
-      "member_display": "LongCat-Flash-Lite",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 49.1,
-      "degrees": {},
-      "sources": [
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "meituan--longcat-flash-thinking",
-      "identity": "longcat-flash-thinking",
-      "family": "longcat-flash",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "LongCat-Flash-Thinking",
-      "vendor": "meituan",
-      "theme": "general",
-      "series_key": "meituan--longcat-flash",
-      "series_display": "Longcat Flash",
-      "member_key": "meituan--longcat-flash-thinking",
-      "member_display": "LongCat-Flash-Thinking",
-      "member_order": 9999,
-      "member_variant_count": 2,
-      "has_composite": true,
-      "composite_score": 61.4,
-      "degrees": {},
-      "sources": [
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "meituan--longcat-flash-thinking@2601",
-      "identity": "longcat-flash-thinking",
-      "family": "longcat-flash",
-      "revisions": [
-        "2601"
-      ],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "LongCat-Flash-Thinking (2601)",
-      "vendor": "meituan",
-      "theme": "general",
-      "series_key": "meituan--longcat-flash",
-      "series_display": "Longcat Flash",
-      "member_key": "meituan--longcat-flash-thinking",
-      "member_display": "LongCat-Flash-Thinking",
-      "member_order": 9999,
-      "member_variant_count": 2,
-      "has_composite": true,
-      "composite_score": 70,
-      "degrees": {},
-      "sources": [
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
       "canonical": "meta--llama-3-70b-instruct",
       "identity": "llama-3-70b-instruct",
       "family": "llama-3",
@@ -32127,81 +30166,6 @@
       "degrees": {},
       "sources": [
         "openrouter"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "minimax--minimax-m2.1",
-      "identity": "minimax-m2.1",
-      "family": "minimax-m2.1",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "MiniMax M2.1",
-      "vendor": "minimax",
-      "theme": "general",
-      "series_key": "minimax--minimax-m2.1",
-      "series_display": "Minimax M2.1",
-      "member_key": "minimax--minimax-m2.1",
-      "member_display": "MiniMax M2.1",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 65.6,
-      "degrees": {},
-      "sources": [
-        "openrouter",
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "minimax--minimax-m2.1-preview",
-      "identity": "minimax-m2.1-preview",
-      "family": "minimax-m2.1",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Minimax M2.1 Preview",
-      "vendor": "minimax",
-      "theme": "general",
-      "series_key": "minimax--minimax-m2.1",
-      "series_display": "Minimax M2.1",
-      "member_key": "minimax--minimax-m2.1-preview",
-      "member_display": "Minimax M2.1 Preview",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "lmarena"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "minimax--minimax-m2.5",
-      "identity": "minimax-m2.5",
-      "family": "minimax-m2.5",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "MiniMax M2.5",
-      "vendor": "minimax",
-      "theme": "general",
-      "series_key": "minimax--minimax-m2.5",
-      "series_display": "Minimax M2.5",
-      "member_key": "minimax--minimax-m2.5",
-      "member_display": "MiniMax M2.5",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 71.9,
-      "degrees": {},
-      "sources": [
-        "openrouter",
-        "lmarena",
-        "llm_stats"
       ],
       "file": "data.json"
     },
@@ -36725,262 +34689,6 @@
       "file": "data.json"
     },
     {
-      "canonical": "openai--gpt-5.2",
-      "identity": "gpt-5.2",
-      "family": "gpt-5.2",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {
-        "openrouter": [
-          {
-            "kind": "batch",
-            "raw_name": "openai/gpt-5.2:batch"
-          }
-        ]
-      },
-      "display": "GPT-5.2",
-      "vendor": "openai",
-      "theme": "general",
-      "series_key": "openai--gpt-5.2",
-      "series_display": "Gpt 5.2",
-      "member_key": "openai--gpt-5.2",
-      "member_display": "GPT-5.2",
-      "member_order": 9999,
-      "member_variant_count": 2,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {
-        "lmarena": [
-          "high"
-        ]
-      },
-      "sources": [
-        "openrouter",
-        "lmarena"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "openai--gpt-5.2-chat",
-      "identity": "gpt-5.2-chat",
-      "family": "gpt-5.2",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "GPT-5.2 Chat",
-      "vendor": "openai",
-      "theme": "general",
-      "series_key": "openai--gpt-5.2",
-      "series_display": "Gpt 5.2",
-      "member_key": "openai--gpt-5.2-chat",
-      "member_display": "GPT-5.2 Chat",
-      "member_order": 9999,
-      "member_variant_count": 2,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "openrouter"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "openai--gpt-5.2-chat@20260210",
-      "identity": "gpt-5.2-chat",
-      "family": "gpt-5.2",
-      "revisions": [
-        "20260210"
-      ],
-      "evaluation_profiles": [],
-      "offerings": {
-        "lmarena": [
-          {
-            "kind": "latest",
-            "raw_name": "gpt-5.2-chat-latest-20260210"
-          }
-        ]
-      },
-      "display": "GPT 5.2 Chat (20260210)",
-      "vendor": "openai",
-      "theme": "general",
-      "series_key": "openai--gpt-5.2",
-      "series_display": "Gpt 5.2",
-      "member_key": "openai--gpt-5.2-chat",
-      "member_display": "GPT 5.2 Chat",
-      "member_order": 9999,
-      "member_variant_count": 2,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "lmarena"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "openai--gpt-5.2-codex",
-      "identity": "gpt-5.2-codex",
-      "family": "gpt-5.2",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "GPT-5.2 Codex",
-      "vendor": "openai",
-      "theme": "general",
-      "series_key": "openai--gpt-5.2",
-      "series_display": "Gpt 5.2",
-      "member_key": "openai--gpt-5.2-codex",
-      "member_display": "GPT-5.2 Codex",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 74,
-      "degrees": {},
-      "sources": [
-        "openrouter",
-        "lmarena",
-        "livebench",
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "openai--gpt-5.2-pro",
-      "identity": "gpt-5.2-pro",
-      "family": "gpt-5.2",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {
-        "openrouter": [
-          {
-            "kind": "batch",
-            "raw_name": "openai/gpt-5.2-pro:batch"
-          }
-        ]
-      },
-      "display": "GPT-5.2 Pro",
-      "vendor": "openai",
-      "theme": "general",
-      "series_key": "openai--gpt-5.2",
-      "series_display": "Gpt 5.2",
-      "member_key": "openai--gpt-5.2-pro",
-      "member_display": "GPT-5.2 Pro",
-      "member_order": 9999,
-      "member_variant_count": 2,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "openrouter"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "openai--gpt-5.2-pro@2025-12-11",
-      "identity": "gpt-5.2-pro",
-      "family": "gpt-5.2",
-      "revisions": [
-        "2025-12-11"
-      ],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "GPT-5.2 Pro (2025-12-11)",
-      "vendor": "openai",
-      "theme": "general",
-      "series_key": "openai--gpt-5.2",
-      "series_display": "Gpt 5.2",
-      "member_key": "openai--gpt-5.2-pro",
-      "member_display": "GPT-5.2 Pro",
-      "member_order": 9999,
-      "member_variant_count": 2,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "openai--gpt-5.2-search",
-      "identity": "gpt-5.2-search",
-      "family": "gpt-5.2",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "GPT 5.2 Search",
-      "vendor": "openai",
-      "theme": "general",
-      "series_key": "openai--gpt-5.2",
-      "series_display": "Gpt 5.2",
-      "member_key": "openai--gpt-5.2-search",
-      "member_display": "GPT 5.2 Search",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "lmarena"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "openai--gpt-5.2-search-non-reasoning",
-      "identity": "gpt-5.2-search-non-reasoning",
-      "family": "gpt-5.2",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "GPT 5.2 Search Non Reasoning",
-      "vendor": "openai",
-      "theme": "general",
-      "series_key": "openai--gpt-5.2",
-      "series_display": "Gpt 5.2",
-      "member_key": "openai--gpt-5.2-search-non-reasoning",
-      "member_display": "GPT 5.2 Search Non Reasoning",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "lmarena"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "openai--gpt-5.2@2025-12-11",
-      "identity": "gpt-5.2",
-      "family": "gpt-5.2",
-      "revisions": [
-        "2025-12-11"
-      ],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "GPT-5.2 (2025-12-11)",
-      "vendor": "openai",
-      "theme": "general",
-      "series_key": "openai--gpt-5.2",
-      "series_display": "Gpt 5.2",
-      "member_key": "openai--gpt-5.2",
-      "member_display": "GPT-5.2",
-      "member_order": 9999,
-      "member_variant_count": 2,
-      "has_composite": true,
-      "composite_score": 74.6,
-      "degrees": {
-        "livebench": [
-          "high"
-        ]
-      },
-      "sources": [
-        "livebench",
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
       "canonical": "openai--gpt-5.3-chat",
       "identity": "gpt-5.3-chat",
       "family": "gpt-5.3",
@@ -37042,210 +34750,6 @@
       "sources": [
         "openrouter",
         "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "openai--gpt-5.4",
-      "identity": "gpt-5.4",
-      "family": "gpt-5.4",
-      "revisions": [],
-      "evaluation_profiles": [
-        "codex-harness"
-      ],
-      "offerings": {
-        "openrouter": [
-          {
-            "kind": "batch",
-            "raw_name": "openai/gpt-5.4:batch"
-          }
-        ]
-      },
-      "display": "GPT-5.4",
-      "vendor": "openai",
-      "theme": "general",
-      "series_key": "openai--gpt-5.4",
-      "series_display": "Gpt 5.4",
-      "member_key": "openai--gpt-5.4",
-      "member_display": "GPT-5.4",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 72.8,
-      "degrees": {
-        "lmarena": [
-          "high"
-        ],
-        "livebench": [
-          "xhigh"
-        ]
-      },
-      "sources": [
-        "openrouter",
-        "lmarena",
-        "livebench",
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "openai--gpt-5.4-image-2",
-      "identity": "gpt-5.4-image-2",
-      "family": "gpt-5.4",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "GPT-5.4 Image 2",
-      "vendor": "openai",
-      "theme": "general",
-      "series_key": "openai--gpt-5.4",
-      "series_display": "Gpt 5.4",
-      "member_key": "openai--gpt-5.4-image-2",
-      "member_display": "GPT-5.4 Image 2",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "openrouter"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "openai--gpt-5.4-mini",
-      "identity": "gpt-5.4-mini",
-      "family": "gpt-5.4",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {
-        "openrouter": [
-          {
-            "kind": "batch",
-            "raw_name": "openai/gpt-5.4-mini:batch"
-          }
-        ]
-      },
-      "display": "GPT-5.4 mini",
-      "vendor": "openai",
-      "theme": "general",
-      "series_key": "openai--gpt-5.4",
-      "series_display": "Gpt 5.4",
-      "member_key": "openai--gpt-5.4-mini",
-      "member_display": "GPT-5.4 mini",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 66.4,
-      "degrees": {
-        "lmarena": [
-          "high"
-        ],
-        "livebench": [
-          "xhigh"
-        ]
-      },
-      "sources": [
-        "openrouter",
-        "lmarena",
-        "livebench",
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "openai--gpt-5.4-nano",
-      "identity": "gpt-5.4-nano",
-      "family": "gpt-5.4",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {
-        "openrouter": [
-          {
-            "kind": "batch",
-            "raw_name": "openai/gpt-5.4-nano:batch"
-          }
-        ]
-      },
-      "display": "GPT-5.4 nano",
-      "vendor": "openai",
-      "theme": "general",
-      "series_key": "openai--gpt-5.4",
-      "series_display": "Gpt 5.4",
-      "member_key": "openai--gpt-5.4-nano",
-      "member_display": "GPT-5.4 nano",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 69.6,
-      "degrees": {
-        "lmarena": [
-          "high"
-        ],
-        "livebench": [
-          "xhigh"
-        ]
-      },
-      "sources": [
-        "openrouter",
-        "lmarena",
-        "livebench",
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "openai--gpt-5.4-pro",
-      "identity": "gpt-5.4-pro",
-      "family": "gpt-5.4",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {
-        "openrouter": [
-          {
-            "kind": "batch",
-            "raw_name": "openai/gpt-5.4-pro:batch"
-          }
-        ]
-      },
-      "display": "GPT-5.4 Pro",
-      "vendor": "openai",
-      "theme": "general",
-      "series_key": "openai--gpt-5.4",
-      "series_display": "Gpt 5.4",
-      "member_key": "openai--gpt-5.4-pro",
-      "member_display": "GPT-5.4 Pro",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "openrouter"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "openai--gpt-5.4-search",
-      "identity": "gpt-5.4-search",
-      "family": "gpt-5.4",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "GPT 5.4 Search",
-      "vendor": "openai",
-      "theme": "general",
-      "series_key": "openai--gpt-5.4",
-      "series_display": "Gpt 5.4",
-      "member_key": "openai--gpt-5.4-search",
-      "member_display": "GPT 5.4 Search",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "lmarena"
       ],
       "file": "data.json"
     },
@@ -42658,30 +40162,6 @@
       "file": "data.json"
     },
     {
-      "canonical": "stepfun--step3-vl-10b",
-      "identity": "step3-vl-10b",
-      "family": "step3-vl",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Step3-VL-10B",
-      "vendor": "stepfun",
-      "theme": "general",
-      "series_key": "stepfun--step3-vl",
-      "series_display": "Step3 Vl",
-      "member_key": "stepfun--step3-vl-10b",
-      "member_display": "Step3-VL-10B",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 58.2,
-      "degrees": {},
-      "sources": [
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
       "canonical": "tencent--hunyuan-a13b-instruct",
       "identity": "hunyuan-a13b-instruct",
       "family": "hunyuan-a13b",
@@ -44157,7 +41637,7 @@
       "file": "data.json"
     },
     {
-      "canonical": "x-ai--grok",
+      "canonical": "xai--grok",
       "identity": "grok",
       "family": "grok",
       "revisions": [],
@@ -44171,156 +41651,12 @@
         ]
       },
       "display": "Grok",
-      "vendor": "x-ai",
+      "vendor": "xai",
       "theme": "general",
-      "series_key": "x-ai--grok",
+      "series_key": "xai--grok",
       "series_display": "Grok",
-      "member_key": "x-ai--grok",
+      "member_key": "xai--grok",
       "member_display": "Grok",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "openrouter"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "x-ai--grok-4.20",
-      "identity": "grok-4.20",
-      "family": "grok-4.20",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Grok 4.20",
-      "vendor": "x-ai",
-      "theme": "general",
-      "series_key": "x-ai--grok-4.20",
-      "series_display": "Grok 4.20",
-      "member_key": "x-ai--grok-4.20",
-      "member_display": "Grok 4.20",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "openrouter"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "x-ai--grok-4.20-multi-agent",
-      "identity": "grok-4.20-multi-agent",
-      "family": "grok-4.20",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Grok 4.20 Multi-Agent",
-      "vendor": "x-ai",
-      "theme": "general",
-      "series_key": "x-ai--grok-4.20",
-      "series_display": "Grok 4.20",
-      "member_key": "x-ai--grok-4.20-multi-agent",
-      "member_display": "Grok 4.20 Multi-Agent",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "openrouter"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "x-ai--grok-4.3",
-      "identity": "grok-4.3",
-      "family": "grok-4.3",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Grok 4.3",
-      "vendor": "x-ai",
-      "theme": "general",
-      "series_key": "x-ai--grok-4.3",
-      "series_display": "Grok 4.3",
-      "member_key": "x-ai--grok-4.3",
-      "member_display": "Grok 4.3",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "openrouter"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "x-ai--grok-4.5",
-      "identity": "grok-4.5",
-      "family": "grok-4.5",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Grok 4.5",
-      "vendor": "x-ai",
-      "theme": "general",
-      "series_key": "x-ai--grok-4.5",
-      "series_display": "Grok 4.5",
-      "member_key": "x-ai--grok-4.5",
-      "member_display": "Grok 4.5",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "openrouter"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "x-ai--grok-4.6",
-      "identity": "grok-4.6",
-      "family": "grok-4.6",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Grok 4.6",
-      "vendor": "x-ai",
-      "theme": "general",
-      "series_key": "x-ai--grok-4.6",
-      "series_display": "Grok 4.6",
-      "member_key": "x-ai--grok-4.6",
-      "member_display": "Grok 4.6",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "openrouter"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "x-ai--grok-build-0.1",
-      "identity": "grok-build-0.1",
-      "family": "grok-build",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Grok Build 0.1",
-      "vendor": "x-ai",
-      "theme": "general",
-      "series_key": "x-ai--grok-build",
-      "series_display": "Grok Build",
-      "member_key": "x-ai--grok-build-0.1",
-      "member_display": "Grok Build 0.1",
       "member_order": 9999,
       "member_variant_count": 1,
       "has_composite": false,
@@ -44952,6 +42288,30 @@
       "file": "data.json"
     },
     {
+      "canonical": "xai--grok-4.20",
+      "identity": "grok-4.20",
+      "family": "grok-4.20",
+      "revisions": [],
+      "evaluation_profiles": [],
+      "offerings": {},
+      "display": "Grok 4.20",
+      "vendor": "xai",
+      "theme": "general",
+      "series_key": "xai--grok-4.20",
+      "series_display": "Grok 4.20",
+      "member_key": "xai--grok-4.20",
+      "member_display": "Grok 4.20",
+      "member_order": 9999,
+      "member_variant_count": 1,
+      "has_composite": false,
+      "composite_score": null,
+      "degrees": {},
+      "sources": [
+        "openrouter"
+      ],
+      "file": "data.json"
+    },
+    {
       "canonical": "xai--grok-4.20-beta-non-reasoning@0309",
       "identity": "grok-4.20-beta-non-reasoning",
       "family": "grok-4.20",
@@ -45029,6 +42389,30 @@
       "file": "data.json"
     },
     {
+      "canonical": "xai--grok-4.20-multi-agent",
+      "identity": "grok-4.20-multi-agent",
+      "family": "grok-4.20",
+      "revisions": [],
+      "evaluation_profiles": [],
+      "offerings": {},
+      "display": "Grok 4.20 Multi-Agent",
+      "vendor": "xai",
+      "theme": "general",
+      "series_key": "xai--grok-4.20",
+      "series_display": "Grok 4.20",
+      "member_key": "xai--grok-4.20-multi-agent",
+      "member_display": "Grok 4.20 Multi-Agent",
+      "member_order": 9999,
+      "member_variant_count": 1,
+      "has_composite": false,
+      "composite_score": null,
+      "degrees": {},
+      "sources": [
+        "openrouter"
+      ],
+      "file": "data.json"
+    },
+    {
       "canonical": "xai--grok-4.20-multi-agent-beta@0309",
       "identity": "grok-4.20-multi-agent-beta",
       "family": "grok-4.20",
@@ -45078,6 +42462,7 @@
         ]
       },
       "sources": [
+        "openrouter",
         "lmarena",
         "livebench",
         "llm_stats"
@@ -45104,6 +42489,7 @@
       "composite_score": 73.5,
       "degrees": {},
       "sources": [
+        "openrouter",
         "lmarena",
         "livebench",
         "llm_stats"
@@ -45134,6 +42520,7 @@
         ]
       },
       "sources": [
+        "openrouter",
         "lmarena",
         "livebench",
         "llm_stats"
@@ -45186,6 +42573,7 @@
       "composite_score": 50.4,
       "degrees": {},
       "sources": [
+        "openrouter",
         "lmarena",
         "livebench"
       ],
@@ -45428,78 +42816,6 @@
       "series_display": "Grok Imagine",
       "member_key": "xai--grok-imagine-video-720p",
       "member_display": "Grok Imagine Video 720p",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "lmarena"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "xiaomi--mimo-v2-flash",
-      "identity": "mimo-v2-flash",
-      "family": "mimo-v2",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "MiMo-V2-Flash",
-      "vendor": "xiaomi",
-      "theme": "general",
-      "series_key": "xiaomi--mimo-v2",
-      "series_display": "Mimo V2",
-      "member_key": "xiaomi--mimo-v2-flash",
-      "member_display": "MiMo-V2-Flash",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 64,
-      "degrees": {},
-      "sources": [
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "xiaomi--mimo-v2-flash-non-thinking",
-      "identity": "mimo-v2-flash-non-thinking",
-      "family": "mimo-v2",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Mimo V2 Flash Non Thinking",
-      "vendor": "xiaomi",
-      "theme": "general",
-      "series_key": "xiaomi--mimo-v2",
-      "series_display": "Mimo V2",
-      "member_key": "xiaomi--mimo-v2-flash-non-thinking",
-      "member_display": "Mimo V2 Flash Non Thinking",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "lmarena"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "xiaomi--mimo-v2-flash-thinking",
-      "identity": "mimo-v2-flash-thinking",
-      "family": "mimo-v2",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Mimo V2 Flash Thinking",
-      "vendor": "xiaomi",
-      "theme": "general",
-      "series_key": "xiaomi--mimo-v2",
-      "series_display": "Mimo V2",
-      "member_key": "xiaomi--mimo-v2-flash-thinking",
-      "member_display": "Mimo V2 Flash Thinking",
       "member_order": 9999,
       "member_variant_count": 1,
       "has_composite": false,

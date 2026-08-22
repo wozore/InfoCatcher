@@ -86,6 +86,7 @@ $env:TAVILY_API_KEY = "你的Tavily_API_Key"
 | `review <draft-id>` | 重算字段覆盖、LayerPatch、Preview hash 和目录版本 | 否 | 否 |
 | `apply <draft-id>` | 等待 `APPLY <draft-id>` 确认后正式写入 | 通常不需要 AI 调用 | 是 |
 | `cancel <draft-id>` | 删除尚未 Apply 的草案 | 否 | 否 |
+| `remove --targets <file> --expected-revision <revision> --confirm "REMOVE <file>"` | 按精确 area/id 列表事务化删除目录记录并清理父级引用 | 否 | 是 |
 | `recover` | 恢复中断的目录事务 | 否 | 可能回滚本地事务文件 |
 
 其中 `probe`、`new` 和 `resume` 可能产生 API 费用；先用 `plan` 查看本次 ResearchScope 和硬上限。`apply`、`cancel` 和 `recover` 可能修改本地文件。
@@ -258,6 +259,17 @@ API 模型会生成三级详情和工具卡；厂商卡、一级、二级是否�
 
 如果只指定已有一级而不指定已有二级，需要提供 `new_group_title`，生成器会新增二级分组并向一级追加引用。
 
+### 自动补全父级引用（link-only）
+
+当新增二级分组或三级详情时，生成器会检查已有父层是否已经持有对应稳定引用。缺少时，计划会把该父层标记为 `replace + link_only`：
+
+- 只复制当前父记录并追加缺失的 `level2_refs` 或 `detail_refs`；
+- 不重新检索、不调用模型改写父级标题、描述、状态、特征或价格，也不增加 ResearchScope 与 AI 成本；
+- Preview 中仍显示为 `replace`，以便 Apply 的 revision、preview hash 和共同事务完整保护这次关系更新；
+- 父记录字段不完整、引用目标不存在或快照不合法时保持 fail-closed，不能用 link-only 绕过校验。
+
+这保证新卡可从厂商一级/二级导航到，不会形成只有数据记录但页面无法到达的孤立分组或详情。
+
 ### 显式修复已有层
 
 修复已 Apply 的污染记录时，优先在 Seed 顶层列出需要替换的层：
@@ -378,7 +390,31 @@ APPLY draft-xxxxxxxxxxxx-xxxxxxxx
 
 不要使用不存在的 `--yes` 绕过确认，也不要在 Apply 过程中手工编辑五份 catalog 文件。
 
-## 8. 取消、恢复和失败处理
+## 8. 精确删除目录记录
+
+维护者需要删除已下线的工具卡及其完整层级时，先准备只包含精确 `{area,id}` 的 JSON：
+
+```json
+{
+  "targets": [
+    { "area": "vendor-card", "id": "vendor-card:example" },
+    { "area": "vendor-level1", "id": "vendor-level1:example" },
+    { "area": "vendor-level2", "id": "vendor-level2:example:models" },
+    { "area": "tool-level3", "id": "tool-level3:example" },
+    { "area": "tool-card", "id": "tool-card:example" }
+  ]
+}
+```
+
+执行前先读取当前 revision，并把预览输出中的确认值原样传回：
+
+```bat
+node scripts/catalog-generator.js remove --targets data\manual\tools\removal-targets.json --expected-revision sha256:... --confirm "REMOVE removal-targets.json"
+```
+
+该入口只接受已登记 area 和精确 ID：目标缺失、重复、revision 变化或删除后留下非法引用都会拒绝写入。通过校验后，它会在共同锁、staging、backup、journal 和 staged dist 事务中删除记录，自动清理指向这些 ID 的父级引用；构建或替换失败时按 journal 回滚。不要用名称模糊匹配，也不要直接编辑五份 catalog JSON。
+
+## 9. 取消、恢复和失败处理
 
 Apply 前取消草案：
 
@@ -401,7 +437,7 @@ bat\catalog-generator.bat recover
 
 如果草案删除失败，状态会变为 `cleanup_pending`。不要再次手工 Apply 同一草案；先执行 `recover`，让系统只完成清理。
 
-## 9. Apply 后验证
+## 10. Apply 后验证
 
 生成器 Apply 已经会构建 staged dist。还可以运行只读校验：
 
@@ -418,7 +454,7 @@ bat\build-dist.bat
 
 该命令会重建并覆盖项目内 `dist/`，只在确认不需要保留当前 dist 内容时运行。
 
-## 10. 热点候选的边界
+## 11. 热点候选的边界
 
 热点反哺产生的 pending 工具候选只是发现线索，不能直接进入正式目录。它们应经过：
 
@@ -435,7 +471,7 @@ pending candidate
 
 热点反哺可通过生成器的 `batch` 命令自动接入这条链（查重 → 厂商/官方源解析 → 逐工具生成 → 自动 Apply，见 §11）。但仍不要直接把 `tool-cards-pending.json` 复制到正式 `tool-cards.json`——必须经过研究合成与 readiness 门禁。
 
-## 11. 批量生成（热点待补卡 → 正式目录）
+## 12. 批量生成（热点待补卡 → 正式目录）
 
 `min-review feedback` 产出的 `data/manual/tools/tool-cards-pending.json` 由 `batch` 命令一键转成正式目录卡片：
 
@@ -481,7 +517,7 @@ node scripts/catalog-generator.js batch --file data/manual/tools/tool-cards-pend
 
 新工具不设 `placement.new_group_title`，分组名默认 = 工具名（deriveKeys 回退 `seed.name`，匹配现有"GPT-5.6"家族组约定）。
 
-## 12. 概念批量生成（热点待补概念 → glossary.json）
+## 13. 概念批量生成（热点待补概念 → glossary.json）
 
 `min-review feedback` 产出的 `data/manual/concepts/concept-cards-pending.json` 由**独立的 concept-generator 入口**转成正式 `data/catalog/glossary.json` 条目。概念生成产出的是 AI 概念知识库（glossary.json），不是五模块厂商/工具目录，故独立成入口，不挂在 catalog-generator 下。与工具批量链路（§11）不同，概念**不自动 apply**：batch 只合成出预览文件并停下，由维护者查看后再显式 `apply` 写入。
 
@@ -548,7 +584,7 @@ node scripts/refresh-vibe-hub-cache.js
 - `category` 只能从现有枚举选（模型架构/训练与微调/推理与部署/多模态/Agent/评估与基准）。
 - 正式 apply 前必须人工确认；apply 只做校验 + 原子写，不自动提交或推送 Git。
 
-## 13. 安全规则速查
+## 14. 安全规则速查
 
 - API Key 只放环境变量；
 - 不把网页中的提示文字当成系统指令；

@@ -13,8 +13,8 @@
     },
     "google": {
       "vendor_name": "Google",
-      "official_urls": ["https://ai.google.dev/gemini-api/docs", "https://ai.google.dev/gemini-api/docs/models"],
-      "model_prefixes": ["gemini", "nano banana", "veo", "lyria"]
+      "official_urls": ["https://ai.google.dev/gemini-api/docs", "https://ai.google.dev/gemini-api/docs/models", "https://ai.google.dev/gemini-api/docs/pricing", "https://ai.google.dev/gemini-api/docs/latest-model"],
+      "model_prefixes": ["gemini", "gemma", "nano banana", "veo", "lyria"]
     },
     "deepseek": {
       "vendor_name": "深度求索",
@@ -59,7 +59,7 @@
     "tencent": {
       "vendor_name": "腾讯（混元）",
       "official_urls": ["https://hunyuan.tencent.com/model/hy-model", "https://hunyuan.tencent.com/model/open-source-model", "https://cloud.tencent.com.cn/document/product/1759/127342"],
-      "model_prefixes": ["hy", "hunyuan"]
+      "model_prefixes": ["hy", "hunyuan", "混元"]
     },
     "bytedance": {
       "vendor_name": "字节跳动（豆包）",
@@ -73,8 +73,13 @@
     },
     "meta": {
       "vendor_name": "Meta（Llama）",
-      "official_urls": ["https://www.llama.com/docs", "https://developer.meta.com/ai/docs/model-cards-and-prompt-formats/"],
-      "model_prefixes": ["llama", "code llama"]
+      "official_urls": ["https://www.llama.com/docs", "https://developer.meta.com/ai/docs/model-cards-and-prompt-formats/", "https://ai.meta.com/llama"],
+      "model_prefixes": ["llama", "code llama", "muse"]
+    },
+    "stepfun": {
+      "vendor_name": "阶跃星辰",
+      "official_urls": ["https://platform.stepfun.com/docs/zh/step-plan/quick-start", "https://platform.stepfun.com/docs/zh/api-reference/chat/chat-completion-create", "https://platform.stepfun.com/docs/zh/guides/pricing/details", "https://static.stepfun.com/blog/step-3.7-flash/"],
+      "model_prefixes": ["step-"]
     },
     "xiaomi": {
       "vendor_name": "小米（MiMo）",
@@ -93,8 +98,8 @@
     },
     "nvidia": {
       "vendor_name": "Nvidia（NIM）",
-      "official_urls": ["https://huggingface.co/nvidia", "https://build.nvidia.com", "https://docs.api.nvidia.com/nim/reference/llm-apis", "https://docs.api.nvidia.com/nim/reference/retrieval-apis", "https://docs.api.nvidia.com/nim/reference/visual-models-apis", "https://docs.api.nvidia.com/nim/reference/multimodal-apis", "https://docs.api.nvidia.com/nim/reference/healthcare-apis", "https://docs.api.nvidia.com/nim/reference/route-optimization-apis"],
-      "model_prefixes": ["nvidia","gliner", "llama", "memotron", "memoguard", "riva", "usdcode", "nv", "cuopt"]
+      "official_urls": ["https://huggingface.co/nvidia", "https://docs.api.nvidia.com/nim/reference/llm-apis", "https://docs.api.nvidia.com/nim/reference/retrieval-apis", "https://docs.api.nvidia.com/nim/reference/visual-models-apis", "https://docs.api.nvidia.com/nim/reference/multimodal-apis", "https://docs.api.nvidia.com/nim/reference/healthcare-apis", "https://docs.api.nvidia.com/nim/reference/route-optimization-apis"],
+      "model_prefixes": ["nvidia", "nemotron", "gliner", "llama", "memotron", "memoguard", "riva", "usdcode", "nv", "cuopt"]
     },
     "alibaba": {
       "vendor_name": "阿里巴巴（通义千问）",

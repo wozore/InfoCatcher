@@ -171,34 +171,6 @@
       }
     },
     {
-      "id": "vendor-card:xunfei",
-      "vendor_key": "xunfei",
-      "title": "科大讯飞",
-      "icon": "🔥",
-      "summary": "科大讯飞推出的星火认知大模型，深耕语音与教育场景，Lite 版本 API 永久免费。",
-      "feature_preview": [
-        {
-          "tone": "positive",
-          "text": "Spark Lite API 永久免费，适合高并发低成本的简单任务"
-        },
-        {
-          "tone": "negative",
-          "text": "官方未公开详细 token 计价，缓存和输出定价不透明"
-        }
-      ],
-      "access_level": "开放",
-      "price_badge": "free",
-      "search_terms": [
-        "科大讯飞",
-        "xinghuo",
-        "讯飞星火"
-      ],
-      "level1_ref": {
-        "kind": "vendor-level1",
-        "id": "vendor-level1:xunfei"
-      }
-    },
-    {
       "id": "vendor-card:minimax",
       "vendor_key": "minimax",
       "title": "MiniMax",
@@ -331,6 +303,259 @@
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:kuaishou"
+      }
+    },
+    {
+      "id": "vendor-card:moonshot",
+      "vendor_key": "moonshot",
+      "title": "月之暗面（Kimi）",
+      "icon": "🤖",
+      "summary": "北京月之暗面科技有限公司，Kimi 开放平台运营方",
+      "feature_preview": [
+        {
+          "tone": "positive",
+          "text": "Kimi 迄今能力最强的模型"
+        },
+        {
+          "tone": "positive",
+          "text": "原生支持视觉理解"
+        },
+        {
+          "tone": "positive",
+          "text": "拥有 100 万 token 上下文窗口"
+        },
+        {
+          "tone": "positive",
+          "text": "面向软件工程场景设计"
+        },
+        {
+          "tone": "positive",
+          "text": "面向知识工作场景设计"
+        },
+        {
+          "tone": "positive",
+          "text": "面向深度推理场景设计"
+        }
+      ],
+      "access_level": "受限",
+      "price_badge": "paid",
+      "search_terms": [
+        "月之暗面（Kimi）",
+        "moonshot"
+      ],
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:moonshot"
+      }
+    },
+    {
+      "id": "vendor-card:alibaba",
+      "vendor_key": "alibaba",
+      "title": "阿里巴巴（通义千问）",
+      "icon": "🤖",
+      "summary": "阿里云百炼是一站式大模型开发与应用平台，集成千问及主流第三方模型，提供兼容OpenAI的API和全链路模型服务。",
+      "feature_preview": [
+        {
+          "tone": "positive",
+          "text": "兼容OpenAI接口，迁移成本低"
+        },
+        {
+          "tone": "positive",
+          "text": "提供可视化应用构建，无需代码"
+        },
+        {
+          "tone": "positive",
+          "text": "支持模型微调和部署，满足定制需求"
+        },
+        {
+          "tone": "positive",
+          "text": "提供多区域服务，降低网络延迟"
+        },
+        {
+          "tone": "positive",
+          "text": "支持按量付费，新用户有免费额度"
+        }
+      ],
+      "access_level": "区域限制",
+      "price_badge": "paid",
+      "search_terms": [
+        "阿里巴巴（通义千问）",
+        "alibaba"
+      ],
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:alibaba"
+      }
+    },
+    {
+      "id": "vendor-card:tencent",
+      "vendor_key": "tencent",
+      "title": "腾讯（混元）",
+      "icon": "🤖",
+      "summary": "腾讯混元大模型是由腾讯公司全链路自研的通用与多模态大模型家族，覆盖文本、图像、视频、语音、3D等模态，面向内容生产、知识问答、业务自动化等场景提供企业级服务。",
+      "feature_preview": [
+        {
+          "tone": "positive",
+          "text": "全链路自研"
+        },
+        {
+          "tone": "positive",
+          "text": "多模态覆盖"
+        },
+        {
+          "tone": "positive",
+          "text": "企业级服务"
+        }
+      ],
+      "access_level": "开放",
+      "price_badge": "paid",
+      "search_terms": [
+        "腾讯（混元）",
+        "tencent"
+      ],
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:tencent"
+      }
+    },
+    {
+      "id": "vendor-card:meta",
+      "vendor_key": "meta",
+      "title": "Meta（Llama）",
+      "icon": "🤖",
+      "summary": "Meta 提供 Muse Spark 1.2 模型，面向真实编码工作流优化，提升首次尝试准确率和工具调用可靠性，并支持 1M 上下文。",
+      "feature_preview": [
+        {
+          "tone": "positive",
+          "text": "针对真实编码工作流优化"
+        },
+        {
+          "tone": "positive",
+          "text": "更高的首次尝试准确率"
+        },
+        {
+          "tone": "positive",
+          "text": "更可靠的工具调用"
+        },
+        {
+          "tone": "positive",
+          "text": "1M 上下文支持长任务"
+        },
+        {
+          "tone": "positive",
+          "text": "代码编写步骤更少延迟更低"
+        }
+      ],
+      "access_level": "受限",
+      "price_badge": "paid",
+      "search_terms": [
+        "Meta（Llama）",
+        "meta"
+      ],
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:meta"
+      }
+    },
+    {
+      "id": "vendor-card:stepfun",
+      "vendor_key": "stepfun",
+      "title": "阶跃星辰",
+      "icon": "🤖",
+      "summary": "阶跃星辰（StepFun）提供多模态大模型 API，支持文本生成、图像理解等。",
+      "feature_preview": [
+        {
+          "tone": "positive",
+          "text": "提供 OpenAI 兼容的 API 接口"
+        },
+        {
+          "tone": "positive",
+          "text": "支持多模态理解与生成"
+        },
+        {
+          "tone": "positive",
+          "text": "提供高效推理的 Flash 模型"
+        },
+        {
+          "tone": "positive",
+          "text": "支持企业级应用和 Agent 场景"
+        }
+      ],
+      "access_level": "开放",
+      "price_badge": "usage_based",
+      "search_terms": [
+        "阶跃星辰",
+        "stepfun"
+      ],
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:stepfun"
+      }
+    },
+    {
+      "id": "vendor-card:xiaomi",
+      "vendor_key": "xiaomi",
+      "title": "小米（MiMo）",
+      "icon": "🤖",
+      "summary": "小米官方大模型开放平台，提供 MiMo-V2.5 系列旗舰模型 API 服务。",
+      "feature_preview": [
+        {
+          "tone": "positive",
+          "text": "提供 MiMo-V2.5 系列旗舰模型"
+        },
+        {
+          "tone": "positive",
+          "text": "提供 Token Plan 套餐"
+        },
+        {
+          "tone": "positive",
+          "text": "支持按量付费等计费模式"
+        },
+        {
+          "tone": "neutral",
+          "text": "V2 系列已下线"
+        }
+      ],
+      "access_level": "开放",
+      "price_badge": "paid",
+      "search_terms": [
+        "小米（MiMo）",
+        "xiaomi"
+      ],
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:xiaomi"
+      }
+    },
+    {
+      "id": "vendor-card:nvidia",
+      "vendor_key": "nvidia",
+      "title": "Nvidia（NIM）",
+      "icon": "🤖",
+      "summary": "NVIDIA NIM 提供优化的推理微服务，简化生成式 AI 模型部署。",
+      "feature_preview": [
+        {
+          "tone": "positive",
+          "text": "提供优化容器简化部署"
+        },
+        {
+          "tone": "positive",
+          "text": "支持本地、云端灵活部署"
+        },
+        {
+          "tone": "positive",
+          "text": "覆盖文本、视觉、检索等多模态"
+        }
+      ],
+      "access_level": "开放",
+      "price_badge": "paid",
+      "search_terms": [
+        "Nvidia（NIM）",
+        "nvidia"
+      ],
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:nvidia"
       }
     }
   ]

@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "rules": [
+    {"vendor":"openai","identity_prefix":"gpt-5.2","reason":"旧覆盖清单中未纳入本轮工具卡范围。"},
+    {"vendor":"openai","identity_prefix":"gpt-5.4","reason":"旧覆盖清单中未纳入本轮工具卡范围。"},
+    {"vendor":"anthropic","identity_prefix":"claude-opus-4.7","reason":"旧覆盖清单中未纳入本轮工具卡范围。"},
+    {"vendor":"anthropic","identity_prefix":"claude-opus-4.6","reason":"旧覆盖清单中未纳入本轮工具卡范围。"},
+    {"vendor":"anthropic","identity_prefix":"claude-sonnet-4.6","reason":"旧覆盖清单中未纳入本轮工具卡范围。"},
+    {"vendor":"deepseek","identity_prefix":"deepseek-v3.2","reason":"旧覆盖清单中未纳入本轮工具卡范围。"},
+    {"vendor":"deepseek","identity_prefix":"deepseek-r1","reason":"旧覆盖清单中未纳入本轮工具卡范围。"},
+    {"vendor":"deepseek","identities":["deepseek-chat","deepseek-reasoner"],"reason":"当前源以旧 API 身份展示为 DeepSeek V3.2，属于未纳入本轮工具卡范围的系列。"},
+    {"vendor":"minimax","identity_prefix":"minimax-m2.5","reason":"用户明确不补充 legacy M2.5。"},
+    {"vendor":"minimax","identity_prefix":"minimax-m2.1","reason":"用户明确不补充 legacy M2.1。"},
+    {"vendor":"stepfun","identity_prefix":"step3-vl","reason":"用户明确未找到并不补充 Step3-VL。"},
+    {"vendor":"xiaomi","identity_prefix":"mimo-v2-flash","reason":"旧覆盖清单中未纳入本轮工具卡范围。"},
+    {"vendor":"meituan","identity_prefix":"longcat-flash","reason":"旧覆盖清单中未纳入本轮工具卡范围。"}
+  ]
+}

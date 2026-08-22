@@ -27,6 +27,7 @@ const {
   normalizedDisplayKey,
 } = require('./model-identity');
 const { readSeriesConfig, attachSeriesMetadata, validateSeriesProjection } = require('./model-series');
+const { readExclusionConfig, filterExcludedRecords } = require('./model-exclusions');
 
 const SOURCE_ORDER = ['openrouter', 'lmarena', 'livebench', 'llm_stats'];
 const CONFIG_DIMS = new Set(LMARENA_CONFIGS.filter(config => config !== 'agent'));
@@ -650,8 +651,16 @@ function rebuildIntegrated(options = {}) {
   const aliasEntries = options.aliasEntries || identityRegistry.entries || [];
   const registry = options.aliasEntries ? { ...identityRegistry, entries: aliasEntries } : identityRegistry;
   const records = collectSourceRecords(snapshots, registry);
-  const lmarenaEloBounds = computeLmarenaEloBounds(records);
-  const models = Object.values(records).map(record => buildModelRecord(record, lmarenaEloBounds));
+  let exclusionConfig;
+  try {
+    exclusionConfig = options.exclusionConfig || readExclusionConfig(options.exclusionConfigFile || COMPARISON_FILES.modelExclusions);
+  } catch (error) {
+    return { ok: false, models: [], errors: [error.message] };
+  }
+  const filteredRecords = filterExcludedRecords(records, exclusionConfig);
+  const activeRecords = filteredRecords.records;
+  const lmarenaEloBounds = computeLmarenaEloBounds(activeRecords);
+  const models = Object.values(activeRecords).map(record => buildModelRecord(record, lmarenaEloBounds));
   const displayCollisions = enforceUniqueDisplays(models);
   computeValues(models);
   const seriesConfig = options.seriesConfig || readSeriesConfig(options.seriesConfigFile);
@@ -710,7 +719,7 @@ function rebuildIntegrated(options = {}) {
     ok: errors.length === 0,
     models,
     errors,
-    diagnostics: { display_collisions_resolved: displayCollisions, series_count: seriesProjection.series.length },
+    diagnostics: { display_collisions_resolved: displayCollisions, series_count: seriesProjection.series.length, excluded_models: filteredRecords.excluded },
     index,
     data,
   };

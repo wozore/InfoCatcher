@@ -41,6 +41,11 @@ function pendingCandidateToSeed(candidate, resolution = {}) {
   const discoverySources = officialUrls.map(url => ({ url, kind: 'official_hint' }));
   // official_hint 参与生成器研究信任根（多个可扩展 includeDomains）；无官方域名时回落热点原文链接（hotspot 不进信任根）。
   if (!officialUrl && candidate.source_url) discoverySources.push({ url: candidate.source_url, kind: 'hotspot' });
+  const placement = {
+    existing_level2_ref: candidate.placement?.existing_level2_ref || null,
+    ...(candidate.placement?.existing_level1_ref ? { existing_level1_ref: candidate.placement.existing_level1_ref } : {}),
+    ...(candidate.placement?.new_group_title ? { new_group_title: candidate.placement.new_group_title } : {}),
+  };
   return {
     detail_kind: candidate.detail_kind_hint === 'api_model' ? 'api_model' : 'tool',
     name,
@@ -48,8 +53,7 @@ function pendingCandidateToSeed(candidate, resolution = {}) {
     vendor_key: candidate.vendor_key || null,
     tool_key: candidate.tool_key || null,
     official_url: officialUrl,
-    // Q-A 决策：不设 new_group_title，deriveKeys 回退 seed.name 作二级分组名（匹配"GPT-5.6"家族组约定）。
-    placement: { existing_level2_ref: null },
+    placement,
     known_fields: {
       summary: candidate.description || '',
       source_hotspot: candidate.source_hotspot === true,

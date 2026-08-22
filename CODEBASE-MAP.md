@@ -13,7 +13,8 @@
 ## data/comparison/ — 模型对比数据层（独立于 catalog，四隔离）
 - [refresh-config.json](data/comparison/refresh-config.json) — 抓取编排配置（每源 interval_hours/full_every/count/last_run，管线专用）。
 - [view-config.json](data/comparison/view-config.json) — 前端展示配置（默认维度/雷达上限/模型上限，维护者可改，管线不覆盖）。
-- [models-alias.json](data/comparison/models-alias.json) — 主键对齐人工登记表（canonical → 各源原始名别名，管线读取）。
+- [models-alias.json](data/comparison/models-alias.json) — 主键对齐人工登记表（canonical → 各源原始名别名）及 catalog 标题/tool_key → canonical 的 `catalog_aliases` 人工桥接；管线与前端读取。
+- [model-exclusions.json](data/comparison/model-exclusions.json) — integrated 重建的整系列排除登记表；按 vendor + token-boundary identity prefix 或 exact identity 过滤，保留 raw 快照不删除。
 - [model-series.json](data/comparison/model-series.json) — 模型系列人工登记与成员展示规则；只组织现有 canonical，不改变跨源实体或评测分数。
 - [integrated/index.json](data/comparison/integrated/index.json) — 前端唯一入口层（小）：模型列表 + composite_score + degrees + sources + `file` 指针。
 - [integrated/data.json](data/comparison/integrated/data.json) — 前端懒加载完整层：dimensions/lmarena_scores/livebench_scores/composite/pricing/value。
@@ -35,15 +36,15 @@
 - [catalog-contract.js](src/catalog/catalog-contract.js) — 五模块字段、枚举、引用和快照形状契约。导出: `AREAS, ALLOWED_FIELDS, DETAIL_KINDS, TOOL_CARD_KINDS, THEMES`
 - [catalog-snapshot-validator.js](src/catalog/catalog-snapshot-validator.js) — FutureSnapshot 兼容性结构/引用纯校验；严格新记录完整性由 catalog-record-completeness 单独门禁。导出: `validateCatalogSnapshot`
 - [catalog-record-completeness.js](src/catalog/catalog-record-completeness.js) — schema v3 正式记录字段齐全和非缺省门禁，拒绝 null、空字符串、空数组、unknown/未知。导出: `NOT_APPLICABLE_STATUS, FORBIDDEN_PLACEHOLDERS, isExplicitValue, validatePlannedRecords`
-- [catalog-profile-contract.js](src/catalog/catalog-profile-contract.js) — 按 `detail_kind + modality` 选择 CatalogProfile，计算适用谓词、ResearchScope、稳定目标 ID 与逐层 create/replace/noop LayerPlan。导出: `PROFILE_DEFINITIONS, VENDOR_PREDICATES, GROUP_PREDICATES, inferModality, planCatalogResearch`
+- [catalog-profile-contract.js](src/catalog/catalog-profile-contract.js) — 按 `detail_kind + modality` 选择 CatalogProfile，计算适用谓词、ResearchScope、稳定目标 ID 与逐层 create/replace/noop LayerPlan；父层缺少新分组/详情稳定引用时规划 `replace + link_only`，仅维护关系且不增加研究范围。导出: `PROFILE_DEFINITIONS, VENDOR_PREDICATES, GROUP_PREDICATES, inferModality, planCatalogResearch`
 - [catalog-research.js](src/catalog/catalog-research.js) — Tavily 来源发现与正文获取编排（discover+acquire）、官方域名信任、URL canonicalization、字段级增量 resume（按缺失字段收敛到对应层 scope）和硬 CostLedger 深 Module；保留预算/Adapter 失败时的来源进度。导出: `DEFAULT_LIMITS, createCostLedger, canonicalizeUrl, officialRootsOf, isTrustedOfficialUrl, sourceIdOf, sourcesForScope, scopeKindsOfFields, researchCatalog`
-- [catalog-synthesis.js](src/catalog/catalog-synthesis.js) — 按层从官方来源正文合成完整记录和来源 provenance（source_ids）；字段级 FieldCoverage 覆盖门禁，api_model 缺 access/price 关键字段建议 product_variant，字段值缺省/占位 fail-closed。导出: `DETAIL_MISMATCH_FIELDS, REQUIRED_LAYER_FIELDS, expectedLayerFields, isNonDefaultFieldValue, fieldCoverageOf, missingCoverageFailure, validateSynthesisOutput, validateLayerPatches, synthesizeCatalog`
+- [catalog-synthesis.js](src/catalog/catalog-synthesis.js) — 按层从官方来源正文合成完整记录和来源 provenance（source_ids）；字段级 FieldCoverage 覆盖门禁，api_model 缺 access/price 关键字段建议 product_variant，字段值缺省/占位 fail-closed；对 `link_only` 父层只克隆当前记录并确定性追加子级引用，不重写父级字段。导出: `DETAIL_MISMATCH_FIELDS, REQUIRED_LAYER_FIELDS, expectedLayerFields, isNonDefaultFieldValue, fieldCoverageOf, missingCoverageFailure, validateSynthesisOutput, validateLayerPatches, synthesizeCatalog`
 - [catalog-draft-envelope.js](src/catalog/catalog-draft-envelope.js) — schema v3 CatalogDraft Envelope 构建与 Apply 前重算门禁；只消费 ResearchPlan、official_sources、字段级 coverage 和 LayerPatches，ready 时用 fieldCoverageOf 重算防伪造。导出: `buildCatalogDraftEnvelope, validateCatalogDraftEnvelope`
 - [catalog-revision.js](src/catalog/catalog-revision.js) — 五模块稳定序列化、revision 和 preview hash。导出: `stableStringify, revisionOf, previewHashOf`
 - [catalog-draft-store.js](src/catalog/catalog-draft-store.js) — schema v3 临时 Draft 创建、读取、更新、列举和删除；持久化 ResearchPlan、OfficialSources、字段级 Coverage、LayerPatches、Readiness 与成本账本。导出: `createDraft, readDraft, updateDraft, deleteDraft, listDrafts`
 - [catalog-record-builders.js](src/catalog/catalog-record-builders.js) — 确定性五类记录 Builder 和业务键规范化；严格生成路径由上游契约保证非缺省输入。导出: `buildVendorCard, buildLevel1, buildLevel2, buildDetail, buildToolCard, deriveKeys`
 - [catalog-change-planner.js](src/catalog/catalog-change-planner.js) — LayerPatches 到 FutureSnapshot 的确定性规划；逐层 create/replace/noop，普通 create 不静默覆盖。导出: `planCatalogPatches`
-- [catalog-transaction-store.js](src/catalog/catalog-transaction-store.js) — catalog 共同锁、五文件 staging、staged dist、journal、回滚和恢复；schema v3 通过 LayerPatches 复用事务；dist 目录交换在 Windows 被占用（IDE/杀软持有目录句柄）时 rename 会 EPERM，自动回退删除重建（build-dist 同法，backup_dist 兜底）。导出: `commitCatalogChange, replaceToolLevel3, recoverCatalogTransaction`
+- [catalog-transaction-store.js](src/catalog/catalog-transaction-store.js) — catalog 共同锁、五文件 staging、staged dist、journal、回滚和恢复；schema v3 通过 LayerPatches 复用事务；支持带 expected revision 和精确 area/id 列表的关系安全删除；dist 目录交换在 Windows 被占用（IDE/杀软持有目录句柄）时 rename 会 EPERM，自动回退删除重建（build-dist 同法，backup_dist 兜底）。导出: `commitCatalogChange, replaceToolLevel3, removeCatalogRecords, planRecordRemoval, recoverCatalogTransaction`
 - [catalog-assistant.js](src/catalog/catalog-assistant.js) — schema v3 生成器深 Module；统一离线 plan、按缺失字段研究/resume、单段合成、Review、Apply、取消和恢复 Interface；resume 的明确成本确认获得一组增量硬预算。导出: `planCatalogDraft, prepareCatalogDraft, resumeCatalogDraft, reviewCatalogDraft, applyCatalogDraft, discardCatalogDraft, recoverCatalogTransactions, researchLimits, resumeResearchLimits, estimateResearchCost, probeCatalogCapabilities`
 - [catalog/ai/deepseek-structured.js](src/catalog/ai/deepseek-structured.js) — 结构化 JSON 深 Module；统一预算预占（ledger 必传，缺省 fail-closed）、JSON 外壳归一化、empty/incomplete/invalid/schema-invalid 分类和有限响应诊断；按 endpoint 分支——DeepSeek 走 Responses（reasoning/text.format），本地 Bonsai 走 Chat Completions（messages + chat_template_kwargs 关思维链），本地分支请求前经 ensureLocalModel 自动启动服务（失败报错 fail-closed）。导出: `extractJsonValues, diagnosticsOf, requestStructuredJson`
 - [catalog/ai/deepseek-catalog-ai.js](src/catalog/ai/deepseek-catalog-ai.js) — DeepSeek 结构化 Catalog Adapter；单段式调用结构化深 Module，基于官方来源正文直接合成各层字段与来源 provenance。导出: `synthesizeLayerFields`
@@ -66,9 +67,10 @@
 - [fetch-llm-stats.js](src/comparison/fetch-llm-stats.js) — llm-stats RSC flight payload 确定性解析（initialData 数组），字段白名单 + 值域校验 fail-closed。导出: `fetchLlmStats, extractFlightChunks, extractInitialData`
 - [model-identity.js](src/comparison/model-identity.js) — 模型身份解析深 Module：安全统一厂商、跨源格式、服务方式、评测挡位与评测环境（如 `codex-harness`），保留参数/MoE/模式等实体差异；唯一返回 model_key/revision/offering/degree/evaluation_profile，人工 alias 命中优先且别名冲突 fail-closed。导出: `resolveModelIdentity, createModelIdentityResolver, parseModelNameMetadata, normalizeVendor`
 - [model-series.js](src/comparison/model-series.js) — 模型系列分组深 Module：读取人工系列登记，按 series/member/configuration 三层生成稳定系列投影；revision 聚合为成员变体，canonical 不被系列合并。导出: `readSeriesConfig, seriesInfoFor, memberInfoFor, attachSeriesMetadata, validateSeriesProjection`
+- [model-exclusions.js](src/comparison/model-exclusions.js) — integrated 重建排除规则深 Module：读取/严格校验 `vendor + identity_prefix` token-boundary 或 exact identity 规则，过滤 source records 并返回命中诊断；只影响 integrated，不删除 raw。导出: `validateExclusionConfig, readExclusionConfig, exclusionForModel, filterExcludedRecords`
 - [identity-review.js](src/comparison/identity-review.js) — 名称歧义离线审计 Module：只收集确定性解析未分类 token，协调本地 Bonsai 建议与按阈值升级的 DeepSeek 复核；所有结果强制人工确认，不写正式 alias/数据。导出: `collectReviewCandidates, shouldEscalate, reviewCandidates`
 - [identity-review-ai.js](src/comparison/identity-review-ai.js) — 名称歧义 AI 建议 Adapter：复用结构化 JSON transport，本地 Bonsai 默认、DeepSeek 可显式升级；统一 prompt/schema，ledger 缺失 fail-closed。导出: `suggestIdentityReview`
-- [rebuild-comparison.js](src/comparison/rebuild-comparison.js) — **integrated 重建核心**：只消费统一模型身份解析（厂商限定 `model_key` + 明确 revision 隔离）→ 收拢服务 offering、degree 与 evaluation profile → 合并 4 源 → 维度归一化 → 综合分缺源按比例重分配 → 性价比；profile 分数进入 `lmarena_profiles`，不生成选择器行，同厂商同展示名最终强制追加身份消歧，写 index/data.json。导出: `rebuildIntegrated, buildModelRecord, slugify, buildAliasMap, livebenchParse, cleanModelDisplay`
+- [rebuild-comparison.js](src/comparison/rebuild-comparison.js) — **integrated 重建核心**：只消费统一模型身份解析（厂商限定 `model_key` + 明确 revision 隔离）→ 合并 4 源记录 → 先按 model-exclusions 过滤整系列 → 重新计算 Elo bounds/维度/综合分/性价比 → 系列投影；profile 分数进入 `lmarena_profiles`，不生成选择器行，同厂商同展示名最终强制追加身份消歧，写 index/data.json；排除只影响 integrated，raw 保留。导出: `rebuildIntegrated, buildModelRecord, slugify, buildAliasMap, livebenchParse, cleanModelDisplay`
 - [run-comparison.js](src/comparison/run-comparison.js) — 抓取编排（cron 每日）：每源独立计数全量 + 失败隔离 WARN + 全绿才重建。导出: `runComparison, fetchSource, isFresh, readConfig`
 
 ## src/web/ — 前端静态站（原生 ES module，无打包器；build-dist.js 原样复制到 dist/）
@@ -90,7 +92,7 @@
 - [js/search.js](src/web/js/search.js) — AI 搜索视图（四层关键词索引答案引擎）：首页/处理/结果三态；首页为左中右布局（左侧「怎么用」三步引导栏 + 中间主区），「你可以试试」示例按钮用场景自然语言问句渲染（scene.example）；统一提取器 extractKeywords 从混杂查询提取关键词（≥2 字符、长词优先），三层词表依次命中——场景层（复用 scenes.json 场景搜索词，与场景模式共用映射）→ 内容层（工具卡 title/vendor_label/search_terms + 品牌短形式派生，如 gpt→GPT-5.5）→ 热点概念层（glossary 词 + 热点标题英文 token），命中后主区渲染含知识块（热点在上、概念在下）；一句话答案（内嵌 [n] 引用→工具 mini 卡）+ 左栏本页概念索引 + 右栏最新热点；「了解更多」跳工具库按 query 过滤 + 强制 tool toggle；概念词全站联动。导出: `searchState, submitSearchHome, renderSearchResults, renderSearchView, openSearchToolDetail, openSearchMoreTools...`
 - [js/tools.js](src/web/js/tools.js) — 工具库视图（厂商/工具 Toggle）由独立 `VendorDirectoryView` / `ToolDirectoryView` 控制器分别管理；工具卡片四类主题、分组和快速索引 + 滤选 + 单级详情弹窗；厂商一级/二级与工具/模型/套餐三级详情统一按稳定 ref 打开，仅 X 关闭。导出: `openDetail, closeModal, showModal, getToolsViewMode, toggleToolsViewMode, setToolsViewMode, clearToolFilters, renderTools...`
 - [js/compare.js](src/web/js/compare.js) — 对比视图双 tab（模型对比 ↔ 工具对比）+ 工具对比（catalog）引擎；api_model 卡 +对比 经标题→canonical 桥接路由到模型 tab、tool/套餐路由到工具 tab；isCompareSelected 模型感知。导出: `compareList, getCompareTab, setCompareTab, renderCompareView, compareKey, isCompareSelected, toggleCompareRef, compareGroupLeaves, updateCompareCount, renderCompare, removeCompare, quickCompare...`
-- [js/compare-models.js](src/web/js/compare-models.js) — **模型对比引擎（读 integrated/ + view-config + models-alias）**：选择器搜索 `display/vendor/family/identity`、模型卡 `tool_key` 通过 v2 identity 和 alias 桥接到 canonical；前端只消费管线已消歧的记录，绝不按名称合并。其余：变体圆圈、综合分/性价比图表与表格能力同现有契约。导出: `renderModelCompare, bindModelCompareEvents, bridgeToCanonical, canonicalForTool, modelCompareIsSelected, modelCap, routeApiModelToCompare`
+- [js/compare-models.js](src/web/js/compare-models.js) — **模型对比引擎（读 integrated/ + view-config + models-alias）**：选择器搜索 `display/vendor/family/identity`、模型卡 `tool_key` 先经人工 `catalog_aliases` 桥接再回退 v2 identity/raw alias 到 canonical；前端只消费管线已消歧的记录，绝不按名称合并。其余：变体圆圈、综合分/性价比图表与表格能力同现有契约。导出: `renderModelCompare, bindModelCompareEvents, bridgeToCanonical, canonicalForTool, modelCompareIsSelected, modelCap, routeApiModelToCompare`
 - [js/featured.js](src/web/js/featured.js) — 推荐视图（编辑精选通过工具 `tool_key` + 三级 `detail_ref` 导航，热门模型按正式工具卡 `detail_kind/theme` 分类；访问/资料状态使用中性未知语义，价格兼容通用计价单位）。导出: `renderFeatured, renderFeaturedTabs...`
 - [js/glossary.js](src/web/js/glossary.js) — AI 概念视图。导出: `activeGlossaryId, openGlossaryConcept, renderGlossary...`
 - [js/trending.js](src/web/js/trending.js) — AI 热点视图（文案走 t()、内容走 getLocalizedField；相关工具资源解析为正式工具卡和三级详情引用）。导出: `renderTrending, openHotspotDetail, reloadHotspots...`
@@ -138,7 +140,7 @@
 ### feedback/ — 收尾环节：工具库/概念库反哺（独立于主链，只写待补卡文件）
 - [tool-feedback.js](src/news/feedback/tool-feedback.js) — 从 approved summary 提取带类型实体（默认正则 / options.llmExtract 注入 LLM），按类型路由（tool/model→待补工具卡并带 detail_kind_hint、concept→待补概念卡、vague→排除），isVagueName 兜底拦截产品/平台/模型家族笼统名（可灵/通义千问等）绝不进待补工具卡；与五模块工具卡/glossary.json 比对，缺失写待补卡（data/manual/tools/tool-cards-pending.json、data/manual/concepts/concept-cards-pending.json，路径走 CATALOG_GENERATOR_FILES.pendingTools / CONCEPT_FILES.pendingConcepts），不直接改知识库。导出: `feedbackFromSummaries, extractEntities, extractEntitiesDefault, normalizeEntities, isVagueName, toolExists, conceptExists`
 - [llm-entity-extract.js](src/news/feedback/llm-entity-extract.js) — 摘要 AI 实体提取（本地 Bonsai 替代默认正则）：找 AI 概念/工具/模型并输出带类型 JSON 数组 `{name,type}`（type∈tool/model/concept/vague，笼统名标 vague；完整名、排除泛称/人名/机构、检查遗漏、无则输出 []）；复用 requestStructuredJson + ledger fail-closed，缺 ledger 内部自建；调用失败抛错由 cmd-min 降级正则。导出: `ENTITY_TYPES, buildEntityExtractInstructions, validateExtractOutput, toEntityList, toNameList, extractEntitiesWithLlm`
-- [catalog-draft-adapter.js](src/news/feedback/catalog-draft-adapter.js) — 将热点待补工具候选转换为 Seed（接受解析结果 vendor_name/official_url/official_urls[]，多官方 URL 全部进 discovery_sources 作 official_hint；detail_kind 由候选 detail_kind_hint 决定——api_model→具体模型，缺省 tool→具体工具；isVagueName 拒绝笼统名 PENDING_CANDIDATE_VAGUE；不设 new_group_title，分组名由 deriveKeys 回退 seed.name），不直接写正式目录。导出: `pendingCandidateToSeed`
+- [catalog-draft-adapter.js](src/news/feedback/catalog-draft-adapter.js) — 将热点待补工具候选转换为 Seed（接受解析结果 vendor_name/official_url/official_urls[]，多官方 URL 全部进 discovery_sources 作 official_hint；保留候选显式指定的 existing level1/level2 稳定引用以加入已有分组；detail_kind 由候选 detail_kind_hint 决定——api_model→具体模型，缺省 tool→具体工具；isVagueName 拒绝笼统名 PENDING_CANDIDATE_VAGUE；不设 new_group_title 时分组名由 deriveKeys 回退 seed.name），不直接写正式目录。导出: `pendingCandidateToSeed`
 
 ## docs/manual/ — 用户说明
 - [catalog-generator.md](docs/manual/catalog-generator.md) — schema v3 五模块目录生成器手册；CatalogProfile/OfficialSource/FieldCoverage/LayerPatch、plan/new/resume/review/apply、硬成本账本和恢复安全规则。
@@ -159,7 +161,7 @@
 - [validate.js](src/maintenance/validate.js) — **校验聚合入口（require 即运行 + process.exit 0/1）**。scripts/validate.js 直接引用，CI 三处工作流依赖
 - [validate-catalog.js](src/maintenance/validate-catalog.js) — catalog 数据校验。导出: `validateCatalog, validateHtml`
 - [validate-news.js](src/maintenance/validate-news.js) — news 数据校验（news-config-v2 采集安全配置 + last-run X credits/request 账本 + hotspots + v2 候选层 min-candidates）。导出: `validateNews, validateMinNews, validateNewsConfig, validateLastRun`
-- [validate-comparison.js](src/maintenance/validate-comparison.js) — 模型对比数据校验（integrated index/data 交叉一致性、canonical/同厂商 display 唯一、series/member 引用完整性、identity/evaluation_profiles 契约、degree 不得伪装评测环境、composite 与 raw 自洽、维度 0-100、view-config/models-alias 契约形状；raw 快照存在则 schema 校验、缺失优雅跳过）。导出: `validateComparison, validateIndex, validateData`
+- [validate-comparison.js](src/maintenance/validate-comparison.js) — 模型对比数据校验（先校验 model-exclusions 规则与 integrated 无命中残留，再校验 index/data 交叉一致性、canonical/同厂商 display 唯一、series/member 引用完整性、identity/evaluation_profiles 契约、degree 不得伪装评测环境、composite 与 raw 自洽、维度 0-100、view-config/models-alias 契约形状；raw 快照存在则 schema 校验、缺失优雅跳过）。导出: `validateComparison, validateIndex, validateData`
 
 ## tests/ — 自动化回归
 - [catalog-interface.test.js](tests/catalog-interface.test.js) — 五模块目录 Interface、字段所有权、稳定引用、工具卡→三级详情以及场景/精选详情引用回归。
@@ -173,6 +175,7 @@
 - [catalog-profile-contract.test.js](tests/catalog/catalog-profile-contract.test.js) — CatalogProfile 适用性、video API 必需谓词、稳定目标与逐层 create/replace/noop 规划回归。
 - [catalog-research.test.js](tests/catalog/catalog-research.test.js) — 官方域名过滤、Tavily-only 成本、字段级 missing-only resume 和硬成本账本回归。
 - [catalog-synthesis.test.js](tests/catalog/catalog-synthesis.test.js) — 完整层字段合成、来源 provenance、字段级 Profile mismatch、占位/伪造覆盖拒绝和 noop 层回归。
+- [catalog-transaction-store.test.js](tests/catalog/catalog-transaction-store.test.js) — 精确 area/id 删除规划、引用清理、缺失目标和不完整删除集回归。
 - [catalog-draft-envelope.test.js](tests/catalog/catalog-draft-envelope.test.js) — schema v3 Readiness 字段级重算、Source 校验与旧 Draft Apply 拒绝回归。
 - [catalog-pipeline-v3.test.js](tests/catalog/catalog-pipeline-v3.test.js) — Kling video API 完整/缺字段 dossier 全链 mock；五层 replace、非缺省字段、字段级 blocked 改类建议和 Assistant new/resume/review 回归。
 - [kling-video-dossier.js](tests/catalog/fixtures/kling-video-dossier.js) — 完全离线的 Kling video API 官方 dossier 与受约束单段合成 Adapter fixture。导出: `OFFICIAL_URL, EXACT_QUOTE, klingVideoSeed, createKlingDossierAdapters`
@@ -183,12 +186,13 @@
 - [collector-x-v2.test.js](tests/news/collector-x-v2.test.js) — X 请求级 credits 硬预算回归：窗外/空长文/重试/零预算/低配置/超量响应/直接门禁。
 - [news-pipeline-min.test.js](tests/news/news-pipeline-min.test.js) — v2 全链编排、总开关、采集状态汇总、credits→last-run 透传回归。
 - [validate-news-config.test.js](tests/maintenance/validate-news-config.test.js) — news-config-v2 安全字段与 last-run X credits/request schema 校验。
-- [rebuild-comparison.test.js](tests/comparison/rebuild-comparison.test.js) — 模型对比管线回归：4 源对齐/合并、models-alias 覆盖、维度归一化、综合分缺源重分配、性价比、单源/无综合分模型、LiveBench CSV 聚合、llm-stats RSC 解析、LMArena 快照 fail-closed。
+- [model-exclusions.test.js](tests/comparison/model-exclusions.test.js) — 排除规则 schema、token-boundary prefix、exact identity、命中诊断和 fail-closed 回归。
+- [rebuild-comparison.test.js](tests/comparison/rebuild-comparison.test.js) — 模型对比管线回归：4 源对齐/合并、models-alias 覆盖、维度归一化、综合分缺源重分配、性价比、单源/无综合分模型、整系列排除在 Elo/value/series 前生效且不写 raw、LiveBench CSV 聚合、llm-stats RSC 解析、LMArena 快照 fail-closed。
 - [model-series.test.js](tests/comparison/model-series.test.js) — 系列投影回归：系列/成员/修订变体聚合、人工成员展示名与重叠登记优先级。
 - [fixtures/raw/](tests/comparison/fixtures/raw/) — 模型对比管线测试 raw 快照 fixtures（openrouter/lmarena/livebench/llm-stats 各源小样本）。
 
 ## scripts/ — 命令入口（薄包装；src/ 为纯逻辑）
-- [catalog-generator.js](scripts/catalog-generator.js) — schema v3 五模块目录生成器 CLI；`plan/prepare` 零网络，`new/resume` 要求成本确认，Apply 要求维护者输入完整确认；另有 `batch`（工具批量生成，`--confirm-cost` 全局确认自动 apply / `--dry-run` 预览 / `--from-preview` 复用解析）与 `url-registry`（人工官方 URL 登记表增删查）。导出: `parseArgs, main, readSeed`
+- [catalog-generator.js](scripts/catalog-generator.js) — schema v3 五模块目录生成器 CLI；`plan/prepare` 零网络，`new/resume` 要求成本确认，Apply 要求维护者输入完整确认；支持 `remove --targets` 精确 ID 删除（revision/确认值/事务回滚）以及 `batch`（`--confirm-cost` 全局确认自动 apply / `--dry-run` 预览 / `--from-preview` 复用解析）与 `url-registry`（人工官方 URL 登记表增删查）。导出: `parseArgs, main, readSeed`
 - [concept-generator.js](scripts/concept-generator.js) — **AI 概念库生成器 CLI（与五模块目录生成器分离）**：`batch --file <待补概念卡> --dry-run/--confirm-cost` 合成预览 → `preview` → `apply [--terms]` 人工写 glossary。导出: `parseArgs, main`
 - [refresh-vibe-hub-cache.js](scripts/refresh-vibe-hub-cache.js) — 定时刷新 vibe-hub 概念缓存（CI 入口，由 refresh-vibe-hub-cache.yml 每 3 天北京 19:00 调用）；只刷 `fetched_at` 距今 > 3 天 TTL 的条目，空缓存/全新鲜零网络，纯 HTTP 不读任何 Key。导出: `main`
 - [news-cli.js](scripts/news-cli.js) — CLI 分发入口（透传 src/news/cli/news-cli，含 **`min-review` 命令组**）
@@ -196,6 +200,7 @@
 - [identity-review.bat](bat/identity-review.bat) — 模型身份歧义审计维护入口；双击调用 `fetch-comparison.js review`，只生成待人工确认清单，不调用 AI、不写正式数据。
 - [validate.js](scripts/validate.js) — 校验聚合入口
 - [build-dist.js](scripts/build-dist.js) — src/web + public + data → dist/（维护者入口：bat/build-dist.bat）
+- [browser-acceptance.js](scripts/browser-acceptance.js) — 依赖零安装的 Edge/CDP 真实页面验收：读取被忽略的 `config/browser.local.json`，启动 dist 静态站与临时 Edge profile，检查 18 张模型卡搜索/详情、对比搜索、旧 Spark/xunfei 隐藏和排除模型不可见。
 - [publish-news.js](scripts/publish-news.js) — 候选 → 公开投影 + RSS 发布（**默认走 v2：min-candidates approved 按每日 top 重建 hotspots.json**）
 - [run-after-first-review.js](scripts/run-after-first-review.js) — 首次审核结论落地后安全并行 `refine` 与 `ai-top`；任一失败仅终止本次记录子进程并整体失败。导出: `runAfterFirstReview`
 - [check-secrets.js](scripts/check-secrets.js) — 密钥/高熵扫描（validate.js 反向依赖）

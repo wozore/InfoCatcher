@@ -118,6 +118,39 @@ test('rebuild：models-alias 覆盖自动主键规则', () => {
   assert.match(models.get('renamed-gpt').display, /^GPT-5\.6 Sol/);
 });
 
+test('rebuild：模型排除在 Elo/value/series 计算前生效，且每日重建不复活', () => {
+  const snapshots = buildSnapshots();
+  const exclusionConfig = {
+    schema_version: 1,
+    rules: [{ vendor: 'openai', identity_prefix: 'gpt-5.6-sol', reason: 'test exclusion' }],
+  };
+  const first = rebuildIntegrated({ snapshots, exclusionConfig, write: false });
+  assert.equal(first.ok, true, first.errors.join('; '));
+  assert.equal(first.models.some(model => model.canonical === 'openai--gpt-5.6-sol'), false);
+  assert.ok(first.diagnostics.excluded_models.some(item => item.canonical === 'openai--gpt-5.6-sol'));
+  assert.equal(first.index.models.some(model => model.canonical === 'openai--gpt-5.6-sol'), false);
+  assert.equal(first.data.models.some(model => model.canonical === 'openai--gpt-5.6-sol'), false);
+  for (const model of first.models) {
+    for (const dimension of Object.values(model.dimensions)) {
+      assert.ok(dimension.value >= 0 && dimension.value <= 100);
+    }
+    if (model.value) assert.ok(model.value.score >= 0 && model.value.score <= 100);
+  }
+
+  const second = rebuildIntegrated({ snapshots, exclusionConfig, write: false });
+  assert.deepEqual(second.models.map(model => model.canonical), first.models.map(model => model.canonical));
+  assert.deepEqual(second.diagnostics.excluded_models.map(item => item.canonical), ['openai--gpt-5.6-sol']);
+});
+
+test('rebuild：排除配置不会写 integrated 文件', () => {
+  const indexFile = path.join(__dirname, '..', '..', 'data', 'comparison', 'integrated', 'index.json');
+  const dataFile = path.join(__dirname, '..', '..', 'data', 'comparison', 'integrated', 'data.json');
+  const before = [fs.readFileSync(indexFile, 'utf8'), fs.readFileSync(dataFile, 'utf8')];
+  const result = rebuildIntegrated({ snapshots: buildSnapshots(), exclusionConfig: { schema_version: 1, rules: [] }, write: false });
+  assert.equal(result.ok, true, result.errors.join('; '));
+  assert.deepEqual([fs.readFileSync(indexFile, 'utf8'), fs.readFileSync(dataFile, 'utf8')], before);
+});
+
 test('rebuild：raw 快照缺失 → 拒绝重建（全绿才重建）', () => {
   const result = rebuildIntegrated({ snapshots: { openrouter: {}, lmarena: null, livebench: null, llm_stats: null }, write: false });
   assert.equal(result.ok, false);

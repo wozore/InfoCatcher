@@ -110,6 +110,123 @@ function finalizeTransaction(staging, backup) {
   removeIfExists(CATALOG_GENERATOR_FILES.journal);
 }
 
+function normalizeRemovalTargets(targets) {
+  if (!Array.isArray(targets) || !targets.length) throw new Error('REMOVE_TARGETS_REQUIRED');
+  const seen = new Set();
+  return targets.map(target => {
+    const area = target?.area;
+    const id = target?.id;
+    if (!FILE_BY_AREA[area] || typeof id !== 'string' || !id.trim()) throw new Error(`REMOVE_TARGET_INVALID:${area}:${id}`);
+    const key = `${area}:${id}`;
+    if (seen.has(key)) throw new Error(`REMOVE_TARGET_DUPLICATE:${key}`);
+    seen.add(key);
+    return { area, id };
+  });
+}
+
+function removeReferences(snapshot, removedRefs) {
+  for (const items of Object.values(snapshot)) {
+    for (const item of items) {
+      for (const field of ['level1_ref', 'level2_ref', 'detail_ref']) {
+        if (item[field] && removedRefs.has(`${item[field].kind}:${item[field].id}`)) delete item[field];
+      }
+      for (const field of ['level2_refs', 'detail_refs']) {
+        if (Array.isArray(item[field])) item[field] = item[field].filter(ref => !removedRefs.has(`${ref.kind}:${ref.id}`));
+      }
+    }
+  }
+}
+
+function planRecordRemoval(snapshot, normalized) {
+  const missing = normalized.filter(target => !snapshot[target.area].some(item => item.id === target.id));
+  if (missing.length) return { ok: false, code: 'REMOVE_TARGET_MISSING', missing };
+  const removedRefs = new Set(normalized.map(target => `${target.area}:${target.id}`));
+  const targetSnapshot = Object.fromEntries(Object.entries(snapshot).map(([area, items]) => [
+    area,
+    items.filter(item => !normalized.some(target => target.area === area && target.id === item.id)),
+  ]));
+  removeReferences(targetSnapshot, removedRefs);
+  const validation = validateCatalogSnapshot(targetSnapshot);
+  if (!validation.ok) return { ok: false, code: 'SNAPSHOT_INVALID', errors: validation.errors };
+  return { ok: true, snapshot: targetSnapshot, removed: normalized };
+}
+
+function commitSnapshotChange(target, options = {}) {
+  ensureDirs();
+  const runId = options.runId || `catalog-${options.operation || 'snapshot'}-${process.pid}-${Date.now()}`;
+  const lockPath = CATALOG_GENERATOR_FILES.lock;
+  const staging = path.join(CATALOG_GENERATOR_FILES.stagingDir, runId);
+  const stagingCatalog = path.join(staging, 'catalog');
+  const backup = path.join(CATALOG_GENERATOR_FILES.backupDir, runId);
+  const backupCatalog = path.join(backup, 'catalog');
+  const stagedDist = path.join(staging, 'dist');
+  const backupDist = path.join(backup, 'dist');
+  let lockHeld = false;
+  try {
+    acquireLock(lockPath, { run_id: runId, pid: process.pid, operation: options.operation || 'snapshot', at: new Date().toISOString() });
+    lockHeld = true;
+    const before = loadCatalogSnapshot();
+    if (options.expectedRevision && before.revision !== options.expectedRevision) return { ok: false, code: 'REVISION_CONFLICT', revision: before.revision };
+    const validation = validateCatalogSnapshot(target);
+    if (!validation.ok) return { ok: false, code: 'SNAPSHOT_INVALID', errors: validation.errors };
+    const targetRevision = revisionOf(target);
+    const journal = {
+      schema_version: 1, run_id: runId, phase: 'staging', before_revision: before.revision,
+      target_revision: targetRevision, staging, backup, backup_catalog: backupCatalog,
+      staged_dist: stagedDist, backup_dist: backupDist, replaced: [], dist_replaced: false, at: new Date().toISOString(),
+    };
+    journalWrite(journal, runId);
+    writeSnapshotFiles(target, stagingCatalog);
+    buildDist({ catalogDir: stagingCatalog, outputDir: stagedDist });
+    journal.phase = 'dist_staged';
+    journalWrite(journal, runId);
+    copyCatalogFiles(backupCatalog);
+    backupDistDirectory(backupDist);
+    journal.phase = 'committing';
+    journal.replaced = Object.keys(FILE_BY_AREA);
+    journalWrite(journal, runId);
+    replaceCatalogFiles(stagingCatalog);
+    journal.phase = 'catalog_validated';
+    journalWrite(journal, runId);
+    const after = loadCatalogSnapshot();
+    if (after.revision !== targetRevision) throw new Error('TARGET_REVISION_MISMATCH');
+    journal.dist_replacement_started = true;
+    journalWrite(journal, runId);
+    replaceDirectory(stagedDist, path.join(DIRS.project, 'dist'));
+    journal.dist_replaced = true;
+    journal.phase = 'dist_verified';
+    journalWrite(journal, runId);
+    journal.phase = 'committed';
+    journalWrite(journal, runId);
+    finalizeTransaction(staging, backup);
+    return { ok: true, beforeRevision: before.revision, targetRevision };
+  } catch (error) {
+    const journal = journalRead();
+    try { if (journal?.run_id === runId) rollbackFromJournal(journal); }
+    catch (rollbackError) {
+      return { ok: false, code: 'ROLLBACK_FAILED', error: rollbackError.message, originalError: error.message };
+    } finally {
+      finalizeTransaction(staging, backup);
+    }
+    return { ok: false, code: error.code || 'BUILD_FAILED', error: error.message };
+  } finally {
+    if (lockHeld) releaseLock(lockPath, runId);
+  }
+}
+
+function removeCatalogRecords(targets, options = {}) {
+  let normalized;
+  try { normalized = normalizeRemovalTargets(targets); }
+  catch (error) { return { ok: false, code: error.message.split(':')[0], error: error.message }; }
+  const current = loadCatalogSnapshot();
+  if (!options.expectedRevision) return { ok: false, code: 'REMOVE_EXPECTED_REVISION_REQUIRED' };
+  if (options.expectedRevision !== current.revision) return { ok: false, code: 'REVISION_CONFLICT', revision: current.revision };
+  const planned = planRecordRemoval(current.snapshot, normalized);
+  if (!planned.ok) return planned;
+  const result = commitSnapshotChange(planned.snapshot, { ...options, operation: 'remove-catalog-records' });
+  return result.ok ? { ...result, removed: normalized } : result;
+}
+
 function commitCatalogChange(seed, options = {}) {
   ensureDirs();
   const runId = options.runId || `catalog-${process.pid}-${Date.now()}`;
@@ -263,4 +380,4 @@ function recoverCatalogTransaction() {
   return { ok: true, recovered: true };
 }
 
-module.exports = { loadCatalogSnapshot, commitCatalogChange, replaceToolLevel3, recoverCatalogTransaction, FILE_BY_AREA };
+module.exports = { loadCatalogSnapshot, commitCatalogChange, replaceToolLevel3, removeCatalogRecords, planRecordRemoval, recoverCatalogTransaction, FILE_BY_AREA };

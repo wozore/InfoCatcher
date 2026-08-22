@@ -102,6 +102,14 @@
         {
           "kind": "tool-level3",
           "id": "tool-level3:gemini-2.5-pro"
+        },
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:gemini-3-7-flash"
+        },
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:gemini-3-6-flash"
         }
       ]
     },
@@ -172,6 +180,10 @@
         {
           "kind": "tool-level3",
           "id": "tool-level3:glm-5.1"
+        },
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:glm-5-3"
         }
       ]
     },
@@ -194,32 +206,6 @@
         {
           "kind": "tool-level3",
           "id": "tool-level3:ernie-5.0"
-        }
-      ]
-    },
-    {
-      "id": "vendor-level2:xunfei:spark-models",
-      "level1_ref": {
-        "kind": "vendor-level1",
-        "id": "vendor-level1:xunfei"
-      },
-      "vendor_key": "xunfei",
-      "title": "星火模型",
-      "official_url": "https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html",
-      "summary": "当前已核实的讯飞星火 API 模型。",
-      "status": "active",
-      "detail_refs": [
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:spark-ultra"
-        },
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:spark-pro"
-        },
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:spark-lite"
         }
       ]
     },
@@ -430,20 +416,272 @@
       ]
     },
     {
-      "id": "vendor-level2:xunfei:spark-x2",
+      "id": "vendor-level2:google:gemma-4",
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:xunfei"
+        "id": "vendor-level1:google"
       },
-      "vendor_key": "xunfei",
-      "title": "Spark X2",
-      "official_url": "https://xinghuo.xfyun.cn/",
-      "summary": "科大讯飞推出的星火大模型系列，提供文本生成、语音识别、语音合成等多种AI能力，面向开发者和企业提供API服务。",
+      "vendor_key": "google",
+      "title": "Gemma 4",
+      "official_url": "https://ai.google.dev/gemma",
+      "summary": "Gemma 4 是 Google DeepMind 推出的开放模型系列，支持文本和图像输入及文本输出，上下文窗口最高 256K，支持超过 140 种语言，提供从 2B 到 31B 的多种尺寸。",
       "status": "active",
       "detail_refs": [
         {
           "kind": "tool-level3",
-          "id": "tool-level3:spark-x2"
+          "id": "tool-level3:gemma-4"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:minimax:minimax-m3",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:minimax"
+      },
+      "vendor_key": "minimax",
+      "title": "MiniMax M3",
+      "official_url": "https://platform.minimax.io/docs/token-plan/intro",
+      "summary": "MiniMax API 提供的订阅计划，涵盖 M3 等模型。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:minimax-m3"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:minimax:minimax-m2-7",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:minimax"
+      },
+      "vendor_key": "minimax",
+      "title": "MiniMax M2.7",
+      "official_url": "https://platform.minimax.io",
+      "summary": "MiniMax API 提供灵活的付费方案，包括按量付费（Pay as You Go）和订阅制 Token Plan，覆盖文本、图像、语音、视频等多模态模型。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:minimax-m2-7"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:xai:grok-4-5",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:xai"
+      },
+      "vendor_key": "xai",
+      "title": "Grok 4.5",
+      "official_url": "https://docs.x.ai",
+      "summary": "SpaceXAI 官方文档，提供 Grok 系列模型的发布说明、API 更新及使用指南。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:grok-4-5"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:moonshot:kimi-k3",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:moonshot"
+      },
+      "vendor_key": "moonshot",
+      "title": "Kimi K3",
+      "official_url": "https://platform.kimi.com/docs/models",
+      "summary": "Kimi 旗舰模型系列，包括 K3、K2.7、K2.6 等，适用于多模态、编程及通用智能场景",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:kimi-k3"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:alibaba:qwen3-8-max",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:alibaba"
+      },
+      "vendor_key": "alibaba",
+      "title": "Qwen3.8 Max",
+      "official_url": "https://help.aliyun.com/en/lingma/qwen3-8-max-preview-limited-time-offer",
+      "summary": "Qwen3.8-Max是千问系列最新旗舰模型，拥有2.4T参数，在代码工程和办公协作等核心能力上显著提升，面向复杂长周期任务提供世界领先的综合性能。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:qwen3-8-max"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:tencent:hy3",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:tencent"
+      },
+      "vendor_key": "tencent",
+      "title": "混元 Hy3",
+      "official_url": "https://cloud.tencent.com.cn/product/tclm",
+      "summary": "腾讯混元大模型是由腾讯公司全链路自研的通用与多模态大模型家族，覆盖文本、图像、视频、语音、3D等模态，面向内容生产、知识问答、业务自动化等场景提供企业级服务。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:hy3"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:meta:muse-spark-1-2",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:meta"
+      },
+      "vendor_key": "meta",
+      "title": "Muse Spark 1.2",
+      "official_url": "https://developer.meta.com/ai/models/muse-spark",
+      "summary": "Meta 提供 Muse 系列模型，包含 Muse Spark 1.2、Muse Spark 1.1 和 Muse Glimmer，以及 Llama 系列模型。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:muse-spark-1-2"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:stepfun:step-3-5-flash",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:stepfun"
+      },
+      "vendor_key": "stepfun",
+      "title": "Step-3.5-Flash",
+      "official_url": "https://platform.stepfun.com/",
+      "summary": "StepFun 开放平台提供一系列大模型 API，包括对话、推理等接口。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:step-3-5-flash"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:stepfun:step-3-7-flash",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:stepfun"
+      },
+      "vendor_key": "stepfun",
+      "title": "Step-3.7-Flash",
+      "official_url": "https://platform.stepfun.com",
+      "summary": "StepFun 开放平台提供 Step 系列模型的 API 服务，支持 Chat Completions 接口，适用于多种 AI 应用场景。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:step-3-7-flash"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:xiaomi:mimo-v2-5",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:xiaomi"
+      },
+      "vendor_key": "xiaomi",
+      "title": "MiMo-V2.5",
+      "official_url": "https://mimo.mi.com",
+      "summary": "小米 MiMo 模型系列，包含 MiMo-V2.5 等多种模型。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:mimo-v2-5"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:nvidia:nemotron-3-ultra",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:nvidia"
+      },
+      "vendor_key": "nvidia",
+      "title": "Nemotron 3 Ultra",
+      "official_url": "https://docs.api.nvidia.com/nim/reference/llm-apis",
+      "summary": "NVIDIA NIM API 提供统一接口访问多种生成式 AI 模型。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:nemotron-3-ultra"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:nvidia:nemotron-3-super",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:nvidia"
+      },
+      "vendor_key": "nvidia",
+      "title": "Nemotron 3 Super",
+      "official_url": "https://docs.api.nvidia.com/nim/reference/llm-apis",
+      "summary": "NVIDIA NIM 提供了一系列 API，使开发者能够轻松访问生成式 AI 模型，涵盖 LLM、检索、视觉和多模态推理。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:nemotron-3-super"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:nvidia:nemotron-3-5",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:nvidia"
+      },
+      "vendor_key": "nvidia",
+      "title": "Nemotron 3.5",
+      "official_url": "https://docs.api.nvidia.com/nim/",
+      "summary": "NVIDIA NIM 提供用于生成式 AI 的 API 端点，包括 LLM、检索、视觉和多模态模型。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:nemotron-3-5"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:xiaomi:mimo-v2-5-pro",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:xiaomi"
+      },
+      "vendor_key": "xiaomi",
+      "title": "MiMo-V2.5 Pro",
+      "official_url": "https://mimo.mi.com/docs",
+      "summary": "小米 MiMo API 开放平台提供 MiMo-V2.5 等顶级旗舰模型，以及 TTS 模型，面向全球用户开放。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:mimo-v2-5-pro"
         }
       ]
     }

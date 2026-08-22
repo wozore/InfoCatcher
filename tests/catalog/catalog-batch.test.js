@@ -91,6 +91,20 @@ test('resolveBatchCandidates 三路：登记表命中 / 解析成功 / unresolve
   assert.equal(result.unresolved[0].name, 'Unknown Tool');
 });
 
+test('resolveBatchCandidates 保留候选指定的稳定层级引用', async () => {
+  const registry = { schema_version: 1, entries: { 'Gemini 3.7 Flash': { vendor_name: 'Google', official_url: 'https://ai.google.dev' } } };
+  const result = await resolveBatchCandidates([{
+    name: 'Gemini 3.7 Flash', vendor_key: 'google', detail_kind_hint: 'api_model',
+    placement: {
+      existing_level1_ref: { kind: 'vendor-level1', id: 'vendor-level1:google' },
+      existing_level2_ref: { kind: 'vendor-level2', id: 'vendor-level2:google:gemini-models' },
+    },
+  }], { registry });
+  assert.deepEqual(result.seeds[0].placement, {
+    existing_level1_ref: { kind: 'vendor-level1', id: 'vendor-level1:google' },
+    existing_level2_ref: { kind: 'vendor-level2', id: 'vendor-level2:google:gemini-models' },
+  });
+});
 test('resolveOfficialSource fail-closed：缺 name / 缺 TAVILY key 均不抛错', async () => {
   const noName = await resolveOfficialSource('   ');
   assert.equal(noName.ok, false);

@@ -42,7 +42,7 @@ function buildSynthesisInstructions() {
     '枚举：vendor_status=verified|partial|conflict|unavailable；group_status/detail_status=active|partial|legacy_supported|deprecated|retired；features.tone=positive|negative|neutral；access_level=开放|受限|区域限制；price_badge=free|paid|freemium|usage_based。',
     'api_pricing 使用 {status:"available",rate_cards:[{label,pricing_basis,currency,metrics:[{label,amount,unit}],conditions}]}；rate_cards[].conditions 必须是非空字符串（描述该档计费条件，如服务层级/上下文档位/币种），找不到任何可写条件的官方计费证据时把 api_pricing 整体列入 missing，绝不输出空 conditions 或空 metrics。找不到官方计费来源时列入 missing，绝不虚构 rate_cards。',
     'one_m_context 必须输出：模型原生支持 1M 上下文时用 {status:"native",tokens:<数字>,conditions:"..."}；不支持时用 {status:"not_applicable",reason:"..."}；禁止省略该字段或输出 null。',
-    '集合字段：features 是数组，每项 {tone,text} 只描述一个独立特点，text 用一句简洁的话概括（30 字以内），禁止用逗号、顿号或分号把多个特点拼接进同一项；scenes=[string]；applicable_scenarios/inapplicable_scenarios=[{title,description}] 都必须非空；vendor_summary/vendor_description/group_summary/summary 非空字符串；vendor_official_url/group_official_url/official_url 是 http(s) 官方 URL；official_date 是发布日期。',
+    '集合字段：features 是数组，每项 {tone,text} 只描述一个独立特点，text 用一句简洁的话概括（30 字以内），禁止用逗号、顿号或分号把多个特点拼接进同一项；字段名必须逐字复制 expected_layer_fields，vendor 特点字段只能命名为 features，禁止使用 vendor_features、feature_preview 或其他别名；scenes=[string]；applicable_scenarios/inapplicable_scenarios=[{title,description}] 都必须非空；vendor_summary/vendor_description/group_summary/summary 非空字符串；vendor_official_url/group_official_url/official_url 是 http(s) 官方 URL；official_date 必须是来源明确给出的发布日期，且严格使用 YYYY-MM-DD；如果来源只有月份/日或没有完整日期，必须把 detail.official_date 列入 missing。',
     '若某字段已由 applicability 标记为 not_applicable，它不会出现在 expected_layer_fields 中，不要输出它。只输出这一个 JSON 对象。',
   ].join('\n');
 }

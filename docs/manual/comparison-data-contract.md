@@ -9,6 +9,7 @@ data/comparison/
 ├── refresh-config.json          # 抓取编排配置（频率/fullEvery/config 清单/count 状态）——管线专用
 ├── view-config.json             # 前端展示配置（维护者可改，管线不覆盖）
 ├── models-alias.json            # 主键对齐人工登记表（管线读取）
+├── model-exclusions.json        # integrated 整系列排除规则（raw 不删除）
 ├── model-series.json            # 系列/成员人工登记与展示顺序（管线读取）
 ├── aa-internal.json             # AA 内部参考（二期，本期不建）
 ├── raw/                         # 4 源快照（管线写，前端不读）
@@ -26,7 +27,16 @@ data/comparison/
 - `integrated/` 由 `rebuild-comparison.js` 全量重建；`view-config.json` / `models-alias.json` / `model-series.json` / `refresh-config.json` 为维护者手工维护，**管线不得覆盖**。
 - 前端相对路径 fetch：`data/comparison/view-config.json`、`data/comparison/integrated/index.json`、`data/comparison/integrated/data.json`。
 
-## 2. 维度键枚举（dimension keys，唯一）
+**排除规则**：`model-exclusions.json` 只参与 integrated 重建，不删除或改写 `raw/` 快照。每条规则必须包含 `vendor`、排除理由，并且二选一配置 `identity_prefix` 或 `identities`：前者采用 token boundary（identity 等于前缀，或以 `${prefix}-` 开头），后者精确匹配 identity。规则在源记录收集后、Elo bounds、维度归一化、综合分、性价比和 series projection 之前执行，因此被排除记录不会影响剩余模型的归一化或产生空系列；重建诊断会返回完整命中列表，校验器拒绝 integrated 中残留的命中记录。
+
+重建顺序固定为：
+
+```text
+collectSourceRecords → exclusions filter → Elo bounds → buildModelRecord
+→ value → series projection → integrated index/data
+```
+
+
 
 | 键 | 中文标签（i18n key 见 §9） | 来源 | 归一化 |
 |---|---|---|---|

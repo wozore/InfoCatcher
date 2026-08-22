@@ -34,7 +34,9 @@ const REQUIRED_LAYER_FIELDS = Object.freeze({
 });
 
 function hasActive(plan, areas) {
-  return areas.some(area => plan.layer_plan[area] && plan.layer_plan[area].operation !== 'noop');
+  return areas.some(area => plan.layer_plan[area]
+    && plan.layer_plan[area].operation !== 'noop'
+    && plan.layer_plan[area].link_only !== true);
 }
 
 function expectedLayerFields(plan) {
@@ -55,13 +57,19 @@ function isNonDefaultFieldValue(value) {
   return isExplicitValue(String(value));
 }
 
+function isIsoDate(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(value || ''))) return false;
+  return !Number.isNaN(Date.parse(`${value}T00:00:00Z`));
+}
+
 function fieldCoverageOf(output, plan) {
   const entries = [];
   for (const [layer, fields] of Object.entries(expectedLayerFields(plan))) {
     for (const field of fields) {
       const value = output?.layer_fields?.[layer]?.[field];
       const refs = output?.provenance?.[`${layer}.${field}`] || [];
-      const status = (isNonDefaultFieldValue(value) && refs.length > 0) ? 'covered' : 'missing';
+      const validValue = isNonDefaultFieldValue(value) && (field !== 'official_date' || isIsoDate(value));
+      const status = (validValue && refs.length > 0) ? 'covered' : 'missing';
       entries.push({ layer, field, status });
     }
   }
@@ -176,6 +184,14 @@ function buildPatches(plan, research, output) {
     records['tool-level3'] = detail;
     if (plan.layer_plan['tool-card']) records['tool-card'] = buildToolCard({ toolKey: keys.toolKey, vendorKey: keys.vendorKey, title: plan.seed.name, vendorLabel: plan.seed.vendor_name, icon, summary: detailFields.summary, theme, scenes: detailFields.scenes, bestForPreview: detailFields.best_for_preview, notForPreview: detailFields.not_for_preview, priceBadge: detailFields.price_badge, accessLevel: detailFields.access_level, searchTerms: [plan.seed.name, plan.seed.vendor_name, keys.toolKey, ...detailFields.scenes], detailId, detailKind: plan.profile.detail_kind });
   }
+  for (const area of ['vendor-level1', 'vendor-level2']) {
+    const layer = plan.layer_plan[area];
+    if (!layer?.link_only) continue;
+    const current = layer.current;
+    records[area] = area === 'vendor-level1'
+      ? { ...current, level2_refs: level2Refs }
+      : { ...current, detail_refs: detailRefs };
+  }
 
   const valueMappings = {
     'vendor-card': { summary: fromSources(fieldSourceIds(output, 'vendor', 'vendor_summary')), feature_preview: fromSources(fieldSourceIds(output, 'vendor', 'features')), access_level: fromSources(fieldSourceIds(output, 'detail', 'access_level')), price_badge: fromSources(fieldSourceIds(output, 'detail', 'price_badge')) },
@@ -198,7 +214,8 @@ function buildPatches(plan, research, output) {
       continue;
     }
     const record = records[area];
-    patches.push({ area, id: layer.id, operation: layer.operation, record, provenance: fullProvenance(record, valueMappings[area]) });
+    const provenance = layer.link_only ? fullProvenance(record) : fullProvenance(record, valueMappings[area]);
+    patches.push({ area, id: layer.id, operation: layer.operation, record, provenance });
   }
   return patches;
 }
@@ -221,8 +238,18 @@ function validateLayerPatches(patches) {
 
 async function synthesizeCatalog(research, plan, adapter) {
   if (!research?.ok) return research || { ok: false, code: 'RESEARCH_REQUIRED', error: '缺少 ResearchResult' };
+  const expected = expectedLayerFields(plan);
+  const hasSynthesisFields = Object.values(expected).some(fields => fields.length > 0);
+  if (!hasSynthesisFields) {
+    const output = { layer_fields: {}, provenance: {} };
+    const coverage = fieldCoverageOf(output, plan);
+    const patches = buildPatches(plan, research, output);
+    const patchValidation = validateLayerPatches(patches);
+    if (!patchValidation.ok) return { ok: false, code: 'LAYER_PATCH_INVALID', errors: patchValidation.errors, cost: research._cost_ledger?.snapshot ? research._cost_ledger.snapshot() : research.cost };
+    return { ok: true, layer_patches: patches, synthesis: { ...output, coverage }, coverage, cost: research._cost_ledger?.snapshot ? research._cost_ledger.snapshot() : research.cost };
+  }
   if (!adapter?.synthesize) return { ok: false, code: 'SYNTHESIS_ADAPTER_REQUIRED', error: '缺少 synthesize adapter' };
-  const output = await adapter.synthesize({ research, plan, expected_layer_fields: expectedLayerFields(plan), ledger: research._cost_ledger });
+  const output = await adapter.synthesize({ research, plan, expected_layer_fields: expected, ledger: research._cost_ledger });
   const cost = research._cost_ledger?.snapshot ? research._cost_ledger.snapshot() : research.cost;
   if (output?.ok === false) return { ...output, cost };
   const validation = validateSynthesisOutput(output, research);

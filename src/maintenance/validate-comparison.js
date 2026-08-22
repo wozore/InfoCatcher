@@ -21,6 +21,7 @@ const {
   LIVEBENCH_GROUP_FIELDS,
 } = require('../comparison/compare-schema');
 const { normalizedDisplayKey } = require('../comparison/model-identity');
+const { validateExclusionConfig, exclusionForModel } = require('../comparison/model-exclusions');
 const { validateSeriesProjection } = require('../comparison/model-series');
 
 let failed = false;
@@ -116,9 +117,20 @@ function validateModelsAlias(data) {
   console.log(`  models-alias.json: ${data.entries.length} 条登记，通过`);
 }
 
-// ═══════════════════════════════════════════════════════════════
-// integrated/index.json
-// ═══════════════════════════════════════════════════════════════
+function validateModelExclusions(config, index) {
+  const result = validateExclusionConfig(config);
+  if (!result.ok) {
+    result.errors.forEach(item => fail(`model-exclusions.json.${item.path}: ${item.message}`));
+    return;
+  }
+  for (const model of index?.models || []) {
+    const match = exclusionForModel(model, config);
+    if (match) fail(`integrated/index.json 保留了排除模型 ${model.canonical}（${match.reason}）`);
+  }
+  console.log(`  model-exclusions.json: ${config.rules.length} 条规则，通过`);
+}
+
+
 function validateIndex(index) {
   if (!index || typeof index !== 'object' || Array.isArray(index)) { fail('integrated/index.json 顶层应为对象'); return; }
   if (![1, 2].includes(index.schema_version)) fail('integrated/index.json.schema_version 应为 1 或 2');
@@ -323,7 +335,9 @@ function validateComparison() {
   }
   validateViewConfig(readJson(COMPARISON_FILES.viewConfig));
   validateModelsAlias(readJson(COMPARISON_FILES.modelsAlias));
+  const exclusionConfig = readJson(COMPARISON_FILES.modelExclusions);
   const index = readJson(COMPARISON_FILES.integratedIndex);
+  validateModelExclusions(exclusionConfig, index);
   validateIndex(index);
   validateData(readJson(COMPARISON_FILES.integratedData), index);
   validateRaw();
@@ -333,6 +347,7 @@ module.exports = {
   validateComparison,
   validateViewConfig,
   validateModelsAlias,
+  validateModelExclusions,
   validateIndex,
   validateData,
   resetComparisonValidationForTests,

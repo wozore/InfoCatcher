@@ -188,6 +188,15 @@ function slugifyModelName(name) {
     .replace(/^-+|-+$/g, '');
 }
 
+function catalogAliasCanonicalFor(toolKey, title) {
+  const needles = [toolKey, slugifyModelName(title), String(title || '').trim().toLowerCase()].filter(Boolean);
+  for (const entry of aliasEntries) {
+    const aliases = entry.catalog_aliases || [];
+    if (aliases.some(alias => needles.includes(String(alias).trim().toLowerCase()))) return entry.model_key || entry.canonical;
+  }
+  return null;
+}
+
 function aliasCanonicalFor(toolKey, title) {
   const needles = [toolKey, slugifyModelName(title)].filter(Boolean);
   for (const entry of aliasEntries) {
@@ -204,6 +213,8 @@ export function bridgeToCanonical(title, toolKey) {
   if (toolKey && indexMap.has(toolKey)) return toolKey;
   const slug = slugifyModelName(title);
   if (slug && indexMap.has(slug)) return slug;
+  const catalogAlias = catalogAliasCanonicalFor(toolKey, title);
+  if (catalogAlias && indexMap.has(catalogAlias)) return catalogAlias;
   const identityMatch = indexModels.find(model => [toolKey, slug].filter(Boolean).includes(model.identity));
   if (identityMatch) return identityMatch.canonical;
   const displayMatch = indexModels.find(model => String(model.display).toLowerCase() === String(title).trim().toLowerCase());

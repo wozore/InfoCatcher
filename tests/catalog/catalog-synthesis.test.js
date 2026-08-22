@@ -8,7 +8,7 @@ const { synthesizeCatalog, normalizeFeaturePreview } = require('../../src/catalo
 
 function seed(overrides = {}) {
   return {
-    detail_kind: 'api_model', modality: 'video', name: 'Kling 2.6 Pro', vendor_name: '可灵', vendor_key: 'kling', tool_key: 'kling-2-6-pro',
+    detail_kind: 'api_model', modality: 'video', name: 'Kling 2.6 Pro', vendor_name: '可灵', vendor_key: 'kuaishou', tool_key: 'kling-2-6-pro',
     placement: { new_group_title: 'Models' }, known_fields: { theme: 'media' }, discovery_sources: [{ url: 'https://kling.ai', kind: 'official_hint' }],
     ...overrides,
   };
@@ -80,10 +80,64 @@ function adapter(missingFields = []) {
 
 function repairedSnapshot() {
   const snapshot = emptySnapshot();
-  for (const [area, id] of Object.entries({ 'vendor-card': 'vendor-card:kling', 'vendor-level1': 'vendor-level1:kling', 'vendor-level2': 'vendor-level2:kling:models', 'tool-level3': 'tool-level3:kling-2-6-pro', 'tool-card': 'tool-card:kling-2-6-pro' })) snapshot[area].push({ id, vendor_key: 'kling' });
+  for (const [area, id] of Object.entries({ 'vendor-card': 'vendor-card:kuaishou', 'vendor-level1': 'vendor-level1:kuaishou', 'vendor-level2': 'vendor-level2:kuaishou:models', 'tool-level3': 'tool-level3:kling-2-6-pro', 'tool-card': 'tool-card:kling-2-6-pro' })) snapshot[area].push({ id, vendor_key: 'kuaishou' });
   return snapshot;
 }
 
+function healthyExistingVendorSnapshot() {
+  const snapshot = emptySnapshot();
+  snapshot['vendor-card'].push({
+    id: 'vendor-card:kuaishou', vendor_key: 'kuaishou', title: '可灵', icon: '🎬', summary: '已有厂商摘要。',
+    feature_preview: [{ tone: 'positive', text: '已有能力。' }], access_level: '开放', price_badge: 'usage_based',
+    search_terms: ['可灵'], level1_ref: { kind: 'vendor-level1', id: 'vendor-level1:kuaishou' },
+  });
+  snapshot['vendor-level1'].push({
+    id: 'vendor-level1:kuaishou', vendor_key: 'kuaishou', title: '可灵', icon: '🎬', official_url: 'https://kling.ai',
+    description: '已有厂商描述。', status: 'active', features: [{ tone: 'positive', text: '已有能力。' }], level2_refs: [],
+  });
+  return snapshot;
+}
+test('link-only parent patch appends the new group ref without re-synthesizing parent fields', async () => {
+  const snapshot = healthyExistingVendorSnapshot();
+  const plan = planCatalogResearch(seed(), snapshot);
+  const research = researchFor(plan);
+  const detailAdapter = adapter();
+  const original = detailAdapter.synthesize;
+  detailAdapter.synthesize = async input => {
+    const value = await original(input);
+    delete value.layer_fields.vendor;
+    for (const key of Object.keys(value.provenance)) if (key.startsWith('vendor.')) delete value.provenance[key];
+    return value;
+  };
+
+  const result = await synthesizeCatalog(research, plan, detailAdapter);
+  assert.equal(result.ok, true, JSON.stringify(result.errors));
+  assert.equal(result.coverage.missing.some(item => item.layer === 'vendor'), false);
+  const parentPatch = result.layer_patches.find(patch => patch.area === 'vendor-level1');
+  assert.equal(parentPatch.operation, 'replace');
+  assert.deepEqual(parentPatch.record.level2_refs, [{ kind: 'vendor-level2', id: 'vendor-level2:kuaishou:models' }]);
+  assert.equal(parentPatch.record.description, '已有厂商描述。');
+  assert.equal(parentPatch.provenance.description.kind, 'deterministic');
+});
+
+test('orphan relation repair bypasses model synthesis when every record already exists', async () => {
+  const snapshot = healthyExistingVendorSnapshot();
+  snapshot['vendor-level1'][0].level2_refs = [{ kind: 'vendor-level2', id: 'vendor-level2:kuaishou:models' }];
+  snapshot['vendor-level2'].push({
+    id: 'vendor-level2:kuaishou:models', level1_ref: { kind: 'vendor-level1', id: 'vendor-level1:kuaishou' }, vendor_key: 'kuaishou',
+    title: 'Models', official_url: 'https://kling.ai', summary: '已有模型分组。', status: 'active', detail_refs: [],
+  });
+  const detail = { id: 'tool-level3:kling-2-6-pro', vendor_key: 'kuaishou', detail_kind: 'api_model', theme: 'media', title: 'Kling 2.6 Pro', vendor_label: '可灵', icon: '🎬', official_url: 'https://kling.ai', status: 'active', summary: '已有模型详情。', one_m_context: { status: 'not_applicable', reason: '视频模型。' }, api_pricing: { status: 'available', rate_cards: [{ label: '生成', pricing_basis: 'generation', currency: 'CREDIT', metrics: [{ label: '生成', amount: 1, unit: 'generation' }], conditions: '官方计费。' }] }, plan: { status: 'not_applicable', reason: '不是套餐。' }, applicable_scenarios: [{ title: '视频', description: '生成视频。' }], inapplicable_scenarios: [{ title: '长视频', description: '不适合长视频。' }], sources: [{ title: '官方', url: 'https://kling.ai' }], official_date: '2025-12-03' };
+  snapshot['tool-level3'].push(detail);
+  snapshot['tool-card'].push({ id: 'tool-card:kling-2-6-pro', tool_key: 'kling-2-6-pro', vendor_key: 'kuaishou', title: 'Kling 2.6 Pro', vendor_label: '可灵', icon: '🎬', summary: '已有工具卡。', theme: 'media', scenes: ['视频生成'], best_for_preview: '视频生成。', not_for_preview: '不适合长视频。', price_badge: 'usage_based', access_level: '开放', search_terms: ['Kling 2.6 Pro'], detail_ref: { kind: 'tool-level3', id: detail.id }, detail_kind: 'api_model' });
+  const plan = planCatalogResearch(seed({ placement: { existing_level2_ref: { kind: 'vendor-level2', id: 'vendor-level2:kuaishou:models' } } }), snapshot);
+  const result = await synthesizeCatalog(researchFor(plan), plan, null);
+  assert.equal(result.ok, true, JSON.stringify(result.errors));
+  assert.deepEqual(result.coverage.entries, []);
+  const groupPatch = result.layer_patches.find(patch => patch.area === 'vendor-level2');
+  assert.deepEqual(groupPatch.record.detail_refs, [{ kind: 'tool-level3', id: detail.id }]);
+  assert.equal(groupPatch.provenance.summary.kind, 'deterministic');
+});
 test('every active layer becomes a complete non-default patch with source provenance', async () => {
   const plan = planCatalogResearch(seed({ repair_layers: ['vendor-card', 'vendor-level1', 'vendor-level2', 'tool-level3', 'tool-card'] }), repairedSnapshot());
   const research = researchFor(plan);
@@ -150,6 +204,21 @@ test('model-reported missing cannot fake away a real field gap', async () => {
   assert.ok(result.missing_fields.includes('detail.official_date'));
 });
 
+test('partial official date is treated as missing before planning', async () => {
+  const plan = planCatalogResearch(seed(), emptySnapshot());
+  const research = researchFor(plan);
+  const bad = adapter();
+  const original = bad.synthesize;
+  bad.synthesize = async input => {
+    const value = await original(input);
+    value.layer_fields.detail.official_date = 'July 8';
+    return value;
+  };
+  const result = await synthesizeCatalog(research, plan, bad);
+  assert.equal(result.ok, false);
+  assert.equal(result.code, 'SYNTHESIS_COVERAGE_INCOMPLETE');
+  assert.ok(result.missing_fields.includes('detail.official_date'));
+});
 test('placeholder field values are treated as missing by field coverage', async () => {
   const plan = planCatalogResearch(seed(), emptySnapshot());
   const research = researchFor(plan);
@@ -166,24 +235,31 @@ test('placeholder field values are treated as missing by field coverage', async 
   assert.ok(result.missing_fields.includes('vendor.vendor_summary'));
 });
 
-test('noop vendor layers do not require vendor synthesis or appear as writable patches', async () => {
-  const snapshot = emptySnapshot();
-  snapshot['vendor-card'].push({ id: 'vendor-card:kling', vendor_key: 'kling' });
-  snapshot['vendor-level1'].push({ id: 'vendor-level1:kling', vendor_key: 'kling' });
-  const plan = planCatalogResearch(seed(), snapshot);
+test('existing vendor layers remain unchanged when their group ref already exists', async () => {
+  const snapshot = healthyExistingVendorSnapshot();
+  snapshot['vendor-level1'][0].level2_refs = [{ kind: 'vendor-level2', id: 'vendor-level2:kuaishou:models' }];
+  snapshot['vendor-level2'].push({
+    id: 'vendor-level2:kuaishou:models', level1_ref: { kind: 'vendor-level1', id: 'vendor-level1:kuaishou' }, vendor_key: 'kuaishou',
+    title: 'Models', official_url: 'https://kling.ai', summary: '已有模型分组。', status: 'active', detail_refs: [],
+  });
+  const plan = planCatalogResearch(seed({ placement: { existing_level2_ref: { kind: 'vendor-level2', id: 'vendor-level2:kuaishou:models' } } }), snapshot);
   const research = researchFor(plan);
   const detailAdapter = adapter();
   const original = detailAdapter.synthesize;
   detailAdapter.synthesize = async input => {
     const value = await original(input);
     delete value.layer_fields.vendor;
-    for (const key of Object.keys(value.provenance)) if (key.startsWith('vendor.')) delete value.provenance[key];
+    delete value.layer_fields.group;
+    for (const key of Object.keys(value.provenance)) if (key.startsWith('vendor.') || key.startsWith('group.')) delete value.provenance[key];
     return value;
   };
   const result = await synthesizeCatalog(research, plan, detailAdapter);
   assert.equal(result.ok, true, JSON.stringify(result.errors));
   assert.equal(result.layer_patches.find(patch => patch.area === 'vendor-card').operation, 'noop');
   assert.equal(result.layer_patches.find(patch => patch.area === 'vendor-level1').operation, 'noop');
+  const groupPatch = result.layer_patches.find(patch => patch.area === 'vendor-level2');
+  assert.equal(groupPatch.operation, 'replace');
+  assert.equal(groupPatch.provenance.summary.kind, 'deterministic');
 });
 
 test('normalizeFeaturePreview splits overlong merged entries but keeps short items intact', () => {

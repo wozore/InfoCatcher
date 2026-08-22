@@ -5,6 +5,7 @@ loadDotEnv();
 
 const fs = require('fs');
 const { loadCatalogSnapshot } = require('../src/catalog/catalog-snapshot-store');
+const { removeCatalogRecords } = require('../src/catalog/catalog-transaction-store');
 const {
   prepareCatalogDraft,
   resumeCatalogDraft,
@@ -159,6 +160,20 @@ async function main(argv = process.argv.slice(2)) {
     console.log(JSON.stringify(result, null, 2));
     return result;
   }
+  if (command === 'remove') {
+    if (!flags.targets) throw new Error('请提供 --targets <精确删除目标 JSON>');
+    const payload = JSON.parse(fs.readFileSync(flags.targets, 'utf8'));
+    const targets = Array.isArray(payload) ? payload : payload.targets;
+    if (!Array.isArray(targets) || !targets.length) throw new Error('删除目标 JSON 必须包含非空 targets 数组');
+    const label = String(flags.targets).split(/[\\/]/).pop();
+    const current = loadCatalogSnapshot();
+    console.log(JSON.stringify({ targets, expected_revision: flags.expected_revision || current.revision, confirmation: `REMOVE ${label}` }, null, 2));
+    const confirmation = flags.confirm || await ask(`输入 REMOVE ${label} 以确认精确删除：`);
+    if (confirmation !== `REMOVE ${label}`) return { ok: false, code: 'REMOVE_CONFIRMATION_REQUIRED' };
+    const result = removeCatalogRecords(targets, { expectedRevision: flags.expected_revision || current.revision });
+    console.log(JSON.stringify(result, null, 2));
+    return result;
+  }
   if (command === 'batch') {
     // 批量生成：待补卡 → 查重 → 厂商/官方源解析 → 逐 seed 生成 → 自动 apply。
     // 用法：catalog-generator batch --file <待补卡.json> [--confirm-cost] [--dry-run] [--from-preview] [--seed-out <file>]
@@ -200,7 +215,7 @@ async function main(argv = process.argv.slice(2)) {
     }
     throw new Error('用法: catalog-generator url-registry list | add --name <名> --url <URL> [--vendor <厂商>] [--alias <别名>] | remove --name <名>');
   }
-  throw new Error('用法: catalog-generator probe|plan|prepare|list|recover|new|resume|review|apply|cancel|batch|url-registry');
+  throw new Error('用法: catalog-generator probe|plan|prepare|list|recover|new|resume|review|apply|cancel|remove|batch|url-registry');
 }
 
 if (require.main === module) {

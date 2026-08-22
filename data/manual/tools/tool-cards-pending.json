@@ -3,7 +3,7 @@
   "kind": "tool_cards_pending",
   "generated_at": "2026-08-16T08:55:27.000Z",
   "date": "20260816",
-  "count": 10,
+  "count": 9,
   "cards": [
     {
       "id": "gpt-5-5",
@@ -59,17 +59,6 @@
       "pending": true,
       "generated_at": "2026-08-16T08:55:27.000Z",
       "vendor_key": "google"
-    },
-    {
-      "id": "spark-x2",
-      "name": "Spark X2",
-      "url": "https://xinghuo.xfyun.cn/sparkapi",
-      "description": "讯飞星火最新深度推理模型（LLM 前沿）。",
-      "detail_kind_hint": "api_model",
-      "source_hotspot": false,
-      "pending": true,
-      "generated_at": "2026-08-16T08:55:27.000Z",
-      "vendor_key": "xunfei"
     },
     {
       "id": "grok-4-6",

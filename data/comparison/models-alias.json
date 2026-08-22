@@ -6,7 +6,8 @@
     "zai": ["zai", "z-ai", "zai-org", "zhipu", "zhipuai"],
     "moonshotai": ["moonshot", "moonshotai"],
     "kling": ["kling", "kuaishou"],
-    "xunfei": ["xunfei", "iflytek"]
+    "xunfei": ["xunfei", "iflytek"],
+    "xai": ["xai", "x-ai"]
   },
   "entries": [
     {
@@ -46,6 +47,114 @@
         "openrouter": ["qwen/qwen3-235b-a22b-2507"],
         "lmarena": ["qwen3-235b-a22b-instruct-2507"]
       }
+    },
+    {
+      "model_key": "zai--glm-5.3",
+      "display": "GLM-5.3",
+      "catalog_aliases": ["glm-5-3", "GLM-5.3"],
+      "aliases": {}
+    },
+    {
+      "model_key": "moonshotai--kimi-k3",
+      "display": "Kimi K3",
+      "catalog_aliases": ["kimi-k3", "Kimi K3"],
+      "aliases": {}
+    },
+    {
+      "model_key": "qwen--qwen3.8-max",
+      "display": "Qwen3.8 Max",
+      "catalog_aliases": ["qwen3-8-max", "Qwen3.8 Max"],
+      "aliases": {}
+    },
+    {
+      "model_key": "meta--muse-spark-1.2",
+      "display": "Muse Spark 1.2",
+      "catalog_aliases": ["muse-spark-1-2", "Muse Spark 1.2"],
+      "aliases": {}
+    },
+    {
+      "model_key": "google--gemini-3.7-flash",
+      "display": "Gemini 3.7 Flash",
+      "catalog_aliases": ["gemini-3-7-flash", "Gemini 3.7 Flash"],
+      "aliases": {}
+    },
+    {
+      "model_key": "google--gemini-3.6-flash",
+      "display": "Gemini 3.6 Flash",
+      "catalog_aliases": ["gemini-3-6-flash", "Gemini 3.6 Flash"],
+      "aliases": {}
+    },
+    {
+      "model_key": "google--gemma-4-31b-it",
+      "display": "Gemma 4 31B IT",
+      "catalog_aliases": ["gemma-4", "Gemma 4"],
+      "aliases": {}
+    },
+    {
+      "model_key": "minimax--minimax-m3",
+      "display": "MiniMax M3",
+      "catalog_aliases": ["minimax-m3", "MiniMax M3"],
+      "aliases": {}
+    },
+    {
+      "model_key": "minimax--minimax-m2.7",
+      "display": "MiniMax M2.7",
+      "catalog_aliases": ["minimax-m2-7", "MiniMax M2.7"],
+      "aliases": {}
+    },
+    {
+      "model_key": "xai--grok-4.5",
+      "display": "Grok 4.5",
+      "catalog_aliases": ["grok-4-5", "Grok 4.5"],
+      "aliases": {}
+    },
+    {
+      "model_key": "tencent--hy3",
+      "display": "Hy3",
+      "catalog_aliases": ["hunyuan-hy3", "混元 Hy3"],
+      "aliases": {}
+    },
+    {
+      "model_key": "stepfun--step-3.5-flash",
+      "display": "Step-3.5-Flash",
+      "catalog_aliases": ["step-3-5-flash", "Step-3.5-Flash"],
+      "aliases": {}
+    },
+    {
+      "model_key": "stepfun--step-3.7-flash",
+      "display": "Step 3.7 Flash",
+      "catalog_aliases": ["step-3-7-flash", "Step-3.7-Flash"],
+      "aliases": {}
+    },
+    {
+      "model_key": "nvidia--nemotron-3-ultra-550b-a55b",
+      "display": "Nemotron 3 Ultra 550B A55B",
+      "catalog_aliases": ["nemotron-3-ultra", "Nemotron 3 Ultra"],
+      "aliases": {}
+    },
+    {
+      "model_key": "nvidia--nemotron-3-super-120b-a12b",
+      "display": "Nemotron 3 Super 120B A12B",
+      "catalog_aliases": ["nemotron-3-super", "Nemotron 3 Super"],
+      "aliases": {}
+    },
+    {
+      "model_key": "nvidia--nemotron-3.5-lightning-30b-a3b",
+      "display": "Nemotron 3.5 Lightning 30B A3B",
+      "catalog_aliases": ["nemotron-3-5", "Nemotron 3.5"],
+      "aliases": {}
+    },
+    {
+      "model_key": "xiaomi--mimo-v2.5",
+      "display": "MiMo-V2.5",
+      "catalog_aliases": ["mimo-v2-5", "MiMo-V2.5"],
+      "aliases": {}
+    },
+    {
+      "model_key": "xiaomi--mimo-v2.5-pro",
+      "display": "MiMo-V2.5-Pro",
+      "catalog_aliases": ["mimo-v2-5-pro", "MiMo-V2.5 Pro"],
+      "aliases": {}
     }
   ],
   "never_merge": [

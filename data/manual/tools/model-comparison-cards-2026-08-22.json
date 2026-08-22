@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "kind": "tool_cards_pending",
+  "generated_at": "2026-08-22T00:00:00.000Z",
+  "date": "20260822",
+  "count": 18,
+  "cards": [
+    {"id":"glm-5-3","name":"GLM-5.3","vendor_name":"智谱 AI（Z.ai）","vendor_key":"zhipu","url":"https://docs.z.ai/guides/llm/glm-5","description":"智谱 GLM 5 系列的当前模型版本。","detail_kind_hint":"api_model","placement":{"existing_level1_ref":{"kind":"vendor-level1","id":"vendor-level1:zhipu"},"existing_level2_ref":{"kind":"vendor-level2","id":"vendor-level2:zhipu:glm-models"}},"source_hotspot":false,"pending":true},
+    {"id":"kimi-k3","name":"Kimi K3","vendor_name":"月之暗面（Kimi）","vendor_key":"moonshot","url":"https://platform.kimi.com/docs/models","description":"月之暗面 Kimi K3 模型。","detail_kind_hint":"api_model","source_hotspot":false,"pending":true},
+    {"id":"qwen3-8-max","name":"Qwen3.8 Max","vendor_name":"阿里巴巴（通义千问）","vendor_key":"alibaba","url":"https://help.aliyun.com/zh/model-studio/qwen3-8-max","description":"通义千问 Qwen3.8 Max 旗舰模型。","detail_kind_hint":"api_model","source_hotspot":false,"pending":true},
+    {"id":"muse-spark-1-2","name":"Muse Spark 1.2","vendor_name":"Meta","vendor_key":"meta","url":"https://ai.meta.com/llama","description":"Meta Muse Spark 1.2 编程优化模型。","detail_kind_hint":"api_model","source_hotspot":false,"pending":true},
+    {"id":"gemini-3-7-flash","name":"Gemini 3.7 Flash","vendor_name":"Google","vendor_key":"google","url":"https://ai.google.dev/gemini-api/docs/latest-model","description":"Google Gemini 3.7 Flash 低延迟模型。","detail_kind_hint":"api_model","placement":{"existing_level1_ref":{"kind":"vendor-level1","id":"vendor-level1:google"},"existing_level2_ref":{"kind":"vendor-level2","id":"vendor-level2:google:gemini-models"}},"source_hotspot":false,"pending":true},
+    {"id":"gemini-3-6-flash","name":"Gemini 3.6 Flash","vendor_name":"Google","vendor_key":"google","url":"https://ai.google.dev/gemini-api/docs/latest-model","description":"Google Gemini 3.6 Flash 模型。","detail_kind_hint":"api_model","placement":{"existing_level1_ref":{"kind":"vendor-level1","id":"vendor-level1:google"},"existing_level2_ref":{"kind":"vendor-level2","id":"vendor-level2:google:gemini-models"}},"source_hotspot":false,"pending":true},
+    {"id":"gemma-4","name":"Gemma 4","vendor_name":"Google","vendor_key":"google","url":"https://ai.google.dev/gemini-api/docs/latest-model","description":"Google Gemma 4 开放模型系列；与 Gemini 独立分组。","detail_kind_hint":"api_model","source_hotspot":false,"pending":true},
+    {"id":"minimax-m3","name":"MiniMax M3","vendor_name":"MiniMax","vendor_key":"minimax","url":"https://platform.minimax.io/subscribe/token-plan?tab=api-enterprise","description":"MiniMax M3 模型。","detail_kind_hint":"api_model","source_hotspot":false,"pending":true},
+    {"id":"minimax-m2-7","name":"MiniMax M2.7","vendor_name":"MiniMax","vendor_key":"minimax","url":"https://platform.minimax.io/docs/guides/pricing-paygo","description":"MiniMax M2.7 模型；不包含 M2.5 或 M2.1。","detail_kind_hint":"api_model","source_hotspot":false,"pending":true},
+    {"id":"grok-4-5","name":"Grok 4.5","vendor_name":"xAI","vendor_key":"xai","url":"https://docs.x.ai/developers/models/grok-4.5","description":"xAI Grok 4.5 模型。","detail_kind_hint":"api_model","source_hotspot":false,"pending":true},
+    {"id":"hunyuan-hy3","name":"混元 Hy3","vendor_name":"腾讯（混元）","vendor_key":"tencent","url":"https://cloud.tencent.com.cn/document/product/1759/127342","description":"腾讯混元 Hy3 模型，不使用 preview 版本。","detail_kind_hint":"api_model","source_hotspot":false,"pending":true},
+    {"id":"step-3-5-flash","name":"Step-3.5-Flash","vendor_name":"阶跃星辰","vendor_key":"stepfun","url":"https://platform.stepfun.com/docs/zh/guides/pricing/details","description":"阶跃星辰 Step-3.5-Flash 模型。","detail_kind_hint":"api_model","source_hotspot":false,"pending":true},
+    {"id":"step-3-7-flash","name":"Step-3.7-Flash","vendor_name":"阶跃星辰","vendor_key":"stepfun","url":"https://static.stepfun.com/blog/step-3.7-flash/","description":"阶跃星辰 Step-3.7-Flash 模型。","detail_kind_hint":"api_model","source_hotspot":false,"pending":true},
+    {"id":"nemotron-3-ultra","name":"Nemotron 3 Ultra","vendor_name":"Nvidia（NIM）","vendor_key":"nvidia","url":"https://docs.api.nvidia.com/nim/reference/llm-apis","description":"NVIDIA Nemotron 3 Ultra 系列；对比页路由到 550B A55B 变体。","detail_kind_hint":"api_model","source_hotspot":false,"pending":true},
+    {"id":"nemotron-3-super","name":"Nemotron 3 Super","vendor_name":"Nvidia（NIM）","vendor_key":"nvidia","url":"https://docs.api.nvidia.com/nim/reference/nvidia-nemotron-3-super-120b-a12b","description":"NVIDIA Nemotron 3 Super 系列；对比页路由到 120B A12B 变体。","detail_kind_hint":"api_model","source_hotspot":false,"pending":true},
+    {"id":"nemotron-3-5","name":"Nemotron 3.5","vendor_name":"Nvidia（NIM）","vendor_key":"nvidia","url":"https://docs.api.nvidia.com/nim/reference/llm-apis","description":"NVIDIA Nemotron 3.5 系列；对比页路由到 Lightning 30B A3B 变体。","detail_kind_hint":"api_model","source_hotspot":false,"pending":true},
+    {"id":"mimo-v2-5","name":"MiMo-V2.5","vendor_name":"小米（MiMo）","vendor_key":"xiaomi","url":"https://mimo.mi.com/models/en-US/mimo-v2.5","description":"小米 MiMo-V2.5 模型。","detail_kind_hint":"api_model","source_hotspot":false,"pending":true},
+    {"id":"mimo-v2-5-pro","name":"MiMo-V2.5 Pro","vendor_name":"小米（MiMo）","vendor_key":"xiaomi","url":"https://mimo.mi.com/docs/en-US/price/pay-as-you-go","description":"小米 MiMo-V2.5 Pro 模型。","detail_kind_hint":"api_model","source_hotspot":false,"pending":true}
+  ]
+}

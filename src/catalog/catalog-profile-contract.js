@@ -101,6 +101,20 @@ function unique(values) {
   return [...new Set(values)];
 }
 
+function hasRef(values, value) {
+  return Array.isArray(values) && values.some(item => item?.kind === value.kind && item?.id === value.id);
+}
+
+function planParentLink(layerPlan, parentArea, childArea, refField, childRef) {
+  const parent = layerPlan[parentArea];
+  const child = layerPlan[childArea];
+  if (!parent?.current || parent.operation !== 'noop' || !child) return;
+  if (child.operation === 'noop' && !child.current) return;
+  if (hasRef(parent.current[refField], childRef)) return;
+  parent.operation = 'replace';
+  parent.link_only = true;
+}
+
 function planCatalogResearch(seed, snapshotInput) {
   if (!seed?.detail_kind || !seed?.name || !seed?.vendor_name) throw new Error('SEED_REQUIRED_FIELDS_MISSING');
   const modality = inferModality(seed);
@@ -113,9 +127,12 @@ function planCatalogResearch(seed, snapshotInput) {
   const repairs = repairSetOf(seed);
   const areas = seed.detail_kind === 'subscription_plan' ? LAYER_AREAS.filter(area => area !== 'tool-card') : LAYER_AREAS;
   const layerPlan = Object.fromEntries(areas.map(area => [area, planLayer(snapshot, area, ids[area], repairs)]));
-  const vendorActive = ['vendor-card', 'vendor-level1'].some(area => layerPlan[area] && layerPlan[area].operation !== 'noop');
-  const groupActive = layerPlan['vendor-level2']?.operation !== 'noop';
-  const detailActive = ['tool-level3', 'tool-card'].some(area => layerPlan[area] && layerPlan[area].operation !== 'noop');
+  planParentLink(layerPlan, 'vendor-level1', 'vendor-level2', 'level2_refs', { kind: 'vendor-level2', id: ids['vendor-level2'] });
+  planParentLink(layerPlan, 'vendor-level2', 'tool-level3', 'detail_refs', { kind: 'tool-level3', id: ids['tool-level3'] });
+  const isResearchActive = area => layerPlan[area] && layerPlan[area].operation !== 'noop' && layerPlan[area].link_only !== true;
+  const vendorActive = ['vendor-card', 'vendor-level1'].some(isResearchActive);
+  const groupActive = isResearchActive('vendor-level2');
+  const detailActive = ['tool-level3', 'tool-card'].some(isResearchActive);
   const scopes = [];
   if (vendorActive) scopes.push({ kind: 'vendor', subject: { kind: 'vendor', key: keys.vendorKey }, predicates: [...VENDOR_PREDICATES] });
   if (groupActive) scopes.push({ kind: 'group', subject: { kind: 'group', key: `${keys.vendorKey}:${keys.groupKey}` }, predicates: [...GROUP_PREDICATES] });

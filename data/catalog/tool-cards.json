@@ -987,109 +987,6 @@
       "detail_kind": "api_model"
     },
     {
-      "id": "tool-card:spark-ultra",
-      "tool_key": "spark-ultra",
-      "vendor_key": "xunfei",
-      "title": "Spark 4.0 Ultra",
-      "vendor_label": "科大讯飞",
-      "icon": "🔥",
-      "summary": "讯飞最强大的星火非思考大模型，已升级至 X1.5 快思考模式，32K 上下文。",
-      "theme": "general",
-      "scenes": [
-        "中文结构化抽取与逻辑推理：旗舰级大语言模型，适合企业级应用和复杂推理。",
-        "成本敏感的高频调用：可选择 Spark Lite（免费）或 Spark Pro。"
-      ],
-      "best_for_preview": "中文结构化抽取与逻辑推理：旗舰级大语言模型，适合企业级应用和复杂推理。",
-      "not_for_preview": "成本敏感的高频调用：可选择 Spark Lite（免费）或 Spark Pro。",
-      "price_badge": "paid",
-      "access_level": "开放",
-      "search_terms": [
-        "Spark 4.0 Ultra",
-        "科大讯飞",
-        "对话",
-        "写作",
-        "语音",
-        "办公",
-        "中文结构化抽取与逻辑推理：旗舰级大语言模型，适合企业级应用和复杂推理。",
-        "成本敏感的高频调用：可选择 Spark Lite（免费）或 Spark Pro。",
-        "讯飞最强大的星火非思考大模型，已升级至 X1.5 快思考模式，32K 上下文。",
-        "写论文"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:spark-ultra"
-      },
-      "detail_kind": "api_model"
-    },
-    {
-      "id": "tool-card:spark-pro",
-      "tool_key": "spark-pro",
-      "vendor_key": "xunfei",
-      "title": "Spark Pro",
-      "vendor_label": "科大讯飞",
-      "icon": "🔥",
-      "summary": "专业级大语言模型，128K 上下文可选，适合文本和智能问答。",
-      "theme": "general",
-      "scenes": [
-        "文本处理与智能问答：性能和响应速度均衡，适合对时效性有要求的业务场景。",
-        "需要最高精度和复杂推理：应选择 Spark Ultra。"
-      ],
-      "best_for_preview": "文本处理与智能问答：性能和响应速度均衡，适合对时效性有要求的业务场景。",
-      "not_for_preview": "需要最高精度和复杂推理：应选择 Spark Ultra。",
-      "price_badge": "paid",
-      "access_level": "开放",
-      "search_terms": [
-        "Spark Pro",
-        "科大讯飞",
-        "对话",
-        "写作",
-        "语音",
-        "办公",
-        "文本处理与智能问答：性能和响应速度均衡，适合对时效性有要求的业务场景。",
-        "需要最高精度和复杂推理：应选择 Spark Ultra。",
-        "专业级大语言模型，128K 上下文可选，适合文本和智能问答。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:spark-pro"
-      },
-      "detail_kind": "api_model"
-    },
-    {
-      "id": "tool-card:spark-lite",
-      "tool_key": "spark-lite",
-      "vendor_key": "xunfei",
-      "title": "Spark Lite",
-      "vendor_label": "科大讯飞",
-      "icon": "🔥",
-      "summary": "轻量级大模型，免费使用，响应速度最高。",
-      "theme": "general",
-      "scenes": [
-        "高并发低延迟场景：适合对成本敏感、对响应速度要求高的简单任务。",
-        "复杂推理或专业任务：免费模型能力有限，高要求场景应选择 Pro 或 Ultra。"
-      ],
-      "best_for_preview": "高并发低延迟场景：适合对成本敏感、对响应速度要求高的简单任务。",
-      "not_for_preview": "复杂推理或专业任务：免费模型能力有限，高要求场景应选择 Pro 或 Ultra。",
-      "price_badge": "paid",
-      "access_level": "开放",
-      "search_terms": [
-        "Spark Lite",
-        "科大讯飞",
-        "对话",
-        "写作",
-        "语音",
-        "办公",
-        "高并发低延迟场景：适合对成本敏感、对响应速度要求高的简单任务。",
-        "复杂推理或专业任务：免费模型能力有限，高要求场景应选择 Pro 或 Ultra。",
-        "轻量级大模型，免费使用，响应速度最高。"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:spark-lite"
-      },
-      "detail_kind": "api_model"
-    },
-    {
       "id": "tool-card:mistral-medium-3.5",
       "tool_key": "mistral-medium-3.5",
       "vendor_key": "mistral",
@@ -1511,44 +1408,6 @@
       "detail_kind": "api_model"
     },
     {
-      "id": "tool-card:spark-x2",
-      "tool_key": "spark-x2",
-      "vendor_key": "xunfei",
-      "title": "Spark X2",
-      "vendor_label": "科大讯飞",
-      "icon": "🤖",
-      "summary": "讯飞星火大模型是科大讯飞推出的AI大语言模型，提供多种能力，包括深度推理、文本生成、语音识别等，支持API调用。",
-      "theme": "general",
-      "scenes": [
-        "知识问答",
-        "数学推理",
-        "办公辅助",
-        "角色扮演",
-        "聊天陪伴",
-        "营销素材生成"
-      ],
-      "best_for_preview": "深度推理模型Spark X2，适合复杂推理任务；超拟人语音合成MOS分4.5，适合语音交互。",
-      "not_for_preview": "语音识别大模型、多语种识别模型可能不适用于纯文本场景。",
-      "price_badge": "freemium",
-      "access_level": "开放",
-      "search_terms": [
-        "Spark X2",
-        "科大讯飞",
-        "spark-x2",
-        "知识问答",
-        "数学推理",
-        "办公辅助",
-        "角色扮演",
-        "聊天陪伴",
-        "营销素材生成"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:spark-x2"
-      },
-      "detail_kind": "api_model"
-    },
-    {
       "id": "tool-card:kling-3-0",
       "tool_key": "kling-3-0",
       "vendor_key": "kuaishou",
@@ -1581,6 +1440,631 @@
       "detail_ref": {
         "kind": "tool-level3",
         "id": "tool-level3:kling-3-0"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:glm-5-3",
+      "tool_key": "glm-5-3",
+      "vendor_key": "zhipu",
+      "title": "GLM-5.3",
+      "vendor_label": "智谱 AI（Z.ai）",
+      "icon": "🤖",
+      "summary": "智谱最新旗舰模型，以极致后训练 Scaling 实现能力跃迁，编程与 Agent 能力再突破。",
+      "theme": "general",
+      "scenes": [
+        "编程开发",
+        "智能体任务",
+        "网络安全分析"
+      ],
+      "best_for_preview": "编程代码生成与复杂项目交付",
+      "not_for_preview": "实时交互式对话应用",
+      "price_badge": "paid",
+      "access_level": "受限",
+      "search_terms": [
+        "GLM-5.3",
+        "智谱 AI（Z.ai）",
+        "glm-5-3",
+        "编程开发",
+        "智能体任务",
+        "网络安全分析"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:glm-5-3"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:gemini-3-7-flash",
+      "tool_key": "gemini-3-7-flash",
+      "vendor_key": "google",
+      "title": "Gemini 3.7 Flash",
+      "vendor_label": "Google",
+      "icon": "🤖",
+      "summary": "Gemini 3.7 Flash is a natively multimodal reasoning model designed for coding and agentic workflows.",
+      "theme": "general",
+      "scenes": [
+        "软件开发",
+        "智能体工作流",
+        "网页开发"
+      ],
+      "best_for_preview": "适合复杂编码与智能体自动化任务",
+      "not_for_preview": "不适用于图像生成或音频生成",
+      "price_badge": "paid",
+      "access_level": "开放",
+      "search_terms": [
+        "Gemini 3.7 Flash",
+        "Google",
+        "gemini-3-7-flash",
+        "软件开发",
+        "智能体工作流",
+        "网页开发"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:gemini-3-7-flash"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:gemini-3-6-flash",
+      "tool_key": "gemini-3-6-flash",
+      "vendor_key": "google",
+      "title": "Gemini 3.6 Flash",
+      "vendor_label": "Google",
+      "icon": "🤖",
+      "summary": "Gemini 3.6 Flash 是 Google 的旗舰级 Flash 模型，针对真实世界任务优化，提供高速度、低成本与前沿智能，特别擅长代码生成、代理执行和空间推理。",
+      "theme": "general",
+      "scenes": [
+        "代码生成",
+        "代理执行",
+        "空间推理"
+      ],
+      "best_for_preview": "代码生成、代理执行和空间推理任务",
+      "not_for_preview": "音频生成、图像生成和 Live API 场景",
+      "price_badge": "paid",
+      "access_level": "开放",
+      "search_terms": [
+        "Gemini 3.6 Flash",
+        "Google",
+        "gemini-3-6-flash",
+        "代码生成",
+        "代理执行",
+        "空间推理"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:gemini-3-6-flash"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:gemma-4",
+      "tool_key": "gemma-4",
+      "vendor_key": "google",
+      "title": "Gemma 4",
+      "vendor_label": "Google",
+      "icon": "🤖",
+      "summary": "Gemma 4 模型系列是 Google DeepMind 开发的开放权重模型，支持多模态输入和文本输出，具备推理能力、可配置思考模式，适用于文本生成、编码和推理等任务。",
+      "theme": "general",
+      "scenes": [
+        "文本生成",
+        "编码",
+        "推理",
+        "视觉理解",
+        "音频处理"
+      ],
+      "best_for_preview": [
+        "开发者构建多模态应用",
+        "研究人员进行AI实验",
+        "需要本地部署的场景"
+      ],
+      "not_for_preview": [
+        "生产环境关键业务",
+        "需要严格数据隐私的场景"
+      ],
+      "price_badge": "free",
+      "access_level": "开放",
+      "search_terms": [
+        "Gemma 4",
+        "Google",
+        "gemma-4",
+        "文本生成",
+        "编码",
+        "推理",
+        "视觉理解",
+        "音频处理"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:gemma-4"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:minimax-m3",
+      "tool_key": "minimax-m3",
+      "vendor_key": "minimax",
+      "title": "MiniMax M3",
+      "vendor_label": "MiniMax",
+      "icon": "🤖",
+      "summary": "MiniMax M3 文本模型，支持 1M 上下文窗口，提供订阅和按量付费两种计费方式。",
+      "theme": "general",
+      "scenes": [
+        "开发与原型设计",
+        "日常编码",
+        "多模态应用开发"
+      ],
+      "best_for_preview": "需要长上下文处理的编码辅助和多模态应用开发",
+      "not_for_preview": "不需要长上下文或预算敏感的场景",
+      "price_badge": "freemium",
+      "access_level": "开放",
+      "search_terms": [
+        "MiniMax M3",
+        "MiniMax",
+        "minimax-m3",
+        "开发与原型设计",
+        "日常编码",
+        "多模态应用开发"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:minimax-m3"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:minimax-m2-7",
+      "tool_key": "minimax-m2-7",
+      "vendor_key": "minimax",
+      "title": "MiniMax M2.7",
+      "vendor_label": "MiniMax",
+      "icon": "🤖",
+      "summary": "MiniMax M2.7 是新一代多模态语言模型，支持 1M 上下文窗口，提供标准和高高速版本，适用于智能体、编码和多模态工作流。",
+      "theme": "general",
+      "scenes": [
+        "智能体",
+        "编码",
+        "多模态应用",
+        "长文档处理"
+      ],
+      "best_for_preview": "需要长上下文和多模态能力的智能体开发与编码任务",
+      "not_for_preview": "对成本敏感且不需要大上下文的轻量级文本任务",
+      "price_badge": "usage_based",
+      "access_level": "开放",
+      "search_terms": [
+        "MiniMax M2.7",
+        "MiniMax",
+        "minimax-m2-7",
+        "智能体",
+        "编码",
+        "多模态应用",
+        "长文档处理"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:minimax-m2-7"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:grok-4-5",
+      "tool_key": "grok-4-5",
+      "vendor_key": "xai",
+      "title": "Grok 4.5",
+      "vendor_label": "xAI",
+      "icon": "🤖",
+      "summary": "Grok 4.5 是 SpaceXAI 面向编码、智能体任务和知识工作的模型，支持函数调用、结构化输出和推理，上下文窗口为 50 万 tokens。",
+      "theme": "general",
+      "scenes": [
+        "编码开发",
+        "智能体任务",
+        "知识工作",
+        "函数调用",
+        "结构化输出"
+      ],
+      "best_for_preview": "Grok 4.5 适用于复杂编码和智能体任务，支持函数调用和推理。",
+      "not_for_preview": "Grok 4.5 可能不适合需要 1M 上下文窗口的极端长文本任务。",
+      "price_badge": "paid",
+      "access_level": "开放",
+      "search_terms": [
+        "Grok 4.5",
+        "xAI",
+        "grok-4-5",
+        "编码开发",
+        "智能体任务",
+        "知识工作",
+        "函数调用",
+        "结构化输出"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:grok-4-5"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:kimi-k3",
+      "tool_key": "kimi-k3",
+      "vendor_key": "moonshot",
+      "title": "Kimi K3",
+      "vendor_label": "月之暗面（Kimi）",
+      "icon": "🤖",
+      "summary": "Kimi K3 是 Kimi 迄今能力最强的旗舰模型，上下文 1M tokens，原生支持视觉理解，面向软件工程、知识工作和深度推理场景",
+      "theme": "general",
+      "scenes": [
+        "软件工程",
+        "知识工作",
+        "深度推理",
+        "视觉理解"
+      ],
+      "best_for_preview": [
+        "Claude Code 等编程 Agent",
+        "复杂代码生成",
+        "长文本理解",
+        "视觉问答"
+      ],
+      "not_for_preview": [
+        "超低成本场景",
+        "不需要视觉和超长上下文的简单对话"
+      ],
+      "price_badge": "paid",
+      "access_level": "受限",
+      "search_terms": [
+        "Kimi K3",
+        "月之暗面（Kimi）",
+        "kimi-k3",
+        "软件工程",
+        "知识工作",
+        "深度推理",
+        "视觉理解"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:kimi-k3"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:qwen3-8-max",
+      "tool_key": "qwen3-8-max",
+      "vendor_key": "alibaba",
+      "title": "Qwen3.8 Max",
+      "vendor_label": "阿里巴巴（通义千问）",
+      "icon": "🤖",
+      "summary": "Qwen3.8-Max是千问系列2.4T参数的MoE旗舰模型，在代码、办公等场景能力提升，支持原生视觉理解和超长文档解析，适合法律、金融、设计等专业任务。",
+      "theme": "general",
+      "scenes": [
+        "代码生成",
+        "数据分析",
+        "办公自动化",
+        "长文档解析",
+        "视觉理解"
+      ],
+      "best_for_preview": "复杂长周期任务、专业领域如法律和金融、代码工程和办公协作",
+      "not_for_preview": "简单快速响应任务，可选用性价比更高的模型",
+      "price_badge": "paid",
+      "access_level": "区域限制",
+      "search_terms": [
+        "Qwen3.8 Max",
+        "阿里巴巴（通义千问）",
+        "qwen3-8-max",
+        "代码生成",
+        "数据分析",
+        "办公自动化",
+        "长文档解析",
+        "视觉理解"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:qwen3-8-max"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:hy3",
+      "tool_key": "hy3",
+      "vendor_key": "tencent",
+      "title": "混元 Hy3",
+      "vendor_label": "腾讯（混元）",
+      "icon": "🤖",
+      "summary": "腾讯混元大模型是由腾讯公司全链路自研的通用与多模态大模型家族，覆盖文本、图像、视频、语音、3D等模态，面向内容生产、知识问答、业务自动化等场景提供企业级服务。",
+      "theme": "general",
+      "scenes": [
+        "内容创作",
+        "知识问答",
+        "业务自动化"
+      ],
+      "best_for_preview": "适合需要文本生成、图像创作、视频生成、3D生成和语音识别等综合AI能力的企业级应用场景。",
+      "not_for_preview": "不适合需要高度定制化模型训练或私有化部署的场景。",
+      "price_badge": "paid",
+      "access_level": "开放",
+      "search_terms": [
+        "混元 Hy3",
+        "腾讯（混元）",
+        "hy3",
+        "内容创作",
+        "知识问答",
+        "业务自动化"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:hy3"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:muse-spark-1-2",
+      "tool_key": "muse-spark-1-2",
+      "vendor_key": "meta",
+      "title": "Muse Spark 1.2",
+      "vendor_label": "Meta（Llama）",
+      "icon": "🤖",
+      "summary": "Muse Spark 1.2 是编码优化模型，支持 1M 上下文，提升编码准确性与工具调用可靠性。",
+      "theme": "general",
+      "scenes": [
+        "编码代理构建",
+        "代码审查机器人",
+        "AI 开发伙伴",
+        "多文件重构",
+        "长调试会话"
+      ],
+      "best_for_preview": "适合构建编码代理和处理长任务或多文件重构的开发场景。",
+      "not_for_preview": "不适合需要微型本地部署或非编码类通用任务。",
+      "price_badge": "paid",
+      "access_level": "受限",
+      "search_terms": [
+        "Muse Spark 1.2",
+        "Meta（Llama）",
+        "muse-spark-1-2",
+        "编码代理构建",
+        "代码审查机器人",
+        "AI 开发伙伴",
+        "多文件重构",
+        "长调试会话"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:muse-spark-1-2"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:step-3-5-flash",
+      "tool_key": "step-3-5-flash",
+      "vendor_key": "stepfun",
+      "title": "Step-3.5-Flash",
+      "vendor_label": "阶跃星辰",
+      "icon": "🤖",
+      "summary": "Step 3.7 Flash 是高效的 Flash 模型，适用于真实世界 Agent。",
+      "theme": "general",
+      "scenes": [
+        "Agent 应用",
+        "编程辅助",
+        "多模态理解",
+        "工具调用"
+      ],
+      "best_for_preview": "适合需要高效推理和工具编排的 Agent 场景。",
+      "not_for_preview": "不适合对上下文长度要求超出现有支持的场景。",
+      "price_badge": "usage_based",
+      "access_level": "开放",
+      "search_terms": [
+        "Step-3.5-Flash",
+        "阶跃星辰",
+        "step-3-5-flash",
+        "Agent 应用",
+        "编程辅助",
+        "多模态理解",
+        "工具调用"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:step-3-5-flash"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:step-3-7-flash",
+      "tool_key": "step-3-7-flash",
+      "vendor_key": "stepfun",
+      "title": "Step-3.7-Flash",
+      "vendor_label": "阶跃星辰",
+      "icon": "🤖",
+      "summary": "Step 3.7 Flash 是 StepFun 推出的高效能 Flash 模型，面向真实世界智能体，支持多模态理解与行动、网络与视觉搜索增强、可靠工具使用与编排，以及智能体生态兼容。",
+      "theme": "general",
+      "scenes": [
+        "智能体应用",
+        "多模态理解与行动",
+        "网络与视觉搜索",
+        "工具调用与编排",
+        "企业级应用"
+      ],
+      "best_for_preview": "需要高效执行复杂任务的真实世界智能体应用，特别是需要多模态理解和可靠工具调用的场景。",
+      "not_for_preview": "对上下文长度有极高要求的任务（如处理超长文档）可能不适合，因为该模型未提及 1M 上下文支持。",
+      "price_badge": "paid",
+      "access_level": "开放",
+      "search_terms": [
+        "Step-3.7-Flash",
+        "阶跃星辰",
+        "step-3-7-flash",
+        "智能体应用",
+        "多模态理解与行动",
+        "网络与视觉搜索",
+        "工具调用与编排",
+        "企业级应用"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:step-3-7-flash"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:mimo-v2-5",
+      "tool_key": "mimo-v2-5",
+      "vendor_key": "xiaomi",
+      "title": "MiMo-V2.5",
+      "vendor_label": "小米（MiMo）",
+      "icon": "🤖",
+      "summary": "Xiaomi MiMo-V2.5 模型，属于小米 MiMo 系列，支持文本处理。",
+      "theme": "general",
+      "scenes": [
+        "长文本处理",
+        "多轮对话"
+      ],
+      "best_for_preview": "适合需要处理超长文本或多轮对话的复杂任务",
+      "not_for_preview": "不适合对实时性要求极高的应用",
+      "price_badge": "paid",
+      "access_level": "开放",
+      "search_terms": [
+        "MiMo-V2.5",
+        "小米（MiMo）",
+        "mimo-v2-5",
+        "长文本处理",
+        "多轮对话"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:mimo-v2-5"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:nemotron-3-ultra",
+      "tool_key": "nemotron-3-ultra",
+      "vendor_key": "nvidia",
+      "title": "Nemotron 3 Ultra",
+      "vendor_label": "Nvidia（NIM）",
+      "icon": "🤖",
+      "summary": "NVIDIA NIM LLM API 提供自然语言生成服务，支持多种顶级模型。",
+      "theme": "general",
+      "scenes": [
+        "聊天",
+        "指令跟随",
+        "问答",
+        "摘要",
+        "创意写作"
+      ],
+      "best_for_preview": "需要快速集成多种文本生成任务的开发者",
+      "not_for_preview": "对成本敏感的初学者",
+      "price_badge": "paid",
+      "access_level": "开放",
+      "search_terms": [
+        "Nemotron 3 Ultra",
+        "Nvidia（NIM）",
+        "nemotron-3-ultra",
+        "聊天",
+        "指令跟随",
+        "问答",
+        "摘要",
+        "创意写作"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:nemotron-3-ultra"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:nemotron-3-super",
+      "tool_key": "nemotron-3-super",
+      "vendor_key": "nvidia",
+      "title": "Nemotron 3 Super",
+      "vendor_label": "Nvidia（NIM）",
+      "icon": "🤖",
+      "summary": "NVIDIA NIM 提供LLM API，支持自然语言生成式AI，适用于聊天、指令跟随、问答、摘要和创意文本生成。",
+      "theme": "general",
+      "scenes": [
+        "生成式AI开发",
+        "企业级AI应用",
+        "多模态推理"
+      ],
+      "best_for_preview": "该API适合需要快速集成顶尖生成式AI模型的开发者，覆盖聊天、问答、摘要等典型场景。",
+      "not_for_preview": "不适合需要超长上下文（如100万token）的原生支持场景，也不适合直接替代本地推理环境。",
+      "price_badge": "usage_based",
+      "access_level": "开放",
+      "search_terms": [
+        "Nemotron 3 Super",
+        "Nvidia（NIM）",
+        "nemotron-3-super",
+        "生成式AI开发",
+        "企业级AI应用",
+        "多模态推理"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:nemotron-3-super"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:nemotron-3-5",
+      "tool_key": "nemotron-3-5",
+      "vendor_key": "nvidia",
+      "title": "Nemotron 3.5",
+      "vendor_label": "Nvidia（NIM）",
+      "icon": "🤖",
+      "summary": "NVIDIA NIM LLM API 提供对顶尖模型的统一访问，支持多种自然语言处理任务。",
+      "theme": "general",
+      "scenes": [
+        "聊天",
+        "指令跟随",
+        "问答",
+        "摘要",
+        "文本生成"
+      ],
+      "best_for_preview": "适用于需要高效部署前沿语言模型的开发者和企业。",
+      "not_for_preview": "不适用于对价格敏感或需要完全本地化部署的场景。",
+      "price_badge": "usage_based",
+      "access_level": "开放",
+      "search_terms": [
+        "Nemotron 3.5",
+        "Nvidia（NIM）",
+        "nemotron-3-5",
+        "聊天",
+        "指令跟随",
+        "问答",
+        "摘要",
+        "文本生成"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:nemotron-3-5"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:mimo-v2-5-pro",
+      "tool_key": "mimo-v2-5-pro",
+      "vendor_key": "xiaomi",
+      "title": "MiMo-V2.5 Pro",
+      "vendor_label": "小米（MiMo）",
+      "icon": "🤖",
+      "summary": "MiMo-V2.5 系列模型是小米推出的顶级旗舰模型，支持文本处理，提供强大的生产力。",
+      "theme": "general",
+      "scenes": [
+        "文本生成",
+        "对话交互",
+        "内容创作",
+        "企业应用"
+      ],
+      "best_for_preview": "文本处理、对话交互",
+      "not_for_preview": "图像识别",
+      "price_badge": "freemium",
+      "access_level": "开放",
+      "search_terms": [
+        "MiMo-V2.5 Pro",
+        "小米（MiMo）",
+        "mimo-v2-5-pro",
+        "文本生成",
+        "对话交互",
+        "内容创作",
+        "企业应用"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:mimo-v2-5-pro"
       },
       "detail_kind": "api_model"
     }

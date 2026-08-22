@@ -36,13 +36,13 @@ const ASSISTANT_OPTIONS = {
 function repairSnapshot() {
   const snapshot = emptySnapshot();
   const ids = {
-    'vendor-card': 'vendor-card:kling',
-    'vendor-level1': 'vendor-level1:kling',
-    'vendor-level2': 'vendor-level2:kling:models',
+    'vendor-card': 'vendor-card:kuaishou',
+    'vendor-level1': 'vendor-level1:kuaishou',
+    'vendor-level2': 'vendor-level2:kuaishou:models',
     'tool-level3': 'tool-level3:kling-2-6-pro',
     'tool-card': 'tool-card:kling-2-6-pro',
   };
-  for (const [area, id] of Object.entries(ids)) snapshot[area].push({ id, vendor_key: 'kling' });
+  for (const [area, id] of Object.entries(ids)) snapshot[area].push({ id, vendor_key: 'kuaishou' });
   return snapshot;
 }
 

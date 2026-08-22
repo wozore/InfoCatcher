@@ -9,7 +9,7 @@ const { buildSynthesisInput, buildSynthesisInstructions, DEFAULT_MAX_SOURCES_PER
 
 function seed() {
   return {
-    detail_kind: 'api_model', modality: 'video', name: 'Kling 2.6 Pro', vendor_name: '可灵', vendor_key: 'kling', tool_key: 'kling-2-6-pro',
+    detail_kind: 'api_model', modality: 'video', name: 'Kling 2.6 Pro', vendor_name: '可灵', vendor_key: 'kuaishou', tool_key: 'kling-2-6-pro',
     placement: { new_group_title: 'Models' }, known_fields: { theme: 'media' }, discovery_sources: [{ url: 'https://kling.ai', kind: 'official_hint' }],
   };
 }
@@ -72,6 +72,8 @@ test('synthesis instructions cover field rules, enums, and provenance requiremen
   assert.match(instructions, /access_level/);
   assert.match(instructions, /unknown/);
   assert.match(instructions, /features 是数组/);
+  assert.match(instructions, /字段名必须逐字复制/);
+  assert.match(instructions, /禁止使用 vendor_features/);
   assert.match(instructions, /禁止用逗号、顿号或分号把多个特点拼接/);
   assert.match(instructions, /不得创建不存在的 source_id/);
 });
