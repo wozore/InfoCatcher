@@ -133,7 +133,11 @@ async function resolveBatchCandidates(cards, options = {}) {
   for (const card of cards || []) {
     const name = String(card.name || card.title || '').trim();
     if (!name) continue;
-    const registryHit = lookupOfficialUrl(name, { registry: options.registry });
+    const registryHit = lookupOfficialUrl(name, {
+      ...(options.registry !== undefined ? { registry: options.registry } : {}),
+      ...(options.productRegistry !== undefined ? { productRegistry: options.productRegistry } : {}),
+      ...(card.detail_kind_hint ? { detailKind: card.detail_kind_hint } : {}),
+    });
     if (registryHit.ok) {
       seeds.push(pendingCandidateToSeed(card, registryHit));
       continue;

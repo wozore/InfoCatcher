@@ -7,6 +7,11 @@ const { parseArgs } = require('../../scripts/catalog-generator');
 const { probeCatalogCapabilities } = require('../../src/catalog/ai/catalog-adapters');
 const { loadGeneratorConfig, normalizeGeneratorOptions } = require('../../src/catalog/catalog-assistant');
 const { requestDeepSeek } = require('../../src/shared/deepseek-client');
+const {
+  addProductUrlRegistryEntry,
+  removeProductUrlRegistryEntry,
+  auditProductUrlRegistry,
+} = require('../../src/catalog/official-url-registry');
 
 test('pending hotspot candidate becomes a tool Seed without Apply capability', () => {
   const seed = pendingCandidateToSeed({ name: 'Example', description: 'Found in hotspot', source_hotspot: true, source_url: 'https://news.example/item' });
@@ -22,6 +27,43 @@ test('catalog generator CLI parses cost confirmation and seed flags', () => {
   assert.equal(parsed.flags.seed, 'seed.json');
   assert.equal(parsed.flags.confirm_cost, true);
 });
+
+test('catalog generator CLI parses product registry flags and keeps legacy vendor syntax', () => {
+  const product = parseArgs(['url-registry', 'product', 'add', '--name', 'Cursor', '--vendor-key', 'anysphere', '--url', 'https://cursor.com', '--product-prefix', 'cursor', '--lifecycle', 'active', '--verified-at', '2026-08-23']);
+  assert.deepEqual(product.positional, ['url-registry', 'product', 'add']);
+  assert.equal(product.flags.vendor_key, 'anysphere');
+  assert.equal(product.flags.product_prefix, 'cursor');
+  assert.equal(product.flags.verified_at, '2026-08-23');
+
+  const legacy = parseArgs(['url-registry', 'list']);
+  assert.deepEqual(legacy.positional, ['url-registry', 'list']);
+});
+
+test('product registry add/remove and audit stay local and validate vendor references', () => {
+  const vendorRegistry = { schema_version: 1, entries: { acme: { vendor_name: 'Acme', official_urls: ['https://acme.example'] } } };
+  const productRegistry = { schema_version: 1, products: {} };
+  const added = addProductUrlRegistryEntry({
+    name: 'Acme Agent',
+    vendor_key: 'acme',
+    official_url: 'https://acme.example/agent',
+    product_prefixes: ['acme agent'],
+    lifecycle: 'active',
+    last_verified_at: '2026-08-23',
+  }, { registry: productRegistry, vendorRegistry });
+  assert.equal(added.ok, true);
+  assert.equal(added.product.vendor_key, 'acme');
+  assert.equal(productRegistry.products['acme agent'].lifecycle, 'active');
+
+  const audit = auditProductUrlRegistry({ registry: productRegistry, vendorRegistry, staleDays: 183, now: '2026-08-23T00:00:00Z' });
+  assert.equal(audit.ok, true);
+  assert.equal(audit.needs_review, 1, '缺少官方更新时间应进入待核验');
+  assert.ok(audit.products[0].reasons.includes('official_update_unverified'));
+
+  const removed = removeProductUrlRegistryEntry('Acme Agent', { registry: productRegistry });
+  assert.equal(removed.removed, 'acme agent');
+  assert.equal(removed.count, 0);
+});
+
 
 test('catalog module config maps snake_case limits to internal options', () => {
   const options = normalizeGeneratorOptions(loadGeneratorConfig());

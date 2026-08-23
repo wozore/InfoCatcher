@@ -31,6 +31,8 @@ const {
   lookupOfficialUrl,
   addUrlRegistryEntry,
   removeUrlRegistryEntry,
+  loadProductUrlRegistry,
+  validateProductUrlRegistry,
 } = require('../../src/catalog/official-url-registry');
 
 const GEN_OPTIONS = { maxSearchQueries: 2, maxPages: 2, maxResponsesCalls: 2, maxSynthesisCalls: 1 };
@@ -89,6 +91,23 @@ test('resolveBatchCandidates 三路：登记表命中 / 解析成功 / unresolve
   assert.equal(resolved.official_url, canonicalizeUrl('https://official.example.com'));
   assert.equal(result.unresolved.length, 1);
   assert.equal(result.unresolved[0].name, 'Unknown Tool');
+});
+
+test('resolveBatchCandidates 将 detail_kind_hint 传入双表 lookup', async () => {
+  const registry = require('../../data/manual/archive/official-url-registry.json');
+  const productRegistry = loadProductUrlRegistry();
+  const result = await resolveBatchCandidates(
+    [{ name: 'Claude Code 2.1', detail_kind_hint: 'tool' }],
+    {
+      registry,
+      productRegistry,
+      resolveOfficialSource: async () => { throw new Error('双表命中时不应联网'); },
+    },
+  );
+  assert.equal(result.unresolved.length, 0);
+  assert.equal(result.seeds.length, 1);
+  assert.equal(result.seeds[0].vendor_name, 'Anthropic');
+  assert.equal(result.seeds[0].official_url, 'https://code.claude.com/docs/en/overview');
 });
 
 test('resolveBatchCandidates 保留候选指定的稳定层级引用', async () => {
@@ -267,6 +286,118 @@ test('official-url-registry 多官方 URL：official_urls 数组全作 official_
   const hints = seed.discovery_sources.filter(source => source.kind === 'official_hint');
   assert.equal(hints.length, 2);
   assert.deepEqual(hints.map(h => h.url).sort(), ['https://kling.ai/', 'https://klingai.com/document-api'].sort());
+});
+
+test('official-url-registry 产品前缀优先于模型前缀，并按词边界与最长前缀匹配', () => {
+  const store = { schema_version: 1, entries: {} };
+  addUrlRegistryEntry(
+    { name: 'anthropic', vendor_name: 'Anthropic', official_url: 'https://docs.anthropic.com', model_prefixes: ['claude'] },
+    { registry: store },
+  );
+  addUrlRegistryEntry(
+    { name: 'claude-code', vendor_name: 'Anthropic', official_url: 'https://code.claude.com/docs', aliases: ['Claude Code'], product_prefixes: ['claude code'] },
+    { registry: store },
+  );
+  addUrlRegistryEntry(
+    { name: 'cursor', vendor_name: 'Anysphere', official_url: 'https://cursor.com/docs', product_prefixes: ['cursor'], model_prefixes: [''] },
+    { registry: store },
+  );
+
+  assert.equal(lookupOfficialUrl('Claude Code 2.1', { registry: store }).official_url, 'https://code.claude.com/docs');
+  assert.equal(lookupOfficialUrl('Claude Opus 5', { registry: store }).official_url, 'https://docs.anthropic.com/');
+  assert.equal(lookupOfficialUrl('Cursor Pro', { registry: store }).vendor_name, 'Anysphere');
+  assert.equal(lookupOfficialUrl('Cursorless', { registry: store }).ok, false);
+  assert.equal(lookupOfficialUrl('anything', { registry: store }).ok, false);
+});
+
+test('official-url-registry 产品条目支持正式目录工具和主流 Agent 名称', () => {
+  const registry = require('../../data/manual/archive/official-url-registry.json');
+  const productRegistry = loadProductUrlRegistry();
+  const names = [
+    ['Cursor', 'Anysphere'],
+    ['GitHub Copilot', 'GitHub'],
+    ['Claude Code', 'Anthropic'],
+    ['Trae', '字节跳动（豆包）'],
+    ['Midjourney', 'Midjourney Inc.'],
+    ['Nano Banana', 'Google'],
+    ['即梦', '字节跳动（豆包）'],
+    ['Suno', 'Suno Inc.'],
+    ['Stable Diffusion', 'Stability AI'],
+    ['DALL·E 3', 'OpenAI'],
+    ['Ideogram', 'Ideogram AI'],
+    ['Windsurf', 'Windsurf'],
+    ['OpenAI Codex', 'OpenAI'],
+    ['Gemini CLI', 'Google'],
+    ['Replit Agent', 'Replit'],
+    ['Devin', 'Cognition'],
+    ['Augment Code', 'Augment Code'],
+    ['Amazon Q Developer', 'Amazon Web Services'],
+    ['Junie', 'JetBrains'],
+    ['Kiro', 'Amazon'],
+    ['Cline', 'Cline'],
+    ['Aider', 'Aider'],
+    ['Continue', 'Continue'],
+    ['Qoder', 'Qoder'],
+    ['CodeBuddy', '腾讯云 CodeBuddy'],
+  ];
+  for (const [name, vendor] of names) {
+    const hit = lookupOfficialUrl(name, { registry, productRegistry });
+    assert.equal(hit.ok, true, `${name} 应命中登记表`);
+    assert.equal(hit.vendor_name, vendor, `${name} 厂商不符`);
+    assert.equal(hit.matched_entry_kind, 'product', `${name} 应命中产品表`);
+    assert.match(hit.official_url, /^https:\/\//, `${name} 官方 URL 无效`);
+  }
+});
+
+test('official-url-registry detailKind 决定产品与厂商模型的优先级', () => {
+  const registry = require('../../data/manual/archive/official-url-registry.json');
+  const productRegistry = loadProductUrlRegistry();
+  const toolHit = lookupOfficialUrl('Claude Code 2.1', { registry, productRegistry, detailKind: 'tool' });
+  assert.equal(toolHit.ok, true);
+  assert.equal(toolHit.matched_entry_kind, 'product');
+  assert.equal(toolHit.vendor_name, 'Anthropic');
+
+  const modelHit = lookupOfficialUrl('Claude Opus 5', { registry, productRegistry, detailKind: 'api_model' });
+  assert.equal(modelHit.ok, true);
+  assert.equal(modelHit.matched_entry_kind, 'vendor');
+  assert.equal(modelHit.matched_key, 'anthropic');
+
+  const imageModelHit = lookupOfficialUrl('DALL·E 3', { registry, productRegistry, detailKind: 'api_model' });
+  assert.equal(imageModelHit.ok, true);
+  assert.equal(imageModelHit.matched_entry_kind, 'product');
+  assert.equal(imageModelHit.matched_key, 'dall-e-3');
+
+  assert.equal(lookupOfficialUrl('Cursorless', { registry, productRegistry, detailKind: 'tool' }).ok, false);
+});
+
+test('official-product-url-registry 双表契约：产品引用厂商、生命周期和官方 URL 校验', () => {
+  const registry = loadProductUrlRegistry();
+  const validation = validateProductUrlRegistry(registry);
+  assert.equal(validation.ok, true, validation.errors.join(', '));
+  assert.equal(validation.count, Object.keys(registry.products).length);
+  assert.ok(registry.products['claude-code']);
+  assert.equal(registry.products['claude-code'].vendor_key, 'anthropic');
+  assert.equal(registry.products['dall-e-3'].lifecycle, 'deprecated');
+
+  const invalid = {
+    schema_version: 1,
+    products: {
+      broken: {
+        vendor_key: 'missing-vendor',
+        official_urls: ['http://not-https.example'],
+        product_prefixes: ['agent'],
+        lifecycle: 'unknown-state',
+        last_verified_at: '2026-99-99',
+      },
+    },
+  };
+  const invalidResult = validateProductUrlRegistry(invalid);
+  assert.equal(invalidResult.ok, false);
+  assert.match(invalidResult.errors.join(','), /VENDOR_KEY_INVALID/);
+  assert.match(invalidResult.errors.join(','), /OFFICIAL_URL_INVALID/);
+  assert.match(invalidResult.errors.join(','), /PRODUCT_PREFIX_INVALID/);
+  assert.match(invalidResult.errors.join(','), /LIFECYCLE_INVALID/);
+  assert.match(invalidResult.errors.join(','), /LAST_VERIFIED_AT_INVALID/);
 });
 
 test('official-url-registry 兼容 official_url 单数字段填数组（防手误）', () => {

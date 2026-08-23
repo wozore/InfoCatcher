@@ -34,6 +34,12 @@ function parseArgs(argv) {
   return { positional, flags };
 }
 
+function csvFlag(value) {
+  return value === undefined || value === true
+    ? undefined
+    : String(value).split(',').map(item => item.trim()).filter(Boolean);
+}
+
 function readSeed(flags) {
   if (!flags.seed) throw new Error('请提供 --seed <file>');
   return JSON.parse(fs.readFileSync(flags.seed, 'utf8'));
@@ -192,28 +198,65 @@ async function main(argv = process.argv.slice(2)) {
   if (command === 'url-registry') {
     // 人工官方 URL 登记表维护（批量生成解析第一道命中源）。
     const registry = require('../src/catalog/official-url-registry');
-    const [action] = positional.slice(1);
-    if (action === 'list') {
+    const requestedNamespace = positional[1];
+    const namespace = requestedNamespace === 'product' ? 'product' : 'vendor';
+    const action = namespace === 'vendor' && !['vendor', 'product'].includes(requestedNamespace)
+      ? requestedNamespace
+      : positional[2];
+    if (namespace === 'vendor' && action === 'list') {
       const store = registry.listUrlRegistry();
       console.log(JSON.stringify(store, null, 2));
       return { ok: true, ...store };
     }
-    if (action === 'add') {
+    if (namespace === 'vendor' && action === 'add') {
       const result = registry.addUrlRegistryEntry({
         name: flags.name,
         vendor_name: flags.vendor,
         official_url: flags.url,
-        aliases: flags.alias ? String(flags.alias).split(',').map(item => item.trim()).filter(Boolean) : undefined,
+        aliases: csvFlag(flags.alias),
+        product_prefixes: csvFlag(flags.product_prefix),
+        model_prefixes: csvFlag(flags.model_prefix),
       });
       console.log(JSON.stringify(result, null, 2));
       return result;
     }
-    if (action === 'remove') {
+    if (namespace === 'vendor' && action === 'remove') {
       const result = registry.removeUrlRegistryEntry(flags.name);
       console.log(JSON.stringify(result, null, 2));
       return result;
     }
-    throw new Error('用法: catalog-generator url-registry list | add --name <名> --url <URL> [--vendor <厂商>] [--alias <别名>] | remove --name <名>');
+    if (namespace === 'product' && action === 'list') {
+      const store = registry.listProductUrlRegistry();
+      console.log(JSON.stringify(store, null, 2));
+      return { ok: true, ...store };
+    }
+    if (namespace === 'product' && action === 'add') {
+      const result = registry.addProductUrlRegistryEntry({
+        name: flags.name,
+        vendor_key: flags.vendor_key,
+        official_url: flags.url,
+        aliases: csvFlag(flags.alias),
+        product_prefixes: csvFlag(flags.product_prefix),
+        lifecycle: flags.lifecycle || 'active',
+        last_verified_at: flags.verified_at,
+        last_official_update_at: flags.official_update_at,
+        superseded_by: flags.superseded_by,
+      });
+      console.log(JSON.stringify(result, null, 2));
+      return result;
+    }
+    if (namespace === 'product' && action === 'remove') {
+      const result = registry.removeProductUrlRegistryEntry(flags.name);
+      console.log(JSON.stringify(result, null, 2));
+      return result;
+    }
+    if (namespace === 'product' && action === 'audit') {
+      const staleDays = flags.stale_days === true ? undefined : Number(flags.stale_days);
+      const result = registry.auditProductUrlRegistry({ staleDays });
+      console.log(JSON.stringify(result, null, 2));
+      return result;
+    }
+    throw new Error('用法: catalog-generator url-registry vendor list|add --name <名> --url <URL> [--vendor <厂商>] [--alias <别名>] [--product-prefix <前缀,...>] [--model-prefix <前缀,...>] | remove --name <名>; url-registry product list|add --name <产品> --vendor-key <厂商键> --url <URL> [--alias <别名>] [--product-prefix <前缀,...>] [--lifecycle <状态>] [--verified-at <YYYY-MM-DD>] [--official-update-at <YYYY-MM-DD>] [--superseded-by <产品键>] | remove --name <产品> | audit [--stale-days <天数>]');
   }
   throw new Error('用法: catalog-generator probe|plan|prepare|list|recover|new|resume|review|apply|cancel|remove|batch|url-registry');
 }

@@ -24,7 +24,7 @@
     "zhipu": {
       "vendor_name": "智谱 AI（Z.ai）",
       "official_urls": ["https://docs.z.ai/guides/overview/pricing", "https://docs.z.ai/guides/overview/overview", "https://docs.bigmodel.cn/cn/guide/start/model-overview", "https://open.bigmodel.cn/pricing"],
-      "model_prefixes": ["glm", "cogview", "cogvideox", "vidu"]
+      "model_prefixes": ["glm", "cogview", "cogvideox"]
     },
     "baidu": {
       "vendor_name": "百度（文心）",
@@ -140,6 +140,78 @@
       "vendor_name": "vidu",
       "official_urls": ["https://platform.vidu.cn", "https://platform.vidu.cn/docs/model-map", "https://platform.vidu.cn/docs/pricing"],
       "model_prefixes": ["vidu"]
+    },
+    "anysphere": {
+      "vendor_name": "Anysphere",
+      "official_urls": ["https://cursor.com/docs", "https://cursor.com/changelog"]
+    },
+    "github": {
+      "vendor_name": "GitHub",
+      "official_urls": ["https://docs.github.com/en/copilot/get-started/what-is-github-copilot", "https://docs.github.com/en/copilot/concepts/agents"]
+    },
+    "midjourney-inc": {
+      "vendor_name": "Midjourney Inc.",
+      "official_urls": ["https://www.midjourney.com", "https://docs.midjourney.com"]
+    },
+    "suno-inc": {
+      "vendor_name": "Suno Inc.",
+      "official_urls": ["https://suno.com", "https://about.suno.com/release-notes"]
+    },
+    "stability-ai": {
+      "vendor_name": "Stability AI",
+      "official_urls": ["https://stability.ai", "https://platform.stability.ai/pricing", "https://stability.ai/license"]
+    },
+    "ideogram-ai": {
+      "vendor_name": "Ideogram AI",
+      "official_urls": ["https://ideogram.ai", "https://docs.ideogram.ai"]
+    },
+    "windsurf-vendor": {
+      "vendor_name": "Windsurf",
+      "official_urls": ["https://windsurf.com", "https://docs.windsurf.com/plugins"]
+    },
+    "replit": {
+      "vendor_name": "Replit",
+      "official_urls": ["https://replit.com/products/agent", "https://docs.replit.com/learn/build-with-agent"]
+    },
+    "cognition": {
+      "vendor_name": "Cognition",
+      "official_urls": ["https://devin.ai/", "https://docs.devin.ai/get-started/devin-intro"]
+    },
+    "augment": {
+      "vendor_name": "Augment Code",
+      "official_urls": ["https://www.augmentcode.com", "https://docs.augmentcode.com/using-augment/agent"]
+    },
+    "aws": {
+      "vendor_name": "Amazon Web Services",
+      "official_urls": ["https://aws.amazon.com/q/developer/", "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/what-is.html"]
+    },
+    "jetbrains": {
+      "vendor_name": "JetBrains",
+      "official_urls": ["https://www.jetbrains.com/junie/", "https://junie.jetbrains.com/docs/junie-ide-plugin.html"]
+    },
+    "amazon": {
+      "vendor_name": "Amazon",
+      "official_urls": ["https://kiro.dev", "https://kiro.dev/docs/billing/"]
+    },
+    "cline-vendor": {
+      "vendor_name": "Cline",
+      "official_urls": ["https://cline.bot", "https://cline.bot/pricing"]
+    },
+    "aider-vendor": {
+      "vendor_name": "Aider",
+      "official_urls": ["https://aider.chat", "https://aider.chat/docs/faq.html"]
+    },
+    "continue-vendor": {
+      "vendor_name": "Continue",
+      "official_urls": ["https://continue.dev", "https://docs.continue.dev"]
+    },
+    "qoder-vendor": {
+      "vendor_name": "Qoder",
+      "official_urls": ["https://qoder.com", "https://docs.qoder.com/plugins/introduction"]
+    },
+    "codebuddy-vendor": {
+      "vendor_name": "腾讯云 CodeBuddy",
+      "official_urls": ["https://www.codebuddy.ai", "https://www.codebuddy.ai/docs/ide/Account/pricing"]
     }
   }
 }

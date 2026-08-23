@@ -486,12 +486,34 @@ tool-cards-pending.json
 
 ### 人工官方 URL 登记表
 
-批量生成前把已知工具的官方域名登记到 `data/manual/archive/official-url-registry.json`，命中就无需花 Tavily/DeepSeek 解析（key 可为工具名或厂商名，同一命名空间，可配 aliases）：
+批量生成前把已知来源登记到两个相互引用的文件中：
+
+- `data/manual/archive/official-url-registry.json`：厂商表，只保存厂商级官方文档/API 入口和 `model_prefixes`。
+- `data/manual/archive/official-product-url-registry.json`：产品表，保存 Cursor、Claude Code、图像/音频工具和编程 Agent 等具体产品，通过 `vendor_key` 引用厂商表。
+
+两个文件由 `src/catalog/official-url-registry.js` 统一读取。调用方不需要知道文件拆分：
+
+- `detailKind=tool`：产品精确名称/词边界前缀优先，再回退厂商名称。
+- `detailKind=api_model`：厂商精确名称/模型前缀优先，特殊产品模型再回退产品精确名称。
+- 未提供类型时：产品优先，再匹配厂商模型。
+
+产品记录使用 `lifecycle`（`active` / `deprecated` / `discontinued` / `unknown`）、`last_verified_at` 和可选 `last_official_update_at`。产品过期不代表官方服务停止；使用 audit 命令区分“待核验”“半年未更新”和“已弃用”。只登记官网、官方文档、官方定价或官方更新页；不要把 `agent`、`code`、`ai` 等通用词登记为产品前缀。
+
+维护命令：
 
 ```bash
-node scripts/catalog-generator.js url-registry list
-node scripts/catalog-generator.js url-registry add --name 可灵 --vendor 快手可灵 --url https://klingai.com --alias Kling
-node scripts/catalog-generator.js url-registry remove --name 可灵
+# 厂商表；旧版 url-registry list/add/remove 仍兼容并映射到 vendor
+node scripts/catalog-generator.js url-registry vendor list
+node scripts/catalog-generator.js url-registry vendor add --name 可灵 --vendor 快手可灵 --url https://klingai.com --model-prefix kling
+node scripts/catalog-generator.js url-registry vendor remove --name 可灵
+
+# 产品表
+node scripts/catalog-generator.js url-registry product list
+node scripts/catalog-generator.js url-registry product add --name cursor --vendor-key anysphere --url https://cursor.com/docs --alias Cursor --product-prefix cursor --lifecycle active --verified-at 2026-08-23
+node scripts/catalog-generator.js url-registry product remove --name cursor
+
+# 纯本地新鲜度审计，不发网络请求、不改登记表
+node scripts/catalog-generator.js url-registry product audit --stale-days 183
 ```
 
 ### 先 dry-run 预览

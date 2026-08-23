@@ -64,7 +64,8 @@ const CATALOG_FILES = Object.freeze({
 
 const CATALOG_GENERATOR_FILES = Object.freeze({
   draftsDir: path.join(TOOLS_DIR, 'catalog-drafts'),
-  urlRegistry: path.join(ARCHIVE_DIR, 'official-url-registry.json'), // 人工官方 URL 登记表（批量解析第一道命中源）
+  urlRegistry: path.join(ARCHIVE_DIR, 'official-url-registry.json'), // 厂商/模型人工官方 URL 登记表（批量解析第一道命中源）
+  productUrlRegistry: path.join(ARCHIVE_DIR, 'official-product-url-registry.json'), // AI 产品官方 URL 登记表（由 registry Module 统一读取）
   batchSeedsPreview: path.join(TOOLS_DIR, 'batch-seeds-preview.json'), // 工具 batch dry-run 解析预览
   pendingTools: path.join(TOOLS_DIR, 'tool-cards-pending.json'), // 工具待补卡（feedback 产物，batch 输入）
   localConfig: AI_CONFIG_FILES.local,
