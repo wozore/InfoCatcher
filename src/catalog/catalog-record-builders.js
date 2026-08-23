@@ -107,7 +107,7 @@ function buildToolCard({ toolKey, vendorKey, title, vendorLabel, icon, summary, 
 function deriveKeys(seed) {
   const vendorKey = slugify(seed.vendor_key || seed.vendor_name, 'vendor_key');
   const toolKey = seed.tool_key ? slugify(seed.tool_key, 'tool_key') : slugify(seed.name, 'tool_key');
-  const groupKey = slugify(seed.group_key || seed.placement?.new_group_title || seed.name, 'group_key');
+  const groupKey = slugify(seed.group_key || seed.placement?.new_group_title || seed.name, 'group_key').replace(/-models$/, '');
   const detailKey = seed.detail_key ? slugify(seed.detail_key, 'detail_key') : toolKey;
   return { vendorKey, toolKey, groupKey, detailKey };
 }

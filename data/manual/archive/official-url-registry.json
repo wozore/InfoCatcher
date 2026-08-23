@@ -31,11 +31,6 @@
       "official_urls": ["https://qianfan.cloud.baidu.com", "https://cloud.baidu.com/doc/qianfan/s/rmh4stp0j", "https://cloud.baidu.com/doc/qianfan/s/imlg0beiu"],
       "model_prefixes": ["ernie", "intervl"]
     },
-    "xunfei": {
-      "vendor_name": "科大讯飞",
-      "official_url": "https://xinghuo.xfyun.cn/sparkapi",
-      "model_prefixes": ["spark"]
-    },
     "minimax": {
       "vendor_name": "MiniMax",
       "official_urls": ["https://platform.minimax.io/docs", "https://platform.minimax.io/docs/token-plan/intro", "https://platform.minimax.io/docs/guides/pricing-speech", "https://platform.minimax.io/docs/guides/pricing-paygo"],
@@ -141,7 +136,7 @@
       "official_url": "https://www.lingguang.com",
       "model_prefixes": []
     },
-    "shengshu": {
+    "vidu": {
       "vendor_name": "vidu",
       "official_urls": ["https://platform.vidu.cn", "https://platform.vidu.cn/docs/model-map", "https://platform.vidu.cn/docs/pricing"],
       "model_prefixes": ["vidu"]

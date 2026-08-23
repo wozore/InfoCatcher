@@ -557,6 +557,295 @@
         "kind": "vendor-level1",
         "id": "vendor-level1:nvidia"
       }
+    },
+    {
+      "id": "vendor-card:bytedance",
+      "vendor_key": "bytedance",
+      "title": "字节跳动（豆包）",
+      "icon": "🤖",
+      "summary": "字节跳动旗下豆包与火山引擎模型服务入口，覆盖 Seed 系列模型及相关 API 能力。",
+      "feature_preview": [
+        {
+          "tone": "positive",
+          "text": "官方入口覆盖豆包与 Seed 系列模型服务"
+        },
+        {
+          "tone": "negative",
+          "text": "具体模型、价格与地区可用性需以火山引擎官方页面为准"
+        }
+      ],
+      "access_level": "区域限制",
+      "price_badge": "usage_based",
+      "search_terms": [
+        "字节跳动",
+        "豆包",
+        "bytedance",
+        "doubao",
+        "seed"
+      ],
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:bytedance"
+      }
+    },
+    {
+      "id": "vendor-card:thinking-machines",
+      "vendor_key": "thinking-machines",
+      "title": "Thinking Machines Lab",
+      "icon": "🤖",
+      "summary": "Thinking Machines Lab 提供 Tinker 模型开发平台与相关模型入口，面向可编程的模型实验与应用构建。",
+      "feature_preview": [
+        {
+          "tone": "positive",
+          "text": "官方文档提供 Tinker 平台与模型入口"
+        },
+        {
+          "tone": "negative",
+          "text": "具体模型、价格和申请条件需以官方文档为准"
+        }
+      ],
+      "access_level": "受限",
+      "price_badge": "usage_based",
+      "search_terms": [
+        "Thinking Machines Lab",
+        "thinking machines",
+        "Tinker",
+        "inkling"
+      ],
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:thinking-machines"
+      }
+    },
+    {
+      "id": "vendor-card:upstage",
+      "vendor_key": "upstage",
+      "title": "Upstage",
+      "icon": "🤖",
+      "summary": "Upstage 提供 Solar 系列模型与企业级 AI API 服务，覆盖通用文本和相关应用场景。",
+      "feature_preview": [
+        {
+          "tone": "positive",
+          "text": "官方入口覆盖 Solar 系列模型与 API 文档"
+        },
+        {
+          "tone": "negative",
+          "text": "具体模型能力、价格与地区可用性需以官方页面为准"
+        }
+      ],
+      "access_level": "受限",
+      "price_badge": "usage_based",
+      "search_terms": [
+        "Upstage",
+        "upstage",
+        "Solar",
+        "Syn"
+      ],
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:upstage"
+      }
+    },
+    {
+      "id": "vendor-card:perplexity",
+      "vendor_key": "perplexity",
+      "title": "Perplexity",
+      "icon": "🤖",
+      "summary": "Perplexity 提供面向检索增强问答与生成式搜索的产品和 API 模型入口。",
+      "feature_preview": [
+        {
+          "tone": "positive",
+          "text": "产品与 API 入口聚焦实时检索和答案生成"
+        },
+        {
+          "tone": "negative",
+          "text": "搜索额度、模型可用性与 API 价格需以官方页面为准"
+        }
+      ],
+      "access_level": "受限",
+      "price_badge": "usage_based",
+      "search_terms": [
+        "Perplexity",
+        "perplexity",
+        "Sonar",
+        "pplx"
+      ],
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:perplexity"
+      }
+    },
+    {
+      "id": "vendor-card:microsoft",
+      "vendor_key": "microsoft",
+      "title": "Microsoft（Azure AI Foundry）",
+      "icon": "🤖",
+      "summary": "Microsoft 通过 Azure AI Foundry 及官方模型生态提供模型目录、部署和 AI 应用服务入口。",
+      "feature_preview": [
+        {
+          "tone": "positive",
+          "text": "官方模型生态覆盖 Phi 等系列及多类 AI 服务"
+        },
+        {
+          "tone": "negative",
+          "text": "模型授权、区域部署与实际价格需以 Azure 官方条件为准"
+        }
+      ],
+      "access_level": "区域限制",
+      "price_badge": "usage_based",
+      "search_terms": [
+        "Microsoft",
+        "microsoft",
+        "Azure AI Foundry",
+        "Phi",
+        "Fara"
+      ],
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:microsoft"
+      }
+    },
+    {
+      "id": "vendor-card:reve",
+      "vendor_key": "reve",
+      "title": "Reve",
+      "icon": "🤖",
+      "summary": "Reve 提供图像生成产品入口及模型相关信息，面向自然语言驱动的视觉创作。",
+      "feature_preview": [
+        {
+          "tone": "positive",
+          "text": "官方产品入口提供图像生成模型与使用方式"
+        },
+        {
+          "tone": "negative",
+          "text": "生成额度、模型能力与价格需以官方页面为准"
+        }
+      ],
+      "access_level": "受限",
+      "price_badge": "paid",
+      "search_terms": [
+        "Reve",
+        "reve",
+        "图像生成"
+      ],
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:reve"
+      }
+    },
+    {
+      "id": "vendor-card:luma",
+      "vendor_key": "luma",
+      "title": "Luma AI",
+      "icon": "🤖",
+      "summary": "Luma AI 提供面向图像、视频和创意生成工作流的模型与开发者 API 入口。",
+      "feature_preview": [
+        {
+          "tone": "positive",
+          "text": "官方文档覆盖创意生成模型与开发者 API"
+        },
+        {
+          "tone": "negative",
+          "text": "模型能力、生成额度与价格需以官方页面为准"
+        }
+      ],
+      "access_level": "受限",
+      "price_badge": "usage_based",
+      "search_terms": [
+        "Luma AI",
+        "luma",
+        "Ray"
+      ],
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:luma"
+      }
+    },
+    {
+      "id": "vendor-card:black-forest-labs",
+      "vendor_key": "black-forest-labs",
+      "title": "Black Forest Labs（FLUX）",
+      "icon": "🤖",
+      "summary": "Black Forest Labs 提供 FLUX 系列图像生成模型、开发者 API 与授权信息。",
+      "feature_preview": [
+        {
+          "tone": "positive",
+          "text": "官方入口覆盖 FLUX 模型、API 和许可信息"
+        },
+        {
+          "tone": "negative",
+          "text": "不同模型的授权、部署方式与价格需分别核对官方条件"
+        }
+      ],
+      "access_level": "受限",
+      "price_badge": "usage_based",
+      "search_terms": [
+        "Black Forest Labs",
+        "black forest labs",
+        "FLUX",
+        "flux"
+      ],
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:black-forest-labs"
+      }
+    },
+    {
+      "id": "vendor-card:antgroup",
+      "vendor_key": "antgroup",
+      "title": "灵光（蚂蚁集团）",
+      "icon": "🤖",
+      "summary": "蚂蚁集团灵光产品入口，提供面向中文用户的 AI 应用与生成式能力。",
+      "feature_preview": [
+        {
+          "tone": "positive",
+          "text": "官方产品入口已登记，可继续按具体能力拆分详情"
+        },
+        {
+          "tone": "negative",
+          "text": "具体功能、开放范围与使用条件需以官方页面为准"
+        }
+      ],
+      "access_level": "受限",
+      "price_badge": "free",
+      "search_terms": [
+        "灵光",
+        "蚂蚁集团",
+        "antgroup"
+      ],
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:antgroup"
+      }
+    },
+    {
+      "id": "vendor-card:vidu",
+      "vendor_key": "vidu",
+      "title": "Vidu",
+      "icon": "🤖",
+      "summary": "生数科技 Vidu 提供视频生成模型与平台入口，覆盖视频创作相关 API 和模型能力。",
+      "feature_preview": [
+        {
+          "tone": "positive",
+          "text": "官方平台提供 Vidu 模型、能力说明和价格入口"
+        },
+        {
+          "tone": "negative",
+          "text": "生成额度、模型规格与地区可用性需以官方页面为准"
+        }
+      ],
+      "access_level": "受限",
+      "price_badge": "usage_based",
+      "search_terms": [
+        "Vidu",
+        "vidu",
+        "生数科技",
+        "视频生成"
+      ],
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:vidu"
+      }
     }
   ]
 }

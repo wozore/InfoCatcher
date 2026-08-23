@@ -38,7 +38,7 @@ function repairSnapshot() {
   const ids = {
     'vendor-card': 'vendor-card:kuaishou',
     'vendor-level1': 'vendor-level1:kuaishou',
-    'vendor-level2': 'vendor-level2:kuaishou:models',
+    'vendor-level2': 'vendor-level2:kuaishou:kling',
     'tool-level3': 'tool-level3:kling-2-6-pro',
     'tool-card': 'tool-card:kling-2-6-pro',
   };

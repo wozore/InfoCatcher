@@ -9,7 +9,7 @@ const { synthesizeCatalog, normalizeFeaturePreview } = require('../../src/catalo
 function seed(overrides = {}) {
   return {
     detail_kind: 'api_model', modality: 'video', name: 'Kling 2.6 Pro', vendor_name: '可灵', vendor_key: 'kuaishou', tool_key: 'kling-2-6-pro',
-    placement: { new_group_title: 'Models' }, known_fields: { theme: 'media' }, discovery_sources: [{ url: 'https://kling.ai', kind: 'official_hint' }],
+    placement: { new_group_title: 'Kling' }, known_fields: { theme: 'media' }, discovery_sources: [{ url: 'https://kling.ai', kind: 'official_hint' }],
     ...overrides,
   };
 }
@@ -80,7 +80,7 @@ function adapter(missingFields = []) {
 
 function repairedSnapshot() {
   const snapshot = emptySnapshot();
-  for (const [area, id] of Object.entries({ 'vendor-card': 'vendor-card:kuaishou', 'vendor-level1': 'vendor-level1:kuaishou', 'vendor-level2': 'vendor-level2:kuaishou:models', 'tool-level3': 'tool-level3:kling-2-6-pro', 'tool-card': 'tool-card:kling-2-6-pro' })) snapshot[area].push({ id, vendor_key: 'kuaishou' });
+  for (const [area, id] of Object.entries({ 'vendor-card': 'vendor-card:kuaishou', 'vendor-level1': 'vendor-level1:kuaishou', 'vendor-level2': 'vendor-level2:kuaishou:kling', 'tool-level3': 'tool-level3:kling-2-6-pro', 'tool-card': 'tool-card:kling-2-6-pro' })) snapshot[area].push({ id, vendor_key: 'kuaishou' });
   return snapshot;
 }
 
@@ -115,22 +115,22 @@ test('link-only parent patch appends the new group ref without re-synthesizing p
   assert.equal(result.coverage.missing.some(item => item.layer === 'vendor'), false);
   const parentPatch = result.layer_patches.find(patch => patch.area === 'vendor-level1');
   assert.equal(parentPatch.operation, 'replace');
-  assert.deepEqual(parentPatch.record.level2_refs, [{ kind: 'vendor-level2', id: 'vendor-level2:kuaishou:models' }]);
+  assert.deepEqual(parentPatch.record.level2_refs, [{ kind: 'vendor-level2', id: 'vendor-level2:kuaishou:kling' }]);
   assert.equal(parentPatch.record.description, '已有厂商描述。');
   assert.equal(parentPatch.provenance.description.kind, 'deterministic');
 });
 
 test('orphan relation repair bypasses model synthesis when every record already exists', async () => {
   const snapshot = healthyExistingVendorSnapshot();
-  snapshot['vendor-level1'][0].level2_refs = [{ kind: 'vendor-level2', id: 'vendor-level2:kuaishou:models' }];
+  snapshot['vendor-level1'][0].level2_refs = [{ kind: 'vendor-level2', id: 'vendor-level2:kuaishou:kling' }];
   snapshot['vendor-level2'].push({
-    id: 'vendor-level2:kuaishou:models', level1_ref: { kind: 'vendor-level1', id: 'vendor-level1:kuaishou' }, vendor_key: 'kuaishou',
-    title: 'Models', official_url: 'https://kling.ai', summary: '已有模型分组。', status: 'active', detail_refs: [],
+    id: 'vendor-level2:kuaishou:kling', level1_ref: { kind: 'vendor-level1', id: 'vendor-level1:kuaishou' }, vendor_key: 'kuaishou',
+    title: 'Kling', official_url: 'https://kling.ai', summary: '已有模型分组。', status: 'active', detail_refs: [],
   });
   const detail = { id: 'tool-level3:kling-2-6-pro', vendor_key: 'kuaishou', detail_kind: 'api_model', theme: 'media', title: 'Kling 2.6 Pro', vendor_label: '可灵', icon: '🎬', official_url: 'https://kling.ai', status: 'active', summary: '已有模型详情。', one_m_context: { status: 'not_applicable', reason: '视频模型。' }, api_pricing: { status: 'available', rate_cards: [{ label: '生成', pricing_basis: 'generation', currency: 'CREDIT', metrics: [{ label: '生成', amount: 1, unit: 'generation' }], conditions: '官方计费。' }] }, plan: { status: 'not_applicable', reason: '不是套餐。' }, applicable_scenarios: [{ title: '视频', description: '生成视频。' }], inapplicable_scenarios: [{ title: '长视频', description: '不适合长视频。' }], sources: [{ title: '官方', url: 'https://kling.ai' }], official_date: '2025-12-03' };
   snapshot['tool-level3'].push(detail);
   snapshot['tool-card'].push({ id: 'tool-card:kling-2-6-pro', tool_key: 'kling-2-6-pro', vendor_key: 'kuaishou', title: 'Kling 2.6 Pro', vendor_label: '可灵', icon: '🎬', summary: '已有工具卡。', theme: 'media', scenes: ['视频生成'], best_for_preview: '视频生成。', not_for_preview: '不适合长视频。', price_badge: 'usage_based', access_level: '开放', search_terms: ['Kling 2.6 Pro'], detail_ref: { kind: 'tool-level3', id: detail.id }, detail_kind: 'api_model' });
-  const plan = planCatalogResearch(seed({ placement: { existing_level2_ref: { kind: 'vendor-level2', id: 'vendor-level2:kuaishou:models' } } }), snapshot);
+  const plan = planCatalogResearch(seed({ placement: { existing_level2_ref: { kind: 'vendor-level2', id: 'vendor-level2:kuaishou:kling' } } }), snapshot);
   const result = await synthesizeCatalog(researchFor(plan), plan, null);
   assert.equal(result.ok, true, JSON.stringify(result.errors));
   assert.deepEqual(result.coverage.entries, []);
@@ -237,12 +237,12 @@ test('placeholder field values are treated as missing by field coverage', async 
 
 test('existing vendor layers remain unchanged when their group ref already exists', async () => {
   const snapshot = healthyExistingVendorSnapshot();
-  snapshot['vendor-level1'][0].level2_refs = [{ kind: 'vendor-level2', id: 'vendor-level2:kuaishou:models' }];
+  snapshot['vendor-level1'][0].level2_refs = [{ kind: 'vendor-level2', id: 'vendor-level2:kuaishou:kling' }];
   snapshot['vendor-level2'].push({
-    id: 'vendor-level2:kuaishou:models', level1_ref: { kind: 'vendor-level1', id: 'vendor-level1:kuaishou' }, vendor_key: 'kuaishou',
-    title: 'Models', official_url: 'https://kling.ai', summary: '已有模型分组。', status: 'active', detail_refs: [],
+    id: 'vendor-level2:kuaishou:kling', level1_ref: { kind: 'vendor-level1', id: 'vendor-level1:kuaishou' }, vendor_key: 'kuaishou',
+    title: 'Kling', official_url: 'https://kling.ai', summary: '已有模型分组。', status: 'active', detail_refs: [],
   });
-  const plan = planCatalogResearch(seed({ placement: { existing_level2_ref: { kind: 'vendor-level2', id: 'vendor-level2:kuaishou:models' } } }), snapshot);
+  const plan = planCatalogResearch(seed({ placement: { existing_level2_ref: { kind: 'vendor-level2', id: 'vendor-level2:kuaishou:kling' } } }), snapshot);
   const research = researchFor(plan);
   const detailAdapter = adapter();
   const original = detailAdapter.synthesize;

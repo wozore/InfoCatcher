@@ -10,7 +10,7 @@ const { buildSynthesisInput, buildSynthesisInstructions, DEFAULT_MAX_SOURCES_PER
 function seed() {
   return {
     detail_kind: 'api_model', modality: 'video', name: 'Kling 2.6 Pro', vendor_name: '可灵', vendor_key: 'kuaishou', tool_key: 'kling-2-6-pro',
-    placement: { new_group_title: 'Models' }, known_fields: { theme: 'media' }, discovery_sources: [{ url: 'https://kling.ai', kind: 'official_hint' }],
+    placement: { new_group_title: 'Kling' }, known_fields: { theme: 'media' }, discovery_sources: [{ url: 'https://kling.ai', kind: 'official_hint' }],
   };
 }
 

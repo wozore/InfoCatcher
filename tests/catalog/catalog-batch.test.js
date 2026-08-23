@@ -97,12 +97,12 @@ test('resolveBatchCandidates 保留候选指定的稳定层级引用', async () 
     name: 'Gemini 3.7 Flash', vendor_key: 'google', detail_kind_hint: 'api_model',
     placement: {
       existing_level1_ref: { kind: 'vendor-level1', id: 'vendor-level1:google' },
-      existing_level2_ref: { kind: 'vendor-level2', id: 'vendor-level2:google:gemini-models' },
+      existing_level2_ref: { kind: 'vendor-level2', id: 'vendor-level2:google:gemini' },
     },
   }], { registry });
   assert.deepEqual(result.seeds[0].placement, {
     existing_level1_ref: { kind: 'vendor-level1', id: 'vendor-level1:google' },
-    existing_level2_ref: { kind: 'vendor-level2', id: 'vendor-level2:google:gemini-models' },
+    existing_level2_ref: { kind: 'vendor-level2', id: 'vendor-level2:google:gemini' },
   });
 });
 test('resolveOfficialSource fail-closed：缺 name / 缺 TAVILY key 均不抛错', async () => {

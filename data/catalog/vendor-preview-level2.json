@@ -28,7 +28,7 @@
       ]
     },
     {
-      "id": "vendor-level2:anthropic:claude-models",
+      "id": "vendor-level2:anthropic:claude",
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:anthropic"
@@ -84,7 +84,7 @@
       ]
     },
     {
-      "id": "vendor-level2:google:gemini-models",
+      "id": "vendor-level2:google:gemini",
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:google"
@@ -140,7 +140,7 @@
       ]
     },
     {
-      "id": "vendor-level2:deepseek:deepseek-models",
+      "id": "vendor-level2:deepseek:deepseek",
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:deepseek"
@@ -162,7 +162,7 @@
       ]
     },
     {
-      "id": "vendor-level2:zhipu:glm-models",
+      "id": "vendor-level2:zhipu:glm",
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:zhipu"
@@ -188,7 +188,7 @@
       ]
     },
     {
-      "id": "vendor-level2:baidu:ernie-models",
+      "id": "vendor-level2:baidu:ernie",
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:baidu"
@@ -210,7 +210,7 @@
       ]
     },
     {
-      "id": "vendor-level2:mistral:mistral-models",
+      "id": "vendor-level2:mistral:mistral",
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:mistral"
@@ -232,7 +232,7 @@
       ]
     },
     {
-      "id": "vendor-level2:cohere:command-models",
+      "id": "vendor-level2:cohere:command",
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:cohere"
@@ -250,13 +250,13 @@
       ]
     },
     {
-      "id": "vendor-level2:kuaishou:models",
+      "id": "vendor-level2:kuaishou:kling",
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:kuaishou"
       },
       "vendor_key": "kuaishou",
-      "title": "Models",
+      "title": "Kling",
       "official_url": "https://kling.ai",
       "summary": "Kling AI 是快手科技推出的 AI 创作平台，提供视频、图像和音频生成工具。",
       "status": "active",

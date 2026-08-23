@@ -20,9 +20,9 @@
     },
     "existing_level2_ref": {
       "kind": "vendor-level2",
-      "id": "vendor-level2:kuaishou:models"
+      "id": "vendor-level2:kuaishou:kling"
     },
-    "new_group_title": "Models"
+    "new_group_title": "Kling"
   },
   "known_fields": {
     "theme": "media"

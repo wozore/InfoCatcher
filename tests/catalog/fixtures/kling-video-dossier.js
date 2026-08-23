@@ -15,8 +15,8 @@ function klingVideoSeed(overrides = {}) {
     official_url: OFFICIAL_URL,
     placement: {
       existing_level1_ref: { kind: 'vendor-level1', id: 'vendor-level1:kuaishou' },
-      existing_level2_ref: { kind: 'vendor-level2', id: 'vendor-level2:kuaishou:models' },
-      new_group_title: 'Models',
+      existing_level2_ref: { kind: 'vendor-level2', id: 'vendor-level2:kuaishou:kling' },
+      new_group_title: 'Kling',
     },
     known_fields: { theme: 'media' },
     discovery_sources: [{ url: OFFICIAL_URL, kind: 'official_hint' }],

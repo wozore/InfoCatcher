@@ -4,6 +4,10 @@
       "path": "vendor/anthropic.svg",
       "color": "#D97757"
     },
+    "thinking-machines": {
+      "path": "vendor/thinking-machines.svg",
+      "color": "#000"
+    },
     "google": {
       "path": "vendor/google.svg",
       "color": "#4285F4"
@@ -44,6 +48,55 @@
     },
     "cohere": {
       "path":"vendor/cohere-color.svg"
+    },
+    "moonshot": {
+      "path":"vendor/kimi.svg"
+    },
+    "alibaba": {
+      "path":"vendor/alibabacloud-color.svg"
+    },
+    "tencent": {
+      "path":"vendor/tencentcloud-color.svg"
+    },
+    "meta": {
+      "path":"vendor/meta-color.svg"
+    },
+    "stepfun": {
+      "path":"vendor/stepfun.svg"
+    },
+    "xiaomi": {
+      "path":"vendor/xiaomi.svg",
+      "color": "#FF6900"
+    },
+    "nvidia": {
+      "path":"vendor/nvidia-color.svg"
+    },
+    "bytedance": {
+      "path":"vendor/bytedance-color.svg"
+    },
+    "Upstage": {
+      "path":"vendor/upstage-color.svg"
+    },
+    "antgroup": {
+      "path":"vendor/antgroup-color.svg"
+    },
+    "perplexity": {
+      "path":"vendor/perplexity-color.svg"
+    },
+    "microsoft": {
+      "path":"vendor/microsoft-color.svg"
+    },
+    "reve": {
+      "path":"vendor/reve.svg"
+    },
+    "vidu": {
+      "path":"vendor/vidu-color.svg"
+    },
+    "luma": {
+      "path":"vendor/dreammachine.svg"
+    },
+    "black-forest-labs": {
+      "path":"vendor/bfl.svg"
     }
   },
   "tool": {},
@@ -51,6 +104,15 @@
     "grok-4-6": {
       "path":"series/grok.svg",
       "color": "#000"
+    },
+    "kling": {
+      "path":"series/kling-color.svg"
+    },
+    "qwen3-8-max": {
+      "path":"series/qwen-color.svg"
+    },
+    "hy3": {
+      "path":"series/hunyuan-color.svg"
     }
   },
   "model": {}
