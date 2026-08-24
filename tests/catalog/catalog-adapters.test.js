@@ -24,6 +24,41 @@ function plan() {
   };
 }
 
+test('catalog discovery propagates keyed Tavily mode without keyless headers', async () => {
+  let request;
+  const result = await discoverOfficialSources({
+    plan: plan(),
+    scope: { kind: 'detail', subject: { kind: 'detail', key: 'kling-v2-6' } },
+    missing_predicates: ['api_available'],
+  }, {
+    searchApiKey: 'tavily-key',
+    accessMode: 'keyed',
+    fetchImpl: async (url, init) => {
+      request = { url, headers: init.headers };
+      return response({ results: [] });
+    },
+  });
+  assert.equal(result.ok, true);
+  assert.equal(request.headers.Authorization, 'Bearer tavily-key');
+  assert.equal(request.headers['X-Tavily-Access-Mode'], undefined);
+});
+
+test('catalog discovery fails closed before fetch when keyed Tavily key is missing', async () => {
+  let calls = 0;
+  const result = await discoverOfficialSources({
+    plan: plan(),
+    scope: { kind: 'detail', subject: { kind: 'detail', key: 'kling-v2-6' } },
+    missing_predicates: ['api_available'],
+  }, {
+    searchApiKey: '',
+    accessMode: 'keyed',
+    fetchImpl: async () => { calls += 1; return response({ results: [] }); },
+  });
+  assert.equal(result.ok, false);
+  assert.equal(result.code, 'TAVILY_SEARCH_AUTH_REQUIRED');
+  assert.equal(calls, 0);
+});
+
 test('catalog discovery delegates official-domain filtering to Tavily', async () => {
   let request;
   const result = await discoverOfficialSources({
@@ -41,6 +76,48 @@ test('catalog discovery delegates official-domain filtering to Tavily', async ()
   assert.equal(request.url, 'https://api.tavily.com/search');
   assert.deepEqual(request.body.include_domains, ['kling.ai']);
   assert.equal(result.sources[0].discovered_for, 'detail:kling-v2-6');
+});
+
+test('catalog discovery returns seed official URLs for direct extraction in detail scope', async () => {
+  const result = await discoverOfficialSources({
+    plan: {
+      seed: {
+        name: 'Augment Code',
+        vendor_name: 'Augment Code',
+        official_url: 'https://www.augmentcode.com/changelog/vs-code-0-496-1-release-notes',
+        discovery_sources: [
+          { url: 'https://docs.augmentcode.com/introduction', kind: 'official_hint' },
+          { url: 'https://example.com/not-an-official-hint', kind: 'other' },
+        ],
+      },
+    },
+    scope: { kind: 'detail', subject: { kind: 'detail', key: 'augment-code' } },
+    missing_predicates: ['release_date'],
+  }, {
+    searchApiKey: 'tavily-key',
+    accessMode: 'keyed',
+    fetchImpl: async () => response({ results: [] }),
+  });
+  assert.equal(result.ok, true);
+  assert.deepEqual(result.sources.map(source => source.url), [
+    'https://www.augmentcode.com/changelog/vs-code-0-496-1-release-notes',
+    'https://docs.augmentcode.com/introduction',
+  ]);
+  assert.equal(result.sources.every(source => source.discovered_for === 'detail:augment-code'), true);
+});
+
+test('catalog discovery does not force detail hints into parent scopes', async () => {
+  const result = await discoverOfficialSources({
+    plan: plan(),
+    scope: { kind: 'vendor', subject: { kind: 'vendor', key: 'kling' } },
+    missing_predicates: ['vendor_features'],
+  }, {
+    searchApiKey: 'tavily-key',
+    accessMode: 'keyed',
+    fetchImpl: async () => response({ results: [] }),
+  });
+  assert.equal(result.ok, true);
+  assert.deepEqual(result.sources, []);
 });
 
 test('catalog acquire uses Tavily cleaned content and canonical URLs', async () => {
@@ -67,10 +144,12 @@ test('catalog capability probe checks Tavily without invoking DeepSeek', async (
   const result = await probeCatalogCapabilities({
     apiKey: 'deepseek-key',
     searchApiKey: 'tavily-key',
+    accessMode: 'keyed',
     fetchImpl: async () => { calls += 1; return response({ results: [{ url: 'https://docs.tavily.com', title: 'Docs', content: 'Tavily' }] }); },
   });
   assert.equal(result.ok, true);
   assert.equal(result.retrieval_provider, 'tavily');
+  assert.equal(result.access_mode, 'keyed');
   assert.equal(result.extraction_provider, 'deepseek');
   assert.equal(calls, 1);
 });

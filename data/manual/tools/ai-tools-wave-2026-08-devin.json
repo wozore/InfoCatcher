@@ -1,0 +1,29 @@
+{
+  "detail_kind": "tool",
+  "name": "Devin",
+  "vendor_name": "Cognition",
+  "vendor_key": "cognition",
+  "tool_key": "devin",
+  "official_url": "https://devin.ai/",
+  "placement": {
+    "new_group_title": "Devin"
+  },
+  "known_fields": {
+    "theme": "dev"
+  },
+  "discovery_sources": [
+    {
+      "url": "https://devin.ai/",
+      "kind": "official_hint"
+    },
+    {
+      "url": "https://docs.devin.ai/get-started/devin-intro",
+      "kind": "official_hint"
+    },
+    {
+      "url": "https://docs.devin.ai/admin/billing",
+      "kind": "official_hint"
+    }
+  ],
+  "wave": "commercial-agent"
+}

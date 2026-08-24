@@ -35,6 +35,10 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:openai:gpt-image-2"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:openai:openai-codex"
         }
       ]
     },
@@ -105,6 +109,10 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:google:gemma-4"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:google:gemini-cli"
         }
       ]
     },
@@ -282,6 +290,10 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:xai:grok-4-5"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:xai:grok-imagine"
         }
       ]
     },
@@ -430,6 +442,10 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:moonshot:kimi-k3"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:moonshot:kimi-k2"
         }
       ]
     },
@@ -467,6 +483,18 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:alibaba:qwen3-8-max"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:alibaba:qwen3-7"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:alibaba:qwen3-5-omni"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:alibaba:qwen-image-2"
         }
       ]
     },
@@ -496,6 +524,10 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:tencent:hy3"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:tencent:hy-mt2"
         }
       ]
     },
@@ -665,7 +697,12 @@
           "text": "限制：具体模型、价格与地区可用性需以火山引擎官方页面为准。"
         }
       ],
-      "level2_refs": []
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:bytedance:seed-character"
+        }
+      ]
     },
     {
       "id": "vendor-level1:thinking-machines",
@@ -765,7 +802,12 @@
           "text": "限制：生成额度、模型能力与价格需以官方页面为准。"
         }
       ],
-      "level2_refs": []
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:reve:reve-2-1"
+        }
+      ]
     },
     {
       "id": "vendor-level1:luma",
@@ -845,7 +887,444 @@
           "text": "限制：生成额度、模型规格与地区可用性需以官方页面为准。"
         }
       ],
-      "level2_refs": []
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:vidu:viduq3"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:vidu:vidu-s1"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level1:windsurf-vendor",
+      "vendor_key": "windsurf-vendor",
+      "title": "Windsurf",
+      "icon": "🧩",
+      "official_url": "https://windsurf.com",
+      "description": "Windsurf（前身为Codeium）是一家专注于AI辅助编程的公司，其产品包括Windsurf Editor（首款AI原生IDE）和Windsurf Plugin（JetBrains等IDE的插件）。公司强调'无限'的品牌理念，通过创新的SWE-1模型、Fast Context等技术，提供快速、智能的代码补全与编辑辅助，支持大型代码库和企业级合规需求（如SOC 2、HIPAA、FedRAMP）。",
+      "status": "verified",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "提供AI原生的IDE和插件"
+        },
+        {
+          "tone": "positive",
+          "text": "支持大型代码库和企业合规"
+        },
+        {
+          "tone": "positive",
+          "text": "具有专有的Fast Context搜索"
+        }
+      ],
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:windsurf-vendor:windsurf"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level1:replit",
+      "vendor_key": "replit",
+      "title": "Replit",
+      "icon": "🧩",
+      "official_url": "https://replit.com",
+      "description": "Replit提供在线IDE和云平台，旨在让任何人都能创建软件。其AI代理Agent可自动完成编码、部署和托管，支持多框架，并提供免费层级。平台还包含丰富的协作和共享功能。",
+      "status": "verified",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "自然语言构建应用"
+        },
+        {
+          "tone": "positive",
+          "text": "支持移动端创建"
+        },
+        {
+          "tone": "positive",
+          "text": "免费层级可用"
+        },
+        {
+          "tone": "positive",
+          "text": "应用模板可分享复刻"
+        }
+      ],
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:replit:replit-agent"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level1:cognition",
+      "vendor_key": "cognition",
+      "title": "Cognition",
+      "icon": "🧩",
+      "official_url": "https://docs.devin.ai/federal/introduction",
+      "description": "Devin为美国联邦政府及任务合作伙伴提供AI软件工程能力，支持联邦风险与授权管理计划、ITAR、IL4/5及本地部署，并配套专业服务。",
+      "status": "verified",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "支持政府云环境部署"
+        },
+        {
+          "tone": "positive",
+          "text": "提供联邦安全合规认证"
+        },
+        {
+          "tone": "positive",
+          "text": "有助于实现任务成果交付"
+        }
+      ],
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:cognition:devin"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level1:augment",
+      "vendor_key": "augment",
+      "title": "Augment Code",
+      "icon": "🧩",
+      "official_url": "https://www.augmentcode.com",
+      "description": "Augment Code 是一个为大型企业级软件工程设计的 AI 编码平台，提供强大的编码智能体、深度融合的代码库上下文和自动化功能，支持从代码生成、代码审查到复杂工作流编排。",
+      "status": "verified",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "提供专门针对大型和复杂代码库的上下文引擎"
+        },
+        {
+          "tone": "positive",
+          "text": "支持编码代理、自动化工作流和 CLI 工具"
+        },
+        {
+          "tone": "positive",
+          "text": "获得 SOC 2 Type II 和 ISO/IEC 42001 认证"
+        },
+        {
+          "tone": "neutral",
+          "text": "响应由 AI 生成，可能包含错误"
+        }
+      ],
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:augment:augment-code"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level1:aws",
+      "vendor_key": "aws",
+      "title": "Amazon Web Services",
+      "icon": "🧩",
+      "official_url": "https://aws.amazon.com/q",
+      "description": "Amazon Q Developer 是一款由生成式 AI 驱动的对话式助手，可帮助开发者理解、构建、扩展和运维 AWS 应用。它提供 IDE 内的代码补全、代码生成、安全扫描、代码升级与优化等功能，并支持在 AWS 控制台、文档站、聊天应用等场景使用。",
+      "status": "verified",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "提供 IDE 内代码补全与生成"
+        },
+        {
+          "tone": "positive",
+          "text": "支持安全漏洞扫描与修复"
+        },
+        {
+          "tone": "positive",
+          "text": "可进行代码升级与优化"
+        },
+        {
+          "tone": "positive",
+          "text": "支持自然语言问答 AWS 架构"
+        }
+      ],
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:aws:amazon-q-developer"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level1:jetbrains",
+      "vendor_key": "jetbrains",
+      "title": "JetBrains",
+      "icon": "🧩",
+      "official_url": "https://junie.jetbrains.com/",
+      "description": "Junie 是 JetBrains 开发的 AI 编码代理，可自主规划并执行复杂多步骤任务，支持 IDE 插件、CLI、GitHub Action 和 GitLab CI/CD 集成，兼容多款主流模型，并强调成本效率与人工监督。",
+      "status": "verified",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "支持多模型选择"
+        },
+        {
+          "tone": "positive",
+          "text": "提供实时纠偏"
+        },
+        {
+          "tone": "positive",
+          "text": "支持远程控制"
+        },
+        {
+          "tone": "positive",
+          "text": "支持代理调试"
+        },
+        {
+          "tone": "positive",
+          "text": "支持自定义技能"
+        }
+      ],
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:jetbrains:junie"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level1:amazon",
+      "vendor_key": "amazon",
+      "title": "Amazon",
+      "icon": "🧩",
+      "official_url": "https://kiro.dev/",
+      "description": "Kiro provides agentic AI assistance for software development with features like autopilot, spec-driven development, and MCP integration, available across multiple interfaces.",
+      "status": "verified",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "支持说明书驱动的开发模式"
+        },
+        {
+          "tone": "positive",
+          "text": "提供自动驾驶模式自动执行任务"
+        },
+        {
+          "tone": "positive",
+          "text": "集成MCP支持多工具扩展"
+        },
+        {
+          "tone": "positive",
+          "text": "企业级安全和合规支持"
+        },
+        {
+          "tone": "positive",
+          "text": "多界面使用覆盖IDE和CLI"
+        }
+      ],
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:amazon:kiro"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level1:cline-vendor",
+      "vendor_key": "cline-vendor",
+      "title": "Cline",
+      "icon": "🧩",
+      "official_url": "https://cline.bot/",
+      "description": "Cline 是开源 AI 编码代理，支持读取文件、编写代码、运行终端命令和浏览器操作，每一步都由用户明确批准。提供 CLI、Kanban、VS Code 扩展、JetBrains 插件和 Agent Core SDK 等多种应用形态，支持与 Slack、Linear 等集成，被三星、Salesforce 等企业采用。Apache 2.0 开源，拥有超过 250 名贡献者。",
+      "status": "verified",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "多文件编辑与一步撤销"
+        },
+        {
+          "tone": "positive",
+          "text": "终端命令实时执行"
+        },
+        {
+          "tone": "positive",
+          "text": "计划与行动双模式"
+        },
+        {
+          "tone": "positive",
+          "text": "支持所有主流模型"
+        },
+        {
+          "tone": "positive",
+          "text": "支持 MCP 扩展"
+        }
+      ],
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:cline-vendor:cline"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level1:aider-vendor",
+      "vendor_key": "aider-vendor",
+      "title": "Aider",
+      "icon": "🧩",
+      "official_url": "https://aider.chat/",
+      "description": "Aider是一个开源的AI配对编程工具，在终端中运行，支持与多种LLM（如Claude、DeepSeek、OpenAI等）交互，具备代码库映射、Git集成、语音编码等功能。",
+      "status": "verified",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "支持云端和本地多种LLM"
+        },
+        {
+          "tone": "positive",
+          "text": "自动映射整个代码库"
+        },
+        {
+          "tone": "positive",
+          "text": "支持100多种编程语言"
+        },
+        {
+          "tone": "positive",
+          "text": "与Git深度集成"
+        },
+        {
+          "tone": "positive",
+          "text": "可在IDE中使用"
+        },
+        {
+          "tone": "positive",
+          "text": "支持图片和网页作为上下文"
+        },
+        {
+          "tone": "positive",
+          "text": "支持语音编码"
+        },
+        {
+          "tone": "positive",
+          "text": "自动执行lint和测试"
+        }
+      ],
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:aider-vendor:aider"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level1:continue-vendor",
+      "vendor_key": "continue-vendor",
+      "title": "Continue",
+      "icon": "🧩",
+      "official_url": "https://docs.continue.dev/",
+      "description": "Continue 是开源 AI 代码助手，为 VS Code 和 JetBrains 提供扩展，支持代理模式、聊天、编辑、自动补全和 CLI 等功能。",
+      "status": "verified",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "支持 VS Code 和 JetBrains"
+        },
+        {
+          "tone": "positive",
+          "text": "提供代理模式协作开发"
+        }
+      ],
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:continue-vendor:continue"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level1:qoder-vendor",
+      "vendor_key": "qoder-vendor",
+      "title": "Qoder",
+      "icon": "🧩",
+      "official_url": "https://qoder.com/",
+      "description": "Qoder是一个代理式编码平台，通过增强上下文工程与智能体结合，全面理解代码库并系统化处理软件研发任务。它提供Editor与Quest两种主要工作空间：Editor将NEXT、Inline Chat与Chat面板集成在代码旁，支持协作与快速迭代；Quest则提供专门窗口用于自主委托，可交接长时间运行的多步骤任务，并包含任务看板、进度追踪与工件审查。平台还集成代码生成、多文件编辑、智能体自动化、知识引擎、MCP扩展、JetBrains插件及CLI等能力。",
+      "status": "verified",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "提供Editor与Quest双工作区"
+        },
+        {
+          "tone": "positive",
+          "text": "支持智能体自主委托长任务"
+        },
+        {
+          "tone": "positive",
+          "text": "深度理解代码库上下文"
+        },
+        {
+          "tone": "positive",
+          "text": "支持多文件编辑能力"
+        },
+        {
+          "tone": "positive",
+          "text": "集成了知识引擎"
+        },
+        {
+          "tone": "positive",
+          "text": "支持MCP外部工具扩展"
+        },
+        {
+          "tone": "positive",
+          "text": "提供JetBrains插件"
+        },
+        {
+          "tone": "positive",
+          "text": "提供CLI终端工作流"
+        }
+      ],
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:qoder-vendor:qoder"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level1:codebuddy-vendor",
+      "vendor_key": "codebuddy-vendor",
+      "title": "腾讯云 CodeBuddy",
+      "icon": "🧩",
+      "official_url": "https://www.codebuddy.ai",
+      "description": "CodeBuddy是腾讯云推出的一款AI代码编辑器，旨在通过智能编程助手提升开发效率。它提供AI驱动的代码补全、代码生成、以及与Figma等工具的集成，并支持Agent协作。",
+      "status": "verified",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "AI驱动代码补全"
+        },
+        {
+          "tone": "positive",
+          "text": "支持Figma设计稿转代码"
+        },
+        {
+          "tone": "positive",
+          "text": "内置组件库和自然语言修改"
+        },
+        {
+          "tone": "positive",
+          "text": "提供多个专业Agent协作"
+        },
+        {
+          "tone": "positive",
+          "text": "支持云部署服务"
+        }
+      ],
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:codebuddy-vendor:codebuddy"
+        }
+      ]
     }
   ]
 }

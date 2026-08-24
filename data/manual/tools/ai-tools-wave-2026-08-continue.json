@@ -1,0 +1,38 @@
+{
+  "detail_kind": "tool",
+  "name": "Continue",
+  "vendor_name": "Continue",
+  "vendor_key": "continue-vendor",
+  "tool_key": "continue",
+  "official_url": "https://continue.dev",
+  "placement": {
+    "new_group_title": "Continue"
+  },
+  "known_fields": {
+    "theme": "dev"
+  },
+  "discovery_sources": [
+    {
+      "url": "https://continue.dev",
+      "kind": "official_hint"
+    },
+    {
+      "url": "https://docs.continue.dev",
+      "kind": "official_hint"
+    },
+    {
+      "url": "https://docs.continue.dev/features/agent/how-it-works",
+      "kind": "official_hint"
+    },
+    {
+      "url": "https://github.com/continuedev/continue/releases",
+      "kind": "official_hint"
+    },
+    {
+      "url": "https://github.com/continuedev/continue/releases/tag/v1.0.19-release",
+      "kind": "official_hint"
+    }
+  ],
+  "repair_note": "修复 tool-level3:continue 的 official_date 为 2025-07-16；Continue 官方仓库中第一个不带 vscode、jetbrains 或 @continuedev 包后缀的主产品 Release Tag 为 v1.0.19-release，对应提交日期为 2025-07-16。仅在该官方 Tag 页面正文明确支持同一日期时采用。",
+  "wave": "open-agent"
+}

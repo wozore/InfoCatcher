@@ -31,6 +31,7 @@ function normalizeGeneratorOptions(options = {}) {
     maxSynthesisCalls: options.maxSynthesisCalls ?? options.max_synthesis_calls,
     maxRepairCalls: options.maxRepairCalls ?? options.max_repair_calls,
     retrievalProvider: options.retrievalProvider ?? options.retrieval_provider ?? 'tavily',
+    accessMode: options.accessMode ?? options.access_mode,
     searchTimeoutMs: options.searchTimeoutMs ?? options.search_timeout_ms,
     searchDepth: options.searchDepth ?? options.search_depth,
     maxSearchResults: options.maxSearchResults ?? options.max_search_results,

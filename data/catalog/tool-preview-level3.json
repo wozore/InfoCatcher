@@ -5200,6 +5200,2724 @@
       "official_date": "2026-06-30",
       "theme": "general",
       "id": "tool-level3:mimo-v2-5-pro"
+    },
+    {
+      "vendor_key": "bytedance",
+      "detail_kind": "api_model",
+      "title": "Doubao Seed Character 260628",
+      "vendor_label": "字节跳动（豆包）",
+      "icon": "🤖",
+      "official_url": "https://docs.volcengine.com/docs/82379/1399009",
+      "status": "active",
+      "summary": "文本生成服务是火山方舟提供的API，支持多种模型调用。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "该模型不支持1M上下文。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "标准计费",
+            "pricing_basis": "按量计费",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "输入",
+                "amount": 0.002,
+                "unit": "元/千tokens"
+              },
+              {
+                "label": "输出",
+                "amount": 0.005,
+                "unit": "元/千tokens"
+              }
+            ],
+            "conditions": "按实际消耗的token数计费。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "文本创作",
+          "description": "用于撰写文章、报告等内容。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "视频生成",
+          "description": "该服务不支持视频生成。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "文本生成- 火山方舟- 火山引擎 - 文档中心",
+          "url": "https://docs.volcengine.com/docs/82379/1399009"
+        },
+        {
+          "title": "火山方舟Doubao Seedance 2.0 快速入门 - 文档中心",
+          "url": "https://docs.volcengine.com/docs/82379/2291680"
+        },
+        {
+          "title": "快速入门- 火山方舟 - 文档中心",
+          "url": "https://docs.volcengine.com/docs/82379/1399008"
+        },
+        {
+          "title": "火山方舟Seedance 视频生成入门使用教程 - 文档中心",
+          "url": "https://docs.volcengine.com/docs/82379/2298881"
+        }
+      ],
+      "official_date": "2025-01-31",
+      "theme": "general",
+      "id": "tool-level3:doubao-seed-character-260628"
+    },
+    {
+      "vendor_key": "deepseek",
+      "detail_kind": "api_model",
+      "title": "DeepSeek-V4-Flash-Vision-Exp",
+      "vendor_label": "深度求索",
+      "icon": "🤖",
+      "official_url": "https://api-docs.deepseek.com/guides/vision",
+      "status": "active",
+      "summary": "DeepSeek-V4-Flash-Vision-Exp 是 DeepSeek 推出的实验性多模态视觉理解模型，支持图像输入，具备前沿的智能体编码能力，可通过 OpenAI、Anthropic 及 Responses API 调用。",
+      "one_m_context": {
+        "status": "native",
+        "tokens": 1000000,
+        "conditions": "上下文长度为 1M token，适用于所有文本与图像输入。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "缓存命中输入（Off-peak）",
+            "pricing_basis": "per 1M tokens",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "Input tokens",
+                "amount": 0.007,
+                "unit": "USD per 1M tokens"
+              }
+            ],
+            "conditions": "Off-peak 时段（除高峰外）缓存命中输入价格，高峰时段为 $0.014。"
+          },
+          {
+            "label": "缓存未命中输入（Off-peak）",
+            "pricing_basis": "per 1M tokens",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "Input tokens",
+                "amount": 0.22,
+                "unit": "USD per 1M tokens"
+              }
+            ],
+            "conditions": "Off-peak 时段缓存未命中输入价格，高峰时段为 $0.44。"
+          },
+          {
+            "label": "输出（Off-peak）",
+            "pricing_basis": "per 1M tokens",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "Output tokens",
+                "amount": 0.66,
+                "unit": "USD per 1M tokens"
+              }
+            ],
+            "conditions": "Off-peak 时段输出价格，高峰时段为 $1.32。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "图像内容描述",
+          "description": "模型能够对图片进行描述，适用于需要文本生成图片内容的场景。"
+        },
+        {
+          "title": "视觉问答",
+          "description": "基于图像内容回答用户提出的问题，支持多轮对话与推理。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "纯文本高速生成",
+          "description": "该模型为多模态设计，若仅需文本生成，使用专用文本模型可能更高效。"
+        },
+        {
+          "title": "不支持原始图像细节",
+          "description": "根据配置，模型不支持原始图像细节，可能不适用于需要高精度图像分析的场景。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Change Log | DeepSeek API Docs",
+          "url": "https://api-docs.deepseek.com/updates"
+        },
+        {
+          "title": "Vision | DeepSeek API Docs",
+          "url": "https://api-docs.deepseek.com/guides/vision"
+        },
+        {
+          "title": "Integrate with Codex | DeepSeek API Docs",
+          "url": "https://api-docs.deepseek.com/quick_start/agent_integrations/codex"
+        },
+        {
+          "title": "Models & Pricing - DeepSeek API Docs",
+          "url": "https://api-docs.deepseek.com/quick_start/pricing"
+        }
+      ],
+      "official_date": "2026-08-21",
+      "theme": "general",
+      "id": "tool-level3:deepseek-v4-flash-vision-exp"
+    },
+    {
+      "vendor_key": "moonshot",
+      "detail_kind": "api_model",
+      "title": "Kimi K2.7 Code",
+      "vendor_label": "月之暗面（Kimi）",
+      "icon": "🤖",
+      "official_url": "https://platform.kimi.com/docs/pricing/chat-k27-code",
+      "status": "active",
+      "summary": "Kimi K2.7 Code 是面向代码场景的编程模型，支持文本、图片与视频输入，具备 256K 上下文窗口和高速版本。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "上下文窗口为256K，不支持1M上下文。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "kimi-k2.7-code",
+            "pricing_basis": "per_token",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "输入（缓存命中）",
+                "amount": 1.3,
+                "unit": "per_1M_tokens"
+              },
+              {
+                "label": "输入（缓存未命中）",
+                "amount": 6.5,
+                "unit": "per_1M_tokens"
+              },
+              {
+                "label": "输出",
+                "amount": 27,
+                "unit": "per_1M_tokens"
+              }
+            ],
+            "conditions": "按每1M tokens计费，区分缓存命中与未命中价格。"
+          },
+          {
+            "label": "kimi-k2.7-code-highspeed",
+            "pricing_basis": "per_token",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "输入（缓存命中）",
+                "amount": 2.6,
+                "unit": "per_1M_tokens"
+              },
+              {
+                "label": "输入（缓存未命中）",
+                "amount": 13,
+                "unit": "per_1M_tokens"
+              },
+              {
+                "label": "输出",
+                "amount": 54,
+                "unit": "per_1M_tokens"
+              }
+            ],
+            "conditions": "高速版价格，按每1M tokens计费，区分缓存命中与未命中。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "复杂代码生成",
+          "description": "适合生成多文件项目代码，利用长上下文保持一致性。"
+        },
+        {
+          "title": "代码审查与修复",
+          "description": "处理大段代码，结合思考模式提供深度修复建议。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "实时交互场景",
+          "description": "默认版速度可能不够快，不适合实时聊天或低延迟应用。"
+        },
+        {
+          "title": "超长文档处理",
+          "description": "上下文仅256K，不适合超过此长度的内容。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Kimi K2.7 Code - Kimi API 开放平台",
+          "url": "https://platform.kimi.com/docs/guide/kimi-k2-7-code-quickstart"
+        },
+        {
+          "title": "编程模型Kimi K2.7 Code 定价",
+          "url": "https://platform.kimi.com/docs/pricing/chat-k27-code"
+        }
+      ],
+      "official_date": "2025-02-20",
+      "theme": "general",
+      "id": "tool-level3:kimi-k2-7-code"
+    },
+    {
+      "vendor_key": "alibaba",
+      "detail_kind": "api_model",
+      "title": "Qwen3.7 Max",
+      "vendor_label": "阿里巴巴（通义千问）",
+      "icon": "🤖",
+      "official_url": "https://help.aliyun.com/zh/model-studio/qwen3-7-max",
+      "status": "active",
+      "summary": "Qwen3.7系列中规模最大、综合能力最强的Max模型，当前开放纯文本模型能力供体验。Qwen3.7是面向智能体时代的新一代旗舰模型，核心优势在于智能体能力的广度与深度：在编程、办公与生产力、长周期自主执行方面均能出色胜任各项任务。",
+      "one_m_context": {
+        "status": "native",
+        "tokens": 1000000,
+        "conditions": "模型原生支持100万tokens上下文窗口，最大输入长度991808，最大输出长度131072。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "北京地域输入",
+            "pricing_basis": "按Token计费",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "输入价格",
+                "amount": 12,
+                "unit": "每百万tokens"
+              }
+            ],
+            "conditions": "适用于华北2（北京）地域，每百万tokens输入价格为12元。"
+          },
+          {
+            "label": "北京地域输出",
+            "pricing_basis": "按Token计费",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "输出价格",
+                "amount": 36,
+                "unit": "每百万tokens"
+              }
+            ],
+            "conditions": "适用于华北2（北京）地域，每百万tokens输出价格为36元。"
+          },
+          {
+            "label": "美国弗吉尼亚输入",
+            "pricing_basis": "按Token计费",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "输入价格",
+                "amount": 18.736,
+                "unit": "每百万tokens"
+              }
+            ],
+            "conditions": "适用于美国（弗吉尼亚）地域，每百万tokens输入价格为18.736元。"
+          },
+          {
+            "label": "美国弗吉尼亚输出",
+            "pricing_basis": "按Token计费",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "输出价格",
+                "amount": 56.207,
+                "unit": "每百万tokens"
+              }
+            ],
+            "conditions": "适用于美国（弗吉尼亚）地域，每百万tokens输出价格为56.207元。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "智能体开发",
+          "description": "构建自主执行任务的AI智能体，处理复杂工程任务和长周期操作。"
+        },
+        {
+          "title": "编程辅助",
+          "description": "代码生成、跨文件理解和复杂工程任务执行。"
+        },
+        {
+          "title": "办公自动化",
+          "description": "生成文档、幻灯片等办公生产力任务。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "需联网搜索的场景",
+          "description": "模型不支持联网搜索，无法获取实时信息。"
+        },
+        {
+          "title": "批量推理场景",
+          "description": "模型不支持批量推理，不适合大规模批处理。"
+        },
+        {
+          "title": "模型微调场景",
+          "description": "模型不支持微调，无法针对特定任务进行定制。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "qwen3.7-max",
+          "url": "https://help.aliyun.com/en/model-studio/qwen3-7-max"
+        },
+        {
+          "title": "Get a limited-time 50% discount on the Qwen3.7-Max model, plus 100 free daily invocations for new users. The offer applies automatically to multiple products and editions, including enterprise plans.-Qoder CN Series(Lingma)-阿里云帮助中心",
+          "url": "https://help.aliyun.com/en/lingma/qwen3-7-max-limited-time-offer"
+        },
+        {
+          "title": "QoderWork CN release notes-Qoder CN Series(Lingma)-阿里云帮助中心",
+          "url": "https://help.aliyun.com/en/lingma/qoderwork-cn-update-log"
+        },
+        {
+          "title": "qwen3.7-max-us Model Info-Alibaba Cloud Model Studio(Model Studio)-阿里云帮助中心",
+          "url": "https://help.aliyun.com/en/model-studio/qwen3-7-max-us"
+        },
+        {
+          "title": "qwen3.7-flash Model Info-Alibaba Cloud Model Studio(Model Studio)-阿里云帮助中心",
+          "url": "https://help.aliyun.com/en/model-studio/qwen3-7-flash"
+        },
+        {
+          "title": "qwen3.7-max 模型信息 - 阿里云文档",
+          "url": "https://help.aliyun.com/zh/model-studio/qwen3-7-max"
+        },
+        {
+          "title": "模型上架与更新 - 阿里云文档",
+          "url": "https://help.aliyun.com/zh/model-studio/newly-released-models"
+        },
+        {
+          "title": "常见问题-大模型服务平台百炼(Model Studio) - 阿里云帮助文档",
+          "url": "https://help.aliyun.com/zh/model-studio/coding-plan-faq"
+        }
+      ],
+      "official_date": "2026-08-03",
+      "theme": "general",
+      "id": "tool-level3:qwen3-7-max"
+    },
+    {
+      "vendor_key": "alibaba",
+      "detail_kind": "api_model",
+      "title": "Qwen3.5 Omni",
+      "vendor_label": "阿里巴巴（通义千问）",
+      "icon": "🤖",
+      "official_url": "https://help.aliyun.com/zh/model-studio/qwen-omni",
+      "status": "active",
+      "summary": "Qwen-Omni 是阿里云百炼平台提供的全模态大模型系列，支持文本、图像、音频和视频的联合理解与生成，适用于长视频分析、会议纪要、字幕生成等场景。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "官方文档未提供上下文长度信息，无法确认支持 1M 上下文。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "qwen3.5-omni-plus-realtime（华北2北京）",
+            "pricing_basis": "per million tokens",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "输入-文本/图片",
+                "amount": 10,
+                "unit": "元/百万Token"
+              },
+              {
+                "label": "输入-音频",
+                "amount": 80,
+                "unit": "元/百万Token"
+              },
+              {
+                "label": "输出-文本多模态输入",
+                "amount": 60,
+                "unit": "元/百万Token"
+              },
+              {
+                "label": "输出-文本+音频",
+                "amount": 300,
+                "unit": "元/百万Token"
+              }
+            ],
+            "conditions": "免费额度100万Token，自开通百炼/模型发布/申请通过之日起90天内有效，仅华北2（北京）地域。"
+          },
+          {
+            "label": "qwen3.5-omni-flash-realtime（华北2北京）",
+            "pricing_basis": "per million tokens",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "输入-文本/图片",
+                "amount": 3.3,
+                "unit": "元/百万Token"
+              },
+              {
+                "label": "输入-音频",
+                "amount": 27,
+                "unit": "元/百万Token"
+              },
+              {
+                "label": "输出-文本多模态输入",
+                "amount": 20,
+                "unit": "元/百万Token"
+              },
+              {
+                "label": "输出-文本+音频",
+                "amount": 107,
+                "unit": "元/百万Token"
+              }
+            ],
+            "conditions": "免费额度100万Token，自开通百炼/模型发布/申请通过之日起90天内有效，仅华北2（北京）地域。"
+          },
+          {
+            "label": "qwen3-omni-flash（国际）",
+            "pricing_basis": "per million tokens",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "输入-文本",
+                "amount": 3.156,
+                "unit": "元/百万Token"
+              },
+              {
+                "label": "输入-音频",
+                "amount": 27.962,
+                "unit": "元/百万Token"
+              },
+              {
+                "label": "输入-图片/视频",
+                "amount": 5.725,
+                "unit": "元/百万Token"
+              },
+              {
+                "label": "输出-文本纯文本输入",
+                "amount": 12.183,
+                "unit": "元/百万Token"
+              },
+              {
+                "label": "输出-文本多模态输入",
+                "amount": 22.458,
+                "unit": "元/百万Token"
+              },
+              {
+                "label": "输出-文本+音频",
+                "amount": 110.896,
+                "unit": "元/百万Token"
+              }
+            ],
+            "conditions": "国际部署，适用于非中国大陆地域。"
+          },
+          {
+            "label": "qwen3-omni-flash（中国大陆）",
+            "pricing_basis": "per million tokens",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "输入-文本",
+                "amount": 1.8,
+                "unit": "元/百万Token"
+              },
+              {
+                "label": "输入-音频",
+                "amount": 15.8,
+                "unit": "元/百万Token"
+              },
+              {
+                "label": "输入-图片/视频",
+                "amount": 3.3,
+                "unit": "元/百万Token"
+              },
+              {
+                "label": "输出-文本纯文本输入",
+                "amount": 6.9,
+                "unit": "元/百万Token"
+              },
+              {
+                "label": "输出-文本多模态输入",
+                "amount": 12.7,
+                "unit": "元/百万Token"
+              },
+              {
+                "label": "输出-文本+音频",
+                "amount": 62.6,
+                "unit": "元/百万Token"
+              }
+            ],
+            "conditions": "中国大陆部署，免费额度100万Token，自开通之日起90天内有效。"
+          },
+          {
+            "label": "qwen3-omni-flash-realtime（国际）",
+            "pricing_basis": "per million tokens",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "输入-文本",
+                "amount": 3.816,
+                "unit": "元/百万Token"
+              },
+              {
+                "label": "输入-音频",
+                "amount": 33.54,
+                "unit": "元/百万Token"
+              },
+              {
+                "label": "输入-图片/视频",
+                "amount": 6.899,
+                "unit": "元/百万Token"
+              },
+              {
+                "label": "输出-文本纯文本输入",
+                "amount": 14.605,
+                "unit": "元/百万Token"
+              },
+              {
+                "label": "输出-文本多模态输入",
+                "amount": 26.935,
+                "unit": "元/百万Token"
+              },
+              {
+                "label": "输出-文本+音频",
+                "amount": 133.06,
+                "unit": "元/百万Token"
+              }
+            ],
+            "conditions": "国际部署，适用于实时对话场景。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "长视频分析",
+          "description": "支持长达 3 小时的音频或 1 小时的视频输入，适用于长视频内容理解与总结。"
+        },
+        {
+          "title": "会议纪要",
+          "description": "可对会议录音进行转写和总结，生成会议纪要。"
+        },
+        {
+          "title": "字幕生成",
+          "description": "基于音视频内容自动生成字幕。"
+        },
+        {
+          "title": "内容审核",
+          "description": "分析音视频内容，识别不当信息，辅助内容审核。"
+        },
+        {
+          "title": "音视频交互",
+          "description": "支持多模态输入，实现音频、视频、图像和文本的联合理解与交互。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "纯文本高精度任务",
+          "description": "该模型擅长多模态理解，若仅需文本处理，可选用专用文本模型以获更佳效果。"
+        },
+        {
+          "title": "极短音频场景",
+          "description": "对于 150 秒内的短视频分析，Qwen3-Omni-Flash 系列可能更高效。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Qwen-Omni-大模型服务平台百炼(Model Studio)-阿里云帮助中心",
+          "url": "https://help.aliyun.com/zh/model-studio/qwen-omni"
+        },
+        {
+          "title": "Model Studio release notes and feature updates - 阿里云文档",
+          "url": "https://help.aliyun.com/en/model-studio/model-release-notes"
+        },
+        {
+          "title": "Qwen-Omni-Alibaba Cloud Model Studio(Model Studio)-阿里云帮助中心",
+          "url": "https://help.aliyun.com/en/model-studio/qwen-omni"
+        },
+        {
+          "title": "Model inference pricing - 阿里云文档",
+          "url": "https://help.aliyun.com/en/model-studio/model-pricing"
+        },
+        {
+          "title": "模型调用价格 - 阿里云文档",
+          "url": "https://help.aliyun.com/zh/model-studio/model-pricing"
+        },
+        {
+          "title": "选择模型 - 阿里云文档",
+          "url": "https://help.aliyun.com/zh/model-studio/models"
+        },
+        {
+          "title": "Qwen-Omni-Realtime - 阿里云文档",
+          "url": "https://help.aliyun.com/en/model-studio/realtime"
+        },
+        {
+          "title": "产品计费 - 阿里云文档",
+          "url": "https://help.aliyun.com/zh/model-studio/product-billing"
+        }
+      ],
+      "official_date": "2026-03-15",
+      "theme": "general",
+      "id": "tool-level3:qwen3-5-omni"
+    },
+    {
+      "vendor_key": "alibaba",
+      "detail_kind": "api_model",
+      "title": "Qwen3.7 Plus",
+      "vendor_label": "阿里巴巴（通义千问）",
+      "icon": "🤖",
+      "official_url": "https://help.aliyun.com/en/model-studio/qwen3-7-plus-us",
+      "status": "active",
+      "summary": "qwen3.7-plus是阿里云百炼提供的多模态交互式智能体模型，支持文本、图像和视频输入，输出文本，具备增强的视觉语言能力，适用于编码、工具使用和生产力工作流。",
+      "one_m_context": {
+        "status": "native",
+        "tokens": 1000000,
+        "conditions": "模型原生支持1M上下文窗口，最大输入长度991808 tokens，最大输出131072 tokens。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "US (Virginia) - 输入<=256k",
+            "pricing_basis": "每百万Token计费",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "输入",
+                "amount": 2.998,
+                "unit": "per 1M tokens"
+              },
+              {
+                "label": "输出",
+                "amount": 11.991,
+                "unit": "per 1M tokens"
+              },
+              {
+                "label": "输入(隐式缓存)",
+                "amount": 0.6,
+                "unit": "per 1M tokens"
+              },
+              {
+                "label": "显式缓存创建",
+                "amount": 3.747,
+                "unit": "per 1M tokens"
+              },
+              {
+                "label": "显式缓存读取",
+                "amount": 0.3,
+                "unit": "per 1M tokens"
+              }
+            ],
+            "conditions": "适用于美国弗吉尼亚地域，输入Token范围0-256k。"
+          },
+          {
+            "label": "US (Virginia) - 输入>256k",
+            "pricing_basis": "每百万Token计费",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "输入",
+                "amount": 8.993,
+                "unit": "per 1M tokens"
+              },
+              {
+                "label": "输出",
+                "amount": 35.972,
+                "unit": "per 1M tokens"
+              },
+              {
+                "label": "输入(隐式缓存)",
+                "amount": 1.799,
+                "unit": "per 1M tokens"
+              },
+              {
+                "label": "显式缓存创建",
+                "amount": 11.241,
+                "unit": "per 1M tokens"
+              },
+              {
+                "label": "显式缓存读取",
+                "amount": 0.899,
+                "unit": "per 1M tokens"
+              }
+            ],
+            "conditions": "适用于美国弗吉尼亚地域，输入Token范围256k以上。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "多模态交互",
+          "description": "能够感知真实世界场景、读取屏幕并与GUI交互。"
+        },
+        {
+          "title": "视觉编程",
+          "description": "可根据视觉参考生成代码，支持端到端移动应用内导航。"
+        },
+        {
+          "title": "编码与工具使用",
+          "description": "全栈智能体级能力，支持编码、工具使用和生产效率工作流。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "结构化输出",
+          "description": "模型不支持结构化输出。"
+        },
+        {
+          "title": "网络搜索",
+          "description": "模型不支持Web搜索功能。"
+        },
+        {
+          "title": "批量推理",
+          "description": "模型不支持批量推理。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "qwen3.7-plus-us Model Info-Alibaba Cloud Model Studio(Model Studio)-阿里云帮助中心",
+          "url": "https://help.aliyun.com/en/model-studio/qwen3-7-plus-us"
+        },
+        {
+          "title": "模型调用价格 - 阿里云文档",
+          "url": "https://help.aliyun.com/zh/model-studio/model-pricing"
+        },
+        {
+          "title": "Model Studio release notes and feature updates - 阿里云文档",
+          "url": "https://help.aliyun.com/en/model-studio/model-release-notes"
+        },
+        {
+          "title": "选择模型 - 阿里云文档",
+          "url": "https://help.aliyun.com/zh/model-studio/models"
+        }
+      ],
+      "official_date": "2026-05-26",
+      "theme": "general",
+      "id": "tool-level3:qwen3-7-plus"
+    },
+    {
+      "vendor_key": "alibaba",
+      "detail_kind": "api_model",
+      "title": "Qwen Image 2.0 Pro",
+      "vendor_label": "阿里巴巴（通义千问）",
+      "icon": "🖼️",
+      "official_url": "https://help.aliyun.com/en/model-studio/qwen-image-2-0-pro",
+      "status": "active",
+      "summary": "千问图像生成与编辑模型Pro系列，支持文生图和图像编辑，具备更强的文字渲染、真实质感和语义遵循能力。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用文本上下文窗口。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "北京地域",
+            "pricing_basis": "按图像生成张数计费",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "图像生成",
+                "amount": 0.5,
+                "unit": "张"
+              }
+            ],
+            "conditions": "北京地域，按成功生成的图像张数计费，每张0.5元。"
+          },
+          {
+            "label": "新加坡地域（国际）",
+            "pricing_basis": "按图像生成张数计费",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "图像生成",
+                "amount": 0.550443,
+                "unit": "张"
+              }
+            ],
+            "conditions": "新加坡地域，部署范围国际，按成功生成的图像张数计费，每张0.550443元。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "专业文字渲染",
+          "description": "生成含清晰文字的图片，如海报、幻灯片。"
+        },
+        {
+          "title": "图像编辑",
+          "description": "对现有图像进行编辑，保持角色一致性。"
+        },
+        {
+          "title": "写实场景生成",
+          "description": "生成具有真实质感的写实风格图像。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "实时交互",
+          "description": "仅支持同步接口，不适用于需要实时反馈的场景。"
+        },
+        {
+          "title": "超长文本生成",
+          "description": "提示词支持1k token，不适用于需更长上下文的场景。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "qwen-image-2.0-pro Model Info-Alibaba Cloud Model Studio(Model Studio)-阿里云帮助中心",
+          "url": "https://help.aliyun.com/en/model-studio/qwen-image-2-0-pro"
+        },
+        {
+          "title": "Qwen-Image-Edit image editing instruction editing API call method-Alibaba Cloud Model Studio(Model Studio)-阿里云帮助中心",
+          "url": "https://help.aliyun.com/en/model-studio/qwen-image-edit-api"
+        },
+        {
+          "title": "千问Qwen-Image文生图API调用方法 - 阿里云帮助文档",
+          "url": "https://help.aliyun.com/zh/model-studio/qwen-image-api"
+        },
+        {
+          "title": "模型调用价格 - 阿里云文档",
+          "url": "https://help.aliyun.com/zh/model-studio/model-pricing"
+        },
+        {
+          "title": "Model inference pricing - 阿里云文档",
+          "url": "https://help.aliyun.com/en/model-studio/model-pricing"
+        },
+        {
+          "title": "Qwen-Image API reference - 阿里云文档",
+          "url": "https://help.aliyun.com/en/model-studio/qwen-image-api"
+        }
+      ],
+      "official_date": "2026-04-22",
+      "theme": "vision",
+      "id": "tool-level3:qwen-image-2-0-pro"
+    },
+    {
+      "vendor_key": "xai",
+      "detail_kind": "api_model",
+      "title": "Grok Imagine Image 2.0",
+      "vendor_label": "xAI",
+      "icon": "🖼️",
+      "official_url": "https://docs.x.ai/developers/models/grok-imagine-image",
+      "status": "active",
+      "summary": "grok-imagine-image 是 xAI 的图像生成模型，支持文本和图像输入，生成 1K 或 2K 分辨率的图像。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用文本上下文窗口。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "grok-imagine-image 按输出图像计费",
+            "pricing_basis": "per_image",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "1K 分辨率输出",
+                "amount": 0.02,
+                "unit": "image"
+              },
+              {
+                "label": "2K 分辨率输出",
+                "amount": 0.02,
+                "unit": "image"
+              }
+            ],
+            "conditions": "输入和输出均为按图像计费；输出价格不随分辨率变化。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "广告创意生成",
+          "description": "根据文案生成配图或海报视觉。"
+        },
+        {
+          "title": "艺术风格转换",
+          "description": "将照片转换为素描或插画风格。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "实时视频生成",
+          "description": "该模型仅支持图像，不支持视频输出。"
+        },
+        {
+          "title": "超高清打印",
+          "description": "最大输出分辨率为 2K，不适合大型印刷。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Imagine Overview | SpaceXAI Docs - Grok API Documentation",
+          "url": "https://docs.x.ai/developers/model-capabilities/imagine"
+        },
+        {
+          "title": "API Pricing | SpaceXAI Docs",
+          "url": "https://docs.x.ai/developers/pricing"
+        },
+        {
+          "title": "Grok Imagine Image | SpaceXAI Docs",
+          "url": "https://docs.x.ai/developers/models/grok-imagine-image"
+        }
+      ],
+      "official_date": "2025-03-21",
+      "theme": "vision",
+      "id": "tool-level3:grok-imagine-image-2-0"
+    },
+    {
+      "vendor_key": "xai",
+      "detail_kind": "api_model",
+      "title": "Grok Imagine Video 1.5",
+      "vendor_label": "xAI",
+      "icon": "🎬",
+      "official_url": "https://docs.x.ai/developers/models/grok-imagine-video-1.5-preview",
+      "status": "active",
+      "summary": "Grok Imagine Video 1.5 Preview 是 xAI 推出的视频生成模型，支持文本、图像、音频输入，根据分辨率按秒计费。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用文本上下文窗口。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "输出视频",
+            "pricing_basis": "per_second",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "480p",
+                "amount": 0.08,
+                "unit": "per_second"
+              },
+              {
+                "label": "720p",
+                "amount": 0.14,
+                "unit": "per_second"
+              }
+            ],
+            "conditions": "按视频生成时长计费，分辨率不同单价不同，仅支持 us-east-1 和 us-west-2 区域。"
+          },
+          {
+            "label": "输入图像",
+            "pricing_basis": "per_image",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "图像",
+                "amount": 0.01,
+                "unit": "per_image"
+              }
+            ],
+            "conditions": "使用图像作为输入时产生费用，音频输入免费。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "视频内容创作",
+          "description": "利用模型生成视频片段，支持文本、图像、音频输入。"
+        },
+        {
+          "title": "多媒体应用开发",
+          "description": "在应用中集成视频生成功能，基于 API 调用。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "低成本批量生成",
+          "description": "按秒计费，成本较高，不适合低成本批量生成。"
+        },
+        {
+          "title": "非视频类任务",
+          "description": "模型仅支持视频生成，不适用于文本或图像生成。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Grok Imagine Video 1.5 Preview | SpaceXAI Docs",
+          "url": "https://docs.x.ai/developers/models/grok-imagine-video-1.5-preview"
+        },
+        {
+          "title": "Grok Imagine Video | SpaceXAI Docs",
+          "url": "https://docs.x.ai/developers/models/grok-imagine-video"
+        }
+      ],
+      "official_date": "2025-01-01",
+      "theme": "media",
+      "id": "tool-level3:grok-imagine-video-1-5"
+    },
+    {
+      "vendor_key": "vidu",
+      "detail_kind": "api_model",
+      "title": "ViduQ3 Pro",
+      "vendor_label": "vidu",
+      "icon": "🎬",
+      "official_url": "https://platform.vidu.cn/docs/pricing",
+      "status": "active",
+      "summary": "Vidu 开放平台提供丰富的视频生成 API 能力，采用积分计价方式。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用文本上下文窗口。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "ViduQ3系列视频生成",
+            "pricing_basis": "按积分计费",
+            "currency": "积分",
+            "metrics": [
+              {
+                "label": "viduq3-pro 1080p",
+                "amount": 24,
+                "unit": "积分/秒"
+              },
+              {
+                "label": "viduq3-pro 720p",
+                "amount": 20,
+                "unit": "积分/秒"
+              },
+              {
+                "label": "viduq3-pro 540p",
+                "amount": 9,
+                "unit": "积分/秒"
+              },
+              {
+                "label": "viduq3-turbo 1080p",
+                "amount": 13,
+                "unit": "积分/秒"
+              },
+              {
+                "label": "viduq3-turbo 720p",
+                "amount": 12,
+                "unit": "积分/秒"
+              },
+              {
+                "label": "viduq3-turbo 540p",
+                "amount": 7,
+                "unit": "积分/秒"
+              }
+            ],
+            "conditions": "时长1-16秒，支持错峰模式，错峰消耗减半。"
+          },
+          {
+            "label": "图像生成",
+            "pricing_basis": "按积分计费",
+            "currency": "积分",
+            "metrics": [
+              {
+                "label": "文生图 1080p",
+                "amount": 6,
+                "unit": "积分/张"
+              },
+              {
+                "label": "文生图 2K",
+                "amount": 8,
+                "unit": "积分/张"
+              },
+              {
+                "label": "文生图 4K",
+                "amount": 10,
+                "unit": "积分/张"
+              }
+            ],
+            "conditions": "参考生图价格随输入图片数量变化。"
+          },
+          {
+            "label": "音频生成",
+            "pricing_basis": "按积分计费",
+            "currency": "积分",
+            "metrics": [
+              {
+                "label": "文生音频 小于5秒",
+                "amount": 10,
+                "unit": "积分/次"
+              },
+              {
+                "label": "文生音频 小于10秒",
+                "amount": 20,
+                "unit": "积分/次"
+              }
+            ],
+            "conditions": "语音合成10积分/500字符，声音复刻300积分/音色。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "视频生成",
+          "description": "支持文生视频、图生视频、首尾帧等。"
+        },
+        {
+          "title": "图像生成",
+          "description": "支持文生图、参考生图、图片编辑。"
+        },
+        {
+          "title": "音频生成",
+          "description": "支持文生音频、音效、语音合成和声音复刻。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "实时数字人",
+          "description": "内测中，暂不开放API。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "产品定价 | Vidu API",
+          "url": "https://platform.vidu.cn/docs/pricing"
+        },
+        {
+          "title": "更新公告 | Vidu API",
+          "url": "https://platform.vidu.cn/docs/update"
+        },
+        {
+          "title": "模型地图 | Vidu API",
+          "url": "https://platform.vidu.cn/docs/model-map"
+        },
+        {
+          "title": "创建和使用主体库 | Vidu API",
+          "url": "https://platform.vidu.cn/docs/subjects"
+        },
+        {
+          "title": "Vidu 模型地图",
+          "url": "https://platform.vidu.cn/models"
+        }
+      ],
+      "official_date": "2026-04-13",
+      "theme": "media",
+      "id": "tool-level3:viduq3-pro"
+    },
+    {
+      "vendor_key": "reve",
+      "detail_kind": "api_model",
+      "title": "Reve 2.1",
+      "vendor_label": "Reve",
+      "icon": "🖼️",
+      "official_url": "https://blog.reve.com/posts/launching-reve-2.1",
+      "status": "active",
+      "summary": "Reve 2.1 是顶级 4K 图像模型，具备视觉智能和布局规划能力，支持精度编辑和多语言文本渲染，输出原生 16MP 图像。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用文本上下文窗口。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "API 标准",
+            "pricing_basis": "按量计费",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "每张图像",
+                "amount": "未明确",
+                "unit": "张"
+              }
+            ],
+            "conditions": "官方未公布具体价格，需通过 API 控制台申请或查看定价。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "专业摄影与电影感",
+          "description": "生成具有电影感、纪实风格的图像，适用于影视分镜、品牌视觉。"
+        },
+        {
+          "title": "精度编辑",
+          "description": "对已有图像进行区域编辑和重新渲染，保持细节一致。"
+        },
+        {
+          "title": "复杂场景布局",
+          "description": "生成包含密集元素、精细文本和复杂结构的图像。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "视频生成",
+          "description": "Reve 2.1 是图像模型，不支持视频生成。"
+        },
+        {
+          "title": "低分辨率快速生成",
+          "description": "追求极速生成且不需要高分辨率时，可能不适合。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Launching Reve 2.1 - Reve Blog",
+          "url": "https://blog.reve.com/posts/launching-reve-2.1"
+        },
+        {
+          "title": "Reve - Teams",
+          "url": "https://app.reve.com/teams"
+        },
+        {
+          "title": "Reve Blog",
+          "url": "https://blog.reve.com/"
+        },
+        {
+          "title": "The Reve API",
+          "url": "https://blog.reve.com/posts/the-reve-api"
+        },
+        {
+          "title": "Reve for Teams",
+          "url": "https://blog.reve.com/posts/reve-for-teams"
+        },
+        {
+          "title": "Model",
+          "url": "https://app.reve.com/model"
+        }
+      ],
+      "official_date": "2026-07-09",
+      "theme": "vision",
+      "id": "tool-level3:reve-2-1"
+    },
+    {
+      "vendor_key": "tencent",
+      "detail_kind": "api_model",
+      "title": "Hy-MT2-30B-A3B",
+      "vendor_label": "腾讯（混元）",
+      "icon": "🤖",
+      "official_url": "https://hunyuan.tencent.com/research/100041?langVersion=zh",
+      "status": "active",
+      "summary": "Hy-MT2 是腾讯混元推出的高性能多语言翻译模型，支持 33 种语言互译，在多种翻译任务上达到开源模型最佳效果。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "来源未提及该模型支持 1M 上下文，且该模型是翻译模型，不适用长上下文场景"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "免费调用",
+            "pricing_basis": "免费",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "调用量",
+                "amount": "无限制",
+                "unit": "次"
+              }
+            ],
+            "conditions": "面向所有用户免费开放，无调用次数限制"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "多语言翻译",
+          "description": "支持 33 种语言互译，适用于文档、内容等翻译场景"
+        },
+        {
+          "title": "跨语言内容创作",
+          "description": "帮助创作者生成多语言内容，提升国际化效率"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "长上下文推理",
+          "description": "模型未披露长上下文处理能力，不适用于需要 1M 上下文的场景"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Hy-MT2：面向实际应用场景的高性能多语言翻译模型",
+          "url": "https://hunyuan.tencent.com/research/100041?langVersion=zh"
+        },
+        {
+          "title": "腾讯混元",
+          "url": "https://hunyuan.tencent.com/news/home"
+        },
+        {
+          "title": "腾讯混元",
+          "url": "https://hunyuan.tencent.com/image/en?tabIndex=0&ref=news.lmarena.ai"
+        },
+        {
+          "title": "混元2.0模型 API 上线：推理能力与效率业界领先，兼具实用性与用户体验-腾讯云开发者社区-腾讯云",
+          "url": "https://cloud.tencent.com.cn/developer/article/2598835?policyId=1003"
+        },
+        {
+          "title": "腾讯混元",
+          "url": "https://hunyuan.tencent.com/image/en?tabIndex=0"
+        }
+      ],
+      "official_date": "2026-05-30",
+      "theme": "general",
+      "id": "tool-level3:hy-mt2-30b-a3b"
+    },
+    {
+      "vendor_key": "windsurf-vendor",
+      "detail_kind": "tool",
+      "title": "Windsurf",
+      "vendor_label": "Windsurf",
+      "icon": "🧩",
+      "official_url": "https://windsurf.com/",
+      "status": "active",
+      "summary": "Windsurf 是一个 AI 驱动的编程平台，融合了 AI 辅助编码、IDE 和云端代理功能，支持多种模型与工具集成，帮助开发者实现从代码编写到代理管理的全流程协作。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用文本上下文窗口。"
+      },
+      "api_pricing": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用此类 API 计价字段。"
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "AI 辅助编码",
+          "description": "使用 Cascade 进行智能代码补全和生成"
+        },
+        {
+          "title": "代理协同管理",
+          "description": "通过 Devin 云代理处理复杂开发任务"
+        },
+        {
+          "title": "多模型工作流",
+          "description": "在不同 AI 模型间切换以优化性能和成本"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "简单文本编辑",
+          "description": "仅需基础文本编辑功能时可用更轻量工具"
+        },
+        {
+          "title": "离线开发",
+          "description": "需要完全离线开发环境时不适用"
+        }
+      ],
+      "sources": [
+        {
+          "title": "https://windsurf.com/",
+          "url": "https://windsurf.com/"
+        },
+        {
+          "title": "https://windsurf.com/blog/our-brand",
+          "url": "https://windsurf.com/blog/our-brand"
+        },
+        {
+          "title": "https://windsurf.com/changelog/windsurf",
+          "url": "https://windsurf.com/changelog/windsurf"
+        },
+        {
+          "title": "https://windsurf.com/changelog",
+          "url": "https://windsurf.com/changelog"
+        },
+        {
+          "title": "Changelog (Next) - Devin Docs",
+          "url": "https://windsurf.com/changelog/windsurf-next"
+        },
+        {
+          "title": "Login | Windsurf",
+          "url": "https://windsurf.com/enterprise/account/login"
+        },
+        {
+          "title": "Provider API Keys | Windsurf",
+          "url": "https://windsurf.com/subscription/provider-api-keys"
+        }
+      ],
+      "official_date": "2025-04-02",
+      "theme": "dev",
+      "id": "tool-level3:windsurf"
+    },
+    {
+      "vendor_key": "openai",
+      "detail_kind": "tool",
+      "title": "OpenAI Codex",
+      "vendor_label": "OpenAI",
+      "icon": "🧩",
+      "official_url": "https://openai.com/codex/",
+      "status": "active",
+      "summary": "Codex 是 OpenAI 推出的编程智能体，可端到端完成构建功能、复杂重构、代码迁移等工程任务，并支持计划调度与自动化后台工作，基于 OpenAI 前沿编码模型驱动。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用文本上下文窗口。"
+      },
+      "api_pricing": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用此类 API 计价字段。"
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "代码重构与迁移",
+          "description": "Codex 可处理大型代码库重构和迁移任务，如更新其他团队的代码库，完成重构和测试生成，保证功能如期上线。"
+        },
+        {
+          "title": "自动化后台工作",
+          "description": "可调度 Codex 处理 issue 分类、告警监控、CI/CD 等重复性后台任务，让团队专注核心开发。"
+        },
+        {
+          "title": "代码审查与质量提升",
+          "description": "Codex 提供更全面的设计、测试和代码审查，帮助团队及早发现问题，提升代码质量。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "需要实时外部网络访问的任务",
+          "description": "Codex 在安全隔离容器中运行，任务执行期间禁用互联网访问，无法访问外部网站或 API。"
+        },
+        {
+          "title": "非代码相关的一般性任务",
+          "description": "Codex 专注于编码任务，不适用于非软件开发类工作。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "https://openai.com/codex/",
+          "url": "https://openai.com/codex/"
+        },
+        {
+          "title": "Introducing Codex - OpenAI",
+          "url": "https://openai.com/index/introducing-codex"
+        },
+        {
+          "title": "https://github.com/openai/codex",
+          "url": "https://github.com/openai/codex"
+        },
+        {
+          "title": "Authentication",
+          "url": "https://developers.openai.com/codex/auth"
+        },
+        {
+          "title": "Login with OPENAI_API_KEY environment variable - Codex",
+          "url": "https://community.openai.com/t/login-with-openai-api-key-environment-variable/1371740"
+        },
+        {
+          "title": "Introducing upgrades to Codex",
+          "url": "https://openai.com/index/introducing-upgrades-to-codex"
+        }
+      ],
+      "official_date": "2025-05-16",
+      "theme": "dev",
+      "id": "tool-level3:openai-codex"
+    },
+    {
+      "vendor_key": "google",
+      "detail_kind": "tool",
+      "title": "Gemini CLI",
+      "vendor_label": "Google",
+      "icon": "🧩",
+      "official_url": "https://github.com/google-gemini/gemini-cli",
+      "status": "active",
+      "summary": "Gemini CLI 是 Google 推出的开源 AI 代理，将 Gemini 模型直接带入终端，支持代码理解、文件操作、命令执行和动态排错，并可扩展 MCP 服务器和自定义扩展。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用文本上下文窗口。"
+      },
+      "api_pricing": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用此类 API 计价字段。"
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "个人开发与代码编写",
+          "description": "开发者可以在终端中通过自然语言进行代码编写、理解和调试，免费使用 Gemini 2.5 Pro。"
+        },
+        {
+          "title": "任务自动化与文件操作",
+          "description": "用户可通过 CLI 执行命令、操作文件系统，并利用内置工具完成网页抓取、搜索等任务。"
+        },
+        {
+          "title": "内容生成与问题解决",
+          "description": "适用于生成内容、解决复杂问题、深度研究和任务管理等广泛场景。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "企业级生产环境",
+          "description": "需要高级安全合规、更高并发和水平扩展的生产工作负载，应使用 Vertex AI 或企业许可。"
+        },
+        {
+          "title": "高度定制化模型控制",
+          "description": "需要特定模型选择或付费高端功能的场景，可能需要 API Key 或付费许可。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "GitHub - google-gemini/gemini-cli: An open-source AI agent that ...",
+          "url": "https://github.com/google-gemini/gemini-cli"
+        },
+        {
+          "title": "https://blog.google/technology/developers/introducing-gemini-cli-open-source-ai-agent/",
+          "url": "https://blog.google/technology/developers/introducing-gemini-cli-open-source-ai-agent/"
+        },
+        {
+          "title": "https://github.com/google-gemini/gemini-cli/releases",
+          "url": "https://github.com/google-gemini/gemini-cli/releases"
+        },
+        {
+          "title": "Gemini CLI: your open-source AI agent",
+          "url": "https://blog.google/innovation-and-ai/technology/developers-tools/introducing-gemini-cli-open-source-ai-agent"
+        },
+        {
+          "title": "gemini-cli/docs/changelogs/index.md at main",
+          "url": "https://github.com/google-gemini/gemini-cli/blob/main/docs/changelogs/index.md"
+        }
+      ],
+      "official_date": "2025-06-25",
+      "theme": "dev",
+      "id": "tool-level3:gemini-cli"
+    },
+    {
+      "vendor_key": "replit",
+      "detail_kind": "tool",
+      "title": "Replit Agent",
+      "vendor_label": "Replit",
+      "icon": "🧩",
+      "official_url": "https://replit.com/products/agent",
+      "status": "active",
+      "summary": "Replit Agent 是 Replit 推出的 AI 软件开发代理，通过自然语言对话构建、测试并部署生产就绪的应用，无需编码经验。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用文本上下文窗口。"
+      },
+      "api_pricing": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用此类 API 计价字段。"
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "从零构建应用",
+          "description": "用户仅用自然语言描述应用想法，Agent 自动规划、编写代码并部署。"
+        },
+        {
+          "title": "快速迭代与修复",
+          "description": "通过对话反馈持续改进应用，Agent 自动测试并修复发现的问题。"
+        },
+        {
+          "title": "自动化重复任务",
+          "description": "构建定制 Agent 和自动化工作流，用于处理繁琐的重复性操作。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "高度定制化后端",
+          "description": "需要深度控制基础设施和复杂架构的场景，Agent 的抽象可能不够灵活。"
+        },
+        {
+          "title": "离线环境",
+          "description": "Agent 依赖云端服务和联网能力，无法在无网络环境下工作。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "https://replit.com/products/agent",
+          "url": "https://replit.com/products/agent"
+        },
+        {
+          "title": "https://replit.com/blog/try-agent",
+          "url": "https://replit.com/blog/try-agent"
+        },
+        {
+          "title": "Replit Agent",
+          "url": "https://docs.replit.com/features/agent/overview"
+        },
+        {
+          "title": "https://docs.replit.com/learn/build-with-agent",
+          "url": "https://docs.replit.com/learn/build-with-agent"
+        },
+        {
+          "title": "https://docs.replit.com/billing/ai-billing",
+          "url": "https://docs.replit.com/billing/ai-billing"
+        },
+        {
+          "title": "Introducing Replit Agent | Replit",
+          "url": "https://replit.com/blog/introducing-replit-agent"
+        },
+        {
+          "title": "Announcing the New Replit Assistant | Replit",
+          "url": "https://replit.com/blog/new-ai-assistant-announcement"
+        },
+        {
+          "title": "The Official Blog | Replit",
+          "url": "https://replit.com/blog/category/all/5"
+        }
+      ],
+      "official_date": "2024-10-04",
+      "theme": "dev",
+      "id": "tool-level3:replit-agent"
+    },
+    {
+      "vendor_key": "cognition",
+      "detail_kind": "tool",
+      "title": "Devin",
+      "vendor_label": "Cognition",
+      "icon": "🧩",
+      "official_url": "https://devin.ai/",
+      "status": "active",
+      "summary": "Devin 是一款由 Cognition 开发的 AI 软件工程师，提供云端、桌面、CLI 等多种接入方式，支持通过对话界面、嵌入式 IDE 和浏览器工具自主完成编码任务。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用文本上下文窗口。"
+      },
+      "api_pricing": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用此类 API 计价字段。"
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "大规模代码迁移",
+          "description": "自动处理大型代码库的迁移和重构，如 Nubank 的 ETL 迁移。"
+        },
+        {
+          "title": "软件缺陷修复",
+          "description": "通过自然语言描述问题，Devin 可自动定位并修复代码缺陷。"
+        },
+        {
+          "title": "自动化测试与验证",
+          "description": "Devin 可运行测试并验证其生成的代码，减少人工介入。"
+        },
+        {
+          "title": "学习与原型开发",
+          "description": "用于快速构建原型或学习新技术，Devin 可浏览文档并编写示例代码。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "高安全性隔离环境",
+          "description": "需要严格数据隔离和本地部署的场景可能无法满足。"
+        },
+        {
+          "title": "无 AI 依赖流程",
+          "description": "要求完全人工编写代码且不引入 AI 辅助的开发流程。"
+        },
+        {
+          "title": "超低延迟交互",
+          "description": "需要毫秒级响应的人机交互开发场景不适用。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "https://devin.ai/",
+          "url": "https://devin.ai/"
+        },
+        {
+          "title": "https://docs.devin.ai/get-started/devin-intro",
+          "url": "https://docs.devin.ai/get-started/devin-intro"
+        },
+        {
+          "title": "Billing - Devin Docs",
+          "url": "https://docs.devin.ai/admin/billing"
+        },
+        {
+          "title": "Billing and Procurement - Devin Docs",
+          "url": "https://docs.devin.ai/federal/usage-and-billing"
+        },
+        {
+          "title": "Introduction",
+          "url": "https://docs.devin.ai/federal/introduction"
+        },
+        {
+          "title": "2024",
+          "url": "https://docs.devin.ai/release-notes/2024"
+        }
+      ],
+      "official_date": "2024-04-02",
+      "theme": "dev",
+      "id": "tool-level3:devin"
+    },
+    {
+      "vendor_key": "augment",
+      "detail_kind": "tool",
+      "title": "Augment Code",
+      "vendor_label": "Augment Code",
+      "icon": "🧩",
+      "official_url": "https://www.augmentcode.com",
+      "status": "active",
+      "summary": "Augment Code 是企业级 AI 原生编码平台，提供强大的编码代理、深度代码库智能和灵活自动化，支持 IDE 和 CLI。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用文本上下文窗口。"
+      },
+      "api_pricing": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用此类 API 计价字段。"
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "自动化代码审查",
+          "description": "自动审查每个 PR 以捕获关键错误。"
+        },
+        {
+          "title": "大型项目开发",
+          "description": "从设计文档到交付功能，支持大型项目。"
+        },
+        {
+          "title": "安全修复",
+          "description": "从 CVE 警报生成已审查的修复方案。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "无需代码开发",
+          "description": "不适用于无编程需求的场景。"
+        },
+        {
+          "title": "简单文本编辑",
+          "description": "不适合仅进行简单文本编辑的场景。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "https://www.augmentcode.com/changelog/vs-code-0-496-1-release-notes",
+          "url": "https://www.augmentcode.com/changelog/vs-code-0-496-1-release-notes"
+        },
+        {
+          "title": "https://docs.augmentcode.com/introduction",
+          "url": "https://docs.augmentcode.com/introduction"
+        },
+        {
+          "title": "https://www.augmentcode.com/workflows",
+          "url": "https://www.augmentcode.com/workflows"
+        },
+        {
+          "title": "JetBrains 0.244.1 Release Notes - Augment Code",
+          "url": "https://www.augmentcode.com/changelog/jetbrains-0-244-1-release-notes"
+        },
+        {
+          "title": "Analytics API - Introduction - Augment Code",
+          "url": "https://docs.augmentcode.com/analytics/analytics-api"
+        }
+      ],
+      "official_date": "2025-07-07",
+      "theme": "dev",
+      "id": "tool-level3:augment-code"
+    },
+    {
+      "vendor_key": "vidu",
+      "detail_kind": "api_model",
+      "title": "Vidu S1",
+      "vendor_label": "vidu",
+      "icon": "🎬",
+      "official_url": "https://platform.vidu.com/docs/vidu-s1",
+      "status": "active",
+      "summary": "Vidu S1 是全球领先的实时交互模型，支持语音控制的定制数字人、无限时长视频生成和高帧率输出。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用文本上下文窗口。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "Vidu S1 按需计费",
+            "pricing_basis": "按生成时长计费",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "每秒费用",
+                "amount": "0.015",
+                "unit": "美元/2秒"
+              }
+            ],
+            "conditions": "Vidu S1 模型按 2 秒消耗 3 credits，定价 0.015 美元；超出并发需额外购买。"
+          },
+          {
+            "label": "按 Credits 套餐",
+            "pricing_basis": "按预付费 credit 包计费",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "新用户体验包",
+                "amount": "5000",
+                "unit": "credits"
+              }
+            ],
+            "conditions": "首次用户专享，5000 credits 售价 15 美元，有效期 3 个月，适用于所有模型。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "实时互动",
+          "description": "支持语音控制的数字人实时对话"
+        },
+        {
+          "title": "实时陪伴",
+          "description": "用于陪伴式交互应用"
+        },
+        {
+          "title": "直播",
+          "description": "低延迟流式生成，适合直播互动"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "离线批处理",
+          "description": "非实时生成场景"
+        },
+        {
+          "title": "静态图像生成",
+          "description": "仅视频生成，无图像生成能力"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Pricing",
+          "url": "https://platform.vidu.com/docs/pricing"
+        },
+        {
+          "title": "Vidu S1 API（Beta）",
+          "url": "https://platform.vidu.com/docs/vidu-s1"
+        },
+        {
+          "title": "Model Map | Vidu API",
+          "url": "https://platform.vidu.com/docs/model-map"
+        },
+        {
+          "title": "Vidu API",
+          "url": "https://platform.vidu.com/"
+        }
+      ],
+      "official_date": "2026-06-01",
+      "theme": "media",
+      "id": "tool-level3:vidu-s1"
+    },
+    {
+      "vendor_key": "aws",
+      "detail_kind": "tool",
+      "title": "Amazon Q Developer",
+      "vendor_label": "Amazon Web Services",
+      "icon": "🧩",
+      "official_url": "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/what-is.html",
+      "status": "active",
+      "summary": "Amazon Q Developer 是 AWS 的生成式 AI 编程助手，提供代码补全、生成、安全扫描、升级优化等功能，支持 IDE、控制台和聊天应用。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用文本上下文窗口。"
+      },
+      "api_pricing": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用此类 API 计价字段。"
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "IDE 内开发",
+          "description": "在 VS Code、JetBrains 等 IDE 中获取代码补全、生成和优化建议。"
+        },
+        {
+          "title": "AWS 架构咨询",
+          "description": "在 AWS 控制台或文档站提问，获取架构、最佳实践和资源相关的回答。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "本地离线开发",
+          "description": "需要完全离线运行，不连接 AWS 服务。Amazon Q Developer 需要联网使用。"
+        },
+        {
+          "title": "非 AWS 环境",
+          "description": "主要在非 AWS 云环境或本地基础设施中开发，不依赖 AWS 服务。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Amazon Q Developer",
+          "url": "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/what-is.html"
+        },
+        {
+          "title": "Document history for Amazon Q Developer User Guide",
+          "url": "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/doc-history.html"
+        },
+        {
+          "title": "AI Coding & Dev Tools - Amazon Q - AWS",
+          "url": "https://aws.amazon.com/q"
+        },
+        {
+          "title": "Amazon Q Documentation",
+          "url": "https://docs.aws.amazon.com/amazonq"
+        },
+        {
+          "title": "Amazon Q Developer now help customers understand ...",
+          "url": "https://aws.amazon.com/about-aws/whats-new/2025/10/amazon-q-developer-understand-service-prices-estimate-workload-costs"
+        },
+        {
+          "title": "[XML] https://docs.aws.amazon.com/sitemap_index.xml",
+          "url": "https://docs.aws.amazon.com/sitemap_index.xml"
+        },
+        {
+          "title": "https://aws.amazon.com/q/developer/",
+          "url": "https://aws.amazon.com/q/developer/"
+        },
+        {
+          "title": "https://aws.amazon.com/q/developer/pricing/",
+          "url": "https://aws.amazon.com/q/developer/pricing/"
+        },
+        {
+          "title": "Overview of cost management capabilities in Amazon Q ...",
+          "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-q-overview.html"
+        }
+      ],
+      "official_date": "2024-04-30",
+      "theme": "dev",
+      "id": "tool-level3:amazon-q-developer"
+    },
+    {
+      "vendor_key": "jetbrains",
+      "detail_kind": "tool",
+      "title": "Junie",
+      "vendor_label": "JetBrains",
+      "icon": "🧩",
+      "official_url": "https://junie.jetbrains.com/",
+      "status": "active",
+      "summary": "Junie 是 JetBrains 的 AI 编码代理，可在 JetBrains IDE 或 CLI 中使用，支持多模型、计划模式、实时引导和调试功能。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用文本上下文窗口。"
+      },
+      "api_pricing": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用此类 API 计价字段。"
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "日常编码与代码修复",
+          "description": "在 IDE 中自主执行代码修改、测试和调试"
+        },
+        {
+          "title": "技术升级与迁移",
+          "description": "处理框架升级或项目迁移等复杂任务"
+        },
+        {
+          "title": "自动化工作流集成",
+          "description": "通过 CLI、GitHub Action 或 GitLab CI/CD 运行任务"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "超长上下文处理",
+          "description": "不原生支持 1M 上下文，不适合需要超大上下文的场景"
+        },
+        {
+          "title": "完全离线环境",
+          "description": "依赖 JetBrains AI 服务或第三方 API，需联网使用"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Junie IDE plugin | Junie Documentation",
+          "url": "https://junie.jetbrains.com/docs/junie-ide-plugin.html"
+        },
+        {
+          "title": "Junie by JetBrains",
+          "url": "https://junie.jetbrains.com/"
+        },
+        {
+          "title": "Quickstart | Junie Documentation",
+          "url": "https://junie.jetbrains.com/docs/junie-cli.html"
+        },
+        {
+          "title": "Junie by JetBrains | AI Assistant Documentation",
+          "url": "https://www.jetbrains.com/help/ai-assistant/junie-agent.html"
+        },
+        {
+          "title": "Integration with JetBrains IDEs | Junie Documentation",
+          "url": "https://junie.jetbrains.com/docs/junie-cli-jetbrains-ide-integration.html"
+        },
+        {
+          "title": "https://www.jetbrains.com/junie/",
+          "url": "https://www.jetbrains.com/junie/"
+        },
+        {
+          "title": "https://junie.jetbrains.com/docs/junie-cli-usage.html",
+          "url": "https://junie.jetbrains.com/docs/junie-cli-usage.html"
+        },
+        {
+          "title": "Getting started with Junie | Junie Documentation",
+          "url": "https://junie.jetbrains.com/docs"
+        },
+        {
+          "title": "Junie, the AI coding agent by JetBrains",
+          "url": "https://www.jetbrains.com/junie"
+        }
+      ],
+      "official_date": "2025-04-15",
+      "theme": "dev",
+      "id": "tool-level3:junie"
+    },
+    {
+      "vendor_key": "amazon",
+      "detail_kind": "tool",
+      "title": "Kiro",
+      "vendor_label": "Amazon",
+      "icon": "🧩",
+      "official_url": "https://kiro.dev/",
+      "status": "active",
+      "summary": "Kiro is an agentic IDE that supports spec-driven development with agentic chat, autopilot mode, MCP integration, hooks, and steering files.",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用文本上下文窗口。"
+      },
+      "api_pricing": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用此类 API 计价字段。"
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "本地开发",
+          "description": "在IDE中进行主动本地开发，利用实时AI协作进行编码"
+        },
+        {
+          "title": "自动化开发任务",
+          "description": "使用Autopilot模式自动化重复操作和任务"
+        },
+        {
+          "title": "规范驱动的开发",
+          "description": "通过结构化的规范来规划功能并分步实现"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "无AI的纯本地开发",
+          "description": "用户可能不需要AI辅助，仅使用传统方法编码"
+        },
+        {
+          "title": "无需网络连接的环境",
+          "description": "某些功能可能在没有网络连接的环境中不可用"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Kiro Changelog",
+          "url": "https://kiro.dev/changelog/feed.rss"
+        },
+        {
+          "title": "Server directory - IDE - Docs - Kiro",
+          "url": "https://kiro.dev/docs/mcp/servers"
+        },
+        {
+          "title": "Pricing - Kiro",
+          "url": "https://kiro.dev/pricing"
+        },
+        {
+          "title": "FAQs - Kiro",
+          "url": "https://kiro.dev/faq"
+        },
+        {
+          "title": "Preview release - Kiro",
+          "url": "https://kiro.dev/changelog/ide/0-1"
+        },
+        {
+          "title": "IDE changelog",
+          "url": "https://kiro.dev/changelog/ide"
+        },
+        {
+          "title": "General changelog",
+          "url": "https://kiro.dev/changelog/general"
+        },
+        {
+          "title": "Changelog",
+          "url": "https://kiro.dev/changelog"
+        },
+        {
+          "title": "Introducing Kiro",
+          "url": "https://kiro.dev/blog/introducing-kiro"
+        },
+        {
+          "title": "https://kiro.dev/changelog/ide/0-1/",
+          "url": "https://kiro.dev/changelog/ide/0-1/"
+        },
+        {
+          "title": "Kiro: Move beyond AI coding to agentic engineering",
+          "url": "https://kiro.dev/"
+        },
+        {
+          "title": "https://kiro.dev/docs/billing/",
+          "url": "https://kiro.dev/docs/billing/"
+        },
+        {
+          "title": "https://kiro.dev/pricing/",
+          "url": "https://kiro.dev/pricing/"
+        },
+        {
+          "title": "Kiro loves regulated workloads - Kiro",
+          "url": "https://kiro.dev/blog/introducing-govcloud"
+        },
+        {
+          "title": "Privacy and Security - Docs - Kiro",
+          "url": "https://kiro.dev/docs/privacy-and-security"
+        }
+      ],
+      "official_date": "2025-07-14",
+      "theme": "dev",
+      "id": "tool-level3:kiro"
+    },
+    {
+      "vendor_key": "cline-vendor",
+      "detail_kind": "tool",
+      "title": "Cline",
+      "vendor_label": "Cline",
+      "icon": "🧩",
+      "official_url": "https://cline.bot/",
+      "status": "active",
+      "summary": "Cline 是开源的 AI 编码代理，在编辑器和终端中运行，支持文件读写、命令执行、浏览器操作，所有操作需用户批准，兼容多种模型与开放协议。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用文本上下文窗口。"
+      },
+      "api_pricing": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用此类 API 计价字段。"
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "个人开发",
+          "description": "个人开发者通过 VS Code 扩展使用 AI 进行编码"
+        },
+        {
+          "title": "团队协作",
+          "description": "企业团队使用 Kanban 和自动化功能进行项目管理"
+        },
+        {
+          "title": "自动化任务",
+          "description": "通过 CLI 在 CI/CD 中执行自动化任务"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "非开发用途",
+          "description": "不适合非技术用户进行日常任务管理"
+        },
+        {
+          "title": "完全离线环境",
+          "description": "需要网络连接以调用模型服务"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Cline Overview - Cline",
+          "url": "https://docs.cline.bot/cline-overview"
+        },
+        {
+          "title": "Releases · cline/cline - GitHub",
+          "url": "https://github.com/cline/cline/releases"
+        },
+        {
+          "title": "Cline - AI Coding, Open Source and Uncompromised",
+          "url": "https://cline.bot/spec-driven"
+        },
+        {
+          "title": "Tags · cline/cline · GitHub",
+          "url": "https://github.com/cline/cline/tags?after=v3.27.0"
+        },
+        {
+          "title": "Releases · cline/cline · GitHub",
+          "url": "https://github.com/cline/cline/releases?page=20"
+        },
+        {
+          "title": "Update README · cline/cline@e855e82 · GitHub",
+          "url": "https://github.com/cline/cline/commit/e855e82d5efb4f9ea81bd6f80e75555e262ea442"
+        },
+        {
+          "title": "Releases · cline/cline · GitHub",
+          "url": "https://github.com/cline/cline/releases?after=v1.0.0"
+        },
+        {
+          "title": "https://github.com/cline/cline/releases/tag/v1.0.4",
+          "url": "https://github.com/cline/cline/releases/tag/v1.0.4"
+        },
+        {
+          "title": "https://cline.bot/",
+          "url": "https://cline.bot/"
+        },
+        {
+          "title": "https://cline.bot/pricing",
+          "url": "https://cline.bot/pricing"
+        },
+        {
+          "title": "Releases · cline/cline · GitHub",
+          "url": "https://github.com/cline/cline/releases?ref=cline.ghost.io"
+        },
+        {
+          "title": "Cline API - Cline",
+          "url": "https://docs.cline.bot/api/reference"
+        },
+        {
+          "title": "Cline (usage-billing)",
+          "url": "https://docs.cline.bot/getting-started/cline-provider"
+        },
+        {
+          "title": "Authorization - Cline",
+          "url": "https://docs.cline.bot/getting-started/selecting-your-model"
+        }
+      ],
+      "official_date": "2024-07-28",
+      "theme": "dev",
+      "id": "tool-level3:cline"
+    },
+    {
+      "vendor_key": "aider-vendor",
+      "detail_kind": "tool",
+      "title": "Aider",
+      "vendor_label": "Aider",
+      "icon": "🧩",
+      "official_url": "https://aider.chat/",
+      "status": "active",
+      "summary": "Aider是一款终端AI编程助手，通过聊天方式帮助用户编写、修改代码，集成Git和代码库映射。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用文本上下文窗口。"
+      },
+      "api_pricing": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用此类 API 计价字段。"
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "代码开发",
+          "description": "在终端中与AI协作编写、修改代码，支持多语言。"
+        },
+        {
+          "title": "代码审查与重构",
+          "description": "利用AI辅助审查代码、进行重构和修复问题。"
+        },
+        {
+          "title": "项目初始化",
+          "description": "快速搭建新项目，利用AI生成初始结构和代码。"
+        },
+        {
+          "title": "学习编程",
+          "description": "通过与AI交互学习编程，获取代码示例和解释。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "图形化集成开发环境",
+          "description": "需要完整IDE功能（如可视化调试器）的场景。"
+        },
+        {
+          "title": "大规模项目重构",
+          "description": "对复杂大型项目进行自动化重构，可能超出终端工具的适用性。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "FAQ",
+          "url": "https://aider.chat/docs/faq.html"
+        },
+        {
+          "title": "Releases · Aider-AI/aider",
+          "url": "https://github.com/Aider-AI/aider/releases"
+        },
+        {
+          "title": "Release history | aider",
+          "url": "https://aider.chat/HISTORY.html"
+        },
+        {
+          "title": "Aider Documentation",
+          "url": "https://aider.chat/docs"
+        },
+        {
+          "title": "Releases · Aider-AI/aider-swe-bench",
+          "url": "https://github.com/Aider-AI/aider-swe-bench/releases"
+        },
+        {
+          "title": "Releases · hotovo/aider-desk · GitHub",
+          "url": "https://github.com/hotovo/aider-desk/releases"
+        },
+        {
+          "title": "Aider - AI Pair Programming in Your Terminal",
+          "url": "https://aider.chat/"
+        },
+        {
+          "title": "GitHub - BNLNPPS/terminal-ai-toolkit: A collection of guidance for terminal-based AI coding tools (Qwen Code, Aider,Copilot CLI, and Gemini CLI) and API provider integration instructions. · GitHub",
+          "url": "https://github.com/BNLNPPS/terminal-ai-toolkit"
+        },
+        {
+          "title": "aider/apis.yml at main · api-evangelist/aider · GitHub",
+          "url": "https://github.com/api-evangelist/aider/blob/main/apis.yml"
+        },
+        {
+          "title": "GitHub - MatthewZMD/aidermacs: AI Pair Programming in Emacs with Aider · GitHub",
+          "url": "https://github.com/MatthewZMD/aidermacs"
+        }
+      ],
+      "official_date": "2023-05-22",
+      "theme": "dev",
+      "id": "tool-level3:aider"
+    },
+    {
+      "vendor_key": "continue-vendor",
+      "detail_kind": "tool",
+      "title": "Continue",
+      "vendor_label": "Continue",
+      "icon": "🧩",
+      "official_url": "https://docs.continue.dev/",
+      "status": "deprecated",
+      "summary": "Continue 是一款开源 AI 编码代理，提供 VS Code、JetBrains 和 CLI 工具。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用文本上下文窗口。"
+      },
+      "api_pricing": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用此类 API 计价字段。"
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "集成开发环境",
+          "description": "在 VS Code 或 JetBrains 中使用 AI 辅助编码。"
+        },
+        {
+          "title": "终端操作",
+          "description": "通过 CLI 进行快速 AI 交互。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "企业级长期支持",
+          "description": "项目已停止维护，缺乏持续更新。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Continue Docs: What is Continue?",
+          "url": "https://docs.continue.dev/"
+        },
+        {
+          "title": "GitHub - continuedev/continue: open-source coding agent · GitHub",
+          "url": "https://github.com/continuedev/continue.git"
+        },
+        {
+          "title": "Releases · continuedev/continue-publish-action",
+          "url": "https://github.com/continuedev/continue-publish-action/releases"
+        },
+        {
+          "title": "Continue.dev",
+          "url": "https://hub.continue.dev/"
+        },
+        {
+          "title": "Documentation needed for recent CLI features: AskQuestion tool, CheckBackgroundJob defaults, and AI SDK environment variable · Issue #10997 · continuedev/continue · GitHub",
+          "url": "https://github.com/continuedev/continue/issues/10997"
+        },
+        {
+          "title": "No `@codebase` context is shown · Issue #3273 · continuedev/continue · GitHub",
+          "url": "https://github.com/continuedev/continue/issues/3273"
+        },
+        {
+          "title": "https://continue.dev/",
+          "url": "https://continue.dev/"
+        },
+        {
+          "title": "https://docs.continue.dev/features/agent/how-it-works",
+          "url": "https://docs.continue.dev/features/agent/how-it-works"
+        },
+        {
+          "title": "https://github.com/continuedev/continue/releases",
+          "url": "https://github.com/continuedev/continue/releases"
+        },
+        {
+          "title": "https://github.com/continuedev/continue/releases/tag/v1.0.19-release",
+          "url": "https://github.com/continuedev/continue/releases/tag/v1.0.19-release"
+        },
+        {
+          "title": "Continue - open-source coding agent",
+          "url": "https://github.com/continuedev/continue"
+        },
+        {
+          "title": "Contributing to Continue Documentation | Continue Docs",
+          "url": "https://docs.continue.dev/CONTRIBUTING"
+        }
+      ],
+      "official_date": "2025-07-16",
+      "theme": "dev",
+      "id": "tool-level3:continue"
+    },
+    {
+      "vendor_key": "qoder-vendor",
+      "detail_kind": "tool",
+      "title": "Qoder",
+      "vendor_label": "Qoder",
+      "icon": "🧩",
+      "official_url": "https://qoder.com/",
+      "status": "active",
+      "summary": "Qoder是一个代理式编码平台，面向真实软件开发，提供Editor与Quest工作区，集成了代码生成、问答、多文件编辑和智能体自动化，并支持MCP、知识引擎、JetBrains插件及CLI等扩展能力。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用文本上下文窗口。"
+      },
+      "api_pricing": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用此类 API 计价字段。"
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "复杂任务委托",
+          "description": "将长时间多步骤开发任务交给Quest智能体，并在任务看板中跟踪进度"
+        },
+        {
+          "title": "代码库理解",
+          "description": "利用增强上下文工程全面分析代码库，提升问题定位与修复效率"
+        },
+        {
+          "title": "多文件重构",
+          "description": "通过NEXT和多文件编辑能力，实现跨文件重构和大型代码调整"
+        },
+        {
+          "title": "团队协作",
+          "description": "结合Editor工作区进行实时协作和快速迭代，并通过Repo Wiki共享项目知识"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "离线纯文本编辑",
+          "description": "核心能力依赖云端智能体和模型，不适合完全离线或本地优先的场景"
+        },
+        {
+          "title": "非软件开发用途",
+          "description": "定位为软件开发平台，不适用于文档写作或数据分析等非编码任务"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Qoder Docs",
+          "url": "https://docs.qoder.com/"
+        },
+        {
+          "title": "JetBrains Plugin Release Notes",
+          "url": "https://docs.qoder.com/release-notes/jetbrains-plugin"
+        },
+        {
+          "title": "AI Programming Tool - AI Programming Platform | Qoder Blog | Qoder",
+          "url": "https://qoder.com/blog"
+        },
+        {
+          "title": "Pricing - Qoder Docs",
+          "url": "https://docs.qoder.com/account/pricing"
+        },
+        {
+          "title": "Qoder CLI Release Notes",
+          "url": "https://docs.qoder.com/release-notes/qoder-cli"
+        },
+        {
+          "title": "IDE Release Notes",
+          "url": "https://docs.qoder.com/release-notes/desktop"
+        },
+        {
+          "title": "Quick Start - Qoder",
+          "url": "https://docs.qoder.com/product-series/quick-start"
+        },
+        {
+          "title": "https://qoder.com/",
+          "url": "https://qoder.com/"
+        },
+        {
+          "title": "https://docs.qoder.com/plugins/introduction",
+          "url": "https://docs.qoder.com/plugins/introduction"
+        }
+      ],
+      "official_date": "2025-10-20",
+      "theme": "dev",
+      "id": "tool-level3:qoder"
+    },
+    {
+      "vendor_key": "codebuddy-vendor",
+      "detail_kind": "tool",
+      "title": "CodeBuddy",
+      "vendor_label": "腾讯云 CodeBuddy",
+      "icon": "🧩",
+      "official_url": "https://www.codebuddy.ai/ide",
+      "status": "active",
+      "summary": "CodeBuddy IDE是一款AI代码编辑器，提供代码补全、AI生成、Agent协作等功能，支持macOS和Windows。",
+      "one_m_context": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用文本上下文窗口。"
+      },
+      "api_pricing": {
+        "status": "not_applicable",
+        "reason": "当前 CatalogProfile 不使用此类 API 计价字段。"
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "日常代码编写",
+          "description": "利用AI补全和生成提升编码效率。"
+        },
+        {
+          "title": "产品设计与开发一体化",
+          "description": "通过Figma导入设计稿并自动生成代码，简化设计与开发流程。"
+        },
+        {
+          "title": "云环境快速部署",
+          "description": "内置云部署能力，支持一键部署到CloudBase等云服务。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "大型企业私有化定制",
+          "description": "需要深度定制IDE或完全私有化部署的场景可能无法满足。"
+        },
+        {
+          "title": "离线开发环境",
+          "description": "依赖云服务，无网络环境下功能受限。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Tencent Cloud Code Assistant CodeBuddy – AI Code Editor",
+          "url": "https://www.codebuddy.ai/login"
+        },
+        {
+          "title": "Release Notes | Tencent Cloud Code Assistant CodeBuddy – AI Code Editor",
+          "url": "https://www.codebuddy.ai/docs/ide/release-notes/release-notes"
+        },
+        {
+          "title": "Tencent Cloud Code Assistant CodeBuddy – AI Code Editor",
+          "url": "https://www.codebuddy.ai/ide"
+        },
+        {
+          "title": "Tencent Cloud Code Assistant CodeBuddy – AI Code Editor",
+          "url": "https://www.codebuddy.ai/blog/8"
+        },
+        {
+          "title": "https://www.codebuddy.ai/",
+          "url": "https://www.codebuddy.ai/"
+        },
+        {
+          "title": "https://www.codebuddy.ai/docs/ide/Account/pricing",
+          "url": "https://www.codebuddy.ai/docs/ide/Account/pricing"
+        },
+        {
+          "title": "https://www.codebuddy.ai/docs/cli/ide-integrations",
+          "url": "https://www.codebuddy.ai/docs/cli/ide-integrations"
+        },
+        {
+          "title": "Tencent Cloud Code Assistant CodeBuddy – AI Code Editor",
+          "url": "https://www.codebuddy.ai/home"
+        },
+        {
+          "title": "Tencent Cloud Code Assistant CodeBuddy – AI Code Editor",
+          "url": "https://www.codebuddy.ai/pricing"
+        },
+        {
+          "title": "Equipping Your AI with an \"On-Demand Steward\"",
+          "url": "https://www.codebuddy.ai/blog/11"
+        },
+        {
+          "title": "Tencent Cloud Code Assistant CodeBuddy – AI Code Editor",
+          "url": "https://www.codebuddy.ai/blog/24"
+        }
+      ],
+      "official_date": "2025-10-16",
+      "theme": "dev",
+      "id": "tool-level3:codebuddy"
     }
   ]
 }

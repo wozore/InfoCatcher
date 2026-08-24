@@ -1,0 +1,19 @@
+{
+  "detail_kind": "tool",
+  "name": "Amazon Q Developer",
+  "vendor_name": "Amazon Web Services",
+  "vendor_key": "aws",
+  "tool_key": "amazon-q-developer",
+  "official_url": "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/doc-history.html",
+  "repair_layers": ["tool-level3"],
+  "known_fields": {
+    "theme": "dev"
+  },
+  "discovery_sources": [
+    { "url": "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/doc-history.html", "kind": "official_hint" },
+    { "url": "https://aws.amazon.com/q/developer/", "kind": "official_hint" },
+    { "url": "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/what-is.html", "kind": "official_hint" },
+    { "url": "https://aws.amazon.com/q/developer/pricing/", "kind": "official_hint" }
+  ],
+  "repair_note": "修复 tool-level3:amazon-q-developer 的 official_date 为 2024-04-30；官方 doc-history 明确记录 Amazon Q Developer GA release 为 April 30, 2024，不采用后续功能发布或页面更新时间。"
+}

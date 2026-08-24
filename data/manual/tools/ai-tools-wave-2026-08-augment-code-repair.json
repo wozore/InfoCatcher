@@ -1,0 +1,18 @@
+{
+  "detail_kind": "tool",
+  "name": "Augment Code",
+  "vendor_name": "Augment Code",
+  "vendor_key": "augment",
+  "tool_key": "augment-code",
+  "official_url": "https://www.augmentcode.com/changelog/vs-code-0-496-1-release-notes",
+  "repair_layers": ["tool-level3"],
+  "known_fields": {
+    "theme": "dev"
+  },
+  "discovery_sources": [
+    { "url": "https://www.augmentcode.com/changelog/vs-code-0-496-1-release-notes", "kind": "official_hint" },
+    { "url": "https://docs.augmentcode.com/introduction", "kind": "official_hint" },
+    { "url": "https://www.augmentcode.com/workflows", "kind": "official_hint" }
+  ],
+  "repair_note": "修复 tool-level3:augment-code 的 official_date 为 2025-07-07（VS Code 0.496.1 官方发布页已用 Tavily 确认存在且标注 July 7, 2025）。"
+}

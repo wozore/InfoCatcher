@@ -132,6 +132,11 @@ test('pendingCandidateToSeed 按 detail_kind_hint 设 detail_kind', () => {
   assert.equal(pendingCandidateToSeed({ name: 'Brand New Tool', detail_kind_hint: 'tool' }).detail_kind, 'tool');
 });
 
+test('pendingCandidateToSeed 透传显式 modality', () => {
+  assert.equal(pendingCandidateToSeed({ name: 'Qwen3.7 Plus', detail_kind_hint: 'api_model', modality: 'text' }).modality, 'text');
+  assert.equal(Object.hasOwn(pendingCandidateToSeed({ name: 'Brand New Tool' }), 'modality'), false);
+});
+
 test('pendingCandidateToSeed 拒绝笼统名（批量生成绝不产出笼统名卡）', () => {
   for (const name of ['可灵', '通义千问', 'ChatGPT', 'Claude', '豆包', 'Kimi']) {
     assert.throws(() => pendingCandidateToSeed({ name }), /PENDING_CANDIDATE_VAGUE/, `${name} 应被拒绝`);

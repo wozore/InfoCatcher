@@ -1,0 +1,29 @@
+{
+  "detail_kind": "tool",
+  "name": "Kiro",
+  "vendor_name": "Amazon",
+  "vendor_key": "amazon",
+  "tool_key": "kiro",
+  "official_url": "https://kiro.dev",
+  "placement": {
+    "new_group_title": "Kiro"
+  },
+  "known_fields": {
+    "theme": "dev"
+  },
+  "discovery_sources": [
+    {
+      "url": "https://kiro.dev",
+      "kind": "official_hint"
+    },
+    {
+      "url": "https://kiro.dev/docs/billing/",
+      "kind": "official_hint"
+    },
+    {
+      "url": "https://kiro.dev/pricing/",
+      "kind": "official_hint"
+    }
+  ],
+  "wave": "commercial-agent"
+}

@@ -1,0 +1,33 @@
+{
+  "detail_kind": "tool",
+  "name": "Amazon Q Developer",
+  "vendor_name": "Amazon Web Services",
+  "vendor_key": "aws",
+  "tool_key": "amazon-q-developer",
+  "official_url": "https://aws.amazon.com/q/developer/",
+  "placement": {
+    "new_group_title": "Amazon Q Developer"
+  },
+  "known_fields": {
+    "theme": "dev"
+  },
+  "discovery_sources": [
+    {
+      "url": "https://aws.amazon.com/q/developer/",
+      "kind": "official_hint"
+    },
+    {
+      "url": "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/what-is.html",
+      "kind": "official_hint"
+    },
+    {
+      "url": "https://aws.amazon.com/q/developer/pricing/",
+      "kind": "official_hint"
+    },
+    {
+      "url": "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/doc-history.html",
+      "kind": "official_hint"
+    }
+  ],
+  "wave": "commercial-agent"
+}

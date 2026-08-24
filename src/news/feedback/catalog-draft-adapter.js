@@ -19,6 +19,7 @@ const { isVagueName } = require('./tool-feedback');
  *   - vendor_name/vendor_label/vendor_key/tool_key  厂商信息（可选，解析可提供）
  *   - url/official_url                             官方 URL（可选，解析可提供）
  *   - detail_kind_hint                             'api_model' | 'tool'（可选；feedback 层按实体类型填）
+ *   - modality                                    api_model 的显式 Profile modality（可选）
  *   - description/source_hotspot/source_url        展示与来源字段
  * @param {object} [resolution] 厂商/官方源解析结果（可省略）
  *   - { vendor_name, official_url }
@@ -52,6 +53,7 @@ function pendingCandidateToSeed(candidate, resolution = {}) {
     vendor_name: vendorName,
     vendor_key: candidate.vendor_key || null,
     tool_key: candidate.tool_key || null,
+    ...(candidate.modality ? { modality: candidate.modality } : {}),
     official_url: officialUrl,
     placement,
     known_fields: {

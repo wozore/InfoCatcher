@@ -52,6 +52,36 @@ test('synthesis input caps source count per layer and truncates long content', (
   assert.ok(input.layers.detail.sources.every(source => source.content.length <= DEFAULT_MAX_SOURCE_CHARS));
 });
 
+test('synthesis input preserves seed-source role and repair context', () => {
+  const repairSeed = {
+    ...seed(),
+    repair_layers: ['tool-level3'],
+    repair_note: '修复 detail.official_date 为 2025-07-07。',
+  };
+  const plan = planCatalogResearch(repairSeed, emptySnapshot());
+  const detailRef = plan.research_scopes.find(scope => scope.kind === 'detail').subject.key;
+  const input = buildSynthesisInput({
+    research: {
+      official_sources: [{
+        source_id: 'source-release',
+        source_role: 'seed_official_hint',
+        url: 'https://kling.ai/release',
+        title: 'Release notes',
+        content: 'July 7, 2025',
+        discovered_for: [`detail:${detailRef}`],
+      }],
+    },
+    plan,
+    expected_layer_fields: { detail: ['official_date'] },
+  });
+  assert.equal(input.layers.detail.sources[0].source_role, 'seed_official_hint');
+  assert.deepEqual(input.repair_context, {
+    layers: ['tool-level3'],
+    note: '修复 detail.official_date 为 2025-07-07。',
+  });
+  assert.match(buildSynthesisInstructions(plan), /source_role=seed_official_hint/);
+});
+
 test('synthesis input skips sources without content or excerpt', () => {
   const plan = planCatalogResearch(seed(), emptySnapshot());
   const refs = plan.research_scopes.map(scope => `${scope.kind}:${scope.subject.key}`);
@@ -70,6 +100,7 @@ test('synthesis instructions cover field rules, enums, and provenance requiremen
   assert.match(instructions, /missing/);
   assert.match(instructions, /api_pricing/);
   assert.match(instructions, /access_level/);
+  assert.match(instructions, /产品实体首次发布日期或 GA 发布日/);
   assert.match(instructions, /unknown/);
   assert.match(instructions, /features 是数组/);
   assert.match(instructions, /字段名必须逐字复制/);

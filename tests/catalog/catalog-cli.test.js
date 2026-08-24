@@ -3,7 +3,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const { pendingCandidateToSeed } = require('../../src/news/feedback/catalog-draft-adapter');
-const { parseArgs } = require('../../scripts/catalog-generator');
+const { parseArgs, tavilyAccessModeFromFlags, generatorOptionsFromFlags } = require('../../scripts/catalog-generator');
 const { probeCatalogCapabilities } = require('../../src/catalog/ai/catalog-adapters');
 const { loadGeneratorConfig, normalizeGeneratorOptions } = require('../../src/catalog/catalog-assistant');
 const { requestDeepSeek } = require('../../src/shared/deepseek-client');
@@ -26,6 +26,21 @@ test('catalog generator CLI parses cost confirmation and seed flags', () => {
   assert.deepEqual(parsed.positional, ['new']);
   assert.equal(parsed.flags.seed, 'seed.json');
   assert.equal(parsed.flags.confirm_cost, true);
+});
+
+test('catalog generator requires and propagates explicit Tavily access mode', () => {
+  const parsed = parseArgs(['batch', '--file', 'cards.json', '--dry-run', '--tavily-access-mode', 'keyed']);
+  assert.equal(parsed.flags.tavily_access_mode, 'keyed');
+  assert.equal(tavilyAccessModeFromFlags(parsed.flags), 'keyed');
+  assert.equal(generatorOptionsFromFlags(parsed.flags).accessMode, 'keyed');
+  assert.throws(
+    () => tavilyAccessModeFromFlags({}),
+    /TAVILY_ACCESS_MODE_REQUIRED/,
+  );
+  assert.throws(
+    () => tavilyAccessModeFromFlags({ tavily_access_mode: 'auto' }),
+    /TAVILY_ACCESS_MODE_INVALID/,
+  );
 });
 
 test('catalog generator CLI parses product registry flags and keeps legacy vendor syntax', () => {
@@ -74,6 +89,7 @@ test('catalog module config maps snake_case limits to internal options', () => {
   assert.equal(options.timeoutMs, 180000);
   assert.equal(options.maxSearchQueries, 4);
   assert.equal(options.maxRepairCalls, 1);
+  assert.equal(normalizeGeneratorOptions({ access_mode: 'keyed' }).accessMode, 'keyed');
 });
 
 test('Tavily capability probe succeeds via keyless without a search key', async () => {

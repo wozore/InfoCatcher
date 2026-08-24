@@ -32,6 +32,24 @@ function buildOfficialDiscoveryQuery({ plan, scope, missing_predicates: missingP
   ].filter(Boolean).join(' ');
 }
 
+function explicitOfficialSourcesOf(plan, scope) {
+  if (scope?.kind !== 'detail') return [];
+  const urls = [
+    plan?.seed?.official_url,
+    ...(plan?.seed?.discovery_sources || [])
+      .filter(source => source?.kind === 'official_hint')
+      .map(source => source.url),
+  ].map(canonicalizeUrl).filter(Boolean);
+  return [...new Set(urls)].map(url => ({
+    url,
+    title: url,
+    excerpt: '',
+    source_kind: 'official_hint',
+    source_role: 'seed_official_hint',
+    discovered_for: sourceScopeOf(scope),
+  }));
+}
+
 function sourceScopeOf(scope) {
   return `${scope.kind}:${scope.subject?.key || ''}`;
 }
@@ -49,13 +67,14 @@ async function discoverOfficialSources(input, options = {}) {
     maxResults: options.maxSearchResults ?? 5,
   });
   if (!result.ok) return result;
+  const discoveredSources = result.sources.map(source => ({
+    ...source,
+    source_kind: 'official',
+    discovered_for: sourceScopeOf(input.scope),
+  }));
   return {
     ok: true,
-    sources: result.sources.map(source => ({
-      ...source,
-      source_kind: 'official',
-      discovered_for: sourceScopeOf(input.scope),
-    })),
+    sources: [...explicitOfficialSourcesOf(input.plan, input.scope), ...discoveredSources],
     usage: result.usage,
   };
 }
@@ -113,6 +132,7 @@ async function probeCatalogCapabilities(options = {}) {
     extraction_provider: provider.name,
     protocol: provider.protocol,
     model: options.model || provider.defaultModel,
+    access_mode: options.accessMode || null,
     source_count: retrieval.source_count,
   };
 }

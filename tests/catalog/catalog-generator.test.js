@@ -61,6 +61,45 @@ test('v3 synthesis adapter uses object JSON mode and reserves synthesis plus res
   assert.match(payloads[0].input, /"layers"/);
 });
 
+test('v3 synthesis repair prefers matching seed evidence for official date', async () => {
+  const fetchImpl = async (_url, init) => {
+    const payload = JSON.parse(init.body);
+    assert.match(payload.instructions, /seed_official_hint/);
+    assert.match(payload.input, /2025-07-07/);
+    return fakeResponse({
+      output_text: JSON.stringify({
+        layer_fields: { detail: { official_date: '2026-02-16' } },
+        provenance: { 'detail.official_date': ['source-latest'] },
+        missing: [],
+      }),
+    });
+  };
+  const result = await synthesizeLayerFields({
+    plan: {
+      seed: { repair_layers: ['tool-level3'], repair_note: '修复 official_date 为 2025-07-07。' },
+      profile: { detail_kind: 'tool', modality: 'general' },
+      applicability: {},
+      research_scopes: [],
+    },
+    expected_layer_fields: { detail: ['official_date'] },
+    research: {
+      official_sources: [{
+        source_id: 'source-release',
+        source_role: 'seed_official_hint',
+        url: 'https://augmentcode.com/release',
+        title: 'Release notes',
+        content: 'July 7, 2025',
+        discovered_for: ['detail:augment-code'],
+      }],
+    },
+    ledger: { reserve() { return { ok: true }; } },
+  }, { apiKey: 'test-key', fetchImpl });
+
+  assert.equal(result.ok, true);
+  assert.equal(result.layer_fields.detail.official_date, '2025-07-07');
+  assert.deepEqual(result.provenance['detail.official_date'], ['source-release']);
+});
+
 test('revision and preview hashes are deterministic', () => {
   const snapshot = emptySnapshot();
   assert.equal(revisionOf(snapshot), revisionOf(JSON.parse(JSON.stringify(snapshot))));

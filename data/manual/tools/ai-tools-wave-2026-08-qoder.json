@@ -1,0 +1,34 @@
+{
+  "detail_kind": "tool",
+  "name": "Qoder",
+  "vendor_name": "Qoder",
+  "vendor_key": "qoder-vendor",
+  "tool_key": "qoder",
+  "official_url": "https://qoder.com",
+  "placement": {
+    "new_group_title": "Qoder"
+  },
+  "known_fields": {
+    "theme": "dev"
+  },
+  "discovery_sources": [
+    {
+      "url": "https://qoder.com",
+      "kind": "official_hint"
+    },
+    {
+      "url": "https://docs.qoder.com/plugins/introduction",
+      "kind": "official_hint"
+    },
+    {
+      "url": "https://docs.qoder.com/account/pricing",
+      "kind": "official_hint"
+    },
+    {
+      "url": "https://docs.qoder.com/release-notes/desktop",
+      "kind": "official_hint"
+    }
+  ],
+  "repair_note": "修复 tool-level3:qoder 的 official_date 为 2025-10-20；Qoder 官方 IDE Release Notes 在该日期记录产品首次 Hello, World! 介绍。不要使用 2025-11-05 的 JetBrains Plugin 首次发布日期作为 Qoder 主产品日期。仅在该官方页面正文明确支持同一日期时采用。",
+  "wave": "open-agent"
+}

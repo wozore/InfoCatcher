@@ -40,6 +40,26 @@ function csvFlag(value) {
     : String(value).split(',').map(item => item.trim()).filter(Boolean);
 }
 
+function tavilyAccessModeFromFlags(flags = {}) {
+  const value = flags.tavily_access_mode;
+  if (value === undefined || value === true) {
+    throw new Error('TAVILY_ACCESS_MODE_REQUIRED: 联网目录命令必须显式提供 --tavily-access-mode keyed|keyless');
+  }
+  const mode = String(value).trim().toLowerCase();
+  if (!['keyed', 'keyless'].includes(mode)) {
+    throw new Error(`TAVILY_ACCESS_MODE_INVALID: 不支持的 Tavily access mode: ${value}`);
+  }
+  return mode;
+}
+
+function generatorOptionsFromFlags(flags = {}) {
+  const accessMode = tavilyAccessModeFromFlags(flags);
+  return {
+    ...normalizeGeneratorOptions(loadGeneratorConfig()),
+    accessMode,
+  };
+}
+
 function readSeed(flags) {
   if (!flags.seed) throw new Error('请提供 --seed <file>');
   return JSON.parse(fs.readFileSync(flags.seed, 'utf8'));
@@ -85,7 +105,8 @@ async function main(argv = process.argv.slice(2)) {
       console.log(JSON.stringify(result, null, 2));
       return result;
     }
-    const result = await probeCatalogCapabilities({ ...normalizeGeneratorOptions(loadGeneratorConfig()), confirmCost: true });
+    const options = generatorOptionsFromFlags(flags);
+    const result = await probeCatalogCapabilities({ ...options, confirmCost: true });
     console.log(JSON.stringify(result, null, 2));
     return result;
   }
@@ -112,7 +133,7 @@ async function main(argv = process.argv.slice(2)) {
       console.log(JSON.stringify(result, null, 2));
       return result;
     }
-    const result = await prepareCatalogDraft(seed, { ...normalizeGeneratorOptions(loadGeneratorConfig()), confirmCost: true });
+    const result = await prepareCatalogDraft(seed, { ...generatorOptionsFromFlags(flags), confirmCost: true });
     printPreview(result);
     return result;
   }
@@ -129,7 +150,7 @@ async function main(argv = process.argv.slice(2)) {
       console.log(JSON.stringify(result, null, 2));
       return result;
     }
-    const result = await resumeCatalogDraft(id, { ...normalizeGeneratorOptions(loadGeneratorConfig()), confirmCost: true });
+    const result = await resumeCatalogDraft(id, { ...generatorOptionsFromFlags(flags), confirmCost: true });
     printPreview(result);
     return result;
   }
@@ -186,7 +207,10 @@ async function main(argv = process.argv.slice(2)) {
     if (!flags.file) throw new Error('请提供 --file <待补卡文件>（先运行 node scripts/news-cli.js min-review feedback 生成）');
     const batch = require('../src/catalog/catalog-batch');
     const cards = batch.readPendingCards(flags.file);
+    const batchOptions = generatorOptionsFromFlags(flags);
     const result = await batch.runBatchFromCards(cards, {
+      generatorOptions: batchOptions,
+      accessMode: batchOptions.accessMode,
       dryRun: flags.dry_run === true,
       fromPreview: flags.from_preview === true,
       confirmCost: flags.confirm_cost === true,
@@ -268,4 +292,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { parseArgs, main, readSeed };
+module.exports = { parseArgs, main, readSeed, tavilyAccessModeFromFlags, generatorOptionsFromFlags };

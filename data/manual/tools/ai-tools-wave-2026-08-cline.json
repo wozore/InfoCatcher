@@ -1,0 +1,25 @@
+{
+  "detail_kind": "tool",
+  "name": "Cline",
+  "vendor_name": "Cline",
+  "vendor_key": "cline-vendor",
+  "tool_key": "cline",
+  "official_url": "https://cline.bot",
+  "placement": {
+    "new_group_title": "Cline"
+  },
+  "known_fields": {
+    "theme": "dev"
+  },
+  "discovery_sources": [
+    {
+      "url": "https://cline.bot",
+      "kind": "official_hint"
+    },
+    {
+      "url": "https://cline.bot/pricing",
+      "kind": "official_hint"
+    }
+  ],
+  "wave": "open-agent"
+}

@@ -2067,6 +2067,935 @@
         "id": "tool-level3:mimo-v2-5-pro"
       },
       "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:doubao-seed-character-260628",
+      "tool_key": "doubao-seed-character-260628",
+      "vendor_key": "bytedance",
+      "title": "Doubao Seed Character 260628",
+      "vendor_label": "字节跳动（豆包）",
+      "icon": "🤖",
+      "summary": "文本生成服务是火山方舟提供的API，支持多种模型调用。",
+      "theme": "general",
+      "scenes": [
+        "文本生成"
+      ],
+      "best_for_preview": "适合需要文本生成能力的应用。",
+      "not_for_preview": "不适合需要视频生成的场景。",
+      "price_badge": "paid",
+      "access_level": "开放",
+      "search_terms": [
+        "Doubao Seed Character 260628",
+        "字节跳动（豆包）",
+        "doubao-seed-character-260628",
+        "文本生成"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:doubao-seed-character-260628"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:deepseek-v4-flash-vision-exp",
+      "tool_key": "deepseek-v4-flash-vision-exp",
+      "vendor_key": "deepseek",
+      "title": "DeepSeek-V4-Flash-Vision-Exp",
+      "vendor_label": "深度求索",
+      "icon": "🤖",
+      "summary": "DeepSeek-V4-Flash-Vision-Exp 是 DeepSeek 推出的实验性多模态视觉理解模型，支持图像输入，具备前沿的智能体编码能力，可通过 OpenAI、Anthropic 及 Responses API 调用。",
+      "theme": "general",
+      "scenes": [
+        "视觉理解",
+        "智能体编码",
+        "多模态对话"
+      ],
+      "best_for_preview": "面向需要同时处理文本与图像理解任务的开发者和智能体应用，尤其在编码场景中结合视觉输入。",
+      "not_for_preview": "不适合仅依赖文本的轻量任务，因为其定位为多模态实验模型。",
+      "price_badge": "paid",
+      "access_level": "开放",
+      "search_terms": [
+        "DeepSeek-V4-Flash-Vision-Exp",
+        "深度求索",
+        "deepseek-v4-flash-vision-exp",
+        "视觉理解",
+        "智能体编码",
+        "多模态对话"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:deepseek-v4-flash-vision-exp"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:kimi-k2-7-code",
+      "tool_key": "kimi-k2-7-code",
+      "vendor_key": "moonshot",
+      "title": "Kimi K2.7 Code",
+      "vendor_label": "月之暗面（Kimi）",
+      "icon": "🤖",
+      "summary": "Kimi K2.7 Code 是面向代码场景的编程模型，支持文本、图片与视频输入，具备 256K 上下文窗口和高速版本。",
+      "theme": "general",
+      "scenes": [
+        "编程任务",
+        "长上下文代码生成",
+        "Agent 任务"
+      ],
+      "best_for_preview": "需要高效解决复杂编程问题，并希望利用长上下文理解多文件代码库的开发者。",
+      "not_for_preview": "不适合对输出速度要求不高的场景，或对成本敏感且需控制 token 消耗的简单任务。",
+      "price_badge": "usage_based",
+      "access_level": "开放",
+      "search_terms": [
+        "Kimi K2.7 Code",
+        "月之暗面（Kimi）",
+        "kimi-k2-7-code",
+        "编程任务",
+        "长上下文代码生成",
+        "Agent 任务"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:kimi-k2-7-code"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:qwen3-7-max",
+      "tool_key": "qwen3-7-max",
+      "vendor_key": "alibaba",
+      "title": "Qwen3.7 Max",
+      "vendor_label": "阿里巴巴（通义千问）",
+      "icon": "🤖",
+      "summary": "Qwen3.7系列中规模最大、综合能力最强的Max模型，当前开放纯文本模型能力供体验。Qwen3.7是面向智能体时代的新一代旗舰模型，核心优势在于智能体能力的广度与深度：在编程、办公与生产力、长周期自主执行方面均能出色胜任各项任务。",
+      "theme": "general",
+      "scenes": [
+        "智能体开发与自主执行",
+        "复杂编程与代码生成",
+        "办公与生产力提升",
+        "长上下文推理与深度解析"
+      ],
+      "best_for_preview": "适合高难度编程任务、复杂办公自动化、长周期自主智能体等专业场景。",
+      "not_for_preview": "不支持联网搜索、批量推理和模型微调，试用期功能可能受限。",
+      "price_badge": "paid",
+      "access_level": "区域限制",
+      "search_terms": [
+        "Qwen3.7 Max",
+        "阿里巴巴（通义千问）",
+        "qwen3-7-max",
+        "智能体开发与自主执行",
+        "复杂编程与代码生成",
+        "办公与生产力提升",
+        "长上下文推理与深度解析"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:qwen3-7-max"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:qwen3-5-omni",
+      "tool_key": "qwen3-5-omni",
+      "vendor_key": "alibaba",
+      "title": "Qwen3.5 Omni",
+      "vendor_label": "阿里巴巴（通义千问）",
+      "icon": "🤖",
+      "summary": "Qwen-Omni 是阿里云百炼平台提供的全模态大模型系列，支持文本、图像、音频和视频的联合理解与生成，适用于长视频分析、会议纪要、字幕生成等场景。",
+      "theme": "general",
+      "scenes": [
+        "长视频分析",
+        "会议纪要",
+        "字幕生成",
+        "内容审核",
+        "音视频交互",
+        "短视频分析"
+      ],
+      "best_for_preview": "长视频分析、会议纪要、字幕生成、内容审核、音视频交互等场景。",
+      "not_for_preview": "短视频分析、成本敏感场景可选用 Qwen3-Omni-Flash 系列，模型能力较弱。",
+      "price_badge": "paid",
+      "access_level": "开放",
+      "search_terms": [
+        "Qwen3.5 Omni",
+        "阿里巴巴（通义千问）",
+        "qwen3-5-omni",
+        "长视频分析",
+        "会议纪要",
+        "字幕生成",
+        "内容审核",
+        "音视频交互",
+        "短视频分析"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:qwen3-5-omni"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:qwen3-7-plus",
+      "tool_key": "qwen3-7-plus",
+      "vendor_key": "alibaba",
+      "title": "Qwen3.7 Plus",
+      "vendor_label": "阿里巴巴（通义千问）",
+      "icon": "🤖",
+      "summary": "qwen3.7-plus是阿里云百炼提供的多模态交互式智能体模型，支持文本、图像和视频输入，输出文本，具备增强的视觉语言能力，适用于编码、工具使用和生产力工作流。",
+      "theme": "general",
+      "scenes": [
+        "多模态交互",
+        "GUI自动化",
+        "视觉编程"
+      ],
+      "best_for_preview": "适合需要处理多模态数据（文本、图像、视频）且要求高性价比的场景，如视觉问答、GUI自动化、代码生成等。",
+      "not_for_preview": "不适合需要结构化输出或网络搜索的场景，也不适合需要微调或批量推理的场景。",
+      "price_badge": "paid",
+      "access_level": "区域限制",
+      "search_terms": [
+        "Qwen3.7 Plus",
+        "阿里巴巴（通义千问）",
+        "qwen3-7-plus",
+        "多模态交互",
+        "GUI自动化",
+        "视觉编程"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:qwen3-7-plus"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:qwen-image-2-0-pro",
+      "tool_key": "qwen-image-2-0-pro",
+      "vendor_key": "alibaba",
+      "title": "Qwen Image 2.0 Pro",
+      "vendor_label": "阿里巴巴（通义千问）",
+      "icon": "🖼️",
+      "summary": "千问图像生成与编辑模型Pro系列，支持文生图和图像编辑，具备更强的文字渲染、真实质感和语义遵循能力。",
+      "theme": "vision",
+      "scenes": [
+        "文生图",
+        "图像编辑",
+        "海报设计",
+        "信息图生成",
+        "写实场景渲染",
+        "多语言文字渲染"
+      ],
+      "best_for_preview": "擅长文字渲染和写实场景，适用于海报与图像编辑。",
+      "not_for_preview": "不支持超长提示词和实时交互。",
+      "price_badge": "paid",
+      "access_level": "区域限制",
+      "search_terms": [
+        "Qwen Image 2.0 Pro",
+        "阿里巴巴（通义千问）",
+        "qwen-image-2-0-pro",
+        "文生图",
+        "图像编辑",
+        "海报设计",
+        "信息图生成",
+        "写实场景渲染",
+        "多语言文字渲染"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:qwen-image-2-0-pro"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:grok-imagine-image-2-0",
+      "tool_key": "grok-imagine-image-2-0",
+      "vendor_key": "xai",
+      "title": "Grok Imagine Image 2.0",
+      "vendor_label": "xAI",
+      "icon": "🖼️",
+      "summary": "grok-imagine-image 是 xAI 的图像生成模型，支持文本和图像输入，生成 1K 或 2K 分辨率的图像。",
+      "theme": "vision",
+      "scenes": [
+        "创意图像生成",
+        "图像编辑与风格转换",
+        "艺术创作辅助",
+        "视觉概念设计"
+      ],
+      "best_for_preview": "适合快速生成高质量图像和进行图像风格编辑。",
+      "not_for_preview": "不适合视频生成或需要超高清分辨率的场景。",
+      "price_badge": "paid",
+      "access_level": "开放",
+      "search_terms": [
+        "Grok Imagine Image 2.0",
+        "xAI",
+        "grok-imagine-image-2-0",
+        "创意图像生成",
+        "图像编辑与风格转换",
+        "艺术创作辅助",
+        "视觉概念设计"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:grok-imagine-image-2-0"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:grok-imagine-video-1-5",
+      "tool_key": "grok-imagine-video-1-5",
+      "vendor_key": "xai",
+      "title": "Grok Imagine Video 1.5",
+      "vendor_label": "xAI",
+      "icon": "🎬",
+      "summary": "Grok Imagine Video 1.5 Preview 是 xAI 推出的视频生成模型，支持文本、图像、音频输入，根据分辨率按秒计费。",
+      "theme": "media",
+      "scenes": [
+        "视频生成",
+        "图像输入",
+        "音频输入"
+      ],
+      "best_for_preview": "适合需要快速生成视频的开发者，支持多种输入模态。",
+      "not_for_preview": "不适合需要低成本视频生成的场景，因为按秒计费且价格较高。",
+      "price_badge": "paid",
+      "access_level": "区域限制",
+      "search_terms": [
+        "Grok Imagine Video 1.5",
+        "xAI",
+        "grok-imagine-video-1-5",
+        "视频生成",
+        "图像输入",
+        "音频输入"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:grok-imagine-video-1-5"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:viduq3-pro",
+      "tool_key": "viduq3-pro",
+      "vendor_key": "vidu",
+      "title": "ViduQ3 Pro",
+      "vendor_label": "vidu",
+      "icon": "🎬",
+      "summary": "Vidu 开放平台提供丰富的视频生成 API 能力，采用积分计价方式。",
+      "theme": "media",
+      "scenes": [
+        "视频生成",
+        "图像生成",
+        "音频生成",
+        "实时数字人"
+      ],
+      "best_for_preview": [
+        "视频生成",
+        "图像生成",
+        "音频生成"
+      ],
+      "not_for_preview": [
+        "实时数字人"
+      ],
+      "price_badge": "freemium",
+      "access_level": "开放",
+      "search_terms": [
+        "ViduQ3 Pro",
+        "vidu",
+        "viduq3-pro",
+        "视频生成",
+        "图像生成",
+        "音频生成",
+        "实时数字人"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:viduq3-pro"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:reve-2-1",
+      "tool_key": "reve-2-1",
+      "vendor_key": "reve",
+      "title": "Reve 2.1",
+      "vendor_label": "Reve",
+      "icon": "🖼️",
+      "summary": "Reve 2.1 是顶级 4K 图像模型，具备视觉智能和布局规划能力，支持精度编辑和多语言文本渲染，输出原生 16MP 图像。",
+      "theme": "vision",
+      "scenes": [
+        "视觉智能与布局规划",
+        "精度编辑",
+        "原生 4K 输出",
+        "多语言文本渲染",
+        "专业摄影与平面设计",
+        "复杂场景生成"
+      ],
+      "best_for_preview": [
+        "需要高分辨率印刷质量的创意工作者",
+        "需要精细控制图像布局的设计师",
+        "需要多语言文本渲染的跨文化品牌"
+      ],
+      "not_for_preview": [
+        "需要视频生成的用户",
+        "只需要快速生成低分辨率图像的场景"
+      ],
+      "price_badge": "paid",
+      "access_level": "开放",
+      "search_terms": [
+        "Reve 2.1",
+        "Reve",
+        "reve-2-1",
+        "视觉智能与布局规划",
+        "精度编辑",
+        "原生 4K 输出",
+        "多语言文本渲染",
+        "专业摄影与平面设计",
+        "复杂场景生成"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:reve-2-1"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:hy-mt2-30b-a3b",
+      "tool_key": "hy-mt2-30b-a3b",
+      "vendor_key": "tencent",
+      "title": "Hy-MT2-30B-A3B",
+      "vendor_label": "腾讯（混元）",
+      "icon": "🤖",
+      "summary": "Hy-MT2 是腾讯混元推出的高性能多语言翻译模型，支持 33 种语言互译，在多种翻译任务上达到开源模型最佳效果。",
+      "theme": "general",
+      "scenes": [
+        "多语言翻译",
+        "跨语言内容创作",
+        "国际化业务部署"
+      ],
+      "best_for_preview": "多语言翻译场景",
+      "not_for_preview": "需要长上下文推理的任务",
+      "price_badge": "free",
+      "access_level": "开放",
+      "search_terms": [
+        "Hy-MT2-30B-A3B",
+        "腾讯（混元）",
+        "hy-mt2-30b-a3b",
+        "多语言翻译",
+        "跨语言内容创作",
+        "国际化业务部署"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:hy-mt2-30b-a3b"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:windsurf",
+      "tool_key": "windsurf",
+      "vendor_key": "windsurf-vendor",
+      "title": "Windsurf",
+      "vendor_label": "Windsurf",
+      "icon": "🧩",
+      "summary": "Windsurf Editor是首款AI原生IDE，提供代码补全、聊天、Cascade等智能功能，支持多种模型（如GPT-5.1、Gemini 3 Pro、SWE-1）以及Fast Context等技术，适合个人和企业用户。",
+      "theme": "dev",
+      "scenes": [
+        "个人开发",
+        "企业团队协作",
+        "大型代码库重构",
+        "多IDE环境"
+      ],
+      "best_for_preview": "适合需要AI辅助编码的各类开发者，尤其是处理大型代码库或需要合规支持的企业团队。",
+      "not_for_preview": "不适合不需要代码补全或AI交互的简单文本编辑场景。",
+      "price_badge": "freemium",
+      "access_level": "开放",
+      "search_terms": [
+        "Windsurf",
+        "Windsurf",
+        "windsurf",
+        "个人开发",
+        "企业团队协作",
+        "大型代码库重构",
+        "多IDE环境"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:windsurf"
+      },
+      "detail_kind": "tool"
+    },
+    {
+      "id": "tool-card:openai-codex",
+      "tool_key": "openai-codex",
+      "vendor_key": "openai",
+      "title": "OpenAI Codex",
+      "vendor_label": "OpenAI",
+      "icon": "🧩",
+      "summary": "OpenAI Codex 是面向编码任务的智能体工具，支持 CLI、IDE 扩展、云端及桌面应用，可通过 ChatGPT 订阅或 API 密钥使用。",
+      "theme": "dev",
+      "scenes": [
+        "编码任务",
+        "自动化脚本",
+        "代码审查",
+        "文档生成",
+        "CI/CD"
+      ],
+      "best_for_preview": "适合开发者在日常编码、自动化及代码审查场景中提升效率的工具。",
+      "not_for_preview": "不适合需要完整云功能或团队协作管理场景的用户。",
+      "price_badge": "freemium",
+      "access_level": "开放",
+      "search_terms": [
+        "OpenAI Codex",
+        "OpenAI",
+        "openai-codex",
+        "编码任务",
+        "自动化脚本",
+        "代码审查",
+        "文档生成",
+        "CI/CD"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:openai-codex"
+      },
+      "detail_kind": "tool"
+    },
+    {
+      "id": "tool-card:gemini-cli",
+      "tool_key": "gemini-cli",
+      "vendor_key": "google",
+      "title": "Gemini CLI",
+      "vendor_label": "Google",
+      "icon": "🧩",
+      "summary": "Gemini CLI 是开源 AI 代理，提供终端内的 Gemini 模型访问，支持代码生成、文件管理、仓库解释等任务。",
+      "theme": "dev",
+      "scenes": [
+        "代码理解与生成",
+        "文件批量重命名",
+        "仓库代码分析",
+        "终端自动化任务"
+      ],
+      "best_for_preview": "开发者、技术爱好者、需要终端 AI 辅助的编程用户",
+      "not_for_preview": "非技术用户或不需要终端操作的用户",
+      "price_badge": "free",
+      "access_level": "开放",
+      "search_terms": [
+        "Gemini CLI",
+        "Google",
+        "gemini-cli",
+        "代码理解与生成",
+        "文件批量重命名",
+        "仓库代码分析",
+        "终端自动化任务"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:gemini-cli"
+      },
+      "detail_kind": "tool"
+    },
+    {
+      "id": "tool-card:replit-agent",
+      "tool_key": "replit-agent",
+      "vendor_key": "replit",
+      "title": "Replit Agent",
+      "vendor_label": "Replit",
+      "icon": "🧩",
+      "summary": "Replit Agent将想法转化为应用，无需编码经验。",
+      "theme": "dev",
+      "scenes": [
+        "初学者构建应用",
+        "快速原型制作",
+        "企业整合数据源"
+      ],
+      "best_for_preview": "快速将想法转化为可部署应用的非技术用户。",
+      "not_for_preview": "需要深度定制现有大型代码库的开发者。",
+      "price_badge": "freemium",
+      "access_level": "开放",
+      "search_terms": [
+        "Replit Agent",
+        "Replit",
+        "replit-agent",
+        "初学者构建应用",
+        "快速原型制作",
+        "企业整合数据源"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:replit-agent"
+      },
+      "detail_kind": "tool"
+    },
+    {
+      "id": "tool-card:devin",
+      "tool_key": "devin",
+      "vendor_key": "cognition",
+      "title": "Devin",
+      "vendor_label": "Cognition",
+      "icon": "🧩",
+      "summary": "Devin是面向政府部门的AI软件工程平台，提供基于用量的平台访问和固定价格的任务交付模式。",
+      "theme": "dev",
+      "scenes": [
+        "政府系统现代化",
+        "漏洞修复",
+        "能力开发"
+      ],
+      "best_for_preview": "政府机构及其任务合作伙伴",
+      "not_for_preview": "普通个人用户",
+      "price_badge": "usage_based",
+      "access_level": "受限",
+      "search_terms": [
+        "Devin",
+        "Cognition",
+        "devin",
+        "政府系统现代化",
+        "漏洞修复",
+        "能力开发"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:devin"
+      },
+      "detail_kind": "tool"
+    },
+    {
+      "id": "tool-card:augment-code",
+      "tool_key": "augment-code",
+      "vendor_key": "augment",
+      "title": "Augment Code",
+      "vendor_label": "Augment Code",
+      "icon": "🧩",
+      "summary": "Augment Code 是专为企业软件工程设计的 AI 编码平台，提供编码代理、上下文引擎和自动化功能。",
+      "theme": "dev",
+      "scenes": [
+        "代码生成",
+        "代码审查",
+        "自动化工作流",
+        "大型项目迁移",
+        "安全修复"
+      ],
+      "best_for_preview": "针对大型代码库的 AI 辅助编码与自动化工作流",
+      "not_for_preview": "非编码相关的通用 AI 助理",
+      "price_badge": "paid",
+      "access_level": "开放",
+      "search_terms": [
+        "Augment Code",
+        "Augment Code",
+        "augment-code",
+        "代码生成",
+        "代码审查",
+        "自动化工作流",
+        "大型项目迁移",
+        "安全修复"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:augment-code"
+      },
+      "detail_kind": "tool"
+    },
+    {
+      "id": "tool-card:vidu-s1",
+      "tool_key": "vidu-s1",
+      "vendor_key": "vidu",
+      "title": "Vidu S1",
+      "vendor_label": "vidu",
+      "icon": "🎬",
+      "summary": "Vidu S1 是全球领先的实时交互模型，支持语音控制的定制数字人、无限时长视频生成和高帧率输出。",
+      "theme": "media",
+      "scenes": [
+        "实时互动",
+        "实时陪伴",
+        "直播",
+        "虚拟角色对话",
+        "客服"
+      ],
+      "best_for_preview": "需要实时语音交互的数字人场景",
+      "not_for_preview": "离线批量视频生成",
+      "price_badge": "usage_based",
+      "access_level": "受限",
+      "search_terms": [
+        "Vidu S1",
+        "vidu",
+        "vidu-s1",
+        "实时互动",
+        "实时陪伴",
+        "直播",
+        "虚拟角色对话",
+        "客服"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:vidu-s1"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:amazon-q-developer",
+      "tool_key": "amazon-q-developer",
+      "vendor_key": "aws",
+      "title": "Amazon Q Developer",
+      "vendor_label": "Amazon Web Services",
+      "icon": "🧩",
+      "summary": "Amazon Q Developer 是 AWS 的生成式 AI 编程助手，提供代码补全、生成、安全扫描、升级优化等功能，支持 IDE、控制台和聊天应用。",
+      "theme": "dev",
+      "scenes": [
+        "IDE 代码辅助",
+        "AWS 架构问答",
+        "代码安全扫描"
+      ],
+      "best_for_preview": "希望在 AWS 上加速开发、获得代码补全与安全扫描的开发者。",
+      "not_for_preview": "需要本地离线运行的开发者或对数据隐私要求极高的企业。",
+      "price_badge": "freemium",
+      "access_level": "开放",
+      "search_terms": [
+        "Amazon Q Developer",
+        "Amazon Web Services",
+        "amazon-q-developer",
+        "IDE 代码辅助",
+        "AWS 架构问答",
+        "代码安全扫描"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:amazon-q-developer"
+      },
+      "detail_kind": "tool"
+    },
+    {
+      "id": "tool-card:junie",
+      "tool_key": "junie",
+      "vendor_key": "jetbrains",
+      "title": "Junie",
+      "vendor_label": "JetBrains",
+      "icon": "🧩",
+      "summary": "Junie 是 JetBrains 的 AI 编码代理，可在 JetBrains IDE 或 CLI 中使用，支持多模型、计划模式、实时引导和调试功能。",
+      "theme": "dev",
+      "scenes": [
+        "IDE 内编码辅助",
+        "终端自动化任务",
+        "GitHub 议题处理",
+        "GitLab 合并请求处理"
+      ],
+      "best_for_preview": "JetBrains IDE 用户",
+      "not_for_preview": "需要超长上下文处理",
+      "price_badge": "freemium",
+      "access_level": "开放",
+      "search_terms": [
+        "Junie",
+        "JetBrains",
+        "junie",
+        "IDE 内编码辅助",
+        "终端自动化任务",
+        "GitHub 议题处理",
+        "GitLab 合并请求处理"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:junie"
+      },
+      "detail_kind": "tool"
+    },
+    {
+      "id": "tool-card:kiro",
+      "tool_key": "kiro",
+      "vendor_key": "amazon",
+      "title": "Kiro",
+      "vendor_label": "Amazon",
+      "icon": "🧩",
+      "summary": "Kiro is an agentic IDE that supports spec-driven development with agentic chat, autopilot mode, MCP integration, hooks, and steering files.",
+      "theme": "dev",
+      "scenes": [
+        "带有AI辅助的本地开发",
+        "自动化重复的开发任务",
+        "通过浏览器委托任务",
+        "终端工作流程和管道"
+      ],
+      "best_for_preview": "对于需要规范驱动开发能力的AI辅助编码任务有良好支持",
+      "not_for_preview": "不适合需要本地离线编码而没有AI辅助的场景",
+      "price_badge": "freemium",
+      "access_level": "区域限制",
+      "search_terms": [
+        "Kiro",
+        "Amazon",
+        "kiro",
+        "带有AI辅助的本地开发",
+        "自动化重复的开发任务",
+        "通过浏览器委托任务",
+        "终端工作流程和管道"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:kiro"
+      },
+      "detail_kind": "tool"
+    },
+    {
+      "id": "tool-card:cline",
+      "tool_key": "cline",
+      "vendor_key": "cline-vendor",
+      "title": "Cline",
+      "vendor_label": "Cline",
+      "icon": "🧩",
+      "summary": "Cline 是开源的 AI 编码代理，在编辑器和终端中运行，支持文件读写、命令执行、浏览器操作，所有操作需用户批准，兼容多种模型与开放协议。",
+      "theme": "dev",
+      "scenes": [
+        "个别开发",
+        "企业团队协作",
+        "自动化脚本",
+        "代码重构",
+        "CI/CD 集成"
+      ],
+      "best_for_preview": "开发人员使用 AI 代理进行代码编辑和任务自动化",
+      "not_for_preview": "非开发人员使用",
+      "price_badge": "freemium",
+      "access_level": "开放",
+      "search_terms": [
+        "Cline",
+        "Cline",
+        "cline",
+        "个别开发",
+        "企业团队协作",
+        "自动化脚本",
+        "代码重构",
+        "CI/CD 集成"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:cline"
+      },
+      "detail_kind": "tool"
+    },
+    {
+      "id": "tool-card:aider",
+      "tool_key": "aider",
+      "vendor_key": "aider-vendor",
+      "title": "Aider",
+      "vendor_label": "Aider",
+      "icon": "🧩",
+      "summary": "Aider是一款终端AI编程助手，通过聊天方式帮助用户编写、修改代码，集成Git和代码库映射。",
+      "theme": "dev",
+      "scenes": [
+        "终端编程",
+        "代码审查",
+        "项目开发",
+        "学习编程"
+      ],
+      "best_for_preview": "适合需要在终端中快速实现代码修改和生成的开发场景。",
+      "not_for_preview": "不适合需要图形界面或IDE完整集成的场景。",
+      "price_badge": "free",
+      "access_level": "开放",
+      "search_terms": [
+        "Aider",
+        "Aider",
+        "aider",
+        "终端编程",
+        "代码审查",
+        "项目开发",
+        "学习编程"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:aider"
+      },
+      "detail_kind": "tool"
+    },
+    {
+      "id": "tool-card:continue",
+      "tool_key": "continue",
+      "vendor_key": "continue-vendor",
+      "title": "Continue",
+      "vendor_label": "Continue",
+      "icon": "🧩",
+      "summary": "Continue 是一款开源 AI 编码代理，提供 VS Code、JetBrains 和 CLI 工具。",
+      "theme": "dev",
+      "scenes": [
+        "代码开发",
+        "代码审查",
+        "自动化编码任务"
+      ],
+      "best_for_preview": "开发者需要高度自定义 AI 编码辅助的场景",
+      "not_for_preview": "需要官方持续维护和支持的企业生产环境",
+      "price_badge": "free",
+      "access_level": "开放",
+      "search_terms": [
+        "Continue",
+        "Continue",
+        "continue",
+        "代码开发",
+        "代码审查",
+        "自动化编码任务"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:continue"
+      },
+      "detail_kind": "tool"
+    },
+    {
+      "id": "tool-card:qoder",
+      "tool_key": "qoder",
+      "vendor_key": "qoder-vendor",
+      "title": "Qoder",
+      "vendor_label": "Qoder",
+      "icon": "🧩",
+      "summary": "Qoder是一个代理式编码平台，面向真实软件开发，提供Editor与Quest工作区，集成了代码生成、问答、多文件编辑和智能体自动化，并支持MCP、知识引擎、JetBrains插件及CLI等扩展能力。",
+      "theme": "dev",
+      "scenes": [
+        "日常编程开发",
+        "自主任务委托",
+        "多文件重构",
+        "代码理解与问答",
+        "知识库管理"
+      ],
+      "best_for_preview": "需要智能体辅助编码、任务自动化及多文件重构的开发者",
+      "not_for_preview": "仅需简单文本补全且不喜欢代理式工作流的用户",
+      "price_badge": "freemium",
+      "access_level": "开放",
+      "search_terms": [
+        "Qoder",
+        "Qoder",
+        "qoder",
+        "日常编程开发",
+        "自主任务委托",
+        "多文件重构",
+        "代码理解与问答",
+        "知识库管理"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:qoder"
+      },
+      "detail_kind": "tool"
+    },
+    {
+      "id": "tool-card:codebuddy",
+      "tool_key": "codebuddy",
+      "vendor_key": "codebuddy-vendor",
+      "title": "CodeBuddy",
+      "vendor_label": "腾讯云 CodeBuddy",
+      "icon": "🧩",
+      "summary": "CodeBuddy IDE是一款AI代码编辑器，提供代码补全、AI生成、Agent协作等功能，支持macOS和Windows。",
+      "theme": "dev",
+      "scenes": [
+        "个人开发者编程",
+        "团队协作开发",
+        "快速原型开发",
+        "Figma设计转代码"
+      ],
+      "best_for_preview": "适合个人开发者和小型团队，需要AI辅助编码和快速原型开发的场景。",
+      "not_for_preview": "不适合需要高度定制化IDE功能或严格私有化部署的企业。",
+      "price_badge": "freemium",
+      "access_level": "开放",
+      "search_terms": [
+        "CodeBuddy",
+        "腾讯云 CodeBuddy",
+        "codebuddy",
+        "个人开发者编程",
+        "团队协作开发",
+        "快速原型开发",
+        "Figma设计转代码"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:codebuddy"
+      },
+      "detail_kind": "tool"
     }
   ]
 }

@@ -1,0 +1,23 @@
+{
+  "detail_kind": "tool",
+  "name": "Kiro",
+  "vendor_name": "Amazon",
+  "vendor_key": "amazon",
+  "tool_key": "kiro",
+  "official_url": "https://kiro.dev/changelog/ide/0-1/",
+  "repair_layers": ["tool-level3"],
+  "placement": {
+    "new_group_title": "Kiro"
+  },
+  "known_fields": {
+    "theme": "dev"
+  },
+  "discovery_sources": [
+    { "url": "https://kiro.dev/changelog/ide/0-1/", "kind": "official_hint" },
+    { "url": "https://kiro.dev", "kind": "official_hint" },
+    { "url": "https://kiro.dev/docs/billing/", "kind": "official_hint" },
+    { "url": "https://kiro.dev/pricing/", "kind": "official_hint" }
+  ],
+  "repair_note": "修复 tool-level3:kiro 的 official_date 为 2025-07-14；官方 IDE changelog 的 0.1 预览版发布页明确标注 July 14, 2025。",
+  "wave": "commercial-agent"
+}

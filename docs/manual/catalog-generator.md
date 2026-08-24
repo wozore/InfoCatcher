@@ -9,7 +9,7 @@
 - Node.js；
 - 在项目根目录执行命令；
 - 目录模块配置的 DeepSeek provider 对应 API Key 环境变量（默认是 `DEEPSEEK_API_KEY`）；
-- 官方资料搜索和正文提取使用 Tavily。Search/Extract 默认走 **keyless**（免费、无需 `TAVILY_API_KEY`）；配置 `TAVILY_API_KEY` 仅用于 keyless 小时额度耗尽时的自动回退，以及 keyed 端点（map/crawl/research）。可选环境变量 `TAVILY_ACCESS_MODE=auto|keyless|keyed` 可一键强制认证模式；
+- 官方资料搜索和正文提取使用 Tavily。目录生成器的联网命令必须显式传入 `--tavily-access-mode keyed`，使用 `TAVILY_API_KEY`；本轮工具卡生成不使用 keyless 模式。缺少 Key 时会在发出请求前 fail-closed；不要把真实 Key 写入 Seed、配置文件、BAT 或目录 JSON。
 - 目录生成器不再使用 DeepSeek `web_search`。Tavily Search 负责发现官方来源，Tavily Extract 负责返回清洗后的正文，DeepSeek 单段式基于官方来源正文合成五层字段与来源 provenance（不再有 AtomicClaim 中间层）。
 
 API Key 只通过环境变量读取，不要写入 Seed、配置文件、BAT、草案或目录 JSON。
@@ -79,9 +79,9 @@ $env:TAVILY_API_KEY = "你的Tavily_API_Key"
 |---|---|---|---|
 | `plan --seed <file>` | 离线计算 CatalogProfile、ResearchScope、LayerPlan 和硬成本计划 | 否 | 否 |
 | `prepare --seed <file>` | `plan` 的兼容别名；只输出离线计划 | 否 | 否 |
-| `probe --confirm-cost` | 检查 Tavily 检索和 DeepSeek 合成配置 | 会调用一次 Tavily | 否 |
-| `new --seed <file> --confirm-cost` | 按计划联网研究并生成 schema v3 Preview Draft | 会联网并可能产生费用 | 否 |
-| `resume <draft-id> --confirm-cost` | 只补 FieldCoverage 中仍缺失字段对应的层来源并重新合成 | 会联网并可能产生费用 | 否 |
+| `probe --confirm-cost --tavily-access-mode keyed` | 检查 Tavily 检索和 DeepSeek 合成配置 | 会调用一次 Tavily | 否 |
+| `new --seed <file> --confirm-cost --tavily-access-mode keyed` | 按计划联网研究并生成 schema v3 Preview Draft | 会联网并可能产生费用 | 否 |
+| `resume <draft-id> --confirm-cost --tavily-access-mode keyed` | 只补 FieldCoverage 中仍缺失字段对应的层来源并重新合成 | 会联网并可能产生费用 | 否 |
 | `list` | 列出草案及状态 | 否 | 否 |
 | `review <draft-id>` | 重算字段覆盖、LayerPatch、Preview hash 和目录版本 | 否 | 否 |
 | `apply <draft-id>` | 等待 `APPLY <draft-id>` 确认后正式写入 | 通常不需要 AI 调用 | 是 |
@@ -94,13 +94,13 @@ $env:TAVILY_API_KEY = "你的Tavily_API_Key"
 输入完整命令后按回车执行，例如：
 
 ```text
-probe --confirm-cost
+probe --confirm-cost --tavily-access-mode keyed
 ```
 
 也可以在 CMD 或 PowerShell 中直接带参数执行：
 
 ```bat
-bat\catalog-generator.bat probe --confirm-cost
+bat\catalog-generator.bat probe --confirm-cost --tavily-access-mode keyed
 ```
 
 双击后直接按回车会退出，不会修改任何文件。命令执行完毕后窗口不会自动进入下一轮交互；需要执行下一条命令时重新双击 BAT，或在终端中再次运行。
@@ -110,7 +110,7 @@ bat\catalog-generator.bat probe --confirm-cost
 在项目根目录执行：
 
 ```bat
-bat\catalog-generator.bat probe --confirm-cost
+bat\catalog-generator.bat probe --confirm-cost --tavily-access-mode keyed
 ```
 
 这会执行一次最小 Tavily 动态检查，可能产生 API 调用费用。成功时应看到：
@@ -301,21 +301,22 @@ bat\catalog-generator.bat plan --seed data\manual\catalog-seed.json
 确认输出中的 `profile`、三个 ResearchScope、每层 `create/replace/noop` 和硬成本上限后，再执行：
 
 ```bat
-bat\catalog-generator.bat new --seed data\manual\catalog-seed.json --confirm-cost
+bat\catalog-generator.bat new --seed data\manual\catalog-seed.json --confirm-cost --tavily-access-mode keyed
 ```
 
 `new` 会依次执行：
 
 1. 根据 `detail_kind + modality` 选择 CatalogProfile，并计算需要研究的 vendor/group/detail scope；
 2. 使用 Tavily Search 按官方域名和谓词联想搜索 developer/API/OpenAPI/pricing/credits/specifications 等资料；
-3. canonicalize URL、过滤非官方域名，再用 Tavily Extract 获取清洗后的 markdown/text 正文；
-4. DeepSeek 不使用 web tools，单段式直接基于各层官方来源正文合成全部层字段与来源 provenance；
-5. 计算 FieldCoverage；任一适用字段缺值、占位或未引用官方来源时保持 blocked；
-6. 验证每个字段引用的 source_id 真实存在，并校验记录完整性；
-7. 本地生成每层完整的 `create/replace/noop` LayerPatch，禁止空值、`null`、空数组和 `unknown/未知`；
-8. 校验 FutureSnapshot、revision 与 Preview hash；
-9. 将 schema v3 Draft 保存到 `data/manual/tools/catalog-drafts/<draft-id>.json`；
-10. 输出 Preview，不会写入正式 catalog。
+3. `detail` scope 还会把 Seed 的 `official_url` 与 `discovery_sources[kind=official_hint]` 作为指定官方来源直接加入待提取列表；它们不只是信任根，适用于用户已核验的具体 release notes、定价页或产品文档；
+4. canonicalize URL、过滤非官方域名，再用 Tavily Extract 获取清洗后的 markdown/text 正文；
+5. DeepSeek 不使用 web tools，单段式直接基于各层官方来源正文合成全部层字段与来源 provenance；
+6. 计算 FieldCoverage；任一适用字段缺值、占位或未引用官方来源时保持 blocked；
+7. 验证每个字段引用的 source_id 真实存在，并校验记录完整性；
+8. 本地生成每层完整的 `create/replace/noop` LayerPatch，禁止空值、`null`、空数组和 `unknown/未知`；
+9. 校验 FutureSnapshot、revision 与 Preview hash；
+10. 将 schema v3 Draft 保存到 `data/manual/tools/catalog-drafts/<draft-id>.json`；
+11. 输出 Preview，不会写入正式 catalog。
 
 输出中的关键值：
 
@@ -332,7 +333,7 @@ bat\catalog-generator.bat new --seed data\manual\catalog-seed.json --confirm-cos
 如果关键事实没有官方证据，Draft 会是 `preview_blocked`。不要手工补价格、日期或占位值绕过门禁；可修正官方来源提示后执行：
 
 ```bat
-bat\catalog-generator.bat resume draft-xxxxxxxxxxxx-xxxxxxxx --confirm-cost
+bat\catalog-generator.bat resume draft-xxxxxxxxxxxx-xxxxxxxx --confirm-cost --tavily-access-mode keyed
 ```
 
 `resume` 只重新研究 FieldCoverage 中仍 missing 字段对应的层 scope，并重新合成，保留已有来源和累计成本账本。即使前一次因网络错误或 `COST_BUDGET_EXHAUSTED` 中断，已完成的 OfficialSources 也会写入失败 Draft，后续不会从已覆盖的 scope 重新开始。
@@ -519,7 +520,7 @@ node scripts/catalog-generator.js url-registry product audit --stale-days 183
 ### 先 dry-run 预览
 
 ```bash
-node scripts/catalog-generator.js batch --file data/manual/tools/tool-cards-pending.json --dry-run
+node scripts/catalog-generator.js batch --file data/manual/tools/tool-cards-pending.json --dry-run --tavily-access-mode keyed
 ```
 
 写 `data/manual/tools/batch-seeds-preview.json`（已解析 seed + 每工具成本估算），不建草案、零研究零合成。
@@ -527,7 +528,7 @@ node scripts/catalog-generator.js batch --file data/manual/tools/tool-cards-pend
 ### 正式批量生成
 
 ```bash
-node scripts/catalog-generator.js batch --file data/manual/tools/tool-cards-pending.json --confirm-cost
+node scripts/catalog-generator.js batch --file data/manual/tools/tool-cards-pending.json --confirm-cost --tavily-access-mode keyed
 ```
 
 - 全局成本确认一次后，每个工具 readiness ready 即自动写入正式五模块目录（跳过人工 `APPLY <id>` 输入）。

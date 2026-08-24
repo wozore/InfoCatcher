@@ -158,6 +158,10 @@
         {
           "kind": "tool-level3",
           "id": "tool-level3:deepseek-v4-pro"
+        },
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:deepseek-v4-flash-vision-exp"
         }
       ]
     },
@@ -682,6 +686,446 @@
         {
           "kind": "tool-level3",
           "id": "tool-level3:mimo-v2-5-pro"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:bytedance:seed-character",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:bytedance"
+      },
+      "vendor_key": "bytedance",
+      "title": "Seed Character",
+      "official_url": "https://docs.volcengine.com/docs/82379/1399009",
+      "summary": "火山方舟是火山引擎提供的大模型服务平台，支持文本生成、视频生成等多种模型。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:doubao-seed-character-260628"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:moonshot:kimi-k2",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:moonshot"
+      },
+      "vendor_key": "moonshot",
+      "title": "Kimi K2",
+      "official_url": "https://platform.kimi.com/",
+      "summary": "Kimi API 开放平台提供模型即服务，集成多种工具和垂直场景能力。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:kimi-k2-7-code"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:alibaba:qwen3-7",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:alibaba"
+      },
+      "vendor_key": "alibaba",
+      "title": "Qwen3.7",
+      "official_url": "https://help.aliyun.com/zh/model-studio/qwen3-7-max",
+      "summary": "Qwen3.7系列中规模最大、综合能力最强的Max模型，面向智能体时代设计，在编程、办公与生产力、长周期自主执行等智能体能力方面表现出色。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:qwen3-7-max"
+        },
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:qwen3-7-plus"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:alibaba:qwen3-5-omni",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:alibaba"
+      },
+      "vendor_key": "alibaba",
+      "title": "Qwen3.5 Omni",
+      "official_url": "https://help.aliyun.com/zh/model-studio/qwen-omni",
+      "summary": "阿里云百炼平台提供的通义千问 Omni 系列全模态大模型，支持文本、图像、音频和视频的联合理解与生成，覆盖多种应用场景。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:qwen3-5-omni"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:alibaba:qwen-image-2",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:alibaba"
+      },
+      "vendor_key": "alibaba",
+      "title": "Qwen Image 2",
+      "official_url": "https://help.aliyun.com/en/model-studio/qwen-image-2-0-pro",
+      "summary": "阿里云百炼平台提供的千问图像生成与编辑模型，整合图像生成与编辑能力，具备专业文字渲染、真实质感与更强语义遵循能力。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:qwen-image-2-0-pro"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:xai:grok-imagine",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:xai"
+      },
+      "vendor_key": "xai",
+      "title": "Grok Imagine",
+      "official_url": "https://docs.x.ai/developers/model-capabilities/imagine",
+      "summary": "Grok Imagine 是 xAI 提供的图像生成与编辑 API 系列，涵盖文本转图像、图像编辑及视频生成能力。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:grok-imagine-image-2-0"
+        },
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:grok-imagine-video-1-5"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:vidu:viduq3",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:vidu"
+      },
+      "vendor_key": "vidu",
+      "title": "ViduQ3",
+      "official_url": "https://platform.vidu.cn/docs/pricing",
+      "summary": "Vidu 开放平台提供视频生成 API，采用积分计价。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:viduq3-pro"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:reve:reve-2-1",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:reve"
+      },
+      "vendor_key": "reve",
+      "title": "Reve 2.1",
+      "official_url": "https://app.reve.com/",
+      "summary": "Reve 是一个独立的 AI 图像模型实验室，专注于可控的 4K 图像生成与编辑。Reve 2.1 是其最新模型，在视觉智能、布局规划和原生 4K 输出方面表现出色，同时提供 API 和企业级团队解决方案。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:reve-2-1"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:tencent:hy-mt2",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:tencent"
+      },
+      "vendor_key": "tencent",
+      "title": "Hy-MT2",
+      "official_url": "https://hunyuan.tencent.com/research/100041?langVersion=zh",
+      "summary": "Hy-MT2 是腾讯混元推出的高性能多语言翻译模型，支持 33 种语言互译，7B 和 30B-A3B 模型在翻译任务上达到开源模型最佳效果。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:hy-mt2-30b-a3b"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:windsurf-vendor:windsurf",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:windsurf-vendor"
+      },
+      "vendor_key": "windsurf-vendor",
+      "title": "Windsurf",
+      "official_url": "https://windsurf.com",
+      "summary": "Windsurf（原Codeium）是AI编程工具，提供编辑器、插件和一系列模型，支持多种IDE，持续更新功能。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:windsurf"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:openai:openai-codex",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:openai"
+      },
+      "vendor_key": "openai",
+      "title": "OpenAI Codex",
+      "official_url": "https://openai.com/products/release-notes",
+      "summary": "OpenAI 官方发布的 Codex 产品更新与发布说明，涵盖 ChatGPT 桌面应用、Codex 应用、API 及模型更新。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:openai-codex"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:google:gemini-cli",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:google"
+      },
+      "vendor_key": "google",
+      "title": "Gemini CLI",
+      "official_url": "https://github.com/google-gemini/gemini-cli",
+      "summary": "Gemini CLI 是 Google 推出的开源 AI 代理，将 Gemini 模型直接引入终端，支持代码理解、自动化任务和工作流构建。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:gemini-cli"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:replit:replit-agent",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:replit"
+      },
+      "vendor_key": "replit",
+      "title": "Replit Agent",
+      "official_url": "https://replit.com",
+      "summary": "Replit Agent是Replit平台的AI开发工具，可创建网页、移动应用、数据看板等。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:replit-agent"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:cognition:devin",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:cognition"
+      },
+      "vendor_key": "cognition",
+      "title": "Devin",
+      "official_url": "https://docs.devin.ai/federal/introduction",
+      "summary": "Devin是面向政府部门的AI软件工程平台，提供安全合规的智能体开发功能。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:devin"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:augment:augment-code",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:augment"
+      },
+      "vendor_key": "augment",
+      "title": "Augment Code",
+      "official_url": "https://www.augmentcode.com/changelog",
+      "summary": "Augment 提供 IDE 扩展、CLI 和 Cosmos 代理平台，不断更新功能和修复。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:augment-code"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:vidu:vidu-s1",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:vidu"
+      },
+      "vendor_key": "vidu",
+      "title": "Vidu S1",
+      "official_url": "https://platform.vidu.com/",
+      "summary": "Vidu API 提供视频生成、图像生成、音频生成及实时交互数字人等模型，覆盖 Vidu S1、ViduQ3、ViduQ2、ViduQ1、Vidu2.0 等系列。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:vidu-s1"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:aws:amazon-q-developer",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:aws"
+      },
+      "vendor_key": "aws",
+      "title": "Amazon Q Developer",
+      "official_url": "https://aws.amazon.com/q",
+      "summary": "Amazon Q 是 AWS 的生成式 AI 助手系列，包含面向开发者的 Amazon Q Developer 和面向企业的 Amazon Q Business。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:amazon-q-developer"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:jetbrains:junie",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:jetbrains"
+      },
+      "vendor_key": "jetbrains",
+      "title": "Junie",
+      "official_url": "https://junie.jetbrains.com/",
+      "summary": "Junie 是 JetBrains 推出的 AI 编码代理，提供 IDE 内与独立 CLI 两种使用方式，官方文档覆盖安装、许可和集成。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:junie"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:amazon:kiro",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:amazon"
+      },
+      "vendor_key": "amazon",
+      "title": "Kiro",
+      "official_url": "https://kiro.dev/changelog/ide",
+      "summary": "The IDE offers agentic chat, specs, steering, hooks, and MCP integration for AI-assisted development.",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:kiro"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:cline-vendor:cline",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:cline-vendor"
+      },
+      "vendor_key": "cline-vendor",
+      "title": "Cline",
+      "official_url": "https://cline.bot/",
+      "summary": "Cline 是面向开发者的开源 AI 编码代理系列，覆盖 IDE、CLI 和 SDK。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:cline"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:aider-vendor:aider",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:aider-vendor"
+      },
+      "vendor_key": "aider-vendor",
+      "title": "Aider",
+      "official_url": "https://aider.chat/",
+      "summary": "Aider是终端AI编程工具，提供AI配对编程能力。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:aider"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:continue-vendor:continue",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:continue-vendor"
+      },
+      "vendor_key": "continue-vendor",
+      "title": "Continue",
+      "official_url": "https://github.com/continuedev/continue.git",
+      "summary": "开源的 AI 编码代理项目，已停止积极维护。",
+      "status": "deprecated",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:continue"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:qoder-vendor:qoder",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:qoder-vendor"
+      },
+      "vendor_key": "qoder-vendor",
+      "title": "Qoder",
+      "official_url": "https://qoder.com/",
+      "summary": "Qoder是一个活跃发展的代理式AI编程平台，官方持续发布更新并拓展生态，涵盖IDE、CLI、JetBrains插件等多种形态。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:qoder"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:codebuddy-vendor:codebuddy",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:codebuddy-vendor"
+      },
+      "vendor_key": "codebuddy-vendor",
+      "title": "CodeBuddy",
+      "official_url": "https://www.codebuddy.ai/ide",
+      "summary": "CodeBuddy IDE是CodeBuddy产品线的集成开发环境，提供AI辅助编码功能，持续更新版本。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:codebuddy"
         }
       ]
     }

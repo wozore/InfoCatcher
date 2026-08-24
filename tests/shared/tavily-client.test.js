@@ -155,6 +155,69 @@ test('keyless cap 429 auto-falls back to keyed and succeeds', async () => {
   assert.equal(state.cooldownUntilMs, 1000000 + 90000);
 });
 
+test('keyless hourly cap detail auto-falls back to keyed and succeeds', async () => {
+  const calls = [];
+  const state = freshState();
+  let bodyConsumed = false;
+  const result = await searchTavily(isolated({
+    state,
+    query: 'test',
+    apiKey: 'test-key',
+    fetchImpl: async (url, init) => {
+      calls.push(init.headers);
+      if (calls.length === 1) {
+        return {
+          ok: false,
+          status: 429,
+          json: async () => {
+            if (bodyConsumed) throw new Error('Body has already been consumed');
+            bodyConsumed = true;
+            return { detail: 'You have reached the hourly keyless Tavily limit.' };
+          },
+          text: async () => { throw new Error('Body has already been consumed'); },
+        };
+      }
+      return response({ results: [{ url: 'https://example.com', title: 't', content: 'c' }] });
+    },
+  }));
+  assert.equal(result.ok, true);
+  assert.equal(calls.length, 2);
+  assert.equal(calls[0]['X-Tavily-Access-Mode'], 'keyless');
+  assert.equal(calls[0].Authorization, undefined);
+  assert.equal(calls[1].Authorization, 'Bearer test-key');
+  assert.equal(calls[1]['X-Tavily-Access-Mode'], undefined);
+  assert.equal(state.stats.keylessCapHits, 1);
+  assert.equal(state.stats.keylessFallbacks, 1);
+  assert.equal(state.cooldownUntilMs, 1000000 + 90000);
+});
+test('similar keyless 429 falls back to keyed to preserve task continuity', async () => {
+  const calls = [];
+  const state = freshState();
+  const result = await searchTavily(isolated({
+    state,
+    query: 'test',
+    apiKey: 'test-key',
+    fetchImpl: async (url, init) => {
+      calls.push(init.headers);
+      if (calls.length === 1) {
+        return {
+          ok: false,
+          status: 429,
+          json: async () => ({ detail: 'You have reached the hourly keyless Tavily limit' }),
+          text: async () => { throw new Error('Body has already been consumed'); },
+        };
+      }
+      return response({ results: [] });
+    },
+  }));
+  assert.equal(result.ok, true);
+  assert.equal(calls.length, 2);
+  assert.equal(calls[1].Authorization, 'Bearer test-key');
+  assert.equal(state.cooldownUntilMs, 1000000 + 90000);
+  assert.equal(state.stats.keylessCapHits, 0);
+  assert.equal(state.stats.keylessRateLimitHits, 1);
+  assert.equal(state.stats.keylessFallbacks, 1);
+});
 test('cap 429 recognized even with single-use response body (real fetch semantics)', async () => {
   // 模拟真实 fetch Response：body 只能消费一次（text 先行消费会使 json 抛错）。
   // 修复前该用例失败（text 先行 → json 抛 → cap 漏判成普通限流）；修复后 429 分支优先 json。
@@ -229,6 +292,42 @@ test('during cooldown without key returns immediately with retry_after_ms', asyn
   assert.equal(calls, 0); // 完全不发请求
 });
 
+test('keyless resumes after cooldown expires', async () => {
+  const state = freshState();
+  let now = 1000000;
+  const calls = [];
+  const fetchImpl = async (url, init) => {
+    calls.push(init.headers);
+    if (calls.length === 1) {
+      return { ok: false, status: 429, json: async () => ({ error: { code: 'other_limit' } }), text: async () => { throw new Error('Body has already been consumed'); } };
+    }
+    return response({ results: [] });
+  };
+  const first = await searchTavily(isolated({
+    state,
+    query: 'first',
+    apiKey: 'test-key',
+    keylessNow: () => now,
+    fetchImpl,
+  }));
+  now = 1090001;
+  const second = await searchTavily(isolated({
+    state,
+    query: 'second',
+    apiKey: 'test-key',
+    keylessNow: () => now,
+    fetchImpl,
+  }));
+  assert.equal(first.ok, true);
+  assert.equal(second.ok, true);
+  assert.equal(calls.length, 3);
+  assert.equal(calls[0]['X-Tavily-Access-Mode'], 'keyless');
+  assert.equal(calls[1].Authorization, 'Bearer test-key');
+  assert.equal(calls[2]['X-Tavily-Access-Mode'], 'keyless');
+  assert.equal(state.stats.keylessCalls, 2);
+  assert.equal(state.stats.keyedCalls, 1);
+});
+
 test('keyless calls are rate-limited to the minimum interval', async () => {
   const state = freshState();
   const sleeps = [];
@@ -245,17 +344,31 @@ test('keyless calls are rate-limited to the minimum interval', async () => {
   assert.ok(sleeps[0] >= 900 && sleeps[0] <= 1100);
 });
 
-test('non-cap 429 returns RATE_LIMITED without cooldown or fallback', async () => {
+test('ordinary keyless 429 falls back to keyed and cools down keyless', async () => {
+  const calls = [];
   const state = freshState();
   const result = await searchTavily(isolated({
     state,
     query: 'test',
     apiKey: 'test-key',
-    fetchImpl: async () => ({ ok: false, status: 429, json: async () => ({ error: { code: 'other_limit' } }), text: async () => 'limited' }),
+    fetchImpl: async (url, init) => {
+      calls.push(init.headers);
+      if (calls.length === 1) {
+        return {
+          ok: false,
+          status: 429,
+          json: async () => ({ error: { code: 'other_limit' } }),
+          text: async () => { throw new Error('Body has already been consumed'); },
+        };
+      }
+      return response({ results: [] });
+    },
   }));
-  assert.equal(result.ok, false);
-  assert.equal(result.code, 'TAVILY_SEARCH_RATE_LIMITED');
-  assert.equal(state.cooldownUntilMs, 0); // 非 cap 不设冷却
+  assert.equal(result.ok, true);
+  assert.equal(calls.length, 2);
+  assert.equal(calls[1].Authorization, 'Bearer test-key');
+  assert.equal(state.cooldownUntilMs, 1000000 + 90000);
   assert.equal(state.stats.keylessCapHits, 0);
-  assert.equal(state.stats.keylessFallbacks, 0);
+  assert.equal(state.stats.keylessRateLimitHits, 1);
+  assert.equal(state.stats.keylessFallbacks, 1);
 });

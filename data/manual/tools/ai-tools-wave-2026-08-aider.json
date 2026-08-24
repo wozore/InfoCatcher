@@ -1,0 +1,29 @@
+{
+  "detail_kind": "tool",
+  "name": "Aider",
+  "vendor_name": "Aider",
+  "vendor_key": "aider-vendor",
+  "tool_key": "aider",
+  "official_url": "https://aider.chat",
+  "placement": {
+    "new_group_title": "Aider"
+  },
+  "known_fields": {
+    "theme": "dev"
+  },
+  "discovery_sources": [
+    {
+      "url": "https://aider.chat",
+      "kind": "official_hint"
+    },
+    {
+      "url": "https://aider.chat/docs/faq.html",
+      "kind": "official_hint"
+    },
+    {
+      "url": "https://github.com/Aider-AI/aider/releases",
+      "kind": "official_hint"
+    }
+  ],
+  "wave": "open-agent"
+}

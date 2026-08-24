@@ -11,8 +11,8 @@
  *   1. 同一请求绝不同时带两个认证头 —— key 优先，会白烧 keyless 额度。
  *   2. keyless 与 keyed 是两套独立配额桶（keyless = 每 IP 小时 / keyed = 每账号月度积分）。
  *   3. 两者成功响应 schema 完全一致，归一化代码无需区分来源。
- *   4. keyless 触发 429（error.code === 'hourly_cap_reached'）后，配置了 key 时自动带
- *      Bearer 重试同一请求（fallback_to_key）；只匹配 code，不匹配动态 message。
+ *   4. keyless 触发任意 429 后，配置了 key 时自动带 Bearer 重试同一请求（fallback_to_key）；
+ *      cap code/detail 用于诊断，普通限流也必须回退以保证任务连续性。
  *
  * 政策红线：官方支持的「单账号内混用」，不涉及多开账号绕额度（ToS 反滥用）。
  */
@@ -30,6 +30,7 @@ const TRAILING_URL_PUNCTUATION = /[`'"“”‘’.,;:!?\)\]}>，。；：！？
 const KEYLESS_OPERATIONS = new Set(['search', 'extract']);
 const KEYED_OPERATIONS = new Set(['map', 'crawl', 'research']);
 const KEYLESS_CAP_CODE = 'hourly_cap_reached';
+const KEYLESS_CAP_DETAIL = 'You have reached the hourly keyless Tavily limit.';
 
 const DEFAULT_KEYLESS_MIN_INTERVAL_MS = 1000;
 const DEFAULT_KEYLESS_COOLDOWN_MS = 90000;
@@ -38,11 +39,13 @@ const DEFAULT_KEYLESS_COOLDOWN_MS = 90000;
 // 测试经 options.keylessState / keylessNow / keylessSleep 注入全新状态隔离。
 const keylessState = {
   lastAtMs: 0, // 上次 keyless 发送时刻（本地最小间隔用）
-  cooldownUntilMs: 0, // keyless 429 cap 后的冷却截止
+  cooldownUntilMs: 0, // keyless 429 后的冷却截止
+  cooldownKind: '', // cap 或普通 rate_limit
   stats: {
     keylessCalls: 0,
     keyedCalls: 0,
     keylessCapHits: 0,
+    keylessRateLimitHits: 0,
     keylessFallbacks: 0,
     cooldownTriggers: 0,
   },
@@ -102,7 +105,19 @@ function buildHeaders(mode, apiKey) {
   return headers;
 }
 
-/** 是否为 keyless 每小时额度耗尽（429 + error.code === hourly_cap_reached）。 */
+/** 是否为 keyless 每小时额度耗尽响应（只接受明确的结构化信号）。 */
+function isKeylessCapPayload(payload) {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false;
+  return payload.error?.code === KEYLESS_CAP_CODE
+    || (typeof payload.detail === 'string' && payload.detail.trim() === KEYLESS_CAP_DETAIL);
+}
+
+/** 是否为 keyless 429（任何限流都应尝试 keyed 续跑）。 */
+function isKeylessRateLimitResult(result) {
+  return Boolean(result && result.status === 429 && result.keyless_rate_limited === true);
+}
+
+/** 是否为 keyless 每小时额度耗尽（用于诊断，不限制回退）。 */
 function isKeylessCapResult(result) {
   return Boolean(result && result.status === 429 && result.capCode === KEYLESS_CAP_CODE);
 }
@@ -140,9 +155,11 @@ async function requestKeyless(endpoint, operation, payload, options) {
     const attempt = await sendWithMode(endpoint, operation, payload, 'keyless', options);
     state.lastAtMs = nowFn();
     state.stats.keylessCalls += 1;
-    if (isKeylessCapResult(attempt)) {
+    if (isKeylessRateLimitResult(attempt)) {
       state.cooldownUntilMs = nowFn() + cooldownMs;
-      state.stats.keylessCapHits += 1;
+      state.cooldownKind = isKeylessCapResult(attempt) ? 'cap' : 'rate_limit';
+      state.stats.keylessRateLimitHits = (state.stats.keylessRateLimitHits || 0) + 1;
+      if (isKeylessCapResult(attempt)) state.stats.keylessCapHits += 1;
       return maybeFallbackKeyed(endpoint, operation, payload, options, apiKey, fallback, nowFn(), state);
     }
     return attempt;
@@ -151,16 +168,24 @@ async function requestKeyless(endpoint, operation, payload, options) {
   }
 }
 
-/** 冷却 / cap 命中后的 keyed 回退决策（同步返回，被调用处 await）。 */
+/** 冷却 / 任意 keyless 429 后的 keyed 回退决策（同步返回，被调用处 await）。 */
 function maybeFallbackKeyed(endpoint, operation, payload, options, apiKey, fallback, now, state) {
   if (fallback && apiKey) {
     state.stats.keylessFallbacks += 1;
     return requestKeyed(endpoint, operation, payload, options);
   }
+  const cap = state.cooldownKind === 'cap';
   return errorResult(
     `${opPrefix(operation)}_RATE_LIMITED`,
-    'Tavily keyless hourly cap 已耗尽（未配置 TAVILY_API_KEY 可回退）',
-    { status: 429, keyless_cap: true, keyless: true, retry_after_ms: Math.max(0, state.cooldownUntilMs - now) },
+    cap
+      ? 'Tavily keyless hourly cap 已耗尽（未配置 TAVILY_API_KEY 可回退）'
+      : 'Tavily keyless 请求被限流（未配置 TAVILY_API_KEY 可回退）',
+    {
+      status: 429,
+      ...(cap ? { keyless_cap: true } : {}),
+      keyless: true,
+      retry_after_ms: Math.max(0, state.cooldownUntilMs - now),
+    },
   );
 }
 
@@ -188,15 +213,22 @@ async function sendWithMode(endpoint, operation, payload, mode, options = {}) {
   }
   if (!response?.ok) {
     const status = response?.status;
-    // keyless cap 检测：仅 keyless 分支、429、error.code === hourly_cap_reached（只匹配 code，不匹配动态 message）。
-    // 注意：fetch Response 的 body 只能消费一次 —— 429 分支必须优先读 json()，绝不能用 text() 先行消费，
-    // 否则 json() 抛错、capCode 落空，429 被误判为普通限流而不回退。
+    // keyless 429 一律标记为可切换的限流；cap code/detail 仅用于诊断和错误语义。
+    // 注意：fetch Response 的 body 只能消费一次 —— 429 分支统一优先读 json()，不再读取 text()。
     if (mode === 'keyless' && status === 429) {
-      let capCode = '';
-      try { capCode = String((await response.json())?.error?.code || ''); } catch {}
-      if (capCode === KEYLESS_CAP_CODE) {
-        return { ok: false, code: `${opPrefix(operation)}_RATE_LIMITED`, status: 429, capCode, keyless_cap: true, error: `Tavily ${operation} keyless hourly cap 已耗尽` };
-      }
+      let body = null;
+      try { body = await response.json(); } catch {}
+      const cap = isKeylessCapPayload(body);
+      return {
+        ok: false,
+        code: `${opPrefix(operation)}_RATE_LIMITED`,
+        status: 429,
+        keyless_rate_limited: true,
+        ...(cap ? { capCode: KEYLESS_CAP_CODE, keyless_cap: true } : {}),
+        error: cap
+          ? `Tavily ${operation} keyless hourly cap 已耗尽`
+          : `Tavily ${operation} keyless 请求被限流`,
+      };
     }
     let detail = '';
     try { detail = String(await response.text()).slice(0, 500); } catch {}
