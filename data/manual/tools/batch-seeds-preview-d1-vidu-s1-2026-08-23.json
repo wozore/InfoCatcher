@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-23T09:25:01.986Z",
+  "source_cards": 1,
+  "skipped": {
+    "skippedExisting": [],
+    "skippedDraft": [],
+    "duplicateInBatch": []
+  },
+  "unresolved": [],
+  "seeds": [
+    {
+      "detail_kind": "api_model",
+      "name": "Vidu S1",
+      "vendor_name": "vidu",
+      "vendor_key": "vidu",
+      "tool_key": null,
+      "modality": "video",
+      "official_url": "https://platform.vidu.cn/",
+      "placement": {
+        "existing_level2_ref": null,
+        "existing_level1_ref": {
+          "kind": "vendor-level1",
+          "id": "vendor-level1:vidu"
+        },
+        "new_group_title": "Vidu S1"
+      },
+      "known_fields": {
+        "summary": "Vidu 官方 API 文档中的 Vidu S1 实时互动数字人视频生成模型，支持语音控制、无限时长与高帧率输出。",
+        "source_hotspot": false
+      },
+      "discovery_sources": [
+        {
+          "url": "https://platform.vidu.cn/",
+          "kind": "official_hint"
+        },
+        {
+          "url": "https://platform.vidu.cn/docs/model-map",
+          "kind": "official_hint"
+        },
+        {
+          "url": "https://platform.vidu.cn/docs/pricing",
+          "kind": "official_hint"
+        },
+        {
+          "url": "https://platform.vidu.com/docs/vidu-s1",
+          "kind": "official_hint"
+        }
+      ]
+    }
+  ],
+  "estimate": {
+    "ok": true,
+    "total": {
+      "search_queries": 4,
+      "pages": 8,
+      "responses_calls": 12,
+      "synthesis_calls": 1
+    },
+    "per_seed": [
+      {
+        "name": "Vidu S1",
+        "ok": true,
+        "cost_plan": {
+          "hard_limits": {
+            "search_queries": 4,
+            "pages": 8,
+            "responses_calls": 12,
+            "synthesis_calls": 1
+          },
+          "planned_scopes": 2,
+          "estimated_search_queries": 2,
+          "estimated_synthesis_calls": 1,
+          "worst_case_responses_calls": 2
+        }
+      }
+    ]
+  }
+}

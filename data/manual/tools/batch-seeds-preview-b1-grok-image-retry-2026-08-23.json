@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-23T07:50:18.368Z",
+  "source_cards": 1,
+  "skipped": {
+    "skippedExisting": [],
+    "skippedDraft": [],
+    "duplicateInBatch": []
+  },
+  "unresolved": [],
+  "seeds": [
+    {
+      "detail_kind": "api_model",
+      "name": "Grok Imagine Image 2.0",
+      "vendor_name": "xAI",
+      "vendor_key": "xai",
+      "tool_key": null,
+      "modality": "image",
+      "official_url": "https://docs.x.ai/",
+      "placement": {
+        "existing_level2_ref": null,
+        "existing_level1_ref": {
+          "kind": "vendor-level1",
+          "id": "vendor-level1:xai"
+        },
+        "new_group_title": "Grok Imagine"
+      },
+      "known_fields": {
+        "summary": "xAI 官方模型文档中的 Grok Imagine Image 2.0 图像生成与编辑模型。",
+        "source_hotspot": false
+      },
+      "discovery_sources": [
+        {
+          "url": "https://docs.x.ai/",
+          "kind": "official_hint"
+        },
+        {
+          "url": "https://docs.x.ai/developers/models",
+          "kind": "official_hint"
+        },
+        {
+          "url": "https://docs.x.ai/developers/pricing",
+          "kind": "official_hint"
+        }
+      ]
+    }
+  ],
+  "estimate": {
+    "ok": true,
+    "total": {
+      "search_queries": 4,
+      "pages": 8,
+      "responses_calls": 12,
+      "synthesis_calls": 1
+    },
+    "per_seed": [
+      {
+        "name": "Grok Imagine Image 2.0",
+        "ok": true,
+        "cost_plan": {
+          "hard_limits": {
+            "search_queries": 4,
+            "pages": 8,
+            "responses_calls": 12,
+            "synthesis_calls": 1
+          },
+          "planned_scopes": 2,
+          "estimated_search_queries": 2,
+          "estimated_synthesis_calls": 1,
+          "worst_case_responses_calls": 2
+        }
+      }
+    ]
+  }
+}

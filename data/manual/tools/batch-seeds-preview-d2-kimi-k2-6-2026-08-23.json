@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-23T09:34:53.629Z",
+  "source_cards": 1,
+  "skipped": {
+    "skippedExisting": [],
+    "skippedDraft": [],
+    "duplicateInBatch": []
+  },
+  "unresolved": [],
+  "seeds": [
+    {
+      "detail_kind": "api_model",
+      "name": "Kimi K2.6",
+      "vendor_name": "月之暗面（Kimi）",
+      "vendor_key": "moonshot",
+      "tool_key": null,
+      "modality": "text",
+      "official_url": "https://platform.kimi.com/docs",
+      "placement": {
+        "existing_level2_ref": {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:moonshot:kimi-k2"
+        },
+        "existing_level1_ref": {
+          "kind": "vendor-level1",
+          "id": "vendor-level1:moonshot"
+        }
+      },
+      "known_fields": {
+        "summary": "Kimi 官方 API 文档中的 Kimi K2.6 通用多模态模型，支持文本、图片与视频输入、256K 上下文与思考模式。",
+        "source_hotspot": false
+      },
+      "discovery_sources": [
+        {
+          "url": "https://platform.kimi.com/docs",
+          "kind": "official_hint"
+        },
+        {
+          "url": "https://platform.kimi.com/docs/models",
+          "kind": "official_hint"
+        },
+        {
+          "url": "https://platform.kimi.com/docs/pricing",
+          "kind": "official_hint"
+        },
+        {
+          "url": "https://platform.kimi.com/docs/guide/kimi-k2-6-quickstart",
+          "kind": "official_hint"
+        }
+      ]
+    }
+  ],
+  "estimate": {
+    "ok": true,
+    "total": {
+      "search_queries": 4,
+      "pages": 8,
+      "responses_calls": 12,
+      "synthesis_calls": 1
+    },
+    "per_seed": [
+      {
+        "name": "Kimi K2.6",
+        "ok": true,
+        "cost_plan": {
+          "hard_limits": {
+            "search_queries": 4,
+            "pages": 8,
+            "responses_calls": 12,
+            "synthesis_calls": 1
+          },
+          "planned_scopes": 1,
+          "estimated_search_queries": 1,
+          "estimated_synthesis_calls": 1,
+          "worst_case_responses_calls": 2
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-23T08:10:02.290Z",
+  "source_cards": 1,
+  "skipped": {
+    "skippedExisting": [],
+    "skippedDraft": [],
+    "duplicateInBatch": []
+  },
+  "unresolved": [],
+  "seeds": [
+    {
+      "detail_kind": "api_model",
+      "name": "Hy-MT2-30B-A3B",
+      "vendor_name": "腾讯（混元）",
+      "vendor_key": "tencent",
+      "tool_key": null,
+      "modality": "text",
+      "official_url": "https://hunyuan.tencent.com/model/hy-model",
+      "placement": {
+        "existing_level2_ref": null,
+        "existing_level1_ref": {
+          "kind": "vendor-level1",
+          "id": "vendor-level1:tencent"
+        },
+        "new_group_title": "Hy-MT2"
+      },
+      "known_fields": {
+        "summary": "腾讯混元官方模型页中的 Hy-MT2-30B-A3B 翻译旗舰模型。",
+        "source_hotspot": false
+      },
+      "discovery_sources": [
+        {
+          "url": "https://hunyuan.tencent.com/model/hy-model",
+          "kind": "official_hint"
+        },
+        {
+          "url": "https://hunyuan.tencent.com/model/open-source-model",
+          "kind": "official_hint"
+        },
+        {
+          "url": "https://cloud.tencent.com.cn/document/product/1759/127342",
+          "kind": "official_hint"
+        }
+      ]
+    }
+  ],
+  "estimate": {
+    "ok": true,
+    "total": {
+      "search_queries": 4,
+      "pages": 8,
+      "responses_calls": 12,
+      "synthesis_calls": 1
+    },
+    "per_seed": [
+      {
+        "name": "Hy-MT2-30B-A3B",
+        "ok": true,
+        "cost_plan": {
+          "hard_limits": {
+            "search_queries": 4,
+            "pages": 8,
+            "responses_calls": 12,
+            "synthesis_calls": 1
+          },
+          "planned_scopes": 2,
+          "estimated_search_queries": 2,
+          "estimated_synthesis_calls": 1,
+          "worst_case_responses_calls": 2
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "kind": "tool_cards_pending",
+  "generated_at": "2026-08-23T00:00:00.000Z",
+  "date": "20260823",
+  "wave": "d2-kimi-k2-6",
+  "count": 1,
+  "cards": [
+    {
+      "id": "kimi-k2-6",
+      "name": "Kimi K2.6",
+      "vendor_name": "月之暗面（Kimi）",
+      "vendor_key": "moonshot",
+      "url": "https://platform.kimi.com/docs/guide/kimi-k2-6-quickstart",
+      "description": "Kimi 官方 API 文档中的 Kimi K2.6 通用多模态模型，支持文本、图片与视频输入、256K 上下文与思考模式。",
+      "detail_kind_hint": "api_model",
+      "modality": "text",
+      "placement": {
+        "existing_level1_ref": {"kind": "vendor-level1", "id": "vendor-level1:moonshot"},
+        "existing_level2_ref": {"kind": "vendor-level2", "id": "vendor-level2:moonshot:kimi-k2"}
+      },
+      "source_hotspot": false,
+      "pending": true
+    }
+  ]
+}

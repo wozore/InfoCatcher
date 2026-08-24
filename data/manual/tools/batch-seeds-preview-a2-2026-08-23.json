@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-23T06:26:00.847Z",
+  "source_cards": 2,
+  "skipped": {
+    "skippedExisting": [],
+    "skippedDraft": [],
+    "duplicateInBatch": []
+  },
+  "unresolved": [],
+  "seeds": [
+    {
+      "detail_kind": "api_model",
+      "name": "Kimi K2.7 Code",
+      "vendor_name": "月之暗面（Kimi）",
+      "vendor_key": "moonshot",
+      "tool_key": null,
+      "official_url": "https://platform.kimi.com/docs",
+      "placement": {
+        "existing_level2_ref": null,
+        "existing_level1_ref": {
+          "kind": "vendor-level1",
+          "id": "vendor-level1:moonshot"
+        },
+        "new_group_title": "Kimi K2"
+      },
+      "known_fields": {
+        "summary": "Kimi 官方模型列表中的 Kimi K2.7 Code 编程模型。",
+        "source_hotspot": false
+      },
+      "discovery_sources": [
+        {
+          "url": "https://platform.kimi.com/docs",
+          "kind": "official_hint"
+        },
+        {
+          "url": "https://platform.kimi.com/docs/models",
+          "kind": "official_hint"
+        },
+        {
+          "url": "https://platform.kimi.com/docs/pricing",
+          "kind": "official_hint"
+        }
+      ]
+    },
+    {
+      "detail_kind": "api_model",
+      "name": "Kimi K2.6",
+      "vendor_name": "月之暗面（Kimi）",
+      "vendor_key": "moonshot",
+      "tool_key": null,
+      "official_url": "https://platform.kimi.com/docs",
+      "placement": {
+        "existing_level2_ref": null,
+        "existing_level1_ref": {
+          "kind": "vendor-level1",
+          "id": "vendor-level1:moonshot"
+        },
+        "new_group_title": "Kimi K2"
+      },
+      "known_fields": {
+        "summary": "Kimi 官方模型列表中的 Kimi K2.6 多模态模型。",
+        "source_hotspot": false
+      },
+      "discovery_sources": [
+        {
+          "url": "https://platform.kimi.com/docs",
+          "kind": "official_hint"
+        },
+        {
+          "url": "https://platform.kimi.com/docs/models",
+          "kind": "official_hint"
+        },
+        {
+          "url": "https://platform.kimi.com/docs/pricing",
+          "kind": "official_hint"
+        }
+      ]
+    }
+  ],
+  "estimate": {
+    "ok": true,
+    "total": {
+      "search_queries": 8,
+      "pages": 16,
+      "responses_calls": 24,
+      "synthesis_calls": 2
+    },
+    "per_seed": [
+      {
+        "name": "Kimi K2.7 Code",
+        "ok": true,
+        "cost_plan": {
+          "hard_limits": {
+            "search_queries": 4,
+            "pages": 8,
+            "responses_calls": 12,
+            "synthesis_calls": 1
+          },
+          "planned_scopes": 2,
+          "estimated_search_queries": 2,
+          "estimated_synthesis_calls": 1,
+          "worst_case_responses_calls": 2
+        }
+      },
+      {
+        "name": "Kimi K2.6",
+        "ok": true,
+        "cost_plan": {
+          "hard_limits": {
+            "search_queries": 4,
+            "pages": 8,
+            "responses_calls": 12,
+            "synthesis_calls": 1
+          },
+          "planned_scopes": 2,
+          "estimated_search_queries": 2,
+          "estimated_synthesis_calls": 1,
+          "worst_case_responses_calls": 2
+        }
+      }
+    ]
+  }
+}
