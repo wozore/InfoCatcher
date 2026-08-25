@@ -380,4 +380,4 @@ function recoverCatalogTransaction() {
   return { ok: true, recovered: true };
 }
 
-module.exports = { loadCatalogSnapshot, commitCatalogChange, replaceToolLevel3, removeCatalogRecords, planRecordRemoval, recoverCatalogTransaction, FILE_BY_AREA };
+module.exports = { loadCatalogSnapshot, commitSnapshotChange, commitCatalogChange, replaceToolLevel3, removeCatalogRecords, planRecordRemoval, recoverCatalogTransaction, FILE_BY_AREA };

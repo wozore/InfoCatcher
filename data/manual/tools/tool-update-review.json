@@ -1,0 +1,643 @@
+{
+  "schema_version": 1,
+  "kind": "tool_update_review",
+  "updated_at": "2026-08-25T11:44:11.083Z",
+  "items": [
+    {
+      "candidate_key": "github-copilot|https://github.blog/changelog/label/copilot||sha256:984a500eb3d9bb1e57f1a7361badb2dc5c9070a834cc922ed162b28a4598ceb3",
+      "release_key": "github-copilot|https://github.blog/changelog/label/copilot|",
+      "product_key": "github-copilot",
+      "detail_id": "tool-level3:copilot",
+      "evidence_detail_id": "github-copilot:https://github.blog/changelog/label/copilot",
+      "previous_date": "2026-08-21",
+      "proposed_date": null,
+      "source_url": "https://github.blog/changelog/label/copilot",
+      "source_type": "changelog",
+      "collector": "tavily_extract",
+      "product_surface": "product",
+      "repository": null,
+      "product_name": "GitHub Copilot",
+      "evidence": {
+        "title": "copilot",
+        "official_published_at": null,
+        "excerpt": "Use Case: copilot - GitHub Changelog Skip to content / Blog Changelog Docs Customer stories Try GitHub Copilot app Attend GitHub Universe Search Changelog Docs Customer stories Attend GitHub Universe Try GitHub Copilot app Back to blog Changelog Copy RSS feed URL Follow @ghchangelog on X All New Releases Improvements Retired Filters ( 0 selected ) Copilot Clear all Filters ( 0 selected ) Match: Any All Tags Account management Actions Application Security Client apps Collaboration tools Community engagement Copilot Ecosystem & accessibility Enterprise management tools Platform governance Projects & Issues Supply chain security Universe ‘25 Clear all Apply August Aug 2026 Aug.21 Release The new GitHub Copilot experience in Slack collaboration tools copilot ... +1 Aug.21 Release Shared agentic work with GitHub Copilot in Microsoft Teams collaboration tools copilot ... +1 Aug.18 Release Enterprise managed settings in GitHub Copilot for JetBrains copilot enterprise management tools ... +1 Aug.14 Release Grok 4.6 is now available in GitHub Copilot copilot Aug.13 Release GitHub Copilot weekly releases — August 10 copilot Aug.13 Release Gemini 3.7 Flash is now available in GitHub Copilot copilot Aug.12 Release Agent Plugins 1.0 in VS Code, Copilot CLI, and the Copilot app copilot Aug.11 Release Copilot memory and Ollama in GitHub Copilot for JetBrains copilot enterprise management tools ... +1 Aug.11 Retired Upcoming deprecation of MAI-Code-1-Flash copilot Aug.11 Release MAI-Code-1.1-Flash available in GitHub Copilot copilot Aug.11 Improvement Per-model token breakdown in the usage report account management copilot ... +1 Aug.10 Improvement Copilot on web expands conversation controls copilot Aug.07 Release GitHub Copilot weekly releases — August 3 copilot Aug.07 Improvement Copilot impact dashboard adds a return on investment section account management copilot enterprise management tools ... +2 Aug.07 Release Copilot code review effort levels are generally available copilot Aug.07 Improvement Copilot usage metrics API adds agent app activity account management copilot enterprise management tools ... +2 Aug.07 Retired GitHub Code Quality no longer adds Copilot as a reviewer application security copilot ... +1 Aug.06 Release MCP allowlists in enterprise managed settings copilot Aug.06 Release Kimi K3 is now available in GitHub Copilot copilot Aug.04 Retired Retiring the Copilot Billing Preview app copilot enterprise management tools ... +1 Aug.04 Retired Upcoming deprecation of GitHub Spark on github.com copilot ecosystem & accessibility ... +1 Aug.03 Release Customize the reasoning level for Copilot cloud agent copilot Aug.03 Release Enterprise team specialization for managed settings client apps copilot enterprise management tools ... +2 Aug.03 Release Trigger Copilot automations with comments copilot July Jul 2026 June Jun 2026 May May 2026 April Apr 2026 March Mar 2026 February Feb 2026 January Jan 2026 Pagination Prev 2026 2025 2024 ... 2018 2026 2025 ... 2018 Next Subscribe to our developer newsletter Discover tips, technical guides, and best practices in our biweekly newsletter just for devs. Enter your email * Subscribe By submitting, I agree to let GitHub and its affiliates use my information for personalized communications, targeted advertising, and campaign effectiveness. See the GitHub Privacy Statement for more details. Back to top Site-wide Links Product Features Security Enterprise Customer Stories Pricing Resources Platform Developer API Partners Atom Electron GitHub Desktop Support Docs Community Forum Training Status Contact Company About Blog Careers Press Shop &copy; 2026 GitHub, Inc. Terms Privacy Manage Cookies Do not share my personal information GitHub on LinkedIn GitHub on Instagram GitHub on YouTube GitHub on X GitHub on TikTok GitHub on Twitch GitHub’s organization on GitHub",
+        "content_hash": "sha256:984a500eb3d9bb1e57f1a7361badb2dc5c9070a834cc922ed162b28a4598ceb3",
+        "status": "ready"
+      },
+      "ai_suggestion": {
+        "verdict": "approve",
+        "matched_surface": "product",
+        "confidence": 0.95,
+        "reason": "The evidence explicitly discusses 'GitHub Copilot' as the target product, listing multiple releases and improvements related to it (e.g., 'Shared agentic work with GitHub Copilot in Microsoft Teams', 'Grok 4.6 is now available in GitHub Copilot', 'Copilot memory and Ollama in GitHub Copilot'). The content directly describes product-level updates and enhancements to GitHub Copilot, which matches the provided product_key 'github-copilot'. There is no ambiguity in the target component or product scope.",
+        "supporting_excerpt": "Shared agentic work with GitHub Copilot in Microsoft Teams collaboration tools copilot ..."
+      },
+      "blocked_reasons": [
+        "EVIDENCE_DATE_MISSING",
+        "PROPOSED_DATE_MISSING",
+        "EVIDENCE_HASH_CHANGED"
+      ],
+      "review_status": "pending",
+      "status": "blocked",
+      "created_at": "2026-08-25",
+      "updated_at": "2026-08-25T11:19:12.403Z"
+    },
+    {
+      "candidate_key": "claude-code|https://code.claude.com/docs/en/changelog||sha256:d147beb356f127c6c021c0d7614ab6861c7db2a2f8a5fb3e53ee8944bebb2be8",
+      "release_key": "claude-code|https://code.claude.com/docs/en/changelog|",
+      "product_key": "claude-code",
+      "detail_id": "tool-level3:claude-code",
+      "evidence_detail_id": "claude-code:https://code.claude.com/docs/en/changelog",
+      "previous_date": "2026-08-14",
+      "proposed_date": null,
+      "source_url": "https://code.claude.com/docs/en/changelog",
+      "source_type": "changelog",
+      "collector": "tavily_extract",
+      "product_surface": "cli",
+      "repository": null,
+      "product_name": "Claude Code",
+      "evidence": {
+        "title": "changelog",
+        "official_published_at": null,
+        "excerpt": "## Documentation Index\n\nFetch the complete documentation index at: </docs/llms.txt>\n\nUse this file to discover all available pages before exploring further.\n\n![light logo](https://mintcdn.com/claude-code/c5r9_6tjPMzFdDDT/logo/light.svg?fit=max&auto=format&n=c5r9_6tjPMzFdDDT&q=85&s=78fd01ff4f4340295a4f66e2ea54903c)\n![dark logo](https://mintcdn.com/claude-code/c5r9_6tjPMzFdDDT/logo/dark.svg?fit=max&auto=format&n=c5r9_6tjPMzFdDDT&q=85&s=1298a0c3b3a1da603b190d0de0e31712)\n\n### Getting started\n\n### Core concepts\n\n### Use Claude Code\n\n### Platforms and integrations\n\n## On this page\n\n# Claude Code changelog\n\nRelease notes for Claude Code, including new features, improvements, and bug fixes by version.\n\n`claude --version`\n`CLAUDE_CODE_PROJECT_DIR_NAME`\n`selection:clear`\n`/config`\n`\\??\\`\n`SendMessage`\n`ListAgents`\n`${VAR}`\n`strictKnownMarketplaces`\n`/login`\n`---`\n`/permissions`\n`!`\n`!`\n`!`\n`--dangerously-skip-permissions`\n`/tui`\n`--allowed-tools`\n`--disallowed-tools`\n`/login`\n`CLAUDE_CODE_OAUTH_TOKEN`\n`SendMessage`\n`ListAgents`\n`/login`\n`claude-api`\n`/permissions`\n`/add-dir <path>`\n`/add-dir`\n`/autocompact`\n`/theme`\n`/help`\n`/config`\n`/advisor`\n`/goal`\n`/goal`\n`CLAUDE_CODE_GOAL_CHECKIN_MINUTES=0`\n`claude setup-token`\n`/config`\n`<system-reminder>`\n`~/.claude.json`\n`--worktree`\n`claude agents`\n`!N`\n`forward_user_identity`\n`CLAUDE_CODE_TOOL_MEMORY_LIMIT`\n`CLAUDE_CODE_WEBFETCH_CACHE_TTL_MS`\n`/checkup`\n`/review`\n`-p`\n`\\??\\`\n`claude self-hosted-runner`\n`claude plugin validate`\n`.claude/skills`\n`/effort`\n`[claude-code:unrecognized_model]`\n`modelOverrides`\n`CLAUDE_CODE_ENABLE_TODO_TOOLS=1`\n`cd <dir> && <command> > file`\n`< file`\n`subagent_type: \"fork\"`\n`@`\n`SendMessage`\n`SendMessage`\n`name-word-word`\n`/config`\n`glrt-`\n`gloas-`\n`glptt-`\n`glagent-`\n`glimt-`\n`glsoat-`\n`glcbt-`\n`glft-`\n`glffct-`\n`glpat-`\n`gldt-`\n`glab`\n`gh`\n`gitlab.com`\n`github.com`\n`additionalMarketplaces`\n`allowedMarketplaces`\n`extraKnownMarketplaces`\n`strictKnownMarketplaces`\n`blockedMarketplaces`\n`desktop:`\n`managed.policies[].match.groups`\n`admin.admin_groups`\n`email_domain`\n`@`\n`/advisor`\n`/model fable`\n`$PSDefaultParameterValues`\n`/login`\n`known_marketplaces.json`\n`/update`\n`/tui`\n`--advisor fable`\n`/model fable`\n`sandbox.bwrapPath`\n`sandbox.socatPath`\n`sandbox.ripgrep`\n`/feedback`\n`/bug`\n`/plugin install plugin@marketplace`\n`/code-review`\n`/remote-control`\n`/tasks`\n`< file`\n`/tmp`\n`sandbox.ripgrep`\n`--settings`\n`/powerup`\n`claude remote-control --continue`\n`command`\n`mode: \"link\"`\n`ListAgents`\n`offline`\n`cloud`\n`--resume`\n`glob`\n`file_path`\n`command`\n`claude --continue`\n`--resume`\n`\\\\?\\`\n`CLAUDE_CODE_ATTRIBUTION_HEADER`\n`/model`\n`ANTHROPIC_BASE_URL`\n`127.0.0.1`\n`localhost`\n`/install-github-app`\n`claude plugin`\n`--input-format stream-json`\n`managed-mcp.json`\n`CLAUDE_CODE_WORKFLOW_PREFIX_STAGGER_MS=0`\n`/compact`\n`[::1]:443`\n`/doctor`\n`/login`\n`CLAUDE_CODE_OAUTH_TOKEN`\n`/commit-push-pr`\n`--force`\n`--amend`\n`--no-verify`\n`--base-dir`\n`/bug`\n`/btw`\n`git`\n`/tui`\n`/model`\n`/resume`\n`claude self-hosted-runner`\n`checkout`\n`!`\n`@`\n`claude-code-action`\n`allowed_non_write_users`\n`/tui`\n`claude agents`\n`claude`\n`CLAUDE_CODE_OAUTH_TOKEN`\n`claude self-hosted-runner`\n`--base-dir`\n`ListAgents`\n`name [ref]`\n`claude self-hosted-runner`\n`archive`\n`ANTHROPIC_BEDROCK_REGION_PREFIX`\n`AWS_REGION`\n`crossSessionInbound`\n`dialogExpiry`\n`extract`\n`onExtractNoMatch`\n`decode: \"jwt\"`\n`maskClaims`\n`awsPairs`\n`sigv4`\n`network.tlsTerminate`\n`--settings`\n`SendMessage`\n`ListAgents`\n`/resume`\n`SendMessage`\n`denyRead: \"~/.aws/\"`\n`/clear`\n`/clear`\n`CLAUDE.md`\n`/resume`\n`--resume`\n`remoteControlAtStartup`\n`\"owner/*\"`\n`strictKnownMarketplaces`\n`blockedMarketplaces`\n`/teleport`\n`claude --teleport <session id>`\n`import()`\n`bypassPermissions`\n`/cd`\n`vertex_ai/claude-*`\n`bedrock/anthropic.claude-*`\n`modelOverrides`\n`managed-settings.json`\n`sandbox.filesystem.denyWrite`\n`git push`\n`CLAUDE_CODE_DISABLE_1M_CONTEXT`\n`CLAUDE_CODE_DISABLE_UNKNOWN_MODEL_WINDOW_ENFORCEMENT=1`\n`/review`\n`/code-review`\n`/code-review <level> <pr",
+        "content_hash": "sha256:d147beb356f127c6c021c0d7614ab6861c7db2a2f8a5fb3e53ee8944bebb2be8",
+        "status": "ready"
+      },
+      "ai_suggestion": {
+        "verdict": "approve",
+        "matched_surface": "cli",
+        "confidence": 0.8,
+        "reason": "The evidence is from the official changelog of Claude Code, which explicitly lists CLI commands, configuration paths, and environment variables. The registry confirms the product is 'claude-code' and the surface is 'cli'.",
+        "supporting_excerpt": "product_surface\": \"cli\""
+      },
+      "blocked_reasons": [
+        "EVIDENCE_DATE_MISSING",
+        "PROPOSED_DATE_MISSING"
+      ],
+      "review_status": "pending",
+      "status": "blocked",
+      "created_at": "2026-08-25",
+      "updated_at": "2026-08-25T11:19:12.403Z"
+    },
+    {
+      "candidate_key": "trae|https://docs.trae.ai/ide/changelog||sha256:df0c0c20d5fb31298d8c53b4348037977a9e041ec181e3881e4e050d959da781",
+      "release_key": "trae|https://docs.trae.ai/ide/changelog|",
+      "product_key": "trae",
+      "detail_id": "tool-level3:trae",
+      "evidence_detail_id": "trae:https://docs.trae.ai/ide/changelog",
+      "previous_date": "2026-07-30",
+      "proposed_date": null,
+      "source_url": "https://docs.trae.ai/ide/changelog",
+      "source_type": "changelog",
+      "collector": "tavily_extract",
+      "product_surface": "desktop",
+      "repository": null,
+      "product_name": "Trae",
+      "evidence": {
+        "title": "changelog",
+        "official_published_at": null,
+        "excerpt": "Changelog - Documentation - TRAE",
+        "content_hash": "sha256:df0c0c20d5fb31298d8c53b4348037977a9e041ec181e3881e4e050d959da781",
+        "status": "ready"
+      },
+      "ai_suggestion": {
+        "verdict": "discard",
+        "matched_surface": "desktop",
+        "confidence": 0.2,
+        "reason": "证据仅表明文档状态为ready，未明确说明这是一个版本级更新，且未说明其涉及的具体组件表面；根据信息不足判断为discard",
+        "supporting_excerpt": "Changelog - Documentation - TRAE"
+      },
+      "blocked_reasons": [
+        "AI_VERDICT_NOT_APPROVE",
+        "AI_CONFIDENCE_LOW",
+        "EVIDENCE_DATE_MISSING",
+        "PROPOSED_DATE_MISSING",
+        "EVIDENCE_HASH_CHANGED"
+      ],
+      "review_status": "pending",
+      "status": "blocked",
+      "created_at": "2026-08-25",
+      "updated_at": "2026-08-25T11:19:12.403Z"
+    },
+    {
+      "candidate_key": "replit-agent|https://docs.replit.com/updates/2026/07/17/changelog|2026-07-17|sha256:09c04d181642cf2d81494b2ffb8558acea819cd7baa860765ee97fcb6ab6244d",
+      "release_key": "replit-agent|https://docs.replit.com/updates/2026/07/17/changelog|2026-07-17",
+      "product_key": "replit-agent",
+      "detail_id": "tool-level3:replit-agent",
+      "evidence_detail_id": "replit-agent:https://docs.replit.com/updates/2026/07/17/changelog",
+      "previous_date": "2026-08-18",
+      "proposed_date": "2026-07-17",
+      "source_url": "https://docs.replit.com/updates/2026/07/17/changelog",
+      "source_type": "release_notes",
+      "collector": "tavily_extract",
+      "product_surface": "product",
+      "repository": null,
+      "product_name": "Replit Agent",
+      "evidence": {
+        "title": "changelog",
+        "official_published_at": null,
+        "excerpt": "> ## Documentation Index\n>\n> Fetch the complete documentation index at:</llms.txt>\n>\n> Use this file to discover all available pages before exploring further.\n\n[Replit home page![light logo](https://mintcdn.com/replit/j4of5To8jzehz0JK/logo/light.svg?fit=max&auto=format&n=j4of5To8jzehz0JK&q=85&s=6209cb5927b56fd1781133af05428373)![dark logo](https://mintcdn.com/replit/j4of5To8jzehz0JK/logo/dark.svg?fit=max&auto=format&n=j4of5To8jzehz0JK&q=85&s=9cbba158300d48c49d8b888e71015495)](/welcome)\n\n[Home](/welcome)[Chat](/chat/overview)[Build](/build/your-first-app)[Design](/design/what-is-replit-design)[Use cases](/use-cases)[Learn](/learn/foundations/what-is-an-app)[Features](/features/collaboration/workspaces)[Trust & Billing](/category/billing)[Enterprise](/category/teams)\n\nJuly 2026\n\n# July 17, 2026\n\n1 min read\n\n## What’s new\n\n* [Agent suggests connectors when several fit](#agent-suggests-connectors-when-several-fit)\n* [Meet the new Tools pane](#meet-the-new-tools-pane)\n* [A faster task sidebar](#a-faster-task-sidebar)\n\n## [​](#integrations) Integrations\n\n### [​](#agent-suggests-connectors-when-several-fit) Agent suggests connectors when several fit\n\nWhen you ask Agent to connect a service and more than one provider works, Agent now shows a short list so you can pick the one you want. Before, Agent had to ask a follow-up question first. Choose a provider, sign in once, and Agent keeps building.Learn more about [connectors](/features/integrations/overview#let-agent-suggest-a-connector).\n\n## [​](#workspace) Workspace\n\n### [​](#meet-the-new-tools-pane) Meet the new Tools pane\n\nEverything your app can use now has one home in your workspace. The new pinned Tools pane brings Database, Auth, Domains, Secrets, and more together in a single place. That makes the full set of tools easy to find at a glance. The tools themselves haven’t changed. They just have a clearer home.Learn more about the [Tools pane](/features/editor/editor-and-tools).\n\n### [​](#a-faster-task-sidebar) A faster task sidebar\n\nThe task sidebar is now a denser, easier-to-scan task navigator. Each task has its own hover card for quick actions and details, the Task Board has a clearer entry point, and tasks stay put instead of shifting when you expand or collapse the sidebar.Learn more about the [task lifecycle](/features/agent/task-lifecycle).\n\nWas this page helpful?\n\nResponses are generated using AI and may contain mistakes.",
+        "content_hash": "sha256:09c04d181642cf2d81494b2ffb8558acea819cd7baa860765ee97fcb6ab6244d",
+        "status": "ready"
+      },
+      "ai_suggestion": {
+        "verdict": "approve",
+        "matched_surface": "product",
+        "confidence": 1,
+        "reason": "证据明确描述了 Replit Agent 产品层面的功能更新，包括 Agent 建议连接器、新的 Tools 面板以及优化后的任务侧边条，这些都属于目标软件产品的版本更新内容。",
+        "supporting_excerpt": "## What’s new\n* [Agent suggests connectors when several fit](#agent-suggests-connectors-when-several-fit)\n* [Meet the new Tools pane](#meet-the-new-tools-pane)\n* [A faster task sidebar](#a-faster-task-sidebar)"
+      },
+      "blocked_reasons": [
+        "PROPOSED_DATE_NOT_AFTER_CURRENT"
+      ],
+      "review_status": "pending",
+      "status": "blocked",
+      "created_at": "2026-08-25",
+      "updated_at": "2026-08-25T11:19:12.403Z"
+    },
+    {
+      "candidate_key": "devin|https://docs.devin.ai/release-notes/overview||sha256:f6c166b5aa330f21001de20cd37513c74d9ca72018e649f338bc479309008115",
+      "release_key": "devin|https://docs.devin.ai/release-notes/overview|",
+      "product_key": "devin",
+      "detail_id": "tool-level3:devin",
+      "evidence_detail_id": "devin:https://docs.devin.ai/release-notes/overview",
+      "previous_date": "2026-08-13",
+      "proposed_date": null,
+      "source_url": "https://docs.devin.ai/release-notes/overview",
+      "source_type": "release_notes",
+      "collector": "tavily_extract",
+      "product_surface": "product",
+      "repository": null,
+      "product_name": "Devin",
+      "evidence": {
+        "title": "overview",
+        "official_published_at": null,
+        "excerpt": "Recent Updates - Devin Docs Documentation Index Fetch the complete documentation index at: /llms.txt Use this file to discover all available pages before exploring further. Skip to main content Devin Docs home page English Search... ⌘ K Ask Assistant Support Devin Devin Search... Navigation Release Notes Recent Updates Cloud CLI Desktop Enterprise Use Cases API Federal Get Started Introducing Devin Your First Session Tutorial Library Essential Guidelines When to Use Devin Instructing Devin Effectively Good vs. Bad Instructions Prompt Templates Cheat Sheet How does Devin fit into my existing SDLC? Onboarding Devin Environment configuration Devin Outposts Index a Repository VPN configuration Knowledge Onboarding AGENTS.md Working with Devin Devin Review Stacked PRs Devin Session Tools Computer Use Browser Authentication Testing & Video Recordings Slash Commands Ask Devin Data Analyst Agent DeepWiki Security Swarm Hand off to cloud Devins MCP (Model Context Protocol) Marketplace DeepWiki MCP Devin MCP Devin CLI Advanced Capabilities Dynamic Workflows Product Guides Knowledge Skills Plugin marketplace Set up your plugin ecosystem Session Insights Secrets & Site Cookies Security Profiles Cloud Authentication with OIDC Creating Playbooks Using Playbooks Automations Auto-triage Scheduled Sessions Deployments Autofix Settings - Bot Comments Invite your Team Integrations Integrations Overview Slack Microsoft Teams GitHub GitLab Bitbucket Linear Jira GitHub Pull Request Templates Self-Hosted SCM & Artifacts Admin Security at Cognition Billing Common Issues Release Notes Recent Updates 2026 2025 2024 On this page August 21, 2026 August 19, 2026 August 14, 2026 August 12, 2026 August 7, 2026 August 5, 2026 July 31, 2026 July 29, 2026 July 24, 2026 July 22, 2026 July 17, 2026 July 15, 2026 July 10, 2026 July 8, 2026 July 3, 2026 July 1, 2026 June 26, 2026 June 24, 2026 June 19, 2026 June 17, 2026 June 12, 2026 June 10, 2026 June 5, 2026 June 3, 2026 May 29, 2026 May 22, 2026 May 17, 2026 May 13, 2026 May 8, 2026 May 6, 2026 May 1, 2026 April 29, 2026 April 24, 2026 April 22, 2026 April 17, 2026 April 15, 2026 April 10, 2026 April 8, 2026 April 3, 2026 April 1, 2026 March 27, 2026 March 24, 2026 March 19, 2026 March 13, 2026 March 11, 2026 March 7, 2026 February 27, 2026 February 24, 2026 February 20, 2026 February 13, 2026 February 6, 2026 All Release Notes Release Notes Recent Updates Copy page Copy page The latest Devin updates: recently released features, improvements, and bug fixes across the product, updated with each release. Copy page Copy page ​ August 21, 2026 Redesigned Session Page Header The session page header is more compact, with tags and session hierarchy built in. Redesigned Sessions Sidebar The sessions sidebar has been redesigned with customizable nav tabs, grouping, richer filtering, and a cleaner session list. Refreshed Chat Visual Design The chat interface has a refreshed visual design. Nested Sub-Devin Sessions Sub-Devin sessions are now shown as a nested tree in the sidebar. Hideable Sidebar The sidebar can be fully hidden and peeked on hover. Session Subscribers Follow and view others’ sessions, with subscriber-based sidebar organization and filtering. Inline Session Rename Shortcut Press Cmd/Ctrl+Option+R on a session page to rename the session inline. Stop Devin Shortcut Press Cmd/Ctrl+Shift+Backspace to stop Devin while it is working. Default Org Picker in Slack DMs In Slack DMs with Devin, you can now set your own default organization with the !org picker. Bearer Secrets for Automation Webhooks Automation webhooks can now authenticate with an Authorization: Bearer secret. Duplicate Findings Fix Resolved a regression in Devin Review that led to findings being reported multiple times. Clearer Findings Improved clarity and conciseness of Devin Review findings. Change a Scan’s Profile You can now change a code scan’s security profile from the UI. Scan Effort Selection Choose a scan effort (normal/deep) on the inges",
+        "content_hash": "sha256:f6c166b5aa330f21001de20cd37513c74d9ca72018e649f338bc479309008115",
+        "status": "ready"
+      },
+      "ai_suggestion": {
+        "verdict": "approve",
+        "matched_surface": "product",
+        "confidence": 0.9,
+        "reason": "The excerpt explicitly describes product-level updates such as 'Redesigned Session Page Header', 'Redesigned Sessions Sidebar', and 'Inline Session Rename Shortcut'. These features directly modify the core Devin application interface and functionality, clearly indicating a product-level update.",
+        "supporting_excerpt": "Redesigned Session Page Header The session page header is more compact, with tags and session hierarchy built in. Redesigned Sessions Sidebar The sessions sidebar has been redesigned with customizable nav tabs, grouping, richer filtering, and a cleaner session list."
+      },
+      "blocked_reasons": [
+        "EVIDENCE_DATE_AMBIGUOUS",
+        "PROPOSED_DATE_MISSING",
+        "EVIDENCE_HASH_CHANGED"
+      ],
+      "review_status": "pending",
+      "status": "blocked",
+      "created_at": "2026-08-25",
+      "updated_at": "2026-08-25T11:19:12.403Z"
+    },
+    {
+      "candidate_key": "augment-code|https://www.augmentcode.com/changelog||sha256:4e7f84903196d2d851aea8283923434532ce2460cb6d380a51edb5963fa74e39",
+      "release_key": "augment-code|https://www.augmentcode.com/changelog|",
+      "product_key": "augment-code",
+      "detail_id": "tool-level3:augment-code",
+      "evidence_detail_id": "augment-code:https://www.augmentcode.com/changelog",
+      "previous_date": "2025-07-07",
+      "proposed_date": null,
+      "source_url": "https://www.augmentcode.com/changelog",
+      "source_type": "changelog",
+      "collector": "tavily_extract",
+      "product_surface": "product",
+      "repository": null,
+      "product_name": "Augment Code",
+      "evidence": {
+        "title": "changelog",
+        "official_published_at": null,
+        "excerpt": "[Skip to content](https://www.augmentcode.com/changelog#main-content)\n\n[![Image 1: Augment Code](https://www.augmentcode.com/augment_code_wordmark.svg?dpl=dpl_2vD7nEDKqRRkVkH5QwezBWM5nk1d)](https://www.augmentcode.com/)\n\nProduct\n\nSolutions\n\n[Context Engine](https://www.augmentcode.com/context-engine)[Pricing](https://www.augmentcode.com/pricing)[Docs](https://docs.augmentcode.com/)[Blog](https://www.augmentcode.com/blog)\n\nResources\n\n[Sign in](https://cosmos.augmentcode.com/)[Book demo](https://www.augmentcode.com/contact)\n\nProduct\n\n[Cosmos](https://www.augmentcode.com/#meet-cosmos)[CLI](https://www.augmentcode.com/product/cli)[Changelog](https://www.augmentcode.com/changelog)\n\nSolutions\n\n[Code Review Review every PR with agents](https://www.augmentcode.com/solutions/code-review)[Test Coverage Coverage that climbs, suites that stay green](https://www.augmentcode.com/solutions/test-coverage)[Incident Management Investigate alerts before humans arrive](https://www.augmentcode.com/solutions/incident-management)[Ticket to PR Assign a ticket, merge a reviewed PR](https://www.augmentcode.com/solutions/ticket-to-pr)[Large Projects From design doc to shipped feature](https://www.augmentcode.com/solutions/large-projects)[Automations Recurring work as repeatable workflows](https://www.augmentcode.com/solutions/automations)[Security Remediation From CVE alert to a reviewed fix](https://www.augmentcode.com/solutions/security-remediation)[Migrations Modernization as a program, not a project](https://www.augmentcode.com/solutions/migrations)[Onboarding Ramp every engineer in days](https://www.augmentcode.com/solutions/onboarding)[Team Standards at Scale Your best workflow, everyone's default](https://www.augmentcode.com/solutions/standardization)\n\n[Context Engine](https://www.augmentcode.com/context-engine)[Pricing](https://www.augmentcode.com/pricing)[Docs](https://docs.augmentcode.com/)[Blog](https://www.augmentcode.com/blog)Resources\n\n[Workflows](https://www.augmentcode.com/workflows)[Podcast](https://www.augmentcode.com/resources/podcast)[Books & Guides](https://www.augmentcode.com/resources/books-and-guides)[Customers](https://www.augmentcode.com/customers)[Status Page](https://status.augmentcode.com/)[Trust Center](https://trust.augmentcode.com/)\n\n[Talk to Sales](https://www.augmentcode.com/contact)[Sign in](https://cosmos.augmentcode.com/)\n\n[](https://www.augmentcode.com/)[Try Cosmos](https://cosmos.augmentcode.com/)[Book demo](https://www.augmentcode.com/contact)\n\nCHANGELOG\n\n# What's New\n\nFeatures, improvements, and milestones over time.\n\n6 months\n\nAug\n\nJul\n\nJun\n\nMay\n\nApr\n\nMar\n\n45 contributions between\n\nFeb 13, 2026\n\nand\n\nAug 13, 2026\n\nAll VS Code JetBrains CLI Code Review Cosmos\n\nAUGUST 2026\n\n1 update\n\nAug 10\n\n## [VSCode Extension 0.893.1 Release Notes](https://www.augmentcode.com/changelog/vscode-0-893-1-stable-release-notes)\n\n#### Reliability & Performance\n\n*   Interrupted chat responses now surface a retriable failure quickly instead of appearing to stall.\n*   Reopening very large workspaces no longer briefly freezes the editor.\n\n#### Bug Fixes\n\n*   Fixed Context Usage double-counting MCP tool definitions.\n\nJULY 2026\n\n7 update s\n\nJul 30\n\n## [Cosmos Week 31 Release Notes](https://www.augmentcode.com/changelog/cosmos-week-31-release-notes)\n\n#### New features\n\n*   File comments: agents can now read and add comments on shared files.\n*   Cost Analytics: export CSV reports.\n\n#### Improvements\n\n*   Integrations: settings pages have clearer navigation, GitLab tokens submit with Enter, and Linear warns when reconnection is required.\n*   Sessions: active worker counts appear on tabs, draft changes persist locally, and shared sessions accept standard user roles.\n*   Agent tools: Slack actions now return clearer errors when they cannot be completed.\n*   Guidance: Experts, Environments, and Automations now link directly to relevant documentation.\n\n#### Bug fixes\n\n*   Cost Analytics: corrected Cosmos totals and token sorting.\n*   Changes: rest",
+        "content_hash": "sha256:4e7f84903196d2d851aea8283923434532ce2460cb6d380a51edb5963fa74e39",
+        "status": "ready"
+      },
+      "ai_suggestion": {
+        "verdict": "approve",
+        "matched_surface": "product",
+        "confidence": 0.95,
+        "reason": "Changelog explicitly lists VS Code Extension release notes and Cosmos Week 31 release notes with features, improvements, and bug fixes, directly mapping to Augment Code product-level changes.",
+        "supporting_excerpt": "## [VSCode Extension 0.893.1 Release Notes]\n\n#### Reliability & Performance\n\n* Interrupted chat responses now surface a retriable failure quickly instead of appearing to stall.\n* Reopening very large workspaces no longer briefly freezes the editor.\n\n#### Bug Fixes\n\n* Fixed Context Usage double-counting MCP tool definitions."
+      },
+      "blocked_reasons": [
+        "EVIDENCE_DATE_MISSING",
+        "PROPOSED_DATE_MISSING"
+      ],
+      "review_status": "pending",
+      "status": "blocked",
+      "created_at": "2026-08-25",
+      "updated_at": "2026-08-25T11:19:12.403Z"
+    },
+    {
+      "candidate_key": "kiro|https://kiro.dev/changelog/web/introducing-kiro-autonomous-agent/||sha256:6ed5a3d12e09387bd91ce861b2288896a5421d7cca2d4cb84085e4c05cf421bf",
+      "release_key": "kiro|https://kiro.dev/changelog/web/introducing-kiro-autonomous-agent/|",
+      "product_key": "kiro",
+      "detail_id": "tool-level3:kiro",
+      "evidence_detail_id": "kiro:https://kiro.dev/changelog/web/introducing-kiro-autonomous-agent/",
+      "previous_date": "2025-07-14",
+      "proposed_date": null,
+      "source_url": "https://kiro.dev/changelog/web/introducing-kiro-autonomous-agent/",
+      "source_type": "changelog",
+      "collector": "tavily_extract",
+      "product_surface": "desktop",
+      "repository": null,
+      "product_name": "Kiro",
+      "evidence": {
+        "title": "introducing kiro autonomous agent",
+        "official_published_at": null,
+        "excerpt": "[Back to Web Changelog](/changelog/web/)\n\n# Introducing Kiro autonomous agent\n\nThe autonomous agent preview is now autonomous mode in Kiro. Start at **[Kiro Web →](https://app.kiro.dev/)**\n\nKiro autonomous agent works independently on development tasks, from implementing features to fixing bugs. It operates asynchronously in isolated sandbox environments, learning from your code reviews and building deep understanding of your codebase and patterns.\n\nKiro autonomous agent is starting to roll out for individual developers in preview to Kiro Pro, Pro+, and Power subscribers. There's no cost during the preview period, and usage is subject to weekly limits. Teams can [join the waitlist](https://pages.awscloud.com/Kiro-autonomous-agent-contact.html) to get early access. [Learn more ->](https://kiro.dev/blog/introducing-kiro-autonomous-agent/)\n\n[{PREVIOUS}\n\n### Introducing Kiro Web (Preview)](/changelog/web/introducing-kiro-web-preview/)\n\n[{NEXT}\n\n### Introducing Automations](/changelog/web/introducing-automations/)",
+        "content_hash": "sha256:6ed5a3d12e09387bd91ce861b2288896a5421d7cca2d4cb84085e4c05cf421bf",
+        "status": "ready"
+      },
+      "ai_suggestion": {
+        "verdict": "approve",
+        "matched_surface": "cli",
+        "confidence": 0.92,
+        "reason": "The evidence explicitly introduces 'Kiro autonomous agent' as a new feature of the Kiro product. The registry indicates the product surface is 'desktop', but the changelog title 'Introducing Kiro autonomous agent' and the description of its functionality (working independently on development tasks, sandbox environments) align with a command-line interface or developer tooling surface. Given the ambiguity, 'cli' is selected as the most likely surface for this update.",
+        "supporting_excerpt": "# Introducing Kiro autonomous agent\n\nThe autonomous agent preview is now autonomous mode in Kiro."
+      },
+      "blocked_reasons": [
+        "PRODUCT_SURFACE_MISMATCH",
+        "EVIDENCE_DATE_MISSING",
+        "PROPOSED_DATE_MISSING"
+      ],
+      "review_status": "pending",
+      "status": "blocked",
+      "created_at": "2026-08-25",
+      "updated_at": "2026-08-25T11:19:12.403Z"
+    },
+    {
+      "candidate_key": "cline|https://github.com/cline/cline/releases/tag/cli-v3.0.58|2026-08-24|sha256:5bdd748ec9710bfad2a8c6fe22e3f319b563727bf0ae5b630b236d728f4de1a9",
+      "release_key": "cline|https://github.com/cline/cline/releases/tag/cli-v3.0.58|2026-08-24",
+      "product_key": "cline",
+      "detail_id": "tool-level3:cline",
+      "evidence_detail_id": "cline:cli-v3.0.58",
+      "previous_date": "2026-08-24",
+      "proposed_date": "2026-08-24",
+      "source_url": "https://github.com/cline/cline/releases/tag/cli-v3.0.58",
+      "source_type": "github_releases",
+      "collector": "github_web_release",
+      "product_surface": "ide_extension",
+      "repository": "cline/cline",
+      "product_name": "Cline",
+      "evidence": {
+        "title": "CLI v3.0.58",
+        "official_published_at": "2026-08-24T23:07:51Z",
+        "excerpt": "- The first-launch \"Try ClinePass\" dialog no longer advertises the $4.99 first-month promo, which is ending\n- The hub's event log is now capped at 64 MiB on disk. Events carrying full session snapshots could previously grow the log to tens of gigabytes on a long-running hub, since deleting rows never shrinks the file. Oldest events are dropped first and the space is returned, and pruning runs on volume as well as on a timer\n- Refreshed the model catalog. Adds two providers (AgentRouter and Opper) and updates model lists and pricing across providers. The resolved default model changes for Aki.io and NanoGPT, so if you use one of those without pinning a model you will get a different default\n\n**Full Changelog**: https://github.com/cline/cline/compare/cli-v3.0.57...cli-v3.0.58",
+        "content_hash": "sha256:5bdd748ec9710bfad2a8c6fe22e3f319b563727bf0ae5b630b236d728f4de1a9",
+        "status": "ready"
+      },
+      "ai_suggestion": {
+        "verdict": "approve",
+        "matched_surface": "cli",
+        "confidence": 0.95,
+        "reason": "The evidence describes version 3.0.58 of the CLI tool for Cline, which matches the registered product_key 'cline'. The update details the release of the CLI tool, including changes to the first-launch dialog and event log. This is a clear product-level update.",
+        "supporting_excerpt": "The first-launch \"Try ClinePass\" dialog no longer advertises the $4.99 first-month promo"
+      },
+      "blocked_reasons": [
+        "PRODUCT_SURFACE_MISMATCH",
+        "PROPOSED_DATE_NOT_AFTER_CURRENT"
+      ],
+      "review_status": "pending",
+      "status": "blocked",
+      "created_at": "2026-08-25",
+      "updated_at": "2026-08-25T11:19:12.403Z"
+    },
+    {
+      "candidate_key": "aider|https://github.com/Aider-AI/aider/releases/tag/v0.86.0|2025-08-09|sha256:84c50ce88d1da2122ba49e1171799a44540a625f025c4b509a8e0bd4b62578bd",
+      "release_key": "aider|https://github.com/Aider-AI/aider/releases/tag/v0.86.0|2025-08-09",
+      "product_key": "aider",
+      "detail_id": "tool-level3:aider",
+      "evidence_detail_id": "aider:v0.86.0",
+      "previous_date": "2026-08-09",
+      "proposed_date": "2025-08-09",
+      "source_url": "https://github.com/Aider-AI/aider/releases/tag/v0.86.0",
+      "source_type": "github_releases",
+      "collector": "github_web_release",
+      "product_surface": "cli",
+      "repository": "Aider-AI/aider",
+      "product_name": "Aider",
+      "evidence": {
+        "title": "Aider v0.86.0",
+        "official_published_at": "2025-08-09T17:42:19Z",
+        "excerpt": "- Added support for all GPT-5 models.\r\n- Added support for Grok-4 via `xai/grok-4` and `openrouter/x-ai/grok-4` model names.\r\n- Added support for `gemini/gemini-2.5-flash-lite-preview-06-17` model, by Tamir Zahavi-Brunner.\r\n- `/clear` now prints “All chat history cleared.” so you know it worked, by Zexin Yuan.\r\n- `/undo` output now shows only the first line of each commit message, making it easier to read.\r\n- Added support for `openrouter/moonshotai/kimi-k2` model, by Jack Harrington.\r\n- Display model announcements with no-arg `/model` command.\r\n- Fixed an issue where new settings for an existing model didn't replace the old ones, by Andrew Grigorev.\r\n- Fixed analytics to support the latest PostHog SDK event-capture API.\r\n- Bumped dependencies to pick up latest litellm==1.75.0.\r\n\r\n- Aider wrote 88% of the code in this release.",
+        "content_hash": "sha256:84c50ce88d1da2122ba49e1171799a44540a625f025c4b509a8e0bd4b62578bd",
+        "status": "ready"
+      },
+      "ai_suggestion": {
+        "verdict": "approve",
+        "matched_surface": "cli",
+        "confidence": 0.95,
+        "reason": "The release notes explicitly describe new features and fixes for the Aider CLI tool, such as adding support for various LLM models (GPT-5, Grok-4, Gemini 2.5) and improving command outputs (e.g., `/clear` and `/undo`). These are direct updates to the CLI interface.",
+        "supporting_excerpt": "- Added support for all GPT-5 models.\r\n- Added support for Grok-4 via `xai/grok-4` and `openrouter/x-ai/grok-4` model names.\r\n- Added support for `gemini/gemini-2.5-flash-lite-preview-06-17` model, by Tamir Zahavi-Brunner.\r\n- `/clear` now prints “All chat history cleared.” so you know it worked, by Zexin Yuan.\r\n- `/undo` output now shows only the first line of each commit message, making it easier to read.\r\n- Added support for `openrouter/moonshotai/kimi-k2` model, by Jack Harrington.\r\n- Display model announcements with no-arg `/model` command.\r\n- Fixed an issue where new settings for an existing model didn't replace the old ones, by Andrew Grigorev.\r\n- Fixed analytics to support the latest PostHog SDK event-capture API.\r\n- Bumped dependencies to pick up latest litellm==1.75.0."
+      },
+      "blocked_reasons": [
+        "PROPOSED_DATE_NOT_AFTER_CURRENT"
+      ],
+      "review_status": "rejected",
+      "status": "blocked",
+      "created_at": "2026-08-25",
+      "updated_at": "2026-08-25T11:19:12.403Z"
+    },
+    {
+      "candidate_key": "codebuddy|https://www.codebuddy.ai/docs/ide/release-notes/release-notes||sha256:a3c346b57d6cbc507242fde3f2d485df731a879dfa75ae25b79894572192fc57",
+      "release_key": "codebuddy|https://www.codebuddy.ai/docs/ide/release-notes/release-notes|",
+      "product_key": "codebuddy",
+      "detail_id": "tool-level3:codebuddy",
+      "evidence_detail_id": "codebuddy:https://www.codebuddy.ai/docs/ide/release-notes/release-notes",
+      "previous_date": "2025-10-16",
+      "proposed_date": null,
+      "source_url": "https://www.codebuddy.ai/docs/ide/release-notes/release-notes",
+      "source_type": "release_notes",
+      "collector": "tavily_extract",
+      "product_surface": "ide_extension",
+      "repository": null,
+      "product_name": "CodeBuddy",
+      "evidence": {
+        "title": "release notes",
+        "official_published_at": null,
+        "excerpt": "[Skip to content](#VPContent)\n\n\n[![logo](https://codebuddy-1328495429.cos.accelerate.myqcloud.com/web/ide/keycloak/img/logo.svg)](/)\n\nIDE\n\n# Release Notes [​](#release-notes)\n\nCodeBuddy IDE version release notes.\n\n## 📖 About [​](#📖-about)\n\nEach version documents new features, experience improvements, and bug fixes.\n\n## 📋 Version History [​](#📋-version-history)\n\n### 4.10.4 (2026-07-22) [​](#_4-10-4-2026-07-22)\n\n* Optimized extension startup time on Windows\n* Unified file change undo label to \"Undo\"\n* Optimized performance during streaming responses for large messages\n* Fixed main process crash caused by unbounded message growth in Remote-SSH\n* Fixed IDE crash and gray screen when loading oversized sessions\n* Fixed chat panel gray screen caused by abnormal message content\n* Fixed memory continuously rising when repeatedly opening and closing multiple windows\n* Fixed stop button occasionally not working while waiting for a response during conversations\n* Fixed overly frequent \"window not responding\" dialogs\n* Fixed write\\_to\\_file concurrent write failures\n* Fixed Git repository scanning blocking the event loop\n* Fixed Q&A history popover exposing raw XML\n* Fixed insufficient-quota guidance text not relaying the backend original message\n* Fixed file preview state cross-interference between multiple workspaces\n* Fixed abnormal state when merging Todo results\n* Fixed message center notifications being incorrectly cleared and abnormal redirect parameters\n\n### 4.10.3 (2026-07-17) [​](#_4-10-3-2026-07-17)\n\n* Added automatic session title generation after the first Q&A round, with a toggle in Settings\n* Added thinking-intensity inheritance from the previous selection when switching history sessions\n* Optimized segmented lazy loading and jump navigation for the history prompts list\n* Reduced the delay before the message bubble appears when sending the first message\n* Improved responsiveness of the Open File dialog\n* Fixed crashes caused by main-thread blocking in the extension host under certain conditions, including ACCESS\\_VIOLATION\n* Fixed extension-host crashes on Windows caused by repeated SDK initialization\n* Fixed unresponsiveness of the remote extension host caused by an Agent disk-search infinite loop\n* Fixed extension-host crashes caused by lack of write permissions in the Remote-SSH history directory\n* Fixed renderer memory overflow caused by automatically opening too many Diff tabs\n* Fixed AI panel load timeouts and abnormal remote context/command execution under Remote-SSH\n* Fixed first-screen blank page on Windows + Remote-SSH and failure to auto-fit after window dragging\n* Fixed black screen when opening a recent project or when Agents open the IDE\n* Fixed a blank right-side CodeBuddy Chat panel in some scenarios\n* Fixed a flash of the empty-session welcome page when switching between multiple tabs\n* Fixed failed paste/backspace after right-click cut in the input box\n* Fixed the scroll-to-bottom button being unclickable and covering the model selector\n* Fixed inability to paste in the AskUserQuestion custom input box\n* Fixed dragged-in files landing in the main input box when editing a sent message\n* Fixed the \"History Prompts\" entry still showing while editing a message\n* Fixed low visibility of the selected session tab state under third-party themes\n* Fixed code block title click jumping with line numbers\n* Fixed incomplete @-mention list after file scanning is interrupted\n* Fixed auto-compaction being skipped when a custom model doesn't specify a context window\n* Fixed no output when executing terminal commands in silent mode\n* Fixed Max Step configuration not being saved in Settings\n* Fixed \"command not found\" when right-clicking in the editor to use Explain/Generate Code\n* Fixed Skills not correctly injecting model prompts after being selected\n* Fixed anomalies when adding Figma to a conversation\n* Fixed Chinese IME being unavailable at Linux desktop startup\n* Fixed inability to auto-recover after the terminal be",
+        "content_hash": "sha256:a3c346b57d6cbc507242fde3f2d485df731a879dfa75ae25b79894572192fc57",
+        "status": "ready"
+      },
+      "ai_suggestion": {
+        "verdict": "approve",
+        "matched_surface": "ide_extension",
+        "confidence": 0.95,
+        "reason": "The evidence is from CodeBuddy's official release notes for the IDE, detailing specific features, optimizations, and bug fixes for the IDE extension. The registry explicitly links product_key 'codebuddy' to product_surface 'ide_extension'. The update source is release_notes, which directly describes product-level release notes for the current tool version.",
+        "supporting_excerpt": "CodeBuddy IDE version release notes."
+      },
+      "blocked_reasons": [
+        "EVIDENCE_DATE_AMBIGUOUS",
+        "PROPOSED_DATE_MISSING"
+      ],
+      "review_status": "pending",
+      "status": "blocked",
+      "created_at": "2026-08-25",
+      "updated_at": "2026-08-25T11:19:12.403Z"
+    },
+    {
+      "candidate_key": "codebuddy|https://www.codebuddy.ai/docs/cli/release-notes/README||sha256:34ccf32fd60e5eb62cceb5cc34455e790e1967c4e7dd9d714fe25bab69c0b375",
+      "release_key": "codebuddy|https://www.codebuddy.ai/docs/cli/release-notes/README|",
+      "product_key": "codebuddy",
+      "detail_id": "tool-level3:codebuddy",
+      "evidence_detail_id": "codebuddy:https://www.codebuddy.ai/docs/cli/release-notes/README",
+      "previous_date": "2025-10-16",
+      "proposed_date": null,
+      "source_url": "https://www.codebuddy.ai/docs/cli/release-notes/README",
+      "source_type": "release_notes",
+      "collector": "tavily_extract",
+      "product_surface": "cli",
+      "repository": null,
+      "product_name": "CodeBuddy",
+      "evidence": {
+        "title": "README",
+        "official_published_at": null,
+        "excerpt": "[Skip to content](https://www.codebuddy.ai/docs/cli/release-notes/README#VPContent)\n\n[![Image 1: logo](https://codebuddy-1328495429.cos.accelerate.myqcloud.com/web/ide/keycloak/img/logo.svg)](https://www.codebuddy.ai/)\n\nCLI[IDE](https://www.codebuddy.ai/docs/ide/)[CLI](https://www.codebuddy.ai/docs/cli/)[WorkBuddy](https://www.codebuddy.ai/docs/workbuddy/)\n\nIDE\n\nCLI\n\nWorkBuddy\n\nSearch K\n\n🌐EN▼\n\nMenu\n\nReturn to top\n\n Sidebar Navigation \n\n## Getting Started\n\n[Overview](https://www.codebuddy.ai/docs/cli/overview)\n\n[Quickstart](https://www.codebuddy.ai/docs/cli/quickstart)\n\n[Installation](https://www.codebuddy.ai/docs/cli/installation)\n\n[Common Workflows](https://www.codebuddy.ai/docs/cli/common-workflows)\n\n[Interactive Mode](https://www.codebuddy.ai/docs/cli/interactive-mode)\n\n[Headless Mode](https://www.codebuddy.ai/docs/cli/headless)\n\n[Troubleshooting](https://www.codebuddy.ai/docs/cli/troubleshooting)\n\n[Best Practices](https://www.codebuddy.ai/docs/cli/best-practices)\n\n[Monorepos and Large Repositories](https://www.codebuddy.ai/docs/cli/large-codebases)\n\n[Dynamic Workflows](https://www.codebuddy.ai/docs/cli/workflows)\n\n[Workflow stdio Protocol](https://www.codebuddy.ai/docs/cli/workflow-stdio-protocol)\n\n## Configuration\n\n[Settings](https://www.codebuddy.ai/docs/cli/settings)\n\n[Models](https://www.codebuddy.ai/docs/cli/models)\n\n[Memory](https://www.codebuddy.ai/docs/cli/memory)\n\n[Status Line](https://www.codebuddy.ai/docs/cli/statusline)\n\n[Environment Variables](https://www.codebuddy.ai/docs/cli/env-vars)\n\n[Directory Structure](https://www.codebuddy.ai/docs/cli/codebuddy-dir)\n\n[Monitoring](https://www.codebuddy.ai/docs/cli/monitoring)\n\n[Terminal Configuration](https://www.codebuddy.ai/docs/cli/terminal-config)\n\n[IDE Integrations](https://www.codebuddy.ai/docs/cli/ide-integrations)\n\n[ACP Protocol](https://www.codebuddy.ai/docs/cli/acp)\n\n[ACP Extension Namespace Reference](https://www.codebuddy.ai/docs/cli/acp-meta-reference)\n\n[GitLab CI/CD](https://www.codebuddy.ai/docs/cli/gitlab-ci-cd)\n\n[Dev Container](https://www.codebuddy.ai/docs/cli/devcontainer)\n\n[MCP](https://www.codebuddy.ai/docs/cli/mcp)\n\n[MCP Apps Integration Guide](https://www.codebuddy.ai/docs/cli/mcp-apps)\n\n[Tool Deferred Loading Override](https://www.codebuddy.ai/docs/cli/tool-defer-overlay)\n\n[Slash Commands](https://www.codebuddy.ai/docs/cli/slash-commands)\n\n[Custom Keybindings](https://www.codebuddy.ai/docs/cli/keybindings)\n\n## Features\n\n[Sub-Agents](https://www.codebuddy.ai/docs/cli/sub-agents)\n\n[Agent Teams](https://www.codebuddy.ai/docs/cli/agent-teams)\n\n[Skills](https://www.codebuddy.ai/docs/cli/skills)\n\n[Hooks Guide](https://www.codebuddy.ai/docs/cli/hooks-guide)\n\n[Plugins](https://www.codebuddy.ai/docs/cli/plugins)\n\n[Plugin Marketplaces](https://www.codebuddy.ai/docs/cli/plugin-marketplaces)\n\n[Checkpointing](https://www.codebuddy.ai/docs/cli/checkpointing)\n\n[Git Worktree](https://www.codebuddy.ai/docs/cli/worktree)\n\n[Remote Control](https://www.codebuddy.ai/docs/cli/remote-control)\n\n[Web UI](https://www.codebuddy.ai/docs/cli/web-ui)\n\n[WeCom Bot Setup (WebSocket)](https://www.codebuddy.ai/docs/cli/wecom-bot-setup)\n\n[Daemon Mode](https://www.codebuddy.ai/docs/cli/daemon)\n\n## Automation\n\n[Goal](https://www.codebuddy.ai/docs/cli/goal)\n\n[Scheduled Tasks](https://www.codebuddy.ai/docs/cli/scheduled-tasks)\n\n[Channels [Beta]](https://www.codebuddy.ai/docs/cli/channels)\n\n## Security\n\n[Security Overview](https://www.codebuddy.ai/docs/cli/security)\n\n[Identity and Access Management](https://www.codebuddy.ai/docs/cli/iam)\n\n[Permission Modes](https://www.codebuddy.ai/docs/cli/permission-modes)\n\n[Permission Rules (Permissions)](https://www.codebuddy.ai/docs/cli/permissions)\n\n[Bash Sandboxing](https://www.codebuddy.ai/docs/cli/bash-sandboxing)\n\n## Reference\n\n[CLI Reference](https://www.codebuddy.ai/docs/cli/cli-reference)\n\n[Hooks Reference](https://www.codebuddy.ai/docs/cli/hooks)\n\n[Plugins Reference](https://www.codebuddy.ai/docs/cli/plugins-reference)\n\n[Cost Management](",
+        "content_hash": "sha256:34ccf32fd60e5eb62cceb5cc34455e790e1967c4e7dd9d714fe25bab69c0b375",
+        "status": "ready"
+      },
+      "ai_suggestion": {
+        "verdict": "approve",
+        "matched_surface": "cli",
+        "confidence": 0.95,
+        "reason": "Evidence is from CodeBuddy official release notes, specifically for the CLI component. The text outlines various CLI features, installation, and configuration details, clearly indicating product-level updates for the CLI.",
+        "supporting_excerpt": "CLI[IDE](https://www.codebuddy.ai/docs/ide/)[CLI](https://www.codebuddy.ai/docs/cli/)[WorkBuddy](https://www.codebuddy.ai/docs/workbuddy/)"
+      },
+      "blocked_reasons": [
+        "EVIDENCE_DATE_MISSING",
+        "PROPOSED_DATE_MISSING"
+      ],
+      "review_status": "pending",
+      "status": "blocked",
+      "created_at": "2026-08-25",
+      "updated_at": "2026-08-25T11:19:12.403Z"
+    },
+    {
+      "candidate_key": "cursor|https://cursor.com/changelog||sha256:1faef30ba5757b22db79743f3c83560d49834f9c3dd55d31a43cb2f0f17d849b",
+      "release_key": "cursor|https://cursor.com/changelog|",
+      "product_key": "cursor",
+      "detail_id": "tool-level3:cursor",
+      "evidence_detail_id": "cursor:https://cursor.com/changelog",
+      "previous_date": "2026-08-03",
+      "proposed_date": null,
+      "source_url": "https://cursor.com/changelog",
+      "source_type": "changelog",
+      "collector": "tavily_extract",
+      "product_surface": "desktop",
+      "repository": null,
+      "product_name": "Cursor",
+      "evidence": {
+        "title": "changelog",
+        "official_published_at": null,
+        "excerpt": "What's New in Cursor — Latest Updates & Release Notes Skip to content Cursor Models Grok Evals Product ↓ Agents Cloud Mobile Automations CLI Marketplace ↗ Review Enterprise Pricing Resources ↓ Changelog Blog Docs Community Help ↗ Workshops Forum ↗ Careers Models → Product → Enterprise Pricing Resources → Sign in Contact Contact sales Download Changelog Aug 19, 2026 · Changelog Cloud Agents and Cursor Harness Improvements We're continuing to improve cloud agents and the Cursor harness so always-on agents can operate as a system, building and shipping software on their own without the need for intervention at each loop. With this release, cloud agents can automatically pick up work in response to events, hold a goal until it's met, and stay on course through long-running sessions. # Subscriptions Cursor can now monitor your PRs, watch a Slack thread, or run scheduled tasks. Cursor Agent subscribes to an event source (a thread or conversation) and wakes when something happens. Subscriptions are available for cloud agents only, for now. Cloud agents automatically subscribe to PRs they create and drive them to completion, fixing CI and addressing bot comments. In Slack, ask @cursor check back in an hour and keep going until that feedback is in . # Custom modes Use any skill as a Custom Mode: a skill that stays pinned in the chat. Custom modes keep agents focused on a skill - you can think about it like \"always on\" skills. From / , pick a skill and press ⌥⏎ (Mac) or Alt+Enter (Windows), or choose Use as Mode . # Subagents on their own machines Subagents can now run on their own virtual machines. Each gets an isolated copy of the project with clean context in its own cloud environment. Have subagents test the parent agent's changes in fresh environments or swarm independent fixes without collisions. Try run a swarm of subagents to test my app for bugs, each in its own environment . # /goal Use /goal to give the agent a long-lived objective to work towards until it's fully complete. Try /goal fix all flaky tests and make CI green in a new chat. Pair it with a custom mode to follow a playbook, or /loop for recurring check-ins. # Steering improvements You can now send a message to steer the agent while it's working without interruption. Follow-ups wait for the next tool call instead of cutting the agent off mid-action. Type a follow-up and hit Send now, or press ⏎ twice. Aug 17, 2026 · Changelog Origin Code Hosting Cursor can now host your code. Origin begins rolling out today in early beta on all paid plans. We're starting with the essentials, designed for agent scale: repos, pull requests, code browsing, and GitHub sync. Agent-native features ship soon. # Origin Repos The new Codebase tab is home for Origin repos. Click +New to create a new repo and name it. Once you do, a page shows you how to install the CLI, with commands for how to clone a repo or push a local project. Push, and your code is hosted on Origin. Name your codebase when you create your first repo. That name becomes part of every repo's URL: cursor.com/codebase/ acme-corp . # Bring your GitHub repos Your GitHub repos can sit alongside the ones Cursor hosts. Connect GitHub to Cursor, pick your org, and you'll see the repos you can sync. Select one and Cursor pulls it in. You choose what gets synced and can disconnect a repo at any time. Anyone with read or write access to a synced repo can view it in Cursor too. Synced repos update in real time. Browse, search, and pull from the copy in Origin. Pushes keep going to GitHub, which stays the source of truth for anything started there. Icons next to each repo name tell you which ones Cursor hosts and which came from GitHub. # Pull requests Every repo has pull requests. Open one to see the timeline, commits, checks, and files changed. Review the diff, leave comments, and merge. Pull requests on synced repos sync both ways: comment in Cursor and it posts to GitHub, react or reply on GitHub and it shows up in Cursor within sec",
+        "content_hash": "sha256:1faef30ba5757b22db79743f3c83560d49834f9c3dd55d31a43cb2f0f17d849b",
+        "status": "ready"
+      },
+      "ai_suggestion": {
+        "verdict": "approve",
+        "matched_surface": "desktop",
+        "confidence": 1,
+        "reason": "The changelog content describes specific product-level updates including 'Cloud Agents and Cursor Harness Improvements', 'Custom modes', 'Subagents on their own machines', '/goal' usage, and 'Origin Code Hosting'. These are clearly scoped to the Cursor desktop application's features and capabilities. The registry also indicates 'product_surface': 'desktop' in the update_source field.",
+        "supporting_excerpt": "Cursor Models Grok Evals Product ↓ Agents Cloud Mobile Automations CLI Marketplace ↗ Review Enterprise Pricing Resources ↓ Changelog Blog Docs Community Help ↗ Workshops Forum ↗ Careers Models → Product → Enterprise Pricing Resources → Sign in Contact Contact sales Download Changelog"
+      },
+      "blocked_reasons": [
+        "EVIDENCE_DATE_AMBIGUOUS",
+        "PROPOSED_DATE_MISSING"
+      ],
+      "review_status": "pending",
+      "status": "blocked",
+      "created_at": "2026-08-25",
+      "updated_at": "2026-08-25T11:19:12.403Z"
+    },
+    {
+      "candidate_key": "replit-agent|https://docs.replit.com/updates||sha256:383a14198d3842a247fa2baf2dc264d48c783a0b4d3747b55c6310d40d72dd40",
+      "release_key": "replit-agent|https://docs.replit.com/updates|",
+      "product_key": "replit-agent",
+      "detail_id": "tool-level3:replit-agent",
+      "evidence_detail_id": "replit-agent:https://docs.replit.com/updates",
+      "previous_date": "2026-08-18",
+      "proposed_date": null,
+      "source_url": "https://docs.replit.com/updates",
+      "source_type": "release_notes",
+      "collector": "tavily_extract",
+      "product_surface": "product",
+      "repository": null,
+      "product_name": "Replit Agent",
+      "evidence": {
+        "title": "updates",
+        "official_published_at": null,
+        "excerpt": "August 21, 2026 - Replit Documentation Index Fetch the complete documentation index at: /llms.txt Use this file to discover all available pages before exploring further. Skip to main content Replit home page English Search... ⌘ K Ask Assistant Start Building Start Building Search... Navigation August 2026 August 21, 2026 Home Chat Build Design Use cases Learn Features Trust & Billing Enterprise Features Changelog Help August 2026 August 21, 2026 August 14, 2026 August 7, 2026 July 2026 July 31, 2026 July 24, 2026 July 17, 2026 July 10, 2026 July 3, 2026 June 2026 June 26, 2026 June 19, 2026 June 12, 2026 June 5, 2026 May 2026 May 29, 2026 May 22, 2026 May 15, 2026 May 8, 2026 May 1, 2026 April 2026 April 24, 2026 April 17, 2026 April 10, 2026 April 3, 2026 March 2026 March 27, 2026 March 20, 2026 March 13, 2026 March 06, 2026 February 2026 February 27, 2026 February 20, 2026 February 13, 2026 February 06, 2026 January 2026 January 30, 2026 January 23, 2026 January 16, 2026 January 09, 2026 January 02, 2026 December 2025 December 26, 2025 December 19, 2025 December 12, 2025 December 05, 2025 November 2025 November 26, 2025 November 21, 2025 November 16, 2025 November 07, 2025 October 2025 October 31, 2025 October 24, 2025 October 17, 2025 October 10, 2025 October 3, 2025 September 2025 September 26, 2025 September 19, 2025 September 12, 2025 September 5, 2025 August 2025 August 29, 2025 August 22, 2025 August 15, 2025 August 8, 2025 August 1, 2025 July 2025 July 25, 2025 July 18, 2025 July 11, 2025 July 4, 2025 June 2025 June 27, 2025 June 20, 2025 June 13, 2025 June 6, 2025 May 2025 May 30, 2025 May 23, 2025 May 16, 2025 May 9, 2025 May 2, 2025 April 2025 April 25, 2025 April 18, 2025 April 11, 2025 April 4, 2025 March 2025 March 28, 2025 March 21, 2025 March 14, 2025 March 7, 2025 February 2025 February 28, 2025 February 21, 2025 February 14, 2025 February 7, 2025 January 2025 January 31, 2025 January 24, 2025 January 17, 2025 January 10, 2025 January 3, 2025 December 2024 December 27, 2024 December 20, 2024 December 13, 2024 On this page What’s new Agent Work in Free Mode Start with Conversations Automate recurring work with Routines Steer Agent while working Import Skills from GitHub Teams and Enterprise Control Agent models across Workspaces Platform Run black-box pen tests August 2026 August 21, 2026 Copy page Copy page 3 min read Copy page Copy page ​ What’s new Work in Free Mode Start with Conversations Automate recurring work with Routines Steer Agent while working Share and import Skills Control Agent models across Workspaces Run black-box pen tests ​ Agent ​ Work in Free Mode Use Free Mode to chat, explore ideas, create, and build without using Power Mode or Max Mode credits. Free Mode uses Auto to select a model, and its limits depend on your plan. Check Settings > Usage to see your remaining allowance and reset timing. Choose Free from the Agent modes panel. Learn how to get the most out of Free Mode . ​ Start with Conversations Start with a private Conversation to ask questions, explore information, attach context, run a Routine, or describe an outcome. When the work becomes substantial, ask Replit to turn the Conversation into a Project. Your context and files carry forward. Start a Conversation from your Workspace home. Learn more about Conversations . ​ Automate recurring work with Routines Schedule Replit to repeat work inside a Conversation. Each result returns to the same Conversation, where you can review it and continue working. Routines run in Power Mode or Max Mode and require a budget for each run. Review active Routines, schedules, and run history in one place. Learn more about Routines . ​ Steer Agent while working Send a follow-up while Agent works to add new context to the active turn. Steer is the default in Conversations and Projects, and you can change either preference to Queue in Settings > Personalization . Press Cmd+Enter on Mac or Ctrl+Enter on Windows and Linux to use the opposite behavior",
+        "content_hash": "sha256:383a14198d3842a247fa2baf2dc264d48c783a0b4d3747b55c6310d40d72dd40",
+        "status": "ready"
+      },
+      "ai_suggestion": {
+        "verdict": "approve",
+        "matched_surface": "product",
+        "confidence": 0.95,
+        "reason": "The excerpt clearly describes new features for the Replit Agent tool, including 'Work in Free Mode', 'Start with Conversations', 'Automate recurring work with Routines', 'Steer Agent while working', 'Share and import Skills', 'Control Agent models across Workspaces', and 'Run black-box pen tests'. These are explicit updates to the Replit Agent product, matching the target tool.",
+        "supporting_excerpt": "What’s new\n\nWork in Free Mode\n\nStart with Conversations\n\nAutomate recurring work with Routines\n\nSteer Agent while working\n\nShare and import Skills\n\nControl Agent models across Workspaces\n\nRun black-box pen tests"
+      },
+      "blocked_reasons": [
+        "EVIDENCE_DATE_AMBIGUOUS",
+        "PROPOSED_DATE_MISSING"
+      ],
+      "review_status": "pending",
+      "status": "blocked",
+      "created_at": "2026-08-25",
+      "updated_at": "2026-08-25T11:19:12.403Z"
+    },
+    {
+      "candidate_key": "amazon-q-developer|https://aws.amazon.com/developer/generative-ai/amazon-q/change-log/||sha256:9d06ad0d42ff30ce10c5dcc67234bc922feca0277c6a90f76dd377f3cbf28146",
+      "release_key": "amazon-q-developer|https://aws.amazon.com/developer/generative-ai/amazon-q/change-log/|",
+      "product_key": "amazon-q-developer",
+      "detail_id": "tool-level3:amazon-q-developer",
+      "evidence_detail_id": "amazon-q-developer:https://aws.amazon.com/developer/generative-ai/amazon-q/change-log/",
+      "previous_date": null,
+      "proposed_date": null,
+      "source_url": "https://aws.amazon.com/developer/generative-ai/amazon-q/change-log/",
+      "source_type": "changelog",
+      "collector": "tavily_extract",
+      "product_surface": "product",
+      "repository": null,
+      "product_name": "Amazon Q Developer",
+      "evidence": {
+        "title": "change log",
+        "official_published_at": null,
+        "excerpt": "## Select your cookie preferences\n\nWe use essential cookies and similar tools that are necessary to provide our site and services. We use performance cookies to collect anonymous statistics, so we can understand how customers use our site and make improvements. Essential cookies cannot be deactivated, but you can choose “Customize” or “Decline” to decline performance cookies.   \n  \n If you agree, AWS and approved third parties will also use cookies to provide useful site features, remember your preferences, and display relevant content, including relevant advertising. To accept or decline all non-essential cookies, choose “Accept” or “Decline.” To make more detailed choices, choose “Customize.”\n\nWe use cookies and similar tools (collectively, \"cookies\") for the following purposes.\n\n### Essential\n\nEssential cookies are necessary to provide our site and services and cannot be deactivated. They are usually set in response to your actions on the site, such as setting your privacy preferences, signing in, or filling in forms.\n\n### Performance\n\nPerformance cookies provide anonymous statistics about how customers navigate our site so we can improve site experience and performance. Approved third parties may perform analytics on our behalf, but they cannot use the data for their own purposes.\n\n### Functional\n\nFunctional cookies help us provide useful site features, remember your preferences, and display relevant content. Approved third parties may set these cookies to provide certain site features. If you do not allow these cookies, then some or all of these services may not function properly.\n\nAllowed\n\n### Advertising\n\nAdvertising cookies may be set through our site by us or our advertising partners and help us deliver relevant marketing content. If you do not allow these cookies, you will experience less relevant advertising.\n\nAllowed\n\nBlocking some types of cookies may impact your experience of our sites. You may review and change your choices at any time by selecting Cookie preferences in the footer of this site. We and selected third-parties use cookies or similar technologies as specified in the [AWS Cookie Notice](https://aws.amazon.com/legal/cookies/).\n\n## Your privacy choices\n\nWe and our advertising partners (“we”) may use information we collect from or about you to show you ads on other websites and online services. Under certain laws, this activity is referred to as “cross-context behavioral advertising” or “targeted advertising.”\n\nTo opt out of our use of cookies or similar technologies to engage in these activities, select “Opt out of cross-context behavioral ads” and “Save preferences” below. If you clear your browser cookies or visit this site from a different device or browser, you will need to make your selection again. For more information about cookies and how we use them, read our [Cookie Notice](https://aws.amazon.com/legal/cookies/).\n\nTo opt out of the use of other identifiers, such as contact information, for these activities, fill out the form [here](https://pulse.aws/application/ZRPLWLL6?p=0).\n\nFor more information about how AWS handles your information, read the [AWS Privacy Notice](https://aws.amazon.com/privacy/).\n\n## Unable to save cookie preferences\n\nWe will only store essential cookies at this time, because we were unable to save your cookie preferences.  \n  \nIf you want to change your cookie preferences, try again later using the link in the AWS console footer, or contact support if the problem persists.\n\n[![AWS Builder Center](/assets/logo-light-mode-Dbm9pHGK.svg)](/)\n\n[![AWS Builder Center](/assets/logo-light-mode-Dbm9pHGK.svg)](/)\n\n[## Builder Center](/)\n\n# Agentic AI\n\nBuild, deploy, and scale AI agents with AWS.\n\n## Building AI Agents on AWS\n\nGuide\n\n### What are AI Agents?\n\nLearn what AI Agents are, including how it works, key components and types, benefits, challenges, and more.\n\n[Learn more](https://aws.amazon.com/what-is/ai-agents/)\n\nGuide\n\n### Agentic Workflow Assistants on AWS\n\nThis guidance de",
+        "content_hash": "sha256:9d06ad0d42ff30ce10c5dcc67234bc922feca0277c6a90f76dd377f3cbf28146",
+        "status": "ready"
+      },
+      "ai_suggestion": {
+        "verdict": "discard",
+        "matched_surface": "product",
+        "confidence": 0,
+        "reason": "该文本描述的是用户界面中关于Cookie Preferences（Cookie偏好）的设置说明，属于Amazon Q Developer的文档或说明页内容，不属于产品级功能更新或版本变更。",
+        "supporting_excerpt": "## Select your cookie preferences\n\nWe use essential cookies and similar tools that are necessary to provide our site and services."
+      },
+      "blocked_reasons": [
+        "AI_VERDICT_NOT_APPROVE",
+        "AI_CONFIDENCE_LOW",
+        "EVIDENCE_DATE_MISSING",
+        "PROPOSED_DATE_MISSING",
+        "CURRENT_DATE_MISSING",
+        "EVIDENCE_HASH_CHANGED"
+      ],
+      "review_status": "pending",
+      "status": "blocked",
+      "created_at": "2026-08-25",
+      "updated_at": "2026-08-25T11:19:12.403Z"
+    },
+    {
+      "candidate_key": "cline|https://github.com/cline/cline/releases/tag/desktop-v0.0.17|2026-08-25|sha256:405b0e3dbf52ac3a7ab907eb8e88df22dab68398ab549da3c368f76ab74143e1",
+      "release_key": "cline|https://github.com/cline/cline/releases/tag/desktop-v0.0.17|2026-08-25",
+      "product_key": "cline",
+      "detail_id": "tool-level3:cline",
+      "evidence_detail_id": "cline:desktop-v0.0.17",
+      "previous_date": "2026-08-24",
+      "proposed_date": "2026-08-25",
+      "source_url": "https://github.com/cline/cline/releases/tag/desktop-v0.0.17",
+      "source_type": "github_releases",
+      "collector": "github_web_release",
+      "product_surface": "cli",
+      "repository": "cline/cline",
+      "product_name": "Cline",
+      "evidence": {
+        "title": "Desktop v0.0.17",
+        "official_published_at": "2026-08-25T09:06:31Z",
+        "excerpt": "- Plugins, MCP, Skills, Rules, Hooks, and Tools are now one Customize hub with tabbed sections and live counts. Catalog-backed tabs show what you have installed followed by an inline Browse section, so installing something from the catalog immediately appears above — the separate Marketplace page is gone\n- Redesigned the Models page: providers are grouped into Connected, Popular, and All with their auth kind and configuration status instead of per-row toggles. OAuth providers now offer a browser sign-in rather than an API key field, with a collapsed manual-key escape hatch where supported, and explicit Connect / Disconnect / Sign out actions\n- Voice input moved to its own Settings → Voice page that only offers connected transcription-capable providers and preselects a default model. The composer's microphone button now appears only once a voice model is configured\n- Sidebar sessions are always grouped by project, with pinned sessions leading each group and scheduled sessions marked by an inline clock. The Favorite action is now called Pin\n- New, Schedule, and Customize each got their own labeled row below the logo. New starts a fresh task and puts your cursor straight in the composer\n- Session search moved into a dialog behind the search icon in the logo row, and it now searches your full history instead of only the sessions already loaded in the sidebar\n- Added suggested schedule templates to the Schedule page\n- Add Provider opens a dialog instead of swapping out the page\n- Desktop notifications are now a single section under General, so the Event/Notify/Sound matrix no longer reads as a peer of settings like Dark mode\n- The agent's todo tool and the Agenda panel have been removed; scheduled tasks are unaffected\n- Fixed the provider list being unscrollable while a provider detail panel was open\n- Fixed a failed settings save leaving the Models page claiming a provider configuration that was never written to disk\n- Fixed Uninstall buttons collapsing to a broken square next to Install\n- Fixed unreadable selected text inside input fields\n- New files are now created with your platform's native line endings\n- Fixed the codebase search tool crashing the app on files containing a single enormous line\n- The hub's event log can no longer grow until it fills your disk\n\n**Full Changelog**: https://github.com/cline/cline/compare/desktop-v0.0.16...desktop-v0.0.17",
+        "content_hash": "sha256:405b0e3dbf52ac3a7ab907eb8e88df22dab68398ab549da3c368f76ab74143e1",
+        "status": "ready"
+      },
+      "ai_suggestion": {
+        "verdict": "approve",
+        "matched_surface": "desktop",
+        "confidence": 0.95,
+        "reason": "The evidence explicitly describes a major release ('Desktop v0.0.17') for the Cline product, detailing significant UI/UX changes, new features (MCP hub, voice input, scheduling), and bug fixes specific to the desktop client. The content_hash and status indicate a ready-to-publish release, confirming it is a valid product-level update.",
+        "supporting_excerpt": "Plugins, MCP, Skills, Rules, Hooks, and Tools are now one Customize hub with tabbed sections and live counts."
+      },
+      "blocked_reasons": [
+        "PRODUCT_SURFACE_MISMATCH"
+      ],
+      "review_status": "pending",
+      "status": "blocked",
+      "created_at": "2026-08-25",
+      "updated_at": "2026-08-25T11:19:12.403Z"
+    },
+    {
+      "candidate_key": "qoder|https://qoder.com/changelog||sha256:1bb90299974102238938d897f2f946fefbda8d37e28220fbb14e0e88ecba5db9",
+      "release_key": "qoder|https://qoder.com/changelog|",
+      "product_key": "qoder",
+      "detail_id": "tool-level3:qoder",
+      "evidence_detail_id": "qoder:https://qoder.com/changelog",
+      "previous_date": null,
+      "proposed_date": null,
+      "source_url": "https://qoder.com/changelog",
+      "source_type": "changelog",
+      "collector": "tavily_extract",
+      "product_surface": "product",
+      "repository": null,
+      "product_name": "Qoder",
+      "evidence": {
+        "title": "changelog",
+        "official_published_at": null,
+        "excerpt": "Qoder Changelog - Release History | Feature Updates | Qoder Qoder NEW QoderWake Marketplace Enterprise Pricing Resources Visit China Site Sign in Download Changelog Thanks for following our journey! Here's what we've been building for you. Not downloaded yet? Get It Now IDE JetBrains Plugin Qoder CLI Cloud Agents QoderWork QoderWake Think Deeper, Build Better © 2026 BRIGHT ZENITH PRIVATE LIMITED . All rights reserved. English Products Pricing Qoder IDE JetBrains Plugin CLI Mobile Cloud Agents Agent SDK Qoder Security Qoder Voice Download Resources Docs Blog FAQs Changelog Terms Terms of Service Privacy Policy Connect Feedback Contact Sales Forum About Us Back to top",
+        "content_hash": "sha256:1bb90299974102238938d897f2f946fefbda8d37e28220fbb14e0e88ecba5db9",
+        "status": "ready"
+      },
+      "ai_suggestion": {
+        "verdict": "approve",
+        "matched_surface": "product",
+        "confidence": 0.9,
+        "reason": "Evidence is a changelog page for Qoder, indicating product-level updates. The registry also confirms 'Qoder' is the target product with active lifecycle.",
+        "supporting_excerpt": "Qoder Changelog - Release History | Feature Updates | Qoder"
+      },
+      "blocked_reasons": [
+        "EVIDENCE_DATE_MISSING",
+        "PROPOSED_DATE_MISSING",
+        "CURRENT_DATE_MISSING"
+      ],
+      "review_status": "pending",
+      "status": "blocked",
+      "created_at": "2026-08-25",
+      "updated_at": "2026-08-25T11:19:12.403Z"
+    },
+    {
+      "candidate_key": "github-copilot|https://github.blog/changelog/label/copilot|2026-08-21|sha256:984a500eb3d9bb1e57f1a7361badb2dc5c9070a834cc922ed162b28a4598ceb3",
+      "release_key": "github-copilot|https://github.blog/changelog/label/copilot|2026-08-21",
+      "product_key": "github-copilot",
+      "detail_id": "tool-level3:copilot",
+      "evidence_detail_id": "github-copilot:https://github.blog/changelog/label/copilot",
+      "previous_date": "2026-08-21",
+      "proposed_date": "2026-08-21",
+      "source_url": "https://github.blog/changelog/label/copilot",
+      "source_type": "changelog",
+      "collector": "tavily_extract",
+      "product_surface": "product",
+      "repository": null,
+      "product_name": "GitHub Copilot",
+      "evidence": {
+        "title": "copilot",
+        "official_published_at": null,
+        "excerpt": "Use Case: copilot - GitHub Changelog Skip to content / Blog Changelog Docs Customer stories Try GitHub Copilot app Attend GitHub Universe Search Changelog Docs Customer stories Attend GitHub Universe Try GitHub Copilot app Back to blog Changelog Copy RSS feed URL Follow @ghchangelog on X All New Releases Improvements Retired Filters ( 0 selected ) Copilot Clear all Filters ( 0 selected ) Match: Any All Tags Account management Actions Application Security Client apps Collaboration tools Community engagement Copilot Ecosystem & accessibility Enterprise management tools Platform governance Projects & Issues Supply chain security Universe ‘25 Clear all Apply August Aug 2026 Aug.21 Release The new GitHub Copilot experience in Slack collaboration tools copilot ... +1 Aug.21 Release Shared agentic work with GitHub Copilot in Microsoft Teams collaboration tools copilot ... +1 Aug.18 Release Enterprise managed settings in GitHub Copilot for JetBrains copilot enterprise management tools ... +1 Aug.14 Release Grok 4.6 is now available in GitHub Copilot copilot Aug.13 Release GitHub Copilot weekly releases — August 10 copilot Aug.13 Release Gemini 3.7 Flash is now available in GitHub Copilot copilot Aug.12 Release Agent Plugins 1.0 in VS Code, Copilot CLI, and the Copilot app copilot Aug.11 Release Copilot memory and Ollama in GitHub Copilot for JetBrains copilot enterprise management tools ... +1 Aug.11 Retired Upcoming deprecation of MAI-Code-1-Flash copilot Aug.11 Release MAI-Code-1.1-Flash available in GitHub Copilot copilot Aug.11 Improvement Per-model token breakdown in the usage report account management copilot ... +1 Aug.10 Improvement Copilot on web expands conversation controls copilot Aug.07 Release GitHub Copilot weekly releases — August 3 copilot Aug.07 Improvement Copilot impact dashboard adds a return on investment section account management copilot enterprise management tools ... +2 Aug.07 Release Copilot code review effort levels are generally available copilot Aug.07 Improvement Copilot usage metrics API adds agent app activity account management copilot enterprise management tools ... +2 Aug.07 Retired GitHub Code Quality no longer adds Copilot as a reviewer application security copilot ... +1 Aug.06 Release MCP allowlists in enterprise managed settings copilot Aug.06 Release Kimi K3 is now available in GitHub Copilot copilot Aug.04 Retired Retiring the Copilot Billing Preview app copilot enterprise management tools ... +1 Aug.04 Retired Upcoming deprecation of GitHub Spark on github.com copilot ecosystem & accessibility ... +1 Aug.03 Release Customize the reasoning level for Copilot cloud agent copilot Aug.03 Release Enterprise team specialization for managed settings client apps copilot enterprise management tools ... +2 Aug.03 Release Trigger Copilot automations with comments copilot July Jul 2026 June Jun 2026 May May 2026 April Apr 2026 March Mar 2026 February Feb 2026 January Jan 2026 Pagination Prev 2026 2025 2024 ... 2018 2026 2025 ... 2018 Next Subscribe to our developer newsletter Discover tips, technical guides, and best practices in our biweekly newsletter just for devs. Enter your email * Subscribe By submitting, I agree to let GitHub and its affiliates use my information for personalized communications, targeted advertising, and campaign effectiveness. See the GitHub Privacy Statement for more details. Back to top Site-wide Links Product Features Security Enterprise Customer Stories Pricing Resources Platform Developer API Partners Atom Electron GitHub Desktop Support Docs Community Forum Training Status Contact Company About Blog Careers Press Shop &copy; 2026 GitHub, Inc. Terms Privacy Manage Cookies Do not share my personal information GitHub on LinkedIn GitHub on Instagram GitHub on YouTube GitHub on X GitHub on TikTok GitHub on Twitch GitHub’s organization on GitHub",
+        "content_hash": "sha256:984a500eb3d9bb1e57f1a7361badb2dc5c9070a834cc922ed162b28a4598ceb3",
+        "status": "ready"
+      },
+      "ai_suggestion": {
+        "verdict": "approve",
+        "matched_surface": "product",
+        "confidence": 0.95,
+        "reason": "文本明确描述GitHub Copilot（product_key: github-copilot）的新功能，如‘Copilot on web expands conversation controls’、‘Grok 4.6 is now available in GitHub Copilot’等，属于目标产品级更新，且与当前目录记录一致。",
+        "supporting_excerpt": "Use Case: copilot - GitHub Changelog ... Aug.21 Release Shared agentic work with GitHub Copilot in Microsoft Teams collaboration tools copilot ... +1 Aug.21 Release Enterprise managed settings in GitHub Copilot for JetBrains copilot enterprise management tools ... +1 Aug.14 Release Grok 4.6 is now available in GitHub Copilot copilot"
+      },
+      "blocked_reasons": [
+        "PROPOSED_DATE_NOT_AFTER_CURRENT"
+      ],
+      "review_status": "pending",
+      "status": "blocked",
+      "created_at": "2026-08-25",
+      "updated_at": "2026-08-25T11:19:12.403Z"
+    }
+  ]
+}

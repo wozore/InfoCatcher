@@ -30,10 +30,13 @@ const { resolveOfficialSource } = require('../../src/catalog/ai/catalog-adapters
 const {
   lookupOfficialUrl,
   addUrlRegistryEntry,
+  addProductUrlRegistryEntry,
   removeUrlRegistryEntry,
   loadProductUrlRegistry,
+  updateSourcesForProduct,
   validateProductUrlRegistry,
 } = require('../../src/catalog/official-url-registry');
+const { CATALOG_GENERATOR_FILES } = require('../../src/shared/paths');
 
 const GEN_OPTIONS = { maxSearchQueries: 2, maxPages: 2, maxResponsesCalls: 2, maxSynthesisCalls: 1 };
 
@@ -398,6 +401,173 @@ test('official-product-url-registry 双表契约：产品引用厂商、生命�
   assert.match(invalidResult.errors.join(','), /PRODUCT_PREFIX_INVALID/);
   assert.match(invalidResult.errors.join(','), /LIFECYCLE_INVALID/);
   assert.match(invalidResult.errors.join(','), /LAST_VERIFIED_AT_INVALID/);
+});
+
+test('update_sources 可选契约：合法 GitHub Release/File 与厂商 changelog/release notes', () => {
+  const vendorRegistry = {
+    schema_version: 1,
+    entries: {
+      acme: { vendor_name: 'Acme', official_urls: ['https://acme.example/docs'] },
+    },
+  };
+  const registry = {
+    schema_version: 1,
+    kind: 'official_product_url_registry',
+    products: {
+      'sample-tool': {
+        name: 'Sample Tool',
+        vendor_key: 'acme',
+        official_urls: ['https://acme.example/docs'],
+        product_prefixes: ['sample tool'],
+        lifecycle: 'active',
+        update_sources: [
+          {
+            kind: 'github_releases',
+            url: 'https://github.com/acme/sample-tool/releases',
+            collector: 'github_web_release',
+            product_surface: 'cli',
+            repository: 'acme/sample-tool',
+            tag_prefix: 'v',
+            include_prerelease: false,
+          },
+          {
+            kind: 'github_file',
+            url: 'https://github.com/acme/sample-tool/blob/main/CHANGELOG.md',
+            collector: 'github_web_file',
+            product_surface: 'cli',
+            repository: 'acme/sample-tool',
+          },
+          {
+            kind: 'changelog',
+            url: 'https://acme.example/changelog',
+            collector: 'tavily_extract',
+            product_surface: 'product',
+          },
+          {
+            kind: 'release_notes',
+            url: 'https://acme.example/release-notes',
+            collector: 'tavily_extract',
+            product_surface: 'desktop',
+          },
+        ],
+      },
+    },
+  };
+  const validation = validateProductUrlRegistry(registry, { vendorRegistry });
+  assert.equal(validation.ok, true, validation.errors.join(', '));
+  assert.equal(validation.count, 1);
+  const sources = updateSourcesForProduct('sample-tool', { registry });
+  assert.equal(sources.length, 4);
+  sources[0].url = 'https://mutated.example';
+  assert.equal(registry.products['sample-tool'].update_sources[0].url, 'https://github.com/acme/sample-tool/releases');
+
+  const addedStore = { schema_version: 1, kind: 'official_product_url_registry', products: {} };
+  const added = addProductUrlRegistryEntry({
+    name: 'Sample Tool',
+    vendor_key: 'acme',
+    official_url: 'https://acme.example/docs',
+    lifecycle: 'active',
+    update_sources: [registry.products['sample-tool'].update_sources[0]],
+  }, { registry: addedStore, vendorRegistry });
+  assert.equal(added.ok, true);
+  assert.equal(added.product.update_sources[0].repository, 'acme/sample-tool');
+});
+
+test('update_sources 严格拒绝错误来源边界、组合、重复和未知字段', () => {
+  const vendorRegistry = {
+    schema_version: 1,
+    entries: { acme: { vendor_name: 'Acme', official_urls: ['https://acme.example/docs'] } },
+  };
+  const baseProduct = {
+    name: 'Sample Tool',
+    vendor_key: 'acme',
+    official_urls: ['https://acme.example/docs'],
+    lifecycle: 'active',
+  };
+  const validate = update_sources => validateProductUrlRegistry({
+    schema_version: 1,
+    products: { sample: { ...baseProduct, update_sources } },
+  }, { vendorRegistry });
+  const release = {
+    kind: 'github_releases',
+    url: 'https://github.com/acme/sample-tool/releases',
+    collector: 'github_web_release',
+    product_surface: 'cli',
+    repository: 'acme/sample-tool',
+    include_prerelease: false,
+  };
+
+  assert.match(validate([{ ...release, repository: 'acme' }]).errors.join(','), /REPOSITORY_INVALID/);
+  assert.match(validate([{ ...release, url: 'https://github.com/other/sample-tool/releases' }]).errors.join(','), /GITHUB_URL_REPOSITORY_MISMATCH/);
+  assert.match(validate([{ ...release, url: 'https://github.com/acme/sample-tool/tags' }]).errors.join(','), /GITHUB_URL_REPOSITORY_MISMATCH/);
+  assert.match(validate([{ ...release, url: 'http://github.com/acme/sample-tool/releases' }]).errors.join(','), /HTTPS_REQUIRED/);
+  assert.match(validate([{ ...release, url: 'https://acme.example/pricing' }]).errors.join(','), /PRICING_URL_FORBIDDEN/);
+  assert.match(validate([{ ...release, collector: 'tavily_extract' }]).errors.join(','), /COLLECTOR_KIND_MISMATCH/);
+  assert.match(validate([{ ...release, unexpected: true }]).errors.join(','), /UNKNOWN_FIELD/);
+  assert.match(validate([{ ...release }, { ...release }]).errors.join(','), /DUPLICATE_URL/);
+  assert.match(validate([{
+    kind: 'github_file',
+    url: 'https://github.com/acme/sample-tool/blob/main/CHANGELOG.md',
+    collector: 'github_web_file',
+    product_surface: 'cli',
+    repository: 'acme/sample-tool',
+    tag_prefix: 'v',
+    include_prerelease: false,
+  }]).errors.join(','), /TAG_PREFIX_FORBIDDEN/);
+  assert.match(validate([{
+    kind: 'changelog',
+    url: 'https://github.com/acme/sample-tool/releases',
+    collector: 'tavily_extract',
+    product_surface: 'cli',
+  }]).errors.join(','), /GITHUB_KIND_REQUIRED/);
+  assert.equal(validate([{ ...release, date_mode: 'latest' }]).ok, true);
+  assert.match(validate([{ ...release, date_mode: 'oldest' }]).errors.join(','), /DATE_MODE_INVALID/);
+});
+
+test('update_sources 不进入 lookupOfficialUrl 或 catalog batch 的 official_hint', async () => {
+  const registry = {
+    schema_version: 1,
+    entries: {
+      acme: { vendor_name: 'Acme', official_urls: ['https://acme.example/docs'] },
+    },
+  };
+  const productRegistry = {
+    schema_version: 1,
+    products: {
+      sample: {
+        name: 'Sample Tool',
+        vendor_key: 'acme',
+        official_urls: ['https://acme.example/docs'],
+        product_prefixes: ['sample tool'],
+        lifecycle: 'active',
+        update_sources: [{
+          kind: 'github_releases',
+          url: 'https://github.com/acme/sample/releases',
+          collector: 'github_web_release',
+          product_surface: 'cli',
+          repository: 'acme/sample',
+          include_prerelease: false,
+        }],
+      },
+    },
+  };
+  const hit = lookupOfficialUrl('Sample Tool', { registry, productRegistry, detailKind: 'tool' });
+  assert.deepEqual(hit.official_urls, ['https://acme.example/docs']);
+  const resolved = await resolveBatchCandidates([{ name: 'Sample Tool', detail_kind_hint: 'tool' }], {
+    registry,
+    productRegistry,
+    resolveOfficialSource: async () => { throw new Error('update source 不应触发 batch 解析'); },
+  });
+  assert.equal(resolved.unresolved.length, 0);
+  assert.deepEqual(resolved.seeds[0].discovery_sources.map(source => source.url), ['https://acme.example/docs']);
+});
+
+test('tool-update-review 路径登记并生成独立审核队列', () => {
+  assert.match(CATALOG_GENERATOR_FILES.toolUpdateReview, /data[\\/]manual[\\/]tools[\\/]tool-update-review\.json$/);
+  assert.equal(fs.existsSync(CATALOG_GENERATOR_FILES.toolUpdateReview), true);
+  const queue = JSON.parse(fs.readFileSync(CATALOG_GENERATOR_FILES.toolUpdateReview, 'utf8'));
+  assert.equal(queue.kind, 'tool_update_review');
+  assert.ok(Array.isArray(queue.items));
 });
 
 test('official-url-registry 兼容 official_url 单数字段填数组（防手误）', () => {

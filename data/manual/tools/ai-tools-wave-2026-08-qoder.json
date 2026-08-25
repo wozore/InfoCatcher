@@ -29,6 +29,6 @@
       "kind": "official_hint"
     }
   ],
-  "repair_note": "修复 tool-level3:qoder 的 official_date 为 2025-10-20；Qoder 官方 IDE Release Notes 在该日期记录产品首次 Hello, World! 介绍。不要使用 2025-11-05 的 JetBrains Plugin 首次发布日期作为 Qoder 主产品日期。仅在该官方页面正文明确支持同一日期时采用。",
+  "repair_note": "修复 tool-level3:qoder 的 公开日期 为 2025-10-20；Qoder 官方 IDE Release Notes 在该日期记录产品首次 Hello, World! 介绍。不要使用 2025-11-05 的 JetBrains Plugin 首次发布日期作为 Qoder 主产品日期。仅在该官方页面正文明确支持同一日期时采用。",
   "wave": "open-agent"
 }

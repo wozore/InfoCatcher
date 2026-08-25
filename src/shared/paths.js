@@ -76,6 +76,8 @@ const CATALOG_GENERATOR_FILES = Object.freeze({
   backupDir: path.join(CATALOG_DIR, '.backup'),
   journal: path.join(CATALOG_DIR, '.transactions', 'journal.json'),
   audit: path.join(CATALOG_DIR, '.transactions', 'audit.json'),
+  dateAudit: path.join(TOOLS_DIR, 'catalog-date-audit.json'), // 日期语义审计清单（只读正式 catalog 后生成）
+  toolUpdateReview: path.join(TOOLS_DIR, 'tool-update-review.json'), // 编程工具更新人工审核清单（后续步骤使用）
 });
 
 const CONCEPT_FILES = Object.freeze({

@@ -33,6 +33,6 @@
       "kind": "official_hint"
     }
   ],
-  "repair_note": "修复 tool-level3:continue 的 official_date 为 2025-07-16；Continue 官方仓库中第一个不带 vscode、jetbrains 或 @continuedev 包后缀的主产品 Release Tag 为 v1.0.19-release，对应提交日期为 2025-07-16。仅在该官方 Tag 页面正文明确支持同一日期时采用。",
+  "repair_note": "修复 tool-level3:continue 的 公开日期 为 2025-07-16；Continue 官方仓库中第一个不带 vscode、jetbrains 或 @continuedev 包后缀的主产品 Release Tag 为 v1.0.19-release，对应提交日期为 2025-07-16。仅在该官方 Tag 页面正文明确支持同一日期时采用。",
   "wave": "open-agent"
 }

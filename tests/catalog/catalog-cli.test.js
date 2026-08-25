@@ -4,6 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const { pendingCandidateToSeed } = require('../../src/news/feedback/catalog-draft-adapter');
 const { parseArgs, tavilyAccessModeFromFlags, generatorOptionsFromFlags } = require('../../scripts/catalog-generator');
+const { publicPreview } = require('../../scripts/catalog-date-repair');
 const { probeCatalogCapabilities } = require('../../src/catalog/ai/catalog-adapters');
 const { loadGeneratorConfig, normalizeGeneratorOptions } = require('../../src/catalog/catalog-assistant');
 const { requestDeepSeek } = require('../../src/shared/deepseek-client');
@@ -20,6 +21,25 @@ test('pending hotspot candidate becomes a tool Seed without Apply capability', (
   assert.equal(seed.known_fields.source_hotspot, true);
   assert.equal(seed.discovery_sources[0].kind, 'hotspot');
 });
+
+test('catalog date repair CLI exposes only reviewable fields', () => {
+  const preview = publicPreview({
+    ok: true,
+    detail_id: 'tool-level3:sample',
+    target_field: 'last_updated_date',
+    date: '2026-08-11',
+    source: { title: 'Official changelog', url: 'https://example.com/changelog' },
+    before_revision: 'sha256:before',
+    target_revision: 'sha256:after',
+    preview: { kind: 'catalog_date_repair' },
+    preview_hash: 'sha256:preview',
+    snapshot: { hidden: true },
+  });
+  assert.equal(preview.ok, true);
+  assert.equal(preview.detail_id, 'tool-level3:sample');
+  assert.equal('snapshot' in preview, false);
+});
+
 
 test('catalog generator CLI parses cost confirmation and seed flags', () => {
   const parsed = parseArgs(['new', '--seed', 'seed.json', '--confirm-cost']);

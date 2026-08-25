@@ -5,49 +5,126 @@
     "cursor": {
       "name": "Cursor",
       "vendor_key": "anysphere",
-      "official_urls": ["https://cursor.com/docs", "https://cursor.com/changelog", "https://cursor.com/pricing"],
-      "aliases": ["Cursor"],
-      "product_prefixes": ["cursor"],
+      "official_urls": [
+        "https://cursor.com/docs",
+        "https://cursor.com/changelog",
+        "https://cursor.com/pricing"
+      ],
+      "aliases": [
+        "Cursor"
+      ],
+      "product_prefixes": [
+        "cursor"
+      ],
+      "update_sources": [
+        {
+          "kind": "changelog",
+          "url": "https://cursor.com/changelog",
+          "collector": "tavily_extract",
+          "product_surface": "desktop",
+          "date_mode": "latest"
+        }
+      ],
       "lifecycle": "active",
-      "last_verified_at": "2026-08-23",
+      "last_verified_at": "2026-08-25",
       "last_official_update_at": "2026-08-19"
     },
     "github-copilot": {
       "name": "GitHub Copilot",
       "vendor_key": "github",
-      "official_urls": ["https://docs.github.com/en/copilot/get-started/what-is-github-copilot", "https://docs.github.com/en/copilot/concepts/agents", "https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference"],
-      "aliases": ["GitHub Copilot"],
-      "product_prefixes": ["github copilot"],
+      "official_urls": [
+        "https://docs.github.com/en/copilot/get-started/what-is-github-copilot",
+        "https://docs.github.com/en/copilot/concepts/agents",
+        "https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference"
+      ],
+      "aliases": [
+        "GitHub Copilot"
+      ],
+      "product_prefixes": [
+        "github copilot"
+      ],
+      "update_sources": [
+        {
+          "kind": "changelog",
+          "url": "https://github.blog/changelog/label/copilot",
+          "collector": "tavily_extract",
+          "product_surface": "product",
+          "date_mode": "latest"
+        }
+      ],
       "lifecycle": "active",
-      "last_verified_at": "2026-08-23",
+      "last_verified_at": "2026-08-25",
       "last_official_update_at": "2026-08-13"
     },
     "claude-code": {
       "name": "Claude Code",
       "vendor_key": "anthropic",
-      "official_urls": ["https://code.claude.com/docs/en/overview", "https://code.claude.com/docs/en/quickstart", "https://code.claude.com/docs/en/changelog"],
-      "aliases": ["Claude Code"],
-      "product_prefixes": ["claude code"],
+      "official_urls": [
+        "https://code.claude.com/docs/en/overview",
+        "https://code.claude.com/docs/en/quickstart",
+        "https://code.claude.com/docs/en/changelog"
+      ],
+      "aliases": [
+        "Claude Code"
+      ],
+      "product_prefixes": [
+        "claude code"
+      ],
+      "update_sources": [
+        {
+          "kind": "github_releases",
+          "url": "https://github.com/anthropics/claude-code/releases",
+          "collector": "github_web_release",
+          "product_surface": "cli",
+          "repository": "anthropics/claude-code",
+          "include_prerelease": false
+        }
+      ],
       "lifecycle": "active",
-      "last_verified_at": "2026-08-23",
-      "last_official_update_at": "2026-05-13"
+      "last_verified_at": "2026-08-25",
+      "last_official_update_at": "2026-08-25"
     },
     "trae": {
       "name": "Trae",
       "vendor_key": "bytedance",
-      "official_urls": ["https://www.trae.ai", "https://www.trae.ai/changelog", "https://www.trae.ai/blog"],
-      "aliases": ["Trae"],
-      "product_prefixes": ["trae"],
+      "official_urls": [
+        "https://www.trae.ai",
+        "https://www.trae.ai/changelog",
+        "https://www.trae.ai/blog"
+      ],
+      "aliases": [
+        "Trae"
+      ],
+      "product_prefixes": [
+        "trae"
+      ],
+      "update_sources": [
+        {
+          "kind": "changelog",
+          "url": "https://docs.trae.ai/ide/changelog",
+          "collector": "tavily_extract",
+          "product_surface": "desktop",
+          "date_mode": "latest"
+        }
+      ],
       "lifecycle": "active",
-      "last_verified_at": "2026-08-23",
-      "last_official_update_at": "2026-07-07"
+      "last_verified_at": "2026-08-25",
+      "last_official_update_at": "2026-08-19"
     },
     "midjourney": {
       "name": "Midjourney",
       "vendor_key": "midjourney-inc",
-      "official_urls": ["https://www.midjourney.com", "https://docs.midjourney.com", "https://docs.midjourney.com/hc/en-us/articles/27870484040333-Comparing-Midjourney-Plans"],
-      "aliases": ["Midjourney"],
-      "product_prefixes": ["midjourney"],
+      "official_urls": [
+        "https://www.midjourney.com",
+        "https://docs.midjourney.com",
+        "https://docs.midjourney.com/hc/en-us/articles/27870484040333-Comparing-Midjourney-Plans"
+      ],
+      "aliases": [
+        "Midjourney"
+      ],
+      "product_prefixes": [
+        "midjourney"
+      ],
       "lifecycle": "active",
       "last_verified_at": "2026-08-23",
       "last_official_update_at": "2026-07-24"
@@ -55,9 +132,25 @@
     "nano-banana": {
       "name": "Nano Banana",
       "vendor_key": "google",
-      "official_urls": ["https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-omni-flash-nano-banana-2-lite/", "https://ai.google.dev/gemini-api/docs"],
-      "aliases": ["Nano Banana", "Nano Banana 2 Lite"],
-      "product_prefixes": ["nano banana"],
+      "official_urls": [
+        "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-omni-flash-nano-banana-2-lite/",
+        "https://ai.google.dev/gemini-api/docs"
+      ],
+      "aliases": [
+        "Nano Banana",
+        "Nano Banana 2 Lite"
+      ],
+      "product_prefixes": [
+        "nano banana"
+      ],
+      "update_sources": [
+        {
+          "kind": "release_notes",
+          "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-omni-flash-nano-banana-2-lite/",
+          "collector": "tavily_extract",
+          "product_surface": "product"
+        }
+      ],
       "lifecycle": "active",
       "last_verified_at": "2026-08-23",
       "last_official_update_at": "2026-06-30"
@@ -65,19 +158,46 @@
     "jimeng": {
       "name": "即梦",
       "vendor_key": "bytedance",
-      "official_urls": ["https://jimeng.jianying.com/", "https://www.volcengine.com/docs/85621/2275082?lang=zh", "https://www.volcengine.com/docs/85621/2201579?lang=zh"],
-      "aliases": ["即梦", "即梦 AI", "Dreamina"],
-      "product_prefixes": ["即梦", "dreamina"],
+      "official_urls": [
+        "https://jimeng.jianying.com/",
+        "https://www.volcengine.com/docs/85621/2275082?lang=zh",
+        "https://www.volcengine.com/docs/85621/2201579?lang=zh"
+      ],
+      "aliases": [
+        "即梦",
+        "即梦 AI",
+        "Dreamina"
+      ],
+      "product_prefixes": [
+        "即梦",
+        "dreamina"
+      ],
+      "update_sources": [
+        {
+          "kind": "release_notes",
+          "url": "https://seed.bytedance.com/zh/blog/one-take-creation-flexible-referencing-introducing-seedance-2-5",
+          "collector": "tavily_extract",
+          "product_surface": "product"
+        }
+      ],
       "lifecycle": "active",
-      "last_verified_at": "2026-08-23",
-      "last_official_update_at": "2026-05-28"
+      "last_verified_at": "2026-08-25",
+      "last_official_update_at": "2026-07-31"
     },
     "suno": {
       "name": "Suno",
       "vendor_key": "suno-inc",
-      "official_urls": ["https://suno.com", "https://about.suno.com/release-notes", "https://suno.com/pricing"],
-      "aliases": ["Suno"],
-      "product_prefixes": ["suno"],
+      "official_urls": [
+        "https://suno.com",
+        "https://about.suno.com/release-notes",
+        "https://suno.com/pricing"
+      ],
+      "aliases": [
+        "Suno"
+      ],
+      "product_prefixes": [
+        "suno"
+      ],
       "lifecycle": "active",
       "last_verified_at": "2026-08-23",
       "last_official_update_at": "2026-08-18"
@@ -85,18 +205,51 @@
     "stable-diffusion": {
       "name": "Stable Diffusion",
       "vendor_key": "stability-ai",
-      "official_urls": ["https://stability.ai", "https://platform.stability.ai/pricing", "https://stability.ai/license"],
-      "aliases": ["Stable Diffusion", "Stable Diffusion 3", "SDXL"],
-      "product_prefixes": ["stable diffusion", "sdxl", "sd3"],
+      "official_urls": [
+        "https://stability.ai",
+        "https://platform.stability.ai/pricing",
+        "https://stability.ai/license"
+      ],
+      "aliases": [
+        "Stable Diffusion",
+        "Stable Diffusion 3",
+        "SDXL"
+      ],
+      "product_prefixes": [
+        "stable diffusion",
+        "sdxl",
+        "sd3"
+      ],
+      "update_sources": [
+        {
+          "kind": "release_notes",
+          "url": "https://platform.stability.ai/docs/release-notes",
+          "collector": "tavily_extract",
+          "product_surface": "product",
+          "date_mode": "latest"
+        }
+      ],
       "lifecycle": "active",
-      "last_verified_at": "2026-08-23"
+      "last_verified_at": "2026-08-25",
+      "last_official_update_at": "2026-05-20"
     },
     "dall-e-3": {
       "name": "DALL·E 3",
       "vendor_key": "openai",
-      "official_urls": ["https://developers.openai.com/api/docs/models/dall-e-3", "https://help.openai.com/en/articles/6402865-is-dall-e-3-available-through-an-api", "https://openai.com/index/dall-e-3/"],
-      "aliases": ["DALL·E 3", "DALL-E 3", "Dalle 3"],
-      "product_prefixes": ["dall-e", "dall·e"],
+      "official_urls": [
+        "https://developers.openai.com/api/docs/models/dall-e-3",
+        "https://help.openai.com/en/articles/6402865-is-dall-e-3-available-through-an-api",
+        "https://openai.com/index/dall-e-3/"
+      ],
+      "aliases": [
+        "DALL·E 3",
+        "DALL-E 3",
+        "Dalle 3"
+      ],
+      "product_prefixes": [
+        "dall-e",
+        "dall·e"
+      ],
       "lifecycle": "deprecated",
       "superseded_by": "gpt-image-2",
       "last_verified_at": "2026-08-23"
@@ -104,9 +257,17 @@
     "ideogram": {
       "name": "Ideogram",
       "vendor_key": "ideogram-ai",
-      "official_urls": ["https://ideogram.ai", "https://docs.ideogram.ai", "https://ideogram.ai/news/ideogram-4.0/"],
-      "aliases": ["Ideogram"],
-      "product_prefixes": ["ideogram"],
+      "official_urls": [
+        "https://ideogram.ai",
+        "https://docs.ideogram.ai",
+        "https://ideogram.ai/news/ideogram-4.0/"
+      ],
+      "aliases": [
+        "Ideogram"
+      ],
+      "product_prefixes": [
+        "ideogram"
+      ],
       "lifecycle": "active",
       "last_verified_at": "2026-08-23",
       "last_official_update_at": "2026-06-03"
@@ -114,128 +275,388 @@
     "windsurf": {
       "name": "Windsurf",
       "vendor_key": "windsurf-vendor",
-      "official_urls": ["https://windsurf.com", "https://docs.windsurf.com/plugins", "https://windsurf.com/blog/pricing-v2"],
-      "aliases": ["Windsurf"],
-      "product_prefixes": ["windsurf"],
+      "official_urls": [
+        "https://windsurf.com",
+        "https://docs.windsurf.com/plugins",
+        "https://windsurf.com/blog/pricing-v2"
+      ],
+      "aliases": [
+        "Windsurf"
+      ],
+      "product_prefixes": [
+        "windsurf"
+      ],
+      "update_sources": [
+        {
+          "kind": "changelog",
+          "url": "https://windsurf.com/changelog/windsurf",
+          "collector": "tavily_extract",
+          "product_surface": "product",
+          "date_mode": "latest"
+        }
+      ],
       "lifecycle": "active",
-      "last_verified_at": "2026-08-23"
+      "last_verified_at": "2026-08-25",
+      "last_official_update_at": "2026-08-21"
     },
     "openai-codex": {
       "name": "OpenAI Codex",
       "vendor_key": "openai",
-      "official_urls": ["https://openai.com/codex/", "https://help.openai.com/en/articles/11096431", "https://github.com/openai/codex"],
-      "aliases": ["OpenAI Codex", "Codex CLI"],
-      "product_prefixes": ["openai codex", "codex cli"],
+      "official_urls": [
+        "https://openai.com/codex/",
+        "https://help.openai.com/en/articles/11096431",
+        "https://github.com/openai/codex"
+      ],
+      "aliases": [
+        "OpenAI Codex",
+        "Codex CLI"
+      ],
+      "product_prefixes": [
+        "openai codex",
+        "codex cli"
+      ],
+      "update_sources": [
+        {
+          "kind": "github_releases",
+          "url": "https://github.com/openai/codex/releases",
+          "collector": "github_web_release",
+          "product_surface": "cli",
+          "repository": "openai/codex",
+          "include_prerelease": false
+        }
+      ],
       "lifecycle": "active",
-      "last_verified_at": "2026-08-23"
+      "last_verified_at": "2026-08-25",
+      "last_official_update_at": "2026-08-24"
     },
     "gemini-cli": {
       "name": "Gemini CLI",
       "vendor_key": "google",
-      "official_urls": ["https://github.com/google-gemini/gemini-cli", "https://github.com/google-gemini/gemini-cli/blob/main/docs/get-started/index.md"],
-      "aliases": ["Gemini CLI"],
-      "product_prefixes": ["gemini cli"],
+      "official_urls": [
+        "https://github.com/google-gemini/gemini-cli",
+        "https://github.com/google-gemini/gemini-cli/blob/main/docs/get-started/index.md"
+      ],
+      "aliases": [
+        "Gemini CLI"
+      ],
+      "product_prefixes": [
+        "gemini cli"
+      ],
+      "update_sources": [
+        {
+          "kind": "github_releases",
+          "url": "https://github.com/google-gemini/gemini-cli/releases",
+          "collector": "github_web_release",
+          "product_surface": "cli",
+          "repository": "google-gemini/gemini-cli",
+          "include_prerelease": false
+        }
+      ],
       "lifecycle": "active",
-      "last_verified_at": "2026-08-23"
+      "last_verified_at": "2026-08-25",
+      "last_official_update_at": "2026-08-19"
     },
     "replit-agent": {
       "name": "Replit Agent",
       "vendor_key": "replit",
-      "official_urls": ["https://replit.com/products/agent", "https://docs.replit.com/learn/build-with-agent", "https://docs.replit.com/billing/ai-billing"],
-      "aliases": ["Replit Agent"],
-      "product_prefixes": ["replit agent"],
+      "official_urls": [
+        "https://replit.com/products/agent",
+        "https://docs.replit.com/learn/build-with-agent",
+        "https://docs.replit.com/billing/ai-billing"
+      ],
+      "aliases": [
+        "Replit Agent"
+      ],
+      "product_prefixes": [
+        "replit agent"
+      ],
+      "update_sources": [
+        {
+          "kind": "release_notes",
+          "url": "https://docs.replit.com/updates",
+          "collector": "tavily_extract",
+          "product_surface": "product",
+          "date_mode": "latest"
+        }
+      ],
       "lifecycle": "active",
-      "last_verified_at": "2026-08-23"
+      "last_verified_at": "2026-08-25",
+      "last_official_update_at": "2026-08-21"
     },
     "devin": {
       "name": "Devin",
       "vendor_key": "cognition",
-      "official_urls": ["https://devin.ai/", "https://docs.devin.ai/get-started/devin-intro", "https://docs.devin.ai/admin/billing"],
-      "aliases": ["Devin"],
-      "product_prefixes": ["devin"],
+      "official_urls": [
+        "https://devin.ai/",
+        "https://docs.devin.ai/get-started/devin-intro",
+        "https://docs.devin.ai/admin/billing"
+      ],
+      "aliases": [
+        "Devin"
+      ],
+      "product_prefixes": [
+        "devin"
+      ],
+      "update_sources": [
+        {
+          "kind": "release_notes",
+          "url": "https://docs.devin.ai/release-notes/overview",
+          "collector": "tavily_extract",
+          "product_surface": "product",
+          "date_mode": "latest"
+        }
+      ],
       "lifecycle": "active",
-      "last_verified_at": "2026-08-23"
+      "last_verified_at": "2026-08-25",
+      "last_official_update_at": "2026-08-21"
     },
     "augment-code": {
       "name": "Augment Code",
       "vendor_key": "augment",
-      "official_urls": ["https://www.augmentcode.com", "https://docs.augmentcode.com/using-augment/agent", "https://www.augmentcode.com/workflows"],
-      "aliases": ["Augment Code", "Augment"],
-      "product_prefixes": ["augment code"],
+      "official_urls": [
+        "https://www.augmentcode.com",
+        "https://docs.augmentcode.com/using-augment/agent",
+        "https://www.augmentcode.com/workflows"
+      ],
+      "aliases": [
+        "Augment Code",
+        "Augment"
+      ],
+      "product_prefixes": [
+        "augment code"
+      ],
+      "update_sources": [
+        {
+          "kind": "changelog",
+          "url": "https://www.augmentcode.com/changelog",
+          "collector": "tavily_extract",
+          "product_surface": "product",
+          "date_mode": "latest"
+        }
+      ],
       "lifecycle": "active",
-      "last_verified_at": "2026-08-23"
+      "last_verified_at": "2026-08-25",
+      "last_official_update_at": "2026-08-21"
     },
     "amazon-q-developer": {
       "name": "Amazon Q Developer",
       "vendor_key": "aws",
-      "official_urls": ["https://aws.amazon.com/q/developer/", "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/what-is.html", "https://aws.amazon.com/q/developer/pricing/"],
-      "aliases": ["Amazon Q Developer"],
-      "product_prefixes": ["amazon q developer"],
+      "official_urls": [
+        "https://aws.amazon.com/q/developer/",
+        "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/what-is.html",
+        "https://aws.amazon.com/q/developer/pricing/"
+      ],
+      "aliases": [
+        "Amazon Q Developer"
+      ],
+      "product_prefixes": [
+        "amazon q developer"
+      ],
+      "update_sources": [
+        {
+          "kind": "github_file",
+          "url": "https://github.com/aws/amazon-q-jetbrains/blob/main/CHANGELOG.md",
+          "collector": "github_web_file",
+          "product_surface": "ide_extension",
+          "repository": "aws/amazon-q-jetbrains"
+        }
+      ],
       "lifecycle": "active",
-      "last_verified_at": "2026-08-23"
+      "last_verified_at": "2026-08-25",
+      "last_official_update_at": "2026-08-19"
     },
     "junie": {
       "name": "Junie",
       "vendor_key": "jetbrains",
-      "official_urls": ["https://www.jetbrains.com/junie/", "https://junie.jetbrains.com/docs/junie-ide-plugin.html", "https://junie.jetbrains.com/docs/junie-cli-usage.html"],
-      "aliases": ["Junie", "JetBrains Junie"],
-      "product_prefixes": ["jetbrains junie", "junie"],
+      "official_urls": [
+        "https://www.jetbrains.com/junie/",
+        "https://junie.jetbrains.com/docs/junie-ide-plugin.html",
+        "https://junie.jetbrains.com/docs/junie-cli-usage.html"
+      ],
+      "aliases": [
+        "Junie",
+        "JetBrains Junie"
+      ],
+      "product_prefixes": [
+        "jetbrains junie",
+        "junie"
+      ],
+      "update_sources": [
+        {
+          "kind": "release_notes",
+          "url": "https://junie.jetbrains.com/whats-new",
+          "collector": "tavily_extract",
+          "product_surface": "cli",
+          "date_mode": "latest"
+        }
+      ],
       "lifecycle": "active",
-      "last_verified_at": "2026-08-23"
+      "last_verified_at": "2026-08-25",
+      "last_official_update_at": "2026-08-19"
     },
     "kiro": {
       "name": "Kiro",
       "vendor_key": "amazon",
-      "official_urls": ["https://kiro.dev", "https://kiro.dev/docs/billing/", "https://kiro.dev/pricing/"],
-      "aliases": ["Kiro"],
-      "product_prefixes": ["kiro"],
+      "official_urls": [
+        "https://kiro.dev",
+        "https://kiro.dev/docs/billing/",
+        "https://kiro.dev/pricing/"
+      ],
+      "aliases": [
+        "Kiro"
+      ],
+      "product_prefixes": [
+        "kiro"
+      ],
+      "update_sources": [
+        {
+          "kind": "changelog",
+          "url": "https://kiro.dev/changelog/cli/",
+          "collector": "tavily_extract",
+          "product_surface": "cli",
+          "date_mode": "latest"
+        }
+      ],
       "lifecycle": "active",
-      "last_verified_at": "2026-08-23"
+      "last_verified_at": "2026-08-25",
+      "last_official_update_at": "2026-08-21"
     },
     "cline": {
       "name": "Cline",
       "vendor_key": "cline-vendor",
-      "official_urls": ["https://cline.bot", "https://cline.bot/pricing"],
-      "aliases": ["Cline"],
-      "product_prefixes": ["cline"],
+      "official_urls": [
+        "https://cline.bot",
+        "https://cline.bot/pricing"
+      ],
+      "aliases": [
+        "Cline"
+      ],
+      "product_prefixes": [
+        "cline"
+      ],
+      "update_sources": [
+        {
+          "kind": "github_releases",
+          "url": "https://github.com/cline/cline/releases",
+          "collector": "github_web_release",
+          "product_surface": "cli",
+          "repository": "cline/cline",
+          "include_prerelease": false
+        }
+      ],
       "lifecycle": "active",
-      "last_verified_at": "2026-08-23"
+      "last_verified_at": "2026-08-25",
+      "last_official_update_at": "2026-08-24"
     },
     "aider": {
       "name": "Aider",
       "vendor_key": "aider-vendor",
-      "official_urls": ["https://aider.chat", "https://aider.chat/docs/faq.html"],
-      "aliases": ["Aider"],
-      "product_prefixes": ["aider"],
+      "official_urls": [
+        "https://aider.chat",
+        "https://aider.chat/docs/faq.html"
+      ],
+      "aliases": [
+        "Aider"
+      ],
+      "product_prefixes": [
+        "aider"
+      ],
+      "update_sources": [
+        {
+          "kind": "github_releases",
+          "url": "https://github.com/Aider-AI/aider/releases",
+          "collector": "github_web_release",
+          "product_surface": "cli",
+          "repository": "Aider-AI/aider",
+          "include_prerelease": false
+        }
+      ],
       "lifecycle": "active",
-      "last_verified_at": "2026-08-23"
+      "last_verified_at": "2026-08-25",
+      "last_official_update_at": "2026-08-09"
     },
     "continue": {
       "name": "Continue",
       "vendor_key": "continue-vendor",
-      "official_urls": ["https://continue.dev", "https://docs.continue.dev", "https://docs.continue.dev/features/agent/how-it-works"],
-      "aliases": ["Continue"],
-      "product_prefixes": ["continue"],
+      "official_urls": [
+        "https://continue.dev",
+        "https://docs.continue.dev",
+        "https://docs.continue.dev/features/agent/how-it-works"
+      ],
+      "aliases": [
+        "Continue"
+      ],
+      "product_prefixes": [
+        "continue"
+      ],
+      "update_sources": [
+        {
+          "kind": "github_releases",
+          "url": "https://github.com/continuedev/continue/releases",
+          "collector": "github_web_release",
+          "product_surface": "ide_extension",
+          "repository": "continuedev/continue",
+          "include_prerelease": false
+        }
+      ],
       "lifecycle": "active",
-      "last_verified_at": "2026-08-23"
+      "last_verified_at": "2026-08-25",
+      "last_official_update_at": "2026-06-19"
     },
     "qoder": {
       "name": "Qoder",
       "vendor_key": "qoder-vendor",
-      "official_urls": ["https://qoder.com", "https://docs.qoder.com/plugins/introduction", "https://docs.qoder.com/account/pricing"],
-      "aliases": ["Qoder"],
-      "product_prefixes": ["qoder"],
+      "official_urls": [
+        "https://qoder.com",
+        "https://docs.qoder.com/plugins/introduction",
+        "https://docs.qoder.com/account/pricing"
+      ],
+      "aliases": [
+        "Qoder"
+      ],
+      "product_prefixes": [
+        "qoder"
+      ],
+      "update_sources": [
+        {
+          "kind": "changelog",
+          "url": "https://docs.qoder.com/release-notes/desktop",
+          "collector": "tavily_extract",
+          "product_surface": "desktop",
+          "date_mode": "latest"
+        }
+      ],
       "lifecycle": "active",
-      "last_verified_at": "2026-08-23"
+      "last_verified_at": "2026-08-25",
+      "last_official_update_at": "2026-08-19"
     },
     "codebuddy": {
       "name": "CodeBuddy",
       "vendor_key": "codebuddy-vendor",
-      "official_urls": ["https://www.codebuddy.ai", "https://www.codebuddy.ai/docs/ide/Account/pricing", "https://www.codebuddy.ai/docs/cli/ide-integrations"],
-      "aliases": ["CodeBuddy", "CodeBuddy IDE"],
-      "product_prefixes": ["codebuddy"],
+      "official_urls": [
+        "https://www.codebuddy.ai",
+        "https://www.codebuddy.ai/docs/ide/Account/pricing",
+        "https://www.codebuddy.ai/docs/cli/ide-integrations"
+      ],
+      "aliases": [
+        "CodeBuddy",
+        "CodeBuddy IDE"
+      ],
+      "product_prefixes": [
+        "codebuddy"
+      ],
+      "update_sources": [
+        {
+          "kind": "release_notes",
+          "url": "https://www.codebuddy.ai/docs/ide/release-notes/release-notes",
+          "collector": "tavily_extract",
+          "product_surface": "ide_extension",
+          "date_mode": "latest"
+        }
+      ],
       "lifecycle": "active",
-      "last_verified_at": "2026-08-23"
+      "last_verified_at": "2026-08-25",
+      "last_official_update_at": "2026-07-22"
     }
   }
 }

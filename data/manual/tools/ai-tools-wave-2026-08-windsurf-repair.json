@@ -5,13 +5,29 @@
   "vendor_key": "windsurf-vendor",
   "tool_key": "windsurf",
   "official_url": "https://windsurf.com",
-  "repair_layers": ["tool-level3"],
-  "known_fields": { "theme": "dev" },
-  "discovery_sources": [
-    { "url": "https://windsurf.com", "kind": "official_hint" },
-    { "url": "https://windsurf.com/blog/our-brand", "kind": "official_hint" },
-    { "url": "https://windsurf.com/changelog/windsurf", "kind": "official_hint" },
-    { "url": "https://windsurf.com/changelog", "kind": "official_hint" }
+  "repair_layers": [
+    "tool-level3"
   ],
-  "repair_note": "修复 tool-level3:windsurf 的 official_date 为 2025-04-02。仅在 Windsurf 官方来源正文明确支持同一完整日期且该日期描述 Windsurf 产品实体首发或 GA 时采用；不要使用 Devin/Windsurf 重品牌后的 changelog、页面更新时间或后续功能发布日期。"
+  "known_fields": {
+    "theme": "dev"
+  },
+  "discovery_sources": [
+    {
+      "url": "https://windsurf.com",
+      "kind": "official_hint"
+    },
+    {
+      "url": "https://windsurf.com/blog/our-brand",
+      "kind": "official_hint"
+    },
+    {
+      "url": "https://windsurf.com/changelog/windsurf",
+      "kind": "official_hint"
+    },
+    {
+      "url": "https://windsurf.com/changelog",
+      "kind": "official_hint"
+    }
+  ],
+  "repair_note": "修复 tool-level3:windsurf 的 公开日期 为 2025-04-02。仅在 Windsurf 官方来源正文明确支持同一完整日期且该日期描述 Windsurf 产品实体首发或 GA 时采用；不要使用 Devin/Windsurf 重品牌后的 changelog、页面更新时间或后续功能发布日期。"
 }

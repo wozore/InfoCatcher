@@ -5,12 +5,25 @@
   "vendor_key": "cognition",
   "tool_key": "devin",
   "official_url": "https://devin.ai/",
-  "repair_layers": ["tool-level3"],
-  "known_fields": { "theme": "dev" },
-  "discovery_sources": [
-    { "url": "https://devin.ai/", "kind": "official_hint" },
-    { "url": "https://docs.devin.ai/get-started/devin-intro", "kind": "official_hint" },
-    { "url": "https://docs.devin.ai/admin/billing", "kind": "official_hint" }
+  "repair_layers": [
+    "tool-level3"
   ],
-  "repair_note": "修复 tool-level3:devin：记录通用 Devin coding agent 产品，不得改写为 Devin Federal 政府产品线。official_date 只能采用 Cognition/Devin 官方来源明确支持的通用 Devin 产品首次公开发布或 GA 日期；排除 /federal/ 文档、页面更新时间、后续功能发布日期和 2026-01-01 等推导/占位日期。若无法获得完整首发日期，保持缺失并阻断。"
+  "known_fields": {
+    "theme": "dev"
+  },
+  "discovery_sources": [
+    {
+      "url": "https://devin.ai/",
+      "kind": "official_hint"
+    },
+    {
+      "url": "https://docs.devin.ai/get-started/devin-intro",
+      "kind": "official_hint"
+    },
+    {
+      "url": "https://docs.devin.ai/admin/billing",
+      "kind": "official_hint"
+    }
+  ],
+  "repair_note": "修复 tool-level3:devin：记录通用 Devin coding agent 产品，不得改写为 Devin Federal 政府产品线。公开日期 只能采用 Cognition/Devin 官方来源明确支持的通用 Devin 产品首次公开发布或 GA 日期；排除 /federal/ 文档、页面更新时间、后续功能发布日期和 2026-01-01 等推导/占位日期。若无法获得完整首发日期，保持缺失并阻断。"
 }

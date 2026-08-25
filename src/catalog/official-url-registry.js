@@ -9,7 +9,8 @@
  *   厂商表 data/manual/archive/official-url-registry.json：
  *   { schema_version: 1, entries: { "<vendor_key>": { vendor_name, official_urls: [], aliases?: [], model_prefixes?: [] } } }
  *   产品表 data/manual/archive/official-product-url-registry.json：
- *   { schema_version: 1, products: { "<product_key>": { name, vendor_key, official_urls: [], aliases?: [], product_prefixes?: [], lifecycle, last_verified_at? } } }
+ *   { schema_version: 1, products: { "<product_key>": { name, vendor_key, official_urls: [], update_sources?: [], aliases?: [], product_prefixes?: [], lifecycle, last_verified_at? } } }
+ *   update_sources 是更新链路专用来源；GitHub URL 始终是 github.com 人类网页，REST endpoint 由后续 collector 根据 repository 构造。
  *   product_prefixes 采用词边界匹配，model_prefixes 保留旧 startsWith 兼容。
  *
  * 纯本地读写，不发网络请求、不消费额度。
@@ -47,7 +48,17 @@ function listProductUrlRegistry() {
   return loadProductUrlRegistry();
 }
 
-/** 列出登记表全部条目。 */
+/** 读取指定产品的专用更新源；只读投影，不参与 lookupOfficialUrl。 */
+function updateSourcesForProduct(productKey, options = {}) {
+  const registry = options.registry || options.productRegistry || loadProductUrlRegistry();
+  const product = registry && registry.products && typeof registry.products === 'object'
+    ? registry.products[normalizeKey(productKey)]
+    : null;
+  return Array.isArray(product?.update_sources)
+    ? product.update_sources.map(source => ({ ...source }))
+    : [];
+}
+
 function listUrlRegistry() {
   return loadUrlRegistry();
 }
@@ -183,6 +194,128 @@ const FORBIDDEN_PRODUCT_PREFIXES = new Set(['ai', 'agent', 'coding agent', 'code
 const PRODUCT_LIFECYCLES = new Set(['active', 'deprecated', 'discontinued', 'unknown']);
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
+const UPDATE_SOURCE_KINDS = Object.freeze(['github_releases', 'github_file', 'changelog', 'release_notes']);
+const UPDATE_SOURCE_COLLECTORS = Object.freeze(['github_web_release', 'github_web_file', 'tavily_extract']);
+const UPDATE_SOURCE_SURFACES = Object.freeze(['product', 'cli', 'desktop', 'ide_extension']);
+const UPDATE_SOURCE_COLLECTOR_BY_KIND = Object.freeze({
+  github_releases: 'github_web_release',
+  github_file: 'github_web_file',
+  changelog: 'tavily_extract',
+  release_notes: 'tavily_extract',
+});
+const UPDATE_SOURCE_FIELDS = Object.freeze(['kind', 'url', 'collector', 'product_surface', 'repository', 'tag_prefix', 'include_prerelease', 'date_mode']);
+const GITHUB_REPOSITORY_PATTERN = /^[A-Za-z0-9](?:[A-Za-z0-9._-]*[A-Za-z0-9])?\/[A-Za-z0-9](?:[A-Za-z0-9._-]*[A-Za-z0-9])?$/;
+const TAG_PREFIX_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._+\/-]{0,99}$/;
+
+function isGithubHost(hostname) {
+  const host = String(hostname || '').toLowerCase();
+  return host === 'github.com' || host.endsWith('.github.com');
+}
+
+function githubPathMatchesRepository(url, repository, kind) {
+  let parsed;
+  try { parsed = new URL(url); } catch { return false; }
+  if (typeof repository !== 'string' || !repository.includes('/')) return false;
+  if (parsed.hostname.toLowerCase() !== 'github.com') return false;
+  const parts = parsed.pathname.split('/').filter(Boolean);
+  const repoParts = repository.split('/');
+  if (parts.length < 3 || parts[0].toLowerCase() !== repoParts[0].toLowerCase() || parts[1].toLowerCase() !== repoParts[1].toLowerCase()) return false;
+  if (kind === 'github_releases') return parts[2].toLowerCase() === 'releases';
+  return parts[2].toLowerCase() === 'blob' && parts.length >= 5;
+}
+
+function isPricingPath(url) {
+  let pathname = '';
+  try { pathname = new URL(url).pathname; } catch { return false; }
+  return pathname.split('/').filter(Boolean).some(segment => /^pricing(?:[-_].*)?$/i.test(segment));
+}
+
+function updateSourceError(productKey, index, code) {
+  return `${productKey}:UPDATE_SOURCE[${index}]:${code}`;
+}
+
+function validateUpdateSource(source, productKey, index) {
+  const errors = [];
+  const prefix = (code) => updateSourceError(productKey, index, code);
+  if (!source || typeof source !== 'object' || Array.isArray(source)) return [prefix('OBJECT_INVALID')];
+  for (const field of Object.keys(source)) {
+    if (!UPDATE_SOURCE_FIELDS.includes(field)) errors.push(prefix('UNKNOWN_FIELD'));
+  }
+
+  const kind = source.kind;
+  const collector = source.collector;
+  const surface = source.product_surface;
+  if (!UPDATE_SOURCE_KINDS.includes(kind)) errors.push(prefix('KIND_INVALID'));
+  if (!UPDATE_SOURCE_COLLECTORS.includes(collector)) errors.push(prefix('COLLECTOR_INVALID'));
+  if (!UPDATE_SOURCE_SURFACES.includes(surface)) errors.push(prefix('PRODUCT_SURFACE_INVALID'));
+  if (source.date_mode !== undefined && source.date_mode !== 'latest') errors.push(prefix('DATE_MODE_INVALID'));
+  if (UPDATE_SOURCE_COLLECTOR_BY_KIND[kind] && collector !== UPDATE_SOURCE_COLLECTOR_BY_KIND[kind]) {
+    errors.push(prefix('COLLECTOR_KIND_MISMATCH'));
+  }
+
+  const url = canonicalizeUrl(source.url);
+  if (!url) errors.push(prefix('URL_INVALID'));
+  else if (!/^https:\/\//i.test(url)) errors.push(prefix('HTTPS_REQUIRED'));
+  if (url && isPricingPath(url)) errors.push(prefix('PRICING_URL_FORBIDDEN'));
+
+  const isGithubKind = kind === 'github_releases' || kind === 'github_file';
+  if (isGithubKind) {
+    if (typeof source.repository !== 'string' || !GITHUB_REPOSITORY_PATTERN.test(source.repository.trim())) {
+      errors.push(prefix('REPOSITORY_INVALID'));
+    }
+    if (url && (!githubPathMatchesRepository(url, source.repository?.trim() || '', kind))) {
+      errors.push(prefix('GITHUB_URL_REPOSITORY_MISMATCH'));
+    }
+    if (kind === 'github_releases') {
+      if (source.include_prerelease !== false) errors.push(prefix('INCLUDE_PRERELEASE_MUST_BE_FALSE'));
+      if (source.tag_prefix !== undefined && (typeof source.tag_prefix !== 'string' || !TAG_PREFIX_PATTERN.test(source.tag_prefix.trim()))) {
+        errors.push(prefix('TAG_PREFIX_INVALID'));
+      }
+    } else {
+      if (source.tag_prefix !== undefined) errors.push(prefix('TAG_PREFIX_FORBIDDEN'));
+      if (source.include_prerelease !== undefined && source.include_prerelease !== false) errors.push(prefix('INCLUDE_PRERELEASE_FORBIDDEN'));
+    }
+  } else {
+    if (source.repository !== undefined) errors.push(prefix('REPOSITORY_FORBIDDEN'));
+    if (source.tag_prefix !== undefined) errors.push(prefix('TAG_PREFIX_FORBIDDEN'));
+    if (source.include_prerelease !== undefined) errors.push(prefix('INCLUDE_PRERELEASE_FORBIDDEN'));
+    if (url && isGithubHost(new URL(url).hostname)) errors.push(prefix('GITHUB_KIND_REQUIRED'));
+  }
+
+  if (url && isGithubKind && new URL(url).hostname.toLowerCase() !== 'github.com') {
+    errors.push(prefix('GITHUB_HUMAN_URL_REQUIRED'));
+  }
+  return errors;
+}
+
+function validateUpdateSources(productKey, sources) {
+  if (!Array.isArray(sources)) return [`${productKey}:UPDATE_SOURCES_INVALID`];
+  const errors = [];
+  const seenUrls = new Set();
+  sources.forEach((source, index) => {
+    errors.push(...validateUpdateSource(source, productKey, index));
+    const url = canonicalizeUrl(source?.url);
+    if (url) {
+      if (seenUrls.has(url)) errors.push(updateSourceError(productKey, index, 'DUPLICATE_URL'));
+      seenUrls.add(url);
+    }
+  });
+  return errors;
+}
+
+function normalizeUpdateSourcesForWrite(productKey, sources) {
+  if (!Array.isArray(sources)) throw new Error('UPDATE_SOURCES_INVALID');
+  const normalized = sources.map(source => ({
+    ...source,
+    ...(source && source.url !== undefined ? { url: canonicalizeUrl(source.url) } : {}),
+    ...(source && source.repository !== undefined ? { repository: String(source.repository).trim() } : {}),
+    ...(source && source.tag_prefix !== undefined ? { tag_prefix: String(source.tag_prefix).trim() } : {}),
+  }));
+  const errors = validateUpdateSources(productKey, normalized);
+  if (errors.length) throw new Error(`UPDATE_SOURCES_INVALID: ${errors.join(',')}`);
+  return normalized;
+}
+
 function isValidDate(value) {
   if (!DATE_PATTERN.test(String(value))) return false;
   const [year, month, day] = String(value).split('-').map(Number);
@@ -231,6 +364,9 @@ function validateProductUrlRegistry(registry, options = {}) {
         if (!prefix || FORBIDDEN_PRODUCT_PREFIXES.has(prefix)) errors.push(`${key}:PRODUCT_PREFIX_INVALID`);
       }
     }
+    if (product.update_sources !== undefined) {
+      errors.push(...validateUpdateSources(key, product.update_sources));
+    }
     if (!PRODUCT_LIFECYCLES.has(product.lifecycle)) errors.push(`${key}:LIFECYCLE_INVALID`);
     for (const field of ['last_verified_at', 'last_official_update_at']) {
       if (product[field] !== undefined && !isValidDate(product[field])) errors.push(`${key}:${field.toUpperCase()}_INVALID`);
@@ -251,12 +387,18 @@ function addProductUrlRegistryEntry(input, options = {}) {
   if (!officialUrls.length) throw new Error('PRODUCT_URL_REGISTRY_URL_INVALID');
   const store = options.registry || loadProductUrlRegistry();
   const products = { ...(store.products || {}) };
-  products[normalizeKey(name)] = {
+  const productKey = normalizeKey(name);
+  const existingProduct = products[productKey];
+  const updateSources = input?.update_sources !== undefined
+    ? normalizeUpdateSourcesForWrite(productKey, input.update_sources)
+    : existingProduct?.update_sources;
+  products[productKey] = {
     name,
     vendor_key: vendorKey,
     official_urls: officialUrls,
     ...(Array.isArray(input?.aliases) && input.aliases.length ? { aliases: [...input.aliases] } : {}),
     ...(productPrefixesOf(input?.product_prefixes).length ? { product_prefixes: productPrefixesOf(input.product_prefixes) } : {}),
+    ...(updateSources !== undefined ? { update_sources: updateSources.map(source => ({ ...source })) } : {}),
     lifecycle: input?.lifecycle || 'active',
     ...(input?.last_verified_at ? { last_verified_at: String(input.last_verified_at) } : {}),
     ...(input?.last_official_update_at ? { last_official_update_at: String(input.last_official_update_at) } : {}),
@@ -388,7 +530,13 @@ module.exports = {
   listUrlRegistry,
   loadProductUrlRegistry,
   listProductUrlRegistry,
+  updateSourcesForProduct,
   validateProductUrlRegistry,
+  validateUpdateSource,
+  validateUpdateSources,
+  UPDATE_SOURCE_KINDS,
+  UPDATE_SOURCE_COLLECTORS,
+  UPDATE_SOURCE_SURFACES,
   lookupOfficialUrl,
   addProductUrlRegistryEntry,
   removeProductUrlRegistryEntry,
