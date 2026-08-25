@@ -12,9 +12,20 @@
 
 可由官方根域、官方链接关系或维护者确认来源证明归属的产品页、开发文档、定价页、公告或更新日志。模型自行声称某来源是官方，不足以建立 OfficialSource。OfficialSource 保留清洗后的正文（`content`），直接作为字段合成的证据。
 
-## FieldCoverage
+## UpdateSource
 
-CatalogProfile 所需的每层展示字段与已取得官方来源的覆盖关系：任一适用字段无值、值仍是占位（null/空串/unknown/待核验）或未引用官方来源时，该字段即 missing。缺少适用的必需字段时，目录草案不能发布。
+编程工具更新链路专用的人工登记来源。产品表中的 `update_sources` 可选且与 `official_urls` 分离；每条来源声明 `kind`、人类可读 HTTPS `url`、`collector`、`product_surface`，GitHub 来源还必须声明与网页对应的 `repository` 和 `include_prerelease: false`。`official_urls` 仍是 catalog 身份、文档和价格研究入口，`lookupOfficialUrl()` 不读取 `update_sources`。
+
+## UpdateCandidate
+
+由确定性 planner 从 `UpdateEvidence` 和 AI 语义建议共同形成、等待人工决定的工具更新项。只允许指向 `detail_kind=tool` 的 `last_updated_date` 向前候选；来源必须命中产品 `update_sources`，日期必须来自官方 metadata/正文、晚于当前值且不晚于扫描日。AI 低置信度、产品表面/实体不匹配、日期缺失或证据 hash 变化均保持 blocked/pending，不进入 Apply。
+
+## ToolUpdateReviewQueue
+
+独立于五模块 catalog 的人工审核 JSON 清单。条目按 `product_key + source_url + proposed_date + content_hash` 稳定去重，重复扫描保留人工 `approved/rejected`；同一发布的 evidence hash 变化替换为新的 pending 条目。只落盘完整官方 URL、证据摘录、内容 hash、日期和五字段 AI 建议，不落盘整页正文或凭据。
+
+`release_date` 表示实体首次公开或 GA 日期，`last_updated_date` 表示有官方证据的产品级最近更新日期；订阅套餐不保存这两类日期。抓取时间或无关页面更新时间不属于日期事实；证据不足时保持日期缺失并显示待核验。
+
 
 ## DerivedField
 
