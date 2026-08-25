@@ -78,6 +78,7 @@ const CATALOG_GENERATOR_FILES = Object.freeze({
   audit: path.join(CATALOG_DIR, '.transactions', 'audit.json'),
   dateAudit: path.join(TOOLS_DIR, 'catalog-date-audit.json'), // 日期语义审计清单（只读正式 catalog 后生成）
   toolUpdateReview: path.join(TOOLS_DIR, 'tool-update-review.json'), // 编程工具更新人工审核清单（后续步骤使用）
+  seriesPolicy: path.join(ARCHIVE_DIR, 'llm-series-policy.json'), // 厂商 LLM 系列分类政策（阶段 1 政策契约，阶段 2 迁移与阶段 4 AI 分类规则源）
 });
 
 const CONCEPT_FILES = Object.freeze({

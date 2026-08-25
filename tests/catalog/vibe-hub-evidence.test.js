@@ -147,6 +147,7 @@ test('fetchVibeHubDefinition 缓存过期 → 重新抓取', async () => {
   const result = await fetchVibeHubDefinition('chat-ui', {
     now: () => nowMs,
     readCache: slug => stale,
+    writeCache: () => {}, // 测试隔离：禁止写真实缓存文件
     fetchImpl: async () => { fetches += 1; return response(sampleHtml()); },
   });
   assert.equal(fetches, 1);

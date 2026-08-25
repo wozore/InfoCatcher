@@ -44,21 +44,131 @@ const {
   normalizeGeneratorOptions,
 } = require('./catalog-assistant');
 const { createCatalogAiAdapters, resolveOfficialSource } = require('./ai/catalog-adapters');
+const { resolveSeriesPlacement, applyPlacementToSeed } = require('./ai/catalog-series-placement-ai');
+const { loadSeriesPolicy } = require('./catalog-series-policy');
+const { loadCatalogSnapshot } = require('./catalog-snapshot-store');
 const { lookupOfficialUrl } = require('./official-url-registry');
 const { createCostLedger } = require('./catalog-research');
 const { slugify } = require('./catalog-record-builders');
 
 const EMPTY_COST = { search_queries: 0, pages: 0, responses_calls: 0, synthesis_calls: 0 };
 
+/** 预估待补卡中需要付费 vendor 解析的数量（registry 命中零成本）。 */
+function estimateResolutionNeed(cards, options = {}) {
+  let paid = 0;
+  let free = 0;
+  for (const card of cards || []) {
+    const name = String(card.name || card.title || '').trim();
+    if (!name) continue;
+    const hit = lookupOfficialUrl(name, {
+      ...(options.registry !== undefined ? { registry: options.registry } : {}),
+      ...(options.productRegistry !== undefined ? { productRegistry: options.productRegistry } : {}),
+      ...(card.detail_kind_hint ? { detailKind: card.detail_kind_hint } : {}),
+    });
+    if (hit.ok) free += 1; else paid += 1;
+  }
+  return {
+    cards_paid: paid,
+    cards_free: free,
+    vendor_search_upper_bound: paid,
+    vendor_responses_upper_bound: paid,
+  };
+}
+
+/** 浅深拷贝快照（供 placement 顺序投影，不改原始数据）。 */
+function cloneSnapshot(snapshot) {
+  const clone = {};
+  for (const [area, items] of Object.entries(snapshot || {})) {
+    clone[area] = (items || []).map(item => {
+      const copy = { ...item };
+      if (Array.isArray(item.level2_refs)) copy.level2_refs = [...item.level2_refs];
+      if (Array.isArray(item.detail_refs)) copy.detail_refs = [...item.detail_refs];
+      return copy;
+    });
+  }
+  return clone;
+}
+
+/** 把一次 decision 的成员数累加进投影快照，使同批后续同厂商候选看到最新成员数。 */
+function bumpProjectedSeries(projected, decision) {
+  if (!decision || !decision.target_mode) return;
+  const targetId = decision.target_level2_id;
+  if (!targetId) return;
+  let l2 = (projected['vendor-level2'] || []).find(x => x.id === targetId);
+  if (!l2) {
+    l2 = {
+      id: targetId,
+      level1_ref: { kind: 'vendor-level1', id: `vendor-level1:${decision.vendor}` },
+      vendor_key: decision.vendor,
+      title: decision.target_level2_title || '',
+      official_url: '',
+      summary: '',
+      status: 'unknown',
+      detail_refs: [],
+    };
+    projected['vendor-level2'].push(l2);
+  }
+  l2.detail_refs.push({ kind: 'tool-level3', id: 'tool-level3:__batch_placeholder__' });
+}
+
+/**
+ * 批量前置：顺序解析 api_model seed 的二级系列归属（阶段 5）。
+ * 顺序维护投影快照（每 decision 累加成员数），使同批多个同厂商候选基于最新成员数判定；
+ * migration_required（第 4 个触发拆分）与 fail_closed 收进 blocked，由调用方阻断对应 seed。
+ * 已持久化 placement_decision 的 seed（from-preview/resume）短路复用，不重复调 AI。
+ * @returns {Promise<{ blocked: Array<{name,kind,code,reason}> }>}
+ */
+async function resolveBatchPlacements(seeds, options = {}) {
+  const policy = loadSeriesPolicy();
+  const base = options.snapshotOf ? options.snapshotOf() : loadCatalogSnapshot().snapshot;
+  const projected = cloneSnapshot(base);
+  const resolve = options.resolveSeriesPlacement || resolveSeriesPlacement;
+  const blocked = [];
+  for (const seed of seeds || []) {
+    if (!seed || seed.detail_kind !== 'api_model') continue;
+    const placement = await resolve(policy, projected, seed, {
+      allowAi: options.allowAiPlacement === true,
+      ledger: options.placementLedger,
+      suggestPlacement: options.suggestSeriesPlacement,
+    });
+    if (placement.kind === 'decision') {
+      applyPlacementToSeed(seed, placement);
+      bumpProjectedSeries(projected, placement);
+    } else if (placement.kind === 'migration_required' || placement.kind === 'fail_closed') {
+      blocked.push({
+        name: seed.name,
+        kind: placement.kind,
+        code: placement.code || 'PLACEMENT_MIGRATION_REQUIRED',
+        reason: placement.reason || '',
+      });
+    }
+  }
+  return { blocked };
+}
+
 function generatorOptionsOf(options) {
   return options.generatorOptions || normalizeGeneratorOptions(loadGeneratorConfig());
 }
 
-/** 读取待补卡文件（tool-cards-pending.json），返回 cards 数组。 */
+/** 读取待补卡文件（tool-cards-pending.json），返回 cards 数组；容器/卡类型非法则 fail-closed。 */
 function readPendingCards(filePath) {
   const payload = readJson(filePath, null);
-  if (!payload || typeof payload !== 'object' || !Array.isArray(payload.cards)) {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
+    throw new Error('PENDING_CARDS_INVALID: 待补卡文件根节点必须是对象');
+  }
+  if (!Array.isArray(payload.cards)) {
     throw new Error('PENDING_CARDS_INVALID: 待补卡文件缺少 cards 数组');
+  }
+  for (const card of payload.cards) {
+    if (!card || typeof card !== 'object' || Array.isArray(card)) {
+      throw new Error('PENDING_CARD_INVALID: 某张待补卡不是对象');
+    }
+    if (typeof card.name !== 'string' || !card.name.trim()) {
+      throw new Error('PENDING_CARD_NAME_REQUIRED: 某张待补卡缺少 name');
+    }
+    if (card.detail_kind_hint !== undefined && typeof card.detail_kind_hint !== 'string') {
+      throw new Error(`PENDING_CARD_DETAIL_KIND_TYPE_INVALID:${card.name}`);
+    }
   }
   return payload.cards;
 }
@@ -139,7 +249,12 @@ async function resolveBatchCandidates(cards, options = {}) {
       ...(card.detail_kind_hint ? { detailKind: card.detail_kind_hint } : {}),
     });
     if (registryHit.ok) {
-      seeds.push(pendingCandidateToSeed(card, registryHit));
+      // registry 命中零解析成本，但 seed 转换（vague/非法 kind）仍可能抛错，须收进 unresolved 而非中断整批。
+      try {
+        seeds.push(pendingCandidateToSeed(card, registryHit));
+      } catch (error) {
+        unresolved.push({ name: card.name, reason: error?.message || String(error) });
+      }
       continue;
     }
     try {
@@ -206,11 +321,22 @@ async function runCatalogBatch(seeds, options = {}) {
   const reviewFn = options.reviewCatalogDraft || reviewCatalogDraft;
   const applyFn = options.applyCatalogDraft || applyCatalogDraft;
   const report = { estimate, applied: [], failed: [], per_tool: [] };
+  const { blocked } = await resolveBatchPlacements(seeds, options);
+  const blockedByCode = new Map(blocked.map(b => [b.name, b.code]));
 
   for (const seed of seeds || []) {
     const entry = { name: seed.name, vendor_name: seed.vendor_name, official_url: seed.official_url, status: 'pending' };
     let draftId = null;
     try {
+      // 阶段 5：迁移触发/校验失败的 seed 在批量前置阶段阻断，不进入 prepare。
+      const blockCode = blockedByCode.get(seed.name);
+      if (blockCode) {
+        entry.status = 'failed';
+        entry.reason = blockCode;
+        report.failed.push({ name: seed.name, draft_id: null, reason: entry.reason });
+        report.per_tool.push(entry);
+        continue;
+      }
       // prepareCatalogDraft 内部会重新 planCatalogDraft 并对照最新快照，
       // 顺序循环逐 seed 天然自洽（前序 apply 改 revision 不影响本 seed）。
       const prepared = await prepareFn(seed, { ...generatorOptions, confirmCost: true, catalogAdapters: adapters });
@@ -278,11 +404,15 @@ function writeBatchPreview(preview, options = {}) {
  * 待补卡 → 正式目录卡片的完整批量入口。
  * @param {Array<object>} cards 待补卡数组（来自 readPendingCards）
  * @param {object} [options]
- *   - dryRun: true            只做查重+解析+成本估算，写 preview，不建 draft
- *   - fromPreview: true       跳过解析，复用 preview 文件的 seeds
+ *   - dryRun: true            查重+解析+确定性 placement，写 preview，不建 draft（付费解析预览）
+ *   - fromPreview: true       跳过解析，复用 preview 文件的 seeds（含 placement_decision，不重复调 AI）
  *   - confirmCost: true       通过全局成本确认，执行自动 apply
  *   - previewFile/seedOut     预览文件路径覆盖（测试用）
- * @returns {Promise<object>} 批量报告（含 skipped/unresolved/seeds/estimate/report）
+ *   - allowAiPlacement        允许 ai_model 歧义候选走 AI 语义分类（阶段 4）
+ * @returns {Promise<object>} 批量报告（含 skipped/unresolved/seeds/cost_estimate/report）
+ *
+ * 成本门禁（阶段 5）：无 confirmCost 且非 dry-run 时，零付费调用——先展示含
+ * vendor_resolution / placement / research 三本账的成本估算，确认后才执行解析与生成。
  */
 async function runBatchFromCards(cards, options = {}) {
   const dedup = dedupeBatchCandidates(cards, options);
@@ -292,25 +422,65 @@ async function runBatchFromCards(cards, options = {}) {
     duplicateInBatch: dedup.duplicateInBatch,
   };
   if (!dedup.unique.length) {
-    return { ok: true, dry_run: options.dryRun === true, skipped, unresolved: [], seeds: [], estimate: { ok: true, total: { ...EMPTY_COST }, per_seed: [] } };
+    return {
+      ok: true,
+      dry_run: options.dryRun === true,
+      skipped,
+      unresolved: [],
+      seeds: [],
+      cost_estimate: { ok: true, resolution: { cards_paid: 0 }, placement: { ai_calls_upper_bound: 0 }, total: { ...EMPTY_COST }, per_seed: [] },
+    };
   }
 
-  let seeds;
-  let unresolved;
+  let seeds = null;
+  let unresolved = [];
   if (options.fromPreview) {
     const preview = readJson(options.previewFile || CATALOG_GENERATOR_FILES.batchSeedsPreview, null);
     if (!preview || !Array.isArray(preview.seeds)) throw new Error('PREVIEW_FILE_INVALID: 缺少 seeds');
     seeds = preview.seeds;
     unresolved = Array.isArray(preview.unresolved) ? preview.unresolved : [];
-  } else {
+  }
+
+  // 三本账成本估算（纯本地零付费）
+  const resolutionNeed = options.fromPreview
+    ? { cards_paid: 0, cards_free: 0, vendor_search_upper_bound: 0, vendor_responses_upper_bound: 0 }
+    : estimateResolutionNeed(dedup.unique, options);
+  const preSeeds = seeds || dedup.unique
+    .map(card => { try { return pendingCandidateToSeed(card, {}); } catch { return null; } })
+    .filter(Boolean);
+  const researchEstimate = planBatchCost(preSeeds, options);
+  const apiModelCount = (preSeeds || []).filter(s => s.detail_kind === 'api_model').length;
+  const placementAiUpperBound = options.allowAiPlacement === true ? apiModelCount : 0;
+  const cost_estimate = {
+    ok: true,
+    resolution: resolutionNeed,
+    placement: { ai_calls_upper_bound: placementAiUpperBound },
+    research: { ok: researchEstimate.ok, total: { ...researchEstimate.total }, per_seed: researchEstimate.per_seed },
+    total: {
+      ...researchEstimate.total,
+      vendor_search_upper_bound: resolutionNeed.vendor_search_upper_bound,
+      vendor_responses_upper_bound: resolutionNeed.vendor_responses_upper_bound,
+      placement_ai_calls_upper_bound: placementAiUpperBound,
+    },
+    per_seed: researchEstimate.per_seed,
+  };
+
+  // 门禁：无确认且非 dry-run → 零付费返回估算（from-preview 也不例外）
+  if (options.dryRun !== true && options.confirmCost !== true) {
+    return { ok: false, code: 'COST_CONFIRMATION_REQUIRED', cost_estimate, skipped, unresolved: [], seeds: [] };
+  }
+
+  // 付费解析：仅 dry-run 预览或确认成本后执行
+  if (!options.fromPreview) {
     const resolution = await resolveBatchCandidates(dedup.unique, options);
     seeds = resolution.seeds;
     unresolved = resolution.unresolved;
+    cost_estimate.resolution = { ...resolutionNeed, actual: resolution.resolve_cost };
   }
 
-  const estimate = planBatchCost(seeds, options);
-
   if (options.dryRun) {
+    // dry-run 也做确定性 placement，把 decision 写入 preview seeds（from-preview 复用零 AI）
+    const { blocked } = await resolveBatchPlacements(seeds, options);
     const preview = {
       schema_version: 1,
       generated_at: new Date().toISOString(),
@@ -318,18 +488,15 @@ async function runBatchFromCards(cards, options = {}) {
       skipped,
       unresolved,
       seeds,
-      estimate,
+      estimate: cost_estimate,
+      placement_blocked: blocked,
     };
     const previewFile = writeBatchPreview(preview, options);
-    return { ok: true, dry_run: true, preview_file: previewFile, skipped, unresolved, seeds, estimate };
-  }
-
-  if (options.confirmCost !== true) {
-    return { ok: false, code: 'COST_CONFIRMATION_REQUIRED', cost_estimate: estimate, skipped, unresolved, seeds };
+    return { ok: true, dry_run: true, preview_file: previewFile, skipped, unresolved, seeds, estimate: cost_estimate, placement_blocked: blocked };
   }
 
   const report = await runCatalogBatch(seeds, options);
-  return { ok: true, skipped, unresolved, seeds, estimate, report };
+  return { ok: true, skipped, unresolved, seeds, estimate: cost_estimate, report };
 }
 
 module.exports = {
@@ -339,4 +506,6 @@ module.exports = {
   planBatchCost,
   runCatalogBatch,
   runBatchFromCards,
+  estimateResolutionNeed,
+  resolveBatchPlacements,
 };

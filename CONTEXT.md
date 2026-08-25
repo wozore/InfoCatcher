@@ -46,3 +46,32 @@ CatalogDraft 是否可进入 Apply 的结论。只有官方来源可信、必需
 ## Apply
 
 在维护者确认后，把 ready CatalogDraft 的 LayerPatches 通过共同锁、staging、备份、journal 和回滚事务写入正式目录。Apply 不执行研究，也不补造缺失字段。
+
+## SeriesPolicy
+
+LLM 二级系列分类的唯一规则源（`data/manual/archive/llm-series-policy.json`）。声明每厂商的模型家族、用途、版本轴、允许的目标二级系列、容量（同系列最多 3 个，第 4 个才允许拆分）与证据状态。阶段 2 迁移与阶段 4 AI 分类都以此为规则门禁；未知厂商或规则不完整一律 fail-closed，绝不回退到以具体模型名建组。
+
+## ModelFamily
+
+厂商内平行的模型产品线，例如 Google 的 Gemini 与 Gemma、MiniMax 的 M 与 H、Qwen 通用与 Omni/Image。不同家族不互相凑数，须分别归入各自系列。
+
+## UsageKind
+
+候选模型的用途分类：`general_llm / coding / image / video / audio_realtime / translation / omni / media / subscription / tool / unknown`。只有 `general_llm` 进入通用 LLM 系列归类；专用用途走各自路径；无法确认时标记 `uncovered`，调用方不得自动建组。
+
+## ReleaseCohort
+
+同一家族内按发布时间划分的组别：`newest`（当前代）与 `previous`（紧邻上一代）。`previous` 是紧邻发布组，不是无限历史收纳箱；被移出当前二级展示的三级详情必须由迁移预览明确列出。
+
+## PlacementDecision
+
+一次经过验证的二级系列归属结论，来源为 `manual / policy / ai`，含 `usage_kind`、家族、主版本、发布批次、目标二级系列 id/title、置信度、evidence 与 policy 版本。经验证后写入 seed/Draft，使 plan、resume、from-preview 可审计复现且不重复调用 AI。AI 只作语义建议，确定性门禁重算最终归属。
+
+## SeriesMigrationPlan
+
+当某厂商候选触发第 4 个成员或需合并既有系列时，生成的输出结果。普通单 seed LayerPlan 无法表达“搬迁已有成员/删除旧系列”，因此 split 必须是独立的多记录迁移计划（重写一级 `level2_refs`、搬迁二级 `detail_refs`），而不是单个新模型的 placement。三级记录本身无父级字段，成员关系只存在于 `vendor-level2.detail_refs`。
+
+## ManualPlacementOverride
+
+人工在待补卡/Seed 上显式指定的 `existing_level1_ref` / `existing_level2_ref` / `new_group_title`，优先于 AI 与政策自动归类，但必须通过引用 kind、存在性与厂商归属校验，否则拒绝。
+

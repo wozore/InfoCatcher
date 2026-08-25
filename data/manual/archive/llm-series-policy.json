@@ -1,0 +1,380 @@
+{
+  "schema_version": 1,
+  "verified_at": "2026-08-25",
+  "purpose": "LLM 二级系列按厂商独立分类规则（阶段 1 政策契约）。描述每厂商的模型家族、用途、版本轴、允许的目标二级系列与证据状态。阶段 2 迁移与阶段 4 AI 分类均以本文件为唯一规则源；未知厂商/非法规则一律 fail-closed，绝不回退到以具体模型名建组。",
+  "capacity": {
+    "merge_up_to": 3,
+    "split_when_member_count_exceeds": 3,
+    "split_series_suffix": { "newest": "-newest", "last": "-last" },
+    "manual_split_exception": "GPT 与 Claude 目前保留用户指定的双系列结构，不按容量自动拆分"
+  },
+  "defaults": {
+    "unknown_vendor_policy": "fail_closed",
+    "invalid_usage_policy": "fail_closed",
+    "general_llm_default": true
+  },
+  "vendor_aliases": {
+    "openai": ["openai", "open ai"],
+    "anthropic": ["anthropic"],
+    "google": ["google", "google ai", "谷歌", "deepmind"],
+    "deepseek": ["deepseek", "深度求索"],
+    "zhipu": ["zhipu", "z.ai", "智谱", "智谱 ai"],
+    "baidu": ["baidu", "百度", "ernie", "文心"],
+    "mistral": ["mistral", "mistral ai"],
+    "cohere": ["cohere", "cohere ai"],
+    "xai": ["xai", "x.ai", "grok", "x ai"],
+    "minimax": ["minimax", "迷你迈思"],
+    "moonshot": ["moonshot", "月之暗面", "kimi"],
+    "alibaba": ["alibaba", "阿里", "通义", "qwen", "千问"],
+    "tencent": ["tencent", "腾讯", "混元", "hunyuan"],
+    "stepfun": ["stepfun", "阶跃星辰", "step"],
+    "xiaomi": ["xiaomi", "小米"],
+    "nvidia": ["nvidia", "英伟达", "nemotron"]
+  },
+  "vendors": [
+    {
+      "vendor_key": "openai",
+      "description": "OpenAI：GPT 通用 LLM 为并行主版本，Realtime/Image/Codex 为独立产品家族。",
+      "families": [
+        {
+          "family": "gpt",
+          "usage_kind": "general_llm",
+          "version_axis": "dot",
+          "manual_split_exception": true,
+          "series": [
+            { "id": "vendor-level2:openai:gpt-5.6", "title": "GPT-5.6", "cohort": "newest", "expected_members": ["gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna"] },
+            { "id": "vendor-level2:openai:gpt-5-5", "title": "GPT-5.5", "cohort": "previous", "expected_members": ["gpt-5-5"] }
+          ],
+          "evidence": { "url": "https://developers.openai.com/api/docs/models/all", "status": "verified" }
+        },
+        {
+          "family": "realtime",
+          "usage_kind": "audio_realtime",
+          "version_axis": "dot",
+          "name_patterns": ["realtime", "voice", "live", "whisper"],
+          "series": [ { "id": "vendor-level2:openai:gpt-realtime", "title": "GPT-Realtime", "cohort": "newest", "expected_members": ["gpt-realtime-2"] } ],
+          "evidence": { "url": "https://developers.openai.com/api/docs/models/all", "status": "verified" }
+        },
+        {
+          "family": "image",
+          "usage_kind": "image",
+          "version_axis": "dot",
+          "name_patterns": ["image", "dall"],
+          "series": [ { "id": "vendor-level2:openai:gpt-image", "title": "GPT-Image", "cohort": "newest", "expected_members": ["gpt-image-2"] } ],
+          "evidence": { "url": "https://developers.openai.com/api/docs/models/all", "status": "verified" }
+        },
+        {
+          "family": "codex",
+          "usage_kind": "tool",
+          "version_axis": "none",
+          "series": [ { "id": "vendor-level2:openai:openai-codex", "title": "OpenAI Codex", "cohort": "newest", "expected_members": ["openai-codex"] } ],
+          "evidence": { "url": "https://developers.openai.com/api/docs/models/all", "status": "verified" }
+        },
+        {
+          "family": "openai_coding_plan",
+          "usage_kind": "subscription",
+          "version_axis": "none",
+          "series": [ { "id": "vendor-level2:openai:openai-coding-plan", "title": "套餐（Coding Plan）", "cohort": "newest", "expected_members": ["chatgpt-go", "chatgpt-plus", "chatgpt-pro"] } ],
+          "evidence": { "url": "https://chatgpt.com/pricing", "status": "verified" }
+        }
+      ]
+    },
+    {
+      "vendor_key": "anthropic",
+      "description": "Anthropic：Claude 按产品线滚动（Fable/Opus/Sonnet/Haiku），当前保留 newest 与 last 双系列。",
+      "families": [
+        {
+          "family": "claude",
+          "usage_kind": "general_llm",
+          "version_axis": "none",
+          "manual_split_exception": true,
+          "series": [
+            { "id": "vendor-level2:anthropic:claude", "title": "newest claude generation", "cohort": "newest", "expected_members": ["claude-fable-5", "claude-opus-5", "claude-sonnet-5", "claude-haiku-4.5"] },
+            { "id": "vendor-level2:anthropic:claude-opus-4-8", "title": "last claude generation", "cohort": "previous", "expected_members": ["claude-opus-4.8"] }
+          ],
+          "evidence": { "url": "https://platform.claude.com/docs/en/about-claude/models/overview", "status": "verified" }
+        },
+        {
+          "family": "claude_coding_plan",
+          "usage_kind": "subscription",
+          "version_axis": "none",
+          "series": [ { "id": "vendor-level2:anthropic:claude-coding-plan", "title": "套餐（Coding Plan）", "cohort": "newest", "expected_members": ["claude-pro", "claude-max-5x", "claude-max-20x"] } ],
+          "evidence": { "url": "https://platform.claude.com/docs/en/about-claude/models/overview", "status": "verified" }
+        }
+      ]
+    },
+    {
+      "vendor_key": "google",
+      "description": "Google：Gemini 与 Gemma 为平行家族；Gemini 已超过容量阈值，目标拆为 newest/last。",
+      "families": [
+        {
+          "family": "gemini",
+          "usage_kind": "general_llm",
+          "version_axis": "dot",
+          "split_rule": "auto",
+          "series": [
+            { "id": "vendor-level2:google:gemini", "title": "Gemini 模型", "cohort": "newest", "expected_members": ["gemini-3-7-flash", "gemini-3-6-flash"] },
+            { "id": "vendor-level2:google:gemini-last", "title": "Gemini 上一代", "cohort": "previous", "expected_members": ["gemini-3.5-flash", "gemini-3-1-pro", "gemini-2.5-pro"] }
+          ],
+          "evidence": { "url": "https://ai.google.dev/gemini-api/docs/models", "status": "verified" }
+        },
+        {
+          "family": "gemma",
+          "usage_kind": "general_llm",
+          "version_axis": "dot",
+          "split_rule": "family",
+          "series": [ { "id": "vendor-level2:google:gemma-4", "title": "Gemma 4", "cohort": "newest", "expected_members": ["gemma-4"] } ],
+          "evidence": { "url": "https://ai.google.dev/gemma/docs/releases", "status": "verified" }
+        },
+        {
+          "family": "gemini_coding_plan",
+          "usage_kind": "subscription",
+          "version_axis": "none",
+          "series": [ { "id": "vendor-level2:google:gemini-coding-plan", "title": "套餐（Coding Plan）", "cohort": "newest", "expected_members": ["google-ai-pro", "google-ai-ultra-5x", "google-ai-ultra-20x"] } ],
+          "evidence": { "url": "https://ai.google.dev/gemini-api/docs/models", "status": "verified" }
+        },
+        {
+          "family": "gemini_cli",
+          "usage_kind": "tool",
+          "version_axis": "none",
+          "series": [ { "id": "vendor-level2:google:gemini-cli", "title": "Gemini CLI", "cohort": "newest", "expected_members": ["gemini-cli"] } ],
+          "evidence": { "url": "https://ai.google.dev/gemini-api/docs/models", "status": "inferred" }
+        }
+      ]
+    },
+    {
+      "vendor_key": "deepseek",
+      "description": "DeepSeek：V4 为单一主版本，Flash/Pro 是同代档位。",
+      "families": [
+        {
+          "family": "deepseek",
+          "usage_kind": "general_llm",
+          "version_axis": "alpha",
+          "split_rule": "family",
+          "series": [ { "id": "vendor-level2:deepseek:deepseek", "title": "DeepSeek 模型", "cohort": "newest", "expected_members": ["deepseek-v4-flash", "deepseek-v4-pro", "deepseek-v4-flash-vision-exp"] } ],
+          "evidence": { "url": "https://api-docs.deepseek.com/api/list-models", "status": "verified" }
+        }
+      ]
+    },
+    {
+      "vendor_key": "zhipu",
+      "description": "智谱：GLM-5 主家族，GLM-5.1/5.2/5.3 是主版本内迭代；第 4 个出现时再拆 newest/last。",
+      "families": [
+        {
+          "family": "glm",
+          "usage_kind": "general_llm",
+          "version_axis": "glm5",
+          "split_rule": "auto_after_4",
+          "series": [ { "id": "vendor-level2:zhipu:glm", "title": "GLM 5", "cohort": "newest", "expected_members": ["glm-5.1", "glm-5.2", "glm-5-3"] } ],
+          "evidence": { "url": "https://docs.z.ai/guides/llm/glm-5", "status": "verified", "member_status": { "glm-5.1": "repository_only", "glm-5.2": "repository_only" } }
+        }
+      ]
+    },
+    {
+      "vendor_key": "baidu",
+      "description": "百度：ERNIE 5 家族（5.0/5.1）。",
+      "families": [
+        {
+          "family": "ernie",
+          "usage_kind": "general_llm",
+          "version_axis": "dot",
+          "split_rule": "family",
+          "series": [ { "id": "vendor-level2:baidu:ernie", "title": "ERNIE 模型", "cohort": "newest", "expected_members": ["ernie-5.1", "ernie-5.0"] } ],
+          "evidence": { "url": "https://cloud.baidu.com/doc/qianfan/s/rmh4stp0j", "status": "verified" }
+        }
+      ]
+    },
+    {
+      "vendor_key": "mistral",
+      "description": "Mistral：Mistral 3 产品，Medium 3.5 / Large 3 为档位与版本差异。",
+      "families": [
+        {
+          "family": "mistral",
+          "usage_kind": "general_llm",
+          "version_axis": "dot",
+          "split_rule": "family",
+          "series": [ { "id": "vendor-level2:mistral:mistral", "title": "Mistral 模型", "cohort": "newest", "expected_members": ["mistral-medium-3.5", "mistral-large-3"] } ],
+          "evidence": { "url": "https://docs.mistral.ai/models", "status": "verified" }
+        }
+      ]
+    },
+    {
+      "vendor_key": "cohere",
+      "description": "Cohere：Command A 产品线（A/A+）。",
+      "families": [
+        {
+          "family": "command",
+          "usage_kind": "general_llm",
+          "version_axis": "none",
+          "split_rule": "family",
+          "series": [ { "id": "vendor-level2:cohere:command", "title": "Command 模型", "cohort": "newest", "expected_members": ["command-a", "command-a-plus"] } ],
+          "evidence": { "url": "https://docs.cohere.com/v1/docs/models", "status": "verified" }
+        }
+      ]
+    },
+    {
+      "vendor_key": "xai",
+      "description": "xAI：Grok 4 主版本（4.5/4.6），Imagine 为媒体家族。",
+      "families": [
+        {
+          "family": "grok",
+          "usage_kind": "general_llm",
+          "version_axis": "dot",
+          "split_rule": "family",
+          "series": [ { "id": "vendor-level2:xai:grok", "title": "Grok 模型", "cohort": "newest", "expected_members": ["grok-4-6", "grok-4-5"] } ],
+          "evidence": { "url": "https://docs.x.ai/developers/models/grok-4.6", "status": "verified" }
+        },
+        {
+          "family": "imagine",
+          "usage_kind": "media",
+          "version_axis": "none",
+          "name_patterns": ["imagine"],
+          "series": [ { "id": "vendor-level2:xai:grok-imagine", "title": "Grok Imagine", "cohort": "newest", "expected_members": ["grok-imagine-image-2-0", "grok-imagine-video-1-5"] } ],
+          "evidence": { "url": "https://docs.x.ai/developers/models/grok-4.6", "status": "verified" }
+        }
+      ]
+    },
+    {
+      "vendor_key": "minimax",
+      "description": "MiniMax：M 为文本/Agent 家族，H3 为视频生成家族。",
+      "families": [
+        {
+          "family": "minimax_m",
+          "usage_kind": "general_llm",
+          "version_axis": "m",
+          "split_rule": "family",
+          "name_patterns": ["minimax-m", "m3", "m2"],
+          "series": [ { "id": "vendor-level2:minimax:m", "title": "MiniMax M 模型", "cohort": "newest", "expected_members": ["minimax-m3", "minimax-m2-7"] } ],
+          "evidence": { "url": "https://platform.minimax.io/docs/guides/models-intro", "status": "verified", "member_status": { "minimax-m3": "verified", "minimax-m2-7": "verified" } }
+        },
+        {
+          "family": "minimax_h",
+          "usage_kind": "video",
+          "version_axis": "none",
+          "name_patterns": ["minimax-h", "h3"],
+          "series": [ { "id": "vendor-level2:minimax:minimax-h3", "title": "MiniMax H3", "cohort": "newest", "expected_members": ["minimax-h3"] } ],
+          "evidence": { "url": "https://www.minimax.io/news/minimax-h3-open-source", "status": "verified" }
+        }
+      ]
+    },
+    {
+      "vendor_key": "moonshot",
+      "description": "月之暗面：Kimi K3 为通用旗舰（Kimi 系列），K2.7 Code 为编程家族（Kimi Code 系列），不为凑数合并。",
+      "families": [
+        {
+          "family": "kimi",
+          "usage_kind": "general_llm",
+          "version_axis": "k",
+          "split_rule": "family",
+          "series": [ { "id": "vendor-level2:moonshot:kimi", "title": "Kimi 模型", "cohort": "newest", "expected_members": ["kimi-k3"] } ],
+          "evidence": { "url": "https://forum.moonshot.ai/t/kimi-k3-is-here-our-most-capable-model/480", "status": "verified" }
+        },
+        {
+          "family": "kimi_code",
+          "usage_kind": "coding",
+          "version_axis": "k",
+          "name_patterns": ["code"],
+          "series": [ { "id": "vendor-level2:moonshot:kimi-code", "title": "Kimi Code", "cohort": "newest", "expected_members": ["kimi-k2-7-code"] } ],
+          "evidence": { "url": "https://forum.moonshot.ai/c/announcement/5", "status": "verified", "member_status": { "kimi-k2-7-code": "repository_only" } }
+        }
+      ]
+    },
+    {
+      "vendor_key": "alibaba",
+      "description": "阿里：Qwen 通用、Omni、Image 为平行产品线。",
+      "families": [
+        {
+          "family": "qwen",
+          "usage_kind": "general_llm",
+          "version_axis": "qwen",
+          "split_rule": "auto_after_4",
+          "series": [ { "id": "vendor-level2:alibaba:qwen", "title": "Qwen 模型", "cohort": "newest", "expected_members": ["qwen3-8-max", "qwen3-7-max", "qwen3-7-plus"] } ],
+          "evidence": { "url": "https://help.aliyun.com/en/model-studio/newly-released-models", "status": "verified", "member_status": { "qwen3-7-max": "repository_only", "qwen3-7-plus": "repository_only" } }
+        },
+        {
+          "family": "qwen_omni",
+          "usage_kind": "omni",
+          "version_axis": "qwen",
+          "name_patterns": ["omni"],
+          "series": [ { "id": "vendor-level2:alibaba:qwen3-5-omni", "title": "Qwen3.5 Omni", "cohort": "newest", "expected_members": ["qwen3-5-omni"] } ],
+          "evidence": { "url": "https://help.aliyun.com/en/model-studio/qwen-omni", "status": "verified" }
+        },
+        {
+          "family": "qwen_image",
+          "usage_kind": "image",
+          "version_axis": "qwen",
+          "name_patterns": ["image"],
+          "series": [ { "id": "vendor-level2:alibaba:qwen-image-2", "title": "Qwen Image 2", "cohort": "newest", "expected_members": ["qwen-image-2-0-pro"] } ],
+          "evidence": { "url": "https://help.aliyun.com/en/model-studio/qwen-omni", "status": "verified" }
+        }
+      ]
+    },
+    {
+      "vendor_key": "tencent",
+      "description": "腾讯：混元 Hy3 为通用 LLM，Hy-MT2 为独立翻译家族。",
+      "families": [
+        {
+          "family": "hunyuan",
+          "usage_kind": "general_llm",
+          "version_axis": "hy",
+          "split_rule": "family",
+          "series": [ { "id": "vendor-level2:tencent:hy3", "title": "混元 Hy3", "cohort": "newest", "expected_members": ["hy3"] } ],
+          "evidence": { "url": "https://cloud.tencent.com/document/product/1823/130051", "status": "verified" }
+        },
+        {
+          "family": "hunyuan_translate",
+          "usage_kind": "translation",
+          "version_axis": "none",
+          "name_patterns": ["mt", "translate", "translation"],
+          "series": [ { "id": "vendor-level2:tencent:hy-mt2", "title": "Hy-MT2", "cohort": "newest", "expected_members": ["hy-mt2-30b-a3b"] } ],
+          "evidence": { "url": "https://intl.cloud.tencent.com/zh/document/product/1300/80695", "status": "verified" }
+        }
+      ]
+    },
+    {
+      "vendor_key": "stepfun",
+      "description": "阶跃星辰：Step 3 主版本（3.7 Flash / 3.5 Flash）。",
+      "families": [
+        {
+          "family": "step",
+          "usage_kind": "general_llm",
+          "version_axis": "dot",
+          "split_rule": "family",
+          "series": [ { "id": "vendor-level2:stepfun:step", "title": "Step 模型", "cohort": "newest", "expected_members": ["step-3-7-flash", "step-3-5-flash"] } ],
+          "evidence": { "url": "https://platform.stepfun.com/docs/zh/guides/models/overview", "status": "verified" }
+        }
+      ]
+    },
+    {
+      "vendor_key": "xiaomi",
+      "description": "小米：MiMo V2.5 家族（标准 / Pro 档位）。",
+      "families": [
+        {
+          "family": "mimo",
+          "usage_kind": "general_llm",
+          "version_axis": "mimo",
+          "split_rule": "family",
+          "series": [ { "id": "vendor-level2:xiaomi:mimo", "title": "MiMo 模型", "cohort": "newest", "expected_members": ["mimo-v2-5", "mimo-v2-5-pro"] } ],
+          "evidence": { "url": "https://aistudio.xiaomimimo.com/", "status": "verified" }
+        }
+      ]
+    },
+    {
+      "vendor_key": "nvidia",
+      "description": "NVIDIA：Nemotron 3 与 Nemotron 3.5 为不同主版本，各成独立系列（Nemotron 3 系列模型较多，不与 3.5 混编）。",
+      "families": [
+        {
+          "family": "nemotron",
+          "usage_kind": "general_llm",
+          "version_axis": "dot",
+          "split_rule": "family",
+          "series": [
+            { "id": "vendor-level2:nvidia:nemotron-3", "title": "Nemotron 3", "cohort": "newest", "expected_members": ["nemotron-3-ultra", "nemotron-3-super"] },
+            { "id": "vendor-level2:nvidia:nemotron-3-5", "title": "Nemotron 3.5", "cohort": "newest", "expected_members": ["nemotron-3-5"] }
+          ],
+          "evidence": { "url": "https://developer.nvidia.com/topics/ai/nemotron", "status": "verified", "member_status": { "nemotron-3-5": "repository_only" } }
+        }
+      ]
+    }
+  ]
+}

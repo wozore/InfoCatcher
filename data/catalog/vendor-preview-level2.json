@@ -34,7 +34,7 @@
         "id": "vendor-level1:anthropic"
       },
       "vendor_key": "anthropic",
-      "title": "Claude 模型",
+      "title": "newest claude generation",
       "official_url": "https://docs.anthropic.com/en/docs/about-claude/models/overview",
       "summary": "当前已核实的 Claude API 模型。",
       "status": "active",
@@ -45,7 +45,7 @@
         },
         {
           "kind": "tool-level3",
-          "id": "tool-level3:claude-opus-4.8"
+          "id": "tool-level3:claude-opus-5"
         },
         {
           "kind": "tool-level3",
@@ -95,14 +95,6 @@
       "summary": "当前已核实的 Gemini API 模型。",
       "status": "active",
       "detail_refs": [
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:gemini-3.5-flash"
-        },
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:gemini-2.5-pro"
-        },
         {
           "kind": "tool-level3",
           "id": "tool-level3:gemini-3-7-flash"
@@ -172,18 +164,18 @@
         "id": "vendor-level1:zhipu"
       },
       "vendor_key": "zhipu",
-      "title": "GLM 模型",
+      "title": "GLM 5",
       "official_url": "https://bigmodel.cn/pricing",
       "summary": "当前已核实的智谱 GLM API 模型。",
       "status": "active",
       "detail_refs": [
         {
           "kind": "tool-level3",
-          "id": "tool-level3:glm-5.2"
+          "id": "tool-level3:glm-5.1"
         },
         {
           "kind": "tool-level3",
-          "id": "tool-level3:glm-5.1"
+          "id": "tool-level3:glm-5.2"
         },
         {
           "kind": "tool-level3",
@@ -250,6 +242,10 @@
         {
           "kind": "tool-level3",
           "id": "tool-level3:command-a"
+        },
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:command-a-plus"
         }
       ]
     },
@@ -294,49 +290,39 @@
       ]
     },
     {
-      "id": "vendor-level2:anthropic:claude-opus-5",
-      "level1_ref": {
-        "kind": "vendor-level1",
-        "id": "vendor-level1:anthropic"
-      },
-      "vendor_key": "anthropic",
-      "title": "Claude Opus 5",
-      "official_url": "https://www.anthropic.com/claude/opus",
-      "summary": "Claude Opus 5是Anthropic推出的最新Opus系列模型，在编码和知识工作方面表现优异，定价为每百万输入令牌5美元、每百万输出令牌25美元。",
-      "status": "active",
-      "detail_refs": [
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:claude-opus-5"
-        }
-      ]
-    },
-    {
-      "id": "vendor-level2:google:gemini-3-1-pro",
+      "id": "vendor-level2:google:gemini-last",
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:google"
       },
       "vendor_key": "google",
-      "title": "Gemini 3.1 Pro",
+      "title": "Gemini 上一代",
       "official_url": "https://ai.google.dev/gemini-api/docs",
       "summary": "Gemini API 是 Google AI 提供的开发者接口，提供 Gemini 系列模型的访问，涵盖文本、图像、音频、视频等多种模态能力。",
       "status": "active",
       "detail_refs": [
         {
           "kind": "tool-level3",
+          "id": "tool-level3:gemini-3.5-flash"
+        },
+        {
+          "kind": "tool-level3",
           "id": "tool-level3:gemini-3-1-pro"
+        },
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:gemini-2.5-pro"
         }
       ]
     },
     {
-      "id": "vendor-level2:xai:grok-4-6",
+      "id": "vendor-level2:xai:grok",
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:xai"
       },
       "vendor_key": "xai",
-      "title": "Grok 4.6",
+      "title": "Grok 模型",
       "official_url": "https://docs.x.ai/",
       "summary": "xAI 官方文档中心，涵盖 Grok 系列模型、API 工具与开发者资源。",
       "status": "active",
@@ -344,6 +330,10 @@
         {
           "kind": "tool-level3",
           "id": "tool-level3:grok-4-6"
+        },
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:grok-4-5"
         }
       ]
     },
@@ -366,31 +356,13 @@
       ]
     },
     {
-      "id": "vendor-level2:cohere:command-a",
-      "level1_ref": {
-        "kind": "vendor-level1",
-        "id": "vendor-level1:cohere"
-      },
-      "vendor_key": "cohere",
-      "title": "Command A+",
-      "official_url": "https://docs.cohere.com/docs/command-a-plus",
-      "summary": "Command A+ 是 Cohere 发布的 Command 系列最新模型，支持多模态输入、推理、翻译及智能体任务，采用混合专家架构，拥有 25B 活跃参数和 218B 总参数。",
-      "status": "active",
-      "detail_refs": [
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:command-a-plus"
-        }
-      ]
-    },
-    {
-      "id": "vendor-level2:openai:gpt-realtime-2",
+      "id": "vendor-level2:openai:gpt-realtime",
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:openai"
       },
       "vendor_key": "openai",
-      "title": "GPT-Realtime-2",
+      "title": "GPT-Realtime",
       "official_url": "https://developers.openai.com/api/docs/models/gpt-realtime-2",
       "summary": "OpenAI Realtime API 的模型系列，包括 GPT-Realtime-2 和 GPT-Realtime-2.1 等实时语音模型，支持语音到语音交互。",
       "status": "active",
@@ -402,13 +374,13 @@
       ]
     },
     {
-      "id": "vendor-level2:openai:gpt-image-2",
+      "id": "vendor-level2:openai:gpt-image",
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:openai"
       },
       "vendor_key": "openai",
-      "title": "gpt-image-2",
+      "title": "GPT-Image",
       "official_url": "https://developers.openai.com/api/docs/changelog",
       "summary": "OpenAI 官方 API 的变更日志，记录了图像生成模型 gpt-image-2 等新功能的发布。",
       "status": "active",
@@ -438,13 +410,13 @@
       ]
     },
     {
-      "id": "vendor-level2:minimax:minimax-m3",
+      "id": "vendor-level2:minimax:m",
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:minimax"
       },
       "vendor_key": "minimax",
-      "title": "MiniMax M3",
+      "title": "MiniMax M 模型",
       "official_url": "https://platform.minimax.io/docs/token-plan/intro",
       "summary": "MiniMax API 提供的订阅计划，涵盖 M3 等模型。",
       "status": "active",
@@ -452,21 +424,7 @@
         {
           "kind": "tool-level3",
           "id": "tool-level3:minimax-m3"
-        }
-      ]
-    },
-    {
-      "id": "vendor-level2:minimax:minimax-m2-7",
-      "level1_ref": {
-        "kind": "vendor-level1",
-        "id": "vendor-level1:minimax"
-      },
-      "vendor_key": "minimax",
-      "title": "MiniMax M2.7",
-      "official_url": "https://platform.minimax.io",
-      "summary": "MiniMax API 提供灵活的付费方案，包括按量付费（Pay as You Go）和订阅制 Token Plan，覆盖文本、图像、语音、视频等多模态模型。",
-      "status": "active",
-      "detail_refs": [
+        },
         {
           "kind": "tool-level3",
           "id": "tool-level3:minimax-m2-7"
@@ -474,31 +432,13 @@
       ]
     },
     {
-      "id": "vendor-level2:xai:grok-4-5",
-      "level1_ref": {
-        "kind": "vendor-level1",
-        "id": "vendor-level1:xai"
-      },
-      "vendor_key": "xai",
-      "title": "Grok 4.5",
-      "official_url": "https://docs.x.ai",
-      "summary": "SpaceXAI 官方文档，提供 Grok 系列模型的发布说明、API 更新及使用指南。",
-      "status": "active",
-      "detail_refs": [
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:grok-4-5"
-        }
-      ]
-    },
-    {
-      "id": "vendor-level2:moonshot:kimi-k3",
+      "id": "vendor-level2:moonshot:kimi",
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:moonshot"
       },
       "vendor_key": "moonshot",
-      "title": "Kimi K3",
+      "title": "Kimi 模型",
       "official_url": "https://platform.kimi.com/docs/models",
       "summary": "Kimi 旗舰模型系列，包括 K3、K2.7、K2.6 等，适用于多模态、编程及通用智能场景",
       "status": "active",
@@ -506,24 +446,6 @@
         {
           "kind": "tool-level3",
           "id": "tool-level3:kimi-k3"
-        }
-      ]
-    },
-    {
-      "id": "vendor-level2:alibaba:qwen3-8-max",
-      "level1_ref": {
-        "kind": "vendor-level1",
-        "id": "vendor-level1:alibaba"
-      },
-      "vendor_key": "alibaba",
-      "title": "Qwen3.8 Max",
-      "official_url": "https://help.aliyun.com/en/lingma/qwen3-8-max-preview-limited-time-offer",
-      "summary": "Qwen3.8-Max是千问系列最新旗舰模型，拥有2.4T参数，在代码工程和办公协作等核心能力上显著提升，面向复杂长周期任务提供世界领先的综合性能。",
-      "status": "active",
-      "detail_refs": [
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:qwen3-8-max"
         }
       ]
     },
@@ -564,17 +486,21 @@
       ]
     },
     {
-      "id": "vendor-level2:stepfun:step-3-5-flash",
+      "id": "vendor-level2:stepfun:step",
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:stepfun"
       },
       "vendor_key": "stepfun",
-      "title": "Step-3.5-Flash",
+      "title": "Step 模型",
       "official_url": "https://platform.stepfun.com/",
       "summary": "StepFun 开放平台提供一系列大模型 API，包括对话、推理等接口。",
       "status": "active",
       "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:step-3-7-flash"
+        },
         {
           "kind": "tool-level3",
           "id": "tool-level3:step-3-5-flash"
@@ -582,31 +508,13 @@
       ]
     },
     {
-      "id": "vendor-level2:stepfun:step-3-7-flash",
-      "level1_ref": {
-        "kind": "vendor-level1",
-        "id": "vendor-level1:stepfun"
-      },
-      "vendor_key": "stepfun",
-      "title": "Step-3.7-Flash",
-      "official_url": "https://platform.stepfun.com",
-      "summary": "StepFun 开放平台提供 Step 系列模型的 API 服务，支持 Chat Completions 接口，适用于多种 AI 应用场景。",
-      "status": "active",
-      "detail_refs": [
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:step-3-7-flash"
-        }
-      ]
-    },
-    {
-      "id": "vendor-level2:xiaomi:mimo-v2-5",
+      "id": "vendor-level2:xiaomi:mimo",
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:xiaomi"
       },
       "vendor_key": "xiaomi",
-      "title": "MiMo-V2.5",
+      "title": "MiMo 模型",
       "official_url": "https://mimo.mi.com",
       "summary": "小米 MiMo 模型系列，包含 MiMo-V2.5 等多种模型。",
       "status": "active",
@@ -614,17 +522,21 @@
         {
           "kind": "tool-level3",
           "id": "tool-level3:mimo-v2-5"
+        },
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:mimo-v2-5-pro"
         }
       ]
     },
     {
-      "id": "vendor-level2:nvidia:nemotron-3-ultra",
+      "id": "vendor-level2:nvidia:nemotron-3",
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:nvidia"
       },
       "vendor_key": "nvidia",
-      "title": "Nemotron 3 Ultra",
+      "title": "Nemotron 3",
       "official_url": "https://docs.api.nvidia.com/nim/reference/llm-apis",
       "summary": "NVIDIA NIM API 提供统一接口访问多种生成式 AI 模型。",
       "status": "active",
@@ -632,21 +544,7 @@
         {
           "kind": "tool-level3",
           "id": "tool-level3:nemotron-3-ultra"
-        }
-      ]
-    },
-    {
-      "id": "vendor-level2:nvidia:nemotron-3-super",
-      "level1_ref": {
-        "kind": "vendor-level1",
-        "id": "vendor-level1:nvidia"
-      },
-      "vendor_key": "nvidia",
-      "title": "Nemotron 3 Super",
-      "official_url": "https://docs.api.nvidia.com/nim/reference/llm-apis",
-      "summary": "NVIDIA NIM 提供了一系列 API，使开发者能够轻松访问生成式 AI 模型，涵盖 LLM、检索、视觉和多模态推理。",
-      "status": "active",
-      "detail_refs": [
+        },
         {
           "kind": "tool-level3",
           "id": "tool-level3:nemotron-3-super"
@@ -672,24 +570,6 @@
       ]
     },
     {
-      "id": "vendor-level2:xiaomi:mimo-v2-5-pro",
-      "level1_ref": {
-        "kind": "vendor-level1",
-        "id": "vendor-level1:xiaomi"
-      },
-      "vendor_key": "xiaomi",
-      "title": "MiMo-V2.5 Pro",
-      "official_url": "https://mimo.mi.com/docs",
-      "summary": "小米 MiMo API 开放平台提供 MiMo-V2.5 等顶级旗舰模型，以及 TTS 模型，面向全球用户开放。",
-      "status": "active",
-      "detail_refs": [
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:mimo-v2-5-pro"
-        }
-      ]
-    },
-    {
       "id": "vendor-level2:bytedance:seed-character",
       "level1_ref": {
         "kind": "vendor-level1",
@@ -708,13 +588,13 @@
       ]
     },
     {
-      "id": "vendor-level2:moonshot:kimi-k2",
+      "id": "vendor-level2:moonshot:kimi-code",
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:moonshot"
       },
       "vendor_key": "moonshot",
-      "title": "Kimi K2",
+      "title": "Kimi Code",
       "official_url": "https://platform.kimi.com/",
       "summary": "Kimi API 开放平台提供模型即服务，集成多种工具和垂直场景能力。",
       "status": "active",
@@ -726,17 +606,21 @@
       ]
     },
     {
-      "id": "vendor-level2:alibaba:qwen3-7",
+      "id": "vendor-level2:alibaba:qwen",
       "level1_ref": {
         "kind": "vendor-level1",
         "id": "vendor-level1:alibaba"
       },
       "vendor_key": "alibaba",
-      "title": "Qwen3.7",
+      "title": "Qwen 模型",
       "official_url": "https://help.aliyun.com/zh/model-studio/qwen3-7-max",
       "summary": "Qwen3.7系列中规模最大、综合能力最强的Max模型，面向智能体时代设计，在编程、办公与生产力、长周期自主执行等智能体能力方面表现出色。",
       "status": "active",
       "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:qwen3-8-max"
+        },
         {
           "kind": "tool-level3",
           "id": "tool-level3:qwen3-7-max"
@@ -860,24 +744,6 @@
       ]
     },
     {
-      "id": "vendor-level2:windsurf-vendor:windsurf",
-      "level1_ref": {
-        "kind": "vendor-level1",
-        "id": "vendor-level1:windsurf-vendor"
-      },
-      "vendor_key": "windsurf-vendor",
-      "title": "Windsurf",
-      "official_url": "https://windsurf.com",
-      "summary": "Windsurf（原Codeium）是AI编程工具，提供编辑器、插件和一系列模型，支持多种IDE，持续更新功能。",
-      "status": "active",
-      "detail_refs": [
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:windsurf"
-        }
-      ]
-    },
-    {
       "id": "vendor-level2:openai:openai-codex",
       "level1_ref": {
         "kind": "vendor-level1",
@@ -914,60 +780,6 @@
       ]
     },
     {
-      "id": "vendor-level2:replit:replit-agent",
-      "level1_ref": {
-        "kind": "vendor-level1",
-        "id": "vendor-level1:replit"
-      },
-      "vendor_key": "replit",
-      "title": "Replit Agent",
-      "official_url": "https://replit.com",
-      "summary": "Replit Agent是Replit平台的AI开发工具，可创建网页、移动应用、数据看板等。",
-      "status": "active",
-      "detail_refs": [
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:replit-agent"
-        }
-      ]
-    },
-    {
-      "id": "vendor-level2:cognition:devin",
-      "level1_ref": {
-        "kind": "vendor-level1",
-        "id": "vendor-level1:cognition"
-      },
-      "vendor_key": "cognition",
-      "title": "Devin",
-      "official_url": "https://docs.devin.ai/federal/introduction",
-      "summary": "Devin是面向政府部门的AI软件工程平台，提供安全合规的智能体开发功能。",
-      "status": "active",
-      "detail_refs": [
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:devin"
-        }
-      ]
-    },
-    {
-      "id": "vendor-level2:augment:augment-code",
-      "level1_ref": {
-        "kind": "vendor-level1",
-        "id": "vendor-level1:augment"
-      },
-      "vendor_key": "augment",
-      "title": "Augment Code",
-      "official_url": "https://www.augmentcode.com/changelog",
-      "summary": "Augment 提供 IDE 扩展、CLI 和 Cosmos 代理平台，不断更新功能和修复。",
-      "status": "active",
-      "detail_refs": [
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:augment-code"
-        }
-      ]
-    },
-    {
       "id": "vendor-level2:vidu:vidu-s1",
       "level1_ref": {
         "kind": "vendor-level1",
@@ -986,146 +798,46 @@
       ]
     },
     {
-      "id": "vendor-level2:aws:amazon-q-developer",
+      "id": "vendor-level2:openai:openai-coding-plan",
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:aws"
+        "id": "vendor-level1:openai"
       },
-      "vendor_key": "aws",
-      "title": "Amazon Q Developer",
-      "official_url": "https://aws.amazon.com/q",
-      "summary": "Amazon Q 是 AWS 的生成式 AI 助手系列，包含面向开发者的 Amazon Q Developer 和面向企业的 Amazon Q Business。",
-      "status": "active",
+      "vendor_key": "openai",
+      "title": "套餐（Coding Plan）",
+      "official_url": "",
+      "summary": "",
+      "status": "unknown",
       "detail_refs": [
         {
           "kind": "tool-level3",
-          "id": "tool-level3:amazon-q-developer"
+          "id": "tool-level3:chatgpt-go"
+        },
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:chatgpt-plus"
+        },
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:chatgpt-pro"
         }
       ]
     },
     {
-      "id": "vendor-level2:jetbrains:junie",
+      "id": "vendor-level2:anthropic:claude-opus-4-8",
       "level1_ref": {
         "kind": "vendor-level1",
-        "id": "vendor-level1:jetbrains"
+        "id": "vendor-level1:anthropic"
       },
-      "vendor_key": "jetbrains",
-      "title": "Junie",
-      "official_url": "https://junie.jetbrains.com/",
-      "summary": "Junie 是 JetBrains 推出的 AI 编码代理，提供 IDE 内与独立 CLI 两种使用方式，官方文档覆盖安装、许可和集成。",
-      "status": "active",
+      "vendor_key": "anthropic",
+      "title": "last claude generation",
+      "official_url": "",
+      "summary": "",
+      "status": "unknown",
       "detail_refs": [
         {
           "kind": "tool-level3",
-          "id": "tool-level3:junie"
-        }
-      ]
-    },
-    {
-      "id": "vendor-level2:amazon:kiro",
-      "level1_ref": {
-        "kind": "vendor-level1",
-        "id": "vendor-level1:amazon"
-      },
-      "vendor_key": "amazon",
-      "title": "Kiro",
-      "official_url": "https://kiro.dev/changelog/ide",
-      "summary": "The IDE offers agentic chat, specs, steering, hooks, and MCP integration for AI-assisted development.",
-      "status": "active",
-      "detail_refs": [
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:kiro"
-        }
-      ]
-    },
-    {
-      "id": "vendor-level2:cline-vendor:cline",
-      "level1_ref": {
-        "kind": "vendor-level1",
-        "id": "vendor-level1:cline-vendor"
-      },
-      "vendor_key": "cline-vendor",
-      "title": "Cline",
-      "official_url": "https://cline.bot/",
-      "summary": "Cline 是面向开发者的开源 AI 编码代理系列，覆盖 IDE、CLI 和 SDK。",
-      "status": "active",
-      "detail_refs": [
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:cline"
-        }
-      ]
-    },
-    {
-      "id": "vendor-level2:aider-vendor:aider",
-      "level1_ref": {
-        "kind": "vendor-level1",
-        "id": "vendor-level1:aider-vendor"
-      },
-      "vendor_key": "aider-vendor",
-      "title": "Aider",
-      "official_url": "https://aider.chat/",
-      "summary": "Aider是终端AI编程工具，提供AI配对编程能力。",
-      "status": "active",
-      "detail_refs": [
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:aider"
-        }
-      ]
-    },
-    {
-      "id": "vendor-level2:continue-vendor:continue",
-      "level1_ref": {
-        "kind": "vendor-level1",
-        "id": "vendor-level1:continue-vendor"
-      },
-      "vendor_key": "continue-vendor",
-      "title": "Continue",
-      "official_url": "https://github.com/continuedev/continue.git",
-      "summary": "开源的 AI 编码代理项目，已停止积极维护。",
-      "status": "deprecated",
-      "detail_refs": [
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:continue"
-        }
-      ]
-    },
-    {
-      "id": "vendor-level2:qoder-vendor:qoder",
-      "level1_ref": {
-        "kind": "vendor-level1",
-        "id": "vendor-level1:qoder-vendor"
-      },
-      "vendor_key": "qoder-vendor",
-      "title": "Qoder",
-      "official_url": "https://qoder.com/",
-      "summary": "Qoder是一个活跃发展的代理式AI编程平台，官方持续发布更新并拓展生态，涵盖IDE、CLI、JetBrains插件等多种形态。",
-      "status": "active",
-      "detail_refs": [
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:qoder"
-        }
-      ]
-    },
-    {
-      "id": "vendor-level2:codebuddy-vendor:codebuddy",
-      "level1_ref": {
-        "kind": "vendor-level1",
-        "id": "vendor-level1:codebuddy-vendor"
-      },
-      "vendor_key": "codebuddy-vendor",
-      "title": "CodeBuddy",
-      "official_url": "https://www.codebuddy.ai/ide",
-      "summary": "CodeBuddy IDE是CodeBuddy产品线的集成开发环境，提供AI辅助编码功能，持续更新版本。",
-      "status": "active",
-      "detail_refs": [
-        {
-          "kind": "tool-level3",
-          "id": "tool-level3:codebuddy"
+          "id": "tool-level3:claude-opus-4.8"
         }
       ]
     }

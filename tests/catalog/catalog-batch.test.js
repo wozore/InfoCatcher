@@ -25,6 +25,7 @@ const {
   resolveBatchCandidates,
   runCatalogBatch,
   runBatchFromCards,
+  resolveBatchPlacements,
 } = require('../../src/catalog/catalog-batch');
 const { resolveOfficialSource } = require('../../src/catalog/ai/catalog-adapters');
 const {
@@ -159,15 +160,21 @@ test('runBatchFromCards --dry-run：查重+解析+成本估算，写 preview，�
   assert.ok(preview.estimate && preview.estimate.per_seed.length === 1);
 });
 
-test('runBatchFromCards 无 confirmCost → COST_CONFIRMATION_REQUIRED，零生成', async () => {
+test('runBatchFromCards 无 confirmCost → COST_CONFIRMATION_REQUIRED，零付费零解析', async () => {
+  let resolved = false;
   const result = await runBatchFromCards([{ name: 'New Tool Beta' }], {
     generatorOptions: GEN_OPTIONS,
-    resolveOfficialSource: async () => ({ ok: true, vendor_name: 'Beta', official_url: 'https://beta.example.com' }),
+    resolveOfficialSource: async () => { resolved = true; return { ok: true, vendor_name: 'Beta', official_url: 'https://beta.example.com' }; },
   });
   assert.equal(result.ok, false);
   assert.equal(result.code, 'COST_CONFIRMATION_REQUIRED');
+  assert.equal(resolved, false, '未确认成本时不得调用付费 vendor 解析');
   assert.ok(result.cost_estimate);
-  assert.equal(result.seeds.length, 1);
+  assert.ok(result.cost_estimate.total);
+  assert.ok(result.cost_estimate.resolution, '三本账含 resolution');
+  assert.ok(result.cost_estimate.placement, '三本账含 placement');
+  assert.ok(result.cost_estimate.research, '三本账含 research');
+  assert.equal(result.seeds.length, 0, '未确认成本时 seeds 为空（零付费）');
 });
 
 // ── 第 5 组：批量生成循环 ──────────────────────────────────────
@@ -579,4 +586,190 @@ test('official-url-registry 兼容 official_url 单数字段填数组（防手�
   const hit = lookupOfficialUrl('Claude Opus 5', { registry: store });
   assert.equal(hit.ok, true);
   assert.deepEqual(hit.official_urls, ['https://docs.anthropic.com/', 'https://platform.claude.com/docs']);
+});
+
+// ── 第 7 组：待补卡输入门禁与单卡失败隔离（阶段 1）────────────
+
+test('readPendingCards：缺 name / 非字符串 detail_kind_hint 拒绝', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cb-gate-'));
+  const file = path.join(dir, 'pending.json');
+
+  fs.writeFileSync(file, JSON.stringify({ schema_version: 1, cards: [{ name: '' }] }));
+  assert.throws(() => readPendingCards(file), /PENDING_CARD_NAME_REQUIRED/);
+
+  fs.writeFileSync(file, JSON.stringify({ schema_version: 1, cards: [{ name: 'X', detail_kind_hint: 5 }] }));
+  assert.throws(() => readPendingCards(file), /PENDING_CARD_DETAIL_KIND_TYPE_INVALID/);
+
+  fs.writeFileSync(file, JSON.stringify({ schema_version: 1, cards: ['not-an-object'] }));
+  assert.throws(() => readPendingCards(file), /PENDING_CARD_INVALID/);
+});
+
+test('resolveBatchCandidates 登记表命中但同时种转换抛错（非法 kind）→ 进入 unresolved，不中断整批', async () => {
+  // 登记表命中给正规卡 vendor；但该卡带非法 detail_kind_hint，pendingCandidateToSeed 会抛错 -> 应收进 unresolved。
+  const registry = { schema_version: 1, entries: { 'Bad Kind Model': { vendor_name: 'OpenAI', official_url: 'https://openai.com' } } };
+  const result = await resolveBatchCandidates(
+    [{ name: 'Bad Kind Model', detail_kind_hint: 'bogus_kind' }, { name: 'Good Tool', detail_kind_hint: 'tool' }],
+    { registry, resolveOfficialSource: async () => ({ ok: true, vendor_name: 'Alpha', official_url: 'https://alpha.example.com' }) },
+  );
+  assert.equal(result.unresolved.length, 1);
+  assert.equal(result.unresolved[0].name, 'Bad Kind Model');
+  assert.match(result.unresolved[0].reason, /PENDING_DETAIL_KIND_INVALID/);
+  assert.equal(result.seeds.length, 1);
+  assert.equal(result.seeds[0].name, 'Good Tool');
+});
+
+// ── 第 8 组：批量 placement 集成（阶段 4）──────────────────────
+
+test('runCatalogBatch：GLM 第 4 个成员 → migration_required 阻断，不进入 prepare', async () => {
+  const seen = [];
+  const report = await runCatalogBatch(
+    [{ detail_kind: 'api_model', name: 'GLM-5.4', vendor_name: '智谱', vendor_key: 'zhipu' }],
+    {
+      generatorOptions: GEN_OPTIONS,
+      prepareCatalogDraft: async seed => { seen.push(seed.name); return { ok: true, draft_id: 'draft-x', draft: { readiness: { status: 'ready' } } }; },
+      reviewCatalogDraft: () => ({ ok: true }),
+      applyCatalogDraft: () => ({ ok: true }),
+    },
+  );
+  assert.equal(seen.length, 0, 'migration_required 不应进入 prepare');
+  assert.equal(report.failed.length, 1);
+  assert.equal(report.failed[0].name, 'GLM-5.4');
+  assert.equal(report.failed[0].reason, 'PLACEMENT_MIGRATION_REQUIRED');
+});
+
+test('runCatalogBatch：政策覆盖通用 LLM → 确定性 decision 写入 seed 后再 prepare', async () => {
+  const captured = [];
+  const report = await runCatalogBatch(
+    [{ detail_kind: 'api_model', name: 'Command B', vendor_name: 'Cohere', vendor_key: 'cohere' }],
+    {
+      generatorOptions: GEN_OPTIONS,
+      prepareCatalogDraft: async seed => { captured.push(seed); return { ok: true, draft_id: 'draft-y', draft: { readiness: { status: 'ready' } } }; },
+      reviewCatalogDraft: () => ({ ok: true }),
+      applyCatalogDraft: () => ({ ok: true }),
+    },
+  );
+  assert.equal(report.applied.length, 1, 'decision 应正常通过 prepare→review→apply');
+  assert.equal(captured.length, 1);
+  assert.deepEqual(captured[0].placement.existing_level2_ref, { kind: 'vendor-level2', id: 'vendor-level2:cohere:command' });
+  assert.equal(captured[0].placement.new_group_title, undefined, 'existing 目标不设 new_group_title');
+});
+
+test('runCatalogBatch：人工 placement 无效 → fail_closed，不进入 prepare', async () => {
+  const seen = [];
+  const report = await runCatalogBatch(
+    [{ detail_kind: 'api_model', name: 'Something', vendor_name: 'Google', vendor_key: 'google', placement: { existing_level2_ref: { kind: 'vendor-level2', id: 'vendor-level2:openai:gpt-5.6' } } }],
+    {
+      generatorOptions: GEN_OPTIONS,
+      prepareCatalogDraft: async seed => { seen.push(seed.name); return { ok: true, draft_id: 'draft-z', draft: { readiness: { status: 'ready' } } }; },
+      reviewCatalogDraft: () => ({ ok: true }),
+      applyCatalogDraft: () => ({ ok: true }),
+    },
+  );
+  assert.equal(seen.length, 0);
+  assert.equal(report.failed.length, 1);
+  assert.match(report.failed[0].reason, /PLACEMENT_REF_INVALID/);
+});
+
+// ── 第 9 组：阶段 5 成本门禁与顺序状态 ─────────────────────────
+
+test('runCatalogBatch：同厂商候选顺序投影，第 3 个 existing、第 4 个 migration_required', async () => {
+  const snap = require('../../src/catalog/catalog-contract').emptySnapshot();
+  snap['vendor-level2'].push({
+    id: 'vendor-level2:zhipu:glm', vendor_key: 'zhipu', title: 'GLM 5', status: 'active',
+    detail_refs: [{ kind: 'tool-level3', id: 'tool-level3:glm-5.1' }, { kind: 'tool-level3', id: 'tool-level3:glm-5.2' }],
+  });
+  const prepared = [];
+  const report = await runCatalogBatch(
+    [
+      { detail_kind: 'api_model', name: 'GLM-5.3', vendor_key: 'zhipu', vendor_name: '智谱' },
+      { detail_kind: 'api_model', name: 'GLM-5.4', vendor_key: 'zhipu', vendor_name: '智谱' },
+    ],
+    {
+      generatorOptions: GEN_OPTIONS,
+      snapshotOf: () => snap,
+      prepareCatalogDraft: async seed => { prepared.push(seed); return { ok: true, draft_id: `draft-${seed.name}`, draft: { readiness: { status: 'ready' } } }; },
+      reviewCatalogDraft: () => ({ ok: true }),
+      applyCatalogDraft: () => ({ ok: true }),
+    },
+  );
+  assert.equal(report.applied.length, 1);
+  assert.equal(report.applied[0].name, 'GLM-5.3', '第 3 个成员应正常加入已有系列');
+  assert.equal(report.failed.length, 1);
+  assert.equal(report.failed[0].name, 'GLM-5.4', '第 4 个成员应触发拆分迁移');
+  assert.equal(report.failed[0].reason, 'PLACEMENT_MIGRATION_REQUIRED');
+  assert.deepEqual(prepared[0].placement.existing_level2_ref, { kind: 'vendor-level2', id: 'vendor-level2:zhipu:glm' });
+});
+
+test('resolveBatchPlacements：from-preview/resume 复用 placement_decision，不重复调用 AI', async () => {
+  const snap = require('../../src/catalog/catalog-contract').emptySnapshot();
+  snap['vendor-level2'].push({ id: 'vendor-level2:alibaba:qwen', vendor_key: 'alibaba', title: 'Qwen 模型', detail_refs: [] });
+  const ledger = { reserve: () => ({ ok: true }) };
+  const seed = { detail_kind: 'api_model', name: 'X-Futuristic-Model-3000', vendor_key: 'alibaba', vendor_name: '阿里' };
+  const mockSuggest = async () => ({
+    ok: true, hint: { usage_kind: 'general_llm', canonical_family: 'qwen', release_cohort: 'newest', confidence: 0.8 }, usage: {}, raw: {},
+  });
+  await resolveBatchPlacements([seed], {
+    allowAiPlacement: true, snapshotOf: () => snap, placementLedger: ledger, suggestSeriesPlacement: mockSuggest,
+  });
+  assert.equal(seed.placement.existing_level2_ref?.id, 'vendor-level2:alibaba:qwen');
+  assert.equal(seed.placement_decision.target_level2_id, 'vendor-level2:alibaba:qwen');
+  assert.equal(seed.placement_decision.source, 'ai');
+
+  let aiCalls = 0;
+  await resolveBatchPlacements([seed], {
+    allowAiPlacement: true, snapshotOf: () => snap, placementLedger: ledger,
+    suggestSeriesPlacement: async () => { aiCalls += 1; throw new Error('resume 不应重复调用 AI'); },
+  });
+  assert.equal(aiCalls, 0, '已持久化 decision 的 seed 应短路，不重复调 AI');
+});
+
+test('runBatchFromCards --dry-run：写 placement_decision 进 preview，from-preview 复用', async () => {
+  const previewFile = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'cb-pp-')), 'preview.json');
+  const snap = require('../../src/catalog/catalog-contract').emptySnapshot();
+  snap['vendor-level2'].push({ id: 'vendor-level2:alibaba:qwen', vendor_key: 'alibaba', title: 'Qwen 模型', detail_refs: [] });
+  const resolveFn = async () => ({ ok: true, vendor_name: '阿里', official_url: 'https://help.aliyun.com' });
+  const mockSuggest = async () => ({
+    ok: true, hint: { usage_kind: 'general_llm', canonical_family: 'qwen', release_cohort: 'newest', confidence: 0.8 }, usage: {}, raw: {},
+  });
+  const dry = await runBatchFromCards(
+    [{ name: 'X-Futuristic-Model-3000', vendor_name: '阿里', vendor_key: 'alibaba', detail_kind_hint: 'api_model' }],
+    {
+      dryRun: true, previewFile, generatorOptions: GEN_OPTIONS, snapshotOf: () => snap,
+      tools: [], drafts: [], // 隔离真实目录/草稿状态（查重仅针对本批）
+      resolveOfficialSource: resolveFn, allowAiPlacement: true, placementLedger: { reserve: () => ({ ok: true }) },
+      suggestSeriesPlacement: mockSuggest,
+    },
+  );
+  assert.equal(dry.ok, true);
+  assert.ok(dry.preview_file);
+  const preview = JSON.parse(fs.readFileSync(previewFile, 'utf8'));
+  assert.equal(preview.seeds[0].placement.existing_level2_ref?.id, 'vendor-level2:alibaba:qwen');
+  assert.ok(preview.seeds[0].placement_decision, 'preview seed 应持久化 placement_decision');
+
+  let aiCalls = 0;
+  const rerun = await runBatchFromCards(
+    [{ name: 'X-Futuristic-Model-3000', vendor_name: '阿里', vendor_key: 'alibaba', detail_kind_hint: 'api_model' }],
+    {
+      fromPreview: true, confirmCost: true, previewFile, generatorOptions: GEN_OPTIONS, snapshotOf: () => snap,
+      tools: [], drafts: [],
+      prepareCatalogDraft: async seed => ({ ok: true, draft_id: 'draft-reuse', draft: { readiness: { status: 'ready' } } }),
+      reviewCatalogDraft: () => ({ ok: true }),
+      applyCatalogDraft: () => ({ ok: true }),
+      suggestSeriesPlacement: async () => { aiCalls += 1; throw new Error('from-preview 不应重复调 AI'); },
+    },
+  );
+  assert.equal(rerun.ok, true);
+  assert.equal(aiCalls, 0);
+  assert.equal(rerun.seeds[0].placement.existing_level2_ref?.id, 'vendor-level2:alibaba:qwen');
+});
+
+test('runBatchFromCards from-preview 无 confirmCost → COST_CONFIRMATION_REQUIRED，零生成', async () => {
+  const previewFile = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'cb-fp-')), 'preview.json');
+  fs.writeFileSync(previewFile, JSON.stringify({ schema_version: 1, seeds: [{ detail_kind: 'tool', name: 'Foo' }], unresolved: [] }));
+  const result = await runBatchFromCards([{ name: 'Foo' }], {
+    fromPreview: true, previewFile, generatorOptions: GEN_OPTIONS,
+    prepareCatalogDraft: async () => { throw new Error('不应执行生成'); },
+  });
+  assert.equal(result.ok, false);
+  assert.equal(result.code, 'COST_CONFIRMATION_REQUIRED');
 });

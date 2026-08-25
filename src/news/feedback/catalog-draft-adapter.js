@@ -47,8 +47,15 @@ function pendingCandidateToSeed(candidate, resolution = {}) {
     ...(candidate.placement?.existing_level1_ref ? { existing_level1_ref: candidate.placement.existing_level1_ref } : {}),
     ...(candidate.placement?.new_group_title ? { new_group_title: candidate.placement.new_group_title } : {}),
   };
+  // detail_kind 严格映射：只接受 catalog 已知类型，未知/非法 hint fail-closed（不静默降为 tool）。
+  const hint = candidate.detail_kind_hint === undefined || candidate.detail_kind_hint === null
+    ? 'tool'
+    : String(candidate.detail_kind_hint);
+  if (!['tool', 'api_model', 'subscription_plan', 'product_variant'].includes(hint)) {
+    throw new Error(`PENDING_DETAIL_KIND_INVALID:${name}:${hint}`);
+  }
   return {
-    detail_kind: candidate.detail_kind_hint === 'api_model' ? 'api_model' : 'tool',
+    detail_kind: hint,
     name,
     vendor_name: vendorName,
     vendor_key: candidate.vendor_key || null,

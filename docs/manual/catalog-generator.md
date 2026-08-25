@@ -591,7 +591,45 @@ node scripts/catalog-generator.js batch --file data/manual/tools/tool-cards-pend
 
 ### 分组归属
 
-新工具不设 `placement.new_group_title`，分组名默认 = 工具名（deriveKeys 回退 `seed.name`，匹配现有"GPT-5.6"家族组约定）。
+非 LLM 工具与专用模型（编程、图像、视频、实时语音、翻译、套餐等）不设 `placement.new_group_title` 时，分组名默认 = 工具名（deriveKeys 回退 `seed.name`，匹配现有"GPT-5.6"家族组约定）。
+
+### LLM 二级系列自动归属（通用大语言模型）
+
+通用 LLM 模型（`detail_kind=api_model` 且属于政策中的 `general_llm` 家族）在批量 prepare 前由「LLM 二级系列分类政策」决定归属，不再默认以模型名建组：
+
+1. **政策规则源**：`data/manual/archive/llm-series-policy.json` 声明 16 个厂商的模型家族、用途、版本轴、允许的目标二级系列、容量（同系列最多 3 个，第 4 个触发拆分）与证据状态。未知厂商/非法规则一律 fail-closed，绝不回退到以具体模型名建组。
+2. **确定性判定**：`src/catalog/catalog-series-policy.js` 的 `planSeriesPlacement` 用品牌提示/家族 pattern 识别已知 LLM，直接产出 `existing`（加入已有系列）或 `create`（用政策稳定 id/标题新建）。已知模型不需要 AI，零成本。
+3. **AI 只作 hint**：仅当候选用途/家族无法确定性判定（`needs_ai`，如无任何品牌命中的新模型）且显式放行 `allowAiPlacement` 时，才调用 `catalog-series-placement-ai` 输出 `usage_kind/family/cohort/confidence` 建议，再由政策重算最终归属。AI 低置信、未知家族、与政策冲突一律 fail-closed；缺账本、未放行时直接 `PLACEMENT_MANUAL_REQUIRED`，绝不静默建组。
+4. **第 4 个成员触发拆分迁移**：目标系列成员数已达拆分阈值（3）时，新候选返回 `PLACEMENT_MIGRATION_REQUIRED` 并阻断该 seed，**不自动重排既有成员**。需要拆分时由维护者更新政策（声明 newest/last 系列）后执行系列迁移（见下）。
+5. **人工 placement 仍最高优先**：Seed/待补卡显式指定 `existing_level2_ref` 时直接采用，但必须通过引用 kind/存在性/厂商归属校验，非法即 fail-closed。
+
+### 二级系列迁移（合并/拆分当前目录）
+
+治理既有 LLM 二级系列用独立迁移入口（不经过生成器 Draft）：
+
+```bash
+node scripts/catalog-series-migration.js                        # 只读预览（含目标 revision）
+node scripts/catalog-series-migration.js --json                 # 结构化预览
+node scripts/catalog-series-migration.js --apply <targetRevision>  # 原子 Apply（必须传预览输出的目标 revision）
+```
+
+- 预览列出：删除的碎片系列、成员搬迁、孤儿、既有浮空详情警告、`id_map` 与 `vendor-level1.level2_refs` 重写。
+- `--apply <targetRevision>` 会按当前快照**重新计算目标 revision**，与传入值不一致（数据已漂移）即中止；随后经 `commitSnapshotChange` 五文件事务 + dist 重建原子提交，并绑定 `expectedRevision` 防并发。
+- 迁移只改 `vendor-preview-level1.json` / `vendor-preview-level2.json`；`tool-level3` 与 `tool-card` 零漂移。
+- 第 4 个成员触发拆分时：先更新政策（把单系列改为 `*-newest` / `*-last` 双系列并分配成员），再跑迁移 Apply，最后重跑批量。
+
+### 批量成本门禁（零确认零付费）
+
+`batch` 的联网/付费解析与生成严格门禁：
+
+- 未传 `--confirm-cost` 且非 `--dry-run`：**零付费返回**三本账成本估算，不执行任何 Tavily/DeepSeek 调用：
+  - `resolution`：需要付费 vendor 解析的卡片数（人工登记表命中零成本）；
+  - `placement`：AI 分类调用上界（默认 0，`allowAiPlacement` 才可能付费）；
+  - `research`：各 seed 研究/合成硬上限。
+- `--dry-run`：付费解析预览 + 确定性 placement 写入 preview，并回填 `resolve_cost`。
+- `--confirm-cost`：确认后执行解析 → 批量生成 → 自动 Apply。
+- **同厂商多候选顺序规划**：批量前置按顺序维护投影成员数，第 3 个正常加入、第 4 个触发迁移阻断；`migration_required` 与 `fail_closed` 天然使后续同家族候选持续阻断。
+- **from-preview / resume 复用**：`--from-preview` 复用上次 dry-run 的 seed（含 `placement_decision`），确定性判定短路，**不重复调用 AI**；已持久化 decision 的 seed 在重跑/续跑时直接采用。
 
 ## 13. 概念批量生成（热点待补概念 → glossary.json）
 
