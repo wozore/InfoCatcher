@@ -99,7 +99,50 @@
       "path":"vendor/bfl.svg"
     }
   },
-  "tool": {},
+  "tool": {
+    "cursor": {
+      "path":"tool/cursor.svg"
+    },
+    "claude-code": {
+      "path":"tool/claudecode-color.svg"
+    },
+    "cline": {
+      "path":"tool/cline.svg"
+    },
+    "codebuddy": {
+      "path":"tool/codebuddy-color.svg"
+    },
+    "codex": {
+      "path":"tool/codex-color.svg"
+    },
+    "devin": {
+      "path":"tool/devin-color.svg"
+    },
+    "gemini-cli": {
+      "path":"tool/geminicli-color.svg"
+    },
+    "copilot": {
+      "path":"tool/githubcopilot.svg"
+    },
+    "junie": {
+      "path":"tool/junie-color.svg"
+    },
+    "kiro": {
+      "path":"tool/kiro-color.svg"
+    },
+    "qoder": {
+      "path":"tool/qoder-color.svg"
+    },
+    "replit": {
+      "path":"tool/replit-color.svg"
+    },
+    "trae": {
+      "path":"tool/trae-color.svg"
+    },
+    "windsurf": {
+      "path":"tool/windsurf.svg"
+    }
+  },
   "series": {
     "grok-4-6": {
       "path":"series/grok.svg",
