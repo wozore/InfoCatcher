@@ -20,6 +20,7 @@
 // ═══════════════════════════════════════════════════════════════
 import { t } from './i18n.js';
 import { catalog } from './catalog-interface.js';
+import { getToolDateDisplay, getToolDetailKindLabel } from './date-display.mjs';
 
 let tools = [];               // 正式工具卡数据（tool/api_model/product_variant）
 let glossary = [];            // glossary.json 的完整内容
@@ -88,10 +89,6 @@ function renderTimelinessBadge(queriedAt) {
 
 function getItemLatestQueriedAt() {
   return null;
-}
-
-function getToolPublishedDate(tool) {
-  return tool?.official_date || null;
 }
 
 /**
@@ -599,7 +596,8 @@ export {
   getTimelinessInfo,
   renderTimelinessBadge,
   getItemLatestQueriedAt,
-  getToolPublishedDate,
+  getToolDateDisplay,
+  getToolDetailKindLabel,
   escapeHtml,
   safeExternalUrl,
   timeAgo,

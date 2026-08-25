@@ -1,6 +1,6 @@
 'use strict';
 
-const { ALLOWED_FIELDS } = require('./catalog-contract');
+const { ALLOWED_FIELDS, DATE_FIELDS } = require('./catalog-contract');
 
 const NOT_APPLICABLE_STATUS = 'not_applicable';
 const FORBIDDEN_PLACEHOLDERS = new Set(['unknown', '未知', '资料状态未知', '待核验', 'n/a', 'na']);
@@ -33,6 +33,7 @@ function validatePlannedRecords(recordsByArea) {
     (records || []).forEach((record, index) => {
       const basePath = `${area}[${index}]`;
       (ALLOWED_FIELDS[area] || []).forEach(field => {
+        if (DATE_FIELDS.includes(field)) return;
         if (!Object.prototype.hasOwnProperty.call(record, field)) addError(errors, 'GENERATED_FIELD_MISSING', `${basePath}.${field}`, '生成记录缺少契约字段');
       });
       walkDefaults(record, basePath, errors);

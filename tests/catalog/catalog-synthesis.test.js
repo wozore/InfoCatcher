@@ -14,7 +14,7 @@ function seed(overrides = {}) {
   };
 }
 
-function layerFieldsFor() {
+function layerFieldsFor(dateField = 'release_date') {
   return {
     vendor: {
       vendor_summary: '可灵是快手旗下的视频生成平台。',
@@ -40,15 +40,16 @@ function layerFieldsFor() {
       api_pricing: { status: 'available', rate_cards: [{ label: '视频生成', pricing_basis: 'generation', currency: 'CREDIT', metrics: [{ label: '标准生成', amount: 1, unit: 'generation' }], conditions: '以官方 API 计费说明为准。' }] },
       applicable_scenarios: [{ title: '短视频生成', description: '适合生成音画同步的短内容。' }],
       inapplicable_scenarios: [{ title: '长视频', description: '超过官方时长上限的内容不适合。' }],
-      official_date: '2025-12-03',
+      [dateField]: '2025-12-03',
     },
   };
 }
 
-function provenanceFor(sourceId) {
+function provenanceFor(sourceId, dateField) {
   const provenance = {};
-  for (const layer of Object.keys(layerFieldsFor())) {
-    for (const field of Object.keys(layerFieldsFor()[layer])) provenance[`${layer}.${field}`] = [sourceId];
+  const fields = layerFieldsFor(dateField);
+  for (const layer of Object.keys(fields)) {
+    for (const field of Object.keys(fields[layer])) provenance[`${layer}.${field}`] = [sourceId];
   }
   return provenance;
 }
@@ -64,10 +65,11 @@ function researchFor(plan) {
 
 function adapter(missingFields = []) {
   return {
-    synthesize: async ({ research }) => {
+    synthesize: async ({ research, plan }) => {
       const sourceId = research.official_sources[0].source_id;
-      const layerFields = layerFieldsFor();
-      const provenance = provenanceFor(sourceId);
+      const dateField = plan.profile.detail_kind === 'tool' ? 'last_updated_date' : 'release_date';
+      const layerFields = layerFieldsFor(dateField);
+      const provenance = provenanceFor(sourceId, dateField);
       for (const field of missingFields) {
         const [layer, name] = field.split('.');
         if (layerFields[layer]) delete layerFields[layer][name];
@@ -127,7 +129,7 @@ test('orphan relation repair bypasses model synthesis when every record already 
     id: 'vendor-level2:kuaishou:kling', level1_ref: { kind: 'vendor-level1', id: 'vendor-level1:kuaishou' }, vendor_key: 'kuaishou',
     title: 'Kling', official_url: 'https://kling.ai', summary: '已有模型分组。', status: 'active', detail_refs: [],
   });
-  const detail = { id: 'tool-level3:kling-2-6-pro', vendor_key: 'kuaishou', detail_kind: 'api_model', theme: 'media', title: 'Kling 2.6 Pro', vendor_label: '可灵', icon: '🎬', official_url: 'https://kling.ai', status: 'active', summary: '已有模型详情。', one_m_context: { status: 'not_applicable', reason: '视频模型。' }, api_pricing: { status: 'available', rate_cards: [{ label: '生成', pricing_basis: 'generation', currency: 'CREDIT', metrics: [{ label: '生成', amount: 1, unit: 'generation' }], conditions: '官方计费。' }] }, plan: { status: 'not_applicable', reason: '不是套餐。' }, applicable_scenarios: [{ title: '视频', description: '生成视频。' }], inapplicable_scenarios: [{ title: '长视频', description: '不适合长视频。' }], sources: [{ title: '官方', url: 'https://kling.ai' }], official_date: '2025-12-03' };
+  const detail = { id: 'tool-level3:kling-2-6-pro', vendor_key: 'kuaishou', detail_kind: 'api_model', theme: 'media', title: 'Kling 2.6 Pro', vendor_label: '可灵', icon: '🎬', official_url: 'https://kling.ai', status: 'active', summary: '已有模型详情。', one_m_context: { status: 'not_applicable', reason: '视频模型。' }, api_pricing: { status: 'available', rate_cards: [{ label: '生成', pricing_basis: 'generation', currency: 'CREDIT', metrics: [{ label: '生成', amount: 1, unit: 'generation' }], conditions: '官方计费。' }] }, plan: { status: 'not_applicable', reason: '不是套餐。' }, applicable_scenarios: [{ title: '视频', description: '生成视频。' }], inapplicable_scenarios: [{ title: '长视频', description: '不适合长视频。' }], sources: [{ title: '官方', url: 'https://kling.ai' }], release_date: '2025-12-03' };
   snapshot['tool-level3'].push(detail);
   snapshot['tool-card'].push({ id: 'tool-card:kling-2-6-pro', tool_key: 'kling-2-6-pro', vendor_key: 'kuaishou', title: 'Kling 2.6 Pro', vendor_label: '可灵', icon: '🎬', summary: '已有工具卡。', theme: 'media', scenes: ['视频生成'], best_for_preview: '视频生成。', not_for_preview: '不适合长视频。', price_badge: 'usage_based', access_level: '开放', search_terms: ['Kling 2.6 Pro'], detail_ref: { kind: 'tool-level3', id: detail.id }, detail_kind: 'api_model' });
   const plan = planCatalogResearch(seed({ placement: { existing_level2_ref: { kind: 'vendor-level2', id: 'vendor-level2:kuaishou:kling' } } }), snapshot);
@@ -165,11 +167,11 @@ test('missing API pricing/access coverage blocks synthesis and suggests product_
 test('non-api_model missing fields fail with SYNTHESIS_COVERAGE_INCOMPLETE without reclassifying', async () => {
   const plan = planCatalogResearch(seed({ detail_kind: 'tool', modality: 'general' }), emptySnapshot());
   const research = researchFor(plan);
-  const result = await synthesizeCatalog(research, plan, adapter(['detail.official_date']));
+  const result = await synthesizeCatalog(research, plan, adapter(['detail.last_updated_date']));
   assert.equal(result.ok, false);
   assert.equal(result.code, 'SYNTHESIS_COVERAGE_INCOMPLETE');
   assert.equal(result.suggested_detail_kind, undefined);
-  assert.ok(result.missing_fields.includes('detail.official_date'));
+  assert.ok(result.missing_fields.includes('detail.last_updated_date'));
 });
 
 test('provenance referencing a nonexistent source_id is rejected', async () => {
@@ -191,7 +193,7 @@ test('provenance referencing a nonexistent source_id is rejected', async () => {
 test('model-reported missing cannot fake away a real field gap', async () => {
   const plan = planCatalogResearch(seed(), emptySnapshot());
   const research = researchFor(plan);
-  const lying = adapter(['detail.official_date']);
+  const lying = adapter(['detail.release_date']);
   const original = lying.synthesize;
   lying.synthesize = async input => {
     const value = await original(input);
@@ -201,23 +203,23 @@ test('model-reported missing cannot fake away a real field gap', async () => {
   const result = await synthesizeCatalog(research, plan, lying);
   assert.equal(result.ok, false);
   assert.equal(result.code, 'SYNTHESIS_COVERAGE_INCOMPLETE');
-  assert.ok(result.missing_fields.includes('detail.official_date'));
+  assert.ok(result.missing_fields.includes('detail.release_date'));
 });
 
-test('partial official date is treated as missing before planning', async () => {
+test('partial release date is treated as missing before planning', async () => {
   const plan = planCatalogResearch(seed(), emptySnapshot());
   const research = researchFor(plan);
   const bad = adapter();
   const original = bad.synthesize;
   bad.synthesize = async input => {
     const value = await original(input);
-    value.layer_fields.detail.official_date = 'July 8';
+    value.layer_fields.detail.release_date = 'July 8';
     return value;
   };
   const result = await synthesizeCatalog(research, plan, bad);
   assert.equal(result.ok, false);
   assert.equal(result.code, 'SYNTHESIS_COVERAGE_INCOMPLETE');
-  assert.ok(result.missing_fields.includes('detail.official_date'));
+  assert.ok(result.missing_fields.includes('detail.release_date'));
 });
 test('placeholder field values are treated as missing by field coverage', async () => {
   const plan = planCatalogResearch(seed(), emptySnapshot());

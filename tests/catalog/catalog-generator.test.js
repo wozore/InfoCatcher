@@ -68,20 +68,20 @@ test('v3 synthesis repair prefers matching seed evidence for official date', asy
     assert.match(payload.input, /2025-07-07/);
     return fakeResponse({
       output_text: JSON.stringify({
-        layer_fields: { detail: { official_date: '2026-02-16' } },
-        provenance: { 'detail.official_date': ['source-latest'] },
+        layer_fields: { detail: { last_updated_date: '2026-02-16' } },
+        provenance: { 'detail.last_updated_date': ['source-latest'] },
         missing: [],
       }),
     });
   };
   const result = await synthesizeLayerFields({
     plan: {
-      seed: { repair_layers: ['tool-level3'], repair_note: '修复 official_date 为 2025-07-07。' },
+      seed: { repair_layers: ['tool-level3'], repair_note: '修复 last_updated_date 为 2025-07-07。' },
       profile: { detail_kind: 'tool', modality: 'general' },
       applicability: {},
       research_scopes: [],
     },
-    expected_layer_fields: { detail: ['official_date'] },
+    expected_layer_fields: { detail: ['last_updated_date'] },
     research: {
       official_sources: [{
         source_id: 'source-release',
@@ -96,8 +96,8 @@ test('v3 synthesis repair prefers matching seed evidence for official date', asy
   }, { apiKey: 'test-key', fetchImpl });
 
   assert.equal(result.ok, true);
-  assert.equal(result.layer_fields.detail.official_date, '2025-07-07');
-  assert.deepEqual(result.provenance['detail.official_date'], ['source-release']);
+  assert.equal(result.layer_fields.detail.last_updated_date, '2025-07-07');
+  assert.deepEqual(result.provenance['detail.last_updated_date'], ['source-release']);
 });
 
 test('revision and preview hashes are deterministic', () => {

@@ -59,7 +59,7 @@ function buildLevel2({ vendorKey, level1Id, groupKey, title, officialUrl, summar
   };
 }
 
-function buildDetail({ vendorKey, detailKind, theme, title, vendorLabel, icon, officialUrl, status, summary, oneMContext, apiPricing, plan, applicableScenarios, inapplicableScenarios, sources, officialDate }) {
+function buildDetail({ vendorKey, detailKind, theme, title, vendorLabel, icon, officialUrl, status, summary, oneMContext, apiPricing, plan, applicableScenarios, inapplicableScenarios, sources, releaseDate, lastUpdatedDate }) {
   const detail = {
     vendor_key: vendorKey,
     detail_kind: detailKind,
@@ -75,9 +75,10 @@ function buildDetail({ vendorKey, detailKind, theme, title, vendorLabel, icon, o
     applicable_scenarios: applicableScenarios || [],
     inapplicable_scenarios: inapplicableScenarios || [],
     sources: sources || [],
-    official_date: officialDate ?? null,
     theme: theme || 'general',
   };
+  if (detailKind === 'tool') detail.last_updated_date = lastUpdatedDate;
+  if (detailKind === 'api_model' || detailKind === 'product_variant') detail.release_date = releaseDate;
   return detail;
 }
 

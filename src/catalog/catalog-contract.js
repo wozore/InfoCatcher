@@ -28,8 +28,11 @@ const VENDOR_LEVEL2_FIELDS = Object.freeze([
 const TOOL_LEVEL3_FIELDS = Object.freeze([
   'id', 'vendor_key', 'detail_kind', 'theme', 'title', 'vendor_label', 'icon', 'official_url',
   'status', 'summary', 'one_m_context', 'api_pricing', 'plan',
-  'applicable_scenarios', 'inapplicable_scenarios', 'sources', 'official_date',
+  'applicable_scenarios', 'inapplicable_scenarios', 'sources',
+  'release_date', 'last_updated_date',
 ]);
+
+const DATE_FIELDS = Object.freeze(['release_date', 'last_updated_date']);
 
 const ALLOWED_FIELDS = Object.freeze({
   'vendor-card': VENDOR_CARD_FIELDS,
@@ -84,6 +87,7 @@ module.exports = {
   DETAIL_KINDS,
   TOOL_CARD_KINDS,
   THEMES,
+  DATE_FIELDS,
   REF_TARGETS,
   isHttpUrl,
   areaItems,

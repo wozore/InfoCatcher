@@ -10,7 +10,7 @@ function discoveryKeywords(predicates = []) {
   const keywords = [];
   if (predicates.some(predicate => ['api_available', 'access_conditions'].includes(predicate))) keywords.push('developer API OpenAPI API documentation authentication access availability');
   if (predicates.some(predicate => ['price_rate', 'pricing_model', 'billing_period'].includes(predicate))) keywords.push('official pricing credits cost billing price');
-  if (predicates.some(predicate => ['release_date', 'availability_status'].includes(predicate))) keywords.push('official release notes announcement changelog');
+  if (predicates.some(predicate => ['release_date', 'last_updated_date', 'availability_status'].includes(predicate))) keywords.push('official release notes announcement changelog');
   if (predicates.some(predicate => ['max_duration', 'output_resolution', 'audio_capability', 'supported_languages', 'capability', 'limitation'].includes(predicate))) keywords.push('official model guide specifications limits duration resolution audio languages');
   if (predicates.some(predicate => predicate.startsWith('vendor_'))) keywords.push('official company product platform about');
   return keywords.join(' ');

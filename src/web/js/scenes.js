@@ -15,7 +15,8 @@ import {
   setRegionBusy,
   renderState,
   escapeHtml,
-  getToolPublishedDate,
+  getToolDateDisplay,
+  getToolDetailKindLabel,
 } from './data.js';
 import { isComparableLeaf, isCompareSelected } from './compare.js';
 import { markConceptsIn } from './search.js';
@@ -50,11 +51,14 @@ function renderSceneToolCard(tool, selectedDetailRef = null) {
   const specificLabel = selectedDetailRef ? detail?.title : null;
   const title = specificLabel || tool.title;
   const description = detail?.summary || tool.summary;
-  const publishedDate = getToolPublishedDate(detail);
-  const dateLabel = detail?.detail_kind === 'tool' ? '更新时间' : '发布时间';
+  const kindLabel = getToolDetailKindLabel(detail);
+  const dateDisplay = getToolDateDisplay(detail);
+  const dateText = dateDisplay
+    ? dateDisplay.label + ' ' + dateDisplay.value
+    : detail?.detail_kind === 'subscription_plan' ? '' : '日期待核验';
   return '<div class="tool-card scene-tool-card" onclick="openDetail(\'' + escapeHtml(detailRef) + '\')">' +
     '<div class="tool-card-header">' +
-      '<div><div class="tool-card-name">' + brandIconHtml({ vendorKey: tool.vendor_key, toolKey: tool.tool_key, modelKey: detail?.detail_kind === 'api_model' ? detail.id.split(':').pop() : null, emoji: tool.icon }) + ' ' + escapeHtml(title) + '</div>' +
+      '<div><div class="tool-card-name">' + brandIconHtml({ vendorKey: tool.vendor_key, toolKey: tool.tool_key, modelKey: detail?.detail_kind === 'api_model' ? detail.id.split(':').pop() : null, emoji: tool.icon }) + ' ' + escapeHtml(title) + (kindLabel ? '<span class="tool-card-kind">' + escapeHtml(kindLabel) + '</span>' : '') + '</div>' +
       (specificLabel ? '<div class="scene-specific-recommendation">具体推荐：' + escapeHtml(specificLabel) + '</div>' : '') +
       '<div class="tool-card-vendor">' + escapeHtml(tool.vendor_label) + '</div></div>' +
       '' /* 决策 98：场景工具卡默认区不显示评分，评分保留在详情模态 */ +
@@ -66,7 +70,7 @@ function renderSceneToolCard(tool, selectedDetailRef = null) {
       renderAccessTag(tool.access_level) +
     '</div>' +
     '<div class="tool-card-footer" onclick="event.stopPropagation()">' +
-      '<span class="scene-tool-updated">' + (publishedDate ? dateLabel + ' ' + escapeHtml(publishedDate) : dateLabel + '待补充') + '</span>' +
+      '<span class="scene-tool-updated">' + escapeHtml(dateText) + '</span>' +
       '<div class="tool-card-actions">' +
         '<button class="detail-button" type="button" onclick="openDetail(\'' + escapeHtml(detailRef) + '\',null,this)">查看详情</button>' +
         (isComparable ? '<button class="compare-toggle ' + (isSelected ? 'selected' : '') + '" aria-pressed="' + isSelected + '" onclick="toggleCompareRef(\'' + escapeHtml(detail.id) + '\',\'' + escapeHtml(detail.id) + '\',this)">' + (isSelected ? '已选' : '+对比') + '</button>' : '') +

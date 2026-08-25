@@ -5,6 +5,7 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const { CATALOG_FILES } = require('../src/shared/paths');
 const { catalog, resetCatalogForTests } = require('../src/catalog-interface');
+const { validateCatalogSnapshot } = require('../src/catalog/catalog-snapshot-validator');
 
 test.beforeEach(() => resetCatalogForTests());
 
@@ -53,7 +54,7 @@ test('level1 and level3 records expose only owned fields', () => {
   const level3Fields = new Set([
     'id', 'vendor_key', 'detail_kind', 'theme', 'title', 'vendor_label', 'icon', 'official_url',
     'status', 'summary', 'one_m_context', 'api_pricing', 'plan',
-    'applicable_scenarios', 'inapplicable_scenarios', 'sources', 'official_date',
+    'applicable_scenarios', 'inapplicable_scenarios', 'sources', 'release_date', 'last_updated_date',
   ]);
   const level1 = catalog({ area: 'vendor-level1', operation: 'list' }).data;
   const level3 = catalog({ area: 'tool-level3', operation: 'list' }).data;
@@ -104,6 +105,68 @@ test('tool card and detail share one detail reference', () => {
   const details = new Set(catalog({ area: 'tool-level3', operation: 'list' }).data.map(item => item.id));
   cards.forEach(card => assert.equal(details.has(card.detail_ref.id), true));
 });
+
+test('date contract accepts typed fields and rejects removed date fields', () => {
+  const detail = {
+    id: 'tool-level3:typed-date',
+    vendor_key: 'typed-vendor',
+    detail_kind: 'tool',
+    theme: 'dev',
+    title: 'Typed Date Tool',
+    official_url: 'https://example.com/tool',
+    release_date: '2025-01-02',
+    last_updated_date: '2025-02-03',
+    sources: [],
+  };
+  const card = {
+    id: 'tool-card:typed-date',
+    tool_key: 'typed-date',
+    vendor_key: 'typed-vendor',
+    title: 'Typed Date Tool',
+    theme: 'dev',
+    detail_kind: 'tool',
+    detail_ref: { kind: 'tool-level3', id: detail.id },
+  };
+  const typed = validateCatalogSnapshot({
+    'vendor-card': [],
+    'tool-card': [card],
+    'vendor-level1': [],
+    'vendor-level2': [],
+    'tool-level3': [detail],
+  });
+  assert.equal(typed.ok, true);
+  assert.deepEqual(typed.errors, []);
+
+  const removedDateField = ['official', 'date'].join('_');
+  const legacy = validateCatalogSnapshot({
+    'vendor-card': [],
+    'tool-card': [{ ...card, id: 'tool-card:legacy', detail_ref: { kind: 'tool-level3', id: 'tool-level3:legacy' } }],
+    'vendor-level1': [],
+    'vendor-level2': [],
+    'tool-level3': [{ ...detail, id: 'tool-level3:legacy', release_date: undefined, last_updated_date: undefined, [removedDateField]: '2025-01-02' }],
+  });
+  assert.equal(legacy.ok, false);
+  assert.ok(legacy.errors.some(item => item.code === 'FIELD_NOT_ALLOWED'));
+});
+
+test('subscription plans reject typed public dates', () => {
+  const result = validateCatalogSnapshot({
+    'vendor-card': [],
+    'tool-card': [],
+    'vendor-level1': [],
+    'vendor-level2': [],
+    'tool-level3': [{
+      id: 'tool-level3:plan',
+      vendor_key: 'typed-vendor',
+      detail_kind: 'subscription_plan',
+      title: 'Typed Plan',
+      release_date: '2025-01-02',
+    }],
+  });
+  assert.equal(result.ok, false);
+  assert.ok(result.errors.some(item => item.code === 'DATE_NOT_APPLICABLE'));
+});
+
 
 test('scene and featured recommendations use stable tool and detail references', () => {
   const cards = catalog({ area: 'tool-card', operation: 'list' }).data;

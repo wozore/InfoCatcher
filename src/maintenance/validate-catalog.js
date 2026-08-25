@@ -68,7 +68,7 @@ const VENDOR_LEVEL2_FIELDS = new Set([
 const TOOL_LEVEL3_FIELDS = new Set([
   'id', 'vendor_key', 'detail_kind', 'theme', 'title', 'vendor_label', 'icon', 'official_url',
   'status', 'summary', 'one_m_context', 'api_pricing', 'plan',
-  'applicable_scenarios', 'inapplicable_scenarios', 'sources', 'official_date',
+  'applicable_scenarios', 'inapplicable_scenarios', 'sources', 'release_date', 'last_updated_date',
 ]);
 const DETAIL_KINDS = new Set(['tool', 'api_model', 'subscription_plan', 'product_variant']);
 const TOOL_CARD_KINDS = new Set(['tool', 'api_model', 'product_variant']);

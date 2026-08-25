@@ -28,7 +28,7 @@ function fullDetailFields() {
     api_pricing: { status: 'available', rate_cards: [{ label: '生成', pricing_basis: 'generation', currency: 'CREDIT', metrics: [{ label: '标准', amount: 1, unit: 'generation' }], conditions: '官方说明' }] },
     applicable_scenarios: [{ title: '短视频', description: '短视频创作。' }],
     inapplicable_scenarios: [{ title: '长视频', description: '超长视频不适合。' }],
-    official_date: '2025-12-03',
+    release_date: '2025-12-03',
   };
 }
 

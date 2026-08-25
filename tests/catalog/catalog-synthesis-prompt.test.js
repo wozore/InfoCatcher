@@ -56,7 +56,7 @@ test('synthesis input preserves seed-source role and repair context', () => {
   const repairSeed = {
     ...seed(),
     repair_layers: ['tool-level3'],
-    repair_note: '修复 detail.official_date 为 2025-07-07。',
+    repair_note: '修复 detail.release_date 为 2025-07-07。',
   };
   const plan = planCatalogResearch(repairSeed, emptySnapshot());
   const detailRef = plan.research_scopes.find(scope => scope.kind === 'detail').subject.key;
@@ -72,12 +72,12 @@ test('synthesis input preserves seed-source role and repair context', () => {
       }],
     },
     plan,
-    expected_layer_fields: { detail: ['official_date'] },
+    expected_layer_fields: { detail: ['release_date'] },
   });
   assert.equal(input.layers.detail.sources[0].source_role, 'seed_official_hint');
   assert.deepEqual(input.repair_context, {
     layers: ['tool-level3'],
-    note: '修复 detail.official_date 为 2025-07-07。',
+    note: '修复 detail.release_date 为 2025-07-07。',
   });
   assert.match(buildSynthesisInstructions(plan), /source_role=seed_official_hint/);
 });
@@ -93,14 +93,14 @@ test('synthesis input skips sources without content or excerpt', () => {
 });
 
 test('synthesis instructions cover field rules, enums, and provenance requirements', () => {
-  const instructions = buildSynthesisInstructions();
+  const instructions = buildSynthesisInstructions(planCatalogResearch(seed(), emptySnapshot()));
   assert.match(instructions, /expected_layer_fields/);
   assert.match(instructions, /provenance/);
   assert.match(instructions, /source_id/);
   assert.match(instructions, /missing/);
   assert.match(instructions, /api_pricing/);
   assert.match(instructions, /access_level/);
-  assert.match(instructions, /产品实体首次发布日期或 GA 发布日/);
+  assert.match(instructions, /release_date 必须是官方来源明确给出的当前实体首次公开发布日期或 GA 发布日/);
   assert.match(instructions, /unknown/);
   assert.match(instructions, /features 是数组/);
   assert.match(instructions, /字段名必须逐字复制/);

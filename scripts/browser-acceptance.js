@@ -58,8 +58,9 @@ async function main() {
   const config = readConfig();
   if (!fs.existsSync(DIST)) fail(`DIST_MISSING:${DIST}`);
   const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'infocatcher-edge-'));
-  const server = spawn(process.platform === 'win32' ? 'python' : 'python3', ['-m', 'http.server', String(PORT), '--directory', DIST], { cwd: ROOT, stdio: 'ignore' });
-  const browser = spawn(config.executablePath, [`--headless=new`, `--disable-gpu`, `--no-first-run`, `--no-default-browser-check`, `--remote-debugging-port=9222`, `--user-data-dir=${profile}`, `http://127.0.0.1:${PORT}/`], { stdio: 'ignore' });
+  const serverCode = "import http.server, os; os.chdir('dist'); Handler=type('Handler',(http.server.SimpleHTTPRequestHandler,),{'extensions_map':{**http.server.SimpleHTTPRequestHandler.extensions_map,'.mjs':'text/javascript'}}); http.server.ThreadingHTTPServer((''," + PORT + "),Handler).serve_forever()";
+  const server = spawn(process.platform === 'win32' ? 'python' : 'python3', ['-c', serverCode], { cwd: ROOT, stdio: 'ignore' });
+  const browser = spawn(config.executablePath, [`--headless=new`, `--disable-gpu`, `--no-first-run`, `--no-default-browser-check`, `--remote-debugging-port=9222`, `--user-data-dir=${profile}`, 'about:blank'], { stdio: 'ignore' });
   let client;
   try {
     await waitHttp(`http://127.0.0.1:${PORT}/`);
@@ -69,15 +70,23 @@ async function main() {
     client = cdp(page.webSocketDebuggerUrl);
     await client.command('Runtime.enable');
     await client.command('Page.enable');
-    await wait(1200);
     const consoleErrors = [];
-    client.socket.addEventListener('message', event => { const message = JSON.parse(String(event.data)); if (message.method === 'Runtime.consoleAPICalled' && ['error', 'assert'].includes(message.params.type)) consoleErrors.push(message.params.type); });
+    client.socket.addEventListener('message', event => {
+      const message = JSON.parse(String(event.data));
+      if (message.method === 'Runtime.consoleAPICalled' && ['error', 'assert'].includes(message.params.type)) consoleErrors.push(message.params.type);
+    });
+    await client.command('Page.navigate', { url: `http://127.0.0.1:${PORT}/` });
+    const readyEnd = Date.now() + 15000;
+    while (Date.now() < readyEnd && !(await evaluate(client, `document.querySelector('#app')?.getAttribute('aria-busy') === 'false'`))) await wait(100);
+    await assertBrowser(client, '页面数据加载', `document.querySelector('#app')?.getAttribute('aria-busy') === 'false'`);
     await assertBrowser(client, '首页加载', `document.title.includes('InfoCatcher')`);
     await assertBrowser(client, '工具库导航', `(()=>{document.querySelector('[data-view="tools"]').click();return document.querySelector('#view-tools').classList.contains('active')})()`);
     await wait(300);
     await assertBrowser(client, '工具视图切换', `(()=>{const t=document.querySelector('#toolsViewToggle');if(t.getAttribute('aria-checked')!=='true')t.click();return t.getAttribute('aria-checked')==='true'})()`);
     await wait(300);
     await assertBrowser(client, '18 张模型卡逐一可搜索', `(()=>{const targets=['GLM-5.3','Kimi K3','Qwen3.8 Max','Muse Spark 1.2','Gemini 3.7 Flash','Gemini 3.6 Flash','Gemma 4','MiniMax M3','MiniMax M2.7','Grok 4.5','混元 Hy3','Step-3.5-Flash','Step-3.7-Flash','Nemotron 3 Ultra','Nemotron 3 Super','Nemotron 3.5','MiMo-V2.5','MiMo-V2.5 Pro'];const input=document.querySelector('#searchInput');const root=document.querySelector('#toolDirectoryView');return (async()=>{for(const target of targets){input.value=target;input.dispatchEvent(new Event('input',{bubbles:true}));await new Promise(resolve=>setTimeout(resolve,80));if(!root.innerText.includes(target))return false;}return true})()})()`);
+    await assertBrowser(client, 'Gemini CLI 显示最近更新', `(()=>{const input=document.querySelector('#searchInput');input.value='Gemini CLI';input.dispatchEvent(new Event('input',{bubbles:true}));const name=[...document.querySelectorAll('.tool-card-name')].find(x=>x.textContent.trim().endsWith('Gemini CLI'));const card=name?.closest('.tool-card');if(!card)return false;card.click();const valid=document.querySelector('#modalContent').innerText.includes('最近更新 2026-08-19');window.closeModal();return valid})()`);
+    await assertBrowser(client, 'Gemini 2.5 Pro 显示发布日期', `(()=>{const input=document.querySelector('#searchInput');input.value='Gemini 2.5 Pro';input.dispatchEvent(new Event('input',{bubbles:true}));const name=[...document.querySelectorAll('.tool-card-name')].find(x=>x.textContent.trim().endsWith('Gemini 2.5 Pro'));const card=name?.closest('.tool-card');if(!card)return false;card.click();const valid=document.querySelector('#modalContent').innerText.includes('发布日期 2025-06-17');window.closeModal();return valid})()`);
     await assertBrowser(client, 'Qwen 详情可打开', `(()=>{const input=document.querySelector('#searchInput');input.value='Qwen3.8 Max';input.dispatchEvent(new Event('input',{bubbles:true}));const card=[...document.querySelectorAll('.tool-card')].find(x=>x.innerText.includes('Qwen3.8 Max'));if(!card)return false;card.click();return !document.querySelector('#modalOverlay').hidden})()`);
     await assertBrowser(client, '旧 Spark 与 xunfei 不出现', `!document.body.innerText.includes('Spark 4.0 Ultra')&&!document.body.innerText.includes('Spark Pro')&&!document.body.innerText.includes('Spark Lite')&&!document.body.innerText.includes('Spark X2')`);
     await assertBrowser(client, '对比页加载', `(()=>{document.querySelector('[data-view="compare"]').click();return document.querySelector('#view-compare').classList.contains('active')})()`);

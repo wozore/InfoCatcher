@@ -94,7 +94,6 @@ function normalizeDetail(detail, cardByDetail) {
     applicable_scenarios: Array.isArray(detail.applicable_scenarios) ? detail.applicable_scenarios : [],
     inapplicable_scenarios: Array.isArray(detail.inapplicable_scenarios) ? detail.inapplicable_scenarios : [],
     sources: normalizeSources(detail.sources),
-    official_date: null,
   };
 }
 
@@ -118,7 +117,6 @@ function createProductDetail(card, level1) {
     applicable_scenarios: unique(card.scenes).map(title => ({ title, description: '' })),
     inapplicable_scenarios: [],
     sources: officialUrl ? [{ title: '官方产品页', url: officialUrl }] : [],
-    official_date: null,
   };
 }
 

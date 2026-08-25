@@ -5,47 +5,52 @@ const { deriveKeys } = require('./catalog-record-builders');
 
 const BASE_DETAIL_PREDICATES = Object.freeze([
   'official_product_url',
-  'release_date',
   'availability_status',
   'capability',
   'limitation',
 ]);
 
+const DATE_PREDICATES = Object.freeze({
+  tool: 'last_updated_date',
+  api_model: 'release_date',
+  product_variant: 'release_date',
+});
+
 const PROFILE_DEFINITIONS = Object.freeze({
   'api_model:text': Object.freeze({
     detail_kind: 'api_model',
     modality: 'text',
-    required_predicates: [...BASE_DETAIL_PREDICATES, 'api_available', 'access_conditions', 'price_rate', 'context_window'],
+    required_predicates: [...BASE_DETAIL_PREDICATES, DATE_PREDICATES.api_model, 'api_available', 'access_conditions', 'price_rate', 'context_window'],
     applicability: { one_m_context: 'required', api_pricing: 'required', plan: 'not_applicable' },
   }),
   'api_model:video': Object.freeze({
     detail_kind: 'api_model',
     modality: 'video',
-    required_predicates: [...BASE_DETAIL_PREDICATES, 'api_available', 'access_conditions', 'price_rate', 'max_duration', 'output_resolution', 'audio_capability', 'supported_languages'],
+    required_predicates: [...BASE_DETAIL_PREDICATES, DATE_PREDICATES.api_model, 'api_available', 'access_conditions', 'price_rate', 'max_duration', 'output_resolution', 'audio_capability', 'supported_languages'],
     applicability: { one_m_context: 'not_applicable', api_pricing: 'required', plan: 'not_applicable' },
   }),
   'api_model:image': Object.freeze({
     detail_kind: 'api_model',
     modality: 'image',
-    required_predicates: [...BASE_DETAIL_PREDICATES, 'api_available', 'access_conditions', 'price_rate', 'output_resolution'],
+    required_predicates: [...BASE_DETAIL_PREDICATES, DATE_PREDICATES.api_model, 'api_available', 'access_conditions', 'price_rate', 'output_resolution'],
     applicability: { one_m_context: 'not_applicable', api_pricing: 'required', plan: 'not_applicable' },
   }),
   'api_model:audio': Object.freeze({
     detail_kind: 'api_model',
     modality: 'audio',
-    required_predicates: [...BASE_DETAIL_PREDICATES, 'api_available', 'access_conditions', 'price_rate', 'audio_capability', 'supported_languages'],
+    required_predicates: [...BASE_DETAIL_PREDICATES, DATE_PREDICATES.api_model, 'api_available', 'access_conditions', 'price_rate', 'audio_capability', 'supported_languages'],
     applicability: { one_m_context: 'not_applicable', api_pricing: 'required', plan: 'not_applicable' },
   }),
   'tool:general': Object.freeze({
     detail_kind: 'tool',
     modality: 'general',
-    required_predicates: [...BASE_DETAIL_PREDICATES, 'access_conditions', 'pricing_model'],
+    required_predicates: [...BASE_DETAIL_PREDICATES, DATE_PREDICATES.tool, 'access_conditions', 'pricing_model'],
     applicability: { one_m_context: 'not_applicable', api_pricing: 'not_applicable', plan: 'not_applicable' },
   }),
   'product_variant:general': Object.freeze({
     detail_kind: 'product_variant',
     modality: 'general',
-    required_predicates: [...BASE_DETAIL_PREDICATES, 'access_conditions', 'pricing_model'],
+    required_predicates: [...BASE_DETAIL_PREDICATES, DATE_PREDICATES.product_variant, 'access_conditions', 'pricing_model'],
     applicability: { one_m_context: 'not_applicable', api_pricing: 'not_applicable', plan: 'not_applicable' },
   }),
   'subscription_plan:general': Object.freeze({
@@ -155,6 +160,7 @@ module.exports = {
   PROFILE_DEFINITIONS,
   VENDOR_PREDICATES,
   GROUP_PREDICATES,
+  DATE_PREDICATES,
   inferModality,
   planCatalogResearch,
 };

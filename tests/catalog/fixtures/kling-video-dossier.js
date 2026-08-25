@@ -62,7 +62,7 @@ function layerFieldsFor() {
       },
       applicable_scenarios: [{ title: '短视频生成', description: '适合生成音画同步的短内容。' }],
       inapplicable_scenarios: [{ title: '长视频', description: '超过官方时长上限的内容不适合。' }],
-      official_date: '2025-12-03',
+      release_date: '2025-12-03',
     },
   };
 }

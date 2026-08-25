@@ -56,9 +56,13 @@
         {
           "title": "https://cursor.com/cn/changelog",
           "url": "https://cursor.com"
+        },
+        {
+          "title": "changelog",
+          "url": "https://cursor.com/changelog"
         }
       ],
-      "official_date": "2026-08-03"
+      "last_updated_date": "2026-08-19"
     },
     {
       "id": "tool-level3:copilot",
@@ -111,9 +115,13 @@
         {
           "title": "https://learn.microsoft.com/zh-cn/power-platform/released-versions/copilotstudio",
           "url": "https://github.com/features/copilot"
+        },
+        {
+          "title": "The new GitHub Copilot experience in Slack",
+          "url": "https://github.blog/changelog/2026-08-21-the-new-github-copilot-experience-in-slack/"
         }
       ],
-      "official_date": "2026-07-30"
+      "last_updated_date": "2026-08-21"
     },
     {
       "id": "tool-level3:claude-code",
@@ -170,9 +178,13 @@
         {
           "title": "https://code.claude.com/docs/en/changelog",
           "url": "https://claude.ai/claude-code"
+        },
+        {
+          "title": "v2.1.245",
+          "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.245"
         }
       ],
-      "official_date": "2026-08-14"
+      "last_updated_date": "2026-08-25"
     },
     {
       "id": "tool-level3:trae",
@@ -229,9 +241,13 @@
         {
           "title": "https://www.trae.cn/changelog",
           "url": "https://www.trae.ai"
+        },
+        {
+          "title": "changelog",
+          "url": "https://docs.trae.ai/ide/changelog"
         }
       ],
-      "official_date": "2026-07-30"
+      "last_updated_date": "2026-08-19"
     },
     {
       "id": "tool-level3:midjourney",
@@ -290,7 +306,7 @@
           "url": "https://www.midjourney.com"
         }
       ],
-      "official_date": "2026-07-24"
+      "last_updated_date": "2026-07-24"
     },
     {
       "id": "tool-level3:nano-banana",
@@ -343,9 +359,13 @@
         {
           "title": "https://blog.google/technology/ai/nano-banana-2/",
           "url": "https://aistudio.google.com"
+        },
+        {
+          "title": "gemini omni flash nano banana 2 lite",
+          "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-omni-flash-nano-banana-2-lite/"
         }
       ],
-      "official_date": "2026-05-28"
+      "last_updated_date": "2026-06-30"
     },
     {
       "id": "tool-level3:jimeng",
@@ -398,9 +418,13 @@
         {
           "title": "https://bytedance.larkoffice.com/wiki/F95cwC8nniilgbkmUX6cSJLengh",
           "url": "https://jimeng.jianying.com"
+        },
+        {
+          "title": "one take creation flexible referencing introducing seedance 2 5",
+          "url": "https://seed.bytedance.com/zh/blog/one-take-creation-flexible-referencing-introducing-seedance-2-5"
         }
       ],
-      "official_date": "2026-08-05"
+      "last_updated_date": "2026-07-31"
     },
     {
       "id": "tool-level3:suno",
@@ -453,9 +477,13 @@
         {
           "title": "https://suno.com/blog/v5-5",
           "url": "https://suno.com"
+        },
+        {
+          "title": "Suno Studio 2.0",
+          "url": "https://suno.com/blog/studio-2"
         }
       ],
-      "official_date": "2026-03-26"
+      "last_updated_date": "2026-08-13"
     },
     {
       "id": "tool-level3:stable-diffusion",
@@ -516,9 +544,13 @@
         {
           "title": "https://stability.ai/news",
           "url": "https://stability.ai"
+        },
+        {
+          "title": "release notes",
+          "url": "https://platform.stability.ai/docs/release-notes"
         }
       ],
-      "official_date": "2024-10-22"
+      "last_updated_date": "2026-05-20"
     },
     {
       "id": "tool-level3:dalle",
@@ -576,8 +608,7 @@
           "title": "https://openai.com",
           "url": "https://openai.com/dall-e-3"
         }
-      ],
-      "official_date": "2026-04-21"
+      ]
     },
     {
       "id": "tool-level3:ideogram",
@@ -626,9 +657,13 @@
         {
           "title": "https://ideogram.ai",
           "url": "https://ideogram.ai"
+        },
+        {
+          "title": "Ideogram 4.0",
+          "url": "https://ideogram.ai/news/ideogram-4.0"
         }
       ],
-      "official_date": "2026-06-03"
+      "last_updated_date": "2026-06-03"
     },
     {
       "id": "tool-level3:gpt-5.6-sol",
@@ -708,8 +743,7 @@
           "title": "OpenAI API pricing",
           "url": "https://developers.openai.com/api/docs/pricing"
         }
-      ],
-      "official_date": "2026-07-09"
+      ]
     },
     {
       "id": "tool-level3:gpt-5.6-terra",
@@ -775,8 +809,7 @@
           "title": "OpenAI API pricing",
           "url": "https://developers.openai.com/api/docs/pricing"
         }
-      ],
-      "official_date": "2026-07-09"
+      ]
     },
     {
       "id": "tool-level3:gpt-5.6-luna",
@@ -842,8 +875,7 @@
           "title": "OpenAI API pricing",
           "url": "https://developers.openai.com/api/docs/pricing"
         }
-      ],
-      "official_date": "2026-07-09"
+      ]
     },
     {
       "id": "tool-level3:chatgpt-go",
@@ -900,8 +932,7 @@
           "title": "Introducing ChatGPT Go",
           "url": "https://openai.com/index/introducing-chatgpt-go"
         }
-      ],
-      "official_date": "2025-08-19"
+      ]
     },
     {
       "id": "tool-level3:chatgpt-plus",
@@ -960,8 +991,7 @@
           "title": "Introducing ChatGPT Go",
           "url": "https://openai.com/index/introducing-chatgpt-go"
         }
-      ],
-      "official_date": "2023-02-01"
+      ]
     },
     {
       "id": "tool-level3:chatgpt-pro",
@@ -1020,8 +1050,7 @@
           "title": "Introducing ChatGPT Go",
           "url": "https://openai.com/index/introducing-chatgpt-go"
         }
-      ],
-      "official_date": "2024-12-05"
+      ]
     },
     {
       "id": "tool-level3:claude-fable-5",
@@ -1082,8 +1111,7 @@
           "title": "Claude Fable 5",
           "url": "https://www.anthropic.com/claude/fable"
         }
-      ],
-      "official_date": "2026-06-09"
+      ]
     },
     {
       "id": "tool-level3:claude-opus-4.8",
@@ -1144,8 +1172,7 @@
           "title": "Claude Opus 4.8",
           "url": "https://www.anthropic.com/claude/opus"
         }
-      ],
-      "official_date": "2026-05-28"
+      ]
     },
     {
       "id": "tool-level3:claude-sonnet-5",
@@ -1215,8 +1242,7 @@
           "title": "Claude Sonnet 5",
           "url": "https://www.anthropic.com/claude/sonnet"
         }
-      ],
-      "official_date": "2026-06-30"
+      ]
     },
     {
       "id": "tool-level3:claude-haiku-4.5",
@@ -1277,8 +1303,7 @@
           "title": "Context windows",
           "url": "https://docs.anthropic.com/en/docs/build-with-claude/context-windows"
         }
-      ],
-      "official_date": "2025-10-15"
+      ]
     },
     {
       "id": "tool-level3:claude-pro",
@@ -1331,8 +1356,7 @@
           "title": "Choose a Claude plan",
           "url": "https://support.anthropic.com/en/articles/11049762-choosing-a-claude-ai-plan"
         }
-      ],
-      "official_date": "2023-09-07"
+      ]
     },
     {
       "id": "tool-level3:claude-max-5x",
@@ -1381,8 +1405,7 @@
           "title": "Choose a Claude plan",
           "url": "https://support.anthropic.com/en/articles/11049762-choosing-a-claude-ai-plan"
         }
-      ],
-      "official_date": "2025-04-09"
+      ]
     },
     {
       "id": "tool-level3:claude-max-20x",
@@ -1431,8 +1454,7 @@
           "title": "Choose a Claude plan",
           "url": "https://support.anthropic.com/en/articles/11049762-choosing-a-claude-ai-plan"
         }
-      ],
-      "official_date": "2025-04-09"
+      ]
     },
     {
       "id": "tool-level3:gemini-3.5-flash",
@@ -1496,9 +1518,13 @@
         {
           "title": "Gemini Developer API pricing",
           "url": "https://ai.google.dev/gemini-api/docs/pricing"
+        },
+        {
+          "title": "Release notes | Gemini API",
+          "url": "https://ai.google.dev/gemini-api/docs/changelog"
         }
       ],
-      "official_date": "2026-05-19"
+      "release_date": "2026-05-19"
     },
     {
       "id": "tool-level3:gemini-2.5-pro",
@@ -1567,9 +1593,13 @@
         {
           "title": "Gemini Developer API pricing",
           "url": "https://ai.google.dev/gemini-api/docs/pricing"
+        },
+        {
+          "title": "Release notes | Gemini API",
+          "url": "https://ai.google.dev/gemini-api/docs/changelog"
         }
       ],
-      "official_date": "2025-06-17"
+      "release_date": "2025-06-17"
     },
     {
       "id": "tool-level3:google-ai-pro",
@@ -1620,8 +1650,7 @@
           "title": "Gemini plans",
           "url": "https://gemini.google/about"
         }
-      ],
-      "official_date": "2024-02-08"
+      ]
     },
     {
       "id": "tool-level3:google-ai-ultra-5x",
@@ -1666,8 +1695,7 @@
           "title": "Gemini plans",
           "url": "https://gemini.google/about"
         }
-      ],
-      "official_date": "2026-05-19"
+      ]
     },
     {
       "id": "tool-level3:google-ai-ultra-20x",
@@ -1712,8 +1740,7 @@
           "title": "Gemini plans",
           "url": "https://gemini.google/about"
         }
-      ],
-      "official_date": "2026-05-19"
+      ]
     },
     {
       "id": "tool-level3:deepseek-v4-flash",
@@ -1783,8 +1810,7 @@
           "title": "Context Caching",
           "url": "https://api-docs.deepseek.com/guides/kv_cache"
         }
-      ],
-      "official_date": "2026-07-31"
+      ]
     },
     {
       "id": "tool-level3:deepseek-v4-pro",
@@ -1853,9 +1879,13 @@
         {
           "title": "Context Caching",
           "url": "https://api-docs.deepseek.com/guides/kv_cache"
+        },
+        {
+          "title": "DeepSeek-V4 Preview: Entering the Era of Affordable Million-Token Context",
+          "url": "https://deepseek.com/en/news/v4-preview/"
         }
       ],
-      "official_date": "2026-08-13"
+      "release_date": "2026-04-24"
     },
     {
       "id": "tool-level3:glm-5.2",
@@ -1912,8 +1942,7 @@
           "title": "模型概览",
           "url": "https://docs.bigmodel.cn/cn/guide/start/model-overview"
         }
-      ],
-      "official_date": "2026-06-17"
+      ]
     },
     {
       "id": "tool-level3:glm-5.1",
@@ -1979,8 +2008,7 @@
           "title": "模型概览",
           "url": "https://docs.bigmodel.cn/cn/guide/start/model-overview"
         }
-      ],
-      "official_date": "2026-03-27"
+      ]
     },
     {
       "id": "tool-level3:ernie-5.1",
@@ -2032,8 +2060,7 @@
           "title": "百度千帆 — 模型服务计费",
           "url": "https://cloud.baidu.com/doc/qianfan/s/wmh4sv6ya"
         }
-      ],
-      "official_date": "2026-05-09"
+      ]
     },
     {
       "id": "tool-level3:ernie-5.0",
@@ -2085,8 +2112,7 @@
           "title": "百度千帆 — 模型服务计费",
           "url": "https://cloud.baidu.com/doc/qianfan/s/wmh4sv6ya"
         }
-      ],
-      "official_date": "2025-11-13"
+      ]
     },
     {
       "id": "tool-level3:mistral-medium-3.5",
@@ -2138,8 +2164,7 @@
           "title": "Mistral API Pricing",
           "url": "https://mistral.ai/pricing/api/"
         }
-      ],
-      "official_date": "2026-04-28"
+      ]
     },
     {
       "id": "tool-level3:mistral-large-3",
@@ -2190,9 +2215,13 @@
         {
           "title": "Mistral API Pricing",
           "url": "https://mistral.ai/pricing/api/"
+        },
+        {
+          "title": "Introducing Mistral 3",
+          "url": "https://mistral.ai/fr/news/mistral-3/"
         }
       ],
-      "official_date": "2025-12-02"
+      "release_date": "2025-12-02"
     },
     {
       "id": "tool-level3:command-a",
@@ -2245,8 +2274,7 @@
           "title": "Cohere Pricing",
           "url": "https://cohere.com/pricing"
         }
-      ],
-      "official_date": "2025-03-13"
+      ]
     },
     {
       "vendor_key": "kuaishou",
@@ -2338,7 +2366,7 @@
           "url": "https://kling.ai/blog/ai-special-effects-guide-visual-effects"
         }
       ],
-      "official_date": "2025-12-03",
+      "release_date": "2025-12-03",
       "theme": "media",
       "id": "tool-level3:kling-2-6-pro"
     },
@@ -2421,7 +2449,7 @@
           "url": "https://community.openai.com/t/gpt-5-5-is-here-available-in-the-api-codex-and-chatgpt-today/1379630"
         }
       ],
-      "official_date": "2026-04-23",
+      "release_date": "2026-04-23",
       "theme": "general",
       "id": "tool-level3:gpt-5-5"
     },
@@ -2492,7 +2520,7 @@
           "url": "https://www.anthropic.com/claude/opus"
         }
       ],
-      "official_date": "2026-07-24",
+      "release_date": "2026-07-24",
       "theme": "general",
       "id": "tool-level3:claude-opus-5"
     },
@@ -2655,7 +2683,7 @@
           "url": "https://ai.google.dev/gemini-api/docs/pricing"
         }
       ],
-      "official_date": "2026-02-19",
+      "release_date": "2026-02-19",
       "theme": "general",
       "id": "tool-level3:gemini-3-1-pro"
     },
@@ -2762,7 +2790,7 @@
           "url": "https://docs.x.ai/overview"
         }
       ],
-      "official_date": "2026-08-12",
+      "release_date": "2026-08-12",
       "theme": "general",
       "id": "tool-level3:grok-4-6"
     },
@@ -2844,7 +2872,7 @@
           "url": "https://platform.minimax.io/docs/faq/about-apis"
         }
       ],
-      "official_date": "2026-07-31",
+      "release_date": "2026-07-31",
       "theme": "general",
       "id": "tool-level3:minimax-h3"
     },
@@ -2931,7 +2959,7 @@
           "url": "https://docs.cohere.com/changelog/2025-07-31-command-a-vision"
         }
       ],
-      "official_date": "2026-05-20",
+      "release_date": "2026-05-20",
       "theme": "general",
       "id": "tool-level3:command-a-plus"
     },
@@ -3070,11 +3098,15 @@
         {
           "title": "Pricing | OpenAI API",
           "url": "https://developers.openai.com/api/docs/pricing"
+        },
+        {
+          "title": "Advancing voice intelligence with new models in the API",
+          "url": "https://openai.com/index/advancing-voice-intelligence-with-new-models-in-the-api/"
         }
       ],
-      "official_date": "2025-08-28",
       "theme": "general",
-      "id": "tool-level3:gpt-realtime-2"
+      "id": "tool-level3:gpt-realtime-2",
+      "release_date": "2026-05-07"
     },
     {
       "vendor_key": "openai",
@@ -3197,7 +3229,7 @@
           "url": "https://developers.openai.com/api/docs/models/gpt-image-2"
         }
       ],
-      "official_date": "2026-04-21",
+      "release_date": "2026-04-21",
       "theme": "general",
       "id": "tool-level3:gpt-image-2"
     },
@@ -3320,7 +3352,7 @@
           "url": "https://kling.ai/blog/kling-video-3-0-credit-cost-guide"
         }
       ],
-      "official_date": "2026-02-06",
+      "release_date": "2026-02-06",
       "theme": "general",
       "id": "tool-level3:kling-3-0"
     },
@@ -3435,7 +3467,6 @@
           "url": "https://docs.z.ai/devpack/overview"
         }
       ],
-      "official_date": "2025-07-15",
       "theme": "general",
       "id": "tool-level3:glm-5-3"
     },
@@ -3536,7 +3567,7 @@
           "url": "https://ai.google.dev/gemini-api/docs/generate-content/latest-model"
         }
       ],
-      "official_date": "2026-08-13",
+      "release_date": "2026-08-13",
       "theme": "general",
       "id": "tool-level3:gemini-3-7-flash"
     },
@@ -3631,7 +3662,7 @@
           "url": "https://ai.google.dev/gemini-api/docs/pricing"
         }
       ],
-      "official_date": "2026-07-21",
+      "release_date": "2026-07-21",
       "theme": "general",
       "id": "tool-level3:gemini-3-6-flash"
     },
@@ -3721,7 +3752,7 @@
           "url": "https://ai.google.dev/gemma/docs/core/gemma_on_gemini_api"
         }
       ],
-      "official_date": "2026-04-02",
+      "release_date": "2026-04-02",
       "theme": "general",
       "id": "tool-level3:gemma-4"
     },
@@ -3822,7 +3853,6 @@
           "url": "https://platform.minimax.io/docs/api-reference/api-overview"
         }
       ],
-      "official_date": "2026-08-20",
       "theme": "general",
       "id": "tool-level3:minimax-m3"
     },
@@ -3954,7 +3984,6 @@
           "url": "https://platform.minimax.io/subscribe/token-plan"
         }
       ],
-      "official_date": "2026-02-01",
       "theme": "general",
       "id": "tool-level3:minimax-m2-7"
     },
@@ -4045,7 +4074,7 @@
           "url": "https://docs.x.ai/developers/models/grok-4.5"
         }
       ],
-      "official_date": "2025-07-08",
+      "release_date": "2025-07-08",
       "theme": "general",
       "id": "tool-level3:grok-4-5"
     },
@@ -4149,7 +4178,6 @@
           "url": "https://platform.kimi.com/docs/pricing/chat"
         }
       ],
-      "official_date": "2026-05-25",
       "theme": "general",
       "id": "tool-level3:kimi-k3"
     },
@@ -4369,7 +4397,7 @@
           "url": "https://help.aliyun.com/zh/model-studio/text-generation"
         }
       ],
-      "official_date": "2026-07-19",
+      "release_date": "2026-07-19",
       "theme": "general",
       "id": "tool-level3:qwen3-8-max"
     },
@@ -4438,7 +4466,6 @@
           "url": "https://cloud.tencent.com.cn/product/tclm"
         }
       ],
-      "official_date": "2024-12-18",
       "theme": "general",
       "id": "tool-level3:hy3"
     },
@@ -4585,7 +4612,6 @@
           "url": "https://developer.meta.com/ai/resources/blog/build-with-muse-code"
         }
       ],
-      "official_date": "2026-08-05",
       "theme": "general",
       "id": "tool-level3:muse-spark-1-2"
     },
@@ -4680,7 +4706,6 @@
           "url": "https://static.stepfun.com/blog/step-3.7-flash/"
         }
       ],
-      "official_date": "2026-05-29",
       "theme": "general",
       "id": "tool-level3:step-3-5-flash"
     },
@@ -4762,7 +4787,6 @@
           "url": "https://static.stepfun.com/blog/step-3.7-flash/"
         }
       ],
-      "official_date": "2026-05-29",
       "theme": "general",
       "id": "tool-level3:step-3-7-flash"
     },
@@ -4840,7 +4864,6 @@
           "url": "https://mimo.mi.com/models/en-US/mimo-v2.5"
         }
       ],
-      "official_date": "2026-06-30",
       "theme": "general",
       "id": "tool-level3:mimo-v2-5"
     },
@@ -4925,7 +4948,6 @@
           "url": "https://docs.api.nvidia.com/nim/reference/route-optimization-apis"
         }
       ],
-      "official_date": "2026-08-21",
       "theme": "general",
       "id": "tool-level3:nemotron-3-ultra"
     },
@@ -5018,7 +5040,6 @@
           "url": "https://docs.api.nvidia.com/nim/reference/nvidia-nemotron-3-super-120b-a12b"
         }
       ],
-      "official_date": "2026-08-21",
       "theme": "general",
       "id": "tool-level3:nemotron-3-super"
     },
@@ -5103,7 +5124,6 @@
           "url": "https://docs.api.nvidia.com/nim/reference/route-optimization-apis"
         }
       ],
-      "official_date": "2026-08-21",
       "theme": "general",
       "id": "tool-level3:nemotron-3-5"
     },
@@ -5197,7 +5217,6 @@
           "url": "https://mimo.mi.com/docs/en-US/price/pay-as-you-go"
         }
       ],
-      "official_date": "2026-06-30",
       "theme": "general",
       "id": "tool-level3:mimo-v2-5-pro"
     },
@@ -5271,7 +5290,6 @@
           "url": "https://docs.volcengine.com/docs/82379/2298881"
         }
       ],
-      "official_date": "2025-01-31",
       "theme": "general",
       "id": "tool-level3:doubao-seed-character-260628"
     },
@@ -5375,7 +5393,6 @@
           "url": "https://api-docs.deepseek.com/quick_start/pricing"
         }
       ],
-      "official_date": "2026-08-21",
       "theme": "general",
       "id": "tool-level3:deepseek-v4-flash-vision-exp"
     },
@@ -5477,7 +5494,6 @@
           "url": "https://platform.kimi.com/docs/pricing/chat-k27-code"
         }
       ],
-      "official_date": "2025-02-20",
       "theme": "general",
       "id": "tool-level3:kimi-k2-7-code"
     },
@@ -5618,7 +5634,7 @@
           "url": "https://help.aliyun.com/zh/model-studio/coding-plan-faq"
         }
       ],
-      "official_date": "2026-08-03",
+      "release_date": "2026-08-03",
       "theme": "general",
       "id": "tool-level3:qwen3-7-max"
     },
@@ -5880,7 +5896,7 @@
           "url": "https://help.aliyun.com/zh/model-studio/product-billing"
         }
       ],
-      "official_date": "2026-03-15",
+      "release_date": "2026-03-15",
       "theme": "general",
       "id": "tool-level3:qwen3-5-omni"
     },
@@ -6019,7 +6035,7 @@
           "url": "https://help.aliyun.com/zh/model-studio/models"
         }
       ],
-      "official_date": "2026-05-26",
+      "release_date": "2026-05-26",
       "theme": "general",
       "id": "tool-level3:qwen3-7-plus"
     },
@@ -6121,7 +6137,6 @@
           "url": "https://help.aliyun.com/en/model-studio/qwen-image-api"
         }
       ],
-      "official_date": "2026-04-22",
       "theme": "vision",
       "id": "tool-level3:qwen-image-2-0-pro"
     },
@@ -6199,7 +6214,6 @@
           "url": "https://docs.x.ai/developers/models/grok-imagine-image"
         }
       ],
-      "official_date": "2025-03-21",
       "theme": "vision",
       "id": "tool-level3:grok-imagine-image-2-0"
     },
@@ -6286,7 +6300,6 @@
           "url": "https://docs.x.ai/developers/models/grok-imagine-video"
         }
       ],
-      "official_date": "2025-01-01",
       "theme": "media",
       "id": "tool-level3:grok-imagine-video-1-5"
     },
@@ -6433,7 +6446,6 @@
           "url": "https://platform.vidu.cn/models"
         }
       ],
-      "official_date": "2026-04-13",
       "theme": "media",
       "id": "tool-level3:viduq3-pro"
     },
@@ -6522,7 +6534,7 @@
           "url": "https://app.reve.com/model"
         }
       ],
-      "official_date": "2026-07-09",
+      "release_date": "2026-07-09",
       "theme": "vision",
       "id": "tool-level3:reve-2-1"
     },
@@ -6599,7 +6611,6 @@
           "url": "https://hunyuan.tencent.com/image/en?tabIndex=0"
         }
       ],
-      "official_date": "2026-05-30",
       "theme": "general",
       "id": "tool-level3:hy-mt2-30b-a3b"
     },
@@ -6678,9 +6689,9 @@
           "url": "https://windsurf.com/subscription/provider-api-keys"
         }
       ],
-      "official_date": "2025-04-02",
       "theme": "dev",
-      "id": "tool-level3:windsurf"
+      "id": "tool-level3:windsurf",
+      "last_updated_date": "2026-08-21"
     },
     {
       "vendor_key": "openai",
@@ -6751,11 +6762,19 @@
         {
           "title": "Introducing upgrades to Codex",
           "url": "https://openai.com/index/introducing-upgrades-to-codex"
+        },
+        {
+          "title": "GitLab support in Codex cloud",
+          "url": "https://openai.com/products/release-notes/"
+        },
+        {
+          "title": "0.149.1",
+          "url": "https://github.com/openai/codex/releases/tag/rust-v0.149.1"
         }
       ],
-      "official_date": "2025-05-16",
       "theme": "dev",
-      "id": "tool-level3:openai-codex"
+      "id": "tool-level3:openai-codex",
+      "last_updated_date": "2026-08-24"
     },
     {
       "vendor_key": "google",
@@ -6822,11 +6841,19 @@
         {
           "title": "gemini-cli/docs/changelogs/index.md at main",
           "url": "https://github.com/google-gemini/gemini-cli/blob/main/docs/changelogs/index.md"
+        },
+        {
+          "title": "Gemini CLI latest stable release v0.55.1",
+          "url": "https://github.com/google-gemini/gemini-cli/blob/main/docs/changelogs/latest.md"
+        },
+        {
+          "title": "Release v0.56.0",
+          "url": "https://github.com/google-gemini/gemini-cli/releases/tag/v0.56.0"
         }
       ],
-      "official_date": "2025-06-25",
       "theme": "dev",
-      "id": "tool-level3:gemini-cli"
+      "id": "tool-level3:gemini-cli",
+      "last_updated_date": "2026-08-19"
     },
     {
       "vendor_key": "replit",
@@ -6905,11 +6932,19 @@
         {
           "title": "The Official Blog | Replit",
           "url": "https://replit.com/blog/category/all/5"
+        },
+        {
+          "title": "Replit introduces Free Mode",
+          "url": "https://replit.com/blog/replit-introduces-free-mode"
+        },
+        {
+          "title": "updates",
+          "url": "https://docs.replit.com/updates"
         }
       ],
-      "official_date": "2024-10-04",
       "theme": "dev",
-      "id": "tool-level3:replit-agent"
+      "id": "tool-level3:replit-agent",
+      "last_updated_date": "2026-08-21"
     },
     {
       "vendor_key": "cognition",
@@ -6988,11 +7023,19 @@
         {
           "title": "2024",
           "url": "https://docs.devin.ai/release-notes/2024"
+        },
+        {
+          "title": "Devin Desktop changelog",
+          "url": "https://docs.devin.ai/desktop/changelog"
+        },
+        {
+          "title": "overview",
+          "url": "https://docs.devin.ai/release-notes/overview"
         }
       ],
-      "official_date": "2024-04-02",
       "theme": "dev",
-      "id": "tool-level3:devin"
+      "id": "tool-level3:devin",
+      "last_updated_date": "2026-08-21"
     },
     {
       "vendor_key": "augment",
@@ -7059,9 +7102,13 @@
         {
           "title": "Analytics API - Introduction - Augment Code",
           "url": "https://docs.augmentcode.com/analytics/analytics-api"
+        },
+        {
+          "title": "changelog",
+          "url": "https://www.augmentcode.com/changelog"
         }
       ],
-      "official_date": "2025-07-07",
+      "last_updated_date": "2026-08-21",
       "theme": "dev",
       "id": "tool-level3:augment-code"
     },
@@ -7155,7 +7202,6 @@
           "url": "https://platform.vidu.com/"
         }
       ],
-      "official_date": "2026-06-01",
       "theme": "media",
       "id": "tool-level3:vidu-s1"
     },
@@ -7236,11 +7282,15 @@
         {
           "title": "Overview of cost management capabilities in Amazon Q ...",
           "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-q-overview.html"
+        },
+        {
+          "title": "CHANGELOG.md",
+          "url": "https://github.com/aws/amazon-q-jetbrains/blob/main/CHANGELOG.md"
         }
       ],
-      "official_date": "2024-04-30",
       "theme": "dev",
-      "id": "tool-level3:amazon-q-developer"
+      "id": "tool-level3:amazon-q-developer",
+      "last_updated_date": "2026-08-19"
     },
     {
       "vendor_key": "jetbrains",
@@ -7323,11 +7373,15 @@
         {
           "title": "Junie, the AI coding agent by JetBrains",
           "url": "https://www.jetbrains.com/junie"
+        },
+        {
+          "title": "whats new",
+          "url": "https://junie.jetbrains.com/whats-new"
         }
       ],
-      "official_date": "2025-04-15",
       "theme": "dev",
-      "id": "tool-level3:junie"
+      "id": "tool-level3:junie",
+      "last_updated_date": "2026-08-19"
     },
     {
       "vendor_key": "amazon",
@@ -7434,9 +7488,13 @@
         {
           "title": "Privacy and Security - Docs - Kiro",
           "url": "https://kiro.dev/docs/privacy-and-security"
+        },
+        {
+          "title": "cli",
+          "url": "https://kiro.dev/changelog/cli/"
         }
       ],
-      "official_date": "2025-07-14",
+      "last_updated_date": "2026-08-21",
       "theme": "dev",
       "id": "tool-level3:kiro"
     },
@@ -7541,11 +7599,15 @@
         {
           "title": "Authorization - Cline",
           "url": "https://docs.cline.bot/getting-started/selecting-your-model"
+        },
+        {
+          "title": "CLI v3.0.58",
+          "url": "https://github.com/cline/cline/releases/tag/cli-v3.0.58"
         }
       ],
-      "official_date": "2024-07-28",
       "theme": "dev",
-      "id": "tool-level3:cline"
+      "id": "tool-level3:cline",
+      "last_updated_date": "2026-08-24"
     },
     {
       "vendor_key": "aider-vendor",
@@ -7638,9 +7700,9 @@
           "url": "https://github.com/MatthewZMD/aidermacs"
         }
       ],
-      "official_date": "2023-05-22",
       "theme": "dev",
-      "id": "tool-level3:aider"
+      "id": "tool-level3:aider",
+      "last_updated_date": "2026-08-09"
     },
     {
       "vendor_key": "continue-vendor",
@@ -7727,11 +7789,19 @@
         {
           "title": "Contributing to Continue Documentation | Continue Docs",
           "url": "https://docs.continue.dev/CONTRIBUTING"
+        },
+        {
+          "title": "CLI Release v1.5.45",
+          "url": "https://github.com/continuedev/continue/releases/tag/v1.5.45"
+        },
+        {
+          "title": "v2.0.0-vscode",
+          "url": "https://github.com/continuedev/continue/releases/tag/v2.0.0-vscode"
         }
       ],
-      "official_date": "2025-07-16",
       "theme": "dev",
-      "id": "tool-level3:continue"
+      "id": "tool-level3:continue",
+      "last_updated_date": "2026-06-19"
     },
     {
       "vendor_key": "qoder-vendor",
@@ -7820,9 +7890,9 @@
           "url": "https://docs.qoder.com/plugins/introduction"
         }
       ],
-      "official_date": "2025-10-20",
       "theme": "dev",
-      "id": "tool-level3:qoder"
+      "id": "tool-level3:qoder",
+      "last_updated_date": "2026-08-19"
     },
     {
       "vendor_key": "codebuddy-vendor",
@@ -7915,7 +7985,7 @@
           "url": "https://www.codebuddy.ai/blog/24"
         }
       ],
-      "official_date": "2025-10-16",
+      "last_updated_date": "2026-07-22",
       "theme": "dev",
       "id": "tool-level3:codebuddy"
     }

@@ -29,9 +29,10 @@ function isoDateFromText(text) {
 
 function applyRepairEvidence(input, output) {
   const expectedDetailFields = input.expected_layer_fields?.detail || [];
-  if (!expectedDetailFields.includes('official_date')) return output;
+  const dateField = ['release_date', 'last_updated_date'].find(field => expectedDetailFields.includes(field));
+  if (!dateField) return output;
   const note = String(input.plan?.seed?.repair_note || '');
-  const target = note.match(/(?:official_date|发布日期)[^0-9]*(20\d{2}-\d{2}-\d{2})/)?.[1];
+  const target = note.match(/(?:release_date|last_updated_date|发布日期|更新日期|更新时间)[^0-9]*(20\d{2}-\d{2}-\d{2})/)?.[1];
   if (!target) return output;
   const source = (input.research.official_sources || []).find(item => item.source_role === 'seed_official_hint'
     && isoDateFromText(item.content || item.excerpt) === target);
@@ -40,11 +41,11 @@ function applyRepairEvidence(input, output) {
     ...output,
     layer_fields: {
       ...output.layer_fields,
-      detail: { ...output.layer_fields?.detail, official_date: target },
+      detail: { ...output.layer_fields?.detail, [dateField]: target },
     },
     provenance: {
       ...output.provenance,
-      'detail.official_date': [source.source_id],
+      [`detail.${dateField}`]: [source.source_id],
     },
   };
 }

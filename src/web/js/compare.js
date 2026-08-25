@@ -23,6 +23,7 @@ import {
   escapeHtml,
   renderState,
   ICON_CLOSE,
+  getToolDateDisplay,
 } from './data.js';
 import { renderTools, closeModal, showModal } from './tools.js';
 import { currentView, switchView } from './main.js';
@@ -211,11 +212,11 @@ function compareTargetLabelHtml(target) {
 function renderCompareProvenance(targets) {
   const rows = targets.map(target => {
     const titles = (target.item?.sources || []).map(source => source.title).filter(Boolean);
-    const dateLabel = target.kind === 'tool' ? '更新时间' : target.kind === 'subscription_plan' ? '' : '发布时间';
-    const date = target.item?.official_date ? ' · ' + dateLabel + ' ' + target.item.official_date : '';
+    const dateDisplay = getToolDateDisplay(target.item);
+    const date = dateDisplay ? ' · ' + dateDisplay.label + ' ' + dateDisplay.value : '';
     return { name: compareTargetLabel(target), nameHtml: compareTargetLabelHtml(target), text: '资料来源：' + (titles.length ? titles.join('、') : '来源待补充') + date };
   });
-  return '<div class="compare-provenance" aria-label="对比数据来源与官方日期">' +
+  return '<div class="compare-provenance" aria-label="对比数据来源与日期">' +
     rows.map(row => '<div class="compare-provenance-row"><span class="compare-provenance-name">' + row.nameHtml + '</span><span class="compare-provenance-text">' + escapeHtml(row.text) + '</span></div>').join('') +
   '</div>';
 }
@@ -278,10 +279,11 @@ function renderRootToolCompare(targets) {
     '<tr><td class="dim">适用场景</td>' + targets.map(target => '<td>' + escapeHtml((target.tool?.scenes || []).slice(0, 5).join('、')) + '</td>').join('') + '</tr>' +
     '<tr><td class="dim">最适合</td>' + targets.map(target => '<td>' + escapeHtml(target.tool?.best_for_preview || '') + '</td>').join('') + '</tr>' +
     '<tr><td class="dim">不适合/限制</td>' + targets.map(target => '<td>' + escapeHtml(target.tool?.not_for_preview || '') + '</td>').join('') + '</tr>' +
-    '<tr><td class="dim">资料来源 / 更新时间</td>' + targets.map(target => {
+    '<tr><td class="dim">资料来源 / 日期</td>' + targets.map(target => {
       const detail = target.item;
       const titles = (detail.sources || []).map(source => source.title).filter(Boolean).join('、') || '来源待补充';
-      return '<td>' + escapeHtml(titles + (detail.official_date ? ' · 更新时间 ' + detail.official_date : '')) + '</td>';
+      const dateDisplay = getToolDateDisplay(detail);
+      return '<td>' + escapeHtml(titles + (dateDisplay ? ' · ' + dateDisplay.label + ' ' + dateDisplay.value : ' · 日期待核验')) + '</td>';
     }).join('') + '</tr>' +
   '</tbody></table>';
 }
@@ -305,7 +307,7 @@ function renderApiModelCompare(targets) {
     { label: 'API 价格', format: formatApiPricing },
     { label: '上下文', format: item => item.one_m_context?.status === 'not_applicable' ? '不适用：' + item.one_m_context.reason : item.one_m_context?.status === 'native' ? '原生支持（' + Number(item.one_m_context.tokens || 0).toLocaleString('zh-CN') + ' tokens）' : item.one_m_context?.status === 'conditional' ? '特定条件支持' : item.one_m_context?.status === 'not_supported' ? '不支持' : '资料待核验' },
     { label: '适用说明', format: item => Array.isArray(item.applicable_scenarios) ? item.applicable_scenarios.filter(scene => scene && typeof scene === 'object').map(scene => scene.title + '：' + scene.description).join('；') || '资料结构待修复' : '暂无可比数据' },
-    { label: '官方日期', format: item => item.official_date || '资料待核验' }
+    { label: '日期', format: item => { const dateDisplay = getToolDateDisplay(item); return dateDisplay ? dateDisplay.label + ' ' + dateDisplay.value : '日期待核验'; } }
   ];
   return '<table class="compare-table"><thead><tr><th>维度</th>' + targets.map(target => '<th>' + compareTargetLabelHtml(target) + '</th>').join('') + '</tr></thead><tbody>' +
     rows.map(row => '<tr><td class="dim">' + row.label + '</td>' + targets.map(target => '<td>' + escapeHtml(row.format(target.item)) + '</td>').join('') + '</tr>').join('') +

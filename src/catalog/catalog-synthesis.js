@@ -1,6 +1,7 @@
 'use strict';
 
 const { buildVendorCard, buildLevel1, buildLevel2, buildDetail, buildToolCard, ref } = require('./catalog-record-builders');
+const { DATE_FIELDS } = require('./catalog-contract');
 const { validatePlannedRecords, isExplicitValue } = require('./catalog-record-completeness');
 
 const DETAIL_MISMATCH_FIELDS = Object.freeze(['access_level', 'price_badge', 'api_pricing']);
@@ -30,7 +31,7 @@ function normalizeFeaturePreview(features) {
 const REQUIRED_LAYER_FIELDS = Object.freeze({
   vendor: ['vendor_summary', 'vendor_description', 'vendor_official_url', 'vendor_status', 'features'],
   group: ['group_summary', 'group_official_url', 'group_status'],
-  detail: ['summary', 'official_url', 'detail_status', 'access_level', 'price_badge', 'scenes', 'best_for_preview', 'not_for_preview', 'applicable_scenarios', 'inapplicable_scenarios', 'official_date'],
+  detail: ['summary', 'official_url', 'detail_status', 'access_level', 'price_badge', 'scenes', 'best_for_preview', 'not_for_preview', 'applicable_scenarios', 'inapplicable_scenarios'],
 });
 
 function hasActive(plan, areas) {
@@ -39,12 +40,19 @@ function hasActive(plan, areas) {
     && plan.layer_plan[area].link_only !== true);
 }
 
+function dateFieldFor(plan) {
+  const kind = plan?.profile?.detail_kind;
+  if (kind === 'tool') return 'last_updated_date';
+  if (kind === 'api_model' || kind === 'product_variant') return 'release_date';
+  return null;
+}
+
 function expectedLayerFields(plan) {
   const fields = {};
   if (hasActive(plan, ['vendor-card', 'vendor-level1'])) fields.vendor = [...REQUIRED_LAYER_FIELDS.vendor];
   if (hasActive(plan, ['vendor-level2'])) fields.group = [...REQUIRED_LAYER_FIELDS.group];
   if (hasActive(plan, ['tool-level3', 'tool-card'])) {
-    fields.detail = [...REQUIRED_LAYER_FIELDS.detail];
+    fields.detail = [...REQUIRED_LAYER_FIELDS.detail, dateFieldFor(plan)].filter(Boolean);
     for (const [field, status] of Object.entries(plan.applicability || {})) if (status === 'required') fields.detail.push(field);
   }
   return fields;
@@ -68,7 +76,7 @@ function fieldCoverageOf(output, plan) {
     for (const field of fields) {
       const value = output?.layer_fields?.[layer]?.[field];
       const refs = output?.provenance?.[`${layer}.${field}`] || [];
-      const validValue = isNonDefaultFieldValue(value) && (field !== 'official_date' || isIsoDate(value));
+      const validValue = isNonDefaultFieldValue(value) && (!DATE_FIELDS.includes(field) || isIsoDate(value));
       const status = (validValue && refs.length > 0) ? 'covered' : 'missing';
       entries.push({ layer, field, status });
     }
@@ -179,7 +187,8 @@ function buildPatches(plan, research, output) {
   }
   if (hasActive(plan, ['vendor-level2'])) records['vendor-level2'] = buildLevel2({ vendorKey: keys.vendorKey, level1Id: ids['vendor-level1'], groupKey: keys.groupKey, title: plan.seed.placement?.new_group_title || plan.seed.name, officialUrl: group.group_official_url, summary: group.group_summary, status: group.group_status, detailRefs });
   if (hasActive(plan, ['tool-level3', 'tool-card'])) {
-    const detail = buildDetail({ vendorKey: keys.vendorKey, detailKind: plan.profile.detail_kind, theme, title: plan.seed.name, vendorLabel: plan.seed.vendor_name, icon, officialUrl: detailFields.official_url, status: detailFields.detail_status, summary: detailFields.summary, oneMContext, apiPricing, plan: planValue, applicableScenarios: detailFields.applicable_scenarios, inapplicableScenarios: detailFields.inapplicable_scenarios, sources, officialDate: detailFields.official_date });
+    const dateField = dateFieldFor(plan);
+    const detail = buildDetail({ vendorKey: keys.vendorKey, detailKind: plan.profile.detail_kind, theme, title: plan.seed.name, vendorLabel: plan.seed.vendor_name, icon, officialUrl: detailFields.official_url, status: detailFields.detail_status, summary: detailFields.summary, oneMContext, apiPricing, plan: planValue, applicableScenarios: detailFields.applicable_scenarios, inapplicableScenarios: detailFields.inapplicable_scenarios, sources, releaseDate: dateField === 'release_date' ? detailFields.release_date : undefined, lastUpdatedDate: dateField === 'last_updated_date' ? detailFields.last_updated_date : undefined });
     detail.id = detailId;
     records['tool-level3'] = detail;
     if (plan.layer_plan['tool-card']) records['tool-card'] = buildToolCard({ toolKey: keys.toolKey, vendorKey: keys.vendorKey, title: plan.seed.name, vendorLabel: plan.seed.vendor_name, icon, summary: detailFields.summary, theme, scenes: detailFields.scenes, bestForPreview: detailFields.best_for_preview, notForPreview: detailFields.not_for_preview, priceBadge: detailFields.price_badge, accessLevel: detailFields.access_level, searchTerms: [plan.seed.name, plan.seed.vendor_name, keys.toolKey, ...detailFields.scenes], detailId, detailKind: plan.profile.detail_kind });
@@ -203,7 +212,7 @@ function buildPatches(plan, research, output) {
       api_pricing: applicability.api_pricing?.provenance || fromSources(fieldSourceIds(output, 'detail', 'api_pricing')),
       plan: applicability.plan?.provenance || fromSources(fieldSourceIds(output, 'detail', 'plan')),
       applicable_scenarios: fromSources(fieldSourceIds(output, 'detail', 'applicable_scenarios')), inapplicable_scenarios: fromSources(fieldSourceIds(output, 'detail', 'inapplicable_scenarios')),
-      sources: { kind: 'official_sources', source_ids: research.official_sources.map(source => source.source_id) }, official_date: fromSources(fieldSourceIds(output, 'detail', 'official_date')),
+      sources: { kind: 'official_sources', source_ids: research.official_sources.map(source => source.source_id) }, release_date: fromSources(fieldSourceIds(output, 'detail', 'release_date')), last_updated_date: fromSources(fieldSourceIds(output, 'detail', 'last_updated_date')),
     },
     'tool-card': { summary: fromSources(fieldSourceIds(output, 'detail', 'summary')), scenes: fromSources(fieldSourceIds(output, 'detail', 'scenes')), best_for_preview: fromSources(fieldSourceIds(output, 'detail', 'best_for_preview')), not_for_preview: fromSources(fieldSourceIds(output, 'detail', 'not_for_preview')), price_badge: fromSources(fieldSourceIds(output, 'detail', 'price_badge')), access_level: fromSources(fieldSourceIds(output, 'detail', 'access_level')) },
   };
@@ -265,6 +274,7 @@ async function synthesizeCatalog(research, plan, adapter) {
 module.exports = {
   DETAIL_MISMATCH_FIELDS,
   REQUIRED_LAYER_FIELDS,
+  dateFieldFor,
   expectedLayerFields,
   isNonDefaultFieldValue,
   fieldCoverageOf,

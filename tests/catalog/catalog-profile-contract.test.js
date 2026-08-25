@@ -96,12 +96,12 @@ test('repair layers replace only explicitly targeted existing records', () => {
 
 test('profile matrix keeps modality-specific predicates and applicability separate', () => {
   const cases = [
-    { detail_kind: 'api_model', modality: 'text', profile: 'api_model:text', required: ['context_window', 'api_available', 'price_rate'], absent: ['max_duration'], applicability: ['required', 'required', 'not_applicable'], toolCard: true },
-    { detail_kind: 'api_model', modality: 'image', profile: 'api_model:image', required: ['output_resolution', 'api_available', 'price_rate'], absent: ['context_window', 'audio_capability'], applicability: ['not_applicable', 'required', 'not_applicable'], toolCard: true },
-    { detail_kind: 'api_model', modality: 'audio', profile: 'api_model:audio', required: ['audio_capability', 'supported_languages', 'price_rate'], absent: ['context_window', 'max_duration'], applicability: ['not_applicable', 'required', 'not_applicable'], toolCard: true },
-    { detail_kind: 'tool', modality: undefined, profile: 'tool:general', required: ['access_conditions', 'pricing_model'], absent: ['api_available', 'price_rate'], applicability: ['not_applicable', 'not_applicable', 'not_applicable'], toolCard: true },
-    { detail_kind: 'product_variant', modality: undefined, profile: 'product_variant:general', required: ['access_conditions', 'pricing_model'], absent: ['api_available', 'price_rate'], applicability: ['not_applicable', 'not_applicable', 'not_applicable'], toolCard: true },
-    { detail_kind: 'subscription_plan', modality: undefined, profile: 'subscription_plan:general', required: ['price_rate', 'billing_period', 'plan_conditions', 'included_models_status'], absent: ['api_available', 'capability'], applicability: ['not_applicable', 'not_applicable', 'required'], toolCard: false },
+    { detail_kind: 'api_model', modality: 'text', profile: 'api_model:text', required: ['release_date', 'context_window', 'api_available', 'price_rate'], absent: ['last_updated_date', 'max_duration'], applicability: ['required', 'required', 'not_applicable'], toolCard: true },
+    { detail_kind: 'api_model', modality: 'image', profile: 'api_model:image', required: ['release_date', 'output_resolution', 'api_available', 'price_rate'], absent: ['last_updated_date', 'context_window', 'audio_capability'], applicability: ['not_applicable', 'required', 'not_applicable'], toolCard: true },
+    { detail_kind: 'api_model', modality: 'audio', profile: 'api_model:audio', required: ['release_date', 'audio_capability', 'supported_languages', 'price_rate'], absent: ['last_updated_date', 'context_window', 'max_duration'], applicability: ['not_applicable', 'required', 'not_applicable'], toolCard: true },
+    { detail_kind: 'tool', modality: undefined, profile: 'tool:general', required: ['last_updated_date', 'access_conditions', 'pricing_model'], absent: ['release_date', 'api_available', 'price_rate'], applicability: ['not_applicable', 'not_applicable', 'not_applicable'], toolCard: true },
+    { detail_kind: 'product_variant', modality: undefined, profile: 'product_variant:general', required: ['release_date', 'access_conditions', 'pricing_model'], absent: ['last_updated_date', 'api_available', 'price_rate'], applicability: ['not_applicable', 'not_applicable', 'not_applicable'], toolCard: true },
+    { detail_kind: 'subscription_plan', modality: undefined, profile: 'subscription_plan:general', required: ['price_rate', 'billing_period', 'plan_conditions', 'included_models_status'], absent: ['release_date', 'last_updated_date', 'api_available', 'capability'], applicability: ['not_applicable', 'not_applicable', 'required'], toolCard: false },
   ];
 
   for (const item of cases) {

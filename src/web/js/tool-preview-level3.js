@@ -1,4 +1,4 @@
-import { escapeHtml, safeExternalUrl, formatPrice, renderTimelinessBadge, ICON_ARROW_LEFT, ICON_EXTERNAL } from './data.js';
+import { escapeHtml, safeExternalUrl, formatPrice, renderTimelinessBadge, getToolDateDisplay, ICON_ARROW_LEFT, ICON_EXTERNAL } from './data.js';
 import { brandIconHtml } from './brand-icons.js';
 
 function notApplicableHtml(title, value) {
@@ -30,12 +30,12 @@ function renderToolLevel3(request = {}) {
   const { detail, toolKey = null, showCompare = false, compareSelected = false, backRef = null } = request;
   if (!detail) return '<div class="intelligence-unavailable">工具详情暂不可用。</div>';
   const kindLabel = detail.detail_kind === 'api_model' ? '模型' : detail.detail_kind === 'subscription_plan' ? '套餐' : detail.detail_kind === 'product_variant' ? '变体' : '工具';
-  const dateLabel = detail.detail_kind === 'tool' ? '更新时间' : detail.detail_kind === 'subscription_plan' ? '' : '发布时间';
+  const dateDisplay = getToolDateDisplay(detail);
   const showCompareAction = showCompare && detail.detail_kind !== 'subscription_plan';
   const sourceHtml = (detail.sources || []).length
     ? '<div class="intelligence-sources"><b>资料来源：</b>' + detail.sources.map(source =>
       '<a href="' + escapeHtml(safeExternalUrl(source.url)) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(source.title) + '</a>'
-    ).join(' · ') + (dateLabel && detail.official_date ? '<span>' + dateLabel + ' ' + escapeHtml(detail.official_date) + '</span>' : '') + '</div>'
+    ).join(' · ') + (dateDisplay ? '<span>' + dateDisplay.label + ' ' + escapeHtml(dateDisplay.value) + '</span>' : '') + '</div>'
     : '';
   const context = detail.one_m_context;
   const contextHtml = context?.status === 'not_applicable'
@@ -74,7 +74,7 @@ function renderToolLevel3(request = {}) {
   });
   return '<div class="model-index-page model-leaf-page">' + backHtml +
     '<section class="node-overview model-index-overview"><h2>' + detailIcon + ' ' + escapeHtml(detail.title) + '</h2><div class="vendor">' + vendorHtml + '<a href="' + escapeHtml(safeExternalUrl(detail.official_url)) + '" target="_blank" rel="noopener noreferrer">官网 ' + ICON_EXTERNAL + '</a></div></section>' +
-    '<div class="model-leaf-panel"><div class="model-panel-heading"><div><span class="node-kind-badge leaf">具体' + kindLabel + '</span><h4>' + escapeHtml(detail.title) + '</h4>' + (detail.official_date ? renderTimelinessBadge(detail.official_date) : '') + '</div>' + compareHtml + '</div>' +
+    '<div class="model-leaf-panel"><div class="model-panel-heading"><div><span class="node-kind-badge leaf">具体' + kindLabel + '</span><h4>' + escapeHtml(detail.title) + '</h4>' + (dateDisplay?.freshnessEligible ? renderTimelinessBadge(dateDisplay.value) : '') + '</div>' + compareHtml + '</div>' +
     '<div class="intelligence-item-body"><p>' + escapeHtml(detail.summary || '') + '</p>' + contextHtml + pricingHtml + planHtml + renderScenario('适用场景及说明', detail.applicable_scenarios) + renderScenario('不适用场景及说明', detail.inapplicable_scenarios) + sourceHtml + '</div></div></div>';
 }
 

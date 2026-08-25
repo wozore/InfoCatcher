@@ -6,6 +6,7 @@ const {
   DETAIL_KINDS,
   TOOL_CARD_KINDS,
   THEMES,
+  DATE_FIELDS,
   isHttpUrl,
   normalizeSnapshot,
 } = require('./catalog-contract');
@@ -59,6 +60,11 @@ function checkUrl(value, path, errors) {
   }
 }
 
+function isIsoDate(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(value || ''))) return false;
+  return !Number.isNaN(Date.parse(`${value}T00:00:00Z`));
+}
+
 function checkLevel3(level3, cardsByDetail, errors) {
   level3.forEach((item, index) => {
     const path = `tool-level3[${index}]`;
@@ -69,8 +75,14 @@ function checkLevel3(level3, cardsByDetail, errors) {
       errors.push(error('REQUIRED_FIELD_MISSING', path, '缺少 title/detail_kind/vendor_key'));
     }
     checkUrl(item.official_url, `${path}.official_url`, errors);
-    if (item.official_date !== null && item.official_date !== undefined && !/^\d{4}-\d{2}-\d{2}$/.test(item.official_date)) {
-      errors.push(error('DATE_INVALID', `${path}.official_date`, '格式必须为 YYYY-MM-DD'));
+    for (const field of DATE_FIELDS) {
+      const value = item[field];
+      if (value !== null && value !== undefined && value !== '' && !isIsoDate(value)) {
+        errors.push(error('DATE_INVALID', `${path}.${field}`, '格式必须为真实日期 YYYY-MM-DD'));
+      }
+    }
+    if (item.detail_kind === 'subscription_plan' && DATE_FIELDS.some(field => item[field] !== null && item[field] !== undefined && item[field] !== '')) {
+      errors.push(error('DATE_NOT_APPLICABLE', path, 'subscription_plan 不应保存 release_date 或 last_updated_date'));
     }
     if (item.detail_kind !== 'subscription_plan' && !THEMES.includes(item.theme)) {
       errors.push(error('THEME_INVALID', `${path}.theme`, `无效 theme: ${item.theme}`));
@@ -102,7 +114,6 @@ function checkLevel3(level3, cardsByDetail, errors) {
 function validateCatalogSnapshot(snapshot) {
   const normalized = normalizeSnapshot(snapshot);
   const errors = [];
-  const warnings = [];
 
   for (const area of AREAS) {
     checkUnique(area, normalized[area], errors);
@@ -127,7 +138,7 @@ function validateCatalogSnapshot(snapshot) {
     if (!THEMES.includes(item.theme)) errors.push(error('THEME_INVALID', `tool-card[${index}].theme`, `无效 theme: ${item.theme}`));
   });
 
-  return { ok: errors.length === 0, errors, warnings, snapshot: normalized };
+  return { ok: errors.length === 0, errors, snapshot: normalized };
 }
 
 module.exports = { validateCatalogSnapshot, error };
