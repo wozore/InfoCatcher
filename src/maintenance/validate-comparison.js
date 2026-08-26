@@ -26,6 +26,9 @@ const { isIsoDate } = require('../comparison/release-date');
 const { readRetentionState } = require('../shared/retention');
 const { validateSeriesProjection } = require('../comparison/model-series');
 
+// theme 值域（契约 §4：按评测维度自动判定的模型类型分类）
+const THEME_VALUES = ['general', 'image', 'video', 'vision'];
+
 let failed = false;
 
 function resetComparisonValidationForTests() {
@@ -164,6 +167,7 @@ function validateIndex(index) {
     if (model.has_composite && !(typeof model.composite_score === 'number' && model.composite_score >= 0 && model.composite_score <= 100)) fail(`integrated/index.json.models[${i}].composite_score 应为 0-100 数值`);
     if (!model.has_composite && model.composite_score != null) fail(`integrated/index.json.models[${i}].composite_score 在无综合分时应为 null`);
     if (!Array.isArray(model.sources) || !model.sources.every(source => SOURCES.includes(source))) fail(`integrated/index.json.models[${i}].sources 应为已知源数组`);
+    if (!THEME_VALUES.includes(model.theme)) fail(`integrated/index.json.models[${i}].theme 未知: ${model.theme}`);
     if (model.file !== 'data.json') fail(`integrated/index.json.models[${i}].file 应为 data.json`);
     if (model.degrees && typeof model.degrees !== 'object') fail(`integrated/index.json.models[${i}].degrees 应为对象`);
     else {
@@ -186,6 +190,15 @@ function validateIndex(index) {
         if (typeof model.member_display !== 'string' || !model.member_display) fail(`integrated/index.json ${model.canonical}.member_display 缺失`);
       }
       validateSeriesProjection(index.series, index.models).forEach(error => fail(`integrated/index.json 系列投影：${error}`));
+      // member theme 值域 + 与主变体模型 theme 一致（前端 chips 按 member.theme，切换移出按 model.theme）
+      const modelByCanonical = new Map(index.models.map(model => [model.canonical, model]));
+      for (const series of index.series) {
+        for (const member of series.members || []) {
+          if (!THEME_VALUES.includes(member.theme)) fail(`integrated/index.json 系列 ${series.series_key} 成员 ${member.member_key}.theme 未知: ${member.theme}`);
+          const model = modelByCanonical.get(member.default_canonical);
+          if (model && model.theme !== member.theme) fail(`integrated/index.json 系列 ${series.series_key} 成员 ${member.member_key}.theme (${member.theme}) 与主变体模型 theme (${model.theme}) 不一致`);
+        }
+      }
     }
   }
 
@@ -245,6 +258,7 @@ function validateData(data, index) {
     if (!['llm_stats', 'catalog', 'openrouter', null, undefined].includes(model.release_date_provenance)) {
       fail(`integrated/data.json ${model.canonical}.release_date_provenance 未知: ${model.release_date_provenance}`);
     }
+    if (!THEME_VALUES.includes(model.theme)) fail(`integrated/data.json ${model.canonical}.theme 未知: ${model.theme}`);
 
     // composite 一致性
     if (model.composite) {

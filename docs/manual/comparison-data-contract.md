@@ -142,7 +142,7 @@ collectSourceRecords → exclusions filter → Elo bounds → buildModelRecord
 - `series_key` / `series_display`：人工登记优先的系列归属与展示名；自动回退只用于组织未登记模型，不能用于 canonical 合并。
 - `member_key` / `member_display`：系列内具体产品/模型的稳定键与短名；同一 `member_key` 的多个明确 revision 收拢到 `series.members[].variants`，选择器默认只显示一个成员行。
 - `degree`、`evaluation_profile`、`offering` 与 revision：配置层信息，不生成系列成员；degree 仍由模型完整数据中的 `degrees` 提供，revision 通过成员变体选择。
-- `theme`：模型类型分类，值域 `general` / `image` / `video` / `vision`。由管线按评测维度自动判定——有视频生成维度（`text_to_video` / `image_to_video` / `video_edit`）→ `video`；有图像生成维度（`text_to_image` / `image_edit`）→ `image`；仅有 `vision` 榜分且无 `text` / `reasoning` / `coding` / `multimodal` 维度 → `vision`；否则 `general`。判定后按所属 member 主变体统一（同一 `member_key` 的 revision 变体同类型，防数据不全误判）。前端类别筛选按此值与 `series.members[].theme` 消费。
+- `theme`：模型类型分类，值域 `general` / `image` / `video` / `vision`。由管线按评测维度自动判定——有视频生成维度（`text_to_video` / `image_to_video` / `video_edit`）→ `video`；有图像生成维度（`text_to_image` / `image_edit`）→ `image`；仅有 `vision` 榜分且无 `text` / `reasoning` / `coding` / `multimodal` 维度 → `vision`；否则 `general`。判定后按所属 member 主变体统一（同一 `member_key` 的 revision 变体同类型，防数据不全误判）。前端类别筛选按此值与 `series.members[].theme` 消费；validate 校验 model 与 member 的 theme 值域、以及 `series.members[].theme` 与主变体模型 theme 的一致性。
 
 ## 3.1 model-series.json（系列人工登记）
 

@@ -98,6 +98,7 @@ test('comparison 校验：系列投影引用现有 canonical 且成员不能为�
       display: '基础版',
       default_canonical: 'openai--gpt-5.5',
       variant_count: 1,
+      theme: 'general',
       variants: [{ canonical: 'openai--gpt-5.5', revision: null }],
     }],
   }];
