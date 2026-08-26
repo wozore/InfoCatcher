@@ -5,13 +5,13 @@ const assert = require('node:assert/strict');
 
 const { attachSeriesMetadata, validateSeriesProjection } = require('../../src/comparison/model-series');
 
-function model(canonical, identity, family, vendor, composite = null, revisions = []) {
+function model(canonical, identity, family, vendor, composite = null, revisions = [], theme = 'general') {
   return {
     canonical,
     identity,
     family,
     vendor,
-    theme: 'general',
+    theme,
     revisions,
     composite: composite == null ? null : { score: composite },
     source_names: { openrouter: [canonical] },
@@ -93,6 +93,22 @@ test('model series：identity_prefixes 数组把同一型号的多个前缀合�
   assert.ok(!series.some(item => item.series_key === 'tencent--hy-mt2-7b'));
   const mt2 = series.find(item => item.series_key === 'tencent--hy-mt2');
   assert.equal(mt2.model_count, 1);
+  assert.equal(validateSeriesProjection(series, models).length, 0);
+});
+
+test('model series：member 主题按主变体优先，无主变体取变体主题众数', () => {
+  const models = [
+    model('qwen--wan-2.2', 'wan-2.2', 'wan', 'qwen', 70, [], 'video'),
+    model('qwen--wan-2.2@0101', 'wan-2.2', 'wan', 'qwen', 60, ['0101'], 'video'),
+    model('baidu--ernie-5.0-preview@1022', 'ernie-5.0-preview', 'ernie-5.0', 'baidu', null, ['2025-10-22'], 'general'),
+    model('baidu--ernie-5.0-preview@1203', 'ernie-5.0-preview', 'ernie-5.0', 'baidu', null, ['2025-12-03'], 'general'),
+    model('baidu--ernie-5.0-preview@1220', 'ernie-5.0-preview', 'ernie-5.0', 'baidu', null, ['2025-12-20'], 'vision'),
+  ];
+  const { series } = attachSeriesMetadata(models, {});
+  const wan = series.find(item => item.series_key === 'qwen--wan').members[0];
+  assert.equal(wan.theme, 'video', '主变体（无 revision）优先');
+  const ernie = series.find(item => item.series_key === 'baidu--ernie-5.0').members[0];
+  assert.equal(ernie.theme, 'general', '无主变体时取变体主题众数，防数据不全的 revision 误分类通用 LLM');
   assert.equal(validateSeriesProjection(series, models).length, 0);
 });
 

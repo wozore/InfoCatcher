@@ -176,6 +176,7 @@ export const messages = {
     searchModel: '搜索厂商、系列或模型',
     addModel: '加入模型',
     removeModel: '移除模型',
+    revisionCurrent: '最新版',
     modelCapLabel: '{n} / {cap}',
     modelCapReached: '最多对比 {n} 个模型',
     selectionTitle: '已选模型',

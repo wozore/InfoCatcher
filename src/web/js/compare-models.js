@@ -69,7 +69,8 @@ const VENDOR_ICONS = {
   openai: '🤖', anthropic: '✦', google: '✨', meta: '🦙', deepseek: '🐋',
   qwen: '🐉', mistral: '🌀', moonshot: '🌙', midjourney: '🎨', xai: '🕳️', glm: '🧊',
 };
-const THEME_ICONS = { vision: '🎨', media: '🎬', dev: '💻', general: '🧠' };
+const THEME_ICONS = { general: '🧠', image: '🖼️', video: '🎬', vision: '👁️', media: '🎬', dev: '💻' };
+const THEME_LABELS = { general: '通用', image: '图像生成', video: '视频生成', vision: '纯视觉理解', media: '媒体', dev: '开发者' };
 
 // ═══════════════════════════════════════════════════════════════
 // 状态
@@ -91,7 +92,7 @@ let chartMode = 'bar';          // 'bar' | 'radar'
 let activeVariants = {};        // canonical → { source: degree }
 let variantOpenFor = null;
 let searchQuery = '';
-let filterTheme = 'all';
+let filterTheme = 'general';
 let expandedVendors = new Set();
 let expandedSeries = new Set();
 
@@ -510,12 +511,17 @@ function syncChartClass() {
 }
 
 // ── 选择器 ─────────────────────────────────────────────────────
+function themeLabel(theme) {
+  return THEME_LABELS[theme] || theme || '通用';
+}
+
 function renderFilterCats() {
   const box = document.getElementById('cmpFilterCats');
   if (!box) return;
-  const themes = [...new Set(indexSeries.map(series => series.theme).filter(Boolean))];
-  box.innerHTML = '<button class="filter-chip' + (filterTheme === 'all' ? ' active' : '') + '" type="button" data-cmp-cat="all" aria-pressed="' + (filterTheme === 'all') + '">全部</button>' +
-    themes.map(theme => '<button class="filter-chip' + (filterTheme === theme ? ' active' : '') + '" type="button" data-cmp-cat="' + escapeHtml(theme) + '" aria-pressed="' + (filterTheme === theme) + '">' + escapeHtml(theme) + '</button>').join('');
+  const themeOrder = ['general', 'image', 'video', 'vision'];
+  const themes = [...new Set(indexSeries.flatMap(series => series.members.map(member => member.theme)).filter(Boolean))]
+    .sort((a, b) => (themeOrder.indexOf(a) - themeOrder.indexOf(b)) || a.localeCompare(b));
+  box.innerHTML = themes.map(theme => '<button class="filter-chip' + (filterTheme === theme ? ' active' : '') + '" type="button" data-cmp-cat="' + escapeHtml(theme) + '" aria-pressed="' + (filterTheme === theme) + '">' + escapeHtml(themeLabel(theme)) + '</button>').join('');
 }
 
 function selectedCountForSeries(series) {
@@ -580,10 +586,12 @@ function expandSearchMatches() {
 
 function visibleMembersForSeries(series) {
   const query = searchQuery.trim().toLowerCase();
-  if (!query) return series.members;
+  let members = series.members;
+  members = members.filter(member => member.theme === filterTheme);
+  if (!query) return members;
   const seriesText = [series.display, series.series_key, series.vendor, vendorLabel(series.vendor)].filter(Boolean).join(' ').toLowerCase();
-  if (seriesText.includes(query)) return series.members;
-  return series.members.filter(member => {
+  if (seriesText.includes(query)) return members;
+  return members.filter(member => {
     const memberText = [member.display, member.member_key, ...member.variants.flatMap(variant => [variant.display, variant.canonical])].filter(Boolean).join(' ').toLowerCase();
     return memberText.includes(query);
   });
@@ -592,7 +600,7 @@ function visibleMembersForSeries(series) {
 function filteredSeries() {
   const query = searchQuery.trim().toLowerCase();
   const list = indexSeries.filter(series => {
-    if (filterTheme !== 'all' && series.theme !== filterTheme) return false;
+    if (!series.members.some(member => member.theme === filterTheme)) return false;
     if (!query) return true;
     return visibleMembersForSeries(series).length > 0;
   });
@@ -609,7 +617,7 @@ function renderMemberVariantSelect(member) {
   if (member.variant_count <= 1) return '';
   const selectedVariant = member.variants.find(variant => selected.includes(variant.canonical));
   return '<select class="cmp-member-revision" data-cmp-revision="' + escapeHtml(member.member_key) + '" aria-label="选择修订版">' +
-    member.variants.map(variant => '<option value="' + escapeHtml(variant.canonical) + '"' + (variant.canonical === (selectedVariant?.canonical || member.default_canonical) ? ' selected' : '') + '>' + escapeHtml(variant.revision || '默认') + '</option>').join('') +
+    member.variants.map(variant => '<option value="' + escapeHtml(variant.canonical) + '"' + (variant.canonical === (selectedVariant?.canonical || member.default_canonical) ? ' selected' : '') + '>' + escapeHtml(variant.revision || t('compare.revisionCurrent')) + '</option>').join('') +
     '</select>';
 }
 
@@ -1327,6 +1335,16 @@ export function bindModelCompareEvents() {
     const cat = event.target.closest('[data-cmp-cat]');
     if (cat) {
       filterTheme = cat.dataset.cmpCat;
+      // 切换类型时自动移出已选的其他类型模型（仅同类可对比）
+      selected = selected.filter(canonical => {
+        const model = indexMap.get(canonical);
+        return !model || model.theme === filterTheme;
+      });
+      activeVariants = Object.fromEntries(Object.entries(activeVariants).filter(([canonical]) => selected.includes(canonical)));
+      if (variantOpenFor && !selected.includes(variantOpenFor)) {
+        variantOpenFor = null;
+        document.getElementById('cmpVariantPopover')?.remove();
+      }
       expandedVendors.clear();
       expandedSeries.clear();
       expandSearchMatches();

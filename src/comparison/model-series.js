@@ -102,6 +102,24 @@ function variantSort(a, b) {
   return String(b.revision || '').localeCompare(String(a.revision || ''), 'en');
 }
 
+// member 主题：无主变体时取变体主题众数（并列偏 general，防数据不全的 revision 误分类通用 LLM）
+function memberThemeMajority(member) {
+  const counts = new Map();
+  for (const variant of member.variants) {
+    const theme = (member.themeByCanonical && member.themeByCanonical[variant.canonical]) || 'general';
+    counts.set(theme, (counts.get(theme) || 0) + 1);
+  }
+  let best = 'general';
+  let bestCount = -1;
+  for (const [theme, count] of counts) {
+    if (count > bestCount || (count === bestCount && theme === 'general')) {
+      best = theme;
+      bestCount = count;
+    }
+  }
+  return best;
+}
+
 function attachSeriesMetadata(models, config = {}) {
   const groups = new Map();
   const byCanonical = new Map();
@@ -129,6 +147,7 @@ function attachSeriesMetadata(models, config = {}) {
       display: member.member_display,
       order: member.member_order,
       variants: [],
+      themeByCanonical: {},
     };
     memberGroup.variants.push({
       canonical: model.canonical,
@@ -137,6 +156,7 @@ function attachSeriesMetadata(models, config = {}) {
       composite_score: model.composite?.score ?? null,
       sources: Object.keys(model.source_names || {}),
     });
+    memberGroup.themeByCanonical[model.canonical] = model.theme || 'general';
     seriesGroup.members.set(member.member_key, memberGroup);
     groups.set(series.series_key, seriesGroup);
   }
@@ -144,14 +164,18 @@ function attachSeriesMetadata(models, config = {}) {
   const series = [...groups.values()].map(group => {
     const members = [...group.members.values()].map(member => {
       member.variants.sort(variantSort);
-      const preferred = member.variants.find(variant => variant.revision == null) || member.variants[0];
+      const preferred = member.variants.find(variant => variant.revision == null);
+      const theme = preferred
+        ? ((member.themeByCanonical && member.themeByCanonical[preferred.canonical]) || 'general')
+        : memberThemeMajority(member);
       return {
         member_key: member.member_key,
         display: member.display,
         order: member.order,
-        default_canonical: preferred.canonical,
+        default_canonical: (preferred || member.variants[0]).canonical,
         variant_count: member.variants.length,
         variants: member.variants,
+        theme,
       };
     }).sort((a, b) => a.order - b.order || a.display.localeCompare(b.display, 'zh-CN'));
     const scores = members.flatMap(member => member.variants.map(variant => variant.composite_score).filter(Number.isFinite));
