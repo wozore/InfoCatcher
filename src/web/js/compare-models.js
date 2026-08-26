@@ -23,7 +23,7 @@
 
 import { escapeHtml, safeExternalUrl, renderState } from './data.js';
 import { t } from './i18n.js';
-import { getToolCardItems, getToolLevel3Item } from './data.js';
+import { getToolCardItems, getToolLevel3Item, getVendorCardItem } from './data.js';
 import { brandIconHtml } from './brand-icons.js';
 
 // ═══════════════════════════════════════════════════════════════
@@ -92,6 +92,7 @@ let activeVariants = {};        // canonical → { source: degree }
 let variantOpenFor = null;
 let searchQuery = '';
 let filterTheme = 'all';
+let expandedVendors = new Set();
 let expandedSeries = new Set();
 
 const loadingPromise = loadEntry();
@@ -521,10 +522,66 @@ function selectedCountForSeries(series) {
   return series.members.reduce((count, member) => count + (member.variants.some(variant => selected.includes(variant.canonical)) ? 1 : 0), 0);
 }
 
+function humanizeVendorKey(vendorKey) {
+  return String(vendorKey || 'unknown')
+    .split(/[-_]+/)
+    .filter(Boolean)
+    .map(part => part.length <= 3 ? part.toUpperCase() : part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ') || 'Unknown';
+}
+
+function vendorLabel(vendorKey) {
+  return getVendorCardItem(vendorKey)?.title || humanizeVendorKey(vendorKey);
+}
+
+function vendorIconHtml(vendorKey) {
+  const card = getVendorCardItem(vendorKey);
+  return brandIconHtml({ vendorKey, emoji: card?.icon || VENDOR_ICONS[vendorKey] || '🧠' });
+}
+
+function vendorGroupsFromSeries(seriesList) {
+  const groups = new Map();
+  for (const series of seriesList) {
+    const vendorKey = series.vendor || 'unknown';
+    const group = groups.get(vendorKey) || {
+      vendor_key: vendorKey,
+      display: vendorLabel(vendorKey),
+      series: [],
+      member_count: 0,
+      selected_count: 0,
+      max_composite_score: null,
+    };
+    group.series.push(series);
+    group.member_count += series.member_count ?? series.members.length;
+    group.selected_count += selectedCountForSeries(series);
+    if (Number.isFinite(series.max_composite_score) && (group.max_composite_score == null || series.max_composite_score > group.max_composite_score)) {
+      group.max_composite_score = series.max_composite_score;
+    }
+    groups.set(vendorKey, group);
+  }
+  return [...groups.values()].sort((a, b) => {
+    const scoreA = Number.isFinite(a.max_composite_score) ? a.max_composite_score : -1;
+    const scoreB = Number.isFinite(b.max_composite_score) ? b.max_composite_score : -1;
+    if (scoreB !== scoreA) return scoreB - scoreA;
+    return String(a.display).localeCompare(String(b.display), 'zh-CN');
+  });
+}
+
+function expandSearchMatches() {
+  expandedVendors.clear();
+  expandedSeries.clear();
+  if (!searchQuery.trim()) return;
+  for (const series of filteredSeries()) {
+    const vendorKey = series.vendor || 'unknown';
+    expandedVendors.add(vendorKey);
+    expandedSeries.add(series.series_key);
+  }
+}
+
 function visibleMembersForSeries(series) {
   const query = searchQuery.trim().toLowerCase();
   if (!query) return series.members;
-  const seriesText = [series.display, series.series_key, series.vendor].filter(Boolean).join(' ').toLowerCase();
+  const seriesText = [series.display, series.series_key, series.vendor, vendorLabel(series.vendor)].filter(Boolean).join(' ').toLowerCase();
   if (seriesText.includes(query)) return series.members;
   return series.members.filter(member => {
     const memberText = [member.display, member.member_key, ...member.variants.flatMap(variant => [variant.display, variant.canonical])].filter(Boolean).join(' ').toLowerCase();
@@ -559,37 +616,48 @@ function renderMemberVariantSelect(member) {
 function renderModelList() {
   const list = document.getElementById('cmpModelList');
   if (!list) return;
-  const groups = filteredSeries();
+  const groups = vendorGroupsFromSeries(filteredSeries());
   if (!groups.length) {
     list.innerHTML = renderState({ icon: '⌕', title: t('compare.empty.noMatch'), message: '', type: 'no-match' });
     return;
   }
-  list.innerHTML = groups.map(series => {
-    const members = visibleMembersForSeries(series);
-    const expanded = expandedSeries.has(series.series_key);
-    const selectedCount = selectedCountForSeries(series);
-    const memberHtml = expanded ? '<div class="cmp-series-members">' + members.map(member => {
-      const isSelected = member.variants.some(variant => selected.includes(variant.canonical));
-      const canonical = member.variants.find(variant => selected.includes(variant.canonical))?.canonical || member.default_canonical;
-      const model = indexMap.get(canonical) || indexMap.get(member.default_canonical);
-      const coverage = model && model.sources?.length ? '<span class="cmp-coverage">' + model.sources.length + ' 源</span>' : '';
-      return '<div class="cmp-model-member' + (isSelected ? ' selected' : '') + '">' +
-        '<button class="cmp-model-item" type="button" data-cmp-pick="' + escapeHtml(canonical) + '" aria-pressed="' + isSelected + '">' +
-          '<span class="cmp-model-icon" aria-hidden="true">' + (model ? modelIconHtml(model) : '') + '</span>' +
-          '<span class="cmp-model-text"><span class="cmp-model-name">' + escapeHtml(member.display) + '</span>' +
-          '<span class="cmp-model-vendor">' + escapeHtml(model?.display || '') + '</span></span>' +
-          coverage +
-        '</button>' + renderMemberVariantSelect(member) +
-      '</div>';
+  list.innerHTML = groups.map(vendor => {
+    const vendorExpanded = expandedVendors.has(vendor.vendor_key);
+    const seriesHtml = vendorExpanded ? '<div class="cmp-vendor-series">' + vendor.series.map(series => {
+      const members = visibleMembersForSeries(series);
+      const expanded = expandedSeries.has(series.series_key);
+      const selectedCount = selectedCountForSeries(series);
+      const memberHtml = expanded ? '<div class="cmp-series-members">' + members.map(member => {
+        const isSelected = member.variants.some(variant => selected.includes(variant.canonical));
+        const canonical = member.variants.find(variant => selected.includes(variant.canonical))?.canonical || member.default_canonical;
+        const model = indexMap.get(canonical) || indexMap.get(member.default_canonical);
+        const coverage = model && model.sources?.length ? '<span class="cmp-coverage">' + model.sources.length + ' 源</span>' : '';
+        return '<div class="cmp-model-member' + (isSelected ? ' selected' : '') + '">' +
+          '<button class="cmp-model-item" type="button" data-cmp-pick="' + escapeHtml(canonical) + '" aria-pressed="' + isSelected + '">' +
+            '<span class="cmp-model-icon" aria-hidden="true">' + (model ? modelIconHtml(model) : '') + '</span>' +
+            '<span class="cmp-model-text"><span class="cmp-model-name">' + escapeHtml(member.display) + '</span>' +
+            '<span class="cmp-model-vendor">' + escapeHtml(model?.display || '') + '</span></span>' +
+            coverage +
+          '</button>' + renderMemberVariantSelect(member) +
+        '</div>';
+      }).join('') + '</div>' : '';
+      const score = Number.isFinite(series.max_composite_score) ? Number(series.max_composite_score).toFixed(1) : t('compare.noComposite');
+      return '<section class="cmp-series' + (expanded ? ' expanded' : '') + '" data-cmp-series="' + escapeHtml(series.series_key) + '">' +
+        '<button class="cmp-series-toggle" type="button" data-cmp-series-toggle="' + escapeHtml(series.series_key) + '" aria-expanded="' + expanded + '">' +
+          '<span class="cmp-model-icon" aria-hidden="true">' + brandIconHtml({ vendorKey: series.vendor, seriesKey: comparisonSeriesIconKey(series.series_key) }) + '</span>' +
+          '<span class="cmp-series-text"><span class="cmp-series-name">' + escapeHtml(series.display) + '</span><span class="cmp-series-meta">' + escapeHtml(t('compare.seriesMeta', { selected: selectedCount, members: series.member_count })) + '</span></span>' +
+          '<span class="cmp-score' + (Number.isFinite(series.max_composite_score) ? '' : ' cmp-score-na') + '">' + escapeHtml(score) + '</span>' +
+          '<span class="cmp-series-chevron" aria-hidden="true">' + (expanded ? '⌃' : '⌄') + '</span>' +
+        '</button>' + memberHtml +
+      '</section>';
     }).join('') + '</div>' : '';
-    const score = Number.isFinite(series.max_composite_score) ? Number(series.max_composite_score).toFixed(1) : t('compare.noComposite');
-    return '<section class="cmp-series' + (expanded ? ' expanded' : '') + '" data-cmp-series="' + escapeHtml(series.series_key) + '">' +
-      '<button class="cmp-series-toggle" type="button" data-cmp-series-toggle="' + escapeHtml(series.series_key) + '" aria-expanded="' + expanded + '">' +
-        '<span class="cmp-model-icon" aria-hidden="true">' + brandIconHtml({ vendorKey: series.vendor, seriesKey: comparisonSeriesIconKey(series.series_key) }) + '</span>' +
-        '<span class="cmp-series-text"><span class="cmp-series-name">' + escapeHtml(series.display) + '</span><span class="cmp-series-meta">' + selectedCount + ' / ' + series.member_count + ' 已选 · ' + series.member_count + ' 个成员</span></span>' +
-        '<span class="cmp-score' + (Number.isFinite(series.max_composite_score) ? '' : ' cmp-score-na') + '">' + escapeHtml(score) + '</span>' +
-        '<span class="cmp-series-chevron" aria-hidden="true">' + (expanded ? '⌃' : '⌄') + '</span>' +
-      '</button>' + memberHtml +
+    return '<section class="cmp-vendor' + (vendorExpanded ? ' expanded' : '') + '" data-cmp-vendor="' + escapeHtml(vendor.vendor_key) + '">' +
+      '<button class="cmp-vendor-toggle" type="button" data-cmp-vendor-toggle="' + escapeHtml(vendor.vendor_key) + '" aria-expanded="' + vendorExpanded + '">' +
+        '<span class="cmp-model-icon" aria-hidden="true">' + vendorIconHtml(vendor.vendor_key) + '</span>' +
+        '<span class="cmp-series-text"><span class="cmp-series-name">' + escapeHtml(vendor.display) + '</span><span class="cmp-series-meta">' + escapeHtml(t('compare.vendorMeta', { selected: vendor.selected_count, series: vendor.series.length, members: vendor.member_count })) + '</span></span>' +
+        '<span class="cmp-score' + (Number.isFinite(vendor.max_composite_score) ? '' : ' cmp-score-na') + '">' + escapeHtml(Number.isFinite(vendor.max_composite_score) ? Number(vendor.max_composite_score).toFixed(1) : t('compare.noComposite')) + '</span>' +
+        '<span class="cmp-series-chevron" aria-hidden="true">' + (vendorExpanded ? '⌃' : '⌄') + '</span>' +
+      '</button>' + seriesHtml +
     '</section>';
   }).join('');
 }
@@ -1124,7 +1192,9 @@ export async function routeApiModelToCompare(card) {
     document.getElementById('cmpVariantPopover')?.remove();
   }
   const seriesKey = indexMap.get(canonical)?.series_key;
+  const series = indexSeries.find(item => item.series_key === seriesKey);
   if (seriesKey) expandedSeries.add(seriesKey);
+  if (series) expandedVendors.add(series.vendor || 'unknown');
   renderAll();
   dispatchModelSelection();
   return true;
@@ -1144,7 +1214,7 @@ export function bindModelCompareEvents() {
     clearTimeout(timer);
     timer = setTimeout(() => {
       searchQuery = cmpSearch.value;
-      expandedSeries.clear();
+      expandSearchMatches();
       renderModelList();
       renderResults();
     }, 150);
@@ -1153,6 +1223,7 @@ export function bindModelCompareEvents() {
   cmpSearchClear?.addEventListener('click', () => {
     cmpSearch.value = '';
     searchQuery = '';
+    expandedVendors.clear();
     expandedSeries.clear();
     cmpSearchClear.style.display = 'none';
     renderModelList();
@@ -1161,6 +1232,14 @@ export function bindModelCompareEvents() {
   });
 
   panel.addEventListener('click', event => {
+    const vendorToggle = event.target.closest('[data-cmp-vendor-toggle]');
+    if (vendorToggle) {
+      const key = vendorToggle.dataset.cmpVendorToggle;
+      if (expandedVendors.has(key)) expandedVendors.delete(key);
+      else expandedVendors.add(key);
+      renderModelList();
+      return;
+    }
     const seriesToggle = event.target.closest('[data-cmp-series-toggle]');
     if (seriesToggle) {
       const key = seriesToggle.dataset.cmpSeriesToggle;
@@ -1248,7 +1327,9 @@ export function bindModelCompareEvents() {
     const cat = event.target.closest('[data-cmp-cat]');
     if (cat) {
       filterTheme = cat.dataset.cmpCat;
+      expandedVendors.clear();
       expandedSeries.clear();
+      expandSearchMatches();
       renderFilterCats();
       renderModelList();
       renderResults();

@@ -34,3 +34,13 @@ test('invalid exclusion rules fail closed', () => {
   assert.equal(result.ok, false);
   assert.ok(result.errors.length >= 2);
 });
+
+test('model exclusions support identity_prefixes array with token boundary', () => {
+  const cfg = { schema_version: 1, rules: [{ vendor: 'tencent', identity_prefixes: ['hunyuan-hy3', 'hy3'], reason: 'no data' }] };
+  assert.equal(validateExclusionConfig(cfg).ok, true);
+  assert.ok(exclusionForModel({ vendor: 'tencent', identity: 'hy3', canonical: 'tencent--hy3' }, cfg));
+  assert.ok(exclusionForModel({ vendor: 'tencent', identity: 'hy3-preview', canonical: 'tencent--hy3-preview' }, cfg));
+  assert.ok(exclusionForModel({ vendor: 'tencent', identity: 'hunyuan-hy3-preview', canonical: 'tencent--hunyuan-hy3-preview' }, cfg));
+  assert.equal(exclusionForModel({ vendor: 'tencent', identity: 'hy-mt2-7b', canonical: 'tencent--hy-mt2-7b' }, cfg), null);
+  assert.equal(exclusionForModel({ vendor: 'qwen', identity: 'hy3', canonical: 'qwen--hy3' }, cfg), null);
+});

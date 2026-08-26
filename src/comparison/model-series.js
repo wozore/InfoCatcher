@@ -19,21 +19,32 @@ function words(value) {
     .replace(/\b\w/g, char => char.toUpperCase());
 }
 
+function prefixLengthsOf(rule) {
+  if (Array.isArray(rule.identity_prefixes) && rule.identity_prefixes.length) {
+    return rule.identity_prefixes.map(prefix => String(prefix).length);
+  }
+  if (rule.identity_prefix) return [String(rule.identity_prefix).length];
+  return [];
+}
+
 function matchesRule(model, rule = {}) {
   if (rule.vendor && String(rule.vendor).toLowerCase() !== String(model.vendor || '').toLowerCase()) return false;
   const identity = String(model.identity || '').toLowerCase();
   if (rule.identity && identity !== String(rule.identity).toLowerCase()) return false;
-  if (rule.identity_prefix && !identity.startsWith(String(rule.identity_prefix).toLowerCase())) return false;
-  return Boolean(rule.identity || rule.identity_prefix || rule.vendor);
+  const prefixes = prefixLengthsOf(rule).length
+    ? (Array.isArray(rule.identity_prefixes) ? rule.identity_prefixes : [rule.identity_prefix])
+    : [];
+  if (prefixes.length && !prefixes.some(prefix => identity.startsWith(String(prefix).toLowerCase()))) return false;
+  return Boolean(rule.identity || prefixes.length || rule.vendor);
 }
 
 function sortedRules(rules) {
   return [...(rules || [])].sort((a, b) => {
     const aRule = a.match || a;
     const bRule = b.match || b;
-    const aLength = String(aRule.identity || aRule.identity_prefix || '').length;
-    const bLength = String(bRule.identity || bRule.identity_prefix || '').length;
-    return bLength - aLength;
+    const aMax = Math.max(...prefixLengthsOf(aRule), 0);
+    const bMax = Math.max(...prefixLengthsOf(bRule), 0);
+    return bMax - aMax;
   });
 }
 

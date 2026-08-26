@@ -124,15 +124,26 @@ function planVendorMigration(policy, vendor, level2s, detailIdToVendor) {
     }
   }
 
+  // 仅把完全由政策通用模型成员组成的旧系列视为可删除碎片；工具、套餐和专用系列必须保留。
+  const generalMemberIds = new Set(vendor.families
+    .filter(family => family.usage_kind === 'general_llm')
+    .flatMap(family => family.series || [])
+    .flatMap(series => series.expected_members || [])
+    .map(memberRef)
+    .filter(Boolean)
+    .map(ref => ref.id));
+
   // 碎片删除：既非目标、又未被消费、且成员全为本厂商记录的既有 L2
   const removed = [];
   for (const l2 of level2s) {
     if (targetIds.has(l2.id)) continue;
     if (consumedIds.has(l2.id)) continue;
     if (!vendor.families.some(f => f.usage_kind === 'general_llm')) continue;
-    const allVendorRecords = (l2.detail_refs || []).every(r => detailIdToVendor.get(r.id) === vendor.vendor_key);
-    if (!allVendorRecords) continue;
-    removed.push({ id: l2.id, title: l2.title, members: (l2.detail_refs || []).map(r => r.id) });
+    const memberIds = (l2.detail_refs || []).map(r => r.id);
+    const allVendorRecords = memberIds.every(id => detailIdToVendor.get(id) === vendor.vendor_key);
+    const allGeneralMembers = memberIds.length > 0 && memberIds.every(id => generalMemberIds.has(id));
+    if (!allVendorRecords || !allGeneralMembers) continue;
+    removed.push({ id: l2.id, title: l2.title, members: memberIds });
   }
 
   return { plan, removed };

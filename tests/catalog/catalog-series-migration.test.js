@@ -188,7 +188,21 @@ test('迁移：id_map 覆盖被删除碎片，orphaned 为空，非政策厂商�
   assert.deepEqual(kling.detail_refs.map(r => r.id), ['tool-level3:kling-3-0']);
 });
 
-// ── 4. 既有浮空详情写入 warnings ───────────────────────────────
+test('迁移：通用厂商未纳入政策的工具系列保留', () => {
+  const snap = syntheticSnapshot();
+  snap['tool-level3'].push(detail('tool-level3:claude-code', 'anthropic', 'tool', 'dev'));
+  snap['tool-card'].push(card('claude-code', 'anthropic', 'tool', 'dev'));
+  const toolSeries = l2('vendor-level2:anthropic:claude-code', 'anthropic', 'Claude Code', ['claude-code']);
+  snap['vendor-level2'].push(toolSeries);
+  snap['vendor-level1'].find(item => item.id === 'vendor-level1:anthropic').level2_refs.push({ kind: 'vendor-level2', id: toolSeries.id });
+
+  const plan = planSeriesMigration(loadSeriesPolicy(), snap);
+  const byId = new Map(plan.snapshot['vendor-level2'].map(x => [x.id, x]));
+  assert.ok(byId.has(toolSeries.id));
+  assert.deepEqual(byId.get(toolSeries.id).detail_refs.map(r => r.id), ['tool-level3:claude-code']);
+  assert.deepEqual(plan.orphaned, []);
+});
+
 
 test('迁移：OpenAI 订阅套餐孤儿被统一 coding plan 收养，既有浮空警告清空', () => {
   const snap = syntheticSnapshot();

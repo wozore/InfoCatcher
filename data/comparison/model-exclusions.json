@@ -1,18 +1,522 @@
 {
   "schema_version": 1,
   "rules": [
-    {"vendor":"openai","identity_prefix":"gpt-5.2","reason":"旧覆盖清单中未纳入本轮工具卡范围。"},
-    {"vendor":"openai","identity_prefix":"gpt-5.4","reason":"旧覆盖清单中未纳入本轮工具卡范围。"},
-    {"vendor":"anthropic","identity_prefix":"claude-opus-4.7","reason":"旧覆盖清单中未纳入本轮工具卡范围。"},
-    {"vendor":"anthropic","identity_prefix":"claude-opus-4.6","reason":"旧覆盖清单中未纳入本轮工具卡范围。"},
-    {"vendor":"anthropic","identity_prefix":"claude-sonnet-4.6","reason":"旧覆盖清单中未纳入本轮工具卡范围。"},
-    {"vendor":"deepseek","identity_prefix":"deepseek-v3.2","reason":"旧覆盖清单中未纳入本轮工具卡范围。"},
-    {"vendor":"deepseek","identity_prefix":"deepseek-r1","reason":"旧覆盖清单中未纳入本轮工具卡范围。"},
-    {"vendor":"deepseek","identities":["deepseek-chat","deepseek-reasoner"],"reason":"当前源以旧 API 身份展示为 DeepSeek V3.2，属于未纳入本轮工具卡范围的系列。"},
-    {"vendor":"minimax","identity_prefix":"minimax-m2.5","reason":"用户明确不补充 legacy M2.5。"},
-    {"vendor":"minimax","identity_prefix":"minimax-m2.1","reason":"用户明确不补充 legacy M2.1。"},
-    {"vendor":"stepfun","identity_prefix":"step3-vl","reason":"用户明确未找到并不补充 Step3-VL。"},
-    {"vendor":"xiaomi","identity_prefix":"mimo-v2-flash","reason":"旧覆盖清单中未纳入本轮工具卡范围。"},
-    {"vendor":"meituan","identity_prefix":"longcat-flash","reason":"旧覆盖清单中未纳入本轮工具卡范围。"}
+    {
+      "vendor": "openai",
+      "identity_prefix": "gpt-5.2",
+      "reason": "旧覆盖清单中未纳入本轮工具卡范围。"
+    },
+    {
+      "vendor": "openai",
+      "identity_prefix": "gpt-5.4",
+      "reason": "旧覆盖清单中未纳入本轮工具卡范围。"
+    },
+    {
+      "vendor": "anthropic",
+      "identity_prefix": "claude-opus-4.7",
+      "reason": "旧覆盖清单中未纳入本轮工具卡范围。"
+    },
+    {
+      "vendor": "anthropic",
+      "identity_prefix": "claude-opus-4.6",
+      "reason": "旧覆盖清单中未纳入本轮工具卡范围。"
+    },
+    {
+      "vendor": "anthropic",
+      "identity_prefix": "claude-sonnet-4.6",
+      "reason": "旧覆盖清单中未纳入本轮工具卡范围。"
+    },
+    {
+      "vendor": "deepseek",
+      "identity_prefix": "deepseek-v3.2",
+      "reason": "旧覆盖清单中未纳入本轮工具卡范围。"
+    },
+    {
+      "vendor": "deepseek",
+      "identity_prefix": "deepseek-r1",
+      "reason": "旧覆盖清单中未纳入本轮工具卡范围。"
+    },
+    {
+      "vendor": "deepseek",
+      "identities": [
+        "deepseek-chat",
+        "deepseek-reasoner"
+      ],
+      "reason": "当前源以旧 API 身份展示为 DeepSeek V3.2，属于未纳入本轮工具卡范围的系列。"
+    },
+    {
+      "vendor": "minimax",
+      "identity_prefix": "minimax-m2.5",
+      "reason": "用户明确不补充 legacy M2.5。"
+    },
+    {
+      "vendor": "minimax",
+      "identity_prefix": "minimax-m2.1",
+      "reason": "用户明确不补充 legacy M2.1。"
+    },
+    {
+      "vendor": "stepfun",
+      "identity_prefix": "step3-vl",
+      "reason": "用户明确未找到并不补充 Step3-VL。"
+    },
+    {
+      "vendor": "xiaomi",
+      "identity_prefix": "mimo-v2-flash",
+      "reason": "旧覆盖清单中未纳入本轮工具卡范围。"
+    },
+    {
+      "vendor": "meituan",
+      "identity_prefix": "longcat-flash",
+      "reason": "旧覆盖清单中未纳入本轮工具卡范围。"
+    },
+    {
+      "vendor": "ai21",
+      "identity_prefixes": [
+        "jamba-1.5"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "allenai",
+      "identity_prefixes": [
+        "llama-3.1",
+        "llama-3.1-tulu",
+        "molmo-2",
+        "olmo-2",
+        "olmo-3"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "amazon",
+      "identity_prefixes": [
+        "amazon-nova",
+        "nova-lite",
+        "nova-micro",
+        "nova-pro"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "anthropic",
+      "identity_prefixes": [
+        "claude-3",
+        "claude-3.5",
+        "claude-3.7",
+        "claude-opus-4",
+        "claude-sonnet-4"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "aorizon",
+      "identity_prefixes": [
+        "happyhorse"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "baidu",
+      "identity_prefixes": [
+        "ernie-4.5"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "bfl",
+      "identity_prefixes": [
+        "flux-1",
+        "flux-1.1"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "bytedance",
+      "identity_prefixes": [
+        "dreamina-seedance-2.0",
+        "seed-2.0",
+        "seed-2.1",
+        "seedance-v1",
+        "seedream-3"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "cohere",
+      "identity_prefixes": [
+        "c4ai-aya",
+        "command-a",
+        "command-r"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "deepseek",
+      "identity_prefixes": [
+        "deepseek-v2.5",
+        "deepseek-v3",
+        "deepseek-vl2"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "deepseek",
+      "identities": [
+        "deepseek-v3"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "diffbot",
+      "identity_prefixes": [
+        "diffbot"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "genmo",
+      "identity_prefixes": [
+        "mochi"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "google",
+      "identity_prefixes": [
+        "diffusiongemma",
+        "gemini-1.0",
+        "gemini-1.5",
+        "gemini-2.0",
+        "gemini-2.5",
+        "gemma-2",
+        "gemma-3",
+        "imagen-3.0",
+        "medgemma",
+        "veo-2",
+        "veo-3"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "ibm",
+      "identity_prefixes": [
+        "granite-3.3",
+        "ibm-granite"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "ideogram",
+      "identity_prefixes": [
+        "ideogram-v2",
+        "ideogram-v3"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "kling",
+      "identity_prefixes": [
+        "kling-v2.1"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "lg",
+      "identity_prefixes": [
+        "exaone"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "meta",
+      "identity_prefixes": [
+        "llama-3",
+        "llama-3.1",
+        "llama-3.2",
+        "llama-3.3",
+        "llama-4",
+        "muse"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "microsoft",
+      "identity_prefixes": [
+        "mai-code-1",
+        "mai-thinking-1",
+        "phi-3",
+        "phi-3.5",
+        "phi-4"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "microsoft",
+      "identities": [
+        "phi-4"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "minimax",
+      "identity_prefixes": [
+        "hailuo-02",
+        "minimax-m1",
+        "minimax-m2"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "mistral",
+      "identity_prefixes": [
+        "codestral",
+        "devstral",
+        "ministral",
+        "mistral-large",
+        "mistral-medium",
+        "mistral-nemo",
+        "pixtral",
+        "shieldstral"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "mistral",
+      "identities": [
+        "mistral-small",
+        "mistral-small-24b-base",
+        "mistral-small-24b-instruct",
+        "mistral-small-3.1-24b-base",
+        "mistral-small-3.1-24b-instruct"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "moonshotai",
+      "identity_prefixes": [
+        "kimi-k1.5"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "moonshotai",
+      "identities": [
+        "kimi-k1.5"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "nous-research",
+      "identity_prefixes": [
+        "hermes-3"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "nvidia",
+      "identity_prefixes": [
+        "llama-3.1",
+        "llama-3.1-nemotron",
+        "llama-3.3",
+        "llama-3.3-nemotron",
+        "nemotron-3",
+        "nemotron-4",
+        "nvidia-nemotron-3"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "openai",
+      "identity_prefixes": [
+        "api-gpt-4o",
+        "chatgpt-4o",
+        "dall-e",
+        "gpt-3.5",
+        "gpt-4",
+        "gpt-4.1",
+        "gpt-4.5",
+        "gpt-4o",
+        "o1",
+        "o3",
+        "o4-mini"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "openai",
+      "identities": [
+        "sora"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "openbmb",
+      "identity_prefixes": [
+        "minicpm"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "qwen",
+      "identity_prefixes": [
+        "qvq",
+        "qwen-2.5",
+        "qwen-vl",
+        "qwen2",
+        "qwen2.5",
+        "qwq"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "qwen",
+      "identities": [
+        "qwen3-235b-a22b",
+        "qwen3-235b-a22b-instruct",
+        "qwen3-235b-a22b-no-thinking",
+        "qwen3-235b-a22b-thinking",
+        "qwen3-30b-a3b",
+        "qwen3-30b-a3b-instruct",
+        "qwen3-32b",
+        "qwen3-coder-480b-a35b-instruct",
+        "qwen3-max",
+        "qwen3-max-preview",
+        "qwen3-next-80b-a3b-instruct",
+        "qwen3-next-80b-a3b-thinking"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "recraft",
+      "identity_prefixes": [
+        "recraft-v3"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "runway",
+      "identity_prefixes": [
+        "runway-gen4"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "sarvamai",
+      "identity_prefixes": [
+        "sarvam"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "shengshu",
+      "identity_prefixes": [
+        "vidu-q2"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "stepfun",
+      "identity_prefixes": [
+        "step-1o",
+        "step-1v",
+        "step-2",
+        "step-3"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "stepfun",
+      "identities": [
+        "step-3"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "tencent",
+      "identity_prefixes": [
+        "hunyuan-large",
+        "hunyuan-standard"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "tencent",
+      "identities": [
+        "hunyuan-large-vision",
+        "hunyuan-standard-256k",
+        "hunyuan-standard-vision",
+        "hunyuan-t1",
+        "hunyuan-turbo",
+        "hunyuan-turbos",
+        "hunyuan-video-1.5",
+        "hunyuan-vision-1.5-thinking"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "unknown",
+      "identity_prefixes": [
+        "athene",
+        "internvl2",
+        "jamba-1.5",
+        "kat-coder",
+        "llava",
+        "ltx",
+        "minicpm",
+        "p-image",
+        "p-video",
+        "pixverse",
+        "reka",
+        "smaug",
+        "stable-diffusion",
+        "trinity",
+        "yi"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "upstage",
+      "identity_prefixes": [
+        "solar"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "xai",
+      "identity_prefixes": [
+        "grok-1.5",
+        "grok-2",
+        "grok-3"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "xai",
+      "identities": [
+        "grok-1.5v"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "zai",
+      "identity_prefixes": [
+        "glm-4",
+        "glm-4.5",
+        "glm-4.5v"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    },
+    {
+      "vendor": "zai",
+      "identities": [
+        "cogvlm2-llama3-chat-19b",
+        "glm-4",
+        "glm-4-plus",
+        "glm-4.5",
+        "glm-4.5-air",
+        "glm-4.5v"
+      ],
+      "reason": "2025年6月之前发布的老型号，对比栏移除。"
+    }
   ]
 }

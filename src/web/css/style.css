@@ -1460,6 +1460,16 @@ main:has(#view-compare.active.cmp-wide-active) { max-width: none; }
 .cmp-cats { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
 .cmp-sort-hint { font-size: 12px; }
 .cmp-model-list { margin-top: 10px; min-height: 0; flex: 1 1 auto; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; align-items: stretch; gap: 8px; }
+.cmp-vendor { min-width: 0; min-height: 46px; flex: 0 0 auto; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); overflow: hidden; }
+.cmp-vendor.expanded { border-color: var(--primary); }
+.cmp-vendor-toggle {
+  display: flex; align-items: center; gap: 8px; min-width: 0; min-height: 50px; width: 100%; padding: 10px;
+  border: 0; background: transparent; cursor: pointer; text-align: left; color: var(--text);
+}
+.cmp-vendor-toggle:hover { background: var(--primary-light); }
+.cmp-vendor-series { display: grid; align-content: start; gap: 6px; padding: 0 6px 6px; border-top: 1px solid var(--border); }
+.cmp-vendor-series .cmp-series { border-color: var(--border); }
+.cmp-vendor-series .cmp-series-toggle { padding-left: 8px; }
 .cmp-series { min-width: 0; min-height: 46px; flex: 0 0 auto; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); overflow: hidden; }
 .cmp-series.expanded { border-color: var(--primary); }
 .cmp-series-toggle {

@@ -23,14 +23,24 @@ function validateExclusionConfig(config) {
     }
     if (typeof rule.vendor !== 'string' || !rule.vendor.trim()) errors.push(error(`${path}.vendor`, '必须是非空字符串'));
     const hasPrefix = typeof rule.identity_prefix === 'string' && rule.identity_prefix.trim();
+    const hasPrefixes = Array.isArray(rule.identity_prefixes) && rule.identity_prefixes.length > 0;
     const hasIdentities = Array.isArray(rule.identities) && rule.identities.length > 0;
-    if (Boolean(hasPrefix) === Boolean(hasIdentities)) errors.push(error(path, '必须且只能配置 identity_prefix 或 identities'));
+    if ([hasPrefix, hasPrefixes, hasIdentities].filter(Boolean).length !== 1) {
+      errors.push(error(path, '必须且只能配置 identity_prefix、identity_prefixes 或 identities 之一'));
+    }
     if (hasPrefix && /\s/.test(rule.identity_prefix)) errors.push(error(`${path}.identity_prefix`, '不能包含空白'));
+    if (hasPrefixes && (!rule.identity_prefixes.every(prefix => typeof prefix === 'string' && prefix.trim() && !/\s/.test(prefix)) || new Set(rule.identity_prefixes).size !== rule.identity_prefixes.length)) {
+      errors.push(error(`${path}.identity_prefixes`, '必须是无空白且不重复的字符串数组'));
+    }
     if (hasIdentities && (!rule.identities.every(identity => typeof identity === 'string' && identity.trim() && !/\s/.test(identity)) || new Set(rule.identities).size !== rule.identities.length)) {
       errors.push(error(`${path}.identities`, '必须是无空白且不重复的字符串数组'));
     }
     if (typeof rule.reason !== 'string' || !rule.reason.trim()) errors.push(error(`${path}.reason`, '必须提供排除理由'));
-    const matchKey = hasPrefix ? `${rule.vendor}:prefix:${rule.identity_prefix}` : `${rule.vendor}:identities:${(rule.identities || []).join('|')}`;
+    const matchKey = hasPrefix
+      ? `${rule.vendor}:prefix:${rule.identity_prefix}`
+      : hasPrefixes
+        ? `${rule.vendor}:prefixes:${rule.identity_prefixes.join('|')}`
+        : `${rule.vendor}:identities:${(rule.identities || []).join('|')}`;
     if (seen.has(matchKey)) errors.push(error(path, `匹配规则重复: ${matchKey}`));
     seen.add(matchKey);
   });
@@ -49,6 +59,7 @@ function ruleMatches(model, rule) {
   if (String(model?.vendor || '') !== rule.vendor) return false;
   const identity = String(model?.identity || '');
   if (rule.identity_prefix) return identity === rule.identity_prefix || identity.startsWith(`${rule.identity_prefix}-`);
+  if (rule.identity_prefixes) return rule.identity_prefixes.some(prefix => identity === prefix || identity.startsWith(`${prefix}-`));
   return rule.identities.includes(identity);
 }
 

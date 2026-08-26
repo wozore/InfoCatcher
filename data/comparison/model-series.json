@@ -6,12 +6,31 @@
       "display": "GPT-5.5",
       "vendor": "openai",
       "order": 10,
-      "match": { "vendor": "openai", "identity_prefix": "gpt-5.5" },
+      "match": {
+        "vendor": "openai",
+        "identity_prefix": "gpt-5.5"
+      },
       "member_rules": [
-        { "identity": "gpt-5.5", "display": "基础版", "order": 0 },
-        { "identity_prefix": "gpt-5.5-instant", "display": "Instant", "order": 10 },
-        { "identity_prefix": "gpt-5.5-pro", "display": "Pro", "order": 20 },
-        { "identity_prefix": "gpt-5.5-search", "display": "Search", "order": 30 }
+        {
+          "identity": "gpt-5.5",
+          "display": "基础版",
+          "order": 0
+        },
+        {
+          "identity_prefix": "gpt-5.5-instant",
+          "display": "Instant",
+          "order": 10
+        },
+        {
+          "identity_prefix": "gpt-5.5-pro",
+          "display": "Pro",
+          "order": 20
+        },
+        {
+          "identity_prefix": "gpt-5.5-search",
+          "display": "Search",
+          "order": 30
+        }
       ]
     },
     {
@@ -19,15 +38,46 @@
       "display": "DeepSeek V4",
       "vendor": "deepseek",
       "order": 20,
-      "match": { "vendor": "deepseek", "identity_prefix": "deepseek-v4" },
+      "match": {
+        "vendor": "deepseek",
+        "identity_prefix": "deepseek-v4"
+      },
       "member_rules": [
-        { "identity": "deepseek-v4-flash-high-preview", "display": "Flash High Preview", "order": 15 },
-        { "identity_prefix": "deepseek-v4-flash-max", "display": "Flash Max", "order": 20 },
-        { "identity_prefix": "deepseek-v4-flash", "display": "Flash", "order": 10 },
-        { "identity": "deepseek-v4-pro-high-preview", "display": "Pro High Preview", "order": 35 },
-        { "identity_prefix": "deepseek-v4-pro-high", "display": "Pro High", "order": 36 },
-        { "identity_prefix": "deepseek-v4-pro-max", "display": "Pro Max", "order": 40 },
-        { "identity_prefix": "deepseek-v4-pro", "display": "Pro", "order": 30 }
+        {
+          "identity": "deepseek-v4-flash-high-preview",
+          "display": "Flash High Preview",
+          "order": 15
+        },
+        {
+          "identity_prefix": "deepseek-v4-flash-max",
+          "display": "Flash Max",
+          "order": 20
+        },
+        {
+          "identity_prefix": "deepseek-v4-flash",
+          "display": "Flash",
+          "order": 10
+        },
+        {
+          "identity": "deepseek-v4-pro-high-preview",
+          "display": "Pro High Preview",
+          "order": 35
+        },
+        {
+          "identity_prefix": "deepseek-v4-pro-high",
+          "display": "Pro High",
+          "order": 36
+        },
+        {
+          "identity_prefix": "deepseek-v4-pro-max",
+          "display": "Pro Max",
+          "order": 40
+        },
+        {
+          "identity_prefix": "deepseek-v4-pro",
+          "display": "Pro",
+          "order": 30
+        }
       ]
     },
     {
@@ -35,49 +85,423 @@
       "display": "Claude Opus 4.8",
       "vendor": "anthropic",
       "order": 30,
-      "match": { "vendor": "anthropic", "identity_prefix": "claude-opus-4.8" }
+      "match": {
+        "vendor": "anthropic",
+        "identity_prefix": "claude-opus-4.8"
+      }
     },
     {
       "series_key": "anthropic--claude-opus-4.5",
       "display": "Claude Opus 4.5",
       "vendor": "anthropic",
       "order": 31,
-      "match": { "vendor": "anthropic", "identity_prefix": "claude-opus-4.5" }
+      "match": {
+        "vendor": "anthropic",
+        "identity_prefix": "claude-opus-4.5"
+      }
     },
     {
       "series_key": "anthropic--claude-opus-4.1",
       "display": "Claude Opus 4.1",
       "vendor": "anthropic",
       "order": 32,
-      "match": { "vendor": "anthropic", "identity_prefix": "claude-opus-4.1" }
+      "match": {
+        "vendor": "anthropic",
+        "identity_prefix": "claude-opus-4.1"
+      }
     },
     {
       "series_key": "anthropic--claude-opus-4",
       "display": "Claude Opus 4",
       "vendor": "anthropic",
       "order": 33,
-      "match": { "vendor": "anthropic", "identity_prefix": "claude-opus-4" }
+      "match": {
+        "vendor": "anthropic",
+        "identity_prefix": "claude-opus-4"
+      }
     },
     {
       "series_key": "anthropic--claude-sonnet-4.6",
       "display": "Claude Sonnet 4.6",
       "vendor": "anthropic",
       "order": 40,
-      "match": { "vendor": "anthropic", "identity_prefix": "claude-sonnet-4.6" }
+      "match": {
+        "vendor": "anthropic",
+        "identity_prefix": "claude-sonnet-4.6"
+      }
     },
     {
       "series_key": "anthropic--claude-sonnet-4.5",
       "display": "Claude Sonnet 4.5",
       "vendor": "anthropic",
       "order": 41,
-      "match": { "vendor": "anthropic", "identity_prefix": "claude-sonnet-4.5" }
+      "match": {
+        "vendor": "anthropic",
+        "identity_prefix": "claude-sonnet-4.5"
+      }
     },
     {
       "series_key": "anthropic--claude-sonnet-4",
       "display": "Claude Sonnet 4",
       "vendor": "anthropic",
       "order": 42,
-      "match": { "vendor": "anthropic", "identity_prefix": "claude-sonnet-4" }
+      "match": {
+        "vendor": "anthropic",
+        "identity_prefix": "claude-sonnet-4"
+      }
+    },
+    {
+      "series_key": "qwen--qwen3.8",
+      "display": "Qwen3.8",
+      "vendor": "qwen",
+      "order": 50,
+      "match": {
+        "vendor": "qwen",
+        "identity_prefix": "qwen3.8"
+      }
+    },
+    {
+      "series_key": "qwen--qwen3.7",
+      "display": "Qwen3.7",
+      "vendor": "qwen",
+      "order": 51,
+      "match": {
+        "vendor": "qwen",
+        "identity_prefix": "qwen3.7"
+      }
+    },
+    {
+      "series_key": "qwen--qwen3.6",
+      "display": "Qwen3.6",
+      "vendor": "qwen",
+      "order": 52,
+      "match": {
+        "vendor": "qwen",
+        "identity_prefix": "qwen3.6"
+      }
+    },
+    {
+      "series_key": "qwen--qwen3.5",
+      "display": "Qwen3.5",
+      "vendor": "qwen",
+      "order": 53,
+      "match": {
+        "vendor": "qwen",
+        "identity_prefix": "qwen3.5"
+      }
+    },
+    {
+      "series_key": "qwen--qwen3-vl",
+      "display": "Qwen3 VL",
+      "vendor": "qwen",
+      "order": 54,
+      "match": {
+        "vendor": "qwen",
+        "identity_prefix": "qwen3-vl"
+      }
+    },
+    {
+      "series_key": "qwen--qwen3-coder",
+      "display": "Qwen3 Coder",
+      "vendor": "qwen",
+      "order": 55,
+      "match": {
+        "vendor": "qwen",
+        "identity_prefix": "qwen3-coder"
+      }
+    },
+    {
+      "series_key": "qwen--qwen3-next",
+      "display": "Qwen3 Next",
+      "vendor": "qwen",
+      "order": 56,
+      "match": {
+        "vendor": "qwen",
+        "identity_prefix": "qwen3-next"
+      }
+    },
+    {
+      "series_key": "qwen--qwen3",
+      "display": "Qwen3",
+      "vendor": "qwen",
+      "order": 57,
+      "match": {
+        "vendor": "qwen",
+        "identity_prefix": "qwen3"
+      }
+    },
+    {
+      "series_key": "qwen--qwen2.5-vl",
+      "display": "Qwen2.5 VL",
+      "vendor": "qwen",
+      "order": 58,
+      "match": {
+        "vendor": "qwen",
+        "identity_prefix": "qwen2.5-vl"
+      }
+    },
+    {
+      "series_key": "qwen--qwen2.5-vl",
+      "display": "Qwen2.5 VL",
+      "vendor": "qwen",
+      "order": 58,
+      "match": {
+        "vendor": "qwen",
+        "identity_prefix": "qwen-2.5-vl"
+      }
+    },
+    {
+      "series_key": "qwen--qwen2.5-coder",
+      "display": "Qwen2.5 Coder",
+      "vendor": "qwen",
+      "order": 59,
+      "match": {
+        "vendor": "qwen",
+        "identity_prefix": "qwen2.5-coder"
+      }
+    },
+    {
+      "series_key": "qwen--qwen2.5-coder",
+      "display": "Qwen2.5 Coder",
+      "vendor": "qwen",
+      "order": 59,
+      "match": {
+        "vendor": "qwen",
+        "identity_prefix": "qwen-2.5-coder"
+      }
+    },
+    {
+      "series_key": "qwen--qwen2.5",
+      "display": "Qwen2.5",
+      "vendor": "qwen",
+      "order": 60,
+      "match": {
+        "vendor": "qwen",
+        "identity_prefix": "qwen2.5"
+      }
+    },
+    {
+      "series_key": "qwen--qwen2.5",
+      "display": "Qwen2.5",
+      "vendor": "qwen",
+      "order": 60,
+      "match": {
+        "vendor": "qwen",
+        "identity_prefix": "qwen-2.5"
+      }
+    },
+    {
+      "series_key": "qwen--qwen2-vl",
+      "display": "Qwen2 VL",
+      "vendor": "qwen",
+      "order": 61,
+      "match": {
+        "vendor": "qwen",
+        "identity_prefix": "qwen2-vl"
+      }
+    },
+    {
+      "series_key": "qwen--qwen2",
+      "display": "Qwen2",
+      "vendor": "qwen",
+      "order": 62,
+      "match": {
+        "vendor": "qwen",
+        "identity_prefix": "qwen2"
+      }
+    },
+    {
+      "series_key": "qwen--qwen-image",
+      "display": "Qwen Image",
+      "vendor": "qwen",
+      "order": 63,
+      "match": {
+        "vendor": "qwen",
+        "identity_prefix": "qwen-image"
+      }
+    },
+    {
+      "series_key": "qwen--qwen-vl",
+      "display": "Qwen VL",
+      "vendor": "qwen",
+      "order": 64,
+      "match": {
+        "vendor": "qwen",
+        "identity_prefix": "qwen-vl"
+      }
+    },
+    {
+      "series_key": "qwen--qwen-classic",
+      "display": "Qwen",
+      "vendor": "qwen",
+      "order": 65,
+      "match": {
+        "vendor": "qwen",
+        "identity_prefix": "qwen-max"
+      }
+    },
+    {
+      "series_key": "qwen--qwen-classic",
+      "display": "Qwen",
+      "vendor": "qwen",
+      "order": 65,
+      "match": {
+        "vendor": "qwen",
+        "identity_prefix": "qwen-plus"
+      }
+    },
+    {
+      "series_key": "qwen--qwq",
+      "display": "QwQ",
+      "vendor": "qwen",
+      "order": 66,
+      "match": {
+        "vendor": "qwen",
+        "identity_prefix": "qwq"
+      }
+    },
+    {
+      "series_key": "qwen--qvq",
+      "display": "QvQ",
+      "vendor": "qwen",
+      "order": 67,
+      "match": {
+        "vendor": "qwen",
+        "identity_prefix": "qvq"
+      }
+    },
+    {
+      "series_key": "qwen--wan",
+      "display": "Wan",
+      "vendor": "qwen",
+      "order": 68,
+      "match": {
+        "vendor": "qwen",
+        "identity_prefix": "wan"
+      }
+    },
+    {
+      "series_key": "qwen--z-image",
+      "display": "Z-Image",
+      "vendor": "qwen",
+      "order": 69,
+      "match": {
+        "vendor": "qwen",
+        "identity_prefix": "z-image"
+      }
+    },
+    {
+      "series_key": "mistral--ministral",
+      "display": "Ministral",
+      "vendor": "mistral",
+      "order": 70,
+      "match": {
+        "vendor": "mistral",
+        "identity_prefixes": [
+          "ministral-3",
+          "ministral-14b",
+          "ministral-3b",
+          "ministral-8b",
+          "ministral-3"
+        ]
+      }
+    },
+    {
+      "series_key": "mistral--devstral",
+      "display": "Devstral",
+      "vendor": "mistral",
+      "order": 71,
+      "match": {
+        "vendor": "mistral",
+        "identity_prefix": "devstral"
+      }
+    },
+    {
+      "series_key": "mistral--codestral",
+      "display": "Codestral",
+      "vendor": "mistral",
+      "order": 72,
+      "match": {
+        "vendor": "mistral",
+        "identity_prefix": "codestral"
+      }
+    },
+    {
+      "series_key": "mistral--pixtral",
+      "display": "Pixtral",
+      "vendor": "mistral",
+      "order": 73,
+      "match": {
+        "vendor": "mistral",
+        "identity_prefix": "pixtral"
+      }
+    },
+    {
+      "series_key": "mistral--magistral",
+      "display": "Magistral",
+      "vendor": "mistral",
+      "order": 74,
+      "match": {
+        "vendor": "mistral",
+        "identity_prefix": "magistral"
+      }
+    },
+    {
+      "series_key": "tencent--hunyuan-hy3",
+      "display": "Hunyuan Hy3",
+      "vendor": "tencent",
+      "order": 80,
+      "match": {
+        "vendor": "tencent",
+        "identity_prefixes": [
+          "hunyuan-hy3",
+          "hy3"
+        ]
+      }
+    },
+    {
+      "series_key": "openai--o1",
+      "display": "OpenAI o1",
+      "vendor": "openai",
+      "order": 90,
+      "match": {
+        "vendor": "openai",
+        "identity_prefix": "o1"
+      }
+    },
+    {
+      "series_key": "openai--o3",
+      "display": "OpenAI o3",
+      "vendor": "openai",
+      "order": 91,
+      "match": {
+        "vendor": "openai",
+        "identity_prefix": "o3"
+      }
+    },
+    {
+      "series_key": "xai--grok-1.5",
+      "display": "Grok 1.5",
+      "vendor": "xai",
+      "order": 100,
+      "match": {
+        "vendor": "xai",
+        "identity_prefix": "grok-1.5"
+      }
+    },
+    {
+      "series_key": "zai--glm-v",
+      "display": "GLM Vision",
+      "vendor": "zai",
+      "order": 110,
+      "match": {
+        "vendor": "zai",
+        "identity_prefixes": [
+          "glm-4.5v",
+          "glm-4.6v",
+          "glm-5v"
+        ]
+      }
     }
   ]
 }

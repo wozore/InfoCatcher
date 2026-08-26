@@ -28,6 +28,8 @@ const {
 } = require('./model-identity');
 const { readSeriesConfig, attachSeriesMetadata, validateSeriesProjection } = require('./model-series');
 const { readExclusionConfig, filterExcludedRecords } = require('./model-exclusions');
+const { filterEmptyModels } = require('./empty-model-filter');
+const { normalizeRevision } = require('./revision-date');
 
 const SOURCE_ORDER = ['openrouter', 'lmarena', 'livebench', 'llm_stats'];
 const CONFIG_DIMS = new Set(LMARENA_CONFIGS.filter(config => config !== 'agent'));
@@ -168,8 +170,8 @@ function resolveCanonical(aliasMap, source, rawName, autoCanonical) {
 }
 
 // ── 源记录收集 ─────────────────────────────────────────────────
-function addIdentityMetadata(record, resolved, source, rawName) {
-  if (resolved.revision) record.revisions.add(resolved.revision);
+function addIdentityMetadata(record, resolved, source, rawName, now = new Date()) {
+  if (resolved.revision) record.revisions.add(normalizeRevision(resolved.revision, now));
   if (resolved.evaluation_profile) record.evaluation_profiles.add(resolved.evaluation_profile);
   if (!record.source_names[source]) record.source_names[source] = [];
   if (!record.source_names[source].includes(rawName)) record.source_names[source].push(rawName);
@@ -181,12 +183,13 @@ function addIdentityMetadata(record, resolved, source, rawName) {
   }
 }
 
-function collectSourceRecords(snapshots, identityRegistry = {}) {
+function collectSourceRecords(snapshots, identityRegistry = {}, now = new Date()) {
   const registry = Array.isArray(identityRegistry) ? { schema_version: 1, entries: identityRegistry } : identityRegistry;
   const resolveIdentity = createModelIdentityResolver(registry);
   const records = {}; // model_key[@revision] → { identity, vendor, sources }
   const get = resolved => {
-    const recordKey = resolved.revision ? `${resolved.model_key}@${resolved.revision}` : resolved.model_key;
+    const revision = resolved.revision ? normalizeRevision(resolved.revision, now) : null;
+    const recordKey = revision ? `${resolved.model_key}@${revision}` : resolved.model_key;
     if (!records[recordKey]) {
       records[recordKey] = {
         canonical: recordKey,
@@ -208,7 +211,7 @@ function collectSourceRecords(snapshots, identityRegistry = {}) {
     const resolved = resolveIdentity({ source: 'openrouter', rawName: item.id });
     if (resolved.kind !== 'model') continue;
     const rec = get(resolved);
-    addIdentityMetadata(rec, resolved, 'openrouter', item.id);
+    addIdentityMetadata(rec, resolved, 'openrouter', item.id, now);
     const current = rec.sources.openrouter;
     const currentOfferingCount = Number(current?._identityOfferingCount || 0);
     if (!current || resolved.offerings.length < currentOfferingCount ||
@@ -226,7 +229,7 @@ function collectSourceRecords(snapshots, identityRegistry = {}) {
       const rawScore = row[scoreField];
       if (!hasNum(rawScore)) continue;
       const rec = get(resolved);
-      addIdentityMetadata(rec, resolved, 'lmarena', row.model_name);
+      addIdentityMetadata(rec, resolved, 'lmarena', row.model_name, now);
       const lmarena = rec.sources.lmarena || (rec.sources.lmarena = {
         configs: {}, profiles: {}, organization: resolved.vendor, license: row.license, degreeOrder: {}, baseName: null,
       });
@@ -251,7 +254,7 @@ function collectSourceRecords(snapshots, identityRegistry = {}) {
     const resolved = resolveIdentity({ source: 'livebench', rawName: row.model });
     if (resolved.kind !== 'model') continue;
     const rec = get(resolved);
-    addIdentityMetadata(rec, resolved, 'livebench', row.model);
+    addIdentityMetadata(rec, resolved, 'livebench', row.model, now);
     const livebench = rec.sources.livebench || (rec.sources.livebench = { scores: {}, degreeOrder: [] });
     const degree = resolved.degree || 'base';
     if (!livebench.scores[degree]) livebench.scores[degree] = {};
@@ -266,7 +269,7 @@ function collectSourceRecords(snapshots, identityRegistry = {}) {
     const resolved = resolveIdentity({ source: 'llm_stats', rawName: model.model_id, vendorHint: model.organization_id || model.organization });
     if (resolved.kind !== 'model') continue;
     const rec = get(resolved);
-    addIdentityMetadata(rec, resolved, 'llm_stats', model.model_id);
+    addIdentityMetadata(rec, resolved, 'llm_stats', model.model_id, now);
     if (!rec.sources.llm_stats || !resolved.revision) rec.sources.llm_stats = model;
   }
 
@@ -641,6 +644,7 @@ function enforceUniqueDisplays(models) {
  */
 function rebuildIntegrated(options = {}) {
   const errors = [];
+  const now = options.now || new Date();
   const snapshots = options.snapshots || loadInputs(options);
   const missing = SOURCE_ORDER.filter(source => !snapshots[source]);
   if (missing.length) {
@@ -650,7 +654,7 @@ function rebuildIntegrated(options = {}) {
   const identityRegistry = options.identityRegistry || options.aliasRegistry || readJson(COMPARISON_FILES.modelsAlias) || { schema_version: 2, entries: [] };
   const aliasEntries = options.aliasEntries || identityRegistry.entries || [];
   const registry = options.aliasEntries ? { ...identityRegistry, entries: aliasEntries } : identityRegistry;
-  const records = collectSourceRecords(snapshots, registry);
+  const records = collectSourceRecords(snapshots, registry, now);
   let exclusionConfig;
   try {
     exclusionConfig = options.exclusionConfig || readExclusionConfig(options.exclusionConfigFile || COMPARISON_FILES.modelExclusions);
@@ -660,9 +664,11 @@ function rebuildIntegrated(options = {}) {
   const filteredRecords = filterExcludedRecords(records, exclusionConfig);
   const activeRecords = filteredRecords.records;
   const lmarenaEloBounds = computeLmarenaEloBounds(activeRecords);
-  const models = Object.values(activeRecords).map(record => buildModelRecord(record, lmarenaEloBounds));
-  const displayCollisions = enforceUniqueDisplays(models);
-  computeValues(models);
+  const builtModels = Object.values(activeRecords).map(record => buildModelRecord(record, lmarenaEloBounds));
+  const displayCollisions = enforceUniqueDisplays(builtModels);
+  computeValues(builtModels);
+  // 无数据模型自动过滤（代码规则）：identity 全部 revision 无评测数据则移除，有数据自动回归
+  const { kept: models, filtered: emptyFiltered } = filterEmptyModels(builtModels);
   const seriesConfig = options.seriesConfig || readSeriesConfig(options.seriesConfigFile);
   const seriesProjection = attachSeriesMetadata(models, seriesConfig);
   const seriesErrors = validateSeriesProjection(seriesProjection.series, models);
@@ -671,7 +677,7 @@ function rebuildIntegrated(options = {}) {
   // 确定性排序：canonical 字典序（前端再按系列/综合分排序）
   models.sort((a, b) => String(a.canonical).localeCompare(String(b.canonical)));
 
-  const generatedAt = new Date().toISOString();
+  const generatedAt = now.toISOString();
   const sourcesMeta = {};
   sourcesMeta.openrouter = { fetched_at: snapshots.openrouter.fetched_at || generatedAt, count: (snapshots.openrouter.data || []).length };
   sourcesMeta.lmarena = { fetched_at: snapshots.lmarena.fetched_at || generatedAt, count: Object.values(snapshots.lmarena.configs || {}).reduce((sum, rows) => sum + rows.length, 0) };
@@ -719,7 +725,7 @@ function rebuildIntegrated(options = {}) {
     ok: errors.length === 0,
     models,
     errors,
-    diagnostics: { display_collisions_resolved: displayCollisions, series_count: seriesProjection.series.length, excluded_models: filteredRecords.excluded },
+    diagnostics: { display_collisions_resolved: displayCollisions, series_count: seriesProjection.series.length, excluded_models: filteredRecords.excluded, empty_filtered_models: emptyFiltered.map(model => model.canonical) },
     index,
     data,
   };

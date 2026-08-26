@@ -27,7 +27,7 @@ data/comparison/
 - `integrated/` 由 `rebuild-comparison.js` 全量重建；`view-config.json` / `models-alias.json` / `model-series.json` / `refresh-config.json` 为维护者手工维护，**管线不得覆盖**。
 - 前端相对路径 fetch：`data/comparison/view-config.json`、`data/comparison/integrated/index.json`、`data/comparison/integrated/data.json`。
 
-**排除规则**：`model-exclusions.json` 只参与 integrated 重建，不删除或改写 `raw/` 快照。每条规则必须包含 `vendor`、排除理由，并且二选一配置 `identity_prefix` 或 `identities`：前者采用 token boundary（identity 等于前缀，或以 `${prefix}-` 开头），后者精确匹配 identity。规则在源记录收集后、Elo bounds、维度归一化、综合分、性价比和 series projection 之前执行，因此被排除记录不会影响剩余模型的归一化或产生空系列；重建诊断会返回完整命中列表，校验器拒绝 integrated 中残留的命中记录。
+**排除规则**：`model-exclusions.json` 只参与 integrated 重建，不删除或改写 `raw/` 快照。每条规则必须包含 `vendor`、排除理由，并且三选一配置 `identity_prefix`、`identity_prefixes` 或 `identities`：前两者采用 token boundary（identity 等于前缀，或以 `${prefix}-` 开头），`identity_prefixes` 为数组时可把多个命名前缀归入同一规则；`identities` 精确匹配 identity。规则在源记录收集后、Elo bounds、维度归一化、综合分、性价比和 series projection 之前执行，因此被排除记录不会影响剩余模型的归一化或产生空系列；重建诊断会返回完整命中列表，校验器拒绝 integrated 中残留的命中记录。
 
 重建顺序固定为：
 
@@ -162,6 +162,11 @@ collectSourceRecords → exclusions filter → Elo bounds → buildModelRecord
 ```
 
 人工登记只影响系列容器和展示顺序，不改变 `canonical`、源级分数或综合分。匹配重叠时以登记数组中更具体的规则优先；无法安全判断的模型回退为独立的 `<vendor>--<family>` 系列。
+
+`match` 支持单个 `identity_prefix`，或使用 `identity_prefixes` 数组把同一型号的多个命名变体（如 `hy3` / `hunyuan-hy3`）合并进同一系列——数组内任一前缀命中即归属，排序时取数组内最长前缀参与优先级比较（最长前缀优先，避免 `hy3` 误吞其它家族）。例如：
+```json
+{ "match": { "vendor": "tencent", "identity_prefixes": ["hunyuan-hy3", "hy3"] } }
+```
 
 
 ```json
@@ -318,3 +323,5 @@ AI 审计不参与 `rebuild`，也不得直接写入 `models-alias.json`。确�
 4. AA 二期，本期不做（aa-internal.json 不建）。
 5. 校验接入 validate.js：integrated 一致性 / canonical 唯一 / 同厂商可见 display 唯一 / alias 一对一 / 不同明确修订版不混分 / composite 与 raw 可复算 / raw schema。网络抽检延后。
 6. 前端零依赖：柱状图 CSS、雷达图手写 SVG；对比页文案走 i18n。
+7. **空壳模型自动过滤（代码规则，非清单）**：合并后无任何有效评测维度且无综合分的模型，当同一 identity 的**所有** revision 均无数据时整组从 integrated 移除；任一 revision 有数据则整组保留（不误杀主变体）。过滤在综合分/性价比计算后、series projection 前执行，随抓取数据动态生效——模型日后获得评测数据会自动回归，无需维护排除登记表。此规则与 `model-exclusions.json`（人工永久排除）职责分离；被过滤模型进 `diagnostics.empty_filtered_models`，raw 快照保留。
+8. **revision 日期规范化（代码规则）**：canonical 的 `@revision` 统一解析为 (year,month,day) 后再拼键。本年不显示年份（`MM-DD` / 月级 `MM`），往年保留（`YYYY-MM-DD` / `YYYY-MM`）；无年份的 MMDD/MM-DD 用系统年份推断，推断日期落在未来（数据源给出的是已发布版本）则回退到上一年；4 位纯数字按月份有效性区分 MMDD（前两位 01-12）与 YYMM（前两位 > 12，推断 20xx 世纪）。同一日期不同写法（如 `0731` 与 `20260731`）规范化后同键，自动合并为同一 revision，不混算分数。重建时以 `options.now` 为基准（默认当前时间），保证可测。

@@ -31,7 +31,7 @@ function buildSnapshots() {
 }
 
 test('rebuild：对齐 4 源、归一化、综合分缺源重分配、性价比', () => {
-  const result = rebuildIntegrated({ snapshots: buildSnapshots(), aliasEntries: [], write: false });
+  const result = rebuildIntegrated({ snapshots: buildSnapshots(), aliasEntries: [], write: false, exclusionConfig: { schema_version: 1, rules: [] } });
   assert.equal(result.ok, true, result.errors.join('; '));
   assert.equal(result.models.length, 8); // gpt/claude/o3/qwen/deepseek/kimi/midjourney/runway-gen-4
   const byCanonical = new Map(result.models.map(model => [model.canonical, model]));
@@ -111,7 +111,7 @@ test('rebuild：models-alias 覆盖自动主键规则', () => {
   const aliasEntries = [
     { canonical: 'renamed-gpt', aliases: { openrouter: ['openai/gpt-5.6-sol'], lmarena: ['GPT-5.6 Sol (High)'] } },
   ];
-  const result = rebuildIntegrated({ snapshots, aliasEntries, write: false });
+  const result = rebuildIntegrated({ snapshots, aliasEntries, write: false, exclusionConfig: { schema_version: 1, rules: [] } });
   assert.equal(result.ok, true);
   const models = new Map(result.models.map(model => [model.canonical, model]));
   assert.ok(models.has('renamed-gpt'), 'alias 覆盖后 canonical 为 renamed-gpt');
@@ -200,7 +200,7 @@ test('rebuild：Codex Harness 是评测环境，不生成 GPT-5.5 重复模型',
     livebench: { groups: [] },
     llm_stats: { models: [] },
   };
-  const result = rebuildIntegrated({ snapshots, identityRegistry: { schema_version: 2, entries: [] }, write: false });
+  const result = rebuildIntegrated({ snapshots, identityRegistry: { schema_version: 2, entries: [] }, write: false, exclusionConfig: { schema_version: 1, rules: [] } });
   assert.equal(result.ok, true, result.errors.join('; '));
   const gptModels = result.models.filter(model => model.canonical.startsWith('openai--gpt-5.5'));
   assert.equal(gptModels.length, 1);
@@ -311,7 +311,7 @@ test('rebuild：raw 源字段 null/空时不写维度（缺失不当 0/25 造假
       ],
     },
   };
-  const result = rebuildIntegrated({ snapshots, aliasEntries: [], write: false });
+  const result = rebuildIntegrated({ snapshots, aliasEntries: [], write: false, exclusionConfig: { schema_version: 1, rules: [] } });
   assert.equal(result.ok, true, result.errors.join('; '));
   const model = result.models.find(m => m.canonical === 'probe--null-fields-probe');
   assert.ok(model, 'probe--null-fields-probe 存在');
@@ -324,11 +324,11 @@ test('rebuild：raw 源字段 null/空时不写维度（缺失不当 0/25 造假
   assert.equal(model.dimensions.reasoning.raw, 50);
   // 综合分只含真实可用源（livebench 全 null → lbAvg null 不进综合）
   assert.deepEqual(model.composite.weights, { llm_stats: 1 });
-  // livebench 行全 null → reasoning/coding 维度不落盘
+  // livebench 行全 null → 无任何有效数据，被空模型自动过滤（缺失不当 0/25 造假，空壳不展示）
   const lb = result.models.find(m => m.canonical === 'unknown--lb-null-probe');
-  assert.ok(lb, 'unknown--lb-null-probe 存在');
-  assert.equal(lb.dimensions.reasoning, undefined);
-  assert.equal(lb.dimensions.coding, undefined);
+  assert.equal(lb, undefined, 'unknown--lb-null-probe 应被空模型自动过滤');
+  const filtered = result.diagnostics.empty_filtered_models;
+  assert.ok(filtered.includes('unknown--lb-null-probe'), '自动过滤诊断应列出该探针模型');
 });
 
 test('rebuild：不同明确修订版不混合来源或综合分', () => {
@@ -347,14 +347,41 @@ test('rebuild：不同明确修订版不混合来源或综合分', () => {
     },
     llm_stats: { models: [] },
   };
-  const result = rebuildIntegrated({ snapshots, write: false, identityRegistry: { schema_version: 2, entries: [] } });
+  const result = rebuildIntegrated({ snapshots, write: false, identityRegistry: { schema_version: 2, entries: [] }, now: new Date('2026-08-26T00:00:00Z'), exclusionConfig: { schema_version: 1, rules: [] } });
   assert.equal(result.ok, true, result.errors.join('; '));
-  const older = result.models.find(model => model.canonical === 'deepseek--deepseek-v4-flash@0423');
-  const newer = result.models.find(model => model.canonical === 'deepseek--deepseek-v4-flash@0731');
-  assert.ok(older);
-  assert.ok(newer);
+  // revision 已规范化：MMDD 按系统年份推断（本年不显示年份 → MM-DD）
+  const older = result.models.find(model => model.canonical === 'deepseek--deepseek-v4-flash@04-23');
+  const newer = result.models.find(model => model.canonical === 'deepseek--deepseek-v4-flash@07-31');
+  assert.ok(older, '0423 → 04-23');
+  assert.ok(newer, '0731 → 07-31');
   assert.deepEqual(Object.keys(older.source_names), ['openrouter']);
   assert.deepEqual(Object.keys(newer.source_names).sort(), ['livebench', 'openrouter']);
   assert.equal(older.composite, null);
   assert.equal(newer.composite?.available?.livebench, 80);
+});
+
+test('rebuild：同一日期的 MMDD 与 YYYYMMDD 规范化后合并为同一 revision', () => {
+  const snapshots = {
+    openrouter: {
+      data: [
+        { id: 'deepseek/deepseek-v4-flash-0731', name: 'DeepSeek V4 Flash', created: 1, input_modalities: ['text'], output_modalities: ['text'], prompt: 1e-6, completion: 1e-6 },
+        { id: 'deepseek/deepseek-v4-flash-20260731', name: 'DeepSeek V4 Flash', created: 2, input_modalities: ['text'], output_modalities: ['text'], prompt: 1e-6, completion: 1e-6 },
+      ],
+    },
+    lmarena: { configs: {} },
+    livebench: {
+      groups: [
+        { model: 'deepseek-v4-flash-0731', reasoning: 80, coding: 80, math: 80, language: 80, instruction_following: 80, data_analysis: 80, agentic_coding: 80 },
+      ],
+    },
+    llm_stats: { models: [] },
+  };
+  const result = rebuildIntegrated({ snapshots, write: false, identityRegistry: { schema_version: 2, entries: [] }, now: new Date('2026-08-26T00:00:00Z'), exclusionConfig: { schema_version: 1, rules: [] } });
+  assert.equal(result.ok, true, result.errors.join('; '));
+  const merged = result.models.find(model => model.canonical === 'deepseek--deepseek-v4-flash@07-31');
+  assert.ok(merged, '0731 与 20260731 合并为 @07-31');
+  assert.equal(result.models.filter(m => m.identity === 'deepseek-v4-flash').length, 1, '应只保留一个 deepseek-v4-flash revision');
+  assert.deepEqual([...merged.revisions], ['07-31']);
+  assert.deepEqual([...merged.source_names.openrouter], ['deepseek/deepseek-v4-flash-0731', 'deepseek/deepseek-v4-flash-20260731']);
+  assert.equal(merged.livebench_scores?.base?.reasoning ?? merged.composite?.available?.livebench, 80, 'livebench 分数合并保留');
 });

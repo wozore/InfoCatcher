@@ -70,3 +70,29 @@ test('model series：重叠登记按配置顺序确定唯一系列', () => {
   assert.equal(result.series[0].series_key, 'a');
   assert.equal(validateSeriesProjection(result.series, models).length, 0);
 });
+
+test('model series：identity_prefixes 数组把同一型号的多个前缀合并进一个系列', () => {
+  const models = [
+    model('tencent--hy3', 'hy3', 'hy3', 'tencent', 60),
+    model('tencent--hy3-preview', 'hy3-preview', 'hy3-preview', 'tencent', 55),
+    model('tencent--hunyuan-hy3-preview', 'hunyuan-hy3-preview', 'hunyuan-hy3', 'tencent', 58),
+    model('tencent--hy-mt2-7b', 'hy-mt2-7b', 'hy-mt2', 'tencent', 50),
+  ];
+  const { series } = attachSeriesMetadata(models, {
+    series: [
+      {
+        series_key: 'tencent--hunyuan-hy3',
+        display: 'Hunyuan Hy3',
+        vendor: 'tencent',
+        match: { vendor: 'tencent', identity_prefixes: ['hunyuan-hy3', 'hy3'] },
+      },
+    ],
+  });
+  const hy3 = series.find(item => item.series_key === 'tencent--hunyuan-hy3');
+  assert.equal(hy3.model_count, 3);
+  assert.ok(!series.some(item => item.series_key === 'tencent--hy-mt2-7b'));
+  const mt2 = series.find(item => item.series_key === 'tencent--hy-mt2');
+  assert.equal(mt2.model_count, 1);
+  assert.equal(validateSeriesProjection(series, models).length, 0);
+});
+
