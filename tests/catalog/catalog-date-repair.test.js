@@ -149,6 +149,7 @@ const REVIEW_REGISTRY = {
         url: 'https://example.com/changelog',
         collector: 'tavily_extract',
         product_surface: 'product',
+        review_mode: 'ai_fallback',
       }],
       lifecycle: 'active',
     },

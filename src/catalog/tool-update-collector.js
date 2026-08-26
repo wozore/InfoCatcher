@@ -6,7 +6,7 @@ const {
   validateUpdateSource,
 } = require('./official-url-registry');
 const { canonicalizeUrl, extractTavily } = require('../shared/tavily-client');
-const { explicitDates } = require('./tool-update-review-planner');
+const { explicitDates } = require('./tool-update-evidence');
 
 const GITHUB_API_BASE = 'https://api.github.com';
 const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com';

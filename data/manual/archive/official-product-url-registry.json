@@ -19,6 +19,7 @@
       "update_sources": [
         {
           "kind": "changelog",
+          "review_mode": "deterministic",
           "url": "https://cursor.com/changelog",
           "collector": "tavily_extract",
           "product_surface": "desktop",
@@ -46,6 +47,7 @@
       "update_sources": [
         {
           "kind": "changelog",
+          "review_mode": "deterministic",
           "url": "https://github.blog/changelog/label/copilot",
           "collector": "tavily_extract",
           "product_surface": "product",
@@ -73,6 +75,7 @@
       "update_sources": [
         {
           "kind": "github_releases",
+          "review_mode": "deterministic",
           "url": "https://github.com/anthropics/claude-code/releases",
           "collector": "github_web_release",
           "product_surface": "cli",
@@ -101,6 +104,7 @@
       "update_sources": [
         {
           "kind": "changelog",
+          "review_mode": "deterministic",
           "url": "https://docs.trae.ai/ide/changelog",
           "collector": "tavily_extract",
           "product_surface": "desktop",
@@ -146,6 +150,7 @@
       "update_sources": [
         {
           "kind": "release_notes",
+          "review_mode": "ai_fallback",
           "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-omni-flash-nano-banana-2-lite/",
           "collector": "tavily_extract",
           "product_surface": "product"
@@ -175,6 +180,7 @@
       "update_sources": [
         {
           "kind": "release_notes",
+          "review_mode": "ai_fallback",
           "url": "https://seed.bytedance.com/zh/blog/one-take-creation-flexible-referencing-introducing-seedance-2-5",
           "collector": "tavily_extract",
           "product_surface": "product"
@@ -223,6 +229,7 @@
       "update_sources": [
         {
           "kind": "release_notes",
+          "review_mode": "ai_fallback",
           "url": "https://platform.stability.ai/docs/release-notes",
           "collector": "tavily_extract",
           "product_surface": "product",
@@ -289,6 +296,7 @@
       "update_sources": [
         {
           "kind": "changelog",
+          "review_mode": "deterministic",
           "url": "https://windsurf.com/changelog/windsurf",
           "collector": "tavily_extract",
           "product_surface": "product",
@@ -318,6 +326,7 @@
       "update_sources": [
         {
           "kind": "github_releases",
+          "review_mode": "deterministic",
           "url": "https://github.com/openai/codex/releases",
           "collector": "github_web_release",
           "product_surface": "cli",
@@ -345,6 +354,7 @@
       "update_sources": [
         {
           "kind": "github_releases",
+          "review_mode": "deterministic",
           "url": "https://github.com/google-gemini/gemini-cli/releases",
           "collector": "github_web_release",
           "product_surface": "cli",
@@ -373,6 +383,7 @@
       "update_sources": [
         {
           "kind": "release_notes",
+          "review_mode": "ai_fallback",
           "url": "https://docs.replit.com/updates",
           "collector": "tavily_extract",
           "product_surface": "product",
@@ -400,6 +411,7 @@
       "update_sources": [
         {
           "kind": "release_notes",
+          "review_mode": "ai_fallback",
           "url": "https://docs.devin.ai/release-notes/overview",
           "collector": "tavily_extract",
           "product_surface": "product",
@@ -428,6 +440,7 @@
       "update_sources": [
         {
           "kind": "changelog",
+          "review_mode": "deterministic",
           "url": "https://www.augmentcode.com/changelog",
           "collector": "tavily_extract",
           "product_surface": "product",
@@ -455,6 +468,7 @@
       "update_sources": [
         {
           "kind": "github_file",
+          "review_mode": "deterministic",
           "url": "https://github.com/aws/amazon-q-jetbrains/blob/main/CHANGELOG.md",
           "collector": "github_web_file",
           "product_surface": "ide_extension",
@@ -484,6 +498,7 @@
       "update_sources": [
         {
           "kind": "release_notes",
+          "review_mode": "ai_fallback",
           "url": "https://junie.jetbrains.com/whats-new",
           "collector": "tavily_extract",
           "product_surface": "cli",
@@ -511,6 +526,7 @@
       "update_sources": [
         {
           "kind": "changelog",
+          "review_mode": "deterministic",
           "url": "https://kiro.dev/changelog/cli/",
           "collector": "tavily_extract",
           "product_surface": "cli",
@@ -537,6 +553,7 @@
       "update_sources": [
         {
           "kind": "github_releases",
+          "review_mode": "deterministic",
           "url": "https://github.com/cline/cline/releases",
           "collector": "github_web_release",
           "product_surface": "cli",
@@ -564,6 +581,7 @@
       "update_sources": [
         {
           "kind": "github_releases",
+          "review_mode": "deterministic",
           "url": "https://github.com/Aider-AI/aider/releases",
           "collector": "github_web_release",
           "product_surface": "cli",
@@ -592,6 +610,7 @@
       "update_sources": [
         {
           "kind": "github_releases",
+          "review_mode": "deterministic",
           "url": "https://github.com/continuedev/continue/releases",
           "collector": "github_web_release",
           "product_surface": "ide_extension",
@@ -620,6 +639,7 @@
       "update_sources": [
         {
           "kind": "changelog",
+          "review_mode": "deterministic",
           "url": "https://docs.qoder.com/release-notes/desktop",
           "collector": "tavily_extract",
           "product_surface": "desktop",
@@ -648,6 +668,7 @@
       "update_sources": [
         {
           "kind": "release_notes",
+          "review_mode": "ai_fallback",
           "url": "https://www.codebuddy.ai/docs/ide/release-notes/release-notes",
           "collector": "tavily_extract",
           "product_surface": "ide_extension",

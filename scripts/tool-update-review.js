@@ -61,6 +61,12 @@ function providerOf(flags) {
   return provider;
 }
 
+function modeOf(flags) {
+  const mode = String(flags.mode || 'hybrid').trim().toLowerCase();
+  if (!['deterministic', 'hybrid'].includes(mode)) throw new Error(`TOOL_UPDATE_REVIEW_MODE_INVALID: ${mode}`);
+  return mode;
+}
+
 function accessModeOf(flags, required) {
   if (!required && flags.tavily_access_mode === undefined) return undefined;
   const value = flags.tavily_access_mode;
@@ -134,7 +140,9 @@ async function runPreflight(flags = {}, deps = {}) {
   const keys = selectedProductKeys(flags, registry);
   const sources = sourceListForProducts(keys, registry);
   const accessMode = accessModeOf(flags, sourceNeedsTavily(sources));
+  const mode = modeOf(flags);
   const provider = providerOf(flags);
+  const aiFallbackSources = sources.some(source => source.review_mode !== 'deterministic');
   const checks = {};
 
   const githubProbe = deps.probeGithub || defaultGithubProbe;
@@ -150,14 +158,16 @@ async function runPreflight(flags = {}, deps = {}) {
       fetchImpl: deps.fetchImpl,
     });
   } else checks.tavily = { ok: true, skipped: true };
-  if (provider === 'local') {
+  if (mode === 'hybrid' && aiFallbackSources && provider === 'local') {
     const localProbe = deps.probeLocal || probeLocal;
     checks.local = await localProbe(deps.fetchImpl);
     checks.local = typeof checks.local === 'boolean' ? { ok: checks.local } : checks.local;
   } else {
     checks.local = { ok: true, skipped: true };
-    checks.deepseek = deps.deepseekProbe ? await deps.deepseekProbe() : { ok: true, requires_confirm_cost: true };
   }
+  if (mode === 'hybrid' && aiFallbackSources && provider === 'deepseek') {
+    checks.deepseek = deps.deepseekProbe ? await deps.deepseekProbe() : { ok: true, requires_confirm_cost: true };
+  } else checks.deepseek = { ok: true, skipped: true };
 
   const ok = Object.values(checks).every(check => check?.ok !== false);
   return {
@@ -166,6 +176,7 @@ async function runPreflight(flags = {}, deps = {}) {
     status: ok ? 'ready' : 'blocked',
     provider,
     access_mode: accessMode || null,
+    mode,
     products: keys,
     source_count: sourceCount(sources),
     checks,
@@ -179,18 +190,24 @@ async function runScan(flags = {}, deps = {}) {
   const keys = selectedProductKeys(flags, registry);
   const sources = sourceListForProducts(keys, registry);
   const accessMode = accessModeOf(flags, sourceNeedsTavily(sources));
+  const mode = modeOf(flags);
   const provider = providerOf(flags);
-  if (provider === 'deepseek' && flags.confirm_cost !== true) {
+  const mayUseAi = mode === 'hybrid' && sources.some(source => source.review_mode !== 'deterministic');
+  if (mayUseAi && provider === 'deepseek' && flags.confirm_cost !== true) {
     return { ok: false, command: 'scan', code: 'TOOL_UPDATE_REVIEW_COST_CONFIRM_REQUIRED', error: 'DeepSeek scan 必须显式提供 --confirm-cost' };
   }
   const current = deps.loadSnapshot ? deps.loadSnapshot() : loadCatalogSnapshot();
+  const aiSourceCount = sources.filter(source => source.review_mode !== 'deterministic').length;
   const ledger = deps.createLedger
-    ? deps.createLedger({ responses_calls: Number(flags.max_ai_calls || Math.max(1, sources.length)) })
-    : createCostLedger({ responses_calls: Number(flags.max_ai_calls || Math.max(1, sources.length)) });
+    ? deps.createLedger({ responses_calls: Number(flags.max_ai_calls || Math.max(0, aiSourceCount)) })
+    : createCostLedger({ responses_calls: Number(flags.max_ai_calls || Math.max(0, aiSourceCount)) });
   const collect = deps.collectProductUpdateEvidence || collectProductUpdateEvidence;
   const suggest = deps.suggestReview || suggestToolUpdateReview;
   const candidates = [];
   const failures = [];
+  let deterministicCount = 0;
+  let needsAiCount = 0;
+  let blockedCount = 0;
 
   for (const productKey of keys) {
     const product = registry.products[productKey];
@@ -204,28 +221,39 @@ async function runScan(flags = {}, deps = {}) {
     const detail = detailFor(productKey, product, current.snapshot);
     for (const evidence of collected.evidence || []) {
       const source = sourceForEvidence(productKey, evidence, registry);
-      if (!source || !detail) {
-        failures.push({ product_key: productKey, source_url: evidence.url, code: !source ? 'SOURCE_NOT_IN_REGISTRY' : 'TOOL_DETAIL_NOT_FOUND' });
-        continue;
-      }
-      const ai = await suggest({ product_key: productKey, evidence, product, source, detail }, {
-        ledger,
-        provider,
-        confirmCost: flags.confirm_cost === true,
-        model: flags.model,
-        endpoint: deps.endpoint,
-        fetchImpl: deps.aiFetchImpl,
-      });
-      if (!ai.ok) {
-        failures.push({ product_key: productKey, source_url: evidence.url, code: ai.code, error: ai.error || null });
-        continue;
-      }
-      const planned = planToolUpdateCandidate(productKey, evidence, ai.suggestion, {
+      let planned = planToolUpdateCandidate(productKey, evidence, null, {
         registry,
         detail,
         now: flags.as_of || new Date().toISOString(),
       });
+      const canFallback = mode === 'hybrid'
+        && source?.review_mode !== 'deterministic'
+        && planned.blocked_reasons.length === 1
+        && (planned.blocked_reasons.includes('AI_REVIEW_REQUIRED') || planned.blocked_reasons.includes('AI_OUTPUT_INVALID'));
+      if (canFallback) {
+        needsAiCount++;
+        const ai = await suggest({ product_key: productKey, evidence, product, source, detail }, {
+          ledger,
+          provider,
+          confirmCost: flags.confirm_cost === true,
+          model: flags.model,
+          endpoint: deps.endpoint,
+          fetchImpl: deps.aiFetchImpl,
+        });
+        if (ai.ok) {
+          planned = planToolUpdateCandidate(productKey, evidence, ai.suggestion, {
+            registry,
+            detail,
+            now: flags.as_of || new Date().toISOString(),
+          });
+        } else {
+          planned.candidate.blocked_reasons = [...new Set([...(planned.candidate.blocked_reasons || []), 'AI_FALLBACK_FAILED'])];
+          failures.push({ product_key: productKey, source_url: evidence.url, code: ai.code, error: ai.error || null });
+        }
+      }
       candidates.push(planned.candidate);
+      if (planned.candidate.decision_source === 'deterministic') deterministicCount++;
+      if (planned.candidate.status === 'blocked') blockedCount++;
     }
   }
 
@@ -241,12 +269,16 @@ async function runScan(flags = {}, deps = {}) {
     command: 'scan',
     status: failures.length ? 'partial' : 'ready',
     provider,
+    mode,
     access_mode: accessMode || null,
     products: keys,
     evidence_count: candidates.length,
     candidate_count: candidates.length,
+    deterministic_count: deterministicCount,
+    needs_ai_count: needsAiCount,
+    blocked_count: blockedCount,
     failures,
-    queue: queue ? { file: queue.file, appended: queue.appended, refreshed: queue.refreshed, reopened: queue.reopened, item_count: queue.queue.items.length } : null,
+    queue: queue ? { file: queue.file, appended: queue.appended, refreshed: queue.refreshed, reopened: queue.reopened, unchanged: queue.unchanged || false, item_count: queue.queue.items.length } : null,
     cost: ledger.snapshot(),
     catalog_apply: false,
   };
@@ -355,6 +387,7 @@ module.exports = {
   PRODUCT_KEYS,
   parseArgs,
   accessModeOf,
+  modeOf,
   runPreflight,
   runScan,
   runList,

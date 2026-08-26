@@ -514,45 +514,48 @@ tool-cards-pending.json
       "product_surface": "cli",
       "repository": "acme/sample-tool",
       "tag_prefix": "v",
-      "include_prerelease": false
-    },
+      "include_prerelease": false,
+      "review_mode": "deterministic"    },
     {
       "kind": "github_file",
       "url": "https://github.com/acme/sample-tool/blob/main/CHANGELOG.md",
       "collector": "github_web_file",
       "product_surface": "cli",
-      "repository": "acme/sample-tool"
+      "repository": "acme/sample-tool",
+      "review_mode": "deterministic"
     },
     {
       "kind": "changelog",
       "url": "https://acme.example/changelog",
       "collector": "tavily_extract",
-      "product_surface": "product"
+      "product_surface": "product",
+      "review_mode": "deterministic"
     }
   ]
 }
 ```
 
-契约硬规则：`kind` 只能是 `github_releases`、`github_file`、`changelog` 或 `release_notes`；collector 必须分别匹配 `github_web_release`、`github_web_file` 或 `tavily_extract`；`product_surface` 只能是 `product`、`cli`、`desktop`、`ide_extension`。GitHub URL 必须是可供人打开的 `https://github.com/<owner>/<repo>/releases...` 或 `/blob/<ref>/<file>` 页面，且 `<owner>/<repo>` 必须与 `repository` 对应；不持久化 `api.github.com`。价格页、Tags 页、单独 tag/commit 时间、重复 URL、HTTP、未知字段组合均拒绝。可选 `date_mode: "latest"` 表示该 changelog 列表页的全部条目都属于目标产品更新、多日期时取最新一条（GitHub Copilot 取最新 copilot 标签更新、Trae 全页均为 IDE 更新即此规则）。`updateSourcesForProduct()` 是只读读取接口，不参与 batch lookup。采集器对 `tavily_extract` 来源优先直接抓取官方 HTML 正文（Tavily Extract 对 JS 渲染/缓存文档站经常丢失 changelog 条目日期），HTML 失败才回退 Tavily Extract。
+契约硬规则：`kind` 只能是 `github_releases`、`github_file`、`changelog` 或 `release_notes`；collector 必须分别匹配 `github_web_release`、`github_web_file` 或 `tavily_extract`；`product_surface` 只能是 `product`、`cli`、`desktop`、`ide_extension`；`review_mode` 必须是 `deterministic` 或 `ai_fallback`，不能根据来源类型自动猜测。`deterministic` 表示日期和产品表面都由程序门禁完成，`ai_fallback` 只允许事实门禁通过后请求语义建议。GitHub URL 必须是可供人打开的 `https://github.com/<owner>/<repo>/releases...` 或 `/blob/<ref>/<file>` 页面，且 `<owner>/<repo>` 必须与 `repository` 对应；不持久化 `api.github.com`。价格页、Tags 页、单独 tag/commit 时间、重复 URL、HTTP、未知字段组合均拒绝。可选 `date_mode: "latest"` 表示该 changelog 列表页的全部条目都属于目标产品更新、多日期时取最新一条（GitHub Copilot 取最新 copilot 标签更新、Trae 全页均为 IDE 更新即此规则）。`updateSourcesForProduct()` 是只读读取接口，不参与 batch lookup。采集器对 `tavily_extract` 来源优先直接抓取官方 HTML 正文（Tavily Extract 对 JS 渲染/缓存文档站经常丢失 changelog 条目日期），HTML 失败才回退 Tavily Extract。
 
-后续更新审核清单路径为 `data/manual/tools/tool-update-review.json`。第 4 步的 scan 只把确定性采集的 `UpdateEvidence` 交给 AI 做语义建议，再经 planner 生成 `candidate` 或 `blocked` 条目；默认 provider 是本地 Bonsai，DeepSeek 必须显式确认成本。AI 只能输出 `verdict`、`matched_surface`、`confidence`、`reason`、`supporting_excerpt` 五个字段，不能创建或改写产品键、URL、repository 或日期。清单默认 `review_status: pending`，不调用 catalog Apply。
+后续更新审核清单路径为 `data/manual/tools/tool-update-review.json`。`scan --mode deterministic` 只把事实完整的确定性来源写成 candidate；`scan --mode hybrid` 先执行同样的事实门禁，只有 `review_mode: "ai_fallback"` 且事实通过的条目才调用语义审核 AI。确定性 candidate 记录 `decision_source: "deterministic"`，AI candidate 记录 `decision_source: "ai"`；未解决的歧义保留为 blocked，不丢弃证据。默认 provider 是本地 Bonsai，DeepSeek 必须显式确认成本。AI 只能输出 `verdict`、`matched_surface`、`confidence`、`reason`、`supporting_excerpt` 五个字段，不能创建或改写产品键、URL、repository 或日期。清单默认 `review_status: pending`，扫描永不写正式 catalog。
 
 第 5 步的日期 Apply 只允许显式 `mode: "advance_update"` 的 `tool.last_updated_date` 向前更新：新日期必须严格晚于当前日期、不晚于 Apply/扫描日，证据日期必须来自官方发布时间 metadata 或正文；模型 `release_date`、套餐、同日、回退、未来日期和非官方来源均拒绝。批量 Apply 先以同一 base revision 生成一份 preview/hash，再重新读取 registry、catalog 和 review queue，逐条确认 `review_status: approved` 与 candidate hash，任一冲突则整批不写入；成功提交只改变目标日期和必要的官方 source 追加，其他字段零漂移。
 
-planner 只接受已登记来源、`detail_kind: tool`、官方 metadata/正文日期、晚于现有 `last_updated_date` 且不晚于扫描日的候选；低置信度、实体/组件错配、日期缺失、未来/同日/回退日期均记录阻断理由。审核条目按 `product_key + source_url + proposed_date + content_hash` 去重，重扫保留人工 `approved/rejected`；同一发布的 evidence hash 变化会重新变为 pending。队列只保存官方 URL、证据摘录、hash、日期和 AI 建议，不保存整页正文或凭据。
+planner 只接受已登记来源、`detail_kind: tool`、官方 metadata/正文日期、晚于现有 `last_updated_date` 且不晚于扫描日的候选；低置信度、实体/组件错配、日期缺失、未来/同日/回退日期均记录阻断理由。审核条目按 `product_key + source_url + proposed_date + content_hash` 去重，重扫保留人工 `approved/rejected`；同一发布的 evidence hash 变化会重新变为 pending。队列可保存 `review_decision` 与 `decision_source`，旧条目的 `ai_suggestion` 仍兼容；日期只能从持久化 evidence 的发布时间或正文摘录复算，不能只依赖 AI supporting excerpt。队列只保存官方 URL、证据摘录、hash、日期和审核建议，不保存整页正文或凭据。
 
 维护命令：
 
 ```bash
-# 编程工具专用更新审核链路（不使用 gh）
-bat\tool-update-review.bat preflight --tavily-access-mode keyless
-bat\tool-update-review.bat scan --tavily-access-mode keyless
+# 编程工具专用更新审核链路
+bat\tool-update-review.bat preflight --mode deterministic --tavily-access-mode keyless
+bat\tool-update-review.bat scan --mode deterministic --tavily-access-mode keyless
+bat\tool-update-review.bat scan --mode hybrid --tavily-access-mode keyless
 bat\tool-update-review.bat list --status pending
 bat\tool-update-review.bat preview
 bat\tool-update-review.bat apply --expected-revision sha256:... --preview-hash sha256:...
 ```
 
-`preflight` 只检查登记表、GitHub 公共访问、Tavily 和本地 AI 能力，不写文件。`scan` 只采集专用 `update_sources`、调用语义审核 AI 并合并 `tool-update-review.json`，不调用 catalog Apply；含 Tavily 来源必须显式选择 `--tavily-access-mode keyed|keyless`，DeepSeek 还必须加 `--confirm-cost`，默认 provider 是本地 Bonsai。`list` 和 `preview` 只读；`preview` 输出当前 expected revision、精确变更和 preview hash。
+`preflight` 将必需的登记表/GitHub/Tavily 能力与可选 AI fallback 分开报告，不写文件。`scan --mode deterministic` 永不探测或调用 AI；`scan --mode hybrid` 只为事实门禁通过且登记为 `ai_fallback` 的来源请求 AI。两种扫描都只合并 `tool-update-review.json`，不写正式 catalog；含 Tavily 来源必须显式选择 `--tavily-access-mode keyed|keyless`，DeepSeek fallback 还必须加 `--confirm-cost`。`list` 和 `preview` 只读；`preview` 输出当前 expected revision、精确变更和 preview hash。`.github/workflows/weekly-tool-update-review.yml` 每周按 [data/news/config/news-config-v2.json](../../data/news/config/news-config-v2.json) 中 `schedule.tool_update_review_hour_utc` 与 `schedule.tool_update_review_minute_utc` 的目标 UTC 时间运行确定性扫描，未设置时默认为 `03:17 UTC`（北京时间 11:17）；GitHub Actions 的 cron 负责每小时唤醒，实际执行允许约 30 分钟调度窗口。修改统一 JSON 的这两个字段即可调整时间；手动触发 workflow 不受时间门控影响。定时任务不会执行本地人工日期写入。
 
 `apply` 只接受人工把候选改为 `review_status: "approved"` 且仍为 `status: "candidate"` 的条目。它要求 `--expected-revision`、`--preview-hash`，并交互输入精确的 `APPLY TOOL-UPDATES <preview_hash>`；CLI 会重新读取 registry、catalog 和审核队列，复算 candidate/preview，最后复用日期批量事务。任何 revision、hash、来源、日期或审核状态冲突都 fail-closed，不能写入；本入口不更新 registry 的 `last_official_update_at` / `last_verified_at`，那属于后续维护步骤。
 

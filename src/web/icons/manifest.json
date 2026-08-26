@@ -112,7 +112,7 @@
     "codebuddy": {
       "path":"tool/codebuddy-color.svg"
     },
-    "codex": {
+    "openai-codex": {
       "path":"tool/codex-color.svg"
     },
     "devin": {

@@ -31,6 +31,7 @@ function releaseSource(overrides = {}) {
     product_surface: 'cli',
     repository: 'acme/tool',
     include_prerelease: false,
+    review_mode: 'deterministic',
     ...overrides,
   };
 }
@@ -42,6 +43,7 @@ function fileSource(overrides = {}) {
     collector: 'github_web_file',
     product_surface: 'cli',
     repository: 'acme/tool',
+    review_mode: 'deterministic',
     ...overrides,
   };
 }
@@ -52,6 +54,7 @@ function tavilySource(overrides = {}) {
     url: 'https://acme.example/changelog',
     collector: 'tavily_extract',
     product_surface: 'product',
+    review_mode: 'deterministic',
     ...overrides,
   };
 }

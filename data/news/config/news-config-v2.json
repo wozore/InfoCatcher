@@ -10,7 +10,9 @@
     "youtube_window_days": 3,
     "x_cron_first": "0 5 * * *",
     "x_cron_second": "0 14 * * *",
-    "x_tz": "Asia/Shanghai"
+    "x_tz": "Asia/Shanghai",
+    "tool_update_review_hour_utc": 3,
+    "tool_update_review_minute_utc": 17
   },
   "collection": {
     "enabled": true,

@@ -10,7 +10,8 @@ const { validateCatalogSnapshot } = require('./catalog-snapshot-validator');
 const { loadCatalogSnapshot, commitSnapshotChange } = require('./catalog-transaction-store');
 const { loadProductUrlRegistry, updateSourcesForProduct } = require('./official-url-registry');
 const { readReviewQueue } = require('./tool-update-review-store');
-const { explicitDates, planToolUpdateCandidate } = require('./tool-update-review-planner');
+const { explicitDates, officialDateOf, isIsoDate } = require('./tool-update-evidence');
+const { planToolUpdateCandidate } = require('./tool-update-review-planner');
 
 const TARGET_FIELD_BY_KIND = Object.freeze({
   tool: 'last_updated_date',
@@ -19,52 +20,13 @@ const TARGET_FIELD_BY_KIND = Object.freeze({
 });
 const DATE_REPAIR_MODES = Object.freeze(['fill_missing', 'advance_update']);
 
-const MONTHS = Object.freeze({
-  january: '01', february: '02', march: '03', april: '04', may: '05', june: '06',
-  july: '07', august: '08', september: '09', october: '10', november: '11', december: '12',
-});
-
-const MONTH_ABBREVIATIONS = Object.freeze({
-  january: 'Jan', february: 'Feb', march: 'Mar', april: 'Apr', may: 'May', june: 'Jun',
-  july: 'Jul', august: 'Aug', september: 'Sep', october: 'Oct', november: 'Nov', december: 'Dec',
-});
-
-function isIsoDate(value) {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(value || ''))) return false;
-  const [year, month, day] = String(value).split('-').map(Number);
-  const date = new Date(Date.UTC(year, month - 1, day));
-  return date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
-}
-
 function dateFieldForDetail(detail) {
   return TARGET_FIELD_BY_KIND[detail?.detail_kind] || null;
 }
 
-function dateVariants(value) {
-  if (!isIsoDate(value)) return [];
-  const [year, month, day] = value.split('-');
-  const monthName = Object.entries(MONTHS).find(([, number]) => number === month)?.[0];
-  const monthAbbreviation = MONTH_ABBREVIATIONS[monthName];
-  return [
-    value,
-    `${monthName} ${Number(day)}, ${year}`,
-    `${monthAbbreviation} ${Number(day)}, ${year}`,
-    `${Number(day)} ${monthName} ${year}`,
-  ].filter(Boolean);
-}
-
-function officialDateOf(value) {
-  const match = String(value || '').match(/(?:^|\b)(20\d{2})-(\d{2})-(\d{2})(?=\b|T)/);
-  const date = match ? `${match[1]}-${match[2]}-${match[3]}` : null;
-  return date && isIsoDate(date) ? date : null;
-}
-
 function evidenceSupportsDate(evidence, date) {
   if (officialDateOf(evidence?.official_published_at) === date) return true;
-  const content = String(evidence?.content || '').toLowerCase();
-  if (dateVariants(date).some(value => content.includes(value.toLowerCase()))) return true;
-  // 与 planner 保持一致：explicitDates 支持月份缩写、点分隔与月份标题年份推断。
-  return explicitDates(evidence?.content || '').includes(date);
+  return explicitDates(evidence?.content || evidence?.excerpt || '').includes(date);
 }
 
 function sourceKey(source) {
@@ -285,7 +247,7 @@ function reviewItemRepairOf(item, snapshot, registry, options = {}) {
   const detail = (snapshot?.['tool-level3'] || []).find(detailItem => detailItem.id === item.detail_id);
   if (!detail) return invalid('DATE_REPAIR_DETAIL_NOT_FOUND', '审核条目对应详情不存在', { detail_id: item.detail_id });
   const evidence = reviewEvidenceOf(item);
-  const revalidated = planToolUpdateCandidate(item.product_key, evidence, item.ai_suggestion, {
+  const revalidated = planToolUpdateCandidate(item.product_key, evidence, item.review_decision || item.ai_suggestion, {
     registry,
     detail,
     now: options.asOf || options.now,

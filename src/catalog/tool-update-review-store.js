@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { CATALOG_GENERATOR_FILES } = require('../shared/paths');
 const { readJson, writeJsonAtomic } = require('../news/core/news-storage');
+const { normalizeToolUpdateReviewValue, DECISION_SOURCES } = require('./tool-update-review-contract');
 
 const REVIEW_SCHEMA_VERSION = 1;
 const REVIEW_KIND = 'tool_update_review';
@@ -34,22 +35,7 @@ function reviewFileOf(file) {
 }
 
 function safeAiSuggestion(value) {
-  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
-  const fields = ['verdict', 'matched_surface', 'confidence', 'reason', 'supporting_excerpt'];
-  const keys = Object.keys(value);
-  if (keys.length !== fields.length || fields.some(field => !keys.includes(field))) return null;
-  if (!['approve', 'hold', 'discard'].includes(value.verdict)) return null;
-  if (!['product', 'cli', 'desktop', 'ide_extension'].includes(value.matched_surface)) return null;
-  if (!Number.isFinite(value.confidence) || value.confidence < 0 || value.confidence > 1) return null;
-  if (typeof value.reason !== 'string' || !value.reason.trim()) return null;
-  if (typeof value.supporting_excerpt !== 'string' || !value.supporting_excerpt.trim() || value.supporting_excerpt.length > 1200) return null;
-  return {
-    verdict: value.verdict,
-    matched_surface: value.matched_surface,
-    confidence: value.confidence,
-    reason: value.reason,
-    supporting_excerpt: value.supporting_excerpt,
-  };
+  return normalizeToolUpdateReviewValue(value);
 }
 
 function normalizeItem(item, now) {
@@ -89,6 +75,8 @@ function normalizeItem(item, now) {
     ...(item.product_name ? { product_name: String(item.product_name) } : {}),
     evidence: safeEvidence,
     ai_suggestion: safeAiSuggestion(item.ai_suggestion),
+    ...(safeAiSuggestion(item.review_decision) ? { review_decision: safeAiSuggestion(item.review_decision) } : {}),
+    ...(DECISION_SOURCES.includes(item.decision_source) ? { decision_source: item.decision_source } : {}),
     blocked_reasons: Array.isArray(item.blocked_reasons) ? [...new Set(item.blocked_reasons.map(String))] : [],
     review_status: reviewStatus,
     status,
@@ -149,6 +137,14 @@ function releaseKeyOf(item) {
   return String(item?.release_key || '').trim();
 }
 
+function comparableItem(item) {
+  const value = clone(item) || {};
+  delete value.created_at;
+  delete value.updated_at;
+  return JSON.stringify(value);
+}
+
+
 function mergeReviewQueue(existing, freshItems, options = {}) {
   const now = nowOf(options.now);
   const existingQueue = existing || defaultReviewQueue();
@@ -166,6 +162,7 @@ function mergeReviewQueue(existing, freshItems, options = {}) {
     const sameIndex = byCandidate.get(fresh.candidate_key);
     if (sameIndex !== undefined) {
       const previous = merged[sameIndex];
+      if (comparableItem(previous) === comparableItem(fresh)) continue;
       merged[sameIndex] = {
         ...previous,
         ...fresh,
@@ -218,9 +215,11 @@ function mergeReviewQueue(existing, freshItems, options = {}) {
 
 function mergeAndWriteReviewQueue(freshItems, options = {}) {
   const file = reviewFileOf(options.file);
-  const merged = mergeReviewQueue(readReviewQueue(file), freshItems, options);
+  const existing = readReviewQueue(file);
+  const merged = mergeReviewQueue(existing, freshItems, options);
+  if (!merged.changed) return { ...merged, ok: true, file, queue: existing, unchanged: true };
   const written = writeReviewQueue(merged.queue, { ...options, file });
-  return { ...merged, ...written };
+  return { ...merged, ...written, unchanged: false };
 }
 
 module.exports = {

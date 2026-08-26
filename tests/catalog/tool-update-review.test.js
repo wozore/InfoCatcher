@@ -169,6 +169,32 @@ test('确定性 planner 通过登记源、tool 详情、官方发布日期和向
   assert.match(result.candidate.candidate_key, /acme-tool\|https:\/\/github.com\/acme\/tool\/releases\|2026-08-20\|sha256:/);
 });
 
+test('确定性来源无需 AI 建议即可生成 candidate，并记录 decision_source', () => {
+  const source = { ...SOURCE, review_mode: 'deterministic' };
+  const registry = { ...REGISTRY, products: { 'acme-tool': { ...REGISTRY.products['acme-tool'], update_sources: [source] } } };
+  const result = planToolUpdateCandidate('acme-tool', evidence({ url: source.url }), undefined, {
+    registry,
+    detail: detail(),
+    now: NOW,
+  });
+  assert.equal(result.ok, true, JSON.stringify(result));
+  assert.equal(result.candidate.decision_source, 'deterministic');
+  assert.equal(result.candidate.review_decision.verdict, 'approve');
+  assert.equal(result.candidate.ai_suggestion, null);
+});
+
+test('日期只能来自持久化 evidence，AI supporting_excerpt 不能单独造日期', () => {
+  const result = planToolUpdateCandidate('acme-tool', evidence({
+    official_published_at: null,
+    excerpt: 'A product update without a calendar date.',
+  }), suggestion({ supporting_excerpt: 'Released Aug 20, 2026.' }), {
+    registry: REGISTRY,
+    detail: detail(),
+    now: NOW,
+  });
+  assert.equal(result.ok, false);
+  assert.ok(result.blocked_reasons.includes('EVIDENCE_DATE_MISSING'));
+});
 test('GitHub Release 具体 tag 页面绑定已登记的 releases 聚合源', () => {
   const result = planToolUpdateCandidate('acme-tool', evidence({
     url: 'https://github.com/acme/tool/releases/tag/v2.0.0',

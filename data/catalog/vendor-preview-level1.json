@@ -76,6 +76,10 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:anthropic:claude-opus-4-8"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:anthropic:claude-code"
         }
       ]
     },
@@ -516,6 +520,10 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:tencent:hy-mt2"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:tencent:codebuddy"
         }
       ]
     },
@@ -677,6 +685,10 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:bytedance:seed-character"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:bytedance:trae"
         }
       ]
     },
@@ -758,7 +770,12 @@
           "text": "限制：模型授权、区域部署与实际价格需以 Azure 官方条件为准。"
         }
       ],
-      "level2_refs": []
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:microsoft:github-copilot"
+        }
+      ]
     },
     {
       "id": "vendor-level1:reve",

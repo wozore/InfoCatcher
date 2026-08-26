@@ -46,7 +46,7 @@
     {
       "id": "tool-card:copilot",
       "tool_key": "copilot",
-      "vendor_key": "copilot",
+      "vendor_key": "microsoft",
       "title": "GitHub Copilot",
       "vendor_label": "Microsoft/GitHub",
       "icon": "🐙",
@@ -87,7 +87,7 @@
     {
       "id": "tool-card:claude-code",
       "tool_key": "claude-code",
-      "vendor_key": "claude-code",
+      "vendor_key": "anthropic",
       "title": "Claude Code",
       "vendor_label": "Anthropic",
       "icon": "⚡",
@@ -131,7 +131,7 @@
     {
       "id": "tool-card:trae",
       "tool_key": "trae",
-      "vendor_key": "trae",
+      "vendor_key": "bytedance",
       "title": "Trae",
       "vendor_label": "字节跳动",
       "icon": "🇨🇳",
@@ -2966,7 +2966,7 @@
     {
       "id": "tool-card:codebuddy",
       "tool_key": "codebuddy",
-      "vendor_key": "codebuddy-vendor",
+      "vendor_key": "tencent",
       "title": "CodeBuddy",
       "vendor_label": "腾讯云 CodeBuddy",
       "icon": "🧩",

@@ -436,11 +436,13 @@ test('update_sources 可选契约：合法 GitHub Release/File 与厂商 changel
             repository: 'acme/sample-tool',
             tag_prefix: 'v',
             include_prerelease: false,
+            review_mode: 'deterministic',
           },
           {
             kind: 'github_file',
             url: 'https://github.com/acme/sample-tool/blob/main/CHANGELOG.md',
             collector: 'github_web_file',
+            review_mode: 'deterministic',
             product_surface: 'cli',
             repository: 'acme/sample-tool',
           },
@@ -448,12 +450,14 @@ test('update_sources 可选契约：合法 GitHub Release/File 与厂商 changel
             kind: 'changelog',
             url: 'https://acme.example/changelog',
             collector: 'tavily_extract',
+            review_mode: 'ai_fallback',
             product_surface: 'product',
           },
           {
             kind: 'release_notes',
             url: 'https://acme.example/release-notes',
             collector: 'tavily_extract',
+            review_mode: 'ai_fallback',
             product_surface: 'desktop',
           },
         ],
@@ -502,6 +506,7 @@ test('update_sources 严格拒绝错误来源边界、组合、重复和未知�
     product_surface: 'cli',
     repository: 'acme/sample-tool',
     include_prerelease: false,
+            review_mode: 'deterministic',
   };
 
   assert.match(validate([{ ...release, repository: 'acme' }]).errors.join(','), /REPOSITORY_INVALID/);
@@ -516,15 +521,18 @@ test('update_sources 严格拒绝错误来源边界、组合、重复和未知�
     kind: 'github_file',
     url: 'https://github.com/acme/sample-tool/blob/main/CHANGELOG.md',
     collector: 'github_web_file',
+            review_mode: 'deterministic',
     product_surface: 'cli',
     repository: 'acme/sample-tool',
     tag_prefix: 'v',
     include_prerelease: false,
+            review_mode: 'deterministic',
   }]).errors.join(','), /TAG_PREFIX_FORBIDDEN/);
   assert.match(validate([{
     kind: 'changelog',
     url: 'https://github.com/acme/sample-tool/releases',
     collector: 'tavily_extract',
+            review_mode: 'ai_fallback',
     product_surface: 'cli',
   }]).errors.join(','), /GITHUB_KIND_REQUIRED/);
   assert.equal(validate([{ ...release, date_mode: 'latest' }]).ok, true);
@@ -554,6 +562,7 @@ test('update_sources 不进入 lookupOfficialUrl 或 catalog batch 的 official_
           product_surface: 'cli',
           repository: 'acme/sample',
           include_prerelease: false,
+            review_mode: 'deterministic',
         }],
       },
     },

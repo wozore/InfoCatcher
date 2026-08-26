@@ -840,6 +840,78 @@
           "id": "tool-level3:claude-opus-4.8"
         }
       ]
+    },
+    {
+      "id": "vendor-level2:microsoft:github-copilot",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:microsoft"
+      },
+      "vendor_key": "microsoft",
+      "title": "GitHub Copilot",
+      "official_url": "https://github.com/features/copilot",
+      "summary": "GitHub 的 AI 编程助手，提供编辑器、GitHub、CLI 与智能体等开发能力。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:copilot"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:anthropic:claude-code",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:anthropic"
+      },
+      "vendor_key": "anthropic",
+      "title": "Claude Code",
+      "official_url": "https://docs.anthropic.com/en/docs/claude-code/getting-started",
+      "summary": "Anthropic 的 AI 编程代理，支持在终端中理解代码库、编辑文件并执行开发任务。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:claude-code"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:bytedance:trae",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:bytedance"
+      },
+      "vendor_key": "bytedance",
+      "title": "TRAE",
+      "official_url": "https://www.trae.ai/",
+      "summary": "字节跳动旗下 AI 编程工具，提供智能代码编辑、开发协作与智能体工作流。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:trae"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:tencent:codebuddy",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:tencent"
+      },
+      "vendor_key": "tencent",
+      "title": "CodeBuddy",
+      "official_url": "https://intl.cloud.tencent.com/document/product/1256/77266?lang=en",
+      "summary": "腾讯云 AI 编程工具，覆盖 IDE、插件与 CLI 等开发形态。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:codebuddy"
+        }
+      ]
     }
   ]
 }

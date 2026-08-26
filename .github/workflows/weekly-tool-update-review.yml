@@ -1,0 +1,186 @@
+name: Weekly Tool Update Review
+
+on:
+  schedule:
+    - cron: '17 * * * 1'
+  workflow_dispatch:
+    inputs:
+      products:
+        description: 'Comma-separated product keys; blank scans all registered products'
+        required: false
+        default: ''
+      mode:
+        description: 'Review mode for this run'
+        required: false
+        type: choice
+        options:
+          - deterministic
+          - hybrid
+        default: deterministic
+      enable_ai_fallback:
+        description: 'Allow the optional DeepSeek fallback for this manual run'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: tool-update-review
+  cancel-in-progress: false
+
+env:
+  TOOL_MODE: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.mode || 'deterministic' }}
+  TOOL_PRODUCTS: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.products || '' }}
+  TOOL_AI_ENABLED: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.enable_ai_fallback || vars.TOOL_UPDATE_AI_FALLBACK_ENABLED || 'false' }}
+  RUN_REVIEW: 'true'
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Check configured weekly time
+        if: github.event_name == 'schedule'
+        run: |
+          set -euo pipefail
+          current="$(date -u +%H:%M)"
+          target_hour="$(node -p "require('./data/news/config/news-config-v2.json').schedule.tool_update_review_hour_utc")"
+          target_minute="$(node -p "require('./data/news/config/news-config-v2.json').schedule.tool_update_review_minute_utc")"
+          target_hour_number=$((10#$target_hour))
+          target_minute_number=$((10#$target_minute))
+          if [ "$target_hour_number" -lt 0 ] || [ "$target_hour_number" -gt 23 ] || [ "$target_minute_number" -lt 0 ] || [ "$target_minute_number" -gt 59 ]; then
+            echo 'Invalid tool update review time in data/news/config/news-config-v2.json'
+            exit 1
+          fi
+          current_minutes=$((10#${current%:*} * 60 + 10#${current#*:}))
+          target_minutes=$((target_hour_number * 60 + target_minute_number))
+          difference=$((current_minutes - target_minutes))
+          target_label="$(printf '%02d:%02d' "$target_hour_number" "$target_minute_number")"
+          if [ "$difference" -lt -30 ] || [ "$difference" -ge 30 ]; then
+            echo 'RUN_REVIEW=false' >> "$GITHUB_ENV"
+            echo "Outside configured window: current=$current target=$target_label UTC"
+          else
+            echo 'RUN_REVIEW=true' >> "$GITHUB_ENV"
+          fi
+
+      - name: Prepare rolling review branch
+        if: github.event_name != 'schedule' || env.RUN_REVIEW == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          open_pr="$(gh pr list --state open --base main --json number,headRefName --jq '.[] | select(.headRefName | startswith("automation/tool-update-review-")) | [.number, .headRefName] | @tsv' | head -n 1 || true)"
+          if [ -n "$open_pr" ]; then
+            pr_number="${open_pr%%$'\t'*}"
+            branch="${open_pr#*$'\t'}"
+            git fetch origin "$branch"
+            git checkout -B "$branch" "origin/$branch"
+            git merge --no-edit origin/main
+            echo "OPEN_PR=$pr_number" >> "$GITHUB_ENV"
+          else
+            branch="automation/tool-update-review-$(date -u +%Y%m%d)"
+            git checkout -B "$branch" origin/main
+            echo "OPEN_PR=" >> "$GITHUB_ENV"
+          fi
+          echo "REVIEW_BRANCH=$branch" >> "$GITHUB_ENV"
+
+      - name: Scan deterministic sources
+        if: (github.event_name != 'schedule' || env.RUN_REVIEW == 'true') && (env.TOOL_MODE != 'hybrid' || env.TOOL_AI_ENABLED != 'true')
+        env:
+          TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
+        run: |
+          set -euo pipefail
+          args=(--mode deterministic --tavily-access-mode keyed)
+          if [ -n "$TOOL_PRODUCTS" ]; then args+=(--products "$TOOL_PRODUCTS"); fi
+          node scripts/tool-update-review.js scan "${args[@]}" | tee "$RUNNER_TEMP/tool-update-scan.json"
+
+      - name: Scan with optional semantic fallback
+        if: (github.event_name != 'schedule' || env.RUN_REVIEW == 'true') && env.TOOL_MODE == 'hybrid' && env.TOOL_AI_ENABLED == 'true'
+        env:
+          TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: |
+          set -euo pipefail
+          args=(--mode hybrid --provider deepseek --confirm-cost --tavily-access-mode keyed)
+          if [ -n "$TOOL_PRODUCTS" ]; then args+=(--products "$TOOL_PRODUCTS"); fi
+          node scripts/tool-update-review.js scan "${args[@]}" | tee "$RUNNER_TEMP/tool-update-scan.json"
+
+      - name: Check changed file boundary
+        if: github.event_name != 'schedule' || env.RUN_REVIEW == 'true'
+        run: |
+          set -euo pipefail
+          changed="$( { git diff --name-only; git ls-files --others --exclude-standard; } | sort -u )"
+          if [ -n "$changed" ] && [ "$changed" != "data/manual/tools/tool-update-review.json" ]; then
+            printf 'Unexpected changed files:\n%s\n' "$changed"
+            exit 1
+          fi
+
+      - name: Validate queue and repository
+        if: github.event_name != 'schedule' || env.RUN_REVIEW == 'true'
+        run: |
+          set -euo pipefail
+          node --test tests/catalog/tool-update-review.test.js tests/catalog/tool-update-review-cli.test.js tests/catalog/tool-update-collector.test.js tests/catalog/catalog-date-repair.test.js
+          node scripts/validate.js
+          node scripts/check-secrets.js
+          git diff --check
+
+      - name: Upload scan summary
+        if: always() && (github.event_name != 'schedule' || env.RUN_REVIEW == 'true')
+        uses: actions/upload-artifact@v4
+        with:
+          name: tool-update-review-${{ github.run_id }}
+          path: ${{ runner.temp }}/tool-update-scan.json
+          if-no-files-found: ignore
+
+      - name: Commit queue changes
+        id: commit
+        if: github.event_name != 'schedule' || env.RUN_REVIEW == 'true'
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- data/manual/tools/tool-update-review.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- data/manual/tools/tool-update-review.json
+          git commit -m 'chore: refresh tool update review queue'
+          git push --set-upstream origin "$REVIEW_BRANCH"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Create or update review PR
+        if: (github.event_name != 'schedule' || env.RUN_REVIEW == 'true') && steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          summary="$(jq -r '"Products: \(.products | length)\nDeterministic: \(.deterministic_count)\nNeeds semantic review: \(.needs_ai_count)\nBlocked: \(.blocked_count)\nFailures: \(.failures | length)'" "$RUNNER_TEMP/tool-update-scan.json")"
+          body=$(cat <<EOF
+          ## Weekly tool update review
+
+          This PR updates only the human review queue.
+
+          $summary
+
+          Maintainer steps: inspect the queue, set the human review status, and merge this PR. The catalog remains unchanged until the existing local maintainer workflow is run separately.
+          EOF
+          )
+          if [ -n "${OPEN_PR:-}" ]; then
+            gh pr edit "$OPEN_PR" --title 'chore: weekly tool update review' --body "$body"
+          else
+            gh pr create --base main --head "$REVIEW_BRANCH" --title 'chore: weekly tool update review' --body "$body"
+          fi

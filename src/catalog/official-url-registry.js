@@ -23,6 +23,7 @@ const path = require('path');
 const { CATALOG_GENERATOR_FILES } = require('../shared/paths');
 const { readJson, writeJsonAtomic } = require('../news/core/news-storage');
 const { canonicalizeUrl } = require('../shared/tavily-client');
+const { REVIEW_MODES } = require('./tool-update-review-contract');
 
 /** 归一化 key：trim + NFKC + 小写（用于登记表匹配与写入键）。 */
 function normalizeKey(value) {
@@ -203,7 +204,7 @@ const UPDATE_SOURCE_COLLECTOR_BY_KIND = Object.freeze({
   changelog: 'tavily_extract',
   release_notes: 'tavily_extract',
 });
-const UPDATE_SOURCE_FIELDS = Object.freeze(['kind', 'url', 'collector', 'product_surface', 'repository', 'tag_prefix', 'include_prerelease', 'date_mode']);
+const UPDATE_SOURCE_FIELDS = Object.freeze(['kind', 'url', 'collector', 'product_surface', 'repository', 'tag_prefix', 'include_prerelease', 'date_mode', 'review_mode']);
 const GITHUB_REPOSITORY_PATTERN = /^[A-Za-z0-9](?:[A-Za-z0-9._-]*[A-Za-z0-9])?\/[A-Za-z0-9](?:[A-Za-z0-9._-]*[A-Za-z0-9])?$/;
 const TAG_PREFIX_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._+\/-]{0,99}$/;
 
@@ -248,6 +249,7 @@ function validateUpdateSource(source, productKey, index) {
   if (!UPDATE_SOURCE_KINDS.includes(kind)) errors.push(prefix('KIND_INVALID'));
   if (!UPDATE_SOURCE_COLLECTORS.includes(collector)) errors.push(prefix('COLLECTOR_INVALID'));
   if (!UPDATE_SOURCE_SURFACES.includes(surface)) errors.push(prefix('PRODUCT_SURFACE_INVALID'));
+  if (!REVIEW_MODES.includes(source.review_mode)) errors.push(prefix('REVIEW_MODE_INVALID'));
   if (source.date_mode !== undefined && source.date_mode !== 'latest') errors.push(prefix('DATE_MODE_INVALID'));
   if (UPDATE_SOURCE_COLLECTOR_BY_KIND[kind] && collector !== UPDATE_SOURCE_COLLECTOR_BY_KIND[kind]) {
     errors.push(prefix('COLLECTOR_KIND_MISMATCH'));

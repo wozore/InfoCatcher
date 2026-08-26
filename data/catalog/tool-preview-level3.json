@@ -66,7 +66,7 @@
     },
     {
       "id": "tool-level3:copilot",
-      "vendor_key": "copilot",
+      "vendor_key": "microsoft",
       "detail_kind": "tool",
       "theme": "dev",
       "title": "GitHub Copilot",
@@ -125,7 +125,7 @@
     },
     {
       "id": "tool-level3:claude-code",
-      "vendor_key": "claude-code",
+      "vendor_key": "anthropic",
       "detail_kind": "tool",
       "theme": "dev",
       "title": "Claude Code",
@@ -188,7 +188,7 @@
     },
     {
       "id": "tool-level3:trae",
-      "vendor_key": "trae",
+      "vendor_key": "bytedance",
       "detail_kind": "tool",
       "theme": "dev",
       "title": "Trae",
@@ -7895,7 +7895,7 @@
       "last_updated_date": "2026-08-19"
     },
     {
-      "vendor_key": "codebuddy-vendor",
+      "vendor_key": "tencent",
       "detail_kind": "tool",
       "title": "CodeBuddy",
       "vendor_label": "腾讯云 CodeBuddy",

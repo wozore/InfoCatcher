@@ -10,7 +10,7 @@ const {
   runApply,
 } = require('../../scripts/tool-update-review');
 
-function sampleRegistry(collector = 'tavily_extract') {
+function sampleRegistry(collector = 'tavily_extract', reviewMode = 'ai_fallback') {
   return {
     schema_version: 1,
     kind: 'official_product_url_registry',
@@ -24,6 +24,7 @@ function sampleRegistry(collector = 'tavily_extract') {
           url: 'https://example.com/changelog',
           collector,
           product_surface: 'product',
+          review_mode: reviewMode,
         }],
         lifecycle: 'active',
       },
@@ -52,7 +53,7 @@ function sampleSnapshot() {
 }
 
 function scanDeps(overrides = {}) {
-  const registry = sampleRegistry();
+  const registry = overrides.registry || sampleRegistry();
   let applyCalled = false;
   return {
     loadRegistry: () => registry,
@@ -109,6 +110,23 @@ test('scan requires explicit Tavily access mode and never calls Apply', async ()
   assert.equal(result.ok, true, JSON.stringify(result));
   assert.equal(result.catalog_apply, false);
   assert.equal(deps.applyCalled, false);
+});
+
+test('deterministic scan 不调用 AI 且写入确定性 decision', async () => {
+  let aiCalls = 0;
+  const deps = scanDeps({
+    registry: sampleRegistry('tavily_extract', 'deterministic'),
+    suggestReview: async () => {
+      aiCalls += 1;
+      throw new Error('deterministic scan must not call AI');
+    },
+  });
+  const result = await runScan({ products: 'sample', mode: 'deterministic', tavily_access_mode: 'keyless', as_of: '2026-08-25' }, deps);
+  assert.equal(result.ok, true, JSON.stringify(result));
+  assert.equal(aiCalls, 0);
+  assert.equal(result.deterministic_count, 1);
+  assert.equal(result.needs_ai_count, 0);
+  assert.equal(result.catalog_apply, false);
 });
 
 test('DeepSeek scan requires explicit cost confirmation', async () => {
