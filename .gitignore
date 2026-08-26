@@ -75,6 +75,11 @@ docs/manual/**
 # Claude Code 创建的嵌套 worktree 是独立 Git 工作区，不应作为主仓库 gitlink 提交
 .claude/worktrees/
 
+# ===== Claude Code 本地权限/会话配置 =====
+# 本地权限规则与个人环境配置，不入库
+.claude/settings.json
+.claude/settings.local.json
+
 # ===== Obsidian =====
 # .obsidian 为符号链接，指向外部笔记库（MyNote/AI归档知识库），非工程交付物；
 # 整个目录忽略（含符号链接文件形态与目录形态），取消历史误跟踪的配置（app.json 等）
