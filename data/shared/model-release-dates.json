@@ -1,0 +1,1192 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-26T16:31:33.560Z",
+  "entries": [
+    {
+      "model_key": "allenai--olmo-3-32b-think",
+      "release_date": "2025-11-21",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "amazon--nova-2-lite",
+      "release_date": "2025-12-02",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "amazon--nova-2-omni",
+      "release_date": "2025-12-02",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "amazon--nova-2-pro",
+      "release_date": "2025-12-02",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "amazon--nova-2-sonic",
+      "release_date": "2025-12-02",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "anthropic--claude-fable-5",
+      "release_date": "2026-06-09",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "anthropic--claude-haiku-4.5",
+      "release_date": "2025-10-15",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "anthropic--claude-haiku-4.5@2025-10-01",
+      "release_date": "2025-10-15",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "anthropic--claude-opus-4.1",
+      "release_date": "2025-08-05",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "anthropic--claude-opus-4.1@2025-08-05",
+      "release_date": "2025-08-05",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "anthropic--claude-opus-4.5",
+      "release_date": "2025-11-24",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "anthropic--claude-opus-4.5@2025-11-01",
+      "release_date": "2025-11-24",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "anthropic--claude-opus-4.8",
+      "release_date": "2026-05-28",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "anthropic--claude-opus-5",
+      "release_date": "2026-07-24",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "anthropic--claude-sonnet-4.5",
+      "release_date": "2025-09-29",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "anthropic--claude-sonnet-4.5@2025-09-29",
+      "release_date": "2025-09-29",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "anthropic--claude-sonnet-5",
+      "release_date": "2026-06-30",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "baidu--ernie-4.5",
+      "release_date": "2025-06-25",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "baidu--ernie-5.0",
+      "release_date": "2026-01-22",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "bytedance--seed-2.0-lite",
+      "release_date": "2026-02-14",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "bytedance--seed-2.0-pro",
+      "release_date": "2026-02-14",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "bytedance--seed-2.1-pro",
+      "release_date": "2026-06-24",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "bytedance--seed-2.1-turbo",
+      "release_date": "2026-06-24",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "cohere--command-a",
+      "release_date": "2026-05-20",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "cohere--command-a-plus@05",
+      "release_date": "2026-05-20",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "cohere--command-a@2025-03",
+      "release_date": "2026-05-20",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "cohere--north-micro-vision-instruct",
+      "release_date": "2026-08-12",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "cohere--north-mini-code-1.0",
+      "release_date": "2026-06-09",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "deepseek--deepseek-v3.1-terminus",
+      "release_date": "2025-09-22",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "deepseek--deepseek-v4-flash",
+      "release_date": "2026-04-24",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "deepseek--deepseek-v4-flash-max",
+      "release_date": "2026-04-23",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "deepseek--deepseek-v4-flash-vision-exp",
+      "release_date": "2026-08-21",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "deepseek--deepseek-v4-flash@04-23",
+      "release_date": "2026-04-23",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "deepseek--deepseek-v4-flash@07-31",
+      "release_date": "2026-07-31",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "deepseek--deepseek-v4-pro",
+      "release_date": "2026-04-24",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "deepseek--deepseek-v4-pro-max",
+      "release_date": "2026-04-23",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "deepseek--deepseek-v4-pro@08-13",
+      "release_date": "2026-08-13",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "google--diffusiongemma-26b-a4b-it",
+      "release_date": "2026-06-10",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "google--gemini-2.5-flash-lite",
+      "release_date": "2025-06-17",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "google--gemini-2.5-pro-preview",
+      "release_date": "2025-06-05",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "google--gemini-2.5-pro-preview@06-05",
+      "release_date": "2025-06-05",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "google--gemini-3-flash-preview",
+      "release_date": "2025-12-17",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "google--gemini-3-pro-preview",
+      "release_date": "2025-11-18",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "google--gemini-3.1-flash-lite-preview",
+      "release_date": "2026-03-03",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "google--gemini-3.1-pro-preview",
+      "release_date": "2026-02-19",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "google--gemini-3.5-flash",
+      "release_date": "2026-05-19",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "google--gemini-3.5-flash-cyber",
+      "release_date": "2026-07-21",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "google--gemini-3.5-flash-lite",
+      "release_date": "2026-07-21",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "google--gemini-3.6-flash",
+      "release_date": "2026-07-21",
+      "catalog_aliases": [
+        "gemini-3-6-flash",
+        "Gemini 3.6 Flash"
+      ]
+    },
+    {
+      "model_key": "google--gemini-3.7-flash",
+      "release_date": "2026-08-13",
+      "catalog_aliases": [
+        "gemini-3-7-flash",
+        "Gemini 3.7 Flash"
+      ]
+    },
+    {
+      "model_key": "google--gemma-3n-e2b",
+      "release_date": "2025-06-26",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "google--gemma-3n-e2b-it",
+      "release_date": "2025-06-26",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "google--gemma-3n-e4b",
+      "release_date": "2025-06-26",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "google--gemma-3n-e4b-it",
+      "release_date": "2025-06-26",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "google--gemma-4-12b-it",
+      "release_date": "2026-05-23",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "google--gemma-4-26b-a4b-it",
+      "release_date": "2026-04-02",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "google--gemma-4-31b-it",
+      "release_date": "2026-04-02",
+      "catalog_aliases": [
+        "gemma-4",
+        "Gemma 4"
+      ]
+    },
+    {
+      "model_key": "google--gemma-4-e2b-it",
+      "release_date": "2026-04-02",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "google--gemma-4-e4b-it",
+      "release_date": "2026-04-02",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "inceptionlabs--mercury-2",
+      "release_date": "2026-02-24",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "kling--kling-2.6-pro",
+      "release_date": "2025-12-03",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "lg--exaone-4.5-33b",
+      "release_date": "2026-04-09",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "lg--k-exaone-236b-a23b",
+      "release_date": "2025-12-31",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "liquid--lfm-2.5-2.6b",
+      "release_date": "2026-08-04",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "liquid--lfm-2.5-vl-3b",
+      "release_date": "2026-08-12",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "meta--muse-glimmer-30b",
+      "release_date": "2026-08-10",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "meta--muse-spark",
+      "release_date": "2026-04-08",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "meta--muse-spark-1.1",
+      "release_date": "2026-07-09",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "meta--muse-spark-1.2",
+      "release_date": "2026-08-05",
+      "catalog_aliases": [
+        "muse-spark-1-2",
+        "Muse Spark 1.2"
+      ]
+    },
+    {
+      "model_key": "microsoft--mai-code-1-flash",
+      "release_date": "2026-06-02",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "microsoft--mai-code-1.1-flash",
+      "release_date": "2026-08-11",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "microsoft--mai-thinking-1",
+      "release_date": "2026-06-02",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "minimax--minimax-h3",
+      "release_date": "2026-07-31",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "minimax--minimax-m1",
+      "release_date": "2025-06-17",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "minimax--minimax-m1-40k",
+      "release_date": "2025-06-16",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "minimax--minimax-m1-80k",
+      "release_date": "2025-06-16",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "minimax--minimax-m2",
+      "release_date": "2025-10-27",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "minimax--minimax-m2.7",
+      "release_date": "2026-03-18",
+      "catalog_aliases": [
+        "minimax-m2-7",
+        "MiniMax M2.7"
+      ]
+    },
+    {
+      "model_key": "minimax--minimax-m3",
+      "release_date": "2026-06-01",
+      "catalog_aliases": [
+        "minimax-m3",
+        "MiniMax M3"
+      ]
+    },
+    {
+      "model_key": "mistral--devstral-medium@2025-07",
+      "release_date": "2025-07-10",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "mistral--devstral-small@2025-07",
+      "release_date": "2025-07-11",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "mistral--magistral-medium",
+      "release_date": "2025-06-10",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "mistral--magistral-small@2025-06",
+      "release_date": "2025-06-10",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "mistral--ministral-14b",
+      "release_date": "2025-12-04",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "mistral--ministral-14b@2025-12",
+      "release_date": "2025-12-02",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "mistral--ministral-3-14b-base@2025-12",
+      "release_date": "2025-12-04",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "mistral--ministral-3-14b-instruct@2025-12",
+      "release_date": "2025-12-04",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "mistral--ministral-3-3b-base@2025-12",
+      "release_date": "2025-12-04",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "mistral--ministral-3-3b-instruct@2025-12",
+      "release_date": "2025-12-04",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "mistral--ministral-3-8b-base@2025-12",
+      "release_date": "2025-12-04",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "mistral--ministral-3-8b-instruct@2025-12",
+      "release_date": "2025-12-04",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "mistral--ministral-3b",
+      "release_date": "2025-12-04",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "mistral--ministral-3b@2025-12",
+      "release_date": "2025-12-02",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "mistral--ministral-8b",
+      "release_date": "2025-12-04",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "mistral--ministral-8b@2025-12",
+      "release_date": "2025-12-02",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "mistral--mistral-large-3",
+      "release_date": "2025-12-02",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "mistral--mistral-large-3-675b-base@2025-12",
+      "release_date": "2025-12-04",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "mistral--mistral-large-3-675b-instruct-eagle@2025-12",
+      "release_date": "2025-12-04",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "mistral--mistral-large-3-675b-instruct-nvfp4@2025-12",
+      "release_date": "2025-12-04",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "mistral--mistral-large-3@2025-09",
+      "release_date": "2025-09-01",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "mistral--mistral-medium-3.5",
+      "release_date": "2026-04-29",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "mistral--mistral-small-3.2-24b-instruct",
+      "release_date": "2025-06-20",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "mistral--mistral-small-3.2-24b-instruct@2025-06",
+      "release_date": "2025-06-20",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "mistral--shieldstral-1.0-3b",
+      "release_date": "2026-08-04",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "moonshotai--kimi-k2",
+      "release_date": "2025-07-11",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "moonshotai--kimi-k2-base",
+      "release_date": "2025-07-11",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "moonshotai--kimi-k2-instruct",
+      "release_date": "2025-07-11",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "moonshotai--kimi-k2-instruct@2025-09-05",
+      "release_date": "2025-09-05",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "moonshotai--kimi-k2-thinking",
+      "release_date": "2025-11-06",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "moonshotai--kimi-k2-thinking@2025-09-05",
+      "release_date": "2025-09-05",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "moonshotai--kimi-k2.5",
+      "release_date": "2026-01-27",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "moonshotai--kimi-k2.6",
+      "release_date": "2026-04-20",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "moonshotai--kimi-k2.7-code",
+      "release_date": "2026-06-12",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "moonshotai--kimi-k2@2025-09-05",
+      "release_date": "2025-09-05",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "moonshotai--kimi-k3",
+      "release_date": "2026-07-16",
+      "catalog_aliases": [
+        "kimi-k3",
+        "Kimi K3"
+      ]
+    },
+    {
+      "model_key": "nvidia--nemotron-3-nano-30b-a3b",
+      "release_date": "2025-12-15",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "nvidia--nemotron-3-super-120b-a12b",
+      "release_date": "2026-03-11",
+      "catalog_aliases": [
+        "nemotron-3-super",
+        "Nemotron 3 Super"
+      ]
+    },
+    {
+      "model_key": "nvidia--nemotron-3-ultra-550b-a55b",
+      "release_date": "2026-06-04",
+      "catalog_aliases": [
+        "nemotron-3-ultra",
+        "Nemotron 3 Ultra"
+      ]
+    },
+    {
+      "model_key": "nvidia--nemotron-3.5-lightning-30b-a3b",
+      "release_date": "2026-08-11",
+      "catalog_aliases": [
+        "nemotron-3-5",
+        "Nemotron 3.5"
+      ]
+    },
+    {
+      "model_key": "nvidia--nvidia-nemotron-nano-9b-v2",
+      "release_date": "2025-08-18",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5",
+      "release_date": "2025-08-07",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5-codex",
+      "release_date": "2025-09-23",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5-codex@2025-09-15",
+      "release_date": "2025-09-15",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5-high@2025-08-07",
+      "release_date": "2025-08-07",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5-medium@2025-08-07",
+      "release_date": "2025-08-07",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5-mini",
+      "release_date": "2025-08-07",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5-mini@2025-08-07",
+      "release_date": "2025-08-07",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5-nano",
+      "release_date": "2025-08-07",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5-nano@2025-08-07",
+      "release_date": "2025-08-07",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5.1",
+      "release_date": "2025-11-13",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5.1-codex",
+      "release_date": "2025-11-19",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5.1-codex-high",
+      "release_date": "2025-11-12",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5.1-codex-mini",
+      "release_date": "2025-11-12",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5.1-high@2025-11-12",
+      "release_date": "2025-11-12",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5.1-instant@2025-11-12",
+      "release_date": "2025-11-12",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5.1-medium@2025-11-12",
+      "release_date": "2025-11-12",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5.1-thinking@2025-11-12",
+      "release_date": "2025-11-12",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5.1@2025-11-13",
+      "release_date": "2025-11-13",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5.3-chat",
+      "release_date": "2026-03-04",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5.3-codex",
+      "release_date": "2026-02-05",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5.5",
+      "release_date": "2026-04-23",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5.5-instant",
+      "release_date": "2026-05-05",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5.5-pro",
+      "release_date": "2026-04-23",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5.6-luna",
+      "release_date": "2026-07-09",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5.6-sol",
+      "release_date": "2026-07-09",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5.6-terra",
+      "release_date": "2026-07-09",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-5@2025-08-07",
+      "release_date": "2025-08-07",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-image-2",
+      "release_date": "2026-04-21",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-oss-120b",
+      "release_date": "2025-08-05",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-oss-120b-high",
+      "release_date": "2025-08-05",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-oss-20b",
+      "release_date": "2025-08-05",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openai--gpt-oss-20b-high",
+      "release_date": "2025-08-05",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "openbmb--minicpm-sala",
+      "release_date": "2026-02-11",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "poolside--laguna-s-2.1",
+      "release_date": "2026-07-21",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "poolside--laguna-xs-2.1",
+      "release_date": "2026-07-02",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen-plus@2025-07-28",
+      "release_date": "2025-09-08",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3-235b-a22b-instruct@2025-07",
+      "release_date": "2025-07-22",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3-235b-a22b-thinking@2025-07",
+      "release_date": "2025-07-25",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3-30b-a3b-instruct@2025-07",
+      "release_date": "2025-07-29",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3-next-80b-a3b-instruct",
+      "release_date": "2025-09-10",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3-next-80b-a3b-thinking",
+      "release_date": "2025-09-10",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3-vl-235b-a22b-instruct",
+      "release_date": "2025-09-22",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3-vl-235b-a22b-thinking",
+      "release_date": "2025-09-22",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3-vl-30b-a3b-instruct",
+      "release_date": "2025-09-22",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3-vl-30b-a3b-thinking",
+      "release_date": "2025-09-22",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3-vl-32b-instruct",
+      "release_date": "2025-09-22",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3-vl-32b-thinking",
+      "release_date": "2025-09-22",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3-vl-4b-instruct",
+      "release_date": "2025-09-22",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3-vl-4b-thinking",
+      "release_date": "2025-09-22",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3-vl-8b-instruct",
+      "release_date": "2025-09-22",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3-vl-8b-thinking",
+      "release_date": "2025-09-22",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3.5-0.8b",
+      "release_date": "2026-03-02",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3.5-122b-a10b",
+      "release_date": "2026-02-24",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3.5-27b",
+      "release_date": "2026-02-24",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3.5-2b",
+      "release_date": "2026-03-02",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3.5-35b-a3b",
+      "release_date": "2026-02-24",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3.5-397b-a17b",
+      "release_date": "2026-02-16",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3.5-4b",
+      "release_date": "2026-03-02",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3.5-9b",
+      "release_date": "2026-03-02",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3.5-flash@02-23",
+      "release_date": "2026-02-25",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3.6-27b",
+      "release_date": "2026-04-21",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3.6-35b-a3b",
+      "release_date": "2026-04-16",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3.6-max-preview",
+      "release_date": "2026-04-27",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3.6-plus",
+      "release_date": "2026-03-31",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3.7-max",
+      "release_date": "2026-05-19",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3.7-max@05-17",
+      "release_date": "2026-08-03",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3.7-plus",
+      "release_date": "2026-05-31",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3.8-27b",
+      "release_date": "2026-08-14",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "qwen--qwen3.8-max",
+      "release_date": "2026-08-02",
+      "catalog_aliases": [
+        "qwen3-8-max",
+        "Qwen3.8 Max"
+      ]
+    },
+    {
+      "model_key": "reve--reve-2.1",
+      "release_date": "2026-07-09",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "sakana--sakana-namazu",
+      "release_date": "2026-08-03",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "sarvamai--sarvam-105b",
+      "release_date": "2026-03-06",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "sarvamai--sarvam-30b",
+      "release_date": "2026-03-06",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "stepfun--step-3.5-flash",
+      "release_date": "2026-02-02",
+      "catalog_aliases": [
+        "step-3-5-flash",
+        "Step-3.5-Flash"
+      ]
+    },
+    {
+      "model_key": "tencent--hy3",
+      "release_date": "2026-07-06",
+      "catalog_aliases": [
+        "hunyuan-hy3",
+        "混元 Hy3"
+      ]
+    },
+    {
+      "model_key": "thinking-machines--inkling-small",
+      "release_date": "2026-07-30",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "unisound--u2",
+      "release_date": "2026-06-05",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "upstage--solar-pro4",
+      "release_date": "2026-08-06",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "xai--grok-4",
+      "release_date": "2025-07-09",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "xai--grok-4-fast-reasoning",
+      "release_date": "2025-08-28",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "xai--grok-4.1-fast-reasoning",
+      "release_date": "2025-11-17",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "xai--grok-4.1-thinking@2025-11-17",
+      "release_date": "2025-11-17",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "xai--grok-4.1@2025-11-17",
+      "release_date": "2025-11-17",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "xai--grok-4.20-beta-non-reasoning@03-09",
+      "release_date": "2026-03-09",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "xai--grok-4.20-beta-reasoning@03-09",
+      "release_date": "2026-03-09",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "xai--grok-4.20-multi-agent-beta@03-09",
+      "release_date": "2026-03-09",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "xai--grok-4.3",
+      "release_date": "2026-05-06",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "xai--grok-4.5",
+      "release_date": "2026-07-16",
+      "catalog_aliases": [
+        "grok-4-5",
+        "Grok 4.5"
+      ]
+    },
+    {
+      "model_key": "xai--grok-4.6",
+      "release_date": "2026-08-12",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "xai--grok-build-0.1",
+      "release_date": "2026-05-20",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "xai--grok-code-fast-1",
+      "release_date": "2025-08-28",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "xiaomi--mimo-v2-omni",
+      "release_date": "2026-03-18",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "xiaomi--mimo-v2-pro",
+      "release_date": "2026-03-18",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "xiaomi--mimo-v2.5",
+      "release_date": "2026-04-22",
+      "catalog_aliases": [
+        "mimo-v2-5",
+        "MiMo-V2.5"
+      ]
+    },
+    {
+      "model_key": "xiaomi--mimo-v2.5-pro",
+      "release_date": "2026-04-27",
+      "catalog_aliases": [
+        "mimo-v2-5-pro",
+        "MiMo-V2.5 Pro"
+      ]
+    },
+    {
+      "model_key": "zai--glm-4.5",
+      "release_date": "2025-07-28",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "zai--glm-4.5-air",
+      "release_date": "2025-07-28",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "zai--glm-4.5v",
+      "release_date": "2025-08-11",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "zai--glm-4.6",
+      "release_date": "2025-09-30",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "zai--glm-4.6v",
+      "release_date": "2025-12-08",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "zai--glm-4.7",
+      "release_date": "2025-12-22",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "zai--glm-4.7-flash",
+      "release_date": "2026-01-19",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "zai--glm-5",
+      "release_date": "2026-02-11",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "zai--glm-5.1",
+      "release_date": "2026-04-07",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "zai--glm-5.2",
+      "release_date": "2026-06-16",
+      "catalog_aliases": []
+    },
+    {
+      "model_key": "zai--glm-5.3",
+      "release_date": "2026-08-14",
+      "catalog_aliases": [
+        "glm-5-3",
+        "GLM-5.3"
+      ]
+    },
+    {
+      "model_key": "zai--glm-5v-turbo",
+      "release_date": "2026-04-02",
+      "catalog_aliases": []
+    }
+  ]
+}

@@ -114,7 +114,11 @@ function validateSynthesisOutput(output, research) {
       provenanceError(errors, path, '派生字段必须引用至少一个官方来源');
       continue;
     }
-    for (const id of refs) if (!sources.has(id)) provenanceError(errors, path, `来源不存在: ${id}`);
+    for (const ref of refs) {
+      // 确定性机械来源（如共享 release_date 索引补填）不要求官方来源存在
+      if (ref && typeof ref === 'object' && ref.kind === 'deterministic') continue;
+      if (!sources.has(ref)) provenanceError(errors, path, `来源不存在: ${ref}`);
+    }
   }
   return { ok: errors.length === 0, errors };
 }

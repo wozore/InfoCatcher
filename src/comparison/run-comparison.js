@@ -18,6 +18,7 @@ const { fetchLmarena } = require('./fetch-lmarena');
 const { fetchLivebench } = require('./fetch-livebench');
 const { fetchLlmStats } = require('./fetch-llm-stats');
 const { rebuildIntegrated } = require('./rebuild-comparison');
+const { advanceRetentionToNow } = require('../shared/retention');
 
 const SOURCE_ORDER = ['openrouter', 'lmarena', 'livebench', 'llm_stats'];
 
@@ -74,6 +75,12 @@ async function runComparison(options = {}) {
   const config = readConfig();
   const summary = { fetched: [], failed: [], pending: [], rebuilt: false, errors: {} };
 
+  // 每月初幂等推进共享 retention（cutoff = 当前年月 − 14 个月），漏跑自愈 snap 到正确目标；
+  // 经 src/shared/retention.js 唯一写入口，写失败降级沿用旧 cutoff 不中断。
+  const retention = advanceRetentionToNow();
+  if (!retention.ok) console.warn('⚠️ retention 推进写失败（沿用当前 cutoff）：', retention.error);
+  const cutoffDate = retention.cutoff_date;
+
   for (const source of SOURCE_ORDER) {
     const sourceConfig = config.sources[source];
     if (!sourceConfig) { summary.errors[source] = 'refresh-config 缺该源配置'; summary.failed.push(source); continue; }
@@ -103,7 +110,7 @@ async function runComparison(options = {}) {
     summary.pending = pending;
     console.warn(`⏸️  重建跳过：以下源未就绪（${pending.join(', ')}），修复后自动继续`);
   } else if (!options.skipRebuild) {
-    const rebuild = rebuildIntegrated();
+    const rebuild = rebuildIntegrated({ cutoffDate });
     if (rebuild.ok) {
       summary.rebuilt = true;
       console.log(`✅ integrated 重建完成：${rebuild.models.length} 个模型`);

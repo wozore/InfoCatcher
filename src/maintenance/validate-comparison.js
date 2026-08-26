@@ -10,7 +10,7 @@
  */
 
 const fs = require('fs');
-const { COMPARISON_FILES } = require('../shared/paths');
+const { COMPARISON_FILES, SHARED_FILES } = require('../shared/paths');
 const {
   SOURCES,
   DIMENSION_KEYS,
@@ -22,6 +22,8 @@ const {
 } = require('../comparison/compare-schema');
 const { normalizedDisplayKey } = require('../comparison/model-identity');
 const { validateExclusionConfig, exclusionForModel } = require('../comparison/model-exclusions');
+const { isIsoDate } = require('../comparison/release-date');
+const { readRetentionState } = require('../shared/retention');
 const { validateSeriesProjection } = require('../comparison/model-series');
 
 let failed = false;
@@ -205,6 +207,9 @@ function validateData(data, index) {
   if (data.schema_version !== index.schema_version) fail(`integrated/data.json.schema_version (${data.schema_version}) 与 index (${index.schema_version}) 不一致`);
   if (!Array.isArray(data.models)) { fail('integrated/data.json.models 应为数组'); return; }
 
+  // 14 个月滚动删除边界（共享段只读；缺失则不校验 retention）
+  const retentionCutoff = readRetentionState().cutoff_date;
+
   const indexCanonicals = new Set((index.models || []).map(model => model.canonical));
   const dataCanonicals = new Set();
   const seen = new Set();
@@ -228,6 +233,17 @@ function validateData(data, index) {
       const priorCanonical = visibleNames.get(visibleKey);
       if (priorCanonical && priorCanonical !== model.canonical) fail(`integrated/data.json 同厂商可见模型重名: ${model.display} (${priorCanonical}, ${model.canonical})`);
       visibleNames.set(visibleKey, model.canonical);
+    }
+
+    // release_date 形状 + retention 一致性（无日期保守保留，仅警告）
+    if (model.release_date != null) {
+      if (!isIsoDate(model.release_date)) fail(`integrated/data.json ${model.canonical}.release_date (${model.release_date}) 应为 ISO YYYY-MM-DD`);
+      else if (retentionCutoff && model.release_date < retentionCutoff) fail(`integrated/data.json ${model.canonical}.release_date (${model.release_date}) 早于 retention cutoff (${retentionCutoff})，应已被过滤`);
+    } else if (retentionCutoff) {
+      console.warn(`⚠️  integrated/data.json ${model.canonical} 无 release_date，滚动删除保守保留`);
+    }
+    if (!['llm_stats', 'catalog', 'openrouter', null, undefined].includes(model.release_date_provenance)) {
+      fail(`integrated/data.json ${model.canonical}.release_date_provenance 未知: ${model.release_date_provenance}`);
     }
 
     // composite 一致性

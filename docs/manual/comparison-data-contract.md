@@ -105,6 +105,8 @@ collectSourceRecords → exclusions filter → Elo bounds → buildModelRecord
       "identity": "gpt-5.6-sol",
       "family": "gpt-5.6",
       "revisions": [],
+      "release_date": "2026-07-09",
+      "release_date_provenance": "llm_stats",
       "evaluation_profiles": ["codex-harness"],
       "offerings": { "openrouter": [{ "kind": "batch", "raw_name": "openai/gpt-5.6-sol:batch" }] },
       "display": "GPT-5.6 Sol",
@@ -136,10 +138,11 @@ collectSourceRecords → exclusions filter → Elo bounds → buildModelRecord
 - `degrees`：该模型各源可选程度变体（供变体圆圈）；无变体则源缺失或空数组。它与 `offerings`、模型身份规格严格分离。
 - `file`：完整数据所在文件，当前全部 `data.json`（分块时改此指针）。
 - `sources`：有数据的源列表（前端标「仅 X 源」）。
-- `series`：轻量系列投影；只保存系列、成员与 canonical 变体引用，不复制完整分数。`series_key` 是选择器分组键，`member_key` 是系列内具体产品键。
+- `series`：轻量系列投影；只保存系列、成员与 canonical 变体引用，不复制完整分数。`series_key` 是选择器分组键，`member_key` 是系列内具体产品键；`series.members[].theme` 是成员类型（值与 model 层 `theme` 一致，用于类别筛选）。
 - `series_key` / `series_display`：人工登记优先的系列归属与展示名；自动回退只用于组织未登记模型，不能用于 canonical 合并。
 - `member_key` / `member_display`：系列内具体产品/模型的稳定键与短名；同一 `member_key` 的多个明确 revision 收拢到 `series.members[].variants`，选择器默认只显示一个成员行。
 - `degree`、`evaluation_profile`、`offering` 与 revision：配置层信息，不生成系列成员；degree 仍由模型完整数据中的 `degrees` 提供，revision 通过成员变体选择。
+- `theme`：模型类型分类，值域 `general` / `image` / `video` / `vision`。由管线按评测维度自动判定——有视频生成维度（`text_to_video` / `image_to_video` / `video_edit`）→ `video`；有图像生成维度（`text_to_image` / `image_edit`）→ `image`；仅有 `vision` 榜分且无 `text` / `reasoning` / `coding` / `multimodal` 维度 → `vision`；否则 `general`。判定后按所属 member 主变体统一（同一 `member_key` 的 revision 变体同类型，防数据不全误判）。前端类别筛选按此值与 `series.members[].theme` 消费。
 
 ## 3.1 model-series.json（系列人工登记）
 
@@ -179,6 +182,8 @@ collectSourceRecords → exclusions filter → Elo bounds → buildModelRecord
       "identity": "gpt-5.6-sol",
       "family": "gpt-5.6",
       "revisions": [],
+      "release_date": "2026-07-09",
+      "release_date_provenance": "llm_stats",
       "evaluation_profiles": ["codex-harness"],
       "offerings": { "openrouter": [{ "kind": "batch", "raw_name": "openai/gpt-5.6-sol:batch" }] },
       "display": "GPT-5.6 Sol",
@@ -300,7 +305,7 @@ AI 审计不参与 `rebuild`，也不得直接写入 `models-alias.json`。确�
 
 | UI 区块 | 数据源 | 规则 |
 |---|---|---|
-| 模型选择器（模型 tab 顶部） | `index.json` series + models | 先按 `series` 渲染系列容器，再展开 `members` 选择具体 canonical；搜索同时匹配系列、成员、vendor、canonical/display，命中成员时只突出该成员；类别筛选按系列 theme；系列按最高有效 `max_composite_score` 排序，成员按人工 order；前端不得按名称去重或合并实体。revision 只在成员内的 `variants` 下拉选择，degree/profile/offering 不生成成员行。 |
+| 模型选择器（模型 tab 顶部） | `index.json` series + models | 先按 `series` 渲染系列容器，再展开 `members` 选择具体 canonical；搜索同时匹配系列、成员、vendor、canonical/display，命中成员时只突出该成员；类别筛选按成员 theme（chips：通用/图像生成/视频生成/纯视觉理解，默认落在通用），切换类别时已选的其他类别模型自动移出；系列按最高有效 `max_composite_score` 排序，成员按人工 order；前端不得按名称去重或合并实体。revision 只在成员内的 `variants` 下拉选择，degree/profile/offering 不生成成员行。 |
 | 已选 chips | 选择器结果 | 上限 `model_cap`；每 chip 内模型 icon 可点 → **变体圆圈** |
 | 变体圆圈 | `data.json` 对应模型 `degrees`/`lmarena_scores`/`livebench_scores` | 点 icon → icon 周围顺时针 360° 平分圆圈（**仅列「有 ≥2 个挡位」的源的挡位并集**；单挡位源不是可切换变体不列圈，避免点了只搭别源上次挡位导致得分随历史漂移）；点圈 → **按所选挡位重算并实时反映**：源级维度（lmarena agent 子维比例分 / Elo 榜按全模型 min-max；livebench 组 → reasoning/coding/communication/instruction_following/agentic_coding/math_reasoning）+ composite（`composite.available` 底座，lmarena/livebench 源级分换挡，缺源按比例重分配）+ value（全表 min-max），然后重渲染图表/表格；状态说明如「已切换至 Claude Opus 5 (High)：LMArena agent 分 0.122→0.110」 |
 | 综合分块（默认勾选） | `dimensions.composite.value` | 柱状图块：每模型一行 icon+横向柱+数值 |
@@ -325,3 +330,16 @@ AI 审计不参与 `rebuild`，也不得直接写入 `models-alias.json`。确�
 6. 前端零依赖：柱状图 CSS、雷达图手写 SVG；对比页文案走 i18n。
 7. **空壳模型自动过滤（代码规则，非清单）**：合并后无任何有效评测维度且无综合分的模型，当同一 identity 的**所有** revision 均无数据时整组从 integrated 移除；任一 revision 有数据则整组保留（不误杀主变体）。过滤在综合分/性价比计算后、series projection 前执行，随抓取数据动态生效——模型日后获得评测数据会自动回归，无需维护排除登记表。此规则与 `model-exclusions.json`（人工永久排除）职责分离；被过滤模型进 `diagnostics.empty_filtered_models`，raw 快照保留。
 8. **revision 日期规范化（代码规则）**：canonical 的 `@revision` 统一解析为 (year,month,day) 后再拼键。本年不显示年份（`MM-DD` / 月级 `MM`），往年保留（`YYYY-MM-DD` / `YYYY-MM`）；无年份的 MMDD/MM-DD 用系统年份推断，推断日期落在未来（数据源给出的是已发布版本）则回退到上一年；4 位纯数字按月份有效性区分 MMDD（前两位 01-12）与 YYMM（前两位 > 12，推断 20xx 世纪）。同一日期不同写法（如 `0731` 与 `20260731`）规范化后同键，自动合并为同一 revision，不混算分数。重建时以 `options.now` 为基准（默认当前时间），保证可测。
+9. **14 个月滚动删除（retention，代码规则 + 共享数据段，数据耦合）**：全局删除边界 cutoff = 当前年月 − 14 个月，持久化在 `data/shared/retention.json`（comparison 管线每月初幂等推进写，catalog `prune` 只读）。模型 `release_date`（发布时间，多源解析：llm-stats → catalog 反查 → openrouter created → null）早于 cutoff 月首日 → 重建时在 Elo 计算前排除（`retention_filtered_models` 诊断）；catalog 工具/模型按 `last_updated_date`/`release_date` 早于 cutoff → 级联删除过期卡（复用事务）。无日期实体保守保留（`retention_retained_null_models` 诊断 + validate 警告）。
+
+**共享数据段访问层（红线）**：`data/shared/` 是 comparison 与 catalog 之间**唯一**跨层通道，只存在数据耦合，两侧不互相 import 数据层模块、不读写对方私有文件、不裸 fs 碰共享文件。共享段只经 `src/shared/` 校验接口访问：
+
+| 共享文件 | 写者（唯一） | 读者 |
+|---|---|---|
+| `data/shared/retention.json` | comparison `advanceRetentionToNow`（幂等推进 + 校验 + 原子写） | catalog prune `readRetentionState`、validate |
+| `data/shared/model-release-dates.json` | comparison 重建 `writeReleaseIndex`（逐条校验 fail-closed） | catalog 生成器 `readReleaseIndex` |
+| `data/shared/catalog-release-dates.json` | catalog 落盘后 `writeCatalogReleaseDates`（事务提交后发布） | comparison 反查 `readCatalogReleaseDates` |
+
+- **数据耦合 = 封装 + 只公开接口**：写路径形状校验 fail-closed（防误篡改），读路径返回校验后冻结结构；业务模块只依赖接口函数，不感知底层文件。
+- **catalog → comparison 反查经共享投影**：comparison 不再直接读 catalog `tool-preview-level3.json`；catalog 每次落盘后把 api_model/product_variant 的 release_date 发布为 `catalog-release-dates.json`（可再生的派生投影，失败降级不进事务回滚链，comparison 读端校验 + 空默认兜底）。
+- **手动 `rebuild` 同样应用共享 cutoff**：`fetch-comparison.js rebuild` 读 `readRetentionState().cutoff_date`，与 `run` 一致，避免旧模型回潮。共享段不进前端 dist（`build-dist` 不复制 `data/shared/`）。

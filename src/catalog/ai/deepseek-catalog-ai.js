@@ -50,6 +50,23 @@ function applyRepairEvidence(input, output) {
   };
 }
 
+/** 从共享 release_date 索引机械补填（AI 未给出 release_date 时的兜底；tool 走 last_updated_date 不填）。 */
+function applyIntegratedReleaseDate(input, output) {
+  const hint = input.plan?.seed?.known_fields?.integrated_release_date;
+  if (!hint || !/^\d{4}-\d{2}-\d{2}$/.test(hint)) return output;
+  if (input.plan?.profile?.detail_kind === 'tool') return output;
+  const detail = output.layer_fields?.detail || {};
+  if (detail.release_date) return output; // AI 已有值 → 不覆盖
+  return {
+    ...output,
+    layer_fields: { ...output.layer_fields, detail: { ...detail, release_date: hint } },
+    provenance: {
+      ...output.provenance,
+      'detail.release_date': [{ kind: 'deterministic', basis: 'comparison_integrated', source_ids: [] }],
+    },
+  };
+}
+
 async function synthesizeLayerFields(input, options = {}) {
   if (!input.ledger?.reserve) return { ok: false, code: 'COST_LEDGER_REQUIRED', error: '目录合成缺少成本账本' };
   const synthesisReserved = input.ledger.reserve('synthesis_calls', 1);
@@ -63,9 +80,11 @@ async function synthesizeLayerFields(input, options = {}) {
     validate: value => Boolean(value && typeof value === 'object' && !Array.isArray(value) && value.layer_fields),
   }, options);
   if (!result.ok) return result;
-  return { ok: true, ...applyRepairEvidence(input, result.value), usage: result.usage };
+  return { ok: true, ...applyIntegratedReleaseDate(input, applyRepairEvidence(input, result.value)), usage: result.usage };
 }
 
 module.exports = {
   synthesizeLayerFields,
+  applyIntegratedReleaseDate,
+  applyRepairEvidence,
 };

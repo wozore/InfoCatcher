@@ -18,6 +18,7 @@ const ACQUISITION_DIR = path.join(DATA_DIR, 'acquisition');
 const COMPARISON_DIR = path.join(DATA_DIR, 'comparison'); // 模型对比：独立数据层（抓取 raw + 前端 integrated）
 const COMPARISON_RAW_DIR = path.join(COMPARISON_DIR, 'raw'); // 4 源原样快照（管线写，前端不读）
 const COMPARISON_INTEGRATED_DIR = path.join(COMPARISON_DIR, 'integrated'); // 前端唯一入口层（管线重建，前端只读）
+const SHARED_DIR = path.join(DATA_DIR, 'shared'); // 跨模块共享数据段（comparison 写 / catalog 读，只数据耦合不代码耦合）
 const ARCHIVE_DIR = path.join(DATA_DIR, 'manual', 'archive'); // 喂 AI 搜索的历史数据（缓存/登记表）
 const TOOLS_DIR = path.join(DATA_DIR, 'manual', 'tools'); // 工具链路工作目录
 const CONCEPTS_DIR = path.join(DATA_DIR, 'manual', 'concepts'); // 概念链路工作目录
@@ -44,6 +45,7 @@ const DIRS = Object.freeze({
   comparison: COMPARISON_DIR,
   comparisonRaw: COMPARISON_RAW_DIR,
   comparisonIntegrated: COMPARISON_INTEGRATED_DIR,
+  shared: SHARED_DIR, // 跨模块共享数据段（retention / model-release-dates）
   fixtures: FIXTURE_DIR,
   archive: ARCHIVE_DIR, // 喂 AI 搜索的历史数据（缓存/登记表）
   tools: TOOLS_DIR, // 工具链路工作目录（工具种子/草稿/工具待补卡）
@@ -118,6 +120,17 @@ const COMPARISON_FILES = Object.freeze({
   integratedData: path.join(COMPARISON_INTEGRATED_DIR, 'data.json'),
 });
 
+// 跨模块共享数据段（data/shared）：comparison 与 catalog 之间唯一跨层通道，只存在数据耦合。
+// 每个文件单一写者、经 src/shared/ 校验接口访问（封装，业务模块不裸 fs、不读对方私有文件）：
+//   retention            comparison 写（advanceRetentionToNow） / catalog prune + validate 读
+//   model-release-dates  comparison 写（writeReleaseIndex）       / catalog 生成器读
+//   catalog-release-dates catalog 写（落盘后发布）                / comparison 反查读
+const SHARED_FILES = Object.freeze({
+  retention: path.join(SHARED_DIR, 'retention.json'), // 14 个月滚动删除日期（cutoff 状态，comparison 写 / catalog prune 读）
+  modelReleaseDates: path.join(SHARED_DIR, 'model-release-dates.json'), // 模型 release_date 查找索引（comparison 写 / catalog 生成器读）
+  catalogReleaseDates: path.join(SHARED_DIR, 'catalog-release-dates.json'), // catalog api_model/product_variant release_date 投影（catalog 写 / comparison 反查读）
+});
+
 const RSS_FEED_PATH = path.join(PUBLIC_DIR, 'feed.xml');
 
-module.exports = { DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, CONCEPT_FILES, AI_CONFIG_FILES, NEWS_FILES, ACQUISITION_FILES, COMPARISON_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH };
+module.exports = { DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, CONCEPT_FILES, AI_CONFIG_FILES, NEWS_FILES, ACQUISITION_FILES, COMPARISON_FILES, SHARED_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH };

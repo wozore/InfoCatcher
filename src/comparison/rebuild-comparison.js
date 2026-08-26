@@ -30,13 +30,21 @@ const { readSeriesConfig, attachSeriesMetadata, validateSeriesProjection } = req
 const { readExclusionConfig, filterExcludedRecords } = require('./model-exclusions');
 const { filterEmptyModels } = require('./empty-model-filter');
 const { normalizeRevision } = require('./revision-date');
+const { buildReleaseLookup, filterByReleaseCutoff, resolveReleaseDate, buildSharedReleaseIndex } = require('./release-date');
+const { readCatalogReleaseDates } = require('../shared/catalog-release-dates');
+const { writeReleaseIndex } = require('../shared/release-index');
 
 const SOURCE_ORDER = ['openrouter', 'lmarena', 'livebench', 'llm_stats'];
 const CONFIG_DIMS = new Set(LMARENA_CONFIGS.filter(config => config !== 'agent'));
-const VENDOR_THEMES = {
-  midjourney: 'vision', stability: 'vision', blackforestlabs: 'vision', flux: 'vision',
-  runway: 'media', sora: 'media', openai: 'general', veo: 'media', pika: 'media', luma: 'media',
-};
+
+// 模型类型分类（按评测维度判定，非厂商）：视频生成优先，其次图像生成，再纯视觉理解，其余归通用
+function themeOfDimensions(dims) {
+  if (!dims) return 'general';
+  if (dims.text_to_video || dims.image_to_video || dims.video_edit) return 'video';
+  if (dims.text_to_image || dims.image_edit) return 'image';
+  if (dims.vision && !dims.text && !dims.reasoning && !dims.coding && !dims.multimodal) return 'vision';
+  return 'general';
+}
 
 // llm-stats 的 license 值多为下划线小写 → 统一为契约展示形态
 const LICENSE_NORMALIZE = {
@@ -327,6 +335,10 @@ function normalizeEloRange(x, bounds) {
 
 function buildModelRecord(entry, lmarenaEloBounds = {}) {
   const { canonical, identity, family, vendor: recordVendor, revisions, evaluation_profiles: evaluationProfiles, offerings, source_names: sourceNames, sources } = entry;
+  // release_date：filter 阶段已注解到 entry；直接单测 entry 无注解时回落多源解析（仅 llm-stats/openrouter）
+  const releaseInfo = entry.release_date !== undefined
+    ? { date: entry.release_date, provenance: entry.release_date_provenance || null }
+    : resolveReleaseDate(entry);
   const lmarena = sources.lmarena;
   const livebench = sources.livebench;
   const llm = sources.llm_stats;
@@ -554,7 +566,7 @@ function buildModelRecord(entry, lmarenaEloBounds = {}) {
     source_names: sourceNames || {},
     display,
     vendor,
-    theme: VENDOR_THEMES[vendor] || 'general',
+    theme: themeOfDimensions(dims),
     license,
     open_source: openSource,
     is_moe: llm && llm.is_moe != null ? llm.is_moe : null,
@@ -569,6 +581,8 @@ function buildModelRecord(entry, lmarenaEloBounds = {}) {
     lmarena_profiles: lmarenaProfiles,
     livebench_scores: livebenchScoresOut,
     pricing,
+    release_date: releaseInfo.date,
+    release_date_provenance: releaseInfo.provenance,
     value: null,
   };
   return result;
@@ -662,7 +676,16 @@ function rebuildIntegrated(options = {}) {
     return { ok: false, models: [], errors: [error.message] };
   }
   const filteredRecords = filterExcludedRecords(records, exclusionConfig);
-  const activeRecords = filteredRecords.records;
+  // 14 个月滚动删除（retention）：release_date 早于 cutoff 的模型在 Elo 计算前排除；无日期保守保留。
+  // catalog 反查为数据耦合：comparison 只读共享投影 data/shared/catalog-release-dates.json，
+  // 不直接读 catalog 私有文件；经 buildReleaseLookup 对齐 models-alias。
+  const cutoffDate = options.cutoffDate || null;
+  const releaseLookup = buildReleaseLookup({
+    catalogDates: options.catalogDates || readCatalogReleaseDates().entries,
+    modelsAlias: registry,
+  });
+  const retentionResult = filterByReleaseCutoff(filteredRecords.records, cutoffDate, releaseLookup);
+  const activeRecords = retentionResult.records;
   const lmarenaEloBounds = computeLmarenaEloBounds(activeRecords);
   const builtModels = Object.values(activeRecords).map(record => buildModelRecord(record, lmarenaEloBounds));
   const displayCollisions = enforceUniqueDisplays(builtModels);
@@ -673,6 +696,13 @@ function rebuildIntegrated(options = {}) {
   const seriesProjection = attachSeriesMetadata(models, seriesConfig);
   const seriesErrors = validateSeriesProjection(seriesProjection.series, models);
   if (seriesErrors.length) errors.push(...seriesErrors);
+
+  // 模型类型以所属 member 的主变体判定为准（同一型号的 revision 变体同类型，防数据不全误判）
+  const modelByCanonical = new Map(models.map(model => [model.canonical, model]));
+  for (const [canonical, meta] of seriesProjection.memberMeta) {
+    const model = modelByCanonical.get(canonical);
+    if (model && meta.member.theme) model.theme = meta.member.theme;
+  }
 
   // 确定性排序：canonical 字典序（前端再按系列/综合分排序）
   models.sort((a, b) => String(a.canonical).localeCompare(String(b.canonical)));
@@ -720,12 +750,21 @@ function rebuildIntegrated(options = {}) {
 
   if (options.write !== false) {
     writeIntegrated(index, data);
+    writeSharedReleaseIndex(models, registry);
   }
   return {
     ok: errors.length === 0,
     models,
     errors,
-    diagnostics: { display_collisions_resolved: displayCollisions, series_count: seriesProjection.series.length, excluded_models: filteredRecords.excluded, empty_filtered_models: emptyFiltered.map(model => model.canonical) },
+    diagnostics: {
+      display_collisions_resolved: displayCollisions,
+      series_count: seriesProjection.series.length,
+      excluded_models: filteredRecords.excluded,
+      empty_filtered_models: emptyFiltered.map(model => model.canonical),
+      retention_cutoff_date: cutoffDate,
+      retention_filtered_models: retentionResult.filtered,
+      retention_retained_null_models: retentionResult.retained_null,
+    },
     index,
     data,
   };
@@ -747,6 +786,17 @@ function writeIntegrated(index, data) {
   fs.writeFileSync(COMPARISON_FILES.integratedData, JSON.stringify(data, null, 2) + '\n', 'utf8');
 }
 
+// 写共享 release_date 索引（catalog 生成器只读；经 src/shared 校验接口，失败降级不阻塞重建）。
+function writeSharedReleaseIndex(models, registry) {
+  try {
+    const payload = buildSharedReleaseIndex(models, registry);
+    const result = writeReleaseIndex(payload.entries);
+    if (!result.ok) console.warn('⚠️ 共享 release_date 索引写失败：', (result.errors || [result.error]).join('; '));
+  } catch (error) {
+    console.warn('⚠️ 共享 release_date 索引写失败：', error.message);
+  }
+}
+
 module.exports = {
   rebuildIntegrated,
   buildModelRecord,
@@ -760,4 +810,5 @@ module.exports = {
   buildAliasMap,
   loadInputs,
   cleanModelDisplay,
+  themeOfDimensions,
 };

@@ -1,0 +1,190 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-26T15:48:10.428Z",
+  "entries": [
+    {
+      "detail_id": "tool-level3:claude-opus-5",
+      "detail_kind": "api_model",
+      "vendor_key": "anthropic",
+      "title": "Claude Opus 5",
+      "tool_key": "claude-opus-5",
+      "release_date": "2026-07-24"
+    },
+    {
+      "detail_id": "tool-level3:command-a-plus",
+      "detail_kind": "api_model",
+      "vendor_key": "cohere",
+      "title": "Command A+",
+      "tool_key": "command-a-plus",
+      "release_date": "2026-05-20"
+    },
+    {
+      "detail_id": "tool-level3:deepseek-v4-pro",
+      "detail_kind": "api_model",
+      "vendor_key": "deepseek",
+      "title": "DeepSeek-V4-Pro",
+      "tool_key": "deepseek-v4-pro",
+      "release_date": "2026-04-24"
+    },
+    {
+      "detail_id": "tool-level3:gemini-2.5-pro",
+      "detail_kind": "api_model",
+      "vendor_key": "google",
+      "title": "Gemini 2.5 Pro",
+      "tool_key": "gemini-2.5-pro",
+      "release_date": "2025-06-17"
+    },
+    {
+      "detail_id": "tool-level3:gemini-3-1-pro",
+      "detail_kind": "api_model",
+      "vendor_key": "google",
+      "title": "Gemini 3.1 Pro",
+      "tool_key": "gemini-3-1-pro",
+      "release_date": "2026-02-19"
+    },
+    {
+      "detail_id": "tool-level3:gemini-3-6-flash",
+      "detail_kind": "api_model",
+      "vendor_key": "google",
+      "title": "Gemini 3.6 Flash",
+      "tool_key": "gemini-3-6-flash",
+      "release_date": "2026-07-21"
+    },
+    {
+      "detail_id": "tool-level3:gemini-3-7-flash",
+      "detail_kind": "api_model",
+      "vendor_key": "google",
+      "title": "Gemini 3.7 Flash",
+      "tool_key": "gemini-3-7-flash",
+      "release_date": "2026-08-13"
+    },
+    {
+      "detail_id": "tool-level3:gemini-3.5-flash",
+      "detail_kind": "api_model",
+      "vendor_key": "google",
+      "title": "Gemini 3.5 Flash",
+      "tool_key": "gemini-3.5-flash",
+      "release_date": "2026-05-19"
+    },
+    {
+      "detail_id": "tool-level3:gemma-4",
+      "detail_kind": "api_model",
+      "vendor_key": "google",
+      "title": "Gemma 4",
+      "tool_key": "gemma-4",
+      "release_date": "2026-04-02"
+    },
+    {
+      "detail_id": "tool-level3:gpt-5-5",
+      "detail_kind": "api_model",
+      "vendor_key": "openai",
+      "title": "GPT-5.5",
+      "tool_key": "gpt-5-5",
+      "release_date": "2026-04-23"
+    },
+    {
+      "detail_id": "tool-level3:gpt-image-2",
+      "detail_kind": "api_model",
+      "vendor_key": "openai",
+      "title": "gpt-image-2",
+      "tool_key": "gpt-image-2",
+      "release_date": "2026-04-21"
+    },
+    {
+      "detail_id": "tool-level3:gpt-realtime-2",
+      "detail_kind": "api_model",
+      "vendor_key": "openai",
+      "title": "GPT-Realtime-2",
+      "tool_key": "gpt-realtime-2",
+      "release_date": "2026-05-07"
+    },
+    {
+      "detail_id": "tool-level3:grok-4-5",
+      "detail_kind": "api_model",
+      "vendor_key": "xai",
+      "title": "Grok 4.5",
+      "tool_key": "grok-4-5",
+      "release_date": "2025-07-08"
+    },
+    {
+      "detail_id": "tool-level3:grok-4-6",
+      "detail_kind": "api_model",
+      "vendor_key": "xai",
+      "title": "Grok 4.6",
+      "tool_key": "grok-4-6",
+      "release_date": "2026-08-12"
+    },
+    {
+      "detail_id": "tool-level3:kling-2-6-pro",
+      "detail_kind": "api_model",
+      "vendor_key": "kuaishou",
+      "title": "Kling 2.6 Pro",
+      "tool_key": "kling-2-6-pro",
+      "release_date": "2025-12-03"
+    },
+    {
+      "detail_id": "tool-level3:kling-3-0",
+      "detail_kind": "api_model",
+      "vendor_key": "kuaishou",
+      "title": "Kling 3.0",
+      "tool_key": "kling-3-0",
+      "release_date": "2026-02-06"
+    },
+    {
+      "detail_id": "tool-level3:minimax-h3",
+      "detail_kind": "api_model",
+      "vendor_key": "minimax",
+      "title": "MiniMax H3",
+      "tool_key": "minimax-h3",
+      "release_date": "2026-07-31"
+    },
+    {
+      "detail_id": "tool-level3:mistral-large-3",
+      "detail_kind": "api_model",
+      "vendor_key": "mistral",
+      "title": "Mistral Large 3",
+      "tool_key": "mistral-large-3",
+      "release_date": "2025-12-02"
+    },
+    {
+      "detail_id": "tool-level3:qwen3-5-omni",
+      "detail_kind": "api_model",
+      "vendor_key": "alibaba",
+      "title": "Qwen3.5 Omni",
+      "tool_key": "qwen3-5-omni",
+      "release_date": "2026-03-15"
+    },
+    {
+      "detail_id": "tool-level3:qwen3-7-max",
+      "detail_kind": "api_model",
+      "vendor_key": "alibaba",
+      "title": "Qwen3.7 Max",
+      "tool_key": "qwen3-7-max",
+      "release_date": "2026-08-03"
+    },
+    {
+      "detail_id": "tool-level3:qwen3-7-plus",
+      "detail_kind": "api_model",
+      "vendor_key": "alibaba",
+      "title": "Qwen3.7 Plus",
+      "tool_key": "qwen3-7-plus",
+      "release_date": "2026-05-26"
+    },
+    {
+      "detail_id": "tool-level3:qwen3-8-max",
+      "detail_kind": "api_model",
+      "vendor_key": "alibaba",
+      "title": "Qwen3.8 Max",
+      "tool_key": "qwen3-8-max",
+      "release_date": "2026-07-19"
+    },
+    {
+      "detail_id": "tool-level3:reve-2-1",
+      "detail_kind": "api_model",
+      "vendor_key": "reve",
+      "title": "Reve 2.1",
+      "tool_key": "reve-2-1",
+      "release_date": "2026-07-09"
+    }
+  ]
+}

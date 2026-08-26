@@ -201,6 +201,38 @@ async function main(argv = process.argv.slice(2)) {
     console.log(JSON.stringify(result, null, 2));
     return result;
   }
+  if (command === 'prune') {
+    // 14 个月滚动级联删除：cutoff 缺省读共享段 data/shared/retention.json（comparison 推进）。
+    // 用法：catalog-generator prune [--cutoff <YYYY-MM|YYYY-MM-DD>] [--dry-run] [--confirm]
+    const { planRetentionPrune, applyRetentionPrune, currentCutoffDate } = require('../src/catalog/catalog-retention-prune');
+    const cutoffInput = flags.cutoff
+      ? (String(flags.cutoff).length === 7 ? `${flags.cutoff}-01` : String(flags.cutoff))
+      : currentCutoffDate();
+    if (!cutoffInput) throw new Error('无法确定 cutoff：请提供 --cutoff <YYYY-MM>，或确认共享段 data/shared/retention.json 已初始化');
+    const current = loadCatalogSnapshot();
+    const planned = planRetentionPrune(current.snapshot, cutoffInput);
+    if (!planned.ok) { console.log(JSON.stringify(planned, null, 2)); return planned; }
+    console.log(JSON.stringify({
+      kind: 'catalog_retention_prune',
+      cutoff_date: planned.cutoff_date,
+      has_changes: planned.has_changes,
+      expired_details: planned.expired_details,
+      tool_cards: planned.tool_cards,
+      vendor_level2s: planned.vendor_level2s,
+      vendor_level1s: planned.vendor_level1s,
+      vendor_cards: planned.vendor_cards,
+      featured_dangling: planned.featured_dangling,
+      expected_revision: current.revision,
+      preview_hash: planned.preview_hash,
+      confirmation: `PRUNE ${planned.cutoff_date}`,
+    }, null, 2));
+    if (flags.dry_run || !planned.has_changes) return { ...planned, dry_run: flags.dry_run === true, committed: false };
+    const confirmation = flags.confirm || await ask(`输入 PRUNE ${planned.cutoff_date} 以确认滚动删除：`);
+    if (confirmation !== `PRUNE ${planned.cutoff_date}`) return { ok: false, code: 'PRUNE_CONFIRMATION_REQUIRED' };
+    const result = applyRetentionPrune({ cutoffDate: planned.cutoff_date, expectedRevision: current.revision, previewHash: planned.preview_hash });
+    console.log(JSON.stringify(result, null, 2));
+    return result;
+  }
   if (command === 'batch') {
     // 批量生成：待补卡 → 查重 → 厂商/官方源解析 → 逐 seed 生成 → 自动 apply。
     // 用法：catalog-generator batch --file <待补卡.json> [--confirm-cost] [--dry-run] [--from-preview] [--seed-out <file>]
@@ -282,7 +314,7 @@ async function main(argv = process.argv.slice(2)) {
     }
     throw new Error('用法: catalog-generator url-registry vendor list|add --name <名> --url <URL> [--vendor <厂商>] [--alias <别名>] [--product-prefix <前缀,...>] [--model-prefix <前缀,...>] | remove --name <名>; url-registry product list|add --name <产品> --vendor-key <厂商键> --url <URL> [--alias <别名>] [--product-prefix <前缀,...>] [--lifecycle <状态>] [--verified-at <YYYY-MM-DD>] [--official-update-at <YYYY-MM-DD>] [--superseded-by <产品键>] | remove --name <产品> | audit [--stale-days <天数>]');
   }
-  throw new Error('用法: catalog-generator probe|plan|prepare|list|recover|new|resume|review|apply|cancel|remove|batch|url-registry');
+  throw new Error('用法: catalog-generator probe|plan|prepare|list|recover|new|resume|review|apply|cancel|remove|prune|batch|url-registry');
 }
 
 if (require.main === module) {

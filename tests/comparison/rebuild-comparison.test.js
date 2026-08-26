@@ -13,7 +13,7 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
 
-const { rebuildIntegrated, buildAliasMap, lmarenaParse, livebenchParse, openrouterCanonical, llmStatsCanonical, cleanModelDisplay } = require('../../src/comparison/rebuild-comparison');
+const { rebuildIntegrated, buildAliasMap, lmarenaParse, livebenchParse, openrouterCanonical, llmStatsCanonical, cleanModelDisplay, themeOfDimensions } = require('../../src/comparison/rebuild-comparison');
 const { parseCsv, aggregateGroups } = require('../../src/comparison/fetch-livebench');
 const { extractFlightChunks, extractInitialData } = require('../../src/comparison/fetch-llm-stats');
 const { validateLmarenaSnapshot, normalizeLmarena, normalizeIndex } = require('../../src/comparison/compare-schema');
@@ -384,4 +384,63 @@ test('rebuild：同一日期的 MMDD 与 YYYYMMDD 规范化后合并为同一 re
   assert.deepEqual([...merged.revisions], ['07-31']);
   assert.deepEqual([...merged.source_names.openrouter], ['deepseek/deepseek-v4-flash-0731', 'deepseek/deepseek-v4-flash-20260731']);
   assert.equal(merged.livebench_scores?.base?.reasoning ?? merged.composite?.available?.livebench, 80, 'livebench 分数合并保留');
+});
+
+test('rebuild：release_date 早于 cutoff 的模型被过滤，无日期保守保留', () => {
+  const snapshots = {
+    openrouter: { data: [] },
+    lmarena: { configs: {} },
+    livebench: { groups: [] },
+    llm_stats: {
+      models: [
+        { model_id: 'gpt-4o', name: 'GPT-4o', organization_id: 'openai', license: 'proprietary', release_date: '2024-05-13', index_reasoning: 50 },
+        { model_id: 'gpt-5.5', name: 'GPT-5.5', organization_id: 'openai', license: 'proprietary', release_date: '2026-04-23', index_reasoning: 90 },
+        { model_id: 'no-date-model', name: 'No Date Model', organization_id: 'openai', license: 'proprietary', index_reasoning: 60 },
+      ],
+    },
+  };
+  const result = rebuildIntegrated({
+    snapshots, write: false, cutoffDate: '2025-06-01',
+    identityRegistry: { schema_version: 2, entries: [] },
+    exclusionConfig: { schema_version: 1, rules: [] },
+  });
+  assert.equal(result.ok, true, result.errors.join('; '));
+  const canonicals = result.models.map(m => m.canonical);
+  assert.ok(!canonicals.includes('openai--gpt-4o'), '2024-05-13 早于 cutoff 应被过滤');
+  assert.ok(canonicals.includes('openai--gpt-5.5'), '2026-04-23 应保留');
+  assert.ok(canonicals.includes('openai--no-date-model'), '无日期保守保留');
+  // 诊断
+  assert.equal(result.diagnostics.retention_cutoff_date, '2025-06-01');
+  assert.equal(result.diagnostics.retention_filtered_models.length, 1);
+  assert.equal(result.diagnostics.retention_filtered_models[0].canonical, 'openai--gpt-4o');
+  assert.equal(result.diagnostics.retention_retained_null_models.length, 1);
+  // 保留模型的 release_date 已投影
+  const kept = result.models.find(m => m.canonical === 'openai--gpt-5.5');
+  assert.equal(kept.release_date, '2026-04-23');
+  assert.equal(kept.release_date_provenance, 'llm_stats');
+});
+
+test('themeOfDimensions：按评测维度归类图像/视频/纯视觉/通用', () => {
+  assert.equal(themeOfDimensions({ text_to_image: {}, image_edit: {} }), 'image');
+  assert.equal(themeOfDimensions({ text_to_video: {}, video_edit: {} }), 'video');
+  assert.equal(themeOfDimensions({ image_to_video: {} }), 'video');
+  assert.equal(themeOfDimensions({ vision: {}, text: {} }), 'general', '带文本能力不算纯视觉');
+  assert.equal(themeOfDimensions({ vision: {}, multimodal: {} }), 'general', '带多模态能力不算纯视觉');
+  assert.equal(themeOfDimensions({ vision: {} }), 'vision');
+  assert.equal(themeOfDimensions({ vision: {}, reasoning: {} }), 'general');
+  assert.equal(themeOfDimensions({ text: {}, coding: {}, math_reasoning: {} }), 'general');
+  assert.equal(themeOfDimensions({ text_to_image: {}, text_to_video: {} }), 'video', '视频优先于图像');
+  assert.equal(themeOfDimensions(null), 'general');
+  assert.equal(themeOfDimensions({}), 'general');
+});
+
+test('rebuild：按模型维度归类生成模型 theme，带 vision 维的通用 LLM 仍归 general', () => {
+  const result = rebuildIntegrated({ snapshots: buildSnapshots(), aliasEntries: [], write: false, exclusionConfig: { schema_version: 1, rules: [] } });
+  assert.equal(result.ok, true, result.errors.join('; '));
+  const byCanonical = new Map(result.models.map(model => [model.canonical, model]));
+  assert.equal(byCanonical.get('midjourney--midjourney-v7').theme, 'image');
+  assert.equal(byCanonical.get('runway--runway-gen-4').theme, 'video');
+  assert.equal(byCanonical.get('openai--gpt-5.6-sol').theme, 'general', '有 vision 榜分的通用 LLM 不归纯视觉');
+  assert.equal(byCanonical.get('anthropic--claude-opus-5').theme, 'general');
+  assert.equal(byCanonical.get('openai--o3-mini').theme, 'general');
 });

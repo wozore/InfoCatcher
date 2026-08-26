@@ -19,6 +19,7 @@ const { COMPARISON_FILES } = require('../src/shared/paths');
 const { runComparison, fetchSource, isFresh, readConfig } = require('../src/comparison/run-comparison');
 const { readRawSnapshot } = require('../src/comparison/compare-store');
 const { rebuildIntegrated } = require('../src/comparison/rebuild-comparison');
+const { readRetentionState } = require('../src/shared/retention');
 const { collectReviewCandidates } = require('../src/comparison/identity-review');
 
 function printStatus() {
@@ -73,7 +74,8 @@ async function main() {
     return;
   }
   if (command === 'rebuild') {
-    const result = rebuildIntegrated();
+    // 手动重建同样应用共享段已持久化的 retention cutoff（与 run 一致，避免旧模型回潮）
+    const result = rebuildIntegrated({ cutoffDate: readRetentionState().cutoff_date });
     if (result.ok) { console.log(`✅ integrated 重建完成：${result.models.length} 个模型`); process.exit(0); }
     console.error(`❌ integrated 重建失败：${result.errors.join('; ')}`);
     process.exit(1);

@@ -9,6 +9,7 @@ const { revisionOf } = require('./catalog-revision');
 const { loadCatalogSnapshot, FILE_BY_AREA } = require('./catalog-snapshot-store');
 const { planCatalogPatches } = require('./catalog-change-planner');
 const { buildDist } = require('../../scripts/build-dist');
+const { publishCatalogReleaseDatesAfterCommit } = require('./catalog-shared-publish');
 
 function ensureDirs() {
   fs.mkdirSync(CATALOG_GENERATOR_FILES.transactionDir, { recursive: true });
@@ -198,6 +199,9 @@ function commitSnapshotChange(target, options = {}) {
     journalWrite(journal, runId);
     journal.phase = 'committed';
     journalWrite(journal, runId);
+    // 发布 catalog api_model/product_variant release_date 共享投影（comparison 反查只读；
+    // 派生可再生产物，失败降级不影响主事务）。
+    publishCatalogReleaseDatesAfterCommit();
     finalizeTransaction(staging, backup);
     return { ok: true, beforeRevision: before.revision, targetRevision };
   } catch (error) {
@@ -290,6 +294,9 @@ function commitCatalogChange(seed, options = {}) {
     journalWrite(journal, runId);
     journal.phase = 'committed';
     journalWrite(journal, runId);
+    // 发布 catalog api_model/product_variant release_date 共享投影（comparison 反查只读；
+    // 派生可再生产物，失败降级不影响主事务）。
+    publishCatalogReleaseDatesAfterCommit();
     finalizeTransaction(staging, backup);
     return { ok: true, plan, beforeRevision: before.revision, targetRevision };
   } catch (error) {
@@ -350,6 +357,9 @@ function replaceToolLevel3(items, options = {}) {
     journal.dist_replaced = true;
     journal.phase = 'committed';
     journalWrite(journal, runId);
+    // 发布 catalog api_model/product_variant release_date 共享投影（comparison 反查只读；
+    // 派生可再生产物，失败降级不影响主事务）。
+    publishCatalogReleaseDatesAfterCommit();
     finalizeTransaction(staging, backup);
     return { ok: true, revision: journal.target_revision };
   } catch (error) {

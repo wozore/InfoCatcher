@@ -45,6 +45,7 @@ const {
 } = require('./catalog-assistant');
 const { createCatalogAiAdapters, resolveOfficialSource } = require('./ai/catalog-adapters');
 const { resolveSeriesPlacement, applyPlacementToSeed } = require('./ai/catalog-series-placement-ai');
+const { loadSharedReleaseIndex, buildIntegratedLookup, lookupReleaseDateForSeed } = require('./catalog-integrated-lookup');
 const { loadSeriesPolicy } = require('./catalog-series-policy');
 const { loadCatalogSnapshot } = require('./catalog-snapshot-store');
 const { lookupOfficialUrl } = require('./official-url-registry');
@@ -320,6 +321,8 @@ async function runCatalogBatch(seeds, options = {}) {
   const prepareFn = options.prepareCatalogDraft || prepareCatalogDraft;
   const reviewFn = options.reviewCatalogDraft || reviewCatalogDraft;
   const applyFn = options.applyCatalogDraft || applyCatalogDraft;
+  // 共享 release_date 索引（comparison 生成）：api_model/product_variant 缺失时机械补填
+  const integratedLookup = options.integratedLookup || buildIntegratedLookup(loadSharedReleaseIndex());
   const report = { estimate, applied: [], failed: [], per_tool: [] };
   const { blocked } = await resolveBatchPlacements(seeds, options);
   const blockedByCode = new Map(blocked.map(b => [b.name, b.code]));
@@ -336,6 +339,14 @@ async function runCatalogBatch(seeds, options = {}) {
         report.failed.push({ name: seed.name, draft_id: null, reason: entry.reason });
         report.per_tool.push(entry);
         continue;
+      }
+      // 阶段 5.5：api_model/product_variant 从共享 release_date 索引机械补填（AI 无值时的兜底线索）
+      if (integratedLookup && (seed.detail_kind === 'api_model' || seed.detail_kind === 'product_variant')) {
+        const hit = lookupReleaseDateForSeed(seed, integratedLookup);
+        if (hit) {
+          seed.known_fields = { ...(seed.known_fields || {}), integrated_release_date: hit.date };
+          entry.integrated_release_date = hit.date;
+        }
       }
       // prepareCatalogDraft 内部会重新 planCatalogDraft 并对照最新快照，
       // 顺序循环逐 seed 天然自洽（前序 apply 改 revision 不影响本 seed）。

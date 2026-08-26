@@ -25,7 +25,11 @@
 - [model-exclusions.json](data/comparison/model-exclusions.json) — integrated 重建的整系列排除登记表；按 vendor + token-boundary identity prefix 或 exact identity 过滤，保留 raw 快照不删除。
 - [model-series.json](data/comparison/model-series.json) — 模型系列人工登记与成员展示规则；只组织现有 canonical，不改变跨源实体或评测分数。
 - [integrated/index.json](data/comparison/integrated/index.json) — 前端唯一入口层（小）：模型列表 + composite_score + degrees + sources + `file` 指针。
-- [integrated/data.json](data/comparison/integrated/data.json) — 前端懒加载完整层：dimensions/lmarena_scores/livebench_scores/composite/pricing/value。
+- [integrated/data.json](data/comparison/integrated/data.json) — 前端懒加载完整层：dimensions/lmarena_scores/livebench_scores/composite/pricing/value/release_date/release_date_provenance。
+## data/shared/ — 跨模块共享数据段（comparison ↔ catalog 双向数据耦合，每文件单一写者，经 src/shared 校验接口访问）
+- [retention.json](data/shared/retention.json) — 14 个月滚动删除日期 cutoff 状态（months/retention_year_month/last_advanced_at）；comparison 经 `advanceRetentionToNow` 写、catalog prune 经 `readRetentionState` 只读。
+- [model-release-dates.json](data/shared/model-release-dates.json) — 模型 release_date 查找索引（model_key + catalog_aliases）；comparison 重建经 `writeReleaseIndex` 写、catalog 生成器经 `readReleaseIndex` 机械查找只读。
+- [catalog-release-dates.json](data/shared/catalog-release-dates.json) — catalog api_model/product_variant release_date 投影（detail_id/detail_kind/vendor_key/title/tool_key/release_date）；catalog 落盘后经 `writeCatalogReleaseDates` 发布、comparison 反查经 `readCatalogReleaseDates` 只读。
 ## 根领域文档
 - [CONTEXT.md](CONTEXT.md) — catalog 领域词汇表；定义 CatalogProfile、ResearchScope、OfficialSource、FieldCoverage、DerivedField、LayerPatch、CatalogDraft、Readiness、UpdateCandidate、ToolUpdateReviewQueue 与 Apply。
 
@@ -38,6 +42,9 @@
 - [llm-endpoints.js](src/shared/llm-endpoints.js) — 本地 Bonsai 模型 OpenAI 兼容端点与模型名常量（news 侧 5 个 + catalog 侧 3 个本地化任务统一引用）。导出: `LOCAL_API_BASE, LOCAL_MODEL`
 - [local-model.js](src/shared/local-model.js) — 本地 Bonsai 自动启动：调用本地 LLM 前确保服务在线——探测离线自动 spawn 启动脚本并轮询就绪（幂等 TTL 缓存、超时后 TTL 内不重复拉起）；注入自定义 fetchImpl（测试 mock）一律放行不探测不启动。导出: `LOCAL_MODEL_SCRIPT, buildProbePayload, probeLocal, startLocalServer, ensureLocalModel, resetLocalModelState, autostartEnabled`
 - [tavily-client.js](src/shared/tavily-client.js) — Tavily Search/Extract 原生 fetch transport；keyless/keyed 按端点混用认证（search/extract 默认 keyless 免费、缺 key 可用，任意 keyless 429 都自动切 keyed 并进入冷却，冷却后恢复 keyless；cap code/detail 用于诊断，本地节流/冷却可注入）、Key/HTTP/超时错误归一化和 URL canonicalization。导出: `SEARCH_ENDPOINT, EXTRACT_ENDPOINT, canonicalizeUrl, resolveAccessMode, isKeylessCapResult, searchTavily, extractTavily, probeTavily`
+- [retention.js](src/shared/retention.js) — 共享段 retention 校验接口（纯逻辑 + 文件 IO 分离）：cutoff = 当前年月 − 14 个月，`advanceRetentionCutoff` 幂等跨自然月推进、漏跑自愈 snap；`readRetentionState` 读端唯一入口（校验后冻结）、`advanceRetentionToNow` 写端唯一入口（推进 + 校验 + 原子写，失败降级沿用旧 cutoff）；`writeRetention` 形状校验 fail-closed 防误篡改。comparison 写、catalog 只读。导出: `DEFAULT_MONTHS, currentCutoffYearMonth, cutoffDateOf, advanceRetentionCutoff, readRetentionFromPayload, validateRetentionPayload, readRetentionState, advanceRetentionToNow, readRetention, writeRetention, ensureSharedDir`
+- [release-index.js](src/shared/release-index.js) — 共享段 `model-release-dates.json` 校验接口（comparison 写 / catalog 只读）：`readReleaseIndex` 校验后冻结读取（缺失/损坏回退空）、`writeReleaseIndex` 逐条形状校验 fail-closed 原子写。导出: `isIsoDate, validateReleaseIndexEntries, readReleaseIndex, writeReleaseIndex`
+- [catalog-release-dates.js](src/shared/catalog-release-dates.js) — 共享段 `catalog-release-dates.json` 校验接口（catalog 写 / comparison 只读）：`readCatalogReleaseDates` 校验后冻结读取、`writeCatalogReleaseDates` 逐条形状校验 fail-closed 原子写。导出: `isIsoDate, validateCatalogReleaseDatesEntries, readCatalogReleaseDates, writeCatalogReleaseDates`
 
 ## src/catalog/ — 目录数据接口与生成器
 - [catalog-interface.js](src/catalog-interface.js) — Node 侧五模块目录唯一 Interface；三级批量替换委托共同事务。导出: `catalog, DATA_FILES, resetCatalogForTests`
@@ -73,6 +80,9 @@
 - [catalog-series-migration.js](src/catalog/catalog-series-migration.js) — LLM 二级系列迁移规划器（**纯确定性、零网络零 AI**）：读取政策 + 五模块快照，生成完整 FutureSnapshot 的精确变更——通用家族重组（merge/split/rename）、专用/套餐/工具家族改名对齐与零漂移、重写 L1.level2_refs、搬迁 L2.detail_refs；三级详情与工具卡完全不动；无既有成员的目标不创建空系列；既有浮空详情写入 warnings 而非孤儿。导出: `planSeriesMigration`
 - [official-url-registry.js](src/catalog/official-url-registry.js) — 批量生成前置：厂商/产品人工官方 URL 登记的统一 Module；双表 loader 与 schema/引用/URL/lifecycle 校验，产品表可选 `update_sources` 严格契约（含可选 `date_mode: latest` 多日期页取最新规则）与只读读取，`lookupOfficialUrl` 按 detailKind 在产品表和厂商表之间选择匹配且不混入更新源。导出: `normalizeKey, loadUrlRegistry, listUrlRegistry, loadProductUrlRegistry, listProductUrlRegistry, updateSourcesForProduct, validateUpdateSource, validateUpdateSources, validateProductUrlRegistry, lookupOfficialUrl, addUrlRegistryEntry, removeUrlRegistryEntry`
 - [concept-batch.js](src/catalog/concept-batch.js) — **概念批量生成编排层（concept-cards-pending → 预览 → 人工 apply → glossary.json）**：查重（同批 + 正式 glossary）→ 回读 approved 摘要作主证据 + vibe-hub 自动补充 → 成本估算/确认 → 逐概念 DeepSeek 合成写预览文件 → 显式 `concept apply` 原子写 glossary（轻量，不套五层 Draft 事务）。导出: `readPendingConcepts, dedupeConceptCandidates, collectConceptEvidence, planConceptCost, runConceptBatch, readConceptPreviews, applyConceptPreviews`
+- [catalog-integrated-lookup.js](src/catalog/catalog-integrated-lookup.js) — 卡片生成器从共享 release_date 索引机械查找（comparison → catalog 方向，只读 `data/shared/model-release-dates.json`，`loadSharedReleaseIndex` 委托 `src/shared/release-index` 校验接口）：按 tool_key/标题/slug/identity 对齐，供 api_model/product_variant 卡缺失 release_date 时补填。导出: `slugifyModelName, loadSharedReleaseIndex, buildIntegratedLookup, lookupReleaseDateForSeed`
+- [catalog-shared-publish.js](src/catalog/catalog-shared-publish.js) — catalog → comparison 方向共享投影发布：`buildCatalogReleaseDates` 从五模块快照确定性投影 api_model/product_variant 的 release_date（join tool-card 取 tool_key）；`publishCatalogReleaseDates`/`publishCatalogReleaseDatesAfterCommit` 经 `src/shared/catalog-release-dates` 校验接口写共享段（派生产物失败降级、不进事务回滚链）。导出: `buildCatalogReleaseDates, publishCatalogReleaseDates, publishCatalogReleaseDatesAfterCommit`
+- [catalog-retention-prune.js](src/catalog/catalog-retention-prune.js) — catalog 五模块 14 个月滚动级联删除：按 detail_kind 取时间字段（tool→last_updated_date、api_model/product_variant→release_date）筛过期详情，级联删 tool-card/vendor-level2/1/vendor-card（失去全部引用的父级）；subscription_plan 与无日期保守保留；featured 悬空只报不改；复用 planRecordRemoval + commitSnapshotChange 事务。cutoff 只读共享段。导出: `DATE_FIELD_BY_KIND, currentCutoffDate, collectPruneTargets, featuredDangling, planRetentionPrune, applyRetentionPrune`
 - [vibe-hub-evidence.js](src/catalog/vibe-hub-evidence.js) — vibe-hub.org 概念页提取与本地缓存（纯 HTTP 零 API 成本）：term→英文 kebab slug（含中文返回 null）、JSON-LD/正文结构化提取、缓存优先 + 串行 ≥500ms 节流、TTL 默认 3 天、过期重抓。导出: `vibeHubSlugOf, extractVibeHubText, loadVibeHubCache, saveVibeHubCache, fetchVibeHubDefinition, fetchPage, refreshStaleVibeHubCache`
 
 ## src/comparison/ — 模型对比数据管线（CommonJS；抓取 4 公开源 → 重建 integrated）
@@ -88,6 +98,7 @@
 - [model-series.js](src/comparison/model-series.js) — 模型系列分组深 Module：读取人工系列登记，按 series/member/configuration 三层生成稳定系列投影；revision 聚合为成员变体，canonical 不被系列合并。导出: `readSeriesConfig, seriesInfoFor, memberInfoFor, attachSeriesMetadata, validateSeriesProjection`
 - [model-exclusions.js](src/comparison/model-exclusions.js) — integrated 重建排除规则深 Module：读取/严格校验 `vendor + identity_prefix` 或 `identity_prefixes` token-boundary / exact identity 规则，过滤 source records 并返回命中诊断；只影响 integrated，不删除 raw。导出: `validateExclusionConfig, readExclusionConfig, exclusionForModel, filterExcludedRecords`
 - [empty-model-filter.js](src/comparison/empty-model-filter.js) — 无数据模型自动过滤（代码规则）：按 identity 分组，同一 identity 全部 revision 无有效评测维度且无综合分时整组从 integrated 移除（任一 revision 有数据则整组保留，不误杀主变体）；随抓取数据动态生效，模型日后有数据自动回归。导出: `hasComparisonData, filterEmptyModels`
+- [release-date.js](src/comparison/release-date.js) — 模型 release_date 多源解析 + 14 个月 cutoff 过滤：优先级 llm-stats `release_date` → catalog 反查（tool-preview-level3 + models-alias catalog_aliases 对齐）→ openrouter `created`（Unix 秒兜底）→ null 保守保留；`filterByReleaseCutoff` 在 Elo 前排除早于 cutoff 的模型；生成共享索引 `data/shared/model-release-dates.json`。导出: `isIsoDate, buildReleaseLookup, resolveReleaseDate, filterByReleaseCutoff, buildSharedReleaseIndex`
 - [identity-review.js](src/comparison/identity-review.js) — 名称歧义离线审计 Module：只收集确定性解析未分类 token，协调本地 Bonsai 建议与按阈值升级的 DeepSeek 复核；所有结果强制人工确认，不写正式 alias/数据。导出: `collectReviewCandidates, shouldEscalate, reviewCandidates`
 - [identity-review-ai.js](src/comparison/identity-review-ai.js) — 名称歧义 AI 建议 Adapter：复用结构化 JSON transport，本地 Bonsai 默认、DeepSeek 可显式升级；统一 prompt/schema，ledger 缺失 fail-closed。导出: `suggestIdentityReview`
 - [rebuild-comparison.js](src/comparison/rebuild-comparison.js) — **integrated 重建核心**：只消费统一模型身份解析（厂商限定 `model_key` + 明确 revision 隔离）→ 合并 4 源记录 → 先按 model-exclusions 过滤整系列 → 重新计算 Elo bounds/维度/综合分/性价比 → 系列投影；profile 分数进入 `lmarena_profiles`，不生成选择器行，同厂商同展示名最终强制追加身份消歧，写 index/data.json；排除只影响 integrated，raw 保留。导出: `rebuildIntegrated, buildModelRecord, slugify, buildAliasMap, livebenchParse, cleanModelDisplay`
@@ -194,6 +205,9 @@
 - [catalog-synthesis-prompt.test.js](tests/catalog/catalog-synthesis-prompt.test.js) — 合成 prompt 按层分组、来源截断限量、跳过无正文来源与指令规则回归。
 - [catalog-adapters.test.js](tests/catalog/catalog-adapters.test.js) — Tavily 官方域名发现、清洗正文、能力探针与 DeepSeek 组合 Adapter 回归。
 - [catalog-batch.test.js](tests/catalog/catalog-batch.test.js) — 批量生成编排回归：读卡、三层查重、双表登记/解析/detail_kind_hint、`update_sources` 严格契约与 batch 兼容性、dry-run 预览、全局成本门禁、批量循环失败隔离、登记表增删。
+- [catalog-integrated-lookup.test.js](tests/catalog/catalog-integrated-lookup.test.js) — 共享 release_date 索引机械查找回归：tool_key/标题/slug/identity 对齐、deterministic 来源跳过官方来源校验。
+- [catalog-retention-prune.test.js](tests/catalog/catalog-retention-prune.test.js) — 14 个月滚动级联删除回归：过期 tool/api_model 判据、级联删 vendor 链、无日期/subscription_plan 保守保留、引用清理、featured 悬空只报不改。
+- [catalog-release-dates.test.js](tests/catalog/catalog-release-dates.test.js) — catalog→comparison 共享投影发布回归：只投影 api_model/product_variant、tool_key join、逐条形状校验 fail-closed、读写冻结。
 - [tool-update-collector.test.js](tests/catalog/tool-update-collector.test.js) — 专用更新网页 collector 全离线回归：GitHub REST/raw 请求构造、来源仓库/路径校验、release 过滤、限流重试、tag-only discovery、Tavily Extract-only 和统一证据。
 - [tool-update-review.test.js](tests/catalog/tool-update-review.test.js) — 工具更新 AI/planner/store 全离线回归：五字段结构化输出、本地/DeepSeek 成本门禁、实体/组件/日期阻断、队列幂等、人工结论保留和 evidence hash 重开。
 - [tool-update-review-cli.test.js](tests/catalog/tool-update-review-cli.test.js) — 工具更新 CLI 离线回归：参数解析、Tavily/DeepSeek 门禁、scan 不 Apply、list 只读和 Apply 三重确认门禁。
@@ -220,6 +234,9 @@
 - [model-exclusions.test.js](tests/comparison/model-exclusions.test.js) — 排除规则 schema、token-boundary prefix、exact identity、命中诊断和 fail-closed 回归。
 - [rebuild-comparison.test.js](tests/comparison/rebuild-comparison.test.js) — 模型对比管线回归：4 源对齐/合并、models-alias 覆盖、维度归一化、综合分缺源重分配、性价比、单源/无综合分模型、整系列排除在 Elo/value/series 前生效且不写 raw、LiveBench CSV 聚合、llm-stats RSC 解析、LMArena 快照 fail-closed。
 - [model-series.test.js](tests/comparison/model-series.test.js) — 系列投影回归：系列/成员/修订变体聚合、人工成员展示名与重叠登记优先级。
+- [retention.test.js](tests/comparison/retention.test.js) — 14 个月滚动删除回归：纯函数（窗口/推进/幂等/自愈）+ 校验接口（readRetentionState 冻结回退、advanceRetentionToNow 唯一写入口、writeRetention fail-closed）。
+- [release-date.test.js](tests/comparison/release-date.test.js) — release_date 多源解析回归：llm-stats 优先、openrouter 兜底、catalog 反查 Path A/B 经共享投影、filterByReleaseCutoff 排除/保守保留。
+- [release-index.test.js](tests/comparison/release-index.test.js) — 共享 model-release-dates 索引读写回归：逐条校验 fail-closed 不覆盖、原子写、缺失/损坏回退空、冻结。
 - [fixtures/raw/](tests/comparison/fixtures/raw/) — 模型对比管线测试 raw 快照 fixtures（openrouter/lmarena/livebench/llm-stats 各源小样本）。
 
 ## scripts/ — 命令入口（薄包装；src/ 为纯逻辑）
