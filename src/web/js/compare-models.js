@@ -96,6 +96,162 @@ let filterTheme = 'general';
 let expandedVendors = new Set();
 let expandedSeries = new Set();
 
+const CMP_SELECTOR_MIN_WIDTH = 220;
+const CMP_SELECTOR_MAX_WIDTH = 480;
+const CMP_SELECTOR_DEFAULT_WIDTH = 280;
+const CMP_SPLITTER_WIDTH = 8;
+const CMP_MAIN_MIN_WIDTH = 320;
+let cmpSelectorWidth = CMP_SELECTOR_DEFAULT_WIDTH;
+let cmpSplitterDrag = null;
+let cmpSplitterBound = false;
+let treeAnchorFrame = 0;
+
+function cmpLayoutOf() {
+  return document.getElementById('compareModelPanel')?.querySelector('.cmp-layout');
+}
+
+function cmpWidthBounds(layout = cmpLayoutOf()) {
+  if (!layout) return { min: CMP_SELECTOR_MIN_WIDTH, max: CMP_SELECTOR_MAX_WIDTH };
+  const styles = getComputedStyle(layout);
+  const gap = Number.parseFloat(styles.columnGap) || 0;
+  const width = layout.getBoundingClientRect().width || layout.clientWidth;
+  if (!width) return { min: CMP_SELECTOR_MIN_WIDTH, max: CMP_SELECTOR_MAX_WIDTH };
+  const availableMax = width - (gap * 2) - CMP_SPLITTER_WIDTH - CMP_MAIN_MIN_WIDTH;
+  return {
+    min: CMP_SELECTOR_MIN_WIDTH,
+    max: Math.max(CMP_SELECTOR_MIN_WIDTH, Math.min(CMP_SELECTOR_MAX_WIDTH, availableMax)),
+  };
+}
+
+function clampCmpSelectorWidth(width, layout = cmpLayoutOf()) {
+  const bounds = cmpWidthBounds(layout);
+  const value = Number.isFinite(width) ? width : CMP_SELECTOR_DEFAULT_WIDTH;
+  return Math.min(bounds.max, Math.max(bounds.min, value));
+}
+
+function applyCmpSelectorWidth(width) {
+  const layout = cmpLayoutOf();
+  if (!layout) return;
+  cmpSelectorWidth = clampCmpSelectorWidth(width, layout);
+  layout.style.setProperty('--cmp-selector-width', `${cmpSelectorWidth}px`);
+  const splitter = document.getElementById('cmpSplitter');
+  if (splitter) {
+    const bounds = cmpWidthBounds(layout);
+    splitter.setAttribute('aria-valuemin', String(bounds.min));
+    splitter.setAttribute('aria-valuemax', String(bounds.max));
+    splitter.setAttribute('aria-valuenow', String(Math.round(cmpSelectorWidth)));
+  }
+}
+
+function treeAnchorOf(trigger) {
+  const list = document.getElementById('cmpModelList');
+  if (!list || !trigger) return null;
+  let kind;
+  let key;
+  if (trigger.matches('[data-cmp-vendor-toggle]')) {
+    kind = 'vendor';
+    key = trigger.dataset.cmpVendorToggle;
+  } else if (trigger.matches('[data-cmp-series-toggle]')) {
+    kind = 'series';
+    key = trigger.dataset.cmpSeriesToggle;
+  } else if (trigger.matches('[data-cmp-pick]')) {
+    kind = 'pick';
+    key = trigger.dataset.cmpPick;
+  } else if (trigger.matches('[data-cmp-revision]')) {
+    kind = 'series';
+    key = trigger.closest('[data-cmp-series]')?.dataset.cmpSeries;
+  }
+  if (!kind || !key) return null;
+  const element = [...list.querySelectorAll(`[data-cmp-${kind}]`)].find(item => item.getAttribute(`data-cmp-${kind}`) === key);
+  if (!element) return null;
+  const listRect = list.getBoundingClientRect();
+  return {
+    list,
+    kind,
+    key,
+    scrollTop: list.scrollTop,
+    offsetTop: element.getBoundingClientRect().top - listRect.top,
+  };
+}
+
+function treeAnchorElement(anchor) {
+  if (!anchor?.list?.isConnected) return null;
+  return [...anchor.list.querySelectorAll(`[data-cmp-${anchor.kind}]`)]
+    .find(item => item.getAttribute(`data-cmp-${anchor.kind}`) === anchor.key) || null;
+}
+
+function restoreTreeAnchor(anchor) {
+  const element = treeAnchorElement(anchor);
+  if (!element) return;
+  const list = anchor.list;
+  const listRect = list.getBoundingClientRect();
+  const offsetTop = element.getBoundingClientRect().top - listRect.top;
+  const maxScrollTop = Math.max(0, list.scrollHeight - list.clientHeight);
+  list.scrollTop = Math.min(maxScrollTop, Math.max(0, anchor.scrollTop + offsetTop - anchor.offsetTop));
+  if (treeAnchorFrame) cancelAnimationFrame(treeAnchorFrame);
+  if (typeof requestAnimationFrame !== 'function') return;
+  treeAnchorFrame = requestAnimationFrame(() => {
+    treeAnchorFrame = 0;
+    const current = treeAnchorElement(anchor);
+    if (!current) return;
+    const currentOffsetTop = current.getBoundingClientRect().top - list.getBoundingClientRect().top;
+    const correction = currentOffsetTop - anchor.offsetTop;
+    if (Math.abs(correction) < 0.5) return;
+    const currentMaxScrollTop = Math.max(0, list.scrollHeight - list.clientHeight);
+    list.scrollTop = Math.min(currentMaxScrollTop, Math.max(0, list.scrollTop + correction));
+  });
+}
+
+function renderWithTreeAnchor(trigger, render) {
+  const anchor = treeAnchorOf(trigger);
+  render();
+  restoreTreeAnchor(anchor);
+}
+
+function bindCmpSplitter() {
+  const splitter = document.getElementById('cmpSplitter');
+  if (!splitter || cmpSplitterBound) return;
+  cmpSplitterBound = true;
+  applyCmpSelectorWidth(cmpSelectorWidth);
+
+  const finishDrag = event => {
+    if (!cmpSplitterDrag) return;
+    cmpSplitterDrag = null;
+    splitter.classList.remove('is-dragging');
+    document.body.classList.remove('cmp-resizing');
+    if (event?.pointerId != null && splitter.hasPointerCapture?.(event.pointerId)) splitter.releasePointerCapture(event.pointerId);
+  };
+
+  splitter.addEventListener('pointerdown', event => {
+    if (event.button !== 0) return;
+    cmpSplitterDrag = { pointerId: event.pointerId, startX: event.clientX, startWidth: cmpSelectorWidth };
+    splitter.classList.add('is-dragging');
+    document.body.classList.add('cmp-resizing');
+    splitter.setPointerCapture?.(event.pointerId);
+    event.preventDefault();
+  });
+  splitter.addEventListener('pointermove', event => {
+    if (!cmpSplitterDrag || event.pointerId !== cmpSplitterDrag.pointerId) return;
+    applyCmpSelectorWidth(cmpSplitterDrag.startWidth + event.clientX - cmpSplitterDrag.startX);
+  });
+  splitter.addEventListener('pointerup', finishDrag);
+  splitter.addEventListener('pointercancel', finishDrag);
+  splitter.addEventListener('lostpointercapture', finishDrag);
+  splitter.addEventListener('keydown', event => {
+    const bounds = cmpWidthBounds();
+    const step = event.shiftKey ? 40 : 16;
+    let next;
+    if (event.key === 'ArrowLeft') next = cmpSelectorWidth - step;
+    else if (event.key === 'ArrowRight') next = cmpSelectorWidth + step;
+    else if (event.key === 'Home') next = bounds.min;
+    else if (event.key === 'End') next = bounds.max;
+    else return;
+    event.preventDefault();
+    applyCmpSelectorWidth(next);
+  });
+  window.addEventListener('resize', () => applyCmpSelectorWidth(cmpSelectorWidth));
+}
+
 const loadingPromise = loadEntry();
 
 async function loadEntry() {
@@ -490,6 +646,7 @@ export function renderModelCompare() {
   const panel = document.getElementById('compareModelPanel');
   if (!panel) return;
   syncChartClass();
+  applyCmpSelectorWidth(cmpSelectorWidth);
   if (!comparisonReady && !comparisonFailed) return; // 加载中：loadingPromise 完成后再渲染
   if (comparisonFailed) {
     document.getElementById('cmpModelList').innerHTML = renderState({ icon: '⚠️', title: t('compare.empty.loadFailed'), message: t('compare.empty.notBuilt'), type: 'error' });
@@ -1214,6 +1371,7 @@ export async function routeApiModelToCompare(card) {
 export function bindModelCompareEvents() {
   const panel = document.getElementById('compareModelPanel');
   if (!panel) return;
+  bindCmpSplitter();
 
   const cmpSearch = document.getElementById('cmpModelSearch');
   const cmpSearchClear = document.getElementById('cmpModelSearchClear');
@@ -1243,22 +1401,26 @@ export function bindModelCompareEvents() {
     const vendorToggle = event.target.closest('[data-cmp-vendor-toggle]');
     if (vendorToggle) {
       const key = vendorToggle.dataset.cmpVendorToggle;
-      if (expandedVendors.has(key)) expandedVendors.delete(key);
-      else expandedVendors.add(key);
-      renderModelList();
+      renderWithTreeAnchor(vendorToggle, () => {
+        if (expandedVendors.has(key)) expandedVendors.delete(key);
+        else expandedVendors.add(key);
+        renderModelList();
+      });
       return;
     }
     const seriesToggle = event.target.closest('[data-cmp-series-toggle]');
     if (seriesToggle) {
       const key = seriesToggle.dataset.cmpSeriesToggle;
-      if (expandedSeries.has(key)) expandedSeries.delete(key);
-      else expandedSeries.add(key);
-      renderModelList();
+      renderWithTreeAnchor(seriesToggle, () => {
+        if (expandedSeries.has(key)) expandedSeries.delete(key);
+        else expandedSeries.add(key);
+        renderModelList();
+      });
       return;
     }
     const pick = event.target.closest('[data-cmp-pick]');
     if (pick) {
-      selectModel(pick.dataset.cmpPick);
+      renderWithTreeAnchor(pick, () => selectModel(pick.dataset.cmpPick));
       return;
     }
     const remove = event.target.closest('[data-cmp-remove]');
@@ -1356,7 +1518,7 @@ export function bindModelCompareEvents() {
   });
   panel.addEventListener('change', event => {
     const revision = event.target.closest('[data-cmp-revision]');
-    if (revision) selectSeriesVariant(revision.dataset.cmpRevision, revision.value);
+    if (revision) renderWithTreeAnchor(revision, () => selectSeriesVariant(revision.dataset.cmpRevision, revision.value));
   });
   // 变体圆圈键盘可达（Enter/空格 触发选择）
   panel.addEventListener('keydown', event => {

@@ -168,6 +168,7 @@ export const messages = {
       tool: '工具对比',
     },
     selectorTitle: '选择模型',
+    splitterLabel: '调整模型选择器与对比内容宽度',
     selectorLead: '先选厂商，再展开系列选择具体模型；评测挡位与修订版在模型内切换。',
     vendorMeta: '{selected} 已选 · {series} 个系列 · {members} 个模型',
     seriesMeta: '{selected} / {members} 已选 · {members} 个模型',

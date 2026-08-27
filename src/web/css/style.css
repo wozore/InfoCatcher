@@ -1452,14 +1452,19 @@ main:has(#view-search.active):has(#searchResultsPanel:not([hidden])) { max-width
 main:has(#view-compare.active.cmp-wide-active) { max-width: none; }
 
 .compare-model-panel { position: relative; } /* 变体圆圈弹窗的绝对定位锚点 */
-.cmp-layout { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 20px; align-items: start; }
+.cmp-layout { --cmp-selector-width: 280px; display: grid; grid-template-columns: var(--cmp-selector-width) 8px minmax(0, 1fr); gap: 20px; align-items: start; }
 .cmp-selector { padding: 18px; position: sticky; top: 92px; height: calc(100vh - 120px); min-height: 0; display: flex; flex-direction: column; }
+.cmp-splitter { align-self: stretch; width: 8px; min-height: 72px; position: relative; cursor: col-resize; touch-action: none; }
+.cmp-splitter::after { content: ''; position: absolute; inset: 0 3px; border-radius: 999px; background: var(--border); transition: background-color 140ms ease, transform 140ms ease; }
+.cmp-splitter:hover::after, .cmp-splitter:focus-visible::after, .cmp-splitter.is-dragging::after { background: var(--primary); transform: scaleX(1.35); }
+.cmp-splitter:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; border-radius: 4px; }
+.cmp-resizing, .cmp-resizing * { cursor: col-resize !important; user-select: none !important; }
 .cmp-selector-head { flex: 0 0 auto; }
 .cmp-selector-head .section-title { margin-bottom: 3px; }
 .cmp-search-box { margin: 12px 0 8px; }
 .cmp-cats { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
 .cmp-sort-hint { font-size: 12px; }
-.cmp-model-list { margin-top: 10px; min-height: 0; flex: 1 1 auto; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; align-items: stretch; gap: 8px; }
+.cmp-model-list { margin-top: 10px; min-height: 0; flex: 1 1 auto; overflow-y: auto; overflow-x: hidden; overflow-anchor: none; display: flex; flex-direction: column; align-items: stretch; gap: 8px; }
 .cmp-vendor { min-width: 0; min-height: 46px; flex: 0 0 auto; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); overflow: hidden; }
 .cmp-vendor.expanded { border-color: var(--primary); }
 .cmp-vendor-toggle {
@@ -2159,6 +2164,7 @@ main:has(#view-compare.active.cmp-wide-active) { max-width: none; }
   .compare-bar-row { grid-template-columns: 1fr; gap: 8px; }
   /* 模型对比移动端：选择器不再 sticky，转单列堆叠；雷达图模型标签收拢到图上方 */
   .cmp-layout { grid-template-columns: 1fr; gap: 14px; }
+  .cmp-splitter { display: none; }
   .cmp-selector { position: static; height: auto; max-height: none; }
   .cmp-model-list { max-height: 320px; flex: 0 1 auto; }
   /* 窄屏柱状图回退定高（height:auto 会随窄宽塌缩柱高，定高 + meet 居中保持柱高稳定） */
