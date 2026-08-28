@@ -1,6 +1,61 @@
 {
-  "fetched_at": "2026-08-25T21:42:38.277Z",
+  "fetched_at": "2026-08-28T05:22:00.087Z",
   "data": [
+    {
+      "id": "inclusionai/ling-3.0-flash-fin:free",
+      "name": "Ling 3.0 Flash Fin (free)",
+      "created": 1787846290,
+      "hugging_face_id": null,
+      "context_length": 262144,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "prompt": 0,
+      "completion": 0,
+      "input_cache_read": null
+    },
+    {
+      "id": "qwen/qwen3.8-flash",
+      "name": "Qwen: Qwen3.8 Flash",
+      "created": 1787773060,
+      "hugging_face_id": null,
+      "context_length": 1000000,
+      "modality": "text+image+video->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "video"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "prompt": 1.5e-7,
+      "completion": 4.7e-7,
+      "input_cache_read": 1.6e-8
+    },
+    {
+      "id": "z-ai/glm-5.3-flash",
+      "name": "Z.ai: GLM 5.3 Flash",
+      "created": 1787752741,
+      "hugging_face_id": "zai-org/GLM-5.3-Flash",
+      "context_length": 1310720,
+      "modality": "text+image+video->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "video"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "prompt": 7.5e-8,
+      "completion": 2.5e-7,
+      "input_cache_read": 1.5e-8
+    },
     {
       "id": "meta/muse-spark-1.2-contributor",
       "name": "Meta: Muse Spark 1.2 Contributor",
@@ -39,25 +94,6 @@
       "prompt": 2.2e-7,
       "completion": 6.6e-7,
       "input_cache_read": 7e-9
-    },
-    {
-      "id": "stealth/ox-alpha",
-      "name": "Ox Alpha",
-      "created": 1787256295,
-      "hugging_face_id": null,
-      "context_length": 1048576,
-      "modality": "text+image+video->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "video"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 0,
-      "completion": 0,
-      "input_cache_read": null
     },
     {
       "id": "tencent/hy-mt2-1.8b",
@@ -131,7 +167,7 @@
       "id": "z-ai/glm-5.3",
       "name": "Z.ai: GLM 5.3",
       "created": 1787086655,
-      "hugging_face_id": null,
+      "hugging_face_id": "zai-org/GLM-5.3",
       "context_length": 1048576,
       "modality": "text->text",
       "input_modalities": [
@@ -291,9 +327,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 0.000001122,
-      "completion": 0.000003366,
-      "input_cache_read": 3.74e-8
+      "prompt": 6.6e-7,
+      "completion": 0.00000198,
+      "input_cache_read": 2.2e-8
     },
     {
       "id": "x-ai/grok-4.6",
@@ -344,9 +380,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 8e-8,
-      "completion": 2e-7,
-      "input_cache_read": 4e-8
+      "prompt": 1e-7,
+      "completion": 2.5e-7,
+      "input_cache_read": 5e-8
     },
     {
       "id": "nvidia/nemotron-3.5-lightning:free",
@@ -472,9 +508,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 3.5e-8,
-      "completion": 1.2e-7,
-      "input_cache_read": 8e-9
+      "prompt": 3e-8,
+      "completion": 1e-7,
+      "input_cache_read": 7e-9
     },
     {
       "id": "deepseek/deepseek-v4-flash-0731",
@@ -489,9 +525,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 4e-8,
-      "completion": 8e-8,
-      "input_cache_read": 8e-9
+      "prompt": 6e-8,
+      "completion": 1.2e-7,
+      "input_cache_read": 1.2e-8
     },
     {
       "id": "thinkingmachines/inkling-small",
@@ -900,7 +936,7 @@
       "name": "Kwaipilot: KAT-Coder-Pro V2.5",
       "created": 1783714589,
       "hugging_face_id": null,
-      "context_length": 256000,
+      "context_length": 262144,
       "modality": "text->text",
       "input_modalities": [
         "text"
@@ -932,25 +968,6 @@
       "input_cache_read": 2e-8
     },
     {
-      "id": "openai/gpt-5.6-luna-pro:batch",
-      "name": "OpenAI: GPT-5.6 Luna Pro (batch)",
-      "created": 1783590867,
-      "hugging_face_id": null,
-      "context_length": 1050000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "file",
-        "image",
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 1e-7,
-      "completion": 6e-7,
-      "input_cache_read": 1e-8
-    },
-    {
       "id": "openai/gpt-5.6-luna",
       "name": "OpenAI: GPT-5.6 Luna",
       "created": 1783590864,
@@ -968,25 +985,6 @@
       "prompt": 2e-7,
       "completion": 0.0000012,
       "input_cache_read": 2e-8
-    },
-    {
-      "id": "openai/gpt-5.6-luna:batch",
-      "name": "OpenAI: GPT-5.6 Luna (batch)",
-      "created": 1783590864,
-      "hugging_face_id": null,
-      "context_length": 1050000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "file",
-        "image",
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 1e-7,
-      "completion": 6e-7,
-      "input_cache_read": 1e-8
     },
     {
       "id": "openai/gpt-5.6-terra-pro",
@@ -1008,25 +1006,6 @@
       "input_cache_read": 2e-7
     },
     {
-      "id": "openai/gpt-5.6-terra-pro:batch",
-      "name": "OpenAI: GPT-5.6 Terra Pro (batch)",
-      "created": 1783590861,
-      "hugging_face_id": null,
-      "context_length": 1050000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "file",
-        "image",
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 0.000001,
-      "completion": 0.000006,
-      "input_cache_read": 1e-7
-    },
-    {
       "id": "openai/gpt-5.6-terra",
       "name": "OpenAI: GPT-5.6 Terra",
       "created": 1783590857,
@@ -1044,25 +1023,6 @@
       "prompt": 0.000002,
       "completion": 0.000012,
       "input_cache_read": 2e-7
-    },
-    {
-      "id": "openai/gpt-5.6-terra:batch",
-      "name": "OpenAI: GPT-5.6 Terra (batch)",
-      "created": 1783590857,
-      "hugging_face_id": null,
-      "context_length": 1050000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "file",
-        "image",
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 0.000001,
-      "completion": 0.000006,
-      "input_cache_read": 1e-7
     },
     {
       "id": "openai/gpt-5.6-sol-pro",
@@ -1084,25 +1044,6 @@
       "input_cache_read": 2e-7
     },
     {
-      "id": "openai/gpt-5.6-sol-pro:batch",
-      "name": "OpenAI: GPT-5.6 Sol Pro (batch)",
-      "created": 1783590854,
-      "hugging_face_id": null,
-      "context_length": 1050000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "file",
-        "image",
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 0.000001,
-      "completion": 0.000005,
-      "input_cache_read": 1e-7
-    },
-    {
       "id": "openai/gpt-5.6-sol",
       "name": "OpenAI: GPT-5.6 Sol",
       "created": 1783590850,
@@ -1120,25 +1061,6 @@
       "prompt": 0.000002,
       "completion": 0.00001,
       "input_cache_read": 2e-7
-    },
-    {
-      "id": "openai/gpt-5.6-sol:batch",
-      "name": "OpenAI: GPT-5.6 Sol (batch)",
-      "created": 1783590850,
-      "hugging_face_id": null,
-      "context_length": 1050000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "file",
-        "image",
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 0.000001,
-      "completion": 0.000005,
-      "input_cache_read": 1e-7
     },
     {
       "id": "x-ai/grok-4.5",
@@ -1429,23 +1351,6 @@
       "input_cache_read": 2.21e-7
     },
     {
-      "id": "z-ai/glm-5.2:batch",
-      "name": "Z.ai: GLM 5.2 (batch)",
-      "created": 1781631930,
-      "hugging_face_id": "zai-org/GLM-5.2",
-      "context_length": 1048575,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 0.0000014,
-      "completion": 0.0000044,
-      "input_cache_read": 2.6e-7
-    },
-    {
       "id": "z-ai/glm-5.2:free",
       "name": "Z.ai: GLM 5.2 (free)",
       "created": 1781631930,
@@ -1493,27 +1398,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 6.7e-7,
+      "prompt": 6.6e-7,
       "completion": 0.0000034,
-      "input_cache_read": 1.9e-7
-    },
-    {
-      "id": "moonshotai/kimi-k2.7-code:batch",
-      "name": "MoonshotAI: Kimi K2.7 Code (batch)",
-      "created": 1781266361,
-      "hugging_face_id": "moonshotai/Kimi-K2.7-Code",
-      "context_length": 262144,
-      "modality": "text+image->text",
-      "input_modalities": [
-        "text",
-        "image"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 9.5e-7,
-      "completion": 0.000004,
-      "input_cache_read": 1.9e-7
+      "input_cache_read": 1.8e-7
     },
     {
       "id": "~anthropic/claude-fable-latest",
@@ -1613,7 +1500,7 @@
       "name": "NVIDIA: Nemotron 3 Ultra",
       "created": 1780551208,
       "hugging_face_id": "nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B-BF16",
-      "context_length": 512288,
+      "context_length": 262144,
       "modality": "text->text",
       "input_modalities": [
         "text"
@@ -1621,9 +1508,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 6e-7,
-      "completion": 0.0000036,
-      "input_cache_read": 2e-7
+      "prompt": 5e-7,
+      "completion": 0.0000022,
+      "input_cache_read": 1e-7
     },
     {
       "id": "nvidia/nemotron-3-ultra-550b-a55b:batch",
@@ -2252,8 +2139,8 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 1.4e-7,
-      "completion": 0.000001,
+      "prompt": 1e-7,
+      "completion": 9e-7,
       "input_cache_read": 5e-8
     },
     {
@@ -2312,25 +2199,6 @@
       "input_cache_read": null
     },
     {
-      "id": "openai/gpt-5.5-pro:batch",
-      "name": "OpenAI: GPT-5.5 Pro (batch)",
-      "created": 1777051896,
-      "hugging_face_id": "",
-      "context_length": 1050000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "file",
-        "image",
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 0.000015,
-      "completion": 0.00009,
-      "input_cache_read": null
-    },
-    {
       "id": "openai/gpt-5.5",
       "name": "OpenAI: GPT-5.5",
       "created": 1777051893,
@@ -2350,25 +2218,6 @@
       "input_cache_read": 5e-7
     },
     {
-      "id": "openai/gpt-5.5:batch",
-      "name": "OpenAI: GPT-5.5 (batch)",
-      "created": 1777051893,
-      "hugging_face_id": "",
-      "context_length": 1050000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "file",
-        "image",
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 0.0000025,
-      "completion": 0.000015,
-      "input_cache_read": 2.5e-7
-    },
-    {
       "id": "deepseek/deepseek-v4-pro",
       "name": "DeepSeek: DeepSeek V4 Pro 0423",
       "created": 1777000679,
@@ -2381,9 +2230,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 5.5593e-7,
-      "completion": 0.00000111186,
-      "input_cache_read": 4.63275e-8
+      "prompt": 8.7e-7,
+      "completion": 0.00000174,
+      "input_cache_read": 7.25e-8
     },
     {
       "id": "deepseek/deepseek-v4-flash",
@@ -2398,9 +2247,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 7.98e-8,
-      "completion": 1.596e-7,
-      "input_cache_read": 1.596e-8
+      "prompt": 8.8606e-8,
+      "completion": 1.77212e-7,
+      "input_cache_read": 1.77212e-8
     },
     {
       "id": "tencent/hy3-preview",
@@ -2638,9 +2487,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 1e-7,
+      "prompt": 9e-8,
       "completion": 3.4e-7,
-      "input_cache_read": 1e-7
+      "input_cache_read": 5e-8
     },
     {
       "id": "google/gemma-4-31b-it:free",
@@ -2882,25 +2731,6 @@
       "input_cache_read": 2e-8
     },
     {
-      "id": "openai/gpt-5.4-nano:batch",
-      "name": "OpenAI: GPT-5.4 Nano (batch)",
-      "created": 1773748187,
-      "hugging_face_id": "",
-      "context_length": 400000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "file",
-        "image",
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 1e-7,
-      "completion": 6.25e-7,
-      "input_cache_read": 1e-8
-    },
-    {
       "id": "openai/gpt-5.4-mini",
       "name": "OpenAI: GPT-5.4 Mini",
       "created": 1773748178,
@@ -2918,25 +2748,6 @@
       "prompt": 7.5e-7,
       "completion": 0.0000045,
       "input_cache_read": 7.5e-8
-    },
-    {
-      "id": "openai/gpt-5.4-mini:batch",
-      "name": "OpenAI: GPT-5.4 Mini (batch)",
-      "created": 1773748178,
-      "hugging_face_id": "",
-      "context_length": 400000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "file",
-        "image",
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 3.75e-7,
-      "completion": 0.00000225,
-      "input_cache_read": 3.75e-8
     },
     {
       "id": "mistralai/mistral-small-2603",
@@ -3065,25 +2876,6 @@
       "input_cache_read": null
     },
     {
-      "id": "openai/gpt-5.4-pro:batch",
-      "name": "OpenAI: GPT-5.4 Pro (batch)",
-      "created": 1772734366,
-      "hugging_face_id": "",
-      "context_length": 1050000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 0.000015,
-      "completion": 0.00009,
-      "input_cache_read": null
-    },
-    {
       "id": "openai/gpt-5.4",
       "name": "OpenAI: GPT-5.4",
       "created": 1772734352,
@@ -3101,25 +2893,6 @@
       "prompt": 0.0000025,
       "completion": 0.000015,
       "input_cache_read": 2.5e-7
-    },
-    {
-      "id": "openai/gpt-5.4:batch",
-      "name": "OpenAI: GPT-5.4 (batch)",
-      "created": 1772734352,
-      "hugging_face_id": "",
-      "context_length": 1050000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 0.00000125,
-      "completion": 0.0000075,
-      "input_cache_read": 1.25e-7
     },
     {
       "id": "inception/mercury-2",
@@ -3444,9 +3217,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 5e-7,
-      "completion": 0.0000036,
-      "input_cache_read": 3e-7
+      "prompt": 3.9e-7,
+      "completion": 0.00000234,
+      "input_cache_read": null
     },
     {
       "id": "minimax/minimax-m2.5",
@@ -3860,7 +3633,7 @@
       ],
       "prompt": 5e-8,
       "completion": 2e-7,
-      "input_cache_read": 3e-8
+      "input_cache_read": 2.5e-8
     },
     {
       "id": "openai/gpt-5.2-chat",
@@ -3901,25 +3674,6 @@
       "input_cache_read": null
     },
     {
-      "id": "openai/gpt-5.2-pro:batch",
-      "name": "OpenAI: GPT-5.2 Pro (batch)",
-      "created": 1765389780,
-      "hugging_face_id": "",
-      "context_length": 400000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "image",
-        "text",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 0.0000105,
-      "completion": 0.000084,
-      "input_cache_read": null
-    },
-    {
       "id": "openai/gpt-5.2",
       "name": "OpenAI: GPT-5.2",
       "created": 1765389775,
@@ -3937,25 +3691,6 @@
       "prompt": 0.00000175,
       "completion": 0.000014,
       "input_cache_read": 1.75e-7
-    },
-    {
-      "id": "openai/gpt-5.2:batch",
-      "name": "OpenAI: GPT-5.2 (batch)",
-      "created": 1765389775,
-      "hugging_face_id": "",
-      "context_length": 400000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "file",
-        "image",
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 8.75e-7,
-      "completion": 0.000007,
-      "input_cache_read": 8.75e-8
     },
     {
       "id": "mistralai/devstral-2512",
@@ -4248,25 +3983,6 @@
       "prompt": 0.00000125,
       "completion": 0.00001,
       "input_cache_read": 1.25e-7
-    },
-    {
-      "id": "openai/gpt-5.1:batch",
-      "name": "OpenAI: GPT-5.1 (batch)",
-      "created": 1763060305,
-      "hugging_face_id": "",
-      "context_length": 400000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "image",
-        "text",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 6.25e-7,
-      "completion": 0.000005,
-      "input_cache_read": 6.25e-8
     },
     {
       "id": "openai/gpt-5.1-codex",
@@ -4634,25 +4350,6 @@
       "input_cache_read": null
     },
     {
-      "id": "openai/gpt-5-pro:batch",
-      "name": "OpenAI: GPT-5 Pro (batch)",
-      "created": 1759776663,
-      "hugging_face_id": "",
-      "context_length": 400000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "image",
-        "text",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 0.0000075,
-      "completion": 0.00006,
-      "input_cache_read": null
-    },
-    {
       "id": "z-ai/glm-4.6",
       "name": "Z.ai: GLM 4.6",
       "created": 1759235576,
@@ -4665,9 +4362,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 5e-7,
-      "completion": 0.000002,
-      "input_cache_read": 1e-7
+      "prompt": 4.3e-7,
+      "completion": 0.00000175,
+      "input_cache_read": 8e-8
     },
     {
       "id": "anthropic/claude-sonnet-4.5",
@@ -4827,24 +4524,6 @@
       "prompt": 6.5e-7,
       "completion": 0.00000325,
       "input_cache_read": 1.3e-7
-    },
-    {
-      "id": "openai/gpt-5-codex:batch",
-      "name": "OpenAI: GPT-5 Codex (batch)",
-      "created": 1758643403,
-      "hugging_face_id": "",
-      "context_length": 400000,
-      "modality": "text+image->text",
-      "input_modalities": [
-        "text",
-        "image"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 6.25e-7,
-      "completion": 0.000005,
-      "input_cache_read": 6.25e-8
     },
     {
       "id": "deepseek/deepseek-v3.1-terminus",
@@ -5073,25 +4752,6 @@
       "input_cache_read": 1.25e-7
     },
     {
-      "id": "openai/gpt-5:batch",
-      "name": "OpenAI: GPT-5 (batch)",
-      "created": 1754587413,
-      "hugging_face_id": "",
-      "context_length": 400000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 6.25e-7,
-      "completion": 0.000005,
-      "input_cache_read": 6.25e-8
-    },
-    {
       "id": "openai/gpt-5-mini",
       "name": "OpenAI: GPT-5 Mini",
       "created": 1754587407,
@@ -5111,25 +4771,6 @@
       "input_cache_read": 2.5e-8
     },
     {
-      "id": "openai/gpt-5-mini:batch",
-      "name": "OpenAI: GPT-5 Mini (batch)",
-      "created": 1754587407,
-      "hugging_face_id": "",
-      "context_length": 400000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 1.25e-7,
-      "completion": 0.000001,
-      "input_cache_read": 1.25e-8
-    },
-    {
       "id": "openai/gpt-5-nano",
       "name": "OpenAI: GPT-5 Nano",
       "created": 1754587402,
@@ -5147,25 +4788,6 @@
       "prompt": 5e-8,
       "completion": 4e-7,
       "input_cache_read": 5e-9
-    },
-    {
-      "id": "openai/gpt-5-nano:batch",
-      "name": "OpenAI: GPT-5 Nano (batch)",
-      "created": 1754587402,
-      "hugging_face_id": "",
-      "context_length": 400000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 2.5e-8,
-      "completion": 2e-7,
-      "input_cache_read": 2.5e-9
     },
     {
       "id": "openai/gpt-oss-120b",
@@ -5432,9 +5054,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 9e-8,
-      "completion": 5.5e-7,
-      "input_cache_read": null
+      "prompt": 8.75e-8,
+      "completion": 3.5e-7,
+      "input_cache_read": 1.75e-8
     },
     {
       "id": "moonshotai/kimi-k2",
@@ -5675,25 +5297,6 @@
       ],
       "prompt": 0.00002,
       "completion": 0.00008,
-      "input_cache_read": null
-    },
-    {
-      "id": "openai/o3-pro:batch",
-      "name": "OpenAI: o3 Pro (batch)",
-      "created": 1749598352,
-      "hugging_face_id": "",
-      "context_length": 200000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "text",
-        "file",
-        "image"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 0.00001,
-      "completion": 0.00004,
       "input_cache_read": null
     },
     {
@@ -5951,25 +5554,6 @@
       "input_cache_read": 2.75e-7
     },
     {
-      "id": "openai/o4-mini-high:batch",
-      "name": "OpenAI: o4 Mini High (batch)",
-      "created": 1744824212,
-      "hugging_face_id": "",
-      "context_length": 200000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "image",
-        "text",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 5.5e-7,
-      "completion": 0.0000022,
-      "input_cache_read": 1.375e-7
-    },
-    {
       "id": "openai/o3",
       "name": "OpenAI: o3",
       "created": 1744823457,
@@ -5987,25 +5571,6 @@
       "prompt": 0.000002,
       "completion": 0.000008,
       "input_cache_read": 5e-7
-    },
-    {
-      "id": "openai/o3:batch",
-      "name": "OpenAI: o3 (batch)",
-      "created": 1744823457,
-      "hugging_face_id": "",
-      "context_length": 200000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "image",
-        "text",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 0.000001,
-      "completion": 0.000004,
-      "input_cache_read": 2.5e-7
     },
     {
       "id": "openai/o4-mini",
@@ -6027,25 +5592,6 @@
       "input_cache_read": 2.75e-7
     },
     {
-      "id": "openai/o4-mini:batch",
-      "name": "OpenAI: o4 Mini (batch)",
-      "created": 1744820942,
-      "hugging_face_id": "",
-      "context_length": 200000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "image",
-        "text",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 5.5e-7,
-      "completion": 0.0000022,
-      "input_cache_read": 1.375e-7
-    },
-    {
       "id": "openai/gpt-4.1",
       "name": "OpenAI: GPT-4.1",
       "created": 1744651385,
@@ -6063,25 +5609,6 @@
       "prompt": 0.000002,
       "completion": 0.000008,
       "input_cache_read": 5e-7
-    },
-    {
-      "id": "openai/gpt-4.1:batch",
-      "name": "OpenAI: GPT-4.1 (batch)",
-      "created": 1744651385,
-      "hugging_face_id": "",
-      "context_length": 1047576,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "image",
-        "text",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 0.000001,
-      "completion": 0.000004,
-      "input_cache_read": 2.5e-7
     },
     {
       "id": "openai/gpt-4.1-mini",
@@ -6103,25 +5630,6 @@
       "input_cache_read": 1e-7
     },
     {
-      "id": "openai/gpt-4.1-mini:batch",
-      "name": "OpenAI: GPT-4.1 Mini (batch)",
-      "created": 1744651381,
-      "hugging_face_id": "",
-      "context_length": 1047576,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "image",
-        "text",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 2e-7,
-      "completion": 8e-7,
-      "input_cache_read": 5e-8
-    },
-    {
       "id": "openai/gpt-4.1-nano",
       "name": "OpenAI: GPT-4.1 Nano",
       "created": 1744651369,
@@ -6139,25 +5647,6 @@
       "prompt": 1e-7,
       "completion": 4e-7,
       "input_cache_read": 2.5e-8
-    },
-    {
-      "id": "openai/gpt-4.1-nano:batch",
-      "name": "OpenAI: GPT-4.1 Nano (batch)",
-      "created": 1744651369,
-      "hugging_face_id": "",
-      "context_length": 1047576,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "image",
-        "text",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 5e-8,
-      "completion": 2e-7,
-      "input_cache_read": 1.25e-8
     },
     {
       "id": "meta-llama/llama-4-maverick",
@@ -6191,9 +5680,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 1e-7,
-      "completion": 3e-7,
-      "input_cache_read": null
+      "prompt": 1.1e-7,
+      "completion": 3.4e-7,
+      "input_cache_read": 5.5e-8
     },
     {
       "id": "deepseek/deepseek-chat-v3-0324",
@@ -6229,25 +5718,6 @@
       ],
       "prompt": 0.00015,
       "completion": 0.0006,
-      "input_cache_read": null
-    },
-    {
-      "id": "openai/o1-pro:batch",
-      "name": "OpenAI: o1-pro (batch)",
-      "created": 1742423211,
-      "hugging_face_id": "",
-      "context_length": 200000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 0.000075,
-      "completion": 0.0003,
       "input_cache_read": null
     },
     {
@@ -6463,24 +5933,6 @@
       "input_cache_read": 5.5e-7
     },
     {
-      "id": "openai/o3-mini-high:batch",
-      "name": "OpenAI: o3 Mini High (batch)",
-      "created": 1739372611,
-      "hugging_face_id": "",
-      "context_length": 200000,
-      "modality": "text+file->text",
-      "input_modalities": [
-        "text",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 5.5e-7,
-      "completion": 0.0000022,
-      "input_cache_read": 2.75e-7
-    },
-    {
       "id": "aion-labs/aion-rp-llama-3.1-8b",
       "name": "AionLabs: Aion-RP 1.0 (8B)",
       "created": 1738696718,
@@ -6511,9 +5963,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 8e-7,
-      "completion": 0.000001,
-      "input_cache_read": 4e-7
+      "prompt": 2.5e-7,
+      "completion": 7.5e-7,
+      "input_cache_read": null
     },
     {
       "id": "qwen/qwen-plus",
@@ -6549,24 +6001,6 @@
       "prompt": 0.0000011,
       "completion": 0.0000044,
       "input_cache_read": 5.5e-7
-    },
-    {
-      "id": "openai/o3-mini:batch",
-      "name": "OpenAI: o3 Mini (batch)",
-      "created": 1738351721,
-      "hugging_face_id": "",
-      "context_length": 200000,
-      "modality": "text+file->text",
-      "input_modalities": [
-        "text",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 5.5e-7,
-      "completion": 0.0000022,
-      "input_cache_read": 2.75e-7
     },
     {
       "id": "mistralai/mistral-small-24b-instruct-2501",
@@ -6726,25 +6160,6 @@
       "input_cache_read": 0.0000075
     },
     {
-      "id": "openai/o1:batch",
-      "name": "OpenAI: o1 (batch)",
-      "created": 1734459999,
-      "hugging_face_id": "",
-      "context_length": 200000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 0.0000075,
-      "completion": 0.00003,
-      "input_cache_read": 0.00000375
-    },
-    {
       "id": "cohere/command-r7b-12-2024",
       "name": "Cohere: Command R7B (12-2024)",
       "created": 1734158152,
@@ -6774,9 +6189,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 1e-7,
-      "completion": 3.2e-7,
-      "input_cache_read": null
+      "prompt": 7.1e-7,
+      "completion": 7.1e-7,
+      "input_cache_read": 7.1e-7
     },
     {
       "id": "amazon/nova-lite-v1",
@@ -6920,23 +6335,6 @@
       "input_cache_read": null
     },
     {
-      "id": "mistralai/ministral-8b",
-      "name": "Mistral: Ministral 8B",
-      "created": 1729123200,
-      "hugging_face_id": null,
-      "context_length": 128000,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 1.1e-7,
-      "completion": 1.1e-7,
-      "input_cache_read": null
-    },
-    {
       "id": "qwen/qwen-2.5-7b-instruct",
       "name": "Qwen: Qwen2.5 7B Instruct",
       "created": 1729036800,
@@ -6951,23 +6349,6 @@
       ],
       "prompt": 1e-7,
       "completion": 2e-7,
-      "input_cache_read": null
-    },
-    {
-      "id": "thedrummer/rocinante-12b",
-      "name": "TheDrummer: Rocinante 12B",
-      "created": 1727654400,
-      "hugging_face_id": "TheDrummer/Rocinante-12B-v1.1",
-      "context_length": 65536,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 2.5e-7,
-      "completion": 5e-7,
       "input_cache_read": null
     },
     {
@@ -7232,25 +6613,6 @@
       "input_cache_read": 7.5e-8
     },
     {
-      "id": "openai/gpt-4o-mini:batch",
-      "name": "OpenAI: GPT-4o-mini (batch)",
-      "created": 1721260800,
-      "hugging_face_id": null,
-      "context_length": 128000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 7.5e-8,
-      "completion": 3e-7,
-      "input_cache_read": 3.75e-8
-    },
-    {
       "id": "google/gemma-2-27b-it",
       "name": "Google: Gemma 2 27B",
       "created": 1720828800,
@@ -7306,25 +6668,6 @@
       "input_cache_read": null
     },
     {
-      "id": "openai/gpt-4o:batch",
-      "name": "OpenAI: GPT-4o (batch)",
-      "created": 1715558400,
-      "hugging_face_id": null,
-      "context_length": 128000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 0.00000125,
-      "completion": 0.000005,
-      "input_cache_read": 6.25e-7
-    },
-    {
       "id": "mistralai/mixtral-8x22b-instruct",
       "name": "Mistral: Mixtral 8x22B Instruct",
       "created": 1713312000,
@@ -7375,24 +6718,6 @@
       ],
       "prompt": 0.00001,
       "completion": 0.00003,
-      "input_cache_read": null
-    },
-    {
-      "id": "openai/gpt-4-turbo:batch",
-      "name": "OpenAI: GPT-4 Turbo (batch)",
-      "created": 1712620800,
-      "hugging_face_id": null,
-      "context_length": 128000,
-      "modality": "text+image->text",
-      "input_modalities": [
-        "text",
-        "image"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 0.000005,
-      "completion": 0.000015,
       "input_cache_read": null
     },
     {
@@ -7587,23 +6912,6 @@
       ],
       "prompt": 5e-7,
       "completion": 0.0000015,
-      "input_cache_read": null
-    },
-    {
-      "id": "openai/gpt-3.5-turbo:batch",
-      "name": "OpenAI: GPT-3.5 Turbo (batch)",
-      "created": 1685232000,
-      "hugging_face_id": null,
-      "context_length": 16385,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 2.5e-7,
-      "completion": 7.5e-7,
       "input_cache_read": null
     },
     {
