@@ -29,7 +29,7 @@ jobs:
       - name: Run validation
         run: |
           node scripts/validate.js
-          node --test tests/news/news-pipeline-min.test.js tests/news/news-rss.test.js tests/news/news-public-gate.test.js tests/news/news-reviewer.test.js tests/news/news-summarizer.test.js tests/news/news-localizer.test.js tests/news/content-classifier-llm.test.js
+          node --test --test-concurrency=1
 
   deploy:
     needs: validate

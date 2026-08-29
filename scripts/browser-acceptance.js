@@ -188,6 +188,47 @@ async function main() {
     await evaluate(client, `(async()=>{const payload=await fetch('data/comparison/integrated/data.json').then(response=>response.json());const hit=payload.models.find(model=>Object.values(model.degrees||{}).some(degrees=>Array.isArray(degrees)&&degrees.length>1));if(!hit)return true;const input=document.querySelector('#cmpModelSearch');input.value=hit.display;input.dispatchEvent(new Event('input',{bubbles:true}));await new Promise(resolve=>setTimeout(resolve,500));const button=[...document.querySelectorAll('[data-cmp-pick]')].find(item=>item.textContent.trim()===hit.display);if(button?.getAttribute('aria-pressed')!=='true')button?.click();await new Promise(resolve=>setTimeout(resolve,500));const trigger=document.querySelector('#cmpChips [data-cmp-variant]');if(!trigger)return false;trigger.click();return !!document.querySelector('#cmpVariantPopover')})()`);
     await assertBrowser(client, 'degree 变体切换后结果保留', `(()=>{const pop=document.querySelector('#cmpVariantPopover');if(!pop)return true;const slot=pop.querySelector('[data-cmp-variant-slot]');if(!slot)return false;slot.click();return document.querySelector('#cmpResults')?.innerText.trim().length>0})()`);
     await assertBrowser(client, '排除模型不在对比搜索', `(()=>{const input=document.querySelector('#cmpModelSearch');input.value='GPT-5.2';input.dispatchEvent(new Event('input',{bubbles:true}));return new Promise(resolve=>setTimeout(()=>resolve(!document.querySelector('#cmpModelList').innerText.includes('GPT-5.2')),400))})()`);
+    // ── MVP 测试收尾：全视图冒烟 + 跨视图联动（阶段 5 验收项） ──
+    // AI 搜索流程：点击示例按钮（触发 selectSearchExample + submitSearchHome 自动提交）
+    // 搜索有动画阶段（每阶段 450ms），这里轮询等待结果面板显示而不是固定短等待。
+    await evaluate(client, `(()=>{document.querySelector('[data-view="search"]').click();const example=document.querySelector('.chip.search-example');if(!example)return false;example.click();return true})()`);
+    const searchResultsEnd = Date.now() + 8000;
+    while (Date.now() < searchResultsEnd && !(await evaluate(client, `(()=>{const p=document.querySelector('#searchResultsPanel');return !!p&&!p.hidden})()`))) await wait(200);
+    await assertBrowser(client, 'AI 搜索流程：提交后进入结果视图', `(()=>{const p=document.querySelector('#searchResultsPanel');return !!p&&!p.hidden&&p.innerText.trim().length>0})()`);
+    // 空态体验：输入无匹配查询 → 显示「暂无对应静态示例」提示
+    await evaluate(client, `(()=>{document.querySelector('[data-view="search"]').click();const input=document.querySelector('#aiSearchInput');input.value='不存在的查询词xyz';input.dispatchEvent(new Event('input',{bubbles:true}));document.querySelector('#aiSearchSubmit').click();return true})()`);
+    await wait(300);
+    await assertBrowser(client, '搜索空态：无匹配时显示提示', `document.querySelector('#searchUnsupportedState')&&!document.querySelector('#searchUnsupportedState').hidden`);
+    // 工具对比 tab
+    await evaluate(client, `(()=>{document.querySelector('[data-view="compare"]').click();document.querySelector('#compareTabTool').click();return true})()`);
+    await wait(200);
+    await assertBrowser(client, '工具对比 tab 可切换', `document.querySelector('#compareToolPanel')&&!document.querySelector('#compareToolPanel').hidden`);
+    // 场景视图
+    await evaluate(client, `(()=>{document.querySelector('[data-view="scenes"]').click();return true})()`);
+    await wait(300);
+    await assertBrowser(client, '场景视图渲染场景入口', `document.querySelector('#scenePicker .scene-pick-chip')!==null`);
+    await evaluate(client, `(()=>{document.querySelector('#scenePicker .scene-pick-chip')?.click();return true})()`);
+    await wait(300);
+    await assertBrowser(client, '场景详情可展开', `document.querySelector('#sceneDetail .scene-detail-card')!==null`);
+    // AI 热点视图
+    await evaluate(client, `(()=>{document.querySelector('[data-view="trending"]').click();return true})()`);
+    await wait(300);
+    await assertBrowser(client, '热点视图渲染卡片或状态', `document.querySelector('#trendingGrid .trending-card')!==null||document.querySelector('#trendingStatus .status-note')!==null`);
+    // AI 概念视图
+    await evaluate(client, `(()=>{document.querySelector('[data-view="glossary"]').click();return true})()`);
+    await wait(300);
+    await assertBrowser(client, '概念索引渲染', `document.querySelector('#glossaryIndexList .glossary-index-item')!==null`);
+    await evaluate(client, `(()=>{document.querySelector('#glossaryIndexList .glossary-index-item')?.click();return true})()`);
+    await wait(300);
+    await assertBrowser(client, '概念详情渲染', `document.querySelector('#glossaryDetail .glossary-article')!==null`);
+    // 编辑精选视图
+    await evaluate(client, `(()=>{document.querySelector('[data-view="featured"]').click();return true})()`);
+    await wait(300);
+    await assertBrowser(client, '编辑精选视图渲染', `document.querySelector('#featuredPicksGrid')&&document.querySelector('#featuredPicksGrid').innerText.trim().length>0`);
+    // 关于视图
+    await evaluate(client, `(()=>{document.querySelector('[data-view="about"]').click();return true})()`);
+    await wait(200);
+    await assertBrowser(client, '关于视图渲染', `document.querySelector('#view-about')?.classList.contains('active')&&document.querySelector('#view-about').innerText.includes('知览')`);
     if (consoleErrors.length) fail(`BROWSER_CONSOLE_ERRORS:${consoleErrors.join(',')}`);
     console.log('Browser acceptance passed.');
   } finally {
