@@ -5,7 +5,7 @@
 ## 先选择正确入口
 
 - **普通用户反馈**：通过[反馈与支持](SUPPORT.md)中的飞书表单提交；适合纠错、收录线索、Bug 和产品建议。
-- **公开协作**：在 GitHub Issues 或 Pull Request 中提交可公开追踪的代码、数据和文档变更；当前仓库的 Issues 入口为 <https://github.com/wozore/InfoCatcher/issues>，仓库更名后会更新为新地址。
+- **公开协作**：在 GitHub Issues 或 Pull Request 中提交可公开追踪的代码、数据和文档变更；当前仓库的 Issues 入口为 <https://github.com/wozore/KnowView/issues>。
 - **安全或隐私问题**：阅读[安全政策](SECURITY.md)，使用 GitHub 私密漏洞报告；不要发到公开 Issue 或飞书表单。
 
 ## 可以贡献什么
