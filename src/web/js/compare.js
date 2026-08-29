@@ -1,5 +1,5 @@
 /**
- * InfoCatcher MVP — 对比模式 (compare)：2-5 个工具并排比较 10+ 维度
+ * 知览 KnowView MVP — 对比模式 (compare)：2-5 个工具并排比较 10+ 维度
  *
  * 核心函数：
  *   toggleCompareRef() — 添加/移除对比（上限 5 个，按钮状态同步）
@@ -277,7 +277,7 @@ function renderRootToolCompare(targets) {
       return '<td>' + escapeHtml(dimension.format(value)) + '</td>';
     }).join('') + '</tr>').join('') +
     '<tr><td class="dim">适用场景</td>' + targets.map(target => '<td>' + escapeHtml((target.tool?.scenes || []).slice(0, 5).join('、')) + '</td>').join('') + '</tr>' +
-    '<tr><td class="dim">最适合</td>' + targets.map(target => '<td>' + escapeHtml(target.tool?.best_for_preview || '') + '</td>').join('') + '</tr>' +
+    '<tr><td class="dim">适合场景</td>' + targets.map(target => '<td>' + escapeHtml(target.tool?.best_for_preview || '') + '</td>').join('') + '</tr>' +
     '<tr><td class="dim">不适合/限制</td>' + targets.map(target => '<td>' + escapeHtml(target.tool?.not_for_preview || '') + '</td>').join('') + '</tr>' +
     '<tr><td class="dim">资料来源 / 日期</td>' + targets.map(target => {
       const detail = target.item;

@@ -1,5 +1,5 @@
 /**
- * InfoCatcher MVP — 数据层：数据加载、共享状态、过滤与通用工具
+ * 知览 KnowView MVP — 数据层：数据加载、共享状态、过滤与通用工具
  *
  * 本模块是全站的“地基”，只被其他模块 import，不依赖任何视图模块：
  *   - 共享数据状态（tools/glossary/scenes/hotspots/featuredPicks/compareList/...）

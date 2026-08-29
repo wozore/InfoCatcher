@@ -2,7 +2,7 @@
  * generate-rss.js — 零依赖 RSS 2.0 Feed 生成器
  *
  * 从 hotspots.json 取最近窗口内的 N 条内容，输出 standards-compliant feed.xml。
- * RSS 阅读器可通过 feed.xml 订阅 InfoCatcher AI 热点，每日自动更新。
+ * RSS 阅读器可通过 feed.xml 订阅 知览 KnowView AI 热点，每日自动更新。
  *
  * B16 决策 72：RSS 与热点视图/发布出口共用同一套公开过滤规则
  * （news-public-gate.js 的 filterPublicItems：近期时间窗口 + 公开字段完整），
@@ -18,7 +18,7 @@ const { filterPublicItems } = require('../news/core/news-public-gate');
 
 const FEED_PATH = path.join(DIRS.public, 'feed.xml');
 const FEED_ITEM_LIMIT = 30;
-const SITE_URL = 'https://wozore.github.io/InfoCatcher';
+const SITE_URL = 'https://wozore.github.io/KnowView';
 
 function esc(str) {
   return String(str)
@@ -76,12 +76,12 @@ function generateRss() {
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
   xml += '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n';
   xml += '  <channel>\n';
-  xml += '    <title>InfoCatcher AI 热点</title>\n';
+  xml += '    <title>知览 KnowView AI 热点</title>\n';
   xml += '    <link>' + esc(SITE_URL) + '</link>\n';
-  xml += '    <description>AI 工具情报与行业热点，每日自动采集 + 人工精选</description>\n';
+  xml += '    <description>AI 热点、工具与模型情报，每日自动采集 + 人工精选</description>\n';
   xml += '    <language>zh-cn</language>\n';
   xml += '    <lastBuildDate>' + now + '</lastBuildDate>\n';
-  xml += '    <generator>InfoCatcher RSS Engine</generator>\n';
+  xml += '    <generator>KnowView RSS Engine</generator>\n';
   xml += '    <atom:link href="' + esc(SITE_URL + '/feed.xml') + '" rel="self" type="application/rss+xml"/>\n';
 
   for (const item of items) {

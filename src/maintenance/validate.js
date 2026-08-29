@@ -1,5 +1,5 @@
 /**
- * validate.js — InfoCatcher MVP 部署前数据与契约完整性校验（聚合入口）
+ * validate.js — 知览 KnowView MVP 部署前数据与契约完整性校验（聚合入口）
  *
  * 在热点管线中的位置：CI/CD 的最后一道门禁，被 deploy.yml 和
  * collect-news.yml 在执行部署或提交数据前调用。任何一项不通过
@@ -87,7 +87,7 @@ function validateBrandIcons() {
 // 不会阻止后续文件的校验，确保一次运行暴露所有问题。
 // failed 计数器在全部校验完成后统一判断退出码。
 // ═══════════════════════════════════════════════════════════════
-console.log('\n📋 InfoCatcher MVP 数据校验\n');
+console.log('\n📋 知览 KnowView MVP 数据校验\n');
 
 // catalog 域（tools / tool-intelligence / glossary / scenes / featured）
 const validatedTools = catalog.validateCatalog();

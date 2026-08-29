@@ -1,5 +1,5 @@
 /**
- * InfoCatcher MVP — AI 热点视图 (trending)：
+ * 知览 KnowView MVP — AI 热点视图 (trending)：
  * 内容类型筛选 + 最近/热度排序, 按唯一内容发布时间分组
  *
  * 安全设计：

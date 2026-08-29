@@ -1,5 +1,5 @@
 /**
- * InfoCatcher MVP — 推荐视图 (featured)：编辑精选 + 热门模型
+ * 知览 KnowView MVP — 编辑精选视图 (featured)：编辑精选 + 热门模型
  *
  * 五个分类（无"全部"），编辑精选和热门模型各带独立分类 tab。
  * 编辑精选来自 featured.json（手动维护 tool_id + detail_ref）。
@@ -128,7 +128,7 @@ function renderEditorPicksForCat() {
     return;
   }
   if (!picks.length) {
-    grid.innerHTML = renderState({ icon: '○', title: '暂无精选推荐', message: escapeHtml(cat.label) + '分类的人工精选正在筹备中。', type: 'unavailable' });
+    grid.innerHTML = renderState({ icon: '○', title: '暂无编辑精选', message: escapeHtml(cat.label) + '分类的人工精选正在筹备中。', type: 'unavailable' });
     return;
   }
   grid.innerHTML = picks.map(pick => {

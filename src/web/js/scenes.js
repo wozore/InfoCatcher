@@ -1,5 +1,5 @@
 /**
- * InfoCatcher MVP — 场景模式 (scenes)：12 个场景入口，可展开子任务并查看匹配工具卡片
+ * 知览 KnowView MVP — 场景模式 (scenes)：12 个场景入口，可展开子任务并查看匹配工具卡片
  *
  * 场景数据来自 scenes.json；搜索匹配名称、简介、关联词和子任务名。
  * 每行展示场景图标、名称、去重后的工具数量和简介；点击后展开任务—工具映射。
@@ -59,7 +59,7 @@ function renderSceneToolCard(tool, selectedDetailRef = null) {
   return '<div class="tool-card scene-tool-card" onclick="openDetail(\'' + escapeHtml(detailRef) + '\')">' +
     '<div class="tool-card-header">' +
       '<div><div class="tool-card-name">' + brandIconHtml({ vendorKey: tool.vendor_key, toolKey: tool.tool_key, modelKey: detail?.detail_kind === 'api_model' ? detail.id.split(':').pop() : null, emoji: tool.icon }) + ' ' + escapeHtml(title) + (kindLabel ? '<span class="tool-card-kind">' + escapeHtml(kindLabel) + '</span>' : '') + '</div>' +
-      (specificLabel ? '<div class="scene-specific-recommendation">具体推荐：' + escapeHtml(specificLabel) + '</div>' : '') +
+      (specificLabel ? '<div class="scene-specific-recommendation">具体建议：' + escapeHtml(specificLabel) + '</div>' : '') +
       '<div class="tool-card-vendor">' + escapeHtml(tool.vendor_label) + '</div></div>' +
       '' /* 决策 98：场景工具卡默认区不显示评分，评分保留在详情模态 */ +
     '</div>' +
@@ -140,7 +140,7 @@ function renderSceneDetail() {
         '<span class="scene-task-name">' + escapeHtml(task.task) + '</span>' +
         '<div class="scene-task-tools">' + toolButtons + '</div>' +
       '</div>' +
-      (recommendationNotes.length ? '<div class="scene-recommendation-reason" data-search-concept-text>推荐依据：' + recommendationNotes.map(escapeHtml).join('；') + '</div>' : '') +
+      (recommendationNotes.length ? '<div class="scene-recommendation-reason" data-search-concept-text>整理依据：' + recommendationNotes.map(escapeHtml).join('；') + '</div>' : '') +
       '<div class="scene-tool-preview" id="scene-tool-preview-' + escapeHtml(scene.id) + '-' + taskIndex + '" hidden></div>' +
     '</div>';
   }).join('');

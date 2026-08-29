@@ -9,8 +9,8 @@ const ROOT = path.resolve(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
 const CONFIG = path.join(ROOT, 'config', 'browser.local.json');
 const PORT = 4173;
-const DESKTOP_SCREENSHOT = path.join(os.tmpdir(), 'infocatcher-compare-desktop.png');
-const MOBILE_SCREENSHOT = path.join(os.tmpdir(), 'infocatcher-compare-mobile.png');
+const DESKTOP_SCREENSHOT = path.join(os.tmpdir(), 'knowview-compare-desktop.png');
+const MOBILE_SCREENSHOT = path.join(os.tmpdir(), 'knowview-compare-mobile.png');
 
 function fail(message) { throw new Error(message); }
 function readConfig() {
@@ -77,7 +77,7 @@ async function assertBrowser(client, name, expression) {
 async function main() {
   const config = readConfig();
   if (!fs.existsSync(DIST)) fail(`DIST_MISSING:${DIST}`);
-  const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'infocatcher-edge-'));
+  const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'knowview-edge-'));
   const serverCode = "import http.server, os; os.chdir('dist'); Handler=type('Handler',(http.server.SimpleHTTPRequestHandler,),{'extensions_map':{**http.server.SimpleHTTPRequestHandler.extensions_map,'.mjs':'text/javascript'}}); http.server.ThreadingHTTPServer((''," + PORT + "),Handler).serve_forever()";
   const server = spawn(process.platform === 'win32' ? 'python' : 'python3', ['-c', serverCode], { cwd: ROOT, stdio: 'ignore' });
   const browser = spawn(config.executablePath, [`--headless=new`, `--disable-gpu`, `--no-first-run`, `--no-default-browser-check`, `--remote-debugging-port=9222`, `--user-data-dir=${profile}`, 'about:blank'], { stdio: 'ignore' });
@@ -100,7 +100,7 @@ async function main() {
     const readyEnd = Date.now() + 15000;
     while (Date.now() < readyEnd && !(await evaluate(client, `document.querySelector('#app')?.getAttribute('aria-busy') === 'false'`))) await wait(100);
     await assertBrowser(client, '页面数据加载', `document.querySelector('#app')?.getAttribute('aria-busy') === 'false'`);
-    await assertBrowser(client, '首页加载', `document.title.includes('InfoCatcher')`);
+    await assertBrowser(client, '首页加载', `document.title.includes('知览')||document.title.includes('KnowView')`);
     await assertBrowser(client, '工具库导航', `(()=>{document.querySelector('[data-view="tools"]').click();return document.querySelector('#view-tools').classList.contains('active')})()`);
     await wait(300);
     await assertBrowser(client, '工具视图切换', `(()=>{const t=document.querySelector('#toolsViewToggle');if(t.getAttribute('aria-checked')!=='true')t.click();return t.getAttribute('aria-checked')==='true'})()`);

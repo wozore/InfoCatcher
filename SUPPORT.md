@@ -25,7 +25,7 @@
 
 ## 安全与隐私问题
 
-不要通过飞书表单或公开 GitHub Issue 提交安全漏洞、可利用细节、账号信息或密钥。安全问题应使用仓库 **Security → Advisories → Report a vulnerability** 的私密报告入口；该功能正式启用后，维护者会在站点和本文件补上直接链接。若私密入口尚未可用，请不要公开披露敏感细节。
+不要通过飞书表单或公开 GitHub Issue 提交安全漏洞、可利用细节、账号信息或密钥。安全问题应使用仓库的 [GitHub 私密漏洞报告入口](https://github.com/wozore/InfoCatcher/security/advisories/new)。若该入口暂时不可用，请不要公开披露敏感细节。
 
 ## 内容边界
 

@@ -1,5 +1,5 @@
 /**
- * validate-news.js — InfoCatcher news 域数据校验
+ * validate-news.js — 知览 KnowView news 域数据校验
  *
  * 从 validate.js 拆分出的 news 域：v2 主链仍存在的数据文件——
  * hotspots.json（公开投影）与 min-candidates.json（v2 单状态轴候选层）的校验函数与入口。

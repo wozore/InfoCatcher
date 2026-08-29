@@ -1,5 +1,5 @@
 /**
- * InfoCatcher — 模型对比（compare-models）：读 data/comparison/integrated/
+ * 知览 KnowView — 模型对比（compare-models）：读 data/comparison/integrated/
  *
  * 数据契约唯一事实源：docs/manual/comparison-data-contract.md。
  * 本模块只消费 integrated/index.json（选择器）+ integrated/data.json（懒加载）+

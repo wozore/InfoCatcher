@@ -1,5 +1,5 @@
 /**
- * InfoCatcher MVP — 浏览器端应用逻辑（纯前端、零依赖、无构建工具）
+ * 知览 KnowView MVP — 浏览器端应用逻辑（纯前端、零依赖、无构建工具）
  *
  * ═══════════════════════════════════════════════════════════════
  * 架构概要：
@@ -160,7 +160,7 @@ const VIEW_TITLES = {
   scenes: '场景',
   compare: '对比',
   trending: 'AI 热点',
-  featured: '推荐',
+  featured: '编辑精选',
   glossary: 'AI 概念',
   about: '关于'
 };

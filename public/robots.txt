@@ -1,4 +1,4 @@
-Sitemap: https://wozore.github.io/InfoCatcher/sitemap.xml
+Sitemap: https://wozore.github.io/KnowView/sitemap.xml
 User-agent: *
 Allow: /
 

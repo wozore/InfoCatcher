@@ -1,5 +1,5 @@
 /**
- * InfoCatcher MVP — AI 概念视图 (glossary)：43 条术语，分类筛选 + 搜索 + 可展开详情
+ * 知览 KnowView MVP — AI 概念视图 (glossary)：43 条术语，分类筛选 + 搜索 + 可展开详情
  *
  * 数据驱动：分类 chip 从 glossary.json 的 category 字段动态提取，
  * 新增术语分类无需修改前端代码。

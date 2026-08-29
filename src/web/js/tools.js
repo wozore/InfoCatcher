@@ -1,5 +1,5 @@
 /**
- * InfoCatcher MVP — 工具库 (tools)：搜索 + 分类/访问/价格筛选 + 卡片网格 + 详情弹窗
+ * 知览 KnowView MVP — 工具库 (tools)：搜索 + 分类/访问/价格筛选 + 卡片网格 + 详情弹窗
  *
  * 本模块同时承载详情弹窗（openDetail / showModal / closeModal）：
  * 弹窗为全站复用（热点、添加对比、搜索匹配都通过它打开），因此

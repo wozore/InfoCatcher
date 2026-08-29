@@ -8,7 +8,7 @@
  * 自动应用），CI 不设代理走直连；脚本不内嵌任何代理凭据。
  */
 
-const DEFAULT_UA = 'InfoCatcher-comparison/0.1 (+https://github.com/wozore/InfoCatcher)';
+const DEFAULT_UA = 'KnowView-comparison/0.1 (+https://github.com/wozore/KnowView)';
 
 /**
  * 抓取文本（GET），带有限重试与退避。

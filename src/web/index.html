@@ -3,44 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>InfoCatcher — AI工具场景化对比平台</title>
-<meta name="description" content="发现、对比、选择最适合你的AI工具。场景化深度对比，公开评测方法论，完全开源免费。">
-<link rel="canonical" href="https://wozore.github.io/InfoCatcher/">
+<title>知览 KnowView — AI 信息编辑部</title>
+<meta name="description" content="看热点，找工具，比模型。知览整理 AI 热点、工具、模型、概念与场景资料，帮助你更快看懂公开信息。">
+<link rel="canonical" href="https://wozore.github.io/KnowView/">
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="InfoCatcher">
+<meta property="og:site_name" content="知览 KnowView">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:url" content="https://wozore.github.io/InfoCatcher/">
-<meta property="og:title" content="InfoCatcher — AI工具场景化对比平台">
-<meta property="og:description" content="发现、对比、选择最适合你的AI工具。汇集主流 AI 工具、模型与使用场景，公开评测方法论，完全开源免费。">
-<meta property="og:image" content="https://wozore.github.io/InfoCatcher/og-image.png">
+<meta property="og:url" content="https://wozore.github.io/KnowView/">
+<meta property="og:title" content="知览 KnowView — AI 信息编辑部">
+<meta property="og:description" content="看热点，找工具，比模型。整理 AI 热点、工具、模型、概念与场景资料，帮助你更快看懂公开信息。">
+<meta property="og:image" content="https://wozore.github.io/KnowView/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="InfoCatcher — 汇集主流 AI 工具、模型与使用场景">
+<meta property="og:image:alt" content="知览 KnowView — 看热点，找工具，比模型">
 
 <!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="InfoCatcher — AI工具场景化对比平台">
-<meta name="twitter:description" content="发现、对比、选择最适合你的AI工具。汇集主流 AI 工具、模型与使用场景，公开评测方法论，完全开源免费。">
-<meta name="twitter:image" content="https://wozore.github.io/InfoCatcher/og-image.png">
-<meta name="twitter:image:alt" content="InfoCatcher — 汇集主流 AI 工具、模型与使用场景">
+<meta name="twitter:title" content="知览 KnowView — AI 信息编辑部">
+<meta name="twitter:description" content="看热点，找工具，比模型。整理 AI 热点、工具、模型、概念与场景资料，帮助你更快看懂公开信息。">
+<meta name="twitter:image" content="https://wozore.github.io/KnowView/og-image.png">
+<meta name="twitter:image:alt" content="知览 KnowView — 看热点，找工具，比模型">
 
 <!-- Structured data -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  "name": "InfoCatcher",
-  "url": "https://wozore.github.io/InfoCatcher/",
-  "description": "发现、对比、选择最适合你的AI工具。场景化深度对比，公开评测方法论，完全开源免费。",
+  "name": "知览 KnowView",
+  "url": "https://wozore.github.io/KnowView/",
+  "description": "看热点，找工具，比模型。知览整理 AI 热点、工具、模型、概念与场景资料，帮助用户更快看懂公开信息。",
   "applicationCategory": "Reference",
   "operatingSystem": "All",
   "inLanguage": "zh-CN",
   "license": "https://opensource.org/licenses/MIT",
   "author": {
     "@type": "Organization",
-    "name": "InfoCatcher"
+    "name": "知览 KnowView"
   },
   "offers": {
     "@type": "Offer",
@@ -51,7 +51,7 @@
 </script>
 
 <link rel="stylesheet" href="css/style.css?v=4">
-<link rel="alternate" type="application/rss+xml" title="InfoCatcher AI 热点 RSS" href="https://wozore.github.io/InfoCatcher/feed.xml">
+<link rel="alternate" type="application/rss+xml" title="知览 KnowView AI 热点 RSS" href="https://wozore.github.io/KnowView/feed.xml">
 </head>
 <body>
 
@@ -73,7 +73,7 @@
 <!-- 导航栏 -->
 <header class="header">
   <div class="header-inner">
-    <a href="#" class="logo" id="homeBtn"><svg class="icon" aria-hidden="true"><use href="#icon-search"/></svg> InfoCatcher</a>
+    <a href="#" class="logo" id="homeBtn"><svg class="icon" aria-hidden="true"><use href="#icon-search"/></svg> 知览 <span lang="en">KnowView</span></a>
     <span class="mobile-current-page" id="mobileCurrentPage" aria-hidden="true">AI 搜索</span>
     <!-- EXTENSION POINT: 新增视图时在此 nav 中添加对应分组与导航按钮 -->
     <nav class="nav nav-groups" aria-label="主导航">
@@ -86,7 +86,7 @@
           <button class="nav-btn" type="button" data-view="tools">工具库</button>
           <button class="nav-btn" type="button" data-view="scenes">场景</button>
           <button class="nav-btn" type="button" data-view="compare">对比 <span class="badge" id="compareCount">0</span></button>
-          <button class="nav-btn" type="button" data-view="featured">推荐</button>
+          <button class="nav-btn" type="button" data-view="featured">编辑精选</button>
         </div>
       </div>
       <div class="nav-dropdown" data-group="knowledge">
@@ -117,7 +117,7 @@
         <button type="button" data-view="tools">工具库</button>
         <button type="button" data-view="scenes">场景</button>
         <button type="button" data-view="compare">对比</button>
-        <button type="button" data-view="featured">推荐</button>
+        <button type="button" data-view="featured">编辑精选</button>
       </div>
     </section>
     <section class="mobile-nav-group" aria-labelledby="mobileKnowledgeLabel">
@@ -410,7 +410,7 @@
     <header class="page-header scenes-header">
       <span class="eyebrow">按任务发现</span>
       <h1 class="page-title" id="scenesViewTitle">先选择你要完成的场景</h1>
-      <p class="page-lead">不同任务对工具能力、使用门槛和成本的要求不同。搜索具体需求，展开场景后查看子任务、匹配工具和推荐依据。</p>
+      <p class="page-lead">不同任务对工具能力、使用门槛和成本的要求不同。搜索具体需求，展开场景后查看子任务、匹配工具和整理依据。</p>
     </header>
 
     <section class="scenes-search panel" aria-labelledby="scenesSearchTitle">
@@ -632,10 +632,10 @@
     </section>
   </section>
 
-  <!-- 推荐视图 -->
+  <!-- 编辑精选视图 -->
   <section id="view-featured" class="view featured-view" aria-labelledby="featuredViewTitle">
     <header class="page-header featured-header">
-      <span class="eyebrow">独立推荐视图</span>
+      <span class="eyebrow">编辑精选与资料排序</span>
       <h1 class="page-title" id="featuredViewTitle">阅读编辑精选与资料热门项</h1>
       <p class="page-lead">编辑精选来自人工维护的既有清单；热门模型按当前资料状态与定价完整度自动排序。两者口径不同，分别展示。</p>
     </header>
@@ -646,7 +646,7 @@
           <div>
             <span class="eyebrow">人工清单</span>
             <h2 class="section-title" id="editorPicksTitle">编辑精选</h2>
-            <p class="section-subtitle">按分类展示已维护的具体 AI 模型与工具，并保留推荐理由。</p>
+            <p class="section-subtitle">按分类展示已维护的具体 AI 模型与工具，并保留整理理由。</p>
           </div>
           <p class="faint">分类状态仅作用于编辑精选。</p>
         </div>
@@ -673,7 +673,7 @@
     <article class="about-article">
       <header class="page-header about-header">
         <span class="eyebrow">关于项目</span>
-        <h1 class="page-title" id="aboutViewTitle">为什么做 InfoCatcher</h1>
+        <h1 class="page-title" id="aboutViewTitle">为什么做知览</h1>
         <p class="page-lead">通过场景化对比、公开评测方法和开源透明，帮助用户理解 AI 工具资料并作出更明智的选择。</p>
       </header>
 
@@ -682,7 +682,7 @@
         <div>
           <h2 class="section-title" id="aboutProblemTitle">我们看到的问题</h2>
           <p>在对 112 名 AI 用户的调查中，<b>60.7%</b> 的人觉得 AI 信息太分散，<b>63.4%</b> 曾因不了解而选错工具，仅 <b>10.7%</b> 信任网上现有的 AI 评测。</p>
-          <p>InfoCatcher 的目标：通过<b>场景化深度对比</b>、<b>公开评测方法论</b>和<b>开源透明</b>，帮你做出更明智的 AI 工具选择。</p>
+          <p>知览的目标：通过<b>场景化对比</b>、<b>公开评测方法</b>和<b>开源透明</b>，帮你更快看懂 AI 信息，并作出更明智的工具选择。</p>
         </div>
       </section>
 
@@ -721,11 +721,12 @@
         <span class="about-section-number" aria-hidden="true">04</span>
         <div>
           <h2 class="section-title" id="aboutOpenTitle">开源与参与</h2>
-          <p>InfoCatcher 是一个开源免费项目，代码和数据托管在 GitHub。欢迎贡献、纠错、提出需求。</p>
+          <p>知览（KnowView）是一个开源免费项目，代码和数据托管在 GitHub。欢迎贡献、纠错、提出建议。</p>
           <div class="about-actions">
+            <a class="btn" href="https://my.feishu.cn/share/base/form/shrcnBU7crL7oOwWJQsv7x7lMz7" rel="noopener">反馈与纠错</a>
             <a class="btn" href="https://github.com/wozore/infocatcher/blob/main/CONTRIBUTING.md">如何贡献</a>
-            <a class="btn" href="https://github.com/wozore/infocatcher/issues/new?template=data-correction.yml">纠错数据</a>
-            <a class="btn" href="https://github.com/wozore/infocatcher/issues/new?template=new-tool.yml">推荐工具</a>
+            <a class="btn" href="https://github.com/wozore/infocatcher/issues/new?template=data-correction.yml">数据纠错</a>
+            <a class="btn" href="https://github.com/wozore/infocatcher/issues/new?template=new-tool.yml">收录建议</a>
           </div>
         </div>
       </section>
@@ -740,8 +741,8 @@
 </div>
 
 <footer class="footer">
-  <p>InfoCatcher v0.1 MVP — 开源免费 · <span id="dataDate"></span> · 数据标注来源，评测方法公开 · 不接收厂商赞助</p>
-  <p style="margin-top:6px"><button class="btn-link" type="button" data-view="about">关于</button> · <a href="https://github.com/wozore/infocatcher/blob/main/CONTRIBUTING.md">如何贡献</a> · <a href="https://github.com/wozore/infocatcher/issues/new?template=data-correction.yml">纠错数据</a> · <a href="https://github.com/wozore/infocatcher/issues/new?template=new-tool.yml">推荐工具</a></p>
+  <p>知览 KnowView MVP — 开源免费 · <span id="dataDate"></span> · 数据标注来源，评测方法公开 · 不接收厂商赞助</p>
+  <p style="margin-top:6px"><button class="btn-link" type="button" data-view="about">关于</button> · <a href="https://my.feishu.cn/share/base/form/shrcnBU7crL7oOwWJQsv7x7lMz7" rel="noopener">反馈与纠错</a> · <a href="https://github.com/wozore/infocatcher/blob/main/CONTRIBUTING.md">如何贡献</a> · <a href="https://github.com/wozore/infocatcher/issues/new?template=data-correction.yml">数据纠错</a> · <a href="https://github.com/wozore/infocatcher/issues/new?template=new-tool.yml">收录建议</a></p>
 </footer>
 
 <script type="module" src="js/main.js"></script>

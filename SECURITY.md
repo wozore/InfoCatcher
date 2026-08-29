@@ -4,7 +4,7 @@
 
 请不要在公开 GitHub Issue、Pull Request、飞书反馈表单或社交平台发布安全漏洞、利用代码、API Key、Cookie、账号信息、个人资料或其他敏感内容。
 
-请通过 GitHub 仓库的 **Security → Advisories → Report a vulnerability** 创建私密报告。报告入口启用后，仓库主页和[反馈与支持](SUPPORT.md)会提供直接链接。维护者会在收到报告后尽快确认，通常以 7 个工作日作为初步处理目标；复杂问题的修复时间取决于影响范围和复现条件。
+请通过仓库的 [GitHub 私密漏洞报告入口](https://github.com/wozore/InfoCatcher/security/advisories/new) 创建私密报告。维护者会在收到报告后尽快确认，通常以 7 个工作日作为初步处理目标；复杂问题的修复时间取决于影响范围和复现条件。
 
 如果私密漏洞报告暂时不可用，请先不要公开披露细节，等待维护者提供安全处理方式。
 

@@ -17,7 +17,7 @@ const DEFAULT_TIMEOUT_MS = 15000;
 const DEFAULT_RETRIES = 2;
 const DEFAULT_RETRY_BASE_MS = 250;
 const MAX_EXCERPT_CHARS = 4000;
-const DEFAULT_USER_AGENT = 'InfoCatcher-tool-update-collector/0.1';
+const DEFAULT_USER_AGENT = 'KnowView-tool-update-collector/0.1';
 
 function errorResult(code, error, extra = {}) {
   return { ok: false, code, error, ...extra };

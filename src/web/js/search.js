@@ -1,5 +1,5 @@
 /**
- * InfoCatcher MVP — AI 搜索视图 (search)：B16 静态搜索入口与结果主线（P1-A 接入）
+ * 知览 KnowView MVP — AI 搜索视图 (search)：B16 静态搜索入口与结果主线（P1-A 接入）
  *
  * 固定静态搜索状态只在当前页面内存中存在，不写入 URL、localStorage 或后端。
  * 决策 9.8：搜索结果/来源/匹配、场景导语、概念详情正文统一接入“概念联动”
@@ -338,7 +338,7 @@ function buildSearchAnswer(query, tools, matches = {}) {
   if (best) {
     const bestName = escapeHtml(best.title) + citation(best, 0);
     if (best.best_for_preview) {
-      overview = '综合已收录资料，' + bestName + ' 最适合' + escapeHtml(best.best_for_preview) + '，是这类任务的优先选择。';
+      overview = '综合已收录资料，' + bestName + ' 适合' + escapeHtml(best.best_for_preview) + '，是这类任务的参考选择。';
     } else if (best.summary) {
       overview = '综合已收录资料，' + bestName + '：' + escapeHtml(best.summary) + '。';
     } else {

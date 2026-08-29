@@ -11,7 +11,7 @@ const {
 } = require('../../src/shared/ai-config');
 
 function withConfig(value, callback) {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'infocatcher-ai-config-'));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'knowview-ai-config-'));
   const filePath = path.join(dir, 'config.json');
   fs.writeFileSync(filePath, JSON.stringify(value));
   try {

@@ -46,7 +46,7 @@ async function requestText(url, options = {}) {
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     try {
       const response = await fetchImpl(url, {
-        headers: { 'User-Agent': 'InfoCatcher/1.0', ...(options.headers || {}) },
+        headers: { 'User-Agent': 'KnowView/1.0', ...(options.headers || {}) },
         signal: AbortSignal.timeout(timeout),
       });
       if (!response.ok) {

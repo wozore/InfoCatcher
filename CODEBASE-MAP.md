@@ -133,10 +133,10 @@
 - [js/tools.js](src/web/js/tools.js) — 工具库视图（厂商/工具 Toggle）由独立 `VendorDirectoryView` / `ToolDirectoryView` 控制器分别管理；工具卡片四类主题、分组和快速索引 + 滤选 + 单级详情弹窗；厂商一级/二级与工具/模型/套餐三级详情统一按稳定 ref 打开，仅 X 关闭。导出: `openDetail, closeModal, showModal, getToolsViewMode, toggleToolsViewMode, setToolsViewMode, clearToolFilters, renderTools...`
 - [js/compare.js](src/web/js/compare.js) — 对比视图双 tab（模型对比 ↔ 工具对比）+ 工具对比（catalog）引擎；api_model 卡 +对比 经标题→canonical 桥接路由到模型 tab、tool/套餐路由到工具 tab；isCompareSelected 模型感知。导出: `compareList, getCompareTab, setCompareTab, renderCompareView, compareKey, isCompareSelected, toggleCompareRef, compareGroupLeaves, updateCompareCount, renderCompare, removeCompare, quickCompare...`
 - [js/compare-models.js](src/web/js/compare-models.js) — **模型对比引擎（读 integrated/ + view-config + models-alias）**：左侧选择器按厂商→模型系列→模型三级树形展示，支持两级展开、搜索祖先路径与 `display/vendor/family/identity` 筛选；模型卡 `tool_key` 先经人工 `catalog_aliases` 桥接再回退 v2 identity/raw alias 到 canonical；前端只消费管线已消歧的记录，绝不按名称合并。其余：变体圆圈、综合分/性价比图表与表格能力同现有契约。导出: `renderModelCompare, bindModelCompareEvents, bridgeToCanonical, canonicalForTool, modelCompareIsSelected, modelCap, routeApiModelToCompare`
-- [js/featured.js](src/web/js/featured.js) — 推荐视图（编辑精选通过工具 `tool_key` + 三级 `detail_ref` 导航，热门模型按正式工具卡 `detail_kind/theme` 分类；访问/资料状态使用中性未知语义，价格兼容通用计价单位）。导出: `renderFeatured, renderFeaturedTabs...`
+- [js/featured.js](src/web/js/featured.js) — 编辑精选视图（编辑精选通过工具 `tool_key` + 三级 `detail_ref` 导航，热门模型按正式工具卡 `detail_kind/theme` 分类；访问/资料状态使用中性未知语义，价格兼容通用计价单位）。导出: `renderFeatured, renderFeaturedTabs...`
 - [js/glossary.js](src/web/js/glossary.js) — AI 概念视图。导出: `activeGlossaryId, openGlossaryConcept, renderGlossary...`
 - [js/trending.js](src/web/js/trending.js) — AI 热点视图（文案走 t()、内容走 getLocalizedField；相关工具资源解析为正式工具卡和三级详情引用）。导出: `renderTrending, openHotspotDetail, reloadHotspots...`
-- [js/scenes.js](src/web/js/scenes.js) — 场景模式视图；任务引用正式工具 `tool_key`，具体模型推荐通过完整三级 `detail_ref` 打开，复用工具卡价格/访问多状态标签避免 unknown 误报。导出: `activeSceneId, renderScenes, renderSceneDetail...`
+- [js/scenes.js](src/web/js/scenes.js) — 场景模式视图；任务引用正式工具 `tool_key`，具体模型建议通过完整三级 `detail_ref` 打开，复用工具卡价格/访问多状态标签避免 unknown 误报。导出: `activeSceneId, renderScenes, renderSceneDetail...`
 
 ## src/news/ — 新闻采集管线（CommonJS）
 ### core/ — 数据层（无网络副作用）

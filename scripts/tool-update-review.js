@@ -125,7 +125,7 @@ async function defaultGithubProbe(options = {}) {
   try {
     const response = await fetchImpl(GITHUB_RATE_LIMIT_URL, {
       method: 'GET',
-      headers: { 'User-Agent': 'InfoCatcher-tool-update-review/0.1', Accept: 'application/vnd.github+json' },
+      headers: { 'User-Agent': 'KnowView-tool-update-review/0.1', Accept: 'application/vnd.github+json' },
     });
     return { ok: Boolean(response?.ok), status: Number(response?.status || 0) };
   } catch (error) {
