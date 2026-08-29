@@ -33,6 +33,14 @@
 ## 根领域文档
 - [CONTEXT.md](CONTEXT.md) — catalog 领域词汇表；定义 CatalogProfile、ResearchScope、OfficialSource、FieldCoverage、DerivedField、LayerPatch、CatalogDraft、Readiness、UpdateCandidate、ToolUpdateReviewQueue 与 Apply。
 
+## 公开项目文档
+- [ABOUT.md](ABOUT.md) — 知览/KnowView 的公开定位、编辑部原则、MVP 能力边界与非个性化推荐声明。
+- [SUPPORT.md](SUPPORT.md) — 普通用户反馈、GitHub 公开协作、处理时效与安全入口分流说明。
+- [SECURITY.md](SECURITY.md) — 安全/隐私问题私密报告、敏感信息边界与处理政策。
+- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) — 公开讨论和贡献的行为准则。
+- [LICENSE](LICENSE) — 软件 MIT 许可证。
+- [docs/manual/editorial-and-data-policy.md](docs/manual/editorial-and-data-policy.md) — AI 内容编辑、来源核验、可上传内容和禁止内容的数据政策。
+
 ## src/shared/ — 跨模块基础能力
 - [env.js](src/shared/env.js) — dotenv 子集解析 + 项目根目录。导出: `loadDotEnv, PROJECT_DIR`
 - [paths.js](src/shared/paths.js) — 目录、catalog 文件与生成器事务路径常量，以及统一 AI 配置文件路径（全仓唯一数据登记点，含五模块 catalog、厂商/产品官方 URL 登记表、草案、锁、staging、backup、journal、日期审计清单、编程工具更新审核清单与概念链路 previews/vibeHubCache；data/manual 下分 archive 喂 AI 搜索历史 / tools 工具链路 / concepts 概念链路，待补卡路径已收拢为 CATALOG_GENERATOR_FILES.pendingTools / CONCEPT_FILES.pendingConcepts）。导出: `DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, CONCEPT_FILES, AI_CONFIG_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH`

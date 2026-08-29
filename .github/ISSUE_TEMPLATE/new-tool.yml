@@ -1,8 +1,12 @@
 name: 推荐新工具
-description: 推荐一个 InfoCatcher 还未收录的 AI 工具
+description: 推荐一个知览还未收录的具体 AI 工具、模型或套餐
 title: "[新工具] "
 labels: ["new-tool"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        请提交具体产品、模型、版本或套餐，并提供公开来源。不要提交 API Key、Cookie、密码、个人资料或安全漏洞细节；安全问题请查看 [安全政策](../../SECURITY.md)。
   - type: input
     id: tool_name
     attributes:

@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 普通用户反馈（飞书表单）
+    url: https://my.feishu.cn/share/base/form/shrcnBU7crL7oOwWJQsv7x7lMz7
+    about: 数据纠错、工具或模型线索、站点 Bug 和产品建议可通过飞书表单匿名提交；不要提交敏感信息。
+  - name: 贡献与内容上传规则
+    url: https://github.com/wozore/InfoCatcher/blob/main/CONTRIBUTING.md
+    about: 提交数据、代码或文档前请阅读证据、版权、隐私和审核规则。
+  - name: 安全与隐私问题
+    url: https://github.com/wozore/InfoCatcher/blob/main/SECURITY.md
+    about: 不要公开提交漏洞、密钥、Cookie、密码或个人敏感信息；请按安全政策使用私密报告。

@@ -3,6 +3,10 @@ description: 报告某个 AI 工具的信息过时或错误
 title: "[数据纠错] "
 labels: ["data-correction"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        请提供可核验来源，并确认没有提交 API Key、Cookie、密码、个人资料或安全漏洞细节；安全问题请查看 [安全政策](../../SECURITY.md)。
   - type: input
     id: tool_name
     attributes:
@@ -29,7 +33,7 @@ body:
     id: current_info
     attributes:
       label: 当前信息
-      description: InfoCatcher 上现在显示的是什么？
+      description: 知览上某个 AI 工具或模型的信息需要修正，请提供可核验来源
     validations:
       required: true
   - type: textarea
