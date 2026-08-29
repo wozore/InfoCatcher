@@ -159,7 +159,9 @@ async function main() {
     await assertBrowser(client, '移动端分隔条隐藏且保持单列', `(()=>{const splitter=document.querySelector('#cmpSplitter'),layout=document.querySelector('.cmp-layout'),selector=document.querySelector('.cmp-selector');return getComputedStyle(splitter).display==='none'&&getComputedStyle(selector).position==='static'&&!getComputedStyle(layout).gridTemplateColumns.includes('8px')})()`);
     await captureScreenshot(client, MOBILE_SCREENSHOT);
     console.log(`  PASS 移动端视觉截图 ${MOBILE_SCREENSHOT}`);
-    await client.command('Emulation.clearDeviceMetricsOverride');
+    // headless 默认视口宽度仅 500px（< 560px 移动断点），仅 clear 不会回到桌面布局；
+    // 必须显式恢复桌面视口后再验证「移动端 → 桌面端」切换恢复。
+    await client.command('Emulation.setDeviceMetricsOverride', { width: 1366, height: 900, deviceScaleFactor: 1, mobile: false });
     await wait(100);
     await evaluate(client, `(()=>{const input=document.querySelector('#cmpModelSearch');input.value='';input.dispatchEvent(new Event('input',{bubbles:true}));return true})()`);
     await wait(300);
