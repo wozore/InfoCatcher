@@ -21,8 +21,10 @@ node scripts/build-dist.js
 
 ```bash
 node scripts/validate.js
-node --test
+node --test tests/
 ```
+
+> 全量测试明确限定在 `tests/` 目录运行，避免 `node --test` 无路径时递归扫描仓库根部的本地符号链接（如 `.obsidian`）。
 
 真实页面验收需要 Edge/CDP 配置，运行：
 

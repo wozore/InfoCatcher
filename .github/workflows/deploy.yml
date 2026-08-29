@@ -29,7 +29,7 @@ jobs:
       - name: Run validation
         run: |
           node scripts/validate.js
-          node --test --test-concurrency=1
+          node --test --test-concurrency=1 tests/
 
   deploy:
     needs: validate
