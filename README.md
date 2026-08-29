@@ -21,10 +21,11 @@ node scripts/build-dist.js
 
 ```bash
 node scripts/validate.js
-node --test tests/
+node --test --test-concurrency=1 tests/
 ```
 
-> 全量测试明确限定在 `tests/` 目录运行，避免 `node --test` 无路径时递归扫描仓库根部的本地符号链接（如 `.obsidian`）。
+> 全量测试限定在 `tests/` 目录：避免 `node --test` 无路径时递归扫描仓库根部的本地符号链接（如 `.obsidian`），并以单并发规避共享运行文件（`data/news/runtime/`）的偶发竞争。
+> Node 20 使用目录参数 `tests/`；Node 24 请改用 glob：`node --test --test-concurrency=1 "tests/**/*.test.js"`。
 
 真实页面验收需要 Edge/CDP 配置，运行：
 

@@ -74,7 +74,10 @@ function startLocalServer(spawnImpl = spawn) {
   if (!fs.existsSync(LOCAL_MODEL_SCRIPT)) {
     return { started: false, error: `本地模型启动脚本不存在：${LOCAL_MODEL_SCRIPT}` };
   }
-  if (process.platform !== 'win32') {
+  // 平台门禁只对真实 spawn（生产路径）生效：.ps1 启动脚本仅在 Windows 可用。
+  // 注入自定义 spawnImpl（测试 mock / 定制环境）时放行，由注入实现负责平台兼容，
+  // 与 ensureLocalModel 注入 fetchImpl 即放行的测试隔离设计一致。
+  if (spawnImpl === spawn && process.platform !== 'win32') {
     return { started: false, error: `本地模型自动启动当前仅支持 Windows（脚本：${LOCAL_MODEL_SCRIPT}）` };
   }
   try {
