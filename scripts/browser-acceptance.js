@@ -203,6 +203,14 @@ async function main() {
     await evaluate(client, `(()=>{document.querySelector('[data-view="compare"]').click();document.querySelector('#compareTabTool').click();return true})()`);
     await wait(200);
     await assertBrowser(client, '工具对比 tab 可切换', `document.querySelector('#compareToolPanel')&&!document.querySelector('#compareToolPanel').hidden`);
+    // 跨视图联动：工具详情里的 +对比 → 关闭弹窗并路由到对比视图
+    await evaluate(client, `(()=>{document.querySelector('[data-view="tools"]').click();const input=document.querySelector('#searchInput');input.value='Qwen3.8 Max';input.dispatchEvent(new Event('input',{bubbles:true}));return true})()`);
+    await wait(300);
+    await evaluate(client, `(()=>{const card=[...document.querySelectorAll('.tool-card')].find(x=>x.innerText.includes('Qwen3.8 Max'));card?.click();return !!card})()`);
+    await wait(300);
+    await evaluate(client, `(()=>{const btn=document.querySelector('#modalContent .compare-toggle');if(!btn)return false;btn.click();return true})()`);
+    await wait(300);
+    await assertBrowser(client, '+对比 路由：关闭弹窗并跳转对比视图', `document.querySelector('#modalOverlay')?.hidden===true&&document.querySelector('#view-compare')?.classList.contains('active')`);
     // 场景视图
     await evaluate(client, `(()=>{document.querySelector('[data-view="scenes"]').click();return true})()`);
     await wait(300);
