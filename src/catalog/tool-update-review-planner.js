@@ -11,7 +11,6 @@ const {
 const {
   isIsoDate,
   isoDateFromValue,
-  explicitDates,
   dateForEvidence: evidenceDateForEvidence,
 } = require('./tool-update-evidence');
 
@@ -235,7 +234,6 @@ function planToolUpdateCandidates(inputs, options = {}) {
 
 module.exports = {
   DEFAULT_MIN_CONFIDENCE,
-  explicitDates,
   dateForEvidence,
   findToolDetail,
   sourceForEvidence,

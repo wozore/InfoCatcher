@@ -61,8 +61,7 @@ function officialDateOf(value) {
   return isoDateFromValue(value);
 }
 
-function dateForEvidence(evidence = {}, maybeOptions = {}, legacyOptions = {}) {
-  const options = Object.keys(legacyOptions).length ? legacyOptions : maybeOptions;
+function dateForEvidence(evidence = {}, options = {}) {
   const metadataDate = officialDateOf(evidence.official_published_at);
   if (metadataDate) return { date: metadataDate, source: 'official_published_at' };
 

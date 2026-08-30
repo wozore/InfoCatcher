@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-InfoCatcher 调查数据分析脚本
+知览 KnowView 调查数据分析脚本
 从脱敏编码 CSV 读取 112 条记录，输出逐题统计、交叉分析和勘误校准。
 """
 

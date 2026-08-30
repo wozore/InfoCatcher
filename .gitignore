@@ -69,7 +69,7 @@ docs/manual/**
 
 # ===== Claude Code / AI 工具会话数据 =====
 # 会话元数据频繁变化，不入库
-.claudian/sessions/
+.claudian/
 
 # ===== Claude Code 临时 worktree =====
 # Claude Code 创建的嵌套 worktree 是独立 Git 工作区，不应作为主仓库 gitlink 提交
@@ -85,6 +85,12 @@ docs/manual/**
 # 整个目录忽略（含符号链接文件形态与目录形态），取消历史误跟踪的配置（app.json 等）
 .obsidian
 .obsidian/
+
+# ===== 脱离版本控制的本地工作稿 =====
+# 工程日志、计划和反馈表截图只保留在维护者本机，不作为公开交付物
+/开发日志.md
+/开发计划.md
+/用户反馈收集表.png
 
 # ===== 脚本生成的临时输出 =====
 # 分析脚本运行产生的中间/输出文件（若生成到这些位置）
@@ -105,12 +111,3 @@ service-account.json
 
 # ===== 调查原始数据（含受访者个人信息，不入库） =====
 # 已脱敏的编码 CSV、问卷 PDF 和分析脚本在 resources/survey/ 下受版本控制
-# ===== MVP 独立仓库（避免嵌套 .git 冲突） =====
-# mvp/ 源码仍由工程仓库追踪（属于 06.编码与单元测试 的交付物），
-# 仅排除内层 .git 目录，防止两个 git 仓库交叉管理
-06.编码与单元测试/mvp/.git/
-
-logs/
-
-# MVP 热点构建临时锁（运行时生成，不入库）
-06.编码与单元测试/mvp/data/news/runtime/.news-build.lock

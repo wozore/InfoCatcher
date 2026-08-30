@@ -305,7 +305,11 @@ function buildFallbackSeries(models) {
   }
   for (const group of groups.values()) {
     group.member_count = group.members.length;
-    for (const member of group.members) member.variants.sort((a, b) => (a.revision ? 1 : -1) - (b.revision ? 1 : -1));
+    for (const member of group.members) member.variants.sort((a, b) => {
+      if (a.revision == null && b.revision != null) return -1;
+      if (a.revision != null && b.revision == null) return 1;
+      return String(b.revision || '').localeCompare(String(a.revision || ''), 'en');
+    });
   }
   return [...groups.values()];
 }

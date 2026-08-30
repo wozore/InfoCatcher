@@ -16,6 +16,7 @@ const {
   planToolUpdateCandidate,
   planToolUpdateCandidates,
 } = require('../../src/catalog/tool-update-review-planner');
+const { explicitDates } = require('../../src/catalog/tool-update-evidence');
 const {
   defaultReviewQueue,
   mergeReviewQueue,
@@ -293,7 +294,6 @@ test('review store 只持久化证据摘录，不保存整页正文', () => {
 });
 
 test('explicitDates 识别月份缩写与序数后缀', () => {
-  const { explicitDates } = require('../../src/catalog/tool-update-review-planner');
   assert.deepEqual(explicitDates('Released on Aug 21, 2026.'), ['2026-08-21']);
   assert.deepEqual(explicitDates('Released on August 21st, 2026.'), ['2026-08-21']);
   assert.deepEqual(explicitDates('Released on Aug 21, 2026 and Sep 3, 2026.').sort(), ['2026-08-21', '2026-09-03']);

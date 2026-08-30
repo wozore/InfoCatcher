@@ -46,7 +46,7 @@ function toolCards(request = {}) {
   const canCompare = ['tool', 'api_model', 'product_variant'].includes(card.detail_kind);
   const compareSelected = request.compareSelected === true;
   const compareHtml = canCompare
-    ? '<div class="tool-card-actions-only"><button class="compare-toggle ' + (compareSelected ? 'selected' : '') + '" type="button" aria-pressed="' + String(compareSelected) + '" onclick="event.stopPropagation();toggleCompareRef(\'' + escapeHtml(card.detail_ref.id) + '\',\'' + escapeHtml(card.detail_ref.id) + '\',this)">' + (compareSelected ? '已选' : '+对比') + '</button></div>'
+    ? '<div class="tool-card-actions-only"><button class="compare-toggle ' + (compareSelected ? 'selected' : '') + '" type="button" aria-pressed="' + String(compareSelected) + '" onclick="event.stopPropagation();toggleCompareRef(\'' + escapeHtml(card.tool_key) + '\',\'' + escapeHtml(card.detail_ref.id) + '\',this)">' + (compareSelected ? '已选' : '+对比') + '</button></div>'
     : '';
   return `<div class="tool-card tool-card--${escapeHtml(card.theme || 'general')}" onclick="${openCard}">
     <div class="tool-card-header"><div>

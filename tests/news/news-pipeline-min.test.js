@@ -20,11 +20,39 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
-const { runMin, isCollectionEnabled } = require('../../src/news/min/pipeline-min');
+const { runMin, isCollectionEnabled, normalizeNow, resolveXWindow } = require('../../src/news/min/pipeline-min');
 const { NEWS_FILES } = require('../../src/shared/paths');
 const { readJson, writeJsonAtomic } = require('../../src/news/core/news-storage');
 
 const CONFIG = require('../../data/news/config/news-config-v2.json');
+
+test('normalizeNow：保留合法 Date/ISO，非法输入回退为当前时间对象', () => {
+  const date = new Date('2026-08-07T06:00:00Z');
+  assert.strictEqual(normalizeNow(date), date);
+  assert.equal(normalizeNow('2026-08-07T06:00:00Z').toISOString(), date.toISOString());
+  assert.ok(normalizeNow('not-a-date') instanceof Date);
+});
+
+test('resolveXWindow：默认使用北京时间当天零点至 now', () => {
+  const now = new Date('2026-08-07T06:00:00Z');
+  assert.deepEqual(resolveXWindow({}, now), {
+    sinceIso: '2026-08-06T16:00:00.000Z',
+    untilIso: '2026-08-07T06:00:00.000Z',
+  });
+});
+
+test('resolveXWindow：显式时间窗优先于默认北京时间窗口', () => {
+  const result = resolveXWindow({ xWindow: {
+    since: '2026-08-01T00:00:00Z',
+    until: new Date('2026-08-02T00:00:00Z'),
+  } }, new Date('2026-08-07T06:00:00Z'));
+  assert.deepEqual(result, {
+    sinceIso: '2026-08-01T00:00:00.000Z',
+    untilIso: '2026-08-02T00:00:00.000Z',
+  });
+});
+
+// 固定参考时间（2026-08-07 14:00 北京时间）。
 
 const MIN_PATH = NEWS_FILES.minCandidates;
 const HISTORY_PATH = NEWS_FILES.sourceHistory;

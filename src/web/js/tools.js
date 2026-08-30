@@ -37,6 +37,7 @@ let modalScrollPosition = null;    // 热点等列表详情关闭时保持原列
 
 // 跨模块状态 setter（ESM：导入绑定只读，改值必须回到本模块）
 function setModalScrollPosition(value) { modalScrollPosition = value; }
+const MODAL_CLOSE_HTML = '<button class="modal-close" type="button" aria-label="关闭详情" onclick="closeModal()">' + ICON_CLOSE + '</button>';
 
 // ═══════════════════════════════════════════════════════════════
 // 工具库 —— 筛选、卡片渲染
@@ -424,13 +425,13 @@ function openDetail(id, selectedItemId = null, trigger = null, backRef = null) {
   const level2 = id.startsWith('vendor-level2:') ? getCatalogItems('vendor-level2').find(item => item.id === id) : null;
   const detail = id.startsWith('tool-level3:') ? getToolLevel3Item('', id) : null;
   if (level1) {
-    content.innerHTML = '<button class="modal-close" type="button" aria-label="关闭详情" onclick="closeModal()">' + ICON_CLOSE + '</button><div id="openaiDetailBody" class="openai-detail"></div>';
+    content.innerHTML = MODAL_CLOSE_HTML + '<div id="openaiDetailBody" class="openai-detail"></div>';
     content.querySelector('#openaiDetailBody').innerHTML = renderVendorLevel1({ vendor: getVendorCardItem(level1.vendor_key), preview: level1, level2: getVendorLevel2Items(level1.vendor_key) });
     showModal(trigger);
     return;
   }
   if (level2) {
-    content.innerHTML = '<button class="modal-close" type="button" aria-label="关闭详情" onclick="closeModal()">' + ICON_CLOSE + '</button>' + renderVendorLevel2({ preview: level2, detailCards: level2.detail_refs.map(ref => getToolLevel3Item(level2.vendor_key, ref.id)).filter(Boolean) });
+    content.innerHTML = MODAL_CLOSE_HTML + renderVendorLevel2({ preview: level2, detailCards: level2.detail_refs.map(ref => getToolLevel3Item(level2.vendor_key, ref.id)).filter(Boolean) });
     showModal(trigger);
     return;
   }
@@ -439,13 +440,13 @@ function openDetail(id, selectedItemId = null, trigger = null, backRef = null) {
     const detailHtml = card
       ? renderConcreteToolLeaf(card, backRef)
       : renderToolLevel3({ detail, showCompare: false, backRef });
-    content.innerHTML = '<button class="modal-close" type="button" aria-label="关闭详情" onclick="closeModal()">' + ICON_CLOSE + '</button>' + detailHtml;
+    content.innerHTML = MODAL_CLOSE_HTML + detailHtml;
     showModal(trigger);
     return;
   }
   const card = getToolCardItems().find(item => item.tool_key === id);
   if (card) {
-    content.innerHTML = '<button class="modal-close" type="button" aria-label="关闭详情" onclick="closeModal()">' + ICON_CLOSE + '</button>' + renderConcreteToolLeaf(card);
+    content.innerHTML = MODAL_CLOSE_HTML + renderConcreteToolLeaf(card);
     showModal(trigger);
   }
 }

@@ -24,6 +24,7 @@ const { CATALOG_GENERATOR_FILES } = require('../shared/paths');
 const { readJson, writeJsonAtomic } = require('../news/core/news-storage');
 const { canonicalizeUrl } = require('../shared/tavily-client');
 const { REVIEW_MODES } = require('./tool-update-review-contract');
+const { DATE_PATTERN } = require('./tool-update-evidence');
 
 /** 归一化 key：trim + NFKC + 小写（用于登记表匹配与写入键）。 */
 function normalizeKey(value) {
@@ -193,7 +194,6 @@ function lookupOfficialUrl(name, options = {}) {
 
 const FORBIDDEN_PRODUCT_PREFIXES = new Set(['ai', 'agent', 'coding agent', 'code', 'developer', 'assistant', 'pro', 'studio']);
 const PRODUCT_LIFECYCLES = new Set(['active', 'deprecated', 'discontinued', 'unknown']);
-const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
 const UPDATE_SOURCE_KINDS = Object.freeze(['github_releases', 'github_file', 'changelog', 'release_notes']);
 const UPDATE_SOURCE_COLLECTORS = Object.freeze(['github_web_release', 'github_web_file', 'tavily_extract']);

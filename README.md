@@ -27,6 +27,20 @@ node --test --test-concurrency=1 tests/
 > 全量测试限定在 `tests/` 目录：避免 `node --test` 无路径时递归扫描仓库根部的本地符号链接（如 `.obsidian`），并以单并发规避共享运行文件（`data/news/runtime/`）的偶发竞争。
 > Node 20 使用目录参数 `tests/`；Node 24 请改用 glob：`node --test --test-concurrency=1 "tests/**/*.test.js"`。
 
+## 开发者入口契约
+
+本项目没有 `package.json`、npm 依赖或运行时后端；标准入口是仓库根目录执行的 Node.js 脚本。常规改动按以下顺序验证：
+
+1. `node scripts/validate.js`：校验目录、热点、对比数据和公开 HTML；
+2. `node --test --test-concurrency=1 tests/`：运行全量回归（Node 24 使用上面的 glob 写法）；
+3. `node scripts/build-dist.js`：将 `src/`、`data/` 和 `public/` 重建到可丢弃的 `dist/`；
+4. `python -m http.server 8000`：从仓库根目录启动静态服务器，再访问 `http://localhost:8000/dist/`；
+5. 配置 `config/browser.local.json` 后运行 `node scripts/browser-acceptance.js`：执行 Edge/CDP 真实页面验收。
+
+维护者入口按领域分开：`scripts/build-news.js` 负责热点采集，`scripts/news-cli.js` 负责 `min-review` 审核命令，`scripts/publish-news.js` 负责公开投影，`scripts/fetch-comparison.js` 负责模型对比，`scripts/catalog-generator.js` 与 `scripts/concept-generator.js` 负责目录/概念生成。改动 `src/` 或 `data/` 后必须先重建 `dist/`；不要手工修改 `dist/`。
+
+真实运行管线前，CLI 会从仓库根目录 `.env` 读取配置；不要把 API Key、Cookie、密码、令牌或本地私密配置写入仓库、Issue、Pull Request 或文档。
+
 真实页面验收需要 Edge/CDP 配置，运行：
 
 ```bash

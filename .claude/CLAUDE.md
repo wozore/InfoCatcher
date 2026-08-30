@@ -22,7 +22,7 @@ The role of this file is to describe common mistakes and confusion points that a
 
 ### Issue tracker
 
-Issues live in GitHub Issues owned by `wozore/InfoCatcher-Engineering`. See `docs/agents/issue-tracker.md`（工程约定文档，不入库，本地参考）。
+Issues live in GitHub Issues owned by `wozore/KnowView`. See `docs/agents/issue-tracker.md`（工程约定文档，不入库，本地参考）。
 
 ### Domain docs
 

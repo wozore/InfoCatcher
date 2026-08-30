@@ -41,7 +41,11 @@
 - [LICENSE](LICENSE) — 软件 MIT 许可证。
 - [docs/manual/editorial-and-data-policy.md](docs/manual/editorial-and-data-policy.md) — AI 内容编辑、来源核验、可上传内容和禁止内容的数据政策。
 
+## src/ — Node 侧公共入口
+- [catalog-interface.js](src/catalog-interface.js) — Node 侧五模块目录唯一 Interface；三级批量替换委托共同事务。导出: `catalog, DATA_FILES, resetCatalogForTests`
+
 ## src/shared/ — 跨模块基础能力
+- [beijing-time.js](src/shared/beijing-time.js) — 固定 UTC+8 北京时间日期键、自然日键与当天零点 ISO 工具，避免本地 Windows 与 CI 时区差异。导出: `BEIJING_OFFSET_MS, beijingDateKey, beijingDayKey, beijingMidnightIso`
 - [env.js](src/shared/env.js) — dotenv 子集解析 + 项目根目录。导出: `loadDotEnv, PROJECT_DIR`
 - [paths.js](src/shared/paths.js) — 目录、catalog 文件与生成器事务路径常量，以及统一 AI 配置文件路径（全仓唯一数据登记点，含五模块 catalog、厂商/产品官方 URL 登记表、草案、锁、staging、backup、journal、日期审计清单、编程工具更新审核清单与概念链路 previews/vibeHubCache；data/manual 下分 archive 喂 AI 搜索历史 / tools 工具链路 / concepts 概念链路，待补卡路径已收拢为 CATALOG_GENERATOR_FILES.pendingTools / CONCEPT_FILES.pendingConcepts）。导出: `DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, CONCEPT_FILES, AI_CONFIG_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH`
 - [ai-provider-registry.js](src/shared/ai-provider-registry.js) — AI provider 注册表、Responses/Messages 协议枚举、provider 到 `.env` Key 字段映射和解析。导出: `AI_PROTOCOLS, AI_PROVIDERS, getProvider, resolveProvider, apiKeyForProvider`
@@ -55,7 +59,7 @@
 - [catalog-release-dates.js](src/shared/catalog-release-dates.js) — 共享段 `catalog-release-dates.json` 校验接口（catalog 写 / comparison 只读）：`readCatalogReleaseDates` 校验后冻结读取、`writeCatalogReleaseDates` 逐条形状校验 fail-closed 原子写。导出: `isIsoDate, validateCatalogReleaseDatesEntries, readCatalogReleaseDates, writeCatalogReleaseDates`
 
 ## src/catalog/ — 目录数据接口与生成器
-- [catalog-interface.js](src/catalog-interface.js) — Node 侧五模块目录唯一 Interface；三级批量替换委托共同事务。导出: `catalog, DATA_FILES, resetCatalogForTests`
+- [catalog-snapshot-store.js](src/catalog/catalog-snapshot-store.js) — 五模块 catalog 快照读取、形状校验与 revision 计算，以及按 area 解析正式文件路径。导出: `FILE_BY_AREA, loadCatalogSnapshot, catalogFileByArea, catalogFiles, generatorPaths`
 - [catalog-contract.js](src/catalog/catalog-contract.js) — 五模块字段、枚举、引用和快照形状契约；日期字段为 `release_date` 与 `last_updated_date`。导出: `AREAS, ALLOWED_FIELDS, DETAIL_KINDS, TOOL_CARD_KINDS, THEMES, DATE_FIELDS`
 - [catalog-snapshot-validator.js](src/catalog/catalog-snapshot-validator.js) — FutureSnapshot 兼容性结构/引用纯校验；严格新记录完整性由 catalog-record-completeness 单独门禁。导出: `validateCatalogSnapshot`
 - [catalog-record-completeness.js](src/catalog/catalog-record-completeness.js) — schema v3 正式记录字段齐全和非缺省门禁，拒绝 null、空字符串、空数组、unknown/未知；日期字段由 Profile 门禁按类型要求。导出: `NOT_APPLICABLE_STATUS, FORBIDDEN_PLACEHOLDERS, isExplicitValue, validatePlannedRecords`
@@ -72,15 +76,15 @@
 - [catalog-assistant.js](src/catalog/catalog-assistant.js) — schema v3 生成器深 Module；统一离线 plan、按缺失字段研究/resume、单段合成、Review、Apply、取消和恢复 Interface；resume 的明确成本确认获得一组增量硬预算。导出: `planCatalogDraft, prepareCatalogDraft, resumeCatalogDraft, reviewCatalogDraft, applyCatalogDraft, discardCatalogDraft, recoverCatalogTransactions, researchLimits, resumeResearchLimits, estimateResearchCost, probeCatalogCapabilities`
 - [catalog/ai/deepseek-structured.js](src/catalog/ai/deepseek-structured.js) — 结构化 JSON 深 Module；统一预算预占（ledger 必传，缺省 fail-closed）、JSON 外壳归一化、empty/incomplete/invalid/schema-invalid 分类和有限响应诊断；按 endpoint 分支——DeepSeek 走 Responses（reasoning/text.format），本地 Bonsai 走 Chat Completions（messages + chat_template_kwargs 关思维链），本地分支请求前经 ensureLocalModel 自动启动服务（失败报错 fail-closed）。导出: `extractJsonValues, diagnosticsOf, requestStructuredJson`
 - [catalog/ai/deepseek-catalog-ai.js](src/catalog/ai/deepseek-catalog-ai.js) — DeepSeek 结构化 Catalog Adapter；单段式调用结构化深 Module，基于官方来源正文直接合成各层字段与来源 provenance；定向 repair 按 profile 选择 `last_updated_date` 或 `release_date`，仅在 seed 指定日期且 `seed_official_hint` 正文包含同一日期时确定性修复并绑定该来源。导出: `synthesizeLayerFields`
+- [catalog/ai/catalog-adapters.js](src/catalog/ai/catalog-adapters.js) — Tavily/DeepSeek catalog 研究与合成适配器的默认组合及注入工厂。导出: `createCatalogResearchAdapters, createCatalogSynthesisAdapter`
 - [catalog/ai/catalog-synthesis-prompt.js](src/catalog/ai/catalog-synthesis-prompt.js) — 目录合成 prompt 纯函数构建；按层分组官方来源正文（截断/限量）与字段清单，保留 seed 官方来源角色与定向 repair context，按 `detail_kind` 要求工具 `last_updated_date` 或模型/变体 `release_date`，生成 instructions 与 input；硬性要求 rate_cards[].conditions 非空字符串、one_m_context 必须输出（原生 1M 或 not_applicable），否则相应字段/整层列入 missing。导出: `DEFAULT_MAX_SOURCES_PER_LAYER, DEFAULT_MAX_SOURCE_CHARS, sourcesForLayer, buildSynthesisInput, buildSynthesisInstructions`
 - [catalog/ai/tool-update-review-ai.js](src/catalog/ai/tool-update-review-ai.js) — 工具专用更新 AI 语义建议 Adapter；本地 Bonsai 默认、DeepSeek 需显式成本确认，输入只含已采集证据/登记元数据，严格输出五字段，不写事实或 catalog。导出: `validateToolUpdateReviewValue, buildToolUpdateReviewInput, buildToolUpdateReviewInstructions, suggestToolUpdateReview`
 - [catalog/tool-update-review-contract.js](src/catalog/tool-update-review-contract.js) — 工具更新审核中性契约；统一五字段 decision 校验、decision source 与来源审核模式枚举。导出: `REVIEW_VERDICTS, REVIEW_SURFACES, REVIEW_FIELDS, DECISION_SOURCES, REVIEW_MODES, validateToolUpdateReviewValue, normalizeToolUpdateReviewValue`
 - [catalog/tool-update-evidence.js](src/catalog/tool-update-evidence.js) — 工具更新证据日期纯函数；统一官方发布时间、正文日期解析和 `date_mode: latest` 选择，不依赖 AI。导出: `isIsoDate, isoDateFromValue, officialDateOf, explicitDates, dateForEvidence`
-- [tool-update-review-planner.js](src/catalog/tool-update-review-planner.js) — 工具更新确定性 planner；校验 registry 来源、tool detail、产品表面、官方日期、置信度和向前更新门禁，输出 candidate/blocked，不 Apply。日期解析支持月份缩写/序数/点分隔与 `date_mode: latest`（多日期 changelog 页取最新）；无当前 `last_updated_date` 的 detail 允许首次填充候选（Apply 阶段走 fill_missing）。导出: `explicitDates, dateForEvidence, findToolDetail, sourceForEvidence, planToolUpdateCandidate, planToolUpdateCandidates`
-- [tool-update-review-contract.js](src/catalog/tool-update-review-contract.js) — 工具更新审核中性契约；统一五字段 decision 校验、decision source 与来源审核模式枚举。导出: `REVIEW_VERDICTS, REVIEW_SURFACES, REVIEW_FIELDS, DECISION_SOURCES, REVIEW_MODES, validateToolUpdateReviewValue, normalizeToolUpdateReviewValue`
-- [tool-update-evidence.js](src/catalog/tool-update-evidence.js) — 工具更新证据日期纯函数；统一官方发布时间、正文日期解析和 `date_mode: latest` 选择，不依赖 AI。导出: `isIsoDate, isoDateFromValue, officialDateOf, explicitDates, dateForEvidence`
+- [tool-update-review-planner.js](src/catalog/tool-update-review-planner.js) — 工具更新确定性 planner；校验 registry 来源、tool detail、产品表面、官方日期、置信度和向前更新门禁，输出 candidate/blocked，不 Apply。日期解析支持月份缩写/序数/点分隔与 `date_mode: latest`（多日期 changelog 页取最新）；无当前 `last_updated_date` 的 detail 允许首次填充候选（Apply 阶段走 fill_missing）。导出: `dateForEvidence, findToolDetail, sourceForEvidence, planToolUpdateCandidate, planToolUpdateCandidates`
 - [tool-update-review-store.js](src/catalog/tool-update-review-store.js) — 工具更新人工审核队列读写与幂等合并；按 product/source/date/content hash 去重，保留 approved/rejected，证据 hash 变化重新 pending，只保存摘录。导出: `defaultReviewQueue, validateReviewQueue, readReviewQueue, writeReviewQueue, mergeReviewQueue, mergeAndWriteReviewQueue`
 - [tool-update-collector.js](src/catalog/tool-update-collector.js) — 编程工具专用更新网页确定性采集层；从受校验的 `update_sources` 读取 GitHub Releases/文件或官方 HTML/Tavily Extract，统一产出可审计 UpdateEvidence，不调用 AI、不写 catalog。tavily_extract 优先直接抓官方 HTML（解决 Tavily 对 JS 渲染/缓存页丢失 changelog 日期），HTML 空壳/无日期回退 Tavily Extract；GitHub Release 正文为空但有官方 `published_at` 时仍以版本名/发布元数据生成 ready 证据。导出: `collectGithubRelease, collectGithubFile, collectTavilySource, collectUpdateEvidence, collectProductUpdateEvidence, htmlToText, fetchHtmlText`
+- [catalog/ai/concept-synthesis-prompt.js](src/catalog/ai/concept-synthesis-prompt.js) — 概念合成 input/instructions 纯函数构建；把待补术语与摘要/vibe-hub 证据组装为受约束的中文 JSON 任务。导出: `DEFAULT_CONCEPT_CATEGORIES, buildConceptSynthesisInput, buildConceptSynthesisInstructions`
 - [catalog/ai/concept-synthesis-ai.js](src/catalog/ai/concept-synthesis-ai.js) — 概念合成 Adapter（本地 Bonsai）；单段式调用结构化深 Module，ledger 必传 fail-closed，合成次数预占，返回 7 字段 glossary 条目（term 以待补卡为准防改词）。导出: `validateConceptValue, normalizeConceptEntry, synthesizeConceptFields`
 - [catalog-batch.js](src/catalog/catalog-batch.js) — **批量生成编排层（②→③ 链路）**：待补卡 → 三层查重（正式目录/进行中 draft/同批）→ 厂商/官方源解析（人工登记表 | Tavily）→ 成本估算/全局确认 → 逐 seed prepare→review→自动 apply → 批量报告；单 seed 失败跳过保留 draft 可 resume；**阶段 4：api_model 批量前置经 resolveBatchPlacements 解析二级归属**（人工 placement 优先并校验、确定性 existing/create、migration_required/fail_closed 阻断）；**阶段 5：无 confirmCost 且非 dry-run 时零付费返回三本账成本估算**（vendor_resolution / placement / research，registry 命中零成本），dry-run 也写确定性 placement_decision 进 preview、from-preview/resume 短路复用不重复调 AI，顺序投影维护同厂商候选最新成员数（第 4 个触发拆分）；`readPendingCards` 输入门禁校验容器/卡类型与 `detail_kind_hint` 类型，登记表命中但 seed 转换抛错（vague/非法 hint）收进 unresolved 不中断整批。导出: `readPendingCards, dedupeBatchCandidates, resolveBatchCandidates, planBatchCost, runCatalogBatch, runBatchFromCards, estimateResolutionNeed, resolveBatchPlacements`
 - [catalog-series-policy.js](src/catalog/catalog-series-policy.js) — LLM 二级系列分类政策深模块（**纯确定性、零网络零 AI**）：读取/严格校验政策、vendor 别名规范化、按家族 pattern/modality 判定用途（general_llm/专用/uncovered）、匹配家族、返回厂商允许目标二级系列、校验人工 placement 引用（kind/存在性/vendor 归属）、**planSeriesPlacement 确定性 placement 规划**（品牌提示识别已知 LLM、判定 existing/create/migration_required/not_applicable/needs_ai，容量第 4 个触发拆分阻断）；被识别为 general_llm 但厂商无对应家族规则或用途无法确认时 fail-closed，绝不回退到以具体模型名建组。导出: `readSeriesPolicy, validateSeriesPolicy, loadSeriesPolicy, normalizeVendorKey, policyForVendor, matchFamily, usageKindOf, allowedTargetSeries, validatePlacementRef, planSeriesPlacement, memberCountOfSeries, groupKeyOfSeriesId, brandHintsOfFamily, detailKeyOf, detailRefIdOf`
@@ -247,7 +251,34 @@
 - [release-index.test.js](tests/comparison/release-index.test.js) — 共享 model-release-dates 索引读写回归：逐条校验 fail-closed 不覆盖、原子写、缺失/损坏回退空、冻结。
 - [fixtures/raw/](tests/comparison/fixtures/raw/) — 模型对比管线测试 raw 快照 fixtures（openrouter/lmarena/livebench/llm-stats 各源小样本）。
 
+- [model-identity.test.js](tests/comparison/model-identity.test.js) — 跨源模型身份解析、厂商/服务方式/评测挡位与歧义门禁回归。
+- [identity-review.test.js](tests/comparison/identity-review.test.js) — 模型名称歧义候选收集、升级阈值与人工确认流程回归。
+- [revision-date.test.js](tests/comparison/revision-date.test.js) — 混合 revision 日期解析、规范化与未来日期回退回归。
+- [empty-model-filter.test.js](tests/comparison/empty-model-filter.test.js) — 无有效评测维度模型按 identity 整组过滤回归。
+- [beijing-time.test.js](tests/news/beijing-time.test.js) — 固定 UTC+8 日期键、自然日与午夜边界回归。
+- [content-classifier-llm.test.js](tests/news/content-classifier-llm.test.js) — 内容分类 LLM 结果归一化与降级回归。
+- [content-classifier-rule.test.js](tests/news/content-classifier-rule.test.js) — 内容分类规则召回、类型判断与边界回归。
+- [feedback/llm-entity-extract.test.js](tests/news/feedback/llm-entity-extract.test.js) — 摘要实体提取结构化输出、类型与 fail-closed 回归。
+- [feedback/tool-feedback.test.js](tests/news/feedback/tool-feedback.test.js) — 热点摘要实体路由、待补工具/概念卡去重与笼统名拦截回归。
+- [keyword-refine.test.js](tests/news/keyword-refine.test.js) — 关键词候选规则召回、approved 原文收集与提纯回归。
+- [min-history.test.js](tests/news/min-history.test.js) — 热点候选轻量历史归档、压缩与批次日期回归。
+- [news-cmd-min.test.js](tests/news/news-cmd-min.test.js) — `min-review` 审核/关键词/top/归档命令纯逻辑回归。
+- [news-localizer.test.js](tests/news/news-localizer.test.js) — 候选标题/描述本地化输入、输出与降级回归。
+- [news-public-gate.test.js](tests/news/news-public-gate.test.js) — 公开字段完整性、时间窗与投影过滤回归。
+- [news-review-list.test.js](tests/news/news-review-list.test.js) — 人工审核清单生成、合并、保留结论与批量应用回归。
+- [news-reviewer.test.js](tests/news/news-reviewer.test.js) — AI 审核建议输入、结构化输出与并发池回归。
+- [news-rss.test.js](tests/news/news-rss.test.js) — RSS 项目筛选、字段投影与生成回归。
+- [news-summarizer.test.js](tests/news/news-summarizer.test.js) — 候选摘要/key points 输入输出与降级回归。
+- [review-v2-disclosure.test.js](tests/news/review-v2-disclosure.test.js) — YouTube AI 生成披露硬排除与 v2 审核分流回归。
+- [run-after-first-review.test.js](tests/news/run-after-first-review.test.js) — 首次审核后 refine/ai-top 并行编排与失败隔离回归。
+- [local-model.test.js](tests/shared/local-model.test.js) — 本地 Bonsai 探测、自动启动、轮询超时、TTL 缓存与测试注入隔离回归。
+- [check-secrets.test.js](tests/maintenance/check-secrets.test.js) — 密钥/高熵扫描与敏感文件门禁回归。
+- [env.test.js](tests/maintenance/env.test.js) — `.env` 子集解析、覆盖规则与项目根目录回归。
+- [validate-comparison.test.js](tests/maintenance/validate-comparison.test.js) — integrated 对比数据、raw 快照与引用契约校验回归。
+- [fixtures/x.json](tests/fixtures/x.json) — 新闻管线 X 平台测试夹具。
+
 ## scripts/ — 命令入口（薄包装；src/ 为纯逻辑）
+- [build-news.js](scripts/build-news.js) — 热点管线 v2 CLI 实际入口；加载 `.env` 后运行 `runMin`，支持默认双平台、`--platforms` 分时采集与 `--fixture` 离线全链。导出: `main, mainMin, buildMinFixtureOptions`
 - [catalog-generator.js](scripts/catalog-generator.js) — schema v3 五模块目录生成器 CLI；`plan/prepare` 零网络，`new/resume/probe/batch` 要求显式 `--tavily-access-mode` 并透传到 Tavily，Apply 要求维护者输入完整确认；支持 `remove --targets` 精确 ID 删除（revision/确认值/事务回滚）、`batch`（`--confirm-cost` 全局确认自动 apply / `--dry-run` 预览 / `--from-preview` 复用解析）以及双表 `url-registry vendor/product` 维护和纯本地 product freshness audit。导出: `parseArgs, main, readSeed, tavilyAccessModeFromFlags, generatorOptionsFromFlags`
 - [concept-generator.js](scripts/concept-generator.js) — **AI 概念库生成器 CLI（与五模块目录生成器分离）**：`batch --file <待补概念卡> --dry-run/--confirm-cost` 合成预览 → `preview` → `apply [--terms]` 人工写 glossary。导出: `parseArgs, main`
 - [catalog-series-migration.js](scripts/catalog-series-migration.js) — LLM 二级系列迁移 CLI：预览（人类可读 / `--json`）加载政策 + 当前快照输出变更；`--apply <targetRevision>` 阶段 3 原子 Apply——按当前快照重算目标 revision 校验防漂移，经 commitSnapshotChange 五文件事务 + dist 重建提交，expectedRevision 绑定防并发冲突。导出: `currentPlan, humanReport, applyMigration, main`
@@ -266,8 +297,8 @@
 - [check-secrets.js](scripts/check-secrets.js) — 密钥/高熵扫描（validate.js 反向依赖）
 - [generate-og-image.js](scripts/generate-og-image.js) — OG 图生成入口
 
-- [migrate-catalog-five-modules.js](scripts/migrate-catalog-five-modules.js) — 旧目录迁移为五模块 catalog 数据及引用报告。
 - [after-first-review.bat](bat/after-first-review.bat) — 首次人工审核后：应用 review 清单，再安全并行生成关键词提纯与 AI top 清单。
+- [archive-min.bat](bat/archive-min.bat) — 归档当前热点候选并重置当日人工清单的维护者入口。
 - [apply-keywords.bat](bat/apply-keywords.bat) — 应用维护者填写的 keyword-refine 清单；仅更新后续采集关键词，不发布或构建。
 - [apply-top.bat](bat/apply-top.bat) — 应用 top_selected 并发布公开投影。
 - [catalog-generator.bat](bat/catalog-generator.bat) — 五模块目录生成器维护者入口，只转发 Node CLI，不包含凭据或业务逻辑。
