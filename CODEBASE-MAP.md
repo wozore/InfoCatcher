@@ -191,6 +191,7 @@
 - [comparison-data-sources.md](docs/manual/comparison-data-sources.md) — 对比页数据源选型核实记录；AA/SWE-bench/LiveBench/HF Leaderboard/OpenRouter 可用通路、LMArena 仅第三方快照、DeepSWE 抓站、HF 网络镜像坑与推荐组合。
 - [comparison-data-contract.md](docs/manual/comparison-data-contract.md) — 对比页数据契约（integrated 层）：文件布局、维度键枚举与归一化口径、index.json/data.json/view-config/models-alias 契约、raw 快照形状、前端渲染规则映射、i18n 键、管线实现红线。
 - [icons.md](docs/manual/icons.md) — 品牌图标资产维护说明：官方 logo 获取、Simple Icons 备选、manifest 键规则和三级模型按系列继承/单模型覆盖。
+- [dev-log.md](docs/manual/dev-log.md) — 开发日志（开发过程记录，公开可见，供回顾开发背景；开发计划不入库仅本地）。
 
 ## src/content/ — 内容生成
 - [generate-rss.js](src/content/generate-rss.js) — RSS 生成。导出: `getFeedItems, generateRss`
