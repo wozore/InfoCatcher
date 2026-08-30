@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-09T08:26:05.947Z",
+  "updated_at": "2026-08-30T10:16:22.216Z",
   "candidates": [
     {
       "id": "youtube-c2dbd7191ba28fe270f9",
@@ -128018,6 +128018,41 @@
           "type_preference": 0.3
         }
       }
+    },
+    {
+      "id": "x-a17be286366112731192",
+      "platform": "x",
+      "native_id": "2093781127051784535",
+      "source_type": "x_post",
+      "url": "https://x.com/cohere/status/2093781127051784535",
+      "title": "I think we’ve all been sleeping on Waterloo\n\nwhat a city https://t.co/Mr2NV3exvr",
+      "description": "I think we’ve all been sleeping on Waterloo\n\nwhat a city https://t.co/Mr2NV3exvr",
+      "published_at": "2026-08-29T19:21:35.000Z",
+      "fetched_at": "2026-08-30T10:16:05.090Z",
+      "author_id": "x-72e8088a05b38ae3cffb",
+      "author_name": "Cohere",
+      "source_id": "x-72e8088a05b38ae3cffb",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": "https://pbs.twimg.com/media/HQ6TtzeW4AAzzpX.png",
+      "metrics": {
+        "views": 22737,
+        "likes": 425,
+        "comments": null,
+        "reposts": 19,
+        "replies": 33
+      },
+      "explicit_links": [
+        "https://t.co/Mr2NV3exvr"
+      ],
+      "content_type": null,
+      "comments": [],
+      "review_status": "discarded",
+      "discard_stage": "l0",
+      "discard_reason": "not_ai",
+      "l1_review": null,
+      "ai_advice": null,
+      "top_selected": false
     }
   ]
 }
