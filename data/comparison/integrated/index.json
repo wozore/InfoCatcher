@@ -1,15 +1,15 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-29T23:16:52.096Z",
+  "generated_at": "2026-08-30T23:28:25.544Z",
   "model_count": 412,
   "series_count": 175,
   "sources": {
     "openrouter": {
-      "fetched_at": "2026-08-28T05:22:00.087Z",
-      "count": 380
+      "fetched_at": "2026-08-30T23:28:08.253Z",
+      "count": 396
     },
     "lmarena": {
-      "fetched_at": "2026-08-28T05:22:16.405Z",
+      "fetched_at": "2026-08-30T23:28:25.254Z",
       "count": 1154
     },
     "livebench": {
@@ -17,7 +17,7 @@
       "count": 44
     },
     "llm_stats": {
-      "fetched_at": "2026-08-28T05:22:16.798Z",
+      "fetched_at": "2026-08-30T23:28:25.536Z",
       "count": 362
     }
   },
@@ -8541,7 +8541,6 @@
               "revision": null,
               "composite_score": null,
               "sources": [
-                "openrouter",
                 "lmarena"
               ]
             }
@@ -9878,7 +9877,6 @@
       "composite_score": null,
       "degrees": {},
       "sources": [
-        "openrouter",
         "lmarena"
       ],
       "file": "data.json"
@@ -11784,7 +11782,14 @@
         "07-31"
       ],
       "evaluation_profiles": [],
-      "offerings": {},
+      "offerings": {
+        "openrouter": [
+          {
+            "kind": "batch",
+            "raw_name": "deepseek/deepseek-v4-flash-0731:batch"
+          }
+        ]
+      },
       "display": "DeepSeek-V4-Flash (07-31)",
       "vendor": "deepseek",
       "theme": "general",
@@ -11917,7 +11922,14 @@
         "08-13"
       ],
       "evaluation_profiles": [],
-      "offerings": {},
+      "offerings": {
+        "openrouter": [
+          {
+            "kind": "batch",
+            "raw_name": "deepseek/deepseek-v4-pro-0813:batch"
+          }
+        ]
+      },
       "display": "DeepSeek-V4-Pro (08-13)",
       "vendor": "deepseek",
       "theme": "general",
@@ -12878,6 +12890,10 @@
       "offerings": {
         "openrouter": [
           {
+            "kind": "batch",
+            "raw_name": "google/gemma-4-31b-it:batch"
+          },
+          {
             "kind": "free",
             "raw_name": "google/gemma-4-31b-it:free"
           }
@@ -13739,7 +13755,14 @@
       "family": "muse-glimmer",
       "revisions": [],
       "evaluation_profiles": [],
-      "offerings": {},
+      "offerings": {
+        "openrouter": [
+          {
+            "kind": "batch",
+            "raw_name": "meta/muse-glimmer-30b:batch"
+          }
+        ]
+      },
       "display": "Muse Glimmer-30B",
       "vendor": "meta",
       "theme": "general",
@@ -14672,7 +14695,14 @@
         "2025-12"
       ],
       "evaluation_profiles": [],
-      "offerings": {},
+      "offerings": {
+        "openrouter": [
+          {
+            "kind": "batch",
+            "raw_name": "mistralai/ministral-8b-2512:batch"
+          }
+        ]
+      },
       "display": "Ministral 3 8B (2025-12)",
       "vendor": "mistral",
       "theme": "general",
@@ -14824,7 +14854,14 @@
       "family": "mistral-medium",
       "revisions": [],
       "evaluation_profiles": [],
-      "offerings": {},
+      "offerings": {
+        "openrouter": [
+          {
+            "kind": "batch",
+            "raw_name": "mistralai/mistral-medium-3-5:batch"
+          }
+        ]
+      },
       "display": "Mistral Medium 3.5",
       "vendor": "mistral",
       "theme": "general",
@@ -15323,7 +15360,14 @@
       "family": "kimi-k3",
       "revisions": [],
       "evaluation_profiles": [],
-      "offerings": {},
+      "offerings": {
+        "openrouter": [
+          {
+            "kind": "batch",
+            "raw_name": "moonshotai/kimi-k3:batch"
+          }
+        ]
+      },
       "display": "Kimi K3",
       "vendor": "moonshotai",
       "theme": "general",
@@ -16577,7 +16621,14 @@
       "family": "gpt-oss",
       "revisions": [],
       "evaluation_profiles": [],
-      "offerings": {},
+      "offerings": {
+        "openrouter": [
+          {
+            "kind": "batch",
+            "raw_name": "openai/gpt-oss-120b:batch"
+          }
+        ]
+      },
       "display": "GPT OSS 120B",
       "vendor": "openai",
       "theme": "general",
@@ -16627,7 +16678,14 @@
       "family": "gpt-oss",
       "revisions": [],
       "evaluation_profiles": [],
-      "offerings": {},
+      "offerings": {
+        "openrouter": [
+          {
+            "kind": "batch",
+            "raw_name": "openai/gpt-oss-20b:batch"
+          }
+        ]
+      },
       "display": "GPT OSS 20B",
       "vendor": "openai",
       "theme": "general",
@@ -17777,7 +17835,14 @@
       "family": "qwen3.5-9b",
       "revisions": [],
       "evaluation_profiles": [],
-      "offerings": {},
+      "offerings": {
+        "openrouter": [
+          {
+            "kind": "batch",
+            "raw_name": "qwen/qwen3.5-9b:batch"
+          }
+        ]
+      },
       "display": "Qwen3.5-9B",
       "vendor": "qwen",
       "theme": "general",
@@ -20446,7 +20511,14 @@
       "family": "glm-5.3",
       "revisions": [],
       "evaluation_profiles": [],
-      "offerings": {},
+      "offerings": {
+        "openrouter": [
+          {
+            "kind": "batch",
+            "raw_name": "z-ai/glm-5.3-flash:batch"
+          }
+        ]
+      },
       "display": "GLM-5.3-Flash",
       "vendor": "zai",
       "theme": "general",

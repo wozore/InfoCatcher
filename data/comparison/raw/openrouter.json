@@ -1,6 +1,23 @@
 {
-  "fetched_at": "2026-08-28T05:22:00.087Z",
+  "fetched_at": "2026-08-30T23:28:08.253Z",
   "data": [
+    {
+      "id": "tencent/hy4-preview",
+      "name": "Tencent: Hy4 preview",
+      "created": 1787897375,
+      "hugging_face_id": null,
+      "context_length": 1048576,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "prompt": 8.34e-7,
+      "completion": 0.000002501,
+      "input_cache_read": 4.2e-8
+    },
     {
       "id": "inclusionai/ling-3.0-flash-fin:free",
       "name": "Ling 3.0 Flash Fin (free)",
@@ -55,6 +72,25 @@
       "prompt": 7.5e-8,
       "completion": 2.5e-7,
       "input_cache_read": 1.5e-8
+    },
+    {
+      "id": "z-ai/glm-5.3-flash:batch",
+      "name": "Z.ai: GLM 5.3 Flash (batch)",
+      "created": 1787752741,
+      "hugging_face_id": "zai-org/GLM-5.3-Flash",
+      "context_length": 1048575,
+      "modality": "text+image+video->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "video"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "prompt": 1.5e-7,
+      "completion": 5e-7,
+      "input_cache_read": 3e-8
     },
     {
       "id": "meta/muse-spark-1.2-contributor",
@@ -134,7 +170,7 @@
       "name": "Z.ai: GLM Latest",
       "created": 1787151053,
       "hugging_face_id": null,
-      "context_length": 1048576,
+      "context_length": 1310720,
       "modality": "text->text",
       "input_modalities": [
         "text"
@@ -142,9 +178,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 0.0000014,
-      "completion": 0.0000044,
-      "input_cache_read": 2.6e-7
+      "prompt": 0.0000011875,
+      "completion": 0.00000418,
+      "input_cache_read": 2.47e-7
     },
     {
       "id": "tencent/hy-mt2-7b",
@@ -168,7 +204,7 @@
       "name": "Z.ai: GLM 5.3",
       "created": 1787086655,
       "hugging_face_id": "zai-org/GLM-5.3",
-      "context_length": 1048576,
+      "context_length": 1310720,
       "modality": "text->text",
       "input_modalities": [
         "text"
@@ -234,9 +270,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 3.75e-7,
-      "completion": 0.000001875,
-      "input_cache_read": 3.75e-8
+      "prompt": 7.5e-7,
+      "completion": 0.00000375,
+      "input_cache_read": 7.5e-8
     },
     {
       "id": "google/gemini-3.7-flash:batch",
@@ -296,6 +332,23 @@
       "input_cache_read": 2.5e-7
     },
     {
+      "id": "qwen/qwen3.8-2.4t-a95b:batch",
+      "name": "Qwen: Qwen3.8 2.4T A95B (batch)",
+      "created": 1786551702,
+      "hugging_face_id": "Qwen/Qwen3.8-2.4T-A95B",
+      "context_length": 1010000,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "prompt": 0.0000025,
+      "completion": 0.00000625,
+      "input_cache_read": 5e-7
+    },
+    {
       "id": "bytedance-seed/seed-2.0-code",
       "name": "ByteDance Seed: Seed-2.0-Code",
       "created": 1786550701,
@@ -330,6 +383,23 @@
       "prompt": 6.6e-7,
       "completion": 0.00000198,
       "input_cache_read": 2.2e-8
+    },
+    {
+      "id": "deepseek/deepseek-v4-pro-0813:batch",
+      "name": "DeepSeek: DeepSeek V4 Pro 0813 (batch)",
+      "created": 1786549364,
+      "hugging_face_id": "deepseek-ai/DeepSeek-V4-Pro-0813",
+      "context_length": 1048576,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "prompt": 0.00000132,
+      "completion": 0.00000396,
+      "input_cache_read": 1.3e-7
     },
     {
       "id": "x-ai/grok-4.6",
@@ -380,9 +450,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 1e-7,
-      "completion": 2.5e-7,
-      "input_cache_read": 5e-8
+      "prompt": 8e-8,
+      "completion": 2e-7,
+      "input_cache_read": 4e-8
     },
     {
       "id": "nvidia/nemotron-3.5-lightning:free",
@@ -440,6 +510,24 @@
     {
       "id": "meta/muse-glimmer-30b",
       "name": "Meta: Muse Glimmer 30B",
+      "created": 1786302394,
+      "hugging_face_id": "meta-models/Muse-Glimmer-30B",
+      "context_length": 131072,
+      "modality": "text+image->text",
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "prompt": 3e-7,
+      "completion": 0.0000012,
+      "input_cache_read": 4e-8
+    },
+    {
+      "id": "meta/muse-glimmer-30b:batch",
+      "name": "Meta: Muse Glimmer 30B (batch)",
       "created": 1786302394,
       "hugging_face_id": "meta-models/Muse-Glimmer-30B",
       "context_length": 131072,
@@ -509,8 +597,8 @@
         "text"
       ],
       "prompt": 3e-8,
-      "completion": 1e-7,
-      "input_cache_read": 7e-9
+      "completion": 1.6e-7,
+      "input_cache_read": 1.3e-8
     },
     {
       "id": "deepseek/deepseek-v4-flash-0731",
@@ -525,9 +613,26 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 6e-8,
-      "completion": 1.2e-7,
-      "input_cache_read": 1.2e-8
+      "prompt": 6.5e-8,
+      "completion": 1.8e-7,
+      "input_cache_read": 1.6e-8
+    },
+    {
+      "id": "deepseek/deepseek-v4-flash-0731:batch",
+      "name": "DeepSeek: DeepSeek V4 Flash 0731 (batch)",
+      "created": 1785478908,
+      "hugging_face_id": "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "context_length": 1048576,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "prompt": 1.4e-7,
+      "completion": 2.8e-7,
+      "input_cache_read": 3e-8
     },
     {
       "id": "thinkingmachines/inkling-small",
@@ -545,6 +650,25 @@
         "text"
       ],
       "prompt": 4.5e-7,
+      "completion": 0.0000012,
+      "input_cache_read": 1e-7
+    },
+    {
+      "id": "thinkingmachines/inkling-small:batch",
+      "name": "Thinking Machines: Inkling Small (batch)",
+      "created": 1785443117,
+      "hugging_face_id": "thinkingmachines/Inkling-Small",
+      "context_length": 524288,
+      "modality": "text+image+audio->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "audio"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "prompt": 5e-7,
       "completion": 0.0000012,
       "input_cache_read": 1e-7
     },
@@ -810,9 +934,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 9.5e-7,
+      "prompt": 0.000001,
       "completion": 0.00000405,
-      "input_cache_read": 1.6e-7
+      "input_cache_read": 1.7e-7
     },
     {
       "id": "thinkingmachines/inkling:batch",
@@ -877,6 +1001,25 @@
     {
       "id": "moonshotai/kimi-k3",
       "name": "MoonshotAI: Kimi K3",
+      "created": 1784215858,
+      "hugging_face_id": "moonshotai/Kimi-K3",
+      "context_length": 1048576,
+      "modality": "text+image+video->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "video"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "prompt": 0.000003,
+      "completion": 0.000015,
+      "input_cache_read": 3e-7
+    },
+    {
+      "id": "moonshotai/kimi-k3:batch",
+      "name": "MoonshotAI: Kimi K3 (batch)",
       "created": 1784215858,
       "hugging_face_id": "moonshotai/Kimi-K3",
       "context_length": 1048576,
@@ -1147,9 +1290,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 1.32e-7,
-      "completion": 5.28e-7,
-      "input_cache_read": 3.3e-8
+      "prompt": 8.25e-8,
+      "completion": 3.3e-7,
+      "input_cache_read": 2.0625e-8
     },
     {
       "id": "poolside/laguna-xs-2.1",
@@ -1930,6 +2073,25 @@
       "input_cache_read": null
     },
     {
+      "id": "mistralai/mistral-medium-3-5:batch",
+      "name": "Mistral: Mistral Medium 3.5 (batch)",
+      "created": 1777570439,
+      "hugging_face_id": null,
+      "context_length": 262144,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "prompt": 7.5e-7,
+      "completion": 0.00000375,
+      "input_cache_read": null
+    },
+    {
       "id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
       "name": "NVIDIA: Nemotron 3 Nano Omni (free)",
       "created": 1777393095,
@@ -2044,9 +2206,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 3.75e-7,
-      "completion": 0.000001875,
-      "input_cache_read": 3.75e-8
+      "prompt": 7.5e-7,
+      "completion": 0.00000375,
+      "input_cache_read": 7.5e-8
     },
     {
       "id": "~anthropic/claude-sonnet-latest",
@@ -2175,9 +2337,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 3.2e-7,
-      "completion": 0.0000032,
-      "input_cache_read": null
+      "prompt": 6e-7,
+      "completion": 0.0000036,
+      "input_cache_read": 1.2e-7
     },
     {
       "id": "openai/gpt-5.5-pro",
@@ -2230,9 +2392,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 8.7e-7,
-      "completion": 0.00000174,
-      "input_cache_read": 7.25e-8
+      "prompt": 4.17252e-7,
+      "completion": 8.34504e-7,
+      "input_cache_read": 3.4771e-8
     },
     {
       "id": "deepseek/deepseek-v4-flash",
@@ -2247,9 +2409,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 8.8606e-8,
-      "completion": 1.77212e-7,
-      "input_cache_read": 1.77212e-8
+      "prompt": 7.84e-8,
+      "completion": 1.568e-7,
+      "input_cache_read": 1.568e-8
     },
     {
       "id": "tencent/hy3-preview",
@@ -2430,9 +2592,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 0.00000126,
-      "completion": 0.00000396,
-      "input_cache_read": 2.34e-7
+      "prompt": 9.66e-7,
+      "completion": 0.000003036,
+      "input_cache_read": 1.794e-7
     },
     {
       "id": "google/gemma-4-26b-a4b-it",
@@ -2490,6 +2652,25 @@
       "prompt": 9e-8,
       "completion": 3.4e-7,
       "input_cache_read": 5e-8
+    },
+    {
+      "id": "google/gemma-4-31b-it:batch",
+      "name": "Google: Gemma 4 31B (batch)",
+      "created": 1775148486,
+      "hugging_face_id": "google/gemma-4-31B-it",
+      "context_length": 262144,
+      "modality": "text+image+video->text",
+      "input_modalities": [
+        "image",
+        "text",
+        "video"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "prompt": 3.9e-7,
+      "completion": 9.7e-7,
+      "input_cache_read": null
     },
     {
       "id": "google/gemma-4-31b-it:free",
@@ -2561,8 +2742,8 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 2.2e-7,
-      "completion": 8.5e-7,
+      "prompt": 2.5e-7,
+      "completion": 8e-7,
       "input_cache_read": 6e-8
     },
     {
@@ -2768,6 +2949,24 @@
       "input_cache_read": 1.5e-8
     },
     {
+      "id": "mistralai/mistral-small-2603:batch",
+      "name": "Mistral: Mistral Small 4 (batch)",
+      "created": 1773695685,
+      "hugging_face_id": "mistralai/Mistral-Small-4-119B-2603",
+      "context_length": 262144,
+      "modality": "text+image->text",
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "prompt": 1.5e-7,
+      "completion": 6e-7,
+      "input_cache_read": 1.5e-8
+    },
+    {
       "id": "z-ai/glm-5-turbo",
       "name": "Z.ai: GLM 5 Turbo",
       "created": 1773583573,
@@ -2854,6 +3053,25 @@
       ],
       "prompt": 1e-7,
       "completion": 1.5e-7,
+      "input_cache_read": null
+    },
+    {
+      "id": "qwen/qwen3.5-9b:batch",
+      "name": "Qwen: Qwen3.5-9B (batch)",
+      "created": 1773152396,
+      "hugging_face_id": "Qwen/Qwen3.5-9B",
+      "context_length": 262144,
+      "modality": "text+image+video->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "video"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "prompt": 1.7e-7,
+      "completion": 2.5e-7,
       "input_cache_read": null
     },
     {
@@ -3023,8 +3241,8 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 2.6e-7,
-      "completion": 0.00000208,
+      "prompt": 2.9e-7,
+      "completion": 0.0000024,
       "input_cache_read": null
     },
     {
@@ -3706,9 +3924,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 4.4e-7,
-      "completion": 0.0000022,
-      "input_cache_read": 4.4e-8
+      "prompt": 4e-7,
+      "completion": 0.000002,
+      "input_cache_read": 4e-8
     },
     {
       "id": "relace/relace-search",
@@ -3838,6 +4056,24 @@
       "input_cache_read": 1.5e-8
     },
     {
+      "id": "mistralai/ministral-8b-2512:batch",
+      "name": "Mistral: Ministral 3 8B 2512 (batch)",
+      "created": 1764681654,
+      "hugging_face_id": "mistralai/Ministral-3-8B-Instruct-2512",
+      "context_length": 262144,
+      "modality": "text+image->text",
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "prompt": 1.5e-7,
+      "completion": 1.5e-7,
+      "input_cache_read": 1.5e-8
+    },
+    {
       "id": "mistralai/ministral-3b-2512",
       "name": "Mistral: Ministral 3 3B 2512",
       "created": 1764681560,
@@ -3875,6 +4111,25 @@
       "input_cache_read": 5e-8
     },
     {
+      "id": "mistralai/mistral-large-2512:batch",
+      "name": "Mistral: Mistral Large 3 2512 (batch)",
+      "created": 1764624472,
+      "hugging_face_id": "",
+      "context_length": 262144,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "prompt": 5e-7,
+      "completion": 0.0000015,
+      "input_cache_read": 5e-8
+    },
+    {
       "id": "deepseek/deepseek-v3.2",
       "name": "DeepSeek: DeepSeek V3.2",
       "created": 1764594642,
@@ -3887,9 +4142,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 2.6e-7,
-      "completion": 3.8e-7,
-      "input_cache_read": 1.3e-7
+      "prompt": 2.69e-7,
+      "completion": 4e-7,
+      "input_cache_read": 1.345e-7
     },
     {
       "id": "anthropic/claude-opus-4.5",
@@ -3928,23 +4183,6 @@
       "prompt": 0.0000025,
       "completion": 0.0000125,
       "input_cache_read": 2.5e-7
-    },
-    {
-      "id": "allenai/olmo-3-32b-think",
-      "name": "AllenAI: Olmo 3 32B Think",
-      "created": 1763758276,
-      "hugging_face_id": "allenai/Olmo-3-32B-Think",
-      "context_length": 65536,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 1.5e-7,
-      "completion": 5e-7,
-      "input_cache_read": null
     },
     {
       "id": "google/gemini-3-pro-image-preview",
@@ -4078,7 +4316,7 @@
       "name": "Mistral: Voxtral Small 24B 2507",
       "created": 1761835144,
       "hugging_face_id": "mistralai/Voxtral-Small-24B-2507",
-      "context_length": 32000,
+      "context_length": 32768,
       "modality": "text+file+audio->text",
       "input_modalities": [
         "text",
@@ -4326,8 +4564,8 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 1.3e-7,
-      "completion": 5.2e-7,
+      "prompt": 1.5e-7,
+      "completion": 6e-7,
       "input_cache_read": null
     },
     {
@@ -4589,9 +4827,9 @@
       "output_modalities": [
         "text"
       ],
-      "prompt": 1e-7,
+      "prompt": 9e-8,
       "completion": 0.0000011,
-      "input_cache_read": 7e-8
+      "input_cache_read": null
     },
     {
       "id": "qwen/qwen-plus-2025-07-28",
@@ -4715,6 +4953,25 @@
       "input_cache_read": 4e-8
     },
     {
+      "id": "mistralai/mistral-medium-3.1:batch",
+      "name": "Mistral: Mistral Medium 3.1 (batch)",
+      "created": 1755095639,
+      "hugging_face_id": "",
+      "context_length": 131072,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "prompt": 4e-7,
+      "completion": 0.000002,
+      "input_cache_read": 4e-8
+    },
+    {
       "id": "z-ai/glm-4.5v",
       "name": "Z.ai: GLM 4.5V",
       "created": 1754922288,
@@ -4807,6 +5064,23 @@
       "input_cache_read": null
     },
     {
+      "id": "openai/gpt-oss-120b:batch",
+      "name": "OpenAI: gpt-oss-120b (batch)",
+      "created": 1754414231,
+      "hugging_face_id": "openai/gpt-oss-120b",
+      "context_length": 131072,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "prompt": 1.5e-7,
+      "completion": 6e-7,
+      "input_cache_read": null
+    },
+    {
       "id": "openai/gpt-oss-20b",
       "name": "OpenAI: gpt-oss-20b",
       "created": 1754414229,
@@ -4822,6 +5096,23 @@
       "prompt": 3e-8,
       "completion": 1.3e-7,
       "input_cache_read": 3e-8
+    },
+    {
+      "id": "openai/gpt-oss-20b:batch",
+      "name": "OpenAI: gpt-oss-20b (batch)",
+      "created": 1754414229,
+      "hugging_face_id": "openai/gpt-oss-20b",
+      "context_length": 131072,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "prompt": 5e-8,
+      "completion": 2e-7,
+      "input_cache_read": null
     },
     {
       "id": "anthropic/claude-opus-4.1",
@@ -4864,6 +5155,24 @@
     {
       "id": "mistralai/codestral-2508",
       "name": "Mistral: Codestral 2508",
+      "created": 1754079630,
+      "hugging_face_id": "",
+      "context_length": 256000,
+      "modality": "text+file->text",
+      "input_modalities": [
+        "text",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "prompt": 3e-7,
+      "completion": 9e-7,
+      "input_cache_read": 3e-8
+    },
+    {
+      "id": "mistralai/codestral-2508:batch",
+      "name": "Mistral: Codestral 2508 (batch)",
       "created": 1754079630,
       "hugging_face_id": "",
       "context_length": 256000,
@@ -5415,23 +5724,6 @@
       "input_cache_read": 1.25e-7
     },
     {
-      "id": "arcee-ai/virtuoso-large",
-      "name": "Arcee AI: Virtuoso Large",
-      "created": 1746478885,
-      "hugging_face_id": "",
-      "context_length": 131072,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "prompt": 7.5e-7,
-      "completion": 0.0000012,
-      "input_cache_read": null
-    },
-    {
       "id": "meta-llama/llama-guard-4-12b",
       "name": "Meta: Llama Guard 4 12B",
       "created": 1745975193,
@@ -5813,7 +6105,7 @@
       "name": "Google: Gemma 3 27B",
       "created": 1741756359,
       "hugging_face_id": "google/gemma-3-27b-it",
-      "context_length": 262144,
+      "context_length": 131072,
       "modality": "text+image->text",
       "input_modalities": [
         "text",

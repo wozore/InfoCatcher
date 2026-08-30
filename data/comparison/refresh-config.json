@@ -4,15 +4,15 @@
     "openrouter": {
       "interval_hours": 48,
       "full_every": 10,
-      "count": 4,
-      "last_run": "2026-08-28T05:22:00.091Z",
+      "count": 5,
+      "last_run": "2026-08-30T23:28:08.255Z",
       "url": "https://openrouter.ai/api/v1/models"
     },
     "lmarena": {
       "interval_hours": 48,
       "full_every": 10,
-      "count": 3,
-      "last_run": "2026-08-28T05:22:16.409Z"
+      "count": 4,
+      "last_run": "2026-08-30T23:28:25.257Z"
     },
     "livebench": {
       "interval_hours": 720,
@@ -24,8 +24,8 @@
     "llm_stats": {
       "interval_hours": 48,
       "full_every": 10,
-      "count": 4,
-      "last_run": "2026-08-28T05:22:16.800Z",
+      "count": 5,
+      "last_run": "2026-08-30T23:28:25.539Z",
       "url": "https://llm-stats.com/leaderboards/open-llm-leaderboard"
     }
   }
