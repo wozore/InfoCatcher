@@ -799,16 +799,13 @@ function writeSharedReleaseIndex(models, registry) {
 
 module.exports = {
   rebuildIntegrated,
-  buildModelRecord,
   collectSourceRecords,
-  computeLmarenaEloBounds,
   slugify,
   openrouterCanonical,
   llmStatsCanonical,
   lmarenaParse,
   livebenchParse,
   buildAliasMap,
-  loadInputs,
   cleanModelDisplay,
   themeOfDimensions,
 };

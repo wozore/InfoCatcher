@@ -1,4 +1,4 @@
-This project is very early-stage with no user feedback. Even if you modify the data files, it doesn't matter—we are working hard to adjust it to the correct state.
+This project is very early-stage with no user feedback. Even if you modify the data files, it doesn't matter—we are working hard to adjust it to the correct state. This refers to iterating on existing data files during development; it does NOT authorize hand-authoring catalog records to replace failed research/synthesis (see Runtime prerequisites below).
 
 The role of this file is to describe common mistakes and confusion points that agents might encounter as they work in this project. If you ever encounter something in the project that surprises you, please alert the developer working with you.
 
@@ -22,8 +22,8 @@ The role of this file is to describe common mistakes and confusion points that a
 
 ### Issue tracker
 
-Issues live in GitHub Issues owned by `wozore/KnowView`. See `docs/agents/issue-tracker.md`（工程约定文档，不入库，本地参考）。
+Issues live in GitHub Issues owned by `wozore/KnowView`（以该处为准）。本地约定见 `docs/archive/agent-issue-tracker-conventions.md`（工程约定文档，不入库）。
 
 ### Domain docs
 
-Single-context repo — `CONTEXT.md` and `docs/adr/` at repo root (currently absent; created lazily by `/domain-modeling`). See `docs/agents/domain.md`（工程约定文档，不入库，本地参考）。
+Single-context repo — `CONTEXT.md` at repo root (exists) and `docs/adr/` (not yet created; created lazily by `/domain-modeling`). See `docs/archive/agent-domain-conventions.md`（工程约定文档，不入库，本地参考；`docs/agents/domain.md` 磁盘上尚未创建）。

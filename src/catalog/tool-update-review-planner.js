@@ -11,7 +11,7 @@ const {
 const {
   isIsoDate,
   isoDateFromValue,
-  dateForEvidence: evidenceDateForEvidence,
+  dateForEvidence,
 } = require('./tool-update-evidence');
 
 const DEFAULT_MIN_CONFIDENCE = 0.8;
@@ -79,10 +79,6 @@ function sourceForEvidence(productKey, evidence, registry) {
   const url = canonicalizeUrl(evidence?.url);
   return sources.find(source => source.collector === evidence.collector
     && (canonicalizeUrl(source.url) === url || githubReleaseEvidenceMatchesSource(source, url))) || null;
-}
-
-function dateForEvidence(evidence, options = {}) {
-  return evidenceDateForEvidence(evidence, options);
 }
 
 function deterministicDecision(source, evidence) {
@@ -234,7 +230,6 @@ function planToolUpdateCandidates(inputs, options = {}) {
 
 module.exports = {
   DEFAULT_MIN_CONFIDENCE,
-  dateForEvidence,
   findToolDetail,
   sourceForEvidence,
   planToolUpdateCandidate,

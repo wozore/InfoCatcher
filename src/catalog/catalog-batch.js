@@ -514,9 +514,7 @@ module.exports = {
   readPendingCards,
   dedupeBatchCandidates,
   resolveBatchCandidates,
-  planBatchCost,
   runCatalogBatch,
   runBatchFromCards,
-  estimateResolutionNeed,
   resolveBatchPlacements,
 };
