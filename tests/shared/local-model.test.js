@@ -20,7 +20,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 // 指向一个真实存在的文件作为「启动脚本」，测试不依赖用户机器路径。
-process.env.INFOCATCHER_LOCAL_MODEL_SCRIPT = __filename;
+process.env.KNOWVIEW_LOCAL_MODEL_SCRIPT = __filename;
 
 const {
   ensureLocalModel,
@@ -58,7 +58,7 @@ const okSpawn = () => ({ unref() {} });
 
 test.beforeEach(() => {
   resetLocalModelState();
-  delete process.env.INFOCATCHER_AUTOSTART_LOCAL_MODEL;
+  delete process.env.KNOWVIEW_AUTOSTART_LOCAL_MODEL;
 });
 
 test('注入自定义 fetchImpl（测试 mock）时放行，不探测不启动', async () => {
@@ -92,7 +92,7 @@ test('探测成功返回 ok，确认在线后 TTL 内不重复探测（缓存）
 });
 
 test('离线且自动启动禁用：报错 LOCAL_MODEL_OFFLINE，不 spawn', async () => {
-  process.env.INFOCATCHER_AUTOSTART_LOCAL_MODEL = '0';
+  process.env.KNOWVIEW_AUTOSTART_LOCAL_MODEL = '0';
   let spawned = 0;
   const result = await ensureLocalModel({
     probeImpl: async () => false,

@@ -77,7 +77,7 @@ function collectLocalizeSource(item) {
  *                     input_chars: number, llm_error: string|null }>}
  */
 async function localizeCandidate(item, options = {}) {
-  const provider = options.provider || process.env.INFOCATCHER_LOCALIZE_PROVIDER || 'deepseek';
+  const provider = options.provider || process.env.KNOWVIEW_LOCALIZE_PROVIDER || process.env.INFOCATCHER_LOCALIZE_PROVIDER || 'deepseek';
   const locale = options.locale || 'zh';
   const source = collectLocalizeSource(item);
   const inputChars = source.title.length + source.description.length;

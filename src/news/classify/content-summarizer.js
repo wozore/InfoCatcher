@@ -85,7 +85,7 @@ function collectSummarySource(item) {
  *                     input_chars: number, llm_error: string|null }>}
  */
 async function summarizeCandidate(item, options = {}) {
-  const provider = options.provider || process.env.INFOCATCHER_SUMMARIZE_PROVIDER || 'deepseek';
+  const provider = options.provider || process.env.KNOWVIEW_SUMMARIZE_PROVIDER || process.env.INFOCATCHER_SUMMARIZE_PROVIDER || 'deepseek';
   const source = collectSummarySource(item);
   const inputChars = source.title.length + source.description.length + (source.transcript ? source.transcript.length : 0);
   const now = options.now || new Date().toISOString();

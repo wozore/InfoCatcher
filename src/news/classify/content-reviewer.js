@@ -91,7 +91,7 @@ function collectReviewSource(item) {
  *                     input_chars: number, llm_error: string|null }>}
  */
 async function reviewCandidate(item, options = {}) {
-  const provider = options.provider || process.env.INFOCATCHER_REVIEW_PROVIDER || 'deepseek';
+  const provider = options.provider || process.env.KNOWVIEW_REVIEW_PROVIDER || process.env.INFOCATCHER_REVIEW_PROVIDER || 'deepseek';
   const source = collectReviewSource(item);
   const inputChars = source.title.length + source.description.length
     + (source.transcript ? source.transcript.length : 0)

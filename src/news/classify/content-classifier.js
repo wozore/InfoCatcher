@@ -250,7 +250,7 @@ function classifyRuleBased(item) {
  *                     ai_confidence: number|null, reasons: string[], hit_tools: string[], hit_concepts: string[] }>}
  */
 async function classifyCandidate(item, options = {}) {
-  const provider = options.provider || process.env.INFOCATCHER_CLASSIFY_PROVIDER;
+  const provider = options.provider || process.env.KNOWVIEW_CLASSIFY_PROVIDER || process.env.INFOCATCHER_CLASSIFY_PROVIDER;
   const ruleResult = classifyRuleBased(item);
   let classifier = 'rule_based';
   let aiConfidence = null;

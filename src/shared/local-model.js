@@ -19,10 +19,11 @@ const { LOCAL_API_BASE, LOCAL_MODEL } = require('./llm-endpoints');
 
 // 本地服务启动脚本（env 可覆盖；默认 Bonsai llama-server）。
 const DEFAULT_LOCAL_MODEL_SCRIPT = 'D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1';
-const LOCAL_MODEL_SCRIPT = process.env.INFOCATCHER_LOCAL_MODEL_SCRIPT || DEFAULT_LOCAL_MODEL_SCRIPT;
+const LOCAL_MODEL_SCRIPT = process.env.KNOWVIEW_LOCAL_MODEL_SCRIPT || process.env.INFOCATCHER_LOCAL_MODEL_SCRIPT || DEFAULT_LOCAL_MODEL_SCRIPT;
 
-// 自动启动总开关（env '0' 关闭；关闭时仅报错不拉起）。
-const AUTOSTART_ENV = 'INFOCATCHER_AUTOSTART_LOCAL_MODEL';
+// 自动启动总开关（env '0' 关闭；关闭时仅报错不拉起）。优先 KNOWVIEW_*，回退旧 INFOCATCHER_*。
+const AUTOSTART_ENV = 'KNOWVIEW_AUTOSTART_LOCAL_MODEL';
+const LEGACY_AUTOSTART_ENV = 'INFOCATCHER_AUTOSTART_LOCAL_MODEL';
 
 // 确认在线后 TTL 内不重复探测（批量调用只付一次开销）。
 const CONFIRMED_TTL_MS = 60_000;
@@ -35,7 +36,8 @@ let lastStartAttemptAt = null;  // 最近一次启动尝试的时间戳（null=�
 let startPromise = null;        // 进行中的启动任务（防并发重复启动）
 
 function autostartEnabled() {
-  return process.env[AUTOSTART_ENV] !== '0';
+  const value = process.env[AUTOSTART_ENV] ?? process.env[LEGACY_AUTOSTART_ENV];
+  return value !== '0';
 }
 
 /** 最小探测请求：max_tokens 1 + 关思维链，确认整条链路可用。 */
