@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-09T08:26:05.947Z",
+  "updated_at": "2026-08-31T11:21:40.523Z",
   "candidates": [
     {
       "id": "youtube-c2dbd7191ba28fe270f9",
@@ -128018,6 +128018,300 @@
           "type_preference": 0.3
         }
       }
+    },
+    {
+      "id": "x-b5b02bffa95347d33cfa",
+      "platform": "x",
+      "native_id": "2094172807357731185",
+      "source_type": "x_post",
+      "url": "https://x.com/huggingface/status/2094172807357731185",
+      "title": "RT @julien_c: open source ai must win",
+      "description": "RT @julien_c: open source ai must win",
+      "published_at": "2026-08-30T21:17:59.000Z",
+      "fetched_at": "2026-08-31T11:21:21.652Z",
+      "author_id": "x-d203a277f19a8f7d78fe",
+      "author_name": "Hugging Face",
+      "source_id": "x-d203a277f19a8f7d78fe",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 104210,
+        "likes": 1871,
+        "comments": null,
+        "reposts": 187,
+        "replies": 191
+      },
+      "explicit_links": [],
+      "content_type": "other",
+      "comments": [],
+      "content_type_status": "ai_suggested",
+      "classifier": "rule_based",
+      "classify_reasons": [
+        "未命中明确类别，归为 other"
+      ],
+      "final_score": 40.1,
+      "score_breakdown": {
+        "long_term_quality": 17.3,
+        "recent_timeliness": 94.4,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 23.1,
+        "type_preference": 30,
+        "long_term_status": "long_term",
+        "applied_weights": {
+          "long_term_quality": 0.2,
+          "recent_timeliness": 0.15,
+          "light_user_experience": 0.05,
+          "source_reliability": 0.15,
+          "interaction_quality": 0.15,
+          "type_preference": 0.3
+        }
+      },
+      "review_status": "pending",
+      "l1_review": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "llm_error": "本地模型启动脚本不存在：D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1"
+      },
+      "ai_advice": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "reviewer": "llm_failed",
+        "generated_at": null,
+        "input_chars": 74,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "top_selected": false,
+      "summarizer": "llm_failed",
+      "summary_generated_at": null,
+      "summary_input_chars": 74,
+      "summary_llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）",
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_failed",
+          "generated_at": null,
+          "input_chars": 74,
+          "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+        }
+      }
+    },
+    {
+      "id": "x-ecc88148f4fc6496bcf6",
+      "platform": "x",
+      "native_id": "2094172721454125224",
+      "source_type": "x_post",
+      "url": "https://x.com/huggingface/status/2094172721454125224",
+      "title": "RT @ai_for_success: MicroDuck goes full Godzilla mode. https://t.co/rDn4e2J0z9",
+      "description": "RT @ai_for_success: MicroDuck goes full Godzilla mode. https://t.co/rDn4e2J0z9",
+      "published_at": "2026-08-30T21:17:39.000Z",
+      "fetched_at": "2026-08-31T11:21:21.652Z",
+      "author_id": "x-d203a277f19a8f7d78fe",
+      "author_name": "Hugging Face",
+      "source_id": "x-d203a277f19a8f7d78fe",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": "https://pbs.twimg.com/media/HQ-KW8kbsAAHeiD.jpg",
+      "metrics": {
+        "views": 67203,
+        "likes": 230,
+        "comments": null,
+        "reposts": 32,
+        "replies": 19
+      },
+      "explicit_links": [
+        "https://t.co/rDn4e2J0z9"
+      ],
+      "content_type": "other",
+      "comments": [],
+      "content_type_status": "ai_suggested",
+      "classifier": "rule_based",
+      "classify_reasons": [
+        "未命中明确类别，归为 other"
+      ],
+      "final_score": 38.8,
+      "score_breakdown": {
+        "long_term_quality": 17.3,
+        "recent_timeliness": 94.4,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 14.6,
+        "type_preference": 30,
+        "long_term_status": "long_term",
+        "applied_weights": {
+          "long_term_quality": 0.2,
+          "recent_timeliness": 0.15,
+          "light_user_experience": 0.05,
+          "source_reliability": 0.15,
+          "interaction_quality": 0.15,
+          "type_preference": 0.3
+        }
+      },
+      "review_status": "pending",
+      "l1_review": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "ai_advice": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "reviewer": "llm_failed",
+        "generated_at": null,
+        "input_chars": 156,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "top_selected": false,
+      "summarizer": "llm_failed",
+      "summary_generated_at": null,
+      "summary_input_chars": 156,
+      "summary_llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）",
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_failed",
+          "generated_at": null,
+          "input_chars": 156,
+          "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+        }
+      }
+    },
+    {
+      "id": "x-71a9d9ca0d729560ca2a",
+      "platform": "x",
+      "native_id": "2094173781421965470",
+      "source_type": "x_post",
+      "url": "https://x.com/huggingface/status/2094173781421965470",
+      "title": "RT @yacineMTB: Guess whose state of the art rigid body simulator that can support up to 200k rigidbodies is accurate enough for the microdu…",
+      "description": "RT @yacineMTB: Guess whose state of the art rigid body simulator that can support up to 200k rigidbodies is accurate enough for the microdu…",
+      "published_at": "2026-08-30T21:21:52.000Z",
+      "fetched_at": "2026-08-31T11:21:21.652Z",
+      "author_id": "x-d203a277f19a8f7d78fe",
+      "author_name": "Hugging Face",
+      "source_id": "x-d203a277f19a8f7d78fe",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 117830,
+        "likes": 978,
+        "comments": null,
+        "reposts": 39,
+        "replies": 61
+      },
+      "explicit_links": [],
+      "content_type": null,
+      "comments": [],
+      "review_status": "discarded",
+      "discard_stage": "l0",
+      "discard_reason": "not_ai",
+      "l1_review": null,
+      "ai_advice": null,
+      "top_selected": false
+    },
+    {
+      "id": "x-ea3d3bd4bbe9b6710b70",
+      "platform": "x",
+      "native_id": "2094173748161073577",
+      "source_type": "x_post",
+      "url": "https://x.com/huggingface/status/2094173748161073577",
+      "title": "RT @BrianRoemmele: The future is gonna be amazing. \n\nThe open source @huggingface Micro Duck is the way.\n\nGet two so you can say “ok guys q…",
+      "description": "RT @BrianRoemmele: The future is gonna be amazing. \n\nThe open source @huggingface Micro Duck is the way.\n\nGet two so you can say “ok guys q…",
+      "published_at": "2026-08-30T21:21:44.000Z",
+      "fetched_at": "2026-08-31T11:21:21.652Z",
+      "author_id": "x-d203a277f19a8f7d78fe",
+      "author_name": "Hugging Face",
+      "source_id": "x-d203a277f19a8f7d78fe",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 94199,
+        "likes": 860,
+        "comments": null,
+        "reposts": 82,
+        "replies": 76
+      },
+      "explicit_links": [],
+      "content_type": null,
+      "comments": [],
+      "review_status": "discarded",
+      "discard_stage": "l0",
+      "discard_reason": "not_ai",
+      "l1_review": null,
+      "ai_advice": null,
+      "top_selected": false
+    },
+    {
+      "id": "x-7b6758720cbed26ae098",
+      "platform": "x",
+      "native_id": "2094173413602398494",
+      "source_type": "x_post",
+      "url": "https://x.com/huggingface/status/2094173413602398494",
+      "title": "RT @RemiFabreRobot: We sold over $2,500,000 worth of Microducks in the first 24 hours. Is this one of the most successful robot launches in…",
+      "description": "RT @RemiFabreRobot: We sold over $2,500,000 worth of Microducks in the first 24 hours. Is this one of the most successful robot launches in…",
+      "published_at": "2026-08-30T21:20:24.000Z",
+      "fetched_at": "2026-08-31T11:21:21.652Z",
+      "author_id": "x-d203a277f19a8f7d78fe",
+      "author_name": "Hugging Face",
+      "source_id": "x-d203a277f19a8f7d78fe",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 238015,
+        "likes": 3980,
+        "comments": null,
+        "reposts": 272,
+        "replies": 194
+      },
+      "explicit_links": [],
+      "content_type": null,
+      "comments": [],
+      "review_status": "discarded",
+      "discard_stage": "l0",
+      "discard_reason": "not_ai",
+      "l1_review": null,
+      "ai_advice": null,
+      "top_selected": false
+    },
+    {
+      "id": "x-651f686fcbfca5c42f2c",
+      "platform": "x",
+      "native_id": "2094173110073192664",
+      "source_type": "x_post",
+      "url": "https://x.com/huggingface/status/2094173110073192664",
+      "title": "RT @HannesVonEssen: How fast can we make it run?? My current best is 1.6 m/s https://t.co/gV4KjK7OfK",
+      "description": "RT @HannesVonEssen: How fast can we make it run?? My current best is 1.6 m/s https://t.co/gV4KjK7OfK",
+      "published_at": "2026-08-30T21:19:11.000Z",
+      "fetched_at": "2026-08-31T11:21:21.652Z",
+      "author_id": "x-d203a277f19a8f7d78fe",
+      "author_name": "Hugging Face",
+      "source_id": "x-d203a277f19a8f7d78fe",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": "https://pbs.twimg.com/amplify_video_thumb/2093858063669182464/img/USOAW54RQrE2IJFX.jpg",
+      "metrics": {
+        "views": 159090,
+        "likes": 1605,
+        "comments": null,
+        "reposts": 87,
+        "replies": 56
+      },
+      "explicit_links": [
+        "https://t.co/gV4KjK7OfK"
+      ],
+      "content_type": null,
+      "comments": [],
+      "review_status": "discarded",
+      "discard_stage": "l0",
+      "discard_reason": "not_ai",
+      "l1_review": null,
+      "ai_advice": null,
+      "top_selected": false
     }
   ]
 }
