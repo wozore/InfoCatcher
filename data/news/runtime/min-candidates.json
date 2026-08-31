@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-09T08:26:05.947Z",
+  "updated_at": "2026-08-31T19:46:26.362Z",
   "candidates": [
     {
       "id": "youtube-c2dbd7191ba28fe270f9",
@@ -128018,6 +128018,298 @@
           "type_preference": 0.3
         }
       }
+    },
+    {
+      "id": "x-27788ca74ab385235a1b",
+      "platform": "x",
+      "native_id": "2094480543429599304",
+      "source_type": "x_post",
+      "url": "https://x.com/huggingface/status/2094480543429599304",
+      "title": "RT @ClementDelangue: If you don't want to wait to experience the magic of HF open-source robots, you should get a Reachy mini, ships much f…",
+      "description": "RT @ClementDelangue: If you don't want to wait to experience the magic of HF open-source robots, you should get a Reachy mini, ships much f…",
+      "published_at": "2026-08-31T17:40:49.000Z",
+      "fetched_at": "2026-08-31T19:46:03.406Z",
+      "author_id": "x-d203a277f19a8f7d78fe",
+      "author_name": "Hugging Face",
+      "source_id": "x-d203a277f19a8f7d78fe",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 17948,
+        "likes": 161,
+        "comments": null,
+        "reposts": 11,
+        "replies": 46
+      },
+      "explicit_links": [],
+      "content_type": "ai_technology",
+      "comments": [],
+      "content_type_status": "ai_suggested",
+      "classifier": "rule_based",
+      "classify_reasons": [
+        "命中模型名或技术/研究关键词"
+      ],
+      "final_score": 46,
+      "score_breakdown": {
+        "long_term_quality": 17.4,
+        "recent_timeliness": 99.1,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 17.7,
+        "type_preference": 50,
+        "long_term_status": "long_term",
+        "applied_weights": {
+          "long_term_quality": 0.2,
+          "recent_timeliness": 0.15,
+          "light_user_experience": 0.05,
+          "source_reliability": 0.15,
+          "interaction_quality": 0.15,
+          "type_preference": 0.3
+        }
+      },
+      "review_status": "pending",
+      "l1_review": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "llm_error": "本地模型启动脚本不存在：D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1"
+      },
+      "ai_advice": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "reviewer": "llm_failed",
+        "generated_at": null,
+        "input_chars": 280,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "top_selected": false,
+      "summarizer": "llm_failed",
+      "summary_generated_at": null,
+      "summary_input_chars": 280,
+      "summary_llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）",
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_failed",
+          "generated_at": null,
+          "input_chars": 280,
+          "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+        }
+      }
+    },
+    {
+      "id": "x-ff8182a1ed6960d1e088",
+      "platform": "x",
+      "native_id": "2094469958805664032",
+      "source_type": "x_post",
+      "url": "https://x.com/huggingface/status/2094469958805664032",
+      "title": "RT @ClementDelangue: Over 4 petabytes of models and datasets have been uploaded to HF just last week by AI builders and their agents! That'…",
+      "description": "RT @ClementDelangue: Over 4 petabytes of models and datasets have been uploaded to HF just last week by AI builders and their agents! That'…",
+      "published_at": "2026-08-31T16:58:46.000Z",
+      "fetched_at": "2026-08-31T19:46:03.406Z",
+      "author_id": "x-d203a277f19a8f7d78fe",
+      "author_name": "Hugging Face",
+      "source_id": "x-d203a277f19a8f7d78fe",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 20622,
+        "likes": 295,
+        "comments": null,
+        "reposts": 30,
+        "replies": 49
+      },
+      "explicit_links": [],
+      "content_type": "ai_technology",
+      "comments": [],
+      "content_type_status": "ai_suggested",
+      "classifier": "rule_based",
+      "classify_reasons": [
+        "命中模型名或技术/研究关键词"
+      ],
+      "final_score": 46.5,
+      "score_breakdown": {
+        "long_term_quality": 17.4,
+        "recent_timeliness": 98.9,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 20.9,
+        "type_preference": 50,
+        "long_term_status": "long_term",
+        "applied_weights": {
+          "long_term_quality": 0.2,
+          "recent_timeliness": 0.15,
+          "light_user_experience": 0.05,
+          "source_reliability": 0.15,
+          "interaction_quality": 0.15,
+          "type_preference": 0.3
+        }
+      },
+      "review_status": "pending",
+      "l1_review": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "ai_advice": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "reviewer": "llm_failed",
+        "generated_at": null,
+        "input_chars": 280,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "top_selected": false,
+      "summarizer": "llm_failed",
+      "summary_generated_at": null,
+      "summary_input_chars": 280,
+      "summary_llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）",
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_failed",
+          "generated_at": null,
+          "input_chars": 280,
+          "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+        }
+      }
+    },
+    {
+      "id": "x-93e6efeb57a064764236",
+      "platform": "x",
+      "native_id": "2094485332947304899",
+      "source_type": "x_post",
+      "url": "https://x.com/cohere/status/2094485332947304899",
+      "title": "RT @jameygannon: the @cohere merch is GORGEOUS https://t.co/rKbPQWaoOF",
+      "description": "RT @jameygannon: the @cohere merch is GORGEOUS https://t.co/rKbPQWaoOF",
+      "published_at": "2026-08-31T17:59:51.000Z",
+      "fetched_at": "2026-08-31T19:46:03.406Z",
+      "author_id": "x-72e8088a05b38ae3cffb",
+      "author_name": "Cohere",
+      "source_id": "x-72e8088a05b38ae3cffb",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": "https://pbs.twimg.com/media/HREJWf_WYAExz2Q.jpg",
+      "metrics": {
+        "views": 3374,
+        "likes": 57,
+        "comments": null,
+        "reposts": 2,
+        "replies": 12
+      },
+      "explicit_links": [
+        "https://t.co/rKbPQWaoOF"
+      ],
+      "content_type": null,
+      "comments": [],
+      "review_status": "discarded",
+      "discard_stage": "l0",
+      "discard_reason": "not_ai",
+      "l1_review": null,
+      "ai_advice": null,
+      "top_selected": false
+    },
+    {
+      "id": "x-d62e9087d26afcb171d3",
+      "platform": "x",
+      "native_id": "2094503572247396372",
+      "source_type": "x_post",
+      "url": "https://x.com/huggingface/status/2094503572247396372",
+      "title": "RT @GoogleResearch: Introducing TimesFM-3, a state-of-the-art time series foundation model that enables accurate multivariate time series f…",
+      "description": "RT @GoogleResearch: Introducing TimesFM-3, a state-of-the-art time series foundation model that enables accurate multivariate time series f…",
+      "published_at": "2026-08-31T19:12:20.000Z",
+      "fetched_at": "2026-08-31T19:46:03.406Z",
+      "author_id": "x-d203a277f19a8f7d78fe",
+      "author_name": "Hugging Face",
+      "source_id": "x-d203a277f19a8f7d78fe",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 76666,
+        "likes": 1838,
+        "comments": null,
+        "reposts": 169,
+        "replies": 25
+      },
+      "explicit_links": [],
+      "content_type": null,
+      "comments": [],
+      "review_status": "discarded",
+      "discard_stage": "l0",
+      "discard_reason": "not_ai",
+      "l1_review": null,
+      "ai_advice": null,
+      "top_selected": false
+    },
+    {
+      "id": "x-f297797ebf3b648f815f",
+      "platform": "x",
+      "native_id": "2094503440554590352",
+      "source_type": "x_post",
+      "url": "https://x.com/huggingface/status/2094503440554590352",
+      "title": "RT @osanseviero: Today we're releasing TimesFM 3.0 on Hugging Face\n\n- Open foundation model for time series forecasting\n- Complex multivari…",
+      "description": "RT @osanseviero: Today we're releasing TimesFM 3.0 on Hugging Face\n\n- Open foundation model for time series forecasting\n- Complex multivari…",
+      "published_at": "2026-08-31T19:11:48.000Z",
+      "fetched_at": "2026-08-31T19:46:03.406Z",
+      "author_id": "x-d203a277f19a8f7d78fe",
+      "author_name": "Hugging Face",
+      "source_id": "x-d203a277f19a8f7d78fe",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 5765,
+        "likes": 132,
+        "comments": null,
+        "reposts": 11,
+        "replies": 8
+      },
+      "explicit_links": [],
+      "content_type": null,
+      "comments": [],
+      "review_status": "discarded",
+      "discard_stage": "l0",
+      "discard_reason": "not_ai",
+      "l1_review": null,
+      "ai_advice": null,
+      "top_selected": false
+    },
+    {
+      "id": "x-6ea78a13f39dce4deb03",
+      "platform": "x",
+      "native_id": "2094470947021701195",
+      "source_type": "x_post",
+      "url": "https://x.com/NVIDIAAI/status/2094470947021701195",
+      "title": "RT @CrowdStrike: Introducing CrowdStrike Falcon IQ: operationalizing Project QuiltWorks at machine speed.\n\nProject QuiltWorks set the stand…",
+      "description": "RT @CrowdStrike: Introducing CrowdStrike Falcon IQ: operationalizing Project QuiltWorks at machine speed.\n\nProject QuiltWorks set the stand…",
+      "published_at": "2026-08-31T17:02:41.000Z",
+      "fetched_at": "2026-08-31T19:46:03.406Z",
+      "author_id": "x-97195d2a8377b1621835",
+      "author_name": "NVIDIA AI",
+      "source_id": "x-97195d2a8377b1621835",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 4056,
+        "likes": 55,
+        "comments": null,
+        "reposts": 4,
+        "replies": 2
+      },
+      "explicit_links": [],
+      "content_type": null,
+      "comments": [],
+      "review_status": "discarded",
+      "discard_stage": "l0",
+      "discard_reason": "not_ai",
+      "l1_review": null,
+      "ai_advice": null,
+      "top_selected": false
     }
   ]
 }
