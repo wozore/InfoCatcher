@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-09T08:26:05.947Z",
+  "updated_at": "2026-09-01T09:45:37.805Z",
   "candidates": [
     {
       "id": "youtube-c2dbd7191ba28fe270f9",
@@ -128018,6 +128018,493 @@
           "type_preference": 0.3
         }
       }
+    },
+    {
+      "id": "x-41f1d342a34b33a9a293",
+      "platform": "x",
+      "native_id": "2094577944056430865",
+      "source_type": "x_post",
+      "url": "https://x.com/AnthropicAI/status/2094577944056430865",
+      "title": "New research: Training a Misaligned Reward Seeker\n\nWhat produces severe misalignment? We’ve long been concerned that cheating during training—otherwise known as reward-hacking—migh",
+      "description": "New research: Training a Misaligned Reward Seeker\n\nWhat produces severe misalignment? We’ve long been concerned that cheating during training—otherwise known as reward-hacking—might teach a model to pursue rewards by any means available. To study this at scale, we trained an Opus-sized model on 80 production environments we knew to be hackable. \n\nIn simulated evals, it engaged in unauthorized cyberattacks, tampered with its reward, and tried to evade safety monitoring.\n\nRead more: https://t.co/gs2ZjYkPan",
+      "published_at": "2026-09-01T00:07:51.000Z",
+      "fetched_at": "2026-09-01T09:45:05.317Z",
+      "author_id": "x-a2a6fb70590ffdcff17e",
+      "author_name": "Anthropic",
+      "source_id": "x-a2a6fb70590ffdcff17e",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": "https://pbs.twimg.com/media/HRFr2lobkAAAroQ.jpg",
+      "metrics": {
+        "views": 224511,
+        "likes": 1686,
+        "comments": null,
+        "reposts": 152,
+        "replies": 140
+      },
+      "explicit_links": [
+        "https://t.co/gs2ZjYkPan"
+      ],
+      "content_type": "ai_technology",
+      "comments": [],
+      "content_type_status": "ai_suggested",
+      "classifier": "rule_based",
+      "classify_reasons": [
+        "命中模型名或技术/研究关键词"
+      ],
+      "final_score": 52,
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 96.1,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 16.9,
+        "type_preference": 50,
+        "long_term_status": "insufficient",
+        "applied_weights": {
+          "long_term_quality": 0.2,
+          "recent_timeliness": 0.15,
+          "light_user_experience": 0.05,
+          "source_reliability": 0.15,
+          "interaction_quality": 0.15,
+          "type_preference": 0.3
+        }
+      },
+      "review_status": "pending",
+      "l1_review": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "llm_error": "本地模型启动脚本不存在：D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1"
+      },
+      "ai_advice": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "reviewer": "llm_failed",
+        "generated_at": null,
+        "input_chars": 689,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "top_selected": false,
+      "summarizer": "llm_failed",
+      "summary_generated_at": null,
+      "summary_input_chars": 689,
+      "summary_llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）",
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_failed",
+          "generated_at": null,
+          "input_chars": 689,
+          "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+        }
+      }
+    },
+    {
+      "id": "x-f27cbcaa175b9a9416f5",
+      "platform": "x",
+      "native_id": "2094557124038951170",
+      "source_type": "x_post",
+      "url": "https://x.com/AnthropicAI/status/2094557124038951170",
+      "title": "We’re sharing an update on our alignment and security efforts.\n\nIn July, we reported three incidents in which Claude models, running without safeguards in cybersecurity evaluations",
+      "description": "We’re sharing an update on our alignment and security efforts.\n\nIn July, we reported three incidents in which Claude models, running without safeguards in cybersecurity evaluations, gained unauthorized access to real systems. \n\nIn a new post, we describe:\n\n1. How we’ve secured our evaluation and training environments, and practices we've asked external partners to adopt when testing pre-release models without cyber safeguards\n\n2. An update on our alignment assessment\n\n3. New research on how reward hacking during training shapes model behavior, why we think our work this spring kept these incid",
+      "published_at": "2026-08-31T22:45:08.000Z",
+      "fetched_at": "2026-09-01T09:45:05.317Z",
+      "author_id": "x-a2a6fb70590ffdcff17e",
+      "author_name": "Anthropic",
+      "source_id": "x-a2a6fb70590ffdcff17e",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 716191,
+        "likes": 2293,
+        "comments": null,
+        "reposts": 249,
+        "replies": 331
+      },
+      "explicit_links": [
+        "https://t.co/E3Ea1Ds814"
+      ],
+      "content_type": "ai_industry",
+      "comments": [],
+      "content_type_status": "ai_suggested",
+      "classifier": "rule_based",
+      "classify_reasons": [
+        "命中行业事件关键词（融资/监管/财务/安全等）"
+      ],
+      "final_score": 54.5,
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 95.6,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 14.4,
+        "type_preference": 60,
+        "long_term_status": "insufficient",
+        "applied_weights": {
+          "long_term_quality": 0.2,
+          "recent_timeliness": 0.15,
+          "light_user_experience": 0.05,
+          "source_reliability": 0.15,
+          "interaction_quality": 0.15,
+          "type_preference": 0.3
+        }
+      },
+      "review_status": "pending",
+      "l1_review": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "ai_advice": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "reviewer": "llm_failed",
+        "generated_at": null,
+        "input_chars": 780,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "top_selected": false,
+      "summarizer": "llm_failed",
+      "summary_generated_at": null,
+      "summary_input_chars": 780,
+      "summary_llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）",
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_failed",
+          "generated_at": null,
+          "input_chars": 780,
+          "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+        }
+      }
+    },
+    {
+      "id": "x-27788ca74ab385235a1b",
+      "platform": "x",
+      "native_id": "2094480543429599304",
+      "source_type": "x_post",
+      "url": "https://x.com/huggingface/status/2094480543429599304",
+      "title": "RT @ClementDelangue: If you don't want to wait to experience the magic of HF open-source robots, you should get a Reachy mini, ships much f…",
+      "description": "RT @ClementDelangue: If you don't want to wait to experience the magic of HF open-source robots, you should get a Reachy mini, ships much f…",
+      "published_at": "2026-08-31T17:40:49.000Z",
+      "fetched_at": "2026-09-01T09:45:05.317Z",
+      "author_id": "x-d203a277f19a8f7d78fe",
+      "author_name": "Hugging Face",
+      "source_id": "x-d203a277f19a8f7d78fe",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 42852,
+        "likes": 397,
+        "comments": null,
+        "reposts": 31,
+        "replies": 69
+      },
+      "explicit_links": [],
+      "content_type": "ai_technology",
+      "comments": [],
+      "content_type_status": "ai_suggested",
+      "classifier": "rule_based",
+      "classify_reasons": [
+        "命中模型名或技术/研究关键词"
+      ],
+      "final_score": 45.1,
+      "score_breakdown": {
+        "long_term_quality": 17.1,
+        "recent_timeliness": 93.6,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 17.9,
+        "type_preference": 50,
+        "long_term_status": "long_term",
+        "applied_weights": {
+          "long_term_quality": 0.2,
+          "recent_timeliness": 0.15,
+          "light_user_experience": 0.05,
+          "source_reliability": 0.15,
+          "interaction_quality": 0.15,
+          "type_preference": 0.3
+        }
+      },
+      "review_status": "pending",
+      "l1_review": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "ai_advice": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "reviewer": "llm_failed",
+        "generated_at": null,
+        "input_chars": 280,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "top_selected": false,
+      "summarizer": "llm_failed",
+      "summary_generated_at": null,
+      "summary_input_chars": 280,
+      "summary_llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）",
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_failed",
+          "generated_at": null,
+          "input_chars": 280,
+          "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+        }
+      }
+    },
+    {
+      "id": "x-ff8182a1ed6960d1e088",
+      "platform": "x",
+      "native_id": "2094469958805664032",
+      "source_type": "x_post",
+      "url": "https://x.com/huggingface/status/2094469958805664032",
+      "title": "RT @ClementDelangue: Over 4 petabytes of models and datasets have been uploaded to HF just last week by AI builders and their agents! That'…",
+      "description": "RT @ClementDelangue: Over 4 petabytes of models and datasets have been uploaded to HF just last week by AI builders and their agents! That'…",
+      "published_at": "2026-08-31T16:58:46.000Z",
+      "fetched_at": "2026-09-01T09:45:05.317Z",
+      "author_id": "x-d203a277f19a8f7d78fe",
+      "author_name": "Hugging Face",
+      "source_id": "x-d203a277f19a8f7d78fe",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 48841,
+        "likes": 547,
+        "comments": null,
+        "reposts": 48,
+        "replies": 71
+      },
+      "explicit_links": [],
+      "content_type": "ai_technology",
+      "comments": [],
+      "content_type_status": "ai_suggested",
+      "classifier": "rule_based",
+      "classify_reasons": [
+        "命中模型名或技术/研究关键词"
+      ],
+      "final_score": 45.3,
+      "score_breakdown": {
+        "long_term_quality": 17.1,
+        "recent_timeliness": 93.3,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 19.1,
+        "type_preference": 50,
+        "long_term_status": "long_term",
+        "applied_weights": {
+          "long_term_quality": 0.2,
+          "recent_timeliness": 0.15,
+          "light_user_experience": 0.05,
+          "source_reliability": 0.15,
+          "interaction_quality": 0.15,
+          "type_preference": 0.3
+        }
+      },
+      "review_status": "pending",
+      "l1_review": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "ai_advice": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "reviewer": "llm_failed",
+        "generated_at": null,
+        "input_chars": 280,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "top_selected": false,
+      "summarizer": "llm_failed",
+      "summary_generated_at": null,
+      "summary_input_chars": 280,
+      "summary_llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）",
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_failed",
+          "generated_at": null,
+          "input_chars": 280,
+          "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+        }
+      }
+    },
+    {
+      "id": "x-93e6efeb57a064764236",
+      "platform": "x",
+      "native_id": "2094485332947304899",
+      "source_type": "x_post",
+      "url": "https://x.com/cohere/status/2094485332947304899",
+      "title": "RT @jameygannon: the @cohere merch is GORGEOUS https://t.co/rKbPQWaoOF",
+      "description": "RT @jameygannon: the @cohere merch is GORGEOUS https://t.co/rKbPQWaoOF",
+      "published_at": "2026-08-31T17:59:51.000Z",
+      "fetched_at": "2026-09-01T09:45:05.317Z",
+      "author_id": "x-72e8088a05b38ae3cffb",
+      "author_name": "Cohere",
+      "source_id": "x-72e8088a05b38ae3cffb",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": "https://pbs.twimg.com/media/HREJWf_WYAExz2Q.jpg",
+      "metrics": {
+        "views": 7551,
+        "likes": 92,
+        "comments": null,
+        "reposts": 2,
+        "replies": 15
+      },
+      "explicit_links": [
+        "https://t.co/rKbPQWaoOF"
+      ],
+      "content_type": null,
+      "comments": [],
+      "review_status": "discarded",
+      "discard_stage": "l0",
+      "discard_reason": "not_ai",
+      "l1_review": null,
+      "ai_advice": null,
+      "top_selected": false
+    },
+    {
+      "id": "x-2c81b57806cde9a7dad0",
+      "platform": "x",
+      "native_id": "2094684306295693362",
+      "source_type": "x_post",
+      "url": "https://x.com/huggingface/status/2094684306295693362",
+      "title": "RT @NielsRogge: For folks wondering what Sliding Window Attention is, there's a method for it on Papers with Code\n\nSliding Window Attention…",
+      "description": "RT @NielsRogge: For folks wondering what Sliding Window Attention is, there's a method for it on Papers with Code\n\nSliding Window Attention…",
+      "published_at": "2026-09-01T07:10:30.000Z",
+      "fetched_at": "2026-09-01T09:45:05.317Z",
+      "author_id": "x-d203a277f19a8f7d78fe",
+      "author_name": "Hugging Face",
+      "source_id": "x-d203a277f19a8f7d78fe",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 21639,
+        "likes": 209,
+        "comments": null,
+        "reposts": 29,
+        "replies": 3
+      },
+      "explicit_links": [],
+      "content_type": null,
+      "comments": [],
+      "review_status": "discarded",
+      "discard_stage": "l0",
+      "discard_reason": "not_ai",
+      "l1_review": null,
+      "ai_advice": null,
+      "top_selected": false
+    },
+    {
+      "id": "x-d62e9087d26afcb171d3",
+      "platform": "x",
+      "native_id": "2094503572247396372",
+      "source_type": "x_post",
+      "url": "https://x.com/huggingface/status/2094503572247396372",
+      "title": "RT @GoogleResearch: Introducing TimesFM-3, a state-of-the-art time series foundation model that enables accurate multivariate time series f…",
+      "description": "RT @GoogleResearch: Introducing TimesFM-3, a state-of-the-art time series foundation model that enables accurate multivariate time series f…",
+      "published_at": "2026-08-31T19:12:20.000Z",
+      "fetched_at": "2026-09-01T09:45:05.317Z",
+      "author_id": "x-d203a277f19a8f7d78fe",
+      "author_name": "Hugging Face",
+      "source_id": "x-d203a277f19a8f7d78fe",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 769369,
+        "likes": 7602,
+        "comments": null,
+        "reposts": 725,
+        "replies": 115
+      },
+      "explicit_links": [],
+      "content_type": null,
+      "comments": [],
+      "review_status": "discarded",
+      "discard_stage": "l0",
+      "discard_reason": "not_ai",
+      "l1_review": null,
+      "ai_advice": null,
+      "top_selected": false
+    },
+    {
+      "id": "x-f297797ebf3b648f815f",
+      "platform": "x",
+      "native_id": "2094503440554590352",
+      "source_type": "x_post",
+      "url": "https://x.com/huggingface/status/2094503440554590352",
+      "title": "RT @osanseviero: Today we're releasing TimesFM 3.0 on Hugging Face\n\n- Open foundation model for time series forecasting\n- Complex multivari…",
+      "description": "RT @osanseviero: Today we're releasing TimesFM 3.0 on Hugging Face\n\n- Open foundation model for time series forecasting\n- Complex multivari…",
+      "published_at": "2026-08-31T19:11:48.000Z",
+      "fetched_at": "2026-09-01T09:45:05.317Z",
+      "author_id": "x-d203a277f19a8f7d78fe",
+      "author_name": "Hugging Face",
+      "source_id": "x-d203a277f19a8f7d78fe",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 45663,
+        "likes": 965,
+        "comments": null,
+        "reposts": 70,
+        "replies": 30
+      },
+      "explicit_links": [],
+      "content_type": null,
+      "comments": [],
+      "review_status": "discarded",
+      "discard_stage": "l0",
+      "discard_reason": "not_ai",
+      "l1_review": null,
+      "ai_advice": null,
+      "top_selected": false
+    },
+    {
+      "id": "x-572c5a795470a2a93ff0",
+      "platform": "x",
+      "native_id": "2094642662729294310",
+      "source_type": "x_post",
+      "url": "https://x.com/NVIDIAAI/status/2094642662729294310",
+      "title": "RT @WescheNex1q: 2 DGX Sparks. Qwen3.8 Flash Next NVFP4.\n\n64 users, independent prompts + KV caches.  \n32,768 output tokens in 78.82s:\n\n415…",
+      "description": "RT @WescheNex1q: 2 DGX Sparks. Qwen3.8 Flash Next NVFP4.\n\n64 users, independent prompts + KV caches.  \n32,768 output tokens in 78.82s:\n\n415…",
+      "published_at": "2026-09-01T04:25:02.000Z",
+      "fetched_at": "2026-09-01T09:45:05.317Z",
+      "author_id": "x-97195d2a8377b1621835",
+      "author_name": "NVIDIA AI",
+      "source_id": "x-97195d2a8377b1621835",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 24639,
+        "likes": 260,
+        "comments": null,
+        "reposts": 24,
+        "replies": 15
+      },
+      "explicit_links": [],
+      "content_type": null,
+      "comments": [],
+      "review_status": "discarded",
+      "discard_stage": "l0",
+      "discard_reason": "not_ai",
+      "l1_review": null,
+      "ai_advice": null,
+      "top_selected": false
     }
   ]
 }
