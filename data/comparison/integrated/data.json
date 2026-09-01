@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-29T23:16:52.096Z",
+  "generated_at": "2026-09-01T00:36:14.106Z",
   "models": [
     {
       "canonical": "allenai--molmo-72b@2025-09-24",
@@ -116,9 +116,6 @@
       "evaluation_profiles": [],
       "offerings": {},
       "source_names": {
-        "openrouter": [
-          "allenai/olmo-3-32b-think"
-        ],
         "lmarena": [
           "olmo-3-32b-think"
         ]
@@ -129,11 +126,9 @@
       "license": "Apache 2.0",
       "open_source": true,
       "is_moe": null,
-      "context_length": 65536,
-      "modalities": [
-        "text"
-      ],
-      "single_source": false,
+      "context_length": null,
+      "modalities": [],
+      "single_source": true,
       "degrees": {},
       "default_degree": {},
       "composite": null,
@@ -154,17 +149,9 @@
       },
       "lmarena_profiles": {},
       "livebench_scores": {},
-      "pricing": {
-        "openrouter": {
-          "prompt": 1.5e-7,
-          "completion": 5e-7,
-          "input_cache_read": null,
-          "currency": "USD",
-          "is_listed_price": true
-        }
-      },
-      "release_date": "2025-11-21",
-      "release_date_provenance": "openrouter",
+      "pricing": {},
+      "release_date": null,
+      "release_date_provenance": null,
       "value": null,
       "series_key": "allenai--olmo-3",
       "series_display": "Olmo 3",
@@ -2328,7 +2315,7 @@
       "release_date": "2026-05-28",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 11.2,
+        "score": 11.8,
         "raw": 1.6550484236861527,
         "note": "ln(综合分/平均每M价)"
       },
@@ -2638,7 +2625,7 @@
       "release_date": "2026-07-24",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 12.4,
+        "score": 13,
         "raw": 1.7215754123709504,
         "note": "ln(综合分/平均每M价)"
       },
@@ -3215,7 +3202,7 @@
       "release_date": "2026-06-30",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 26.7,
+        "score": 28,
         "raw": 2.533696813957432,
         "note": "ln(综合分/平均每M价)"
       },
@@ -3274,83 +3261,6 @@
       "series_display": "Claude Sonnet",
       "member_key": "anthropic--claude-sonnet-5-search",
       "member_display": "Claude Sonnet 5 Search",
-      "member_order": 9999
-    },
-    {
-      "canonical": "baidu--ernie-4.5",
-      "identity": "ernie-4.5",
-      "family": "ernie-4.5",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "source_names": {
-        "llm_stats": [
-          "ernie-4.5"
-        ]
-      },
-      "display": "ERNIE 4.5",
-      "vendor": "baidu",
-      "theme": "general",
-      "license": "Proprietary",
-      "open_source": false,
-      "is_moe": null,
-      "context_length": null,
-      "modalities": [
-        "text"
-      ],
-      "single_source": true,
-      "degrees": {},
-      "default_degree": {},
-      "composite": null,
-      "dimensions": {
-        "reasoning": {
-          "value": 8.9,
-          "source": "llm_stats",
-          "raw": -12.86,
-          "note": "index_reasoning"
-        },
-        "finance": {
-          "value": 6.4,
-          "source": "llm_stats",
-          "raw": -14.85,
-          "note": "index_finance"
-        },
-        "legal": {
-          "value": 6.2,
-          "source": "llm_stats",
-          "raw": -15.05,
-          "note": "index_legal"
-        },
-        "healthcare": {
-          "value": 6.4,
-          "source": "llm_stats",
-          "raw": -14.85,
-          "note": "index_healthcare"
-        },
-        "math_reasoning": {
-          "value": 5.3,
-          "source": "llm_stats",
-          "raw": -15.75,
-          "note": "index_math"
-        },
-        "expert_knowledge": {
-          "value": 74,
-          "source": "llm_stats",
-          "raw": 0.74,
-          "note": "GPQA"
-        }
-      },
-      "lmarena_scores": {},
-      "lmarena_profiles": {},
-      "livebench_scores": {},
-      "pricing": {},
-      "release_date": "2025-06-25",
-      "release_date_provenance": "llm_stats",
-      "value": null,
-      "series_key": "baidu--ernie-4.5",
-      "series_display": "Ernie 4.5",
-      "member_key": "baidu--ernie-4.5",
-      "member_display": "ERNIE 4.5",
       "member_order": 9999
     },
     {
@@ -5908,9 +5818,9 @@
       },
       "pricing": {
         "openrouter": {
-          "prompt": 8.8606e-8,
-          "completion": 1.77212e-7,
-          "input_cache_read": 1.77212e-8,
+          "prompt": 7.84e-8,
+          "completion": 1.568e-7,
+          "input_cache_read": 1.568e-8,
           "currency": "USD",
           "is_listed_price": true
         }
@@ -5918,8 +5828,8 @@
       "release_date": "2026-04-24",
       "release_date_provenance": "openrouter",
       "value": {
-        "score": 91.3,
-        "raw": 6.200140738106752,
+        "score": 98.2,
+        "raw": 6.322516386158817,
         "note": "ln(综合分/平均每M价)"
       },
       "series_key": "deepseek--deepseek-v4",
@@ -6111,7 +6021,7 @@
       "release_date": "2026-04-23",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 85.5,
+        "score": 89.9,
         "raw": 5.872788255474384,
         "note": "ln(综合分/平均每M价)"
       },
@@ -6211,7 +6121,7 @@
       "release_date": "2026-08-21",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 74.9,
+        "score": 78.7,
         "raw": 5.270665835217526,
         "note": "ln(综合分/平均每M价)"
       },
@@ -6344,7 +6254,7 @@
       "release_date": "2026-04-23",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 90.5,
+        "score": 95.1,
         "raw": 6.156978985585555,
         "note": "ln(综合分/平均每M价)"
       },
@@ -6362,10 +6272,18 @@
         "07-31"
       ],
       "evaluation_profiles": [],
-      "offerings": {},
+      "offerings": {
+        "openrouter": [
+          {
+            "kind": "batch",
+            "raw_name": "deepseek/deepseek-v4-flash-0731:batch"
+          }
+        ]
+      },
       "source_names": {
         "openrouter": [
-          "deepseek/deepseek-v4-flash-0731"
+          "deepseek/deepseek-v4-flash-0731",
+          "deepseek/deepseek-v4-flash-0731:batch"
         ],
         "lmarena": [
           "Deepseek V4 Flash (High) (20260731)"
@@ -6532,9 +6450,9 @@
       },
       "pricing": {
         "openrouter": {
-          "prompt": 6e-8,
-          "completion": 1.2e-7,
-          "input_cache_read": 1.2e-8,
+          "prompt": 6.5e-8,
+          "completion": 1.8e-7,
+          "input_cache_read": 1.6e-8,
           "currency": "USD",
           "is_listed_price": true
         },
@@ -6546,8 +6464,8 @@
       "release_date": "2026-07-31",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 100,
-        "raw": 6.694286993191346,
+        "score": 99.4,
+        "raw": 6.385985633536829,
         "note": "ln(综合分/平均每M价)"
       },
       "series_key": "deepseek--deepseek-v4",
@@ -6727,9 +6645,9 @@
       },
       "pricing": {
         "openrouter": {
-          "prompt": 8.7e-7,
-          "completion": 0.00000174,
-          "input_cache_read": 7.25e-8,
+          "prompt": 4.17252e-7,
+          "completion": 8.34504e-7,
+          "input_cache_read": 3.4771e-8,
           "currency": "USD",
           "is_listed_price": true
         }
@@ -6737,8 +6655,8 @@
       "release_date": "2026-04-24",
       "release_date_provenance": "catalog",
       "value": {
-        "score": 50.6,
-        "raw": 3.8895501495760874,
+        "score": 66.8,
+        "raw": 4.624353005404865,
         "note": "ln(综合分/平均每M价)"
       },
       "series_key": "deepseek--deepseek-v4",
@@ -7003,10 +6921,18 @@
         "08-13"
       ],
       "evaluation_profiles": [],
-      "offerings": {},
+      "offerings": {
+        "openrouter": [
+          {
+            "kind": "batch",
+            "raw_name": "deepseek/deepseek-v4-pro-0813:batch"
+          }
+        ]
+      },
       "source_names": {
         "openrouter": [
-          "deepseek/deepseek-v4-pro-0813"
+          "deepseek/deepseek-v4-pro-0813",
+          "deepseek/deepseek-v4-pro-0813:batch"
         ],
         "lmarena": [
           "DeepSeek V4 Pro (High) (0813)"
@@ -7199,7 +7125,7 @@
       "release_date": "2026-08-13",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 54.2,
+        "score": 57,
         "raw": 4.095606392042523,
         "note": "ln(综合分/平均每M价)"
       },
@@ -7318,278 +7244,6 @@
       "series_display": "Diffusiongemma 26b",
       "member_key": "google--diffusiongemma-26b-a4b-it",
       "member_display": "DiffusionGemma 26B-A4B",
-      "member_order": 9999
-    },
-    {
-      "canonical": "google--gemini-2.5-flash-lite",
-      "identity": "gemini-2.5-flash-lite",
-      "family": "gemini-2.5",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {
-        "openrouter": [
-          {
-            "kind": "batch",
-            "raw_name": "google/gemini-2.5-flash-lite:batch"
-          }
-        ]
-      },
-      "source_names": {
-        "openrouter": [
-          "google/gemini-2.5-flash-lite",
-          "google/gemini-2.5-flash-lite:batch"
-        ],
-        "llm_stats": [
-          "gemini-2.5-flash-lite"
-        ]
-      },
-      "display": "Gemini 2.5 Flash-Lite",
-      "vendor": "google",
-      "theme": "general",
-      "license": "creative_commons_attribution_4_0_license",
-      "open_source": true,
-      "is_moe": null,
-      "context_length": 1048576,
-      "modalities": [
-        "text",
-        "image",
-        "audio",
-        "video"
-      ],
-      "single_source": false,
-      "degrees": {},
-      "default_degree": {},
-      "composite": {
-        "score": 38.6,
-        "weights": {
-          "llm_stats": 1
-        },
-        "method": "proportional_redistribute",
-        "available": {
-          "llm_stats": 38.5625
-        },
-        "note": "缺源，权重按比例重分配"
-      },
-      "dimensions": {
-        "reasoning": {
-          "value": 39.3,
-          "source": "llm_stats",
-          "raw": 11.42,
-          "note": "index_reasoning"
-        },
-        "coding": {
-          "value": 21.9,
-          "source": "llm_stats",
-          "raw": -2.44,
-          "note": "index_code"
-        },
-        "long_context": {
-          "value": 24.2,
-          "source": "llm_stats",
-          "raw": -0.66,
-          "note": "index_long_context"
-        },
-        "healthcare": {
-          "value": 46,
-          "source": "llm_stats",
-          "raw": 16.77,
-          "note": "index_healthcare"
-        },
-        "math_reasoning": {
-          "value": 49.8,
-          "source": "llm_stats",
-          "raw": 0.498,
-          "note": "aime_2025"
-        },
-        "expert_knowledge": {
-          "value": 64.6,
-          "source": "llm_stats",
-          "raw": 0.646,
-          "note": "GPQA"
-        },
-        "multimodal": {
-          "value": 29.9,
-          "source": "llm_stats",
-          "raw": 3.88,
-          "note": "index_vision"
-        },
-        "swe_capability": {
-          "value": 31.6,
-          "source": "llm_stats",
-          "raw": 0.316,
-          "note": "swe-bench-verified"
-        },
-        "composite": {
-          "value": 38.6,
-          "source": "composite",
-          "raw": 38.6
-        }
-      },
-      "lmarena_scores": {},
-      "lmarena_profiles": {},
-      "livebench_scores": {},
-      "pricing": {
-        "openrouter": {
-          "prompt": 1e-7,
-          "completion": 4e-7,
-          "input_cache_read": 1e-8,
-          "currency": "USD",
-          "is_listed_price": true
-        }
-      },
-      "release_date": "2025-06-17",
-      "release_date_provenance": "llm_stats",
-      "value": {
-        "score": 70.8,
-        "raw": 5.039546637590676,
-        "note": "ln(综合分/平均每M价)"
-      },
-      "series_key": "google--gemini-2.5",
-      "series_display": "Gemini 2.5",
-      "member_key": "google--gemini-2.5-flash-lite",
-      "member_display": "Gemini 2.5 Flash-Lite",
-      "member_order": 9999
-    },
-    {
-      "canonical": "google--gemini-2.5-pro-preview",
-      "identity": "gemini-2.5-pro-preview",
-      "family": "gemini-2.5",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "source_names": {
-        "openrouter": [
-          "google/gemini-2.5-pro-preview"
-        ]
-      },
-      "display": "Gemini 2.5 Pro Preview",
-      "vendor": "google",
-      "theme": "general",
-      "license": null,
-      "open_source": false,
-      "is_moe": null,
-      "context_length": 1048576,
-      "modalities": [
-        "image",
-        "text",
-        "audio"
-      ],
-      "single_source": true,
-      "degrees": {},
-      "default_degree": {},
-      "composite": null,
-      "dimensions": {},
-      "lmarena_scores": {},
-      "lmarena_profiles": {},
-      "livebench_scores": {},
-      "pricing": {
-        "openrouter": {
-          "prompt": 0.00000125,
-          "completion": 0.00001,
-          "input_cache_read": 1.25e-7,
-          "currency": "USD",
-          "is_listed_price": true
-        }
-      },
-      "release_date": "2025-06-05",
-      "release_date_provenance": "openrouter",
-      "value": null,
-      "series_key": "google--gemini-2.5",
-      "series_display": "Gemini 2.5",
-      "member_key": "google--gemini-2.5-pro-preview",
-      "member_display": "Gemini 2.5 Pro Preview",
-      "member_order": 9999
-    },
-    {
-      "canonical": "google--gemini-2.5-pro-preview@06-05",
-      "identity": "gemini-2.5-pro-preview",
-      "family": "gemini-2.5",
-      "revisions": [
-        "06-05"
-      ],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "source_names": {
-        "llm_stats": [
-          "gemini-2.5-pro-preview-06-05"
-        ]
-      },
-      "display": "Gemini 2.5 Pro Preview (06-05)",
-      "vendor": "google",
-      "theme": "general",
-      "license": "Proprietary",
-      "open_source": false,
-      "is_moe": null,
-      "context_length": null,
-      "modalities": [
-        "text",
-        "image"
-      ],
-      "single_source": true,
-      "degrees": {},
-      "default_degree": {},
-      "composite": null,
-      "dimensions": {
-        "reasoning": {
-          "value": 60.5,
-          "source": "llm_stats",
-          "raw": 28.42,
-          "note": "index_reasoning"
-        },
-        "coding": {
-          "value": 45.9,
-          "source": "llm_stats",
-          "raw": 16.74,
-          "note": "index_code"
-        },
-        "long_context": {
-          "value": 29.1,
-          "source": "llm_stats",
-          "raw": 3.24,
-          "note": "index_long_context"
-        },
-        "healthcare": {
-          "value": 63.2,
-          "source": "llm_stats",
-          "raw": 30.59,
-          "note": "index_healthcare"
-        },
-        "math_reasoning": {
-          "value": 88,
-          "source": "llm_stats",
-          "raw": 0.88,
-          "note": "aime_2025"
-        },
-        "expert_knowledge": {
-          "value": 86.4,
-          "source": "llm_stats",
-          "raw": 0.864,
-          "note": "GPQA"
-        },
-        "multimodal": {
-          "value": 48.9,
-          "source": "llm_stats",
-          "raw": 19.09,
-          "note": "index_vision"
-        },
-        "swe_capability": {
-          "value": 67.2,
-          "source": "llm_stats",
-          "raw": 0.672,
-          "note": "swe-bench-verified"
-        }
-      },
-      "lmarena_scores": {},
-      "lmarena_profiles": {},
-      "livebench_scores": {},
-      "pricing": {},
-      "release_date": "2025-06-05",
-      "release_date_provenance": "llm_stats",
-      "value": null,
-      "series_key": "google--gemini-2.5",
-      "series_display": "Gemini 2.5",
-      "member_key": "google--gemini-2.5-pro-preview",
-      "member_display": "Gemini 2.5 Pro Preview",
       "member_order": 9999
     },
     {
@@ -8938,7 +8592,7 @@
       "release_date": "2026-02-19",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 20.6,
+        "score": 21.7,
         "raw": 2.1892564076870427,
         "note": "ln(综合分/平均每M价)"
       },
@@ -9261,7 +8915,7 @@
       "release_date": "2026-05-19",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 25.5,
+        "score": 26.8,
         "raw": 2.467292103087018,
         "note": "ln(综合分/平均每M价)"
       },
@@ -9570,7 +9224,7 @@
       "release_date": "2026-07-21",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 44,
+        "score": 46.3,
         "raw": 3.5179216559702966,
         "note": "ln(综合分/平均每M价)"
       },
@@ -9836,7 +9490,7 @@
       "release_date": "2026-07-21",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 40,
+        "score": 42,
         "raw": 3.2900588887244404,
         "note": "ln(综合分/平均每M价)"
       },
@@ -10083,9 +9737,9 @@
       },
       "pricing": {
         "openrouter": {
-          "prompt": 3.75e-7,
-          "completion": 0.000001875,
-          "input_cache_read": 3.75e-8,
+          "prompt": 7.5e-7,
+          "completion": 0.00000375,
+          "input_cache_read": 7.5e-8,
           "currency": "USD",
           "is_listed_price": true
         },
@@ -10097,8 +9751,8 @@
       "release_date": "2026-08-13",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 54.4,
-        "raw": 4.106126730920361,
+        "score": 44.3,
+        "raw": 3.4129795503604154,
         "note": "ln(综合分/平均每M价)"
       },
       "series_key": "google--gemini-3.7",
@@ -10293,312 +9947,6 @@
       "series_display": "Gemini Omni",
       "member_key": "google--gemini-omni-flash",
       "member_display": "Gemini Omni Flash",
-      "member_order": 9999
-    },
-    {
-      "canonical": "google--gemma-3n-e2b",
-      "identity": "gemma-3n-e2b",
-      "family": "gemma-3n",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "source_names": {
-        "llm_stats": [
-          "gemma-3n-e2b"
-        ]
-      },
-      "display": "Gemma 3n E2B",
-      "vendor": "google",
-      "theme": "general",
-      "license": "Proprietary",
-      "open_source": false,
-      "is_moe": null,
-      "context_length": null,
-      "modalities": [
-        "text",
-        "image"
-      ],
-      "single_source": true,
-      "degrees": {},
-      "default_degree": {},
-      "composite": null,
-      "dimensions": {
-        "reasoning": {
-          "value": 12.7,
-          "source": "llm_stats",
-          "raw": -9.84,
-          "note": "index_reasoning"
-        },
-        "math_reasoning": {
-          "value": 17.7,
-          "source": "llm_stats",
-          "raw": -5.87,
-          "note": "index_math"
-        }
-      },
-      "lmarena_scores": {},
-      "lmarena_profiles": {},
-      "livebench_scores": {},
-      "pricing": {},
-      "release_date": "2025-06-26",
-      "release_date_provenance": "llm_stats",
-      "value": null,
-      "series_key": "google--gemma-3n",
-      "series_display": "Gemma 3n",
-      "member_key": "google--gemma-3n-e2b",
-      "member_display": "Gemma 3n E2B",
-      "member_order": 9999
-    },
-    {
-      "canonical": "google--gemma-3n-e2b-it",
-      "identity": "gemma-3n-e2b-it",
-      "family": "gemma-3n",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "source_names": {
-        "llm_stats": [
-          "gemma-3n-e2b-it"
-        ]
-      },
-      "display": "Gemma 3n E2B Instructed",
-      "vendor": "google",
-      "theme": "general",
-      "license": "Proprietary",
-      "open_source": false,
-      "is_moe": null,
-      "context_length": null,
-      "modalities": [
-        "text",
-        "image"
-      ],
-      "single_source": true,
-      "degrees": {},
-      "default_degree": {},
-      "composite": null,
-      "dimensions": {
-        "reasoning": {
-          "value": 12.1,
-          "source": "llm_stats",
-          "raw": -10.33,
-          "note": "index_reasoning"
-        },
-        "coding": {
-          "value": 19.6,
-          "source": "llm_stats",
-          "raw": -4.36,
-          "note": "index_code"
-        },
-        "finance": {
-          "value": 13.6,
-          "source": "llm_stats",
-          "raw": -9.09,
-          "note": "index_finance"
-        },
-        "legal": {
-          "value": 13.6,
-          "source": "llm_stats",
-          "raw": -9.09,
-          "note": "index_legal"
-        },
-        "healthcare": {
-          "value": 13.6,
-          "source": "llm_stats",
-          "raw": -9.09,
-          "note": "index_healthcare"
-        },
-        "math_reasoning": {
-          "value": 6.7,
-          "source": "llm_stats",
-          "raw": 0.067,
-          "note": "aime_2025"
-        },
-        "expert_knowledge": {
-          "value": 24.8,
-          "source": "llm_stats",
-          "raw": 0.248,
-          "note": "GPQA"
-        }
-      },
-      "lmarena_scores": {},
-      "lmarena_profiles": {},
-      "livebench_scores": {},
-      "pricing": {},
-      "release_date": "2025-06-26",
-      "release_date_provenance": "llm_stats",
-      "value": null,
-      "series_key": "google--gemma-3n",
-      "series_display": "Gemma 3n",
-      "member_key": "google--gemma-3n-e2b-it",
-      "member_display": "Gemma 3n E2B Instructed",
-      "member_order": 9999
-    },
-    {
-      "canonical": "google--gemma-3n-e4b",
-      "identity": "gemma-3n-e4b",
-      "family": "gemma-3n",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "source_names": {
-        "llm_stats": [
-          "gemma-3n-e4b"
-        ]
-      },
-      "display": "Gemma 3n E4B",
-      "vendor": "google",
-      "theme": "general",
-      "license": "Proprietary",
-      "open_source": false,
-      "is_moe": null,
-      "context_length": null,
-      "modalities": [
-        "text",
-        "image"
-      ],
-      "single_source": true,
-      "degrees": {},
-      "default_degree": {},
-      "composite": null,
-      "dimensions": {
-        "reasoning": {
-          "value": 17.7,
-          "source": "llm_stats",
-          "raw": -5.86,
-          "note": "index_reasoning"
-        },
-        "math_reasoning": {
-          "value": 22,
-          "source": "llm_stats",
-          "raw": -2.37,
-          "note": "index_math"
-        }
-      },
-      "lmarena_scores": {},
-      "lmarena_profiles": {},
-      "livebench_scores": {},
-      "pricing": {},
-      "release_date": "2025-06-26",
-      "release_date_provenance": "llm_stats",
-      "value": null,
-      "series_key": "google--gemma-3n",
-      "series_display": "Gemma 3n",
-      "member_key": "google--gemma-3n-e4b",
-      "member_display": "Gemma 3n E4B",
-      "member_order": 9999
-    },
-    {
-      "canonical": "google--gemma-3n-e4b-it",
-      "identity": "gemma-3n-e4b-it",
-      "family": "gemma-3n",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "source_names": {
-        "lmarena": [
-          "gemma-3n-e4b-it"
-        ],
-        "llm_stats": [
-          "gemma-3n-e4b-it"
-        ]
-      },
-      "display": "Gemma 3n E4B Instructed",
-      "vendor": "google",
-      "theme": "general",
-      "license": "Proprietary",
-      "open_source": true,
-      "is_moe": null,
-      "context_length": null,
-      "modalities": [
-        "text",
-        "image"
-      ],
-      "single_source": false,
-      "degrees": {},
-      "default_degree": {},
-      "composite": {
-        "score": 20,
-        "weights": {
-          "llm_stats": 1
-        },
-        "method": "proportional_redistribute",
-        "available": {
-          "llm_stats": 20
-        },
-        "note": "缺源，权重按比例重分配"
-      },
-      "dimensions": {
-        "text": {
-          "value": 20.2,
-          "source": "lmarena",
-          "raw": 1305.2237777670348
-        },
-        "reasoning": {
-          "value": 18.9,
-          "source": "llm_stats",
-          "raw": -4.9,
-          "note": "index_reasoning"
-        },
-        "coding": {
-          "value": 24.9,
-          "source": "llm_stats",
-          "raw": -0.05,
-          "note": "index_code"
-        },
-        "finance": {
-          "value": 20.3,
-          "source": "llm_stats",
-          "raw": -3.8,
-          "note": "index_finance"
-        },
-        "legal": {
-          "value": 20.3,
-          "source": "llm_stats",
-          "raw": -3.8,
-          "note": "index_legal"
-        },
-        "healthcare": {
-          "value": 20.3,
-          "source": "llm_stats",
-          "raw": -3.8,
-          "note": "index_healthcare"
-        },
-        "math_reasoning": {
-          "value": 11.6,
-          "source": "llm_stats",
-          "raw": 0.116,
-          "note": "aime_2025"
-        },
-        "expert_knowledge": {
-          "value": 23.7,
-          "source": "llm_stats",
-          "raw": 0.237,
-          "note": "GPQA"
-        },
-        "composite": {
-          "value": 20,
-          "source": "composite",
-          "raw": 20
-        }
-      },
-      "lmarena_scores": {
-        "text": {
-          "base": {
-            "score": 1305.2237777670348,
-            "rank": 224
-          }
-        }
-      },
-      "lmarena_profiles": {},
-      "livebench_scores": {},
-      "pricing": {},
-      "release_date": "2025-06-26",
-      "release_date_provenance": "llm_stats",
-      "value": null,
-      "series_key": "google--gemma-3n",
-      "series_display": "Gemma 3n",
-      "member_key": "google--gemma-3n-e4b-it",
-      "member_display": "Gemma 3n E4B Instructed",
       "member_order": 9999
     },
     {
@@ -10908,7 +10256,7 @@
       "release_date": "2026-04-02",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 82.7,
+        "score": 86.9,
         "raw": 5.713491288783162,
         "note": "ln(综合分/平均每M价)"
       },
@@ -11077,6 +10425,10 @@
       "offerings": {
         "openrouter": [
           {
+            "kind": "batch",
+            "raw_name": "google/gemma-4-31b-it:batch"
+          },
+          {
             "kind": "free",
             "raw_name": "google/gemma-4-31b-it:free"
           }
@@ -11085,6 +10437,7 @@
       "source_names": {
         "openrouter": [
           "google/gemma-4-31b-it",
+          "google/gemma-4-31b-it:batch",
           "google/gemma-4-31b-it:free"
         ],
         "llm_stats": [
@@ -11197,7 +10550,7 @@
       "release_date": "2026-04-02",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 83.1,
+        "score": 87.4,
         "raw": 5.737322203776053,
         "note": "ln(综合分/平均每M价)"
       },
@@ -13423,10 +12776,18 @@
       "family": "muse-glimmer",
       "revisions": [],
       "evaluation_profiles": [],
-      "offerings": {},
+      "offerings": {
+        "openrouter": [
+          {
+            "kind": "batch",
+            "raw_name": "meta/muse-glimmer-30b:batch"
+          }
+        ]
+      },
       "source_names": {
         "openrouter": [
-          "meta/muse-glimmer-30b"
+          "meta/muse-glimmer-30b",
+          "meta/muse-glimmer-30b:batch"
         ],
         "llm_stats": [
           "muse-glimmer-30b"
@@ -13517,8 +12878,8 @@
       "livebench_scores": {},
       "pricing": {
         "openrouter": {
-          "prompt": 3.5e-7,
-          "completion": 0.0000015,
+          "prompt": 3e-7,
+          "completion": 0.0000012,
           "input_cache_read": 4e-8,
           "currency": "USD",
           "is_listed_price": true
@@ -13527,8 +12888,8 @@
       "release_date": "2026-08-10",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 58.1,
-        "raw": 4.317848408982471,
+        "score": 65,
+        "raw": 4.52756893996454,
         "note": "ln(综合分/平均每M价)"
       },
       "series_key": "meta--muse-glimmer",
@@ -13909,7 +13270,7 @@
       "release_date": "2026-07-09",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 37.8,
+        "score": 39.7,
         "raw": 3.1643236375360435,
         "note": "ln(综合分/平均每M价)"
       },
@@ -14149,7 +13510,7 @@
       "release_date": "2026-08-05",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 38.6,
+        "score": 40.5,
         "raw": 3.2079067934976266,
         "note": "ln(综合分/平均每M价)"
       },
@@ -14783,326 +14144,6 @@
       "member_order": 9999
     },
     {
-      "canonical": "minimax--minimax-m1",
-      "identity": "minimax-m1",
-      "family": "minimax-m1",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "source_names": {
-        "openrouter": [
-          "minimax/minimax-m1"
-        ],
-        "lmarena": [
-          "minimax-m1"
-        ]
-      },
-      "display": "MiniMax M1",
-      "vendor": "minimax",
-      "theme": "general",
-      "license": "Apache 2.0",
-      "open_source": true,
-      "is_moe": null,
-      "context_length": 1000000,
-      "modalities": [
-        "text"
-      ],
-      "single_source": false,
-      "degrees": {},
-      "default_degree": {},
-      "composite": null,
-      "dimensions": {
-        "text": {
-          "value": 35.1,
-          "source": "lmarena",
-          "raw": 1342.3612348452598
-        }
-      },
-      "lmarena_scores": {
-        "text": {
-          "base": {
-            "score": 1342.3612348452598,
-            "rank": 191
-          }
-        }
-      },
-      "lmarena_profiles": {},
-      "livebench_scores": {},
-      "pricing": {
-        "openrouter": {
-          "prompt": 5.5e-7,
-          "completion": 0.0000022,
-          "input_cache_read": null,
-          "currency": "USD",
-          "is_listed_price": true
-        }
-      },
-      "release_date": "2025-06-17",
-      "release_date_provenance": "openrouter",
-      "value": null,
-      "series_key": "minimax--minimax-m1",
-      "series_display": "Minimax M1",
-      "member_key": "minimax--minimax-m1",
-      "member_display": "MiniMax M1",
-      "member_order": 9999
-    },
-    {
-      "canonical": "minimax--minimax-m1-40k",
-      "identity": "minimax-m1-40k",
-      "family": "minimax-m1",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "source_names": {
-        "llm_stats": [
-          "minimax-m1-40k"
-        ]
-      },
-      "display": "MiniMax M1 40K",
-      "vendor": "minimax",
-      "theme": "general",
-      "license": "MIT",
-      "open_source": true,
-      "is_moe": null,
-      "context_length": null,
-      "modalities": [
-        "text"
-      ],
-      "single_source": true,
-      "degrees": {},
-      "default_degree": {},
-      "composite": {
-        "score": 51.2,
-        "weights": {
-          "llm_stats": 1
-        },
-        "method": "proportional_redistribute",
-        "available": {
-          "llm_stats": 51.24999999999999
-        },
-        "note": "缺源，权重按比例重分配"
-      },
-      "dimensions": {
-        "reasoning": {
-          "value": 51.4,
-          "source": "llm_stats",
-          "raw": 21.14,
-          "note": "index_reasoning"
-        },
-        "coding": {
-          "value": 35.3,
-          "source": "llm_stats",
-          "raw": 8.25,
-          "note": "index_code"
-        },
-        "communication": {
-          "value": 41.9,
-          "source": "llm_stats",
-          "raw": 13.48,
-          "note": "index_communication"
-        },
-        "tool_calling": {
-          "value": 41.4,
-          "source": "llm_stats",
-          "raw": 13.13,
-          "note": "index_tool_calling"
-        },
-        "long_context": {
-          "value": 55.4,
-          "source": "llm_stats",
-          "raw": 24.33,
-          "note": "index_long_context"
-        },
-        "finance": {
-          "value": 47.6,
-          "source": "llm_stats",
-          "raw": 18.08,
-          "note": "index_finance"
-        },
-        "legal": {
-          "value": 47.6,
-          "source": "llm_stats",
-          "raw": 18.08,
-          "note": "index_legal"
-        },
-        "healthcare": {
-          "value": 47.6,
-          "source": "llm_stats",
-          "raw": 18.08,
-          "note": "index_healthcare"
-        },
-        "math_reasoning": {
-          "value": 74.6,
-          "source": "llm_stats",
-          "raw": 0.746,
-          "note": "aime_2025"
-        },
-        "expert_knowledge": {
-          "value": 69.2,
-          "source": "llm_stats",
-          "raw": 0.692,
-          "note": "GPQA"
-        },
-        "multimodal": {
-          "value": 19.8,
-          "source": "llm_stats",
-          "raw": -4.18,
-          "note": "index_vision"
-        },
-        "swe_capability": {
-          "value": 55.6,
-          "source": "llm_stats",
-          "raw": 0.556,
-          "note": "swe-bench-verified"
-        },
-        "composite": {
-          "value": 51.2,
-          "source": "composite",
-          "raw": 51.2
-        }
-      },
-      "lmarena_scores": {},
-      "lmarena_profiles": {},
-      "livebench_scores": {},
-      "pricing": {},
-      "release_date": "2025-06-16",
-      "release_date_provenance": "llm_stats",
-      "value": null,
-      "series_key": "minimax--minimax-m1",
-      "series_display": "Minimax M1",
-      "member_key": "minimax--minimax-m1-40k",
-      "member_display": "MiniMax M1 40K",
-      "member_order": 9999
-    },
-    {
-      "canonical": "minimax--minimax-m1-80k",
-      "identity": "minimax-m1-80k",
-      "family": "minimax-m1",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "source_names": {
-        "llm_stats": [
-          "minimax-m1-80k"
-        ]
-      },
-      "display": "MiniMax M1 80K",
-      "vendor": "minimax",
-      "theme": "general",
-      "license": "MIT",
-      "open_source": true,
-      "is_moe": null,
-      "context_length": null,
-      "modalities": [
-        "text"
-      ],
-      "single_source": true,
-      "degrees": {},
-      "default_degree": {},
-      "composite": {
-        "score": 52.5,
-        "weights": {
-          "llm_stats": 1
-        },
-        "method": "proportional_redistribute",
-        "available": {
-          "llm_stats": 52.449999999999996
-        },
-        "note": "缺源，权重按比例重分配"
-      },
-      "dimensions": {
-        "reasoning": {
-          "value": 52.6,
-          "source": "llm_stats",
-          "raw": 22.09,
-          "note": "index_reasoning"
-        },
-        "coding": {
-          "value": 37.1,
-          "source": "llm_stats",
-          "raw": 9.71,
-          "note": "index_code"
-        },
-        "communication": {
-          "value": 43.2,
-          "source": "llm_stats",
-          "raw": 14.58,
-          "note": "index_communication"
-        },
-        "tool_calling": {
-          "value": 43.6,
-          "source": "llm_stats",
-          "raw": 14.85,
-          "note": "index_tool_calling"
-        },
-        "long_context": {
-          "value": 52.2,
-          "source": "llm_stats",
-          "raw": 21.76,
-          "note": "index_long_context"
-        },
-        "finance": {
-          "value": 48.8,
-          "source": "llm_stats",
-          "raw": 19.01,
-          "note": "index_finance"
-        },
-        "legal": {
-          "value": 48.8,
-          "source": "llm_stats",
-          "raw": 19.01,
-          "note": "index_legal"
-        },
-        "healthcare": {
-          "value": 48.8,
-          "source": "llm_stats",
-          "raw": 19.01,
-          "note": "index_healthcare"
-        },
-        "math_reasoning": {
-          "value": 76.9,
-          "source": "llm_stats",
-          "raw": 0.769,
-          "note": "aime_2025"
-        },
-        "expert_knowledge": {
-          "value": 70,
-          "source": "llm_stats",
-          "raw": 0.7,
-          "note": "GPQA"
-        },
-        "multimodal": {
-          "value": 20.6,
-          "source": "llm_stats",
-          "raw": -3.52,
-          "note": "index_vision"
-        },
-        "swe_capability": {
-          "value": 56,
-          "source": "llm_stats",
-          "raw": 0.56,
-          "note": "swe-bench-verified"
-        },
-        "composite": {
-          "value": 52.5,
-          "source": "composite",
-          "raw": 52.5
-        }
-      },
-      "lmarena_scores": {},
-      "lmarena_profiles": {},
-      "livebench_scores": {},
-      "pricing": {},
-      "release_date": "2025-06-16",
-      "release_date_provenance": "llm_stats",
-      "value": null,
-      "series_key": "minimax--minimax-m1",
-      "series_display": "Minimax M1",
-      "member_key": "minimax--minimax-m1-80k",
-      "member_display": "MiniMax M1 80K",
-      "member_order": 9999
-    },
-    {
       "canonical": "minimax--minimax-m2",
       "identity": "minimax-m2",
       "family": "minimax-m2",
@@ -15259,7 +14300,7 @@
       "release_date": "2025-10-27",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 61.9,
+        "score": 65,
         "raw": 4.5311225438395155,
         "note": "ln(综合分/平均每M价)"
       },
@@ -15462,7 +14503,7 @@
       "release_date": "2026-03-18",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 56.2,
+        "score": 59.1,
         "raw": 4.209655408733095,
         "note": "ln(综合分/平均每M价)"
       },
@@ -15729,7 +14770,7 @@
       "release_date": "2026-06-01",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 60.4,
+        "score": 63.5,
         "raw": 4.446565155811452,
         "note": "ln(综合分/平均每M价)"
       },
@@ -15892,93 +14933,6 @@
       "member_order": 9999
     },
     {
-      "canonical": "mistral--magistral-medium",
-      "identity": "magistral-medium",
-      "family": "magistral-medium",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "source_names": {
-        "llm_stats": [
-          "magistral-medium"
-        ]
-      },
-      "display": "Magistral Medium",
-      "vendor": "mistral",
-      "theme": "general",
-      "license": "Apache-2.0",
-      "open_source": true,
-      "is_moe": null,
-      "context_length": null,
-      "modalities": [
-        "text",
-        "image"
-      ],
-      "single_source": true,
-      "degrees": {},
-      "default_degree": {},
-      "composite": {
-        "score": 41.8,
-        "weights": {
-          "llm_stats": 1
-        },
-        "method": "proportional_redistribute",
-        "available": {
-          "llm_stats": 41.8375
-        },
-        "note": "缺源，权重按比例重分配"
-      },
-      "dimensions": {
-        "reasoning": {
-          "value": 42,
-          "source": "llm_stats",
-          "raw": 13.62,
-          "note": "index_reasoning"
-        },
-        "coding": {
-          "value": 29.6,
-          "source": "llm_stats",
-          "raw": 3.65,
-          "note": "index_code"
-        },
-        "math_reasoning": {
-          "value": 64.9,
-          "source": "llm_stats",
-          "raw": 0.649,
-          "note": "aime_2025"
-        },
-        "expert_knowledge": {
-          "value": 70.8,
-          "source": "llm_stats",
-          "raw": 0.708,
-          "note": "GPQA"
-        },
-        "multimodal": {
-          "value": 22.1,
-          "source": "llm_stats",
-          "raw": -2.3,
-          "note": "index_vision"
-        },
-        "composite": {
-          "value": 41.8,
-          "source": "composite",
-          "raw": 41.8
-        }
-      },
-      "lmarena_scores": {},
-      "lmarena_profiles": {},
-      "livebench_scores": {},
-      "pricing": {},
-      "release_date": "2025-06-10",
-      "release_date_provenance": "llm_stats",
-      "value": null,
-      "series_key": "mistral--magistral",
-      "series_display": "Magistral",
-      "member_key": "mistral--magistral-medium",
-      "member_display": "Magistral Medium",
-      "member_order": 9999
-    },
-    {
       "canonical": "mistral--magistral-medium@2025-06",
       "identity": "magistral-medium",
       "family": "magistral-medium",
@@ -16029,88 +14983,6 @@
       "series_display": "Magistral",
       "member_key": "mistral--magistral-medium",
       "member_display": "Magistral Medium",
-      "member_order": 9999
-    },
-    {
-      "canonical": "mistral--magistral-small@2025-06",
-      "identity": "magistral-small",
-      "family": "magistral-small",
-      "revisions": [
-        "2025-06"
-      ],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "source_names": {
-        "llm_stats": [
-          "magistral-small-2506"
-        ]
-      },
-      "display": "Magistral Small (2025-06)",
-      "vendor": "mistral",
-      "theme": "general",
-      "license": "Apache-2.0",
-      "open_source": true,
-      "is_moe": null,
-      "context_length": null,
-      "modalities": [
-        "text"
-      ],
-      "single_source": true,
-      "degrees": {},
-      "default_degree": {},
-      "composite": {
-        "score": 38.8,
-        "weights": {
-          "llm_stats": 1
-        },
-        "method": "proportional_redistribute",
-        "available": {
-          "llm_stats": 38.837500000000006
-        },
-        "note": "缺源，权重按比例重分配"
-      },
-      "dimensions": {
-        "reasoning": {
-          "value": 39.1,
-          "source": "llm_stats",
-          "raw": 11.27,
-          "note": "index_reasoning"
-        },
-        "coding": {
-          "value": 31.6,
-          "source": "llm_stats",
-          "raw": 5.25,
-          "note": "index_code"
-        },
-        "math_reasoning": {
-          "value": 62.8,
-          "source": "llm_stats",
-          "raw": 0.6276,
-          "note": "aime_2025"
-        },
-        "expert_knowledge": {
-          "value": 68.2,
-          "source": "llm_stats",
-          "raw": 0.6818,
-          "note": "GPQA"
-        },
-        "composite": {
-          "value": 38.8,
-          "source": "composite",
-          "raw": 38.8
-        }
-      },
-      "lmarena_scores": {},
-      "lmarena_profiles": {},
-      "livebench_scores": {},
-      "pricing": {},
-      "release_date": "2025-06-10",
-      "release_date_provenance": "llm_stats",
-      "value": null,
-      "series_key": "mistral--magistral",
-      "series_display": "Magistral",
-      "member_key": "mistral--magistral-small",
-      "member_display": "Magistral Small",
       "member_order": 9999
     },
     {
@@ -16985,10 +15857,18 @@
         "2025-12"
       ],
       "evaluation_profiles": [],
-      "offerings": {},
+      "offerings": {
+        "openrouter": [
+          {
+            "kind": "batch",
+            "raw_name": "mistralai/ministral-8b-2512:batch"
+          }
+        ]
+      },
       "source_names": {
         "openrouter": [
-          "mistralai/ministral-8b-2512"
+          "mistralai/ministral-8b-2512",
+          "mistralai/ministral-8b-2512:batch"
         ]
       },
       "display": "Ministral 3 8B (2025-12)",
@@ -17433,10 +16313,18 @@
       "family": "mistral-medium",
       "revisions": [],
       "evaluation_profiles": [],
-      "offerings": {},
+      "offerings": {
+        "openrouter": [
+          {
+            "kind": "batch",
+            "raw_name": "mistralai/mistral-medium-3-5:batch"
+          }
+        ]
+      },
       "source_names": {
         "openrouter": [
-          "mistralai/mistral-medium-3-5"
+          "mistralai/mistral-medium-3-5",
+          "mistralai/mistral-medium-3-5:batch"
         ],
         "lmarena": [
           "Mistral Medium 3.5",
@@ -17630,7 +16518,7 @@
       "release_date": "2026-04-29",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 25.3,
+        "score": 26.6,
         "raw": 2.4548291945507223,
         "note": "ln(综合分/平均每M价)"
       },
@@ -17638,162 +16526,6 @@
       "series_display": "Mistral Medium",
       "member_key": "mistral--mistral-medium-3.5",
       "member_display": "Mistral Medium 3.5",
-      "member_order": 9999
-    },
-    {
-      "canonical": "mistral--mistral-small-3.2-24b-instruct",
-      "identity": "mistral-small-3.2-24b-instruct",
-      "family": "mistral-small",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "source_names": {
-        "openrouter": [
-          "mistralai/mistral-small-3.2-24b-instruct"
-        ]
-      },
-      "display": "Mistral Small 3.2 24B",
-      "vendor": "mistral",
-      "theme": "general",
-      "license": null,
-      "open_source": true,
-      "is_moe": null,
-      "context_length": 131072,
-      "modalities": [
-        "image",
-        "text"
-      ],
-      "single_source": true,
-      "degrees": {},
-      "default_degree": {},
-      "composite": null,
-      "dimensions": {},
-      "lmarena_scores": {},
-      "lmarena_profiles": {},
-      "livebench_scores": {},
-      "pricing": {
-        "openrouter": {
-          "prompt": 7.5e-8,
-          "completion": 2e-7,
-          "input_cache_read": null,
-          "currency": "USD",
-          "is_listed_price": true
-        }
-      },
-      "release_date": "2025-06-20",
-      "release_date_provenance": "openrouter",
-      "value": null,
-      "series_key": "mistral--mistral-small",
-      "series_display": "Mistral Small",
-      "member_key": "mistral--mistral-small-3.2-24b-instruct",
-      "member_display": "Mistral Small 3.2 24B",
-      "member_order": 9999
-    },
-    {
-      "canonical": "mistral--mistral-small-3.2-24b-instruct@2025-06",
-      "identity": "mistral-small-3.2-24b-instruct",
-      "family": "mistral-small",
-      "revisions": [
-        "2025-06"
-      ],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "source_names": {
-        "llm_stats": [
-          "mistral-small-3.2-24b-instruct-2506"
-        ]
-      },
-      "display": "Mistral Small 3.2 24B Instruct (2025-06)",
-      "vendor": "mistral",
-      "theme": "general",
-      "license": "Apache-2.0",
-      "open_source": true,
-      "is_moe": null,
-      "context_length": null,
-      "modalities": [
-        "text",
-        "image"
-      ],
-      "single_source": true,
-      "degrees": {},
-      "default_degree": {},
-      "composite": {
-        "score": 36.2,
-        "weights": {
-          "llm_stats": 1
-        },
-        "method": "proportional_redistribute",
-        "available": {
-          "llm_stats": 36.199999999999996
-        },
-        "note": "缺源，权重按比例重分配"
-      },
-      "dimensions": {
-        "reasoning": {
-          "value": 35.5,
-          "source": "llm_stats",
-          "raw": 8.41,
-          "note": "index_reasoning"
-        },
-        "communication": {
-          "value": 34.5,
-          "source": "llm_stats",
-          "raw": 7.62,
-          "note": "index_communication"
-        },
-        "finance": {
-          "value": 36.9,
-          "source": "llm_stats",
-          "raw": 9.55,
-          "note": "index_finance"
-        },
-        "legal": {
-          "value": 36.9,
-          "source": "llm_stats",
-          "raw": 9.55,
-          "note": "index_legal"
-        },
-        "healthcare": {
-          "value": 39.2,
-          "source": "llm_stats",
-          "raw": 11.39,
-          "note": "index_healthcare"
-        },
-        "math_reasoning": {
-          "value": 39.2,
-          "source": "llm_stats",
-          "raw": 11.38,
-          "note": "index_math"
-        },
-        "expert_knowledge": {
-          "value": 46.1,
-          "source": "llm_stats",
-          "raw": 0.4613,
-          "note": "GPQA"
-        },
-        "multimodal": {
-          "value": 38.4,
-          "source": "llm_stats",
-          "raw": 10.76,
-          "note": "index_vision"
-        },
-        "composite": {
-          "value": 36.2,
-          "source": "composite",
-          "raw": 36.2
-        }
-      },
-      "lmarena_scores": {},
-      "lmarena_profiles": {},
-      "livebench_scores": {},
-      "pricing": {},
-      "release_date": "2025-06-20",
-      "release_date_provenance": "llm_stats",
-      "value": null,
-      "series_key": "mistral--mistral-small",
-      "series_display": "Mistral Small",
-      "member_key": "mistral--mistral-small-3.2-24b-instruct",
-      "member_display": "Mistral Small 3.2 24B Instruct",
       "member_order": 9999
     },
     {
@@ -18701,7 +17433,7 @@
       "release_date": "2026-01-27",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 47.6,
+        "score": 50,
         "raw": 3.7203242868215947,
         "note": "ln(综合分/平均每M价)"
       },
@@ -19072,7 +17804,7 @@
       "release_date": "2026-04-20",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 40.4,
+        "score": 42.5,
         "raw": 3.314736817134813,
         "note": "ln(综合分/平均每M价)"
       },
@@ -19359,7 +18091,7 @@
       "release_date": "2026-06-12",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 43.8,
+        "score": 46.1,
         "raw": 3.5070503868645337,
         "note": "ln(综合分/平均每M价)"
       },
@@ -19474,7 +18206,7 @@
       "release_date": "2025-09-05",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 44.1,
+        "score": 46.4,
         "raw": 3.5225582386664227,
         "note": "ln(综合分/平均每M价)"
       },
@@ -19490,10 +18222,18 @@
       "family": "kimi-k3",
       "revisions": [],
       "evaluation_profiles": [],
-      "offerings": {},
+      "offerings": {
+        "openrouter": [
+          {
+            "kind": "batch",
+            "raw_name": "moonshotai/kimi-k3:batch"
+          }
+        ]
+      },
       "source_names": {
         "openrouter": [
-          "moonshotai/kimi-k3"
+          "moonshotai/kimi-k3",
+          "moonshotai/kimi-k3:batch"
         ],
         "lmarena": [
           "Kimi K3 (Max)",
@@ -19711,7 +18451,7 @@
       "release_date": "2026-07-16",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 21,
+        "score": 22.1,
         "raw": 2.2143608595792066,
         "note": "ln(综合分/平均每M价)"
       },
@@ -19954,7 +18694,7 @@
       "release_date": "2025-12-15",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 88.3,
+        "score": 92.8,
         "raw": 6.028760331851679,
         "note": "ln(综合分/平均每M价)"
       },
@@ -20105,7 +18845,7 @@
       "release_date": "2026-03-11",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 78.7,
+        "score": 82.7,
         "raw": 5.48578032284241,
         "note": "ln(综合分/平均每M价)"
       },
@@ -20261,7 +19001,7 @@
       "release_date": "2026-06-04",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 51.9,
+        "score": 54.6,
         "raw": 3.966791734969912,
         "note": "ln(综合分/平均每M价)"
       },
@@ -20392,7 +19132,7 @@
       "release_date": "2026-08-11",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 88.7,
+        "score": 93.2,
         "raw": 6.053499938027435,
         "note": "ln(综合分/平均每M价)"
       },
@@ -22702,7 +21442,7 @@
       "release_date": "2026-04-23",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 8.2,
+        "score": 8.6,
         "raw": 1.486785899666213,
         "note": "ln(综合分/平均每M价)"
       },
@@ -23214,7 +21954,7 @@
       "release_date": "2026-07-09",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 63,
+        "score": 66.2,
         "raw": 4.593675806562357,
         "note": "ln(综合分/平均每M价)"
       },
@@ -23500,7 +22240,7 @@
       "release_date": "2026-07-09",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 27.8,
+        "score": 29.2,
         "raw": 2.598979106047848,
         "note": "ln(综合分/平均每M价)"
       },
@@ -23775,7 +22515,7 @@
       "release_date": "2026-07-09",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 22.7,
+        "score": 23.8,
         "raw": 2.3054381619764523,
         "note": "ln(综合分/平均每M价)"
       },
@@ -24161,10 +22901,18 @@
       "family": "gpt-oss",
       "revisions": [],
       "evaluation_profiles": [],
-      "offerings": {},
+      "offerings": {
+        "openrouter": [
+          {
+            "kind": "batch",
+            "raw_name": "openai/gpt-oss-120b:batch"
+          }
+        ]
+      },
       "source_names": {
         "openrouter": [
-          "openai/gpt-oss-120b"
+          "openai/gpt-oss-120b",
+          "openai/gpt-oss-120b:batch"
         ],
         "lmarena": [
           "gpt-oss-120b"
@@ -24285,7 +23033,7 @@
       "release_date": "2025-08-05",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 94.7,
+        "score": 99.5,
         "raw": 6.392087030740359,
         "note": "ln(综合分/平均每M价)"
       },
@@ -24399,10 +23147,18 @@
       "family": "gpt-oss",
       "revisions": [],
       "evaluation_profiles": [],
-      "offerings": {},
+      "offerings": {
+        "openrouter": [
+          {
+            "kind": "batch",
+            "raw_name": "openai/gpt-oss-20b:batch"
+          }
+        ]
+      },
       "source_names": {
         "openrouter": [
-          "openai/gpt-oss-20b"
+          "openai/gpt-oss-20b",
+          "openai/gpt-oss-20b:batch"
         ],
         "lmarena": [
           "gpt-oss-20b"
@@ -24523,7 +23279,7 @@
       "release_date": "2025-08-05",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 94.3,
+        "score": 99.1,
         "raw": 6.369472808983107,
         "note": "ln(综合分/平均每M价)"
       },
@@ -25125,7 +23881,7 @@
       "release_date": "2026-07-21",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 93.8,
+        "score": 98.6,
         "raw": 6.342382208916918,
         "note": "ln(综合分/平均每M价)"
       },
@@ -25232,7 +23988,7 @@
       "release_date": "2026-07-02",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 95.1,
+        "score": 100,
         "raw": 6.418908561934922,
         "note": "ln(综合分/平均每M价)"
       },
@@ -26077,7 +24833,7 @@
       "release_date": "2025-07-22",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 79.6,
+        "score": 83.6,
         "raw": 5.534405347497652,
         "note": "ln(综合分/平均每M价)"
       },
@@ -26219,7 +24975,7 @@
       "release_date": "2025-07-25",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 50.2,
+        "score": 52.7,
         "raw": 3.8675712428573124,
         "note": "ln(综合分/平均每M价)"
       },
@@ -26421,9 +25177,9 @@
       "livebench_scores": {},
       "pricing": {
         "openrouter": {
-          "prompt": 1e-7,
+          "prompt": 9e-8,
           "completion": 0.0000011,
-          "input_cache_read": 7e-8,
+          "input_cache_read": null,
           "currency": "USD",
           "is_listed_price": true
         }
@@ -26431,8 +25187,8 @@
       "release_date": "2025-09-10",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 60.2,
-        "raw": 4.438721978350427,
+        "score": 63.5,
+        "raw": 4.447090228020944,
         "note": "ln(综合分/平均每M价)"
       },
       "series_key": "qwen--qwen3-next",
@@ -26571,7 +25327,7 @@
       "release_date": "2025-09-10",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 59.7,
+        "score": 62.7,
         "raw": 4.405815496637897,
         "note": "ln(综合分/平均每M价)"
       },
@@ -26723,7 +25479,7 @@
       "release_date": "2025-09-22",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 52.1,
+        "score": 54.8,
         "raw": 3.9789283915759834,
         "note": "ln(综合分/平均每M价)"
       },
@@ -26881,7 +25637,7 @@
       "release_date": "2025-09-22",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 40,
+        "score": 42,
         "raw": 3.287383730293271,
         "note": "ln(综合分/平均每M价)"
       },
@@ -27003,8 +25759,8 @@
       "livebench_scores": {},
       "pricing": {
         "openrouter": {
-          "prompt": 1.3e-7,
-          "completion": 5.2e-7,
+          "prompt": 1.5e-7,
+          "completion": 6e-7,
           "input_cache_read": null,
           "currency": "USD",
           "is_listed_price": true
@@ -27013,8 +25769,8 @@
       "release_date": "2025-09-22",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 69.3,
-        "raw": 4.954743046655002,
+        "score": 70.2,
+        "raw": 4.811642203014329,
         "note": "ln(综合分/平均每M价)"
       },
       "series_key": "qwen--qwen3-vl",
@@ -27145,7 +25901,7 @@
       "release_date": "2025-09-22",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 45.7,
+        "score": 48.1,
         "raw": 3.615067296191036,
         "note": "ln(综合分/平均每M价)"
       },
@@ -27277,7 +26033,7 @@
       "release_date": "2025-09-22",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 75,
+        "score": 78.8,
         "raw": 5.276936571523086,
         "note": "ln(综合分/平均每M价)"
       },
@@ -27514,7 +26270,7 @@
       "release_date": "2025-09-22",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 65.1,
+        "score": 68.5,
         "raw": 4.715944591489998,
         "note": "ln(综合分/平均每M价)"
       },
@@ -27640,7 +26396,7 @@
       "release_date": "2025-09-22",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 58.3,
+        "score": 61.3,
         "raw": 4.328338129560376,
         "note": "ln(综合分/平均每M价)"
       },
@@ -27766,7 +26522,7 @@
       "release_date": "2025-09-22",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 70.4,
+        "score": 74,
         "raw": 5.012963583855847,
         "note": "ln(综合分/平均每M价)"
       },
@@ -27898,7 +26654,7 @@
       "release_date": "2025-09-22",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 47.1,
+        "score": 49.5,
         "raw": 3.693255828713735,
         "note": "ln(综合分/平均每M价)"
       },
@@ -28187,8 +26943,8 @@
       "livebench_scores": {},
       "pricing": {
         "openrouter": {
-          "prompt": 2.6e-7,
-          "completion": 0.00000208,
+          "prompt": 2.9e-7,
+          "completion": 0.0000024,
           "input_cache_read": null,
           "currency": "USD",
           "is_listed_price": true
@@ -28197,8 +26953,8 @@
       "release_date": "2026-02-24",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 53.9,
-        "raw": 4.079997113813959,
+        "score": 54.1,
+        "raw": 3.9406068495698214,
         "note": "ln(综合分/平均每M价)"
       },
       "series_key": "qwen--qwen3.5",
@@ -28383,7 +27139,7 @@
       "release_date": "2026-02-24",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 58.6,
+        "score": 61.6,
         "raw": 4.347240518588466,
         "note": "ln(综合分/平均每M价)"
       },
@@ -28671,7 +27427,7 @@
       "release_date": "2026-02-24",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 60.4,
+        "score": 63.5,
         "raw": 4.446565155811452,
         "note": "ln(综合分/平均每M价)"
       },
@@ -28853,7 +27609,7 @@
       "release_date": "2026-02-16",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 52.4,
+        "score": 55.1,
         "raw": 3.9929106645672467,
         "note": "ln(综合分/平均每M价)"
       },
@@ -28986,10 +27742,18 @@
       "family": "qwen3.5-9b",
       "revisions": [],
       "evaluation_profiles": [],
-      "offerings": {},
+      "offerings": {
+        "openrouter": [
+          {
+            "kind": "batch",
+            "raw_name": "qwen/qwen3.5-9b:batch"
+          }
+        ]
+      },
       "source_names": {
         "openrouter": [
-          "qwen/qwen3.5-9b"
+          "qwen/qwen3.5-9b",
+          "qwen/qwen3.5-9b:batch"
         ],
         "llm_stats": [
           "qwen3.5-9b"
@@ -29103,7 +27867,7 @@
       "release_date": "2026-03-02",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 89.7,
+        "score": 94.3,
         "raw": 6.110136076825481,
         "note": "ln(综合分/平均每M价)"
       },
@@ -29425,9 +28189,9 @@
       },
       "pricing": {
         "openrouter": {
-          "prompt": 3.2e-7,
-          "completion": 0.0000032,
-          "input_cache_read": null,
+          "prompt": 6e-7,
+          "completion": 0.0000036,
+          "input_cache_read": 1.2e-7,
           "currency": "USD",
           "is_listed_price": true
         },
@@ -29439,8 +28203,8 @@
       "release_date": "2026-04-21",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 46.1,
-        "raw": 3.634891143871518,
+        "score": 45.2,
+        "raw": 3.458267608192201,
         "note": "ln(综合分/平均每M价)"
       },
       "series_key": "qwen--qwen3.6",
@@ -29578,7 +28342,7 @@
       "release_date": "2026-04-16",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 68.1,
+        "score": 71.6,
         "raw": 4.884315927417586,
         "note": "ln(综合分/平均每M价)"
       },
@@ -29849,7 +28613,7 @@
       "release_date": "2026-03-31",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 54.3,
+        "score": 57.1,
         "raw": 4.103823306176644,
         "note": "ln(综合分/平均每M价)"
       },
@@ -30457,7 +29221,7 @@
       "release_date": "2026-05-31",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 56.7,
+        "score": 59.6,
         "raw": 4.239526572066598,
         "note": "ln(综合分/平均每M价)"
       },
@@ -30832,7 +29596,7 @@
       "release_date": "2026-08-14",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 49.8,
+        "score": 52.4,
         "raw": 3.8471034593288307,
         "note": "ln(综合分/平均每M价)"
       },
@@ -31068,7 +29832,7 @@
       "release_date": "2026-08-02",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 37.1,
+        "score": 39,
         "raw": 3.1278564264810322,
         "note": "ln(综合分/平均每M价)"
       },
@@ -32783,7 +31547,7 @@
       "release_date": "2026-02-02",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 85.7,
+        "score": 90,
         "raw": 5.8805329864007,
         "note": "ln(综合分/平均每M价)"
       },
@@ -33191,9 +31955,9 @@
       "livebench_scores": {},
       "pricing": {
         "openrouter": {
-          "prompt": 1.32e-7,
-          "completion": 5.28e-7,
-          "input_cache_read": 3.3e-8,
+          "prompt": 8.25e-8,
+          "completion": 3.3e-7,
+          "input_cache_read": 2.0625e-8,
           "currency": "USD",
           "is_listed_price": true
         }
@@ -33201,8 +31965,8 @@
       "release_date": "2026-07-06",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 75.2,
-        "raw": 5.284587173736135,
+        "score": 87.7,
+        "raw": 5.75459080298187,
         "note": "ln(综合分/平均每M价)"
       },
       "series_key": "tencent--hunyuan-hy3",
@@ -33321,7 +32085,7 @@
       "release_date": "2026-07-30",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 63,
+        "score": 66.2,
         "raw": 4.594446222625116,
         "note": "ln(综合分/平均每M价)"
       },
@@ -35338,7 +34102,7 @@
       "release_date": "2026-05-06",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 39,
+        "score": 41,
         "raw": 3.234224101815,
         "note": "ln(综合分/平均每M价)"
       },
@@ -35589,7 +34353,7 @@
       "release_date": "2026-07-16",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 33.4,
+        "score": 35.1,
         "raw": 2.9164184668342656,
         "note": "ln(综合分/平均每M价)"
       },
@@ -35815,7 +34579,7 @@
       "release_date": "2026-08-12",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 33.5,
+        "score": 35.2,
         "raw": 2.921816590603823,
         "note": "ln(综合分/平均每M价)"
       },
@@ -36048,7 +34812,7 @@
       "release_date": "2026-05-20",
       "release_date_provenance": "openrouter",
       "value": {
-        "score": 43.7,
+        "score": 45.9,
         "raw": 3.4985257256227174,
         "note": "ln(综合分/平均每M价)"
       },
@@ -36956,7 +35720,7 @@
       "release_date": "2026-04-22",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 84.4,
+        "score": 88.7,
         "raw": 5.807713397504433,
         "note": "ln(综合分/平均每M价)"
       },
@@ -37187,7 +35951,7 @@
       "release_date": "2026-04-27",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 60.3,
+        "score": 63.4,
         "raw": 4.441523733538527,
         "note": "ln(综合分/平均每M价)"
       },
@@ -37339,7 +36103,7 @@
       "release_date": "2025-07-28",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 48.3,
+        "score": 50.7,
         "raw": 3.7578723256008875,
         "note": "ln(综合分/平均每M价)"
       },
@@ -37491,7 +36255,7 @@
       "release_date": "2025-07-28",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 65.5,
+        "score": 68.8,
         "raw": 4.736914268038518,
         "note": "ln(综合分/平均每M价)"
       },
@@ -37703,7 +36467,7 @@
       "release_date": "2025-09-30",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 53.2,
+        "score": 55.9,
         "raw": 4.03610623467029,
         "note": "ln(综合分/平均每M价)"
       },
@@ -37937,7 +36701,7 @@
       "release_date": "2025-12-22",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 55.2,
+        "score": 58,
         "raw": 4.153052163048879,
         "note": "ln(综合分/平均每M价)"
       },
@@ -38065,7 +36829,7 @@
       "release_date": "2026-01-19",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 78.5,
+        "score": 82.5,
         "raw": 5.471539679486877,
         "note": "ln(综合分/平均每M价)"
       },
@@ -38190,7 +36954,7 @@
       "release_date": "2026-02-11",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 53.2,
+        "score": 56,
         "raw": 4.041379026642188,
         "note": "ln(综合分/平均每M价)"
       },
@@ -38389,9 +37153,9 @@
       "livebench_scores": {},
       "pricing": {
         "openrouter": {
-          "prompt": 0.00000126,
-          "completion": 0.00000396,
-          "input_cache_read": 2.34e-7,
+          "prompt": 9.66e-7,
+          "completion": 0.000003036,
+          "input_cache_read": 1.794e-7,
           "currency": "USD",
           "is_listed_price": true
         },
@@ -38403,8 +37167,8 @@
       "release_date": "2026-04-07",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 38.5,
-        "raw": 3.2042094099089717,
+        "score": 45.4,
+        "raw": 3.4699125756419775,
         "note": "ln(综合分/平均每M价)"
       },
       "series_key": "zai--glm-5.1",
@@ -38652,7 +37416,7 @@
       "release_date": "2026-06-16",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 42.2,
+        "score": 44.4,
         "raw": 3.4166287512754354,
         "note": "ln(综合分/平均每M价)"
       },
@@ -38687,7 +37451,7 @@
       "license": "unknown",
       "open_source": true,
       "is_moe": true,
-      "context_length": 1048576,
+      "context_length": 1310720,
       "modalities": [
         "text"
       ],
@@ -38871,7 +37635,7 @@
       "release_date": "2026-08-14",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 39.7,
+        "score": 41.8,
         "raw": 3.2751909713807823,
         "note": "ln(综合分/平均每M价)"
       },
@@ -38887,10 +37651,18 @@
       "family": "glm-5.3",
       "revisions": [],
       "evaluation_profiles": [],
-      "offerings": {},
+      "offerings": {
+        "openrouter": [
+          {
+            "kind": "batch",
+            "raw_name": "z-ai/glm-5.3-flash:batch"
+          }
+        ]
+      },
       "source_names": {
         "openrouter": [
-          "z-ai/glm-5.3-flash"
+          "z-ai/glm-5.3-flash",
+          "z-ai/glm-5.3-flash:batch"
         ],
         "lmarena": [
           "glm-5.3-flash"
@@ -39022,7 +37794,7 @@
       "release_date": "2026-08-26",
       "release_date_provenance": "llm_stats",
       "value": {
-        "score": 93.3,
+        "score": 98,
         "raw": 6.311315902493154,
         "note": "ln(综合分/平均每M价)"
       },
