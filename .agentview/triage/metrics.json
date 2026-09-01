@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "metrics": {
+    "rawQuestions": 4,
+    "clustersAnswered": 0,
+    "autoAnswers": 0,
+    "resolvedAtSession": 4,
+    "holdMs": [],
+    "circuitNotified": false
+  }
+}

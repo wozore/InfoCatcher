@@ -295,6 +295,17 @@ test('批量 Apply 重新读取 approved queue、校验 candidate hash、revisio
     asOf: '2026-08-25',
   });
   assert.equal(pending.code, 'DATE_REPAIR_NO_APPROVED_ITEMS');
+
+  const newer = reviewCandidate(before, { date: '2026-08-12', content_hash: 'sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' });
+  const staleApproved = applyDateRepairBatch([{ candidate_key: candidate.candidate_key }], {
+    snapshot: before,
+    registry: REVIEW_REGISTRY,
+    reviewQueue: { schema_version: 1, kind: 'tool_update_review', updated_at: null, items: [{ ...approvedItem }, { ...newer, review_status: 'pending' }] },
+    expectedRevision: planned.before_revision,
+    previewHash: planned.preview_hash,
+    asOf: '2026-08-25',
+  });
+  assert.equal(staleApproved.code, 'DATE_REPAIR_NO_APPROVED_ITEMS');
 });
 test('apply requires revision and preview hash and commits only a reviewed snapshot', () => {
   const before = snapshot();

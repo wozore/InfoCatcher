@@ -171,6 +171,7 @@ async function l1AiReview(item, options = {}) {
       verdict: null,
       reasons: Array.isArray(result.reasons) ? result.reasons : [],
       confidence: 0,
+      confidence_range: result.confidence_range || null,
       llm_error: result.llm_error || null,
     };
   }
@@ -178,6 +179,7 @@ async function l1AiReview(item, options = {}) {
     verdict: result.verdict,
     reasons: Array.isArray(result.reasons) ? result.reasons : [],
     confidence: Number(result.confidence) || 0,
+    confidence_range: result.confidence_range || null,
     llm_error: result.llm_error || null,
   };
 }

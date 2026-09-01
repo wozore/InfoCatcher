@@ -172,9 +172,6 @@
     },
     "trae": {
       "path":"tool/trae-color.svg"
-    },
-    "windsurf": {
-      "path":"tool/windsurf.svg"
     }
   },
   "series": {

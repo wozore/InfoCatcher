@@ -20,7 +20,10 @@ const { explicitDates } = require('../../src/catalog/tool-update-evidence');
 const {
   defaultReviewQueue,
   mergeReviewQueue,
+  reviewQueueViews,
   readReviewQueue,
+  setReviewStatusReviewQueue,
+  removePendingBlockedReviewItems,
   writeReviewQueue,
 } = require('../../src/catalog/tool-update-review-store');
 
@@ -230,7 +233,7 @@ test('低置信度、实体/组件错配和非 tool 目标均 blocked', () => {
   assert.ok(nonTool.blocked_reasons.includes('DETAIL_KIND_NOT_TOOL'));
 });
 
-test('日期缺失、未来、同日和回退均 blocked，不猜日期', () => {
+test('日期缺失或未来时 blocked，当前日期及更早更新标记为 no-op', () => {
   const missing = planToolUpdateCandidate('acme-tool', evidence({ official_published_at: null, excerpt: 'New feature without a date.' }), suggestion({ supporting_excerpt: 'New feature without a date.' }), {
     registry: REGISTRY, detail: detail(), now: NOW,
   });
@@ -244,12 +247,15 @@ test('日期缺失、未来、同日和回退均 blocked，不猜日期', () => 
   const same = planToolUpdateCandidate('acme-tool', evidence({ official_published_at: '2026-08-01T00:00:00Z' }), suggestion(), {
     registry: REGISTRY, detail: detail(), now: NOW,
   });
-  assert.ok(same.blocked_reasons.includes('PROPOSED_DATE_NOT_AFTER_CURRENT'));
+  assert.equal(same.ok, true);
+  assert.equal(same.ignored, true);
+  assert.equal(same.blocked_reasons.length, 0);
 
   const rollback = planToolUpdateCandidate('acme-tool', evidence({ official_published_at: '2026-07-31T00:00:00Z' }), suggestion(), {
     registry: REGISTRY, detail: detail(), now: NOW,
   });
-  assert.ok(rollback.blocked_reasons.includes('PROPOSED_DATE_NOT_AFTER_CURRENT'));
+  assert.equal(rollback.ok, true);
+  assert.equal(rollback.ignored, true);
 });
 
 test('批量 planner 隔离 blocked 项且不改变正式数据', () => {
@@ -274,12 +280,48 @@ test('review queue 幂等合并、保留人工结论、同 release hash 变化�
     registry: REGISTRY, detail: detail(), now: NOW,
   }).candidate;
   const reopened = mergeReviewQueue(same.queue, [changed], { now: NOW });
-  assert.equal(reopened.queue.items.length, 1);
-  assert.equal(reopened.queue.items[0].review_status, 'pending');
-  assert.ok(reopened.queue.items[0].blocked_reasons.includes('EVIDENCE_HASH_CHANGED'));
-  assert.equal(mergeReviewQueue(reopened.queue, [changed], { now: NOW }).queue.items.length, 1);
+  assert.equal(reopened.queue.items.length, 2);
+  assert.equal(reopened.queue.items[0].review_status, 'approved');
+  assert.equal(reopened.queue.items[0].superseded_by, changed.candidate_key);
+  assert.equal(reopened.queue.items[0].superseded_reason, 'newer_evidence');
+  assert.equal(reopened.queue.items[1].review_status, 'pending');
+  assert.equal(reopened.queue.items[1].candidate_key, changed.candidate_key);
+  assert.equal(reopened.queue.items[1].blocked_reasons.includes('EVIDENCE_HASH_CHANGED'), false);
+  assert.equal(mergeReviewQueue(reopened.queue, [changed], { now: NOW }).queue.items.length, 2);
 });
 
+test('队列视图按当前登记来源保留最新证据并隐藏旧来源历史', () => {
+  const oldItem = planToolUpdateCandidate('acme-tool', evidence(), suggestion(), { registry: REGISTRY, detail: detail(), now: NOW }).candidate;
+  const newItem = planToolUpdateCandidate('acme-tool', evidence({
+    official_published_at: '2026-08-22T09:00:00Z',
+    content_hash: 'sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+    title: 'Release v2.1.0',
+    excerpt: '## v2.1.0\\n\\nReleased 2026-08-22',
+  }), suggestion(), { registry: REGISTRY, detail: detail(), now: '2026-08-23T12:00:00Z' }).candidate;
+  const replacedSource = { ...oldItem, candidate_key: 'acme-tool|https://legacy.example/changelog|2026-08-19|sha256:cccc', release_key: 'acme-tool|https://legacy.example/changelog|2026-08-19', source_url: 'https://legacy.example/changelog', proposed_date: '2026-08-19' };
+  const merged = mergeReviewQueue({ ...defaultReviewQueue(), items: [oldItem, replacedSource] }, [newItem], { registry: REGISTRY, now: '2026-08-23T12:00:00Z' });
+  const views = reviewQueueViews(merged.queue, { registry: REGISTRY });
+  assert.deepEqual(views.actionable.map(item => item.candidate_key), [newItem.candidate_key]);
+  assert.equal(views.history.length, 2);
+  assert.ok(views.history.every(item => item.history_reason === 'newer_evidence' || item.history_reason === 'source_replaced'));
+});
+test('已替代审核项不能再次写入人工结论', () => {
+  const oldItem = planToolUpdateCandidate('acme-tool', evidence(), suggestion(), { registry: REGISTRY, detail: detail(), now: NOW }).candidate;
+  const newItem = planToolUpdateCandidate('acme-tool', evidence({
+    official_published_at: '2026-08-22T09:00:00Z',
+    content_hash: 'sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd',
+    title: 'Release v2.1.0',
+    excerpt: '## v2.1.0\\n\\nReleased 2026-08-22',
+  }), suggestion(), { registry: REGISTRY, detail: detail(), now: '2026-08-23T12:00:00Z' }).candidate;
+  const merged = mergeReviewQueue({ ...defaultReviewQueue(), items: [{ ...oldItem, review_status: 'approved' }] }, [newItem], { registry: REGISTRY, now: '2026-08-23T12:00:00Z' });
+  const file = tmpFile();
+  writeReviewQueue(merged.queue, { file, now: '2026-08-23T12:00:00Z' });
+  const revision = require('../../src/catalog/tool-update-review-store').reviewQueueRevision(readReviewQueue(file));
+  const result = setReviewStatusReviewQueue(oldItem.candidate_key, 'rejected', { expectedRevision: revision, registry: REGISTRY, file });
+  assert.equal(result.ok, false);
+  assert.equal(result.code, 'TOOL_UPDATE_REVIEW_NOT_CURRENT');
+  fs.rmSync(path.dirname(file), { recursive: true, force: true });
+});
 test('review store 只持久化证据摘录，不保存整页正文', () => {
   const file = tmpFile();
   const candidate = planToolUpdateCandidate('acme-tool', evidence({ excerpt: 'short excerpt' }), suggestion(), {
@@ -291,6 +333,23 @@ test('review store 只持久化证据摘录，不保存整页正文', () => {
   assert.equal(loaded.items[0].evidence.excerpt, 'short excerpt');
   assert.equal('content' in loaded.items[0].evidence, false);
   assert.equal(loaded.items[0].review_status, 'pending');
+});
+
+test('删除旧 pending/blocked 时精确计数，保留 approved 与 rejected 项', () => {
+  const file = tmpFile();
+  const pending = planToolUpdateCandidate('acme-tool', evidence(), suggestion({ confidence: 0.2 }), { registry: REGISTRY, detail: detail(), now: NOW }).candidate;
+  const approved = { ...planToolUpdateCandidate('acme-tool', evidence({ content_hash: 'sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' }), suggestion(), { registry: REGISTRY, detail: detail(), now: NOW }).candidate, review_status: 'approved' };
+  const rejected = { ...planToolUpdateCandidate('acme-tool', evidence({ content_hash: 'sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc' }), suggestion({ confidence: 0.2 }), { registry: REGISTRY, detail: detail(), now: NOW }).candidate, review_status: 'rejected' };
+  writeReviewQueue({ ...defaultReviewQueue(), items: [pending, approved, rejected] }, { file, now: NOW });
+  const revision = require('../../src/catalog/tool-update-review-store').reviewQueueRevision(readReviewQueue(file));
+  const mismatch = removePendingBlockedReviewItems({ file, expectedRevision: revision, expectedCount: 2 });
+  assert.equal(mismatch.ok, false);
+  assert.equal(mismatch.code, 'TOOL_UPDATE_REVIEW_REMOVE_COUNT_MISMATCH');
+  const removed = removePendingBlockedReviewItems({ file, expectedRevision: revision, expectedCount: 1, now: NOW });
+  assert.equal(removed.ok, true);
+  assert.equal(removed.removed, 1);
+  assert.deepEqual(readReviewQueue(file).items.map(item => item.review_status).sort(), ['approved', 'rejected']);
+  fs.rmSync(path.dirname(file), { recursive: true, force: true });
 });
 
 test('explicitDates 识别月份缩写与序数后缀', () => {

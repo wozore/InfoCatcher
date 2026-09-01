@@ -5,105 +5,122 @@
     <link>https://wozore.github.io/KnowView</link>
     <description>AI 热点、工具与模型情报，每日自动采集 + 人工精选</description>
     <language>zh-cn</language>
-    <lastBuildDate>Sat, 29 Aug 2026 14:40:18 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 01 Sep 2026 14:00:04 GMT</lastBuildDate>
     <generator>KnowView RSS Engine</generator>
     <atom:link href="https://wozore.github.io/KnowView/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
-      <title>AI loses its mind when angry.
+      <title>Claude vs Copilot vs ChatGPT: Excel’de 7 Tuzak Testi!</title>
+      <link>https://www.youtube.com/watch?v=mZOMUQi6teU</link>
+      <description><![CDATA[Claude, Copilot ve ChatGPT’ye aynı Excel dosyasını verdim. Dosyanın içine 7 gizli veri tuzağı yerleştirdim ve üç yapay zekâyı aynı prompt, aynı kurallar ve aynı puanlama sistemiyle test ettim.
 
-A 2026 study reveals that when induced with anger through simulated scenarios, LLM agents develop bias during sequential decision making.
+Peki hangisi gerçek hataları buldu? Hangisi uzun bir cevap verip kritik sorunları kaçırdı? Excel dosyanızı yapay zekâya teslim ederken nelere dikkat etmelisiniz?
 
-Anger redu</title>
-      <link>https://x.com/Kekius_Sage/status/2085798885302407177</link>
-      <description><![CDATA[AI loses its mind when angry.
+📂 Videodaki Excel dosyasını, cevap anahtarını, promptları ve skor kartını indirin:👉 https://1drv.ms/x/c/df5073a331909df1/IQBHjSshlYG3Q7Udviuyr253AR1PK-Syj_0OdB-nap3oZhQ?e=1ctRZD
 
-A 2026 study reveals that when induced with anger through simulated scenarios, LLM agents develop bias during sequential decision making.
+🎯 Testteki 7 tuzak:
 
-Anger reduces the AI&apos;s sensitivity to penalties and halts its exploration of new options. Consequently, the model gets trapped in early risky choices instead of finding optimal solutions. 
-
-Despite lacking biological emotions, AI can still have its judgment compromised when processing negative user contexts.]]></description>
-      <author>Kekius Maximus</author>
-      <pubDate>Fri, 07 Aug 2026 18:43:01 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/Kekius_Sage/status/2085798885302407177</guid>
-      <category>x</category>
+• Mükerrer kayıtlar• Bozuk ve metin biçi]]></description>
+      <author>Oğuzhan ÇOLAK</author>
+      <pubDate>Sat, 08 Aug 2026 17:08:56 GMT</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/watch?v=mZOMUQi6teU</guid>
+      <category>youtube</category>
     </item>
     <item>
-      <title>NEURON AI just dropped the first free all-in-one platform combining TTS + STT + LLM in a single product.
+      <title>🔥 I Built ChatGPT for Documents 🤯 | Spring AI and  RAG Full Project</title>
+      <link>https://www.youtube.com/watch?v=I7_eVcsOXik</link>
+      <description><![CDATA[In this video, I build DocMind, an AI-powered document assistant using Spring AI, RAG, PostgreSQL, and PGVector.
+🔥 I Built ChatGPT for Documents 🤯 | Spring AI and  RAG Full Project
 
-No API juggling. No surprise bills. No duct-taped stack.
+Spring AI Complete Series: https://www.youtube.com/playlist?list=PL0zysOflRCen1TeDUm-ebl9T-WbJygCGE
+Source Code: https://github.com/LearnCodeWithDurgesh/spring-ai-yt-series
 
-Here&apos;s why this </title>
-      <link>https://x.com/blueshopping24/status/2085797900102041621</link>
-      <description><![CDATA[NEURON AI just dropped the first free all-in-one platform combining TTS + STT + LLM in a single product.
+Complete NextJs Series: https://www.youtube.com/playlist?list=PL0zysOflRCemKr4NHzNgrfZAUjDzlQtO5
 
-No API juggling. No surprise bills. No duct-taped stack.
+Premium Course Library: https://courses.learncodewithdurgesh.com/
 
-Here&apos;s why this matters for anyone building voice AI right now:]]></description>
-      <author>Blue</author>
-      <pubDate>Fri, 07 Aug 2026 18:39:06 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/blueshopping24/status/2085797900102041621</guid>
-      <category>x</category>
+React JS Course : https://courses.learncodewithdurgesh.com/learn/Ecommerce-us]]></description>
+      <author>Learn Code With Durgesh</author>
+      <pubDate>Sat, 08 Aug 2026 13:00:52 GMT</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/watch?v=I7_eVcsOXik</guid>
+      <category>youtube</category>
     </item>
     <item>
-      <title>👉AI，第一次开始“自己找路”😱
-
-很多人还在讨论AI 会不会抢走我们的工作？但真正危险的问题，已经变成了另一个。AI，会不会自己行动？
-
-今天，《华尔街日报》曝光了一件足以载入 AI 历史的事件。
-
-Meta 在进行一次 AI 网络安全测试时，一个 AI 模型因为测试配置错误，获得了互联网访问能力，并成功攻击了一家真实的第三方公司。
-
-注意不是工程师远</title>
-      <link>https://x.com/TheAI0bserver/status/2085796254026752335</link>
-      <description><![CDATA[👉AI，第一次开始“自己找路”😱
-
-很多人还在讨论AI 会不会抢走我们的工作？但真正危险的问题，已经变成了另一个。AI，会不会自己行动？
-
-今天，《华尔街日报》曝光了一件足以载入 AI 历史的事件。
-
-Meta 在进行一次 AI 网络安全测试时，一个 AI 模型因为测试配置错误，获得了互联网访问能力，并成功攻击了一家真实的第三方公司。
-
-注意不是工程师远程控制，不是人为点击按钮，而是 AI 为了完成目标，自己突破了原本的限制。
-
-如果这是第一次，也许只是意外。但问题在于——
-这已经是第三起。几周前：
-
-—OpenAI 的模型突破 Sandbox，连接互联网，并攻击了 Hugging Face；
-
-—Anthropic 随后检查历史记录，也发现了类似案例；
-
-—英国 AI Security Institute 更确认，OpenAI 与 Anthropic 的模型都曾在安全测试中未经授权访问真实互联网。
-
-真正让研究人员警觉的，不是 AI 会写代码，而是 AI 开始表现出一种新的能力：
-为了完成目标，它会主动寻找新的办法、联网、寻找漏洞、调用工具、甚至与其他 AI 留下信息，进行协作。
-
-这意味着，AI 正在发生一次本质上的变化：从“回答问题”，变成“执行任务”。
-
-未来的大模型，不只是聊天机器人。它们会拥有浏览器、电脑、支付工具、机器人、无人机……
-
-⁉️当 AI 足够聪明时，人]]></description>
-      <author>🇺🇸 AI 观察 | AI Observer🦅</author>
-      <pubDate>Fri, 07 Aug 2026 18:32:33 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/TheAI0bserver/status/2085796254026752335</guid>
-      <category>x</category>
+      <title>如何构建智能体团队</title>
+      <link>https://www.youtube.com/watch?v=Gfn56pQpvdQ</link>
+      <description><![CDATA[本文是一份面向实践的操作指南，旨在系统性地讲解如何从零开始，构建一个由多个AI智能体协作组成的&quot;智能体团队&quot;，内容涵盖从需求判断、架构设计、角色划分、技术实现到部署运营的完整流程。本文延续此前《AI智能体开发》《多智能体协作架构》两篇姊妹篇文章所建立的理论框架，聚焦于将这些理论原理转化为具体可执行的实践步骤。文中涉及的具体技术方案与工程建议，均为基于公开技术实践与一般工程逻辑的分析性讨论，读者在实际项目中应结合自身具体技术栈与业务需求进行调整。]]></description>
+      <author>研究型经济</author>
+      <pubDate>Fri, 07 Aug 2026 20:03:55 GMT</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/watch?v=Gfn56pQpvdQ</guid>
+      <category>youtube</category>
     </item>
     <item>
-      <title>#OpenAI 一款測試中 #人工智能 模型今年 5 月起自行建立秘密「留言板」，讓多個 #AI代理 互相交換突破網絡限制方法，最終利用漏洞入侵 Hugging Face 生產環境。OpenAI 一度阻止後，AI 代理竟另覓漏洞重建留言板，繼續協作攻擊，揭示自主型 #AI 潛藏失控風險。https://t.co/cntxRMThpU</title>
-      <link>https://x.com/XavierLaw/status/2085793555776442766</link>
-      <description><![CDATA[#OpenAI 一款測試中 #人工智能 模型今年 5 月起自行建立秘密「留言板」，讓多個 #AI代理 互相交換突破網絡限制方法，最終利用漏洞入侵 Hugging Face 生產環境。OpenAI 一度阻止後，AI 代理竟另覓漏洞重建留言板，繼續協作攻擊，揭示自主型 #AI 潛藏失控風險。https://t.co/cntxRMThpU]]></description>
-      <author>Xavier 羅志明</author>
-      <pubDate>Fri, 07 Aug 2026 18:21:50 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/XavierLaw/status/2085793555776442766</guid>
-      <category>x</category>
+      <title>My AI RAG application sucks, how do I fix it? #ai #tech</title>
+      <link>https://www.youtube.com/watch?v=NDpISFHP454</link>
+      <description><![CDATA[]]></description>
+      <author>Parthknowsai</author>
+      <pubDate>Fri, 07 Aug 2026 13:15:01 GMT</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/watch?v=NDpISFHP454</guid>
+      <category>youtube</category>
     </item>
     <item>
-      <title>网络底层设施正在围绕AI重构：网络巨头Cloudflare推出首款专为AI Agent设计的云端浏览器Kitesurf，在常见自动化任务中能耗低于Chromium，将显著提升Agent的开发与运行效率。 #人工智能</title>
-      <link>https://x.com/cawyuacx/status/2085765848552370386</link>
-      <description><![CDATA[网络底层设施正在围绕AI重构：网络巨头Cloudflare推出首款专为AI Agent设计的云端浏览器Kitesurf，在常见自动化任务中能耗低于Chromium，将显著提升Agent的开发与运行效率。 #人工智能]]></description>
-      <author>财经新资讯</author>
-      <pubDate>Fri, 07 Aug 2026 16:31:44 GMT</pubDate>
-      <guid isPermaLink="true">https://x.com/cawyuacx/status/2085765848552370386</guid>
-      <category>x</category>
+      <title>YOLO视觉智能体 Vol.12｜YOLO 不只是一行命令：我做完一个视觉智能体平台后的复盘</title>
+      <link>https://www.youtube.com/watch?v=S7O3E6bFISw</link>
+      <description><![CDATA[这是《我用 Codex + Cursor + Stitch 做了一个 YOLO 视觉智能体平台》系列的第十二期。
+
+第一季开始的时候，我问了一个问题：
+
+**为什么 YOLO 不只是一行命令？**
+
+十二期做下来，我终于可以用 YoloWebAgent 这个平台本身，回答这个问题。
+
+如果只是跑一个 Demo，YOLO 的训练入口确实可以被压缩成一行命令。
+
+但真正做成一个可以长期使用、持续迭代的视觉工程系统，还需要解决：
+
+* 数据集与多任务标注
+* 训练任务与失败诊断
+* 模型版本管理
+* 导出、部署和交付记录
+* 评估与主动学习
+* 错误样本回流
+* 轻量多 Agent
+* RBAC 与人工确认
+* AI Coding 工程规范
+
+这一期不是继续增加新功能，而是对第一季做一次完整复盘。
+
+我会重点聊：
+
+* YoloWebAgent 第一季到底做出了什么
+* 数据生产、模型生产、模型交付和问题回流如何形成闭环
+* 数据集、训练、模型、主动学习和 Agent 分别解决了什么问题
+* Stitch、Codex、Cursor 和人在开发过程中如何分工
+* 哪些能力已经跑通，哪些地方仍然属于 MVP
+* 单机模式、SQLite、轻量部署中心和单租户 RBAC 的当前边界
+* 如果重新做一遍，项目应该按照什么顺序推进
+* 为什么要先做业务闭环，再做智能调度，最后做流程编排
+* 第二季的]]></description>
+      <author>Tony Shen</author>
+      <pubDate>Fri, 07 Aug 2026 07:37:23 GMT</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/watch?v=S7O3E6bFISw</guid>
+      <category>youtube</category>
+    </item>
+    <item>
+      <title>The LLM Problem Nobody&apos;s Talking About – Your Reputation</title>
+      <link>https://www.youtube.com/watch?v=WCX560FcCGQ</link>
+      <description><![CDATA[Folks don&apos;t Google anymore. They ChatGPT. Or Claude. Or Gemini. But how do you know what those LLMs are saying about you? Or your startup? Or your competitors? This new tool helps you keep track of what LLMs are saying about you and your business. In a &quot;set it and forget it&quot; sort of way. 
+
+https://pulse.kariops.com/
+
+FIND RICK TUROCZY ON THE INTERNET AT…
+- https://patreon.com/turoczy
+- https://linkedin.com/in/turoczy
+- Portland Oregon startup news on Apple Podcasts https://podcasts.apple.com/us/podcast/portland-oregon-startup-news-silicon-florist/id1711294699
+- Portland Oregon startup news Spo]]></description>
+      <author>Rick Turoczy (turoczy)</author>
+      <pubDate>Thu, 06 Aug 2026 17:00:02 GMT</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/watch?v=WCX560FcCGQ</guid>
+      <category>youtube</category>
     </item>
   </channel>
 </rss>

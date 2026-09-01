@@ -13,10 +13,11 @@ const {
 
 const NOW = '2026-08-25T12:00:00.000Z';
 
-function response(payload, { status = 200, headers = {} } = {}) {
+function response(payload, { status = 200, headers = {}, url = '' } = {}) {
   return {
     ok: status >= 200 && status < 300,
     status,
+    url,
     headers: { get: name => headers[name.toLowerCase()] || headers[name] || null },
     json: async () => (typeof payload === 'string' ? JSON.parse(payload) : payload),
     text: async () => (typeof payload === 'string' ? payload : JSON.stringify(payload)),
@@ -217,6 +218,15 @@ test('Tavily collector 优先抓取官方 HTML 正文，不调用 Tavily Extract
   assert.match(result.evidence.excerpt, /Aug 21, 2026/);
 });
 
+test('Tavily HTML 跨产品重定向直接失败，不采纳错误产品正文', async () => {
+  const source = tavilySource({ url: 'https://windsurf.example/changelog' });
+  const result = await collectTavilySource('windsurf', source, {
+    fetchImpl: async () => response('# Devin Desktop changelog\\n\\n## Aug 21, 2026', { url: 'https://docs.devin.ai/release-notes/overview' }),
+  });
+  assert.equal(result.ok, false);
+  assert.equal(result.code, 'UPDATE_HTML_REDIRECT_UNTRUSTED');
+  assert.equal(result.final_url, 'https://docs.devin.ai/release-notes/overview');
+});
 test('HTML 抓取失败或空正文时回退 Tavily Extract，且不调用 Search', async () => {
   const calls = [];
   const source = tavilySource();

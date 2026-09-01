@@ -279,34 +279,6 @@
       "last_verified_at": "2026-08-23",
       "last_official_update_at": "2026-06-03"
     },
-    "windsurf": {
-      "name": "Windsurf",
-      "vendor_key": "windsurf-vendor",
-      "official_urls": [
-        "https://windsurf.com",
-        "https://docs.windsurf.com/plugins",
-        "https://windsurf.com/blog/pricing-v2"
-      ],
-      "aliases": [
-        "Windsurf"
-      ],
-      "product_prefixes": [
-        "windsurf"
-      ],
-      "update_sources": [
-        {
-          "kind": "changelog",
-          "review_mode": "deterministic",
-          "url": "https://windsurf.com/changelog/windsurf",
-          "collector": "tavily_extract",
-          "product_surface": "product",
-          "date_mode": "latest"
-        }
-      ],
-      "lifecycle": "active",
-      "last_verified_at": "2026-08-25",
-      "last_official_update_at": "2026-08-21"
-    },
     "openai-codex": {
       "name": "OpenAI Codex",
       "vendor_key": "openai",
@@ -472,7 +444,8 @@
           "url": "https://github.com/aws/amazon-q-jetbrains/blob/main/CHANGELOG.md",
           "collector": "github_web_file",
           "product_surface": "ide_extension",
-          "repository": "aws/amazon-q-jetbrains"
+          "repository": "aws/amazon-q-jetbrains",
+          "date_mode": "latest"
         }
       ],
       "lifecycle": "active",

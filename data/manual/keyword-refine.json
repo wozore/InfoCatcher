@@ -1,0 +1,133 @@
+{
+  "schema_version": 2,
+  "kind": "keyword_refine_candidates",
+  "date": "20260831",
+  "source_review_status": "approved",
+  "source_count": 691,
+  "input_count": 691,
+  "source_basis": "all_approved_frequency",
+  "candidates": [
+    {
+      "word": "prompt",
+      "category": "concept",
+      "candidate_type": "repeated",
+      "count": 30
+    },
+    {
+      "word": "multimodal",
+      "category": "concept",
+      "candidate_type": "repeated",
+      "count": 21
+    },
+    {
+      "word": "microsoft",
+      "category": "industry",
+      "candidate_type": "repeated",
+      "count": 48
+    },
+    {
+      "word": "code",
+      "category": "concept",
+      "candidate_type": "repeated",
+      "count": 79
+    },
+    {
+      "word": "youtube",
+      "category": "industry",
+      "candidate_type": "repeated",
+      "count": 35
+    },
+    {
+      "word": "flash",
+      "category": "tool",
+      "candidate_type": "repeated",
+      "count": 50
+    },
+    {
+      "word": "github",
+      "category": "tool",
+      "candidate_type": "repeated",
+      "count": 26
+    },
+    {
+      "word": "gpt-5",
+      "category": "tool",
+      "candidate_type": "repeated",
+      "count": 26
+    },
+    {
+      "word": "meta",
+      "category": "industry",
+      "candidate_type": "repeated",
+      "count": 24
+    },
+    {
+      "word": "robot",
+      "category": "tool",
+      "candidate_type": "repeated",
+      "count": 22
+    },
+    {
+      "word": "search",
+      "category": "tool",
+      "candidate_type": "repeated",
+      "count": 22
+    },
+    {
+      "word": "live",
+      "category": "tool",
+      "candidate_type": "repeated",
+      "count": 22
+    },
+    {
+      "word": "generative",
+      "category": "concept",
+      "candidate_type": "repeated",
+      "count": 22
+    },
+    {
+      "word": "intelligence",
+      "category": "concept",
+      "candidate_type": "repeated",
+      "count": 22
+    },
+    {
+      "word": "con",
+      "category": "industry",
+      "candidate_type": "repeated",
+      "count": 23
+    },
+    {
+      "word": "kimi",
+      "category": "tool",
+      "candidate_type": "repeated",
+      "count": 23
+    },
+    {
+      "word": "codex",
+      "category": "tool",
+      "candidate_type": "repeated",
+      "count": 23
+    },
+    {
+      "word": "studio",
+      "category": "tool",
+      "candidate_type": "repeated",
+      "count": 23
+    },
+    {
+      "word": "reasoning",
+      "category": "concept",
+      "candidate_type": "repeated",
+      "count": 6
+    },
+    {
+      "word": "tvbs",
+      "category": "industry",
+      "candidate_type": "repeated",
+      "count": 31
+    }
+  ],
+  "adopted_keywords": [],
+  "discarded_keywords": []
+}

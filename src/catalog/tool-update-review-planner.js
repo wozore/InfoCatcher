@@ -144,6 +144,7 @@ function planToolUpdateCandidate(productKey, evidence, suggestion, options = {})
   let source = null;
   let detail = null;
   let proposedDate = null;
+  let noUpdate = false;
   let reviewDecision = normalizeToolUpdateReviewValue(normalizedSuggestion);
   let decisionSource = reviewDecision ? 'ai' : null;
 
@@ -160,6 +161,43 @@ function planToolUpdateCandidate(productKey, evidence, suggestion, options = {})
     else if (matchedDetail.detail_kind !== 'tool') reasons.push('DETAIL_KIND_NOT_TOOL');
   }
 
+  if (source && detail && normalizedEvidence.status === 'ready') {
+    const dateResult = dateForEvidence(normalizedEvidence, { latest: source?.date_mode === 'latest' });
+    proposedDate = dateResult.date;
+    if (dateResult.reason) reasons.push(dateResult.reason);
+    if (!proposedDate) reasons.push('PROPOSED_DATE_MISSING');
+    const today = todayOf(options.now);
+    if (proposedDate && today && proposedDate > today) reasons.push('PROPOSED_DATE_IN_FUTURE');
+    if (isIsoDate(detail.last_updated_date) && proposedDate && proposedDate <= detail.last_updated_date) {
+      reasons.push('PROPOSED_DATE_NOT_AFTER_CURRENT');
+      noUpdate = true;
+    }
+  }
+
+  if (noUpdate) {
+    const sourceUrl = canonicalizeUrl(normalizedEvidence.url) || '';
+    const releaseKey = `${requestedKey}|${sourceUrl}|${proposedDate || ''}`;
+    const candidateKey = `${releaseKey}|${normalizedEvidence.content_hash || ''}`;
+    const item = baseItem({
+      evidence: normalizedEvidence,
+      suggestion: normalizedSuggestion,
+      proposed_date: proposedDate,
+      blocked_reasons: [],
+      status: 'candidate',
+    }, {
+      registry,
+      product,
+      source,
+      detail,
+      productKey: requestedKey,
+      releaseKey,
+      candidateKey,
+      reviewDecision: null,
+      decisionSource: null,
+    });
+    return { ok: true, ignored: true, candidate: item, blocked_reasons: [] };
+  }
+
   if (source?.review_mode === 'deterministic') {
     reviewDecision = deterministicDecision(source, normalizedEvidence);
     decisionSource = reviewDecision ? 'deterministic' : null;
@@ -172,18 +210,6 @@ function planToolUpdateCandidate(productKey, evidence, suggestion, options = {})
     if (reviewDecision.confidence < (options.minConfidence ?? DEFAULT_MIN_CONFIDENCE)) reasons.push('AI_CONFIDENCE_LOW');
     if (!REVIEW_SURFACES.includes(source?.product_surface) || reviewDecision.matched_surface !== source?.product_surface) {
       reasons.push('PRODUCT_SURFACE_MISMATCH');
-    }
-  }
-
-  if (source && detail && normalizedEvidence.status === 'ready') {
-    const dateResult = dateForEvidence(normalizedEvidence, { latest: source?.date_mode === 'latest' });
-    proposedDate = dateResult.date;
-    if (dateResult.reason) reasons.push(dateResult.reason);
-    if (!proposedDate) reasons.push('PROPOSED_DATE_MISSING');
-    const today = todayOf(options.now);
-    if (proposedDate && today && proposedDate > today) reasons.push('PROPOSED_DATE_IN_FUTURE');
-    if (isIsoDate(detail.last_updated_date) && proposedDate && proposedDate <= detail.last_updated_date) {
-      reasons.push('PROPOSED_DATE_NOT_AFTER_CURRENT');
     }
   }
 
@@ -221,10 +247,12 @@ function planToolUpdateCandidates(inputs, options = {}) {
     input.suggestion || input.ai_suggestion,
     options,
   ));
+  const activeResults = results.filter(result => !result.ignored);
   return {
     ok: results.every(result => result.ok),
-    candidates: results.map(result => result.candidate),
-    blocked: results.filter(result => !result.ok).map(result => result.candidate),
+    candidates: activeResults.map(result => result.candidate),
+    blocked: activeResults.filter(result => !result.ok).map(result => result.candidate),
+    ignored: results.filter(result => result.ignored).length,
   };
 }
 

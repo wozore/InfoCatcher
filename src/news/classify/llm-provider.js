@@ -20,7 +20,7 @@
 
 'use strict';
 
-const { requestDeepSeek } = require('../../shared/deepseek-client');
+const { requestDeepSeek, textFromResponse } = require('../../shared/deepseek-client');
 const { LOCAL_API_BASE, LOCAL_MODEL } = require('../../shared/llm-endpoints');
 const { ensureLocalModel } = require('../../shared/local-model');
 
@@ -110,6 +110,21 @@ const REVIEW_MAX_SUMMARY_CHARS = 800;
 // 合法判定集合（与 content-reviewer.js 的 VERDICTS 一致）
 const VALID_VERDICTS = new Set(['approve', 'hold', 'discard']);
 
+const CONFIDENCE_RANGES = Object.freeze({
+  '0-20%': [0, 0.2],
+  '20-40%': [0.2, 0.4],
+  '40-60%': [0.4, 0.6],
+  '60-80%': [0.6, 0.8],
+  '80-90%': [0.8, 0.9],
+  '90-100%': [0.9, 1],
+});
+
+function normalizeConfidenceRange(value) {
+  if (typeof value !== 'string') return null;
+  const normalized = value.trim().replace(/[–—]/g, '-').replace(/\s+/g, '');
+  return Object.prototype.hasOwnProperty.call(CONFIDENCE_RANGES, normalized) ? normalized : null;
+}
+
 // 中文判定 → 枚举（模型偶尔输出中文时的兜底映射）
 const VERDICT_LABEL_MAP = {
   '通过': 'approve', '建议通过': 'approve',
@@ -123,18 +138,26 @@ const REVIEW_SYSTEM_PROMPT = '你是 AI 资讯内容审核编辑。根据给定�
 const REVIEW_USER_PROMPT_TEMPLATE = `请为下面这条 AI 资讯做初步审核，严格输出 JSON：
 {
   "verdict": "discard | hold | approve",
-  "reasons": ["理由1", "理由2"],
-  "confidence": 0.0
+  "confidence_range": "0-20% | 20-40% | 40-60% | 60-80% | 80-90% | 90-100%",
+  "confidence": 0.0,
+  "reasons": ["理由1", "理由2"]
 }
 
 判定标准：
 - discard：明显无关的内容（非 AI 主题、广告/垃圾、纯标题党、低质量搬运等）。
 - hold：存疑或信息不足（信息不全、疑似搬运、无法判断相关性等），需要人工细看，并给出 1~2 条具体理由。
 - approve：与 AI 主题明确相关且有实质信息量，建议通过。
-- confidence：你对判定的自信程度，0.0 到 1.0 之间的数字。越有把握越高；不确定时给出低值。
-- 自动分流阈值：approve 达到 0.85、discard 达到 0.90 才会自动处理。
-- 如果 approve 的 confidence >= 0.85 或 discard 的 confidence >= 0.90，只输出 verdict 和 confidence，不要输出 reasons。
-- 如果是 hold 或 approve/discard 的 confidence 低于对应阈值，必须输出 1~2 条简短、具体的 reasons。
+- confidence_range：按证据充分程度选择一个区间，不要把它当作统计概率：
+  - 0-20%：几乎没有可核验信息，或审核请求失败。
+  - 20-40%：只有极少线索，相关性或内容实质很不确定。
+  - 40-60%：有部分线索，但关键信息缺失，仍明显需要人工确认。
+  - 60-80%：主题和内容大致明确，但证据、来源或实质信息仍不完整。
+  - 80-90%：证据较充分，只有少量边界问题，尚不足以自动处理。
+  - 90-100%：有充分、直接且一致的证据，可以进入自动分流候选。
+- confidence：填写所选区间的下界（例如 60-80% 填 0.60），不得填写区间外的数值。区间比单个数值更重要。
+- 自动分流阈值：approve 达到 0.85、discard 达到 0.90 才会自动处理；只有选择 90-100% 区间时才允许触发自动分流。
+- 如果 approve 的区间为 90-100% 或 discard 的区间为 90-100%，只输出 verdict、confidence_range 和 confidence，不要输出 reasons。
+- 其他情况必须输出 1~2 条简短、具体的 reasons。
 
 标题：{title}
 描述：{description}
@@ -346,6 +369,46 @@ function normalizeSummary(raw) {
   return { summary, key_points: keyPoints };
 }
 
+function buildSummaryResponsesPayload(item, model = DEFAULT_MODEL) {
+  const chat = buildSummaryPayload(item, model);
+  return {
+    model: chat.model,
+    instructions: chat.messages[0].content,
+    input: chat.messages.slice(1).map(message => ({
+      role: message.role,
+      content: [{ type: 'input_text', text: message.content }],
+    })),
+    max_output_tokens: chat.max_tokens,
+    stream: false,
+    reasoning: { effort: 'none' },
+    text: { format: { type: 'json_object' } },
+  };
+}
+
+async function summarizeWithExternalDeepSeek(item, options = {}) {
+  const apiKey = options.apiKey ?? process.env.DEEPSEEK_API_KEY;
+  const fetchImpl = options.fetchImpl || (typeof fetch === 'function' ? fetch : null);
+  const timeoutMs = options.timeoutMs ?? 15_000;
+  if (!apiKey) return { ok: false, error: '缺少 DEEPSEEK_API_KEY', code: 'missing_api_key' };
+  if (!fetchImpl) return { ok: false, error: '当前运行环境无 fetch', code: 'no_fetch' };
+  let payload;
+  try {
+    payload = buildSummaryResponsesPayload(item, options.model);
+  } catch (error) {
+    return { ok: false, error: error.message, code: 'payload_error' };
+  }
+  const result = await requestDeepSeek(payload, { apiKey, fetchImpl, timeoutMs, signal: options.signal });
+  if (!result.ok) {
+    const code = result.code === 'DEEPSEEK_TIMEOUT' ? 'timeout' : (result.status ? `http_${result.status}` : 'network_error');
+    return { ok: false, error: result.error, code };
+  }
+  const content = textFromResponse(result.data);
+  if (!content) return { ok: false, error: 'DeepSeek 返回空内容', code: 'empty_content' };
+  const parsed = normalizeSummary(content);
+  if (!parsed) return { ok: false, error: 'DeepSeek 输出无法解析为 JSON 总结', code: 'invalid_summary' };
+  return { ok: true, summary: parsed.summary, key_points: parsed.key_points, raw: content };
+}
+
 /**
  * 对单条候选做 DeepSeek 内容总结。
  * @param {{title?: string, description?: string, transcript?: string}} item
@@ -477,9 +540,14 @@ function normalizeReview(raw) {
   const reasons = Array.isArray(data?.reasons)
     ? data.reasons.filter(reason => typeof reason === 'string' && reason.trim()).map(reason => reason.trim())
     : [];
+  const confidenceRange = normalizeConfidenceRange(data?.confidence_range);
   const parsedConfidence = Number(data?.confidence);
-  const confidence = Number.isFinite(parsedConfidence) ? Math.max(0, Math.min(1, parsedConfidence)) : 0;
-  return { verdict, reasons, confidence };
+  const confidence = confidenceRange
+    ? CONFIDENCE_RANGES[confidenceRange][0]
+    : (Number.isFinite(parsedConfidence) ? Math.max(0, Math.min(1, parsedConfidence)) : 0);
+  const result = { verdict, reasons, confidence };
+  if (confidenceRange) result.confidence_range = confidenceRange;
+  return result;
 }
 
 /**
@@ -541,7 +609,7 @@ async function reviewWithDeepSeek(item, options = {}) {
     if (!parsed) {
       return { ok: false, error: `DeepSeek 输出无法解析为审核建议：${content.slice(0, 60)}`, code: 'invalid_review' };
     }
-    return { ok: true, verdict: parsed.verdict, reasons: parsed.reasons, confidence: parsed.confidence, raw: content };
+    return { ok: true, verdict: parsed.verdict, reasons: parsed.reasons, confidence: parsed.confidence, confidence_range: parsed.confidence_range || null, raw: content };
   } catch (err) {
     const code = err?.name === 'TimeoutError' || err?.code === 'ETIMEDOUT' ? 'timeout' : 'network_error';
     return { ok: false, error: err?.message || String(err), code };
@@ -849,8 +917,12 @@ ${JSON.stringify(sourceItems)}`;
   };
 }
 
-/** 将 DeepSeek JSON 严格规范化为人工提纯清单所需的四字段。 */
-function normalizeKeywordRefine(content, existingKeywords = []) {
+/**
+ * 将 DeepSeek JSON 严格规范化为人工提纯清单所需的四字段。
+ * options.filterExisting=true（分批场景）：把已有关键词/非法条目过滤掉，保留其余有效词，
+ * 只在无任何有效词时返回 null；缺省严格模式：出现任何非法/已有关键词即整体返回 null。
+ */
+function normalizeKeywordRefine(content, existingKeywords = [], options = {}) {
   if (!content) return null;
   const existing = new Set((existingKeywords || []).map(word => String(word).trim().toLowerCase()));
   const cleaned = String(content).trim()
@@ -861,21 +933,31 @@ function normalizeKeywordRefine(content, existingKeywords = []) {
   try {
     const parsed = JSON.parse(match[0]);
     if (!Array.isArray(parsed.keywords) || parsed.keywords.length > KEYWORD_REFINE_MAX_RESULTS) return null;
+    const filter = options.filterExisting === true;
     const seen = new Set();
     const keywords = [];
     for (const raw of parsed.keywords) {
-      if (!raw || typeof raw.word !== 'string' || typeof raw.category !== 'string' || typeof raw.candidate_type !== 'string') return null;
+      if (!raw || typeof raw.word !== 'string' || typeof raw.category !== 'string' || typeof raw.candidate_type !== 'string') {
+        if (filter) continue;
+        return null;
+      }
       const word = raw.word.trim();
       const category = raw.category.trim().toLowerCase();
       const candidateType = raw.candidate_type.trim().toLowerCase();
       const count = Number(raw.count);
-      if (!ENGLISH_KEYWORD_RE.test(word) || !KEYWORD_CATEGORIES.has(category) || !KEYWORD_CANDIDATE_TYPES.has(candidateType) || !Number.isInteger(count) || count < 1) return null;
+      if (!ENGLISH_KEYWORD_RE.test(word) || !KEYWORD_CATEGORIES.has(category) || !KEYWORD_CANDIDATE_TYPES.has(candidateType) || !Number.isInteger(count) || count < 1) {
+        if (filter) continue;
+        return null;
+      }
       const key = word.toLowerCase();
-      if (existing.has(key) || seen.has(key)) return null;
+      if (existing.has(key) || seen.has(key)) {
+        if (filter) continue;
+        return null;
+      }
       seen.add(key);
       keywords.push({ word, category, candidate_type: candidateType, count });
     }
-    return keywords;
+    return keywords.length ? keywords : null;
   } catch {
     return null;
   }
@@ -924,7 +1006,7 @@ async function refineKeywordsWithDeepSeek(approvedItems, ruleCandidates, options
     if (typeof content !== 'string' || !content.trim()) {
       return { ok: false, error: 'DeepSeek 返回空内容', code: 'empty_content' };
     }
-    const keywords = normalizeKeywordRefine(content, options.existingKeywords);
+    const keywords = normalizeKeywordRefine(content, options.existingKeywords, { filterExisting: options.filterExisting === true });
     if (!keywords) {
       return { ok: false, error: `DeepSeek 输出无法解析为关键词清单：${content.slice(0, 60)}`, code: 'invalid_keyword_refine' };
     }
@@ -960,9 +1042,12 @@ module.exports = {
   buildSummaryPayload,
   normalizeSummary,
   summarizeWithDeepSeek,
+  summarizeWithExternalDeepSeek,
   REVIEW_MAX_TOKENS,
   REVIEW_MAX_SUMMARY_CHARS,
   VALID_VERDICTS,
+  CONFIDENCE_RANGES,
+  normalizeConfidenceRange,
   buildReviewPayload,
   normalizeReview,
   reviewWithDeepSeek,

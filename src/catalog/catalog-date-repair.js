@@ -9,7 +9,7 @@ const { revisionOf, previewHashOf, stableStringify } = require('./catalog-revisi
 const { validateCatalogSnapshot } = require('./catalog-snapshot-validator');
 const { loadCatalogSnapshot, commitSnapshotChange } = require('./catalog-transaction-store');
 const { loadProductUrlRegistry, updateSourcesForProduct } = require('./official-url-registry');
-const { readReviewQueue } = require('./tool-update-review-store');
+const { readReviewQueue, reviewQueueViews } = require('./tool-update-review-store');
 const { explicitDates, officialDateOf, isIsoDate } = require('./tool-update-evidence');
 const { planToolUpdateCandidate } = require('./tool-update-review-planner');
 
@@ -240,6 +240,7 @@ function reviewEvidenceOf(item) {
 }
 
 function reviewItemRepairOf(item, snapshot, registry, options = {}) {
+  if (item?.superseded_by) return invalid('DATE_REPAIR_REVIEW_SUPERSEDED', '审核条目已被后续证据替代，不能 Apply', { candidate_key: item.candidate_key, superseded_by: item.superseded_by });
   if (!item || item.review_status !== 'approved') return invalid('DATE_REPAIR_REVIEW_NOT_APPROVED', '审核条目不是 approved', { candidate_key: item?.candidate_key });
   if (item.status !== 'candidate' || (item.blocked_reasons || []).length) {
     return invalid('DATE_REPAIR_REVIEW_BLOCKED', '审核条目存在阻断理由，不能 Apply', { candidate_key: item.candidate_key });
@@ -280,7 +281,8 @@ function approvedRepairsFromReviewQueue(snapshot, options = {}) {
   const requestedKeys = Array.isArray(options.candidateKeys) && options.candidateKeys.length
     ? new Set(options.candidateKeys.map(String))
     : null;
-  const items = (queue.items || []).filter(item => item.review_status === 'approved'
+  const currentItems = reviewQueueViews(queue, { registry }).current_items;
+  const items = currentItems.filter(item => item.review_status === 'approved'
     && (!requestedKeys || requestedKeys.has(String(item.candidate_key))));
   if (!items.length) return invalid('DATE_REPAIR_NO_APPROVED_ITEMS', '审核队列没有可 Apply 的 approved 条目');
   const repairs = [];

@@ -21,6 +21,7 @@ const {
   buildSummaryPayload,
   normalizeSummary,
   summarizeWithDeepSeek,
+  summarizeWithExternalDeepSeek,
 } = require('../../src/news/classify/llm-provider');
 const {
   collectSummarySource,
@@ -109,14 +110,24 @@ test('summarizeWithDeepSeek 输出无法解析：invalid_summary', async () => {
   assert.equal(result.code, 'invalid_summary');
 });
 
-test('summarizeWithDeepSeek 成功：返回 summary + key_points', async () => {
-  const result = await summarizeWithDeepSeek({ title: 't', description: 'd' }, {
+test('summarizeWithExternalDeepSeek 使用外部 Responses endpoint，不经过本地模型门禁', async () => {
+  let endpoint = '';
+  let requestBody = null;
+  const result = await summarizeWithExternalDeepSeek({ title: '字幕标题', description: '视频描述', transcript: '字幕内容' }, {
     apiKey: 'key',
-    fetchImpl: mockFetch(() => deepSeekOk('{"summary":"AI 工具发布","key_points":["新增本地模型","支持语音"]}')),
+    fetchImpl: async (url, options) => {
+      endpoint = String(url);
+      requestBody = JSON.parse(options.body);
+      return { ok: true, status: 200, json: async () => ({ output_text: '{"summary":"外部摘要","key_points":["外部要点"]}' }) };
+    },
   });
   assert.equal(result.ok, true);
-  assert.equal(result.summary, 'AI 工具发布');
-  assert.deepEqual(result.key_points, ['新增本地模型', '支持语音']);
+  assert.equal(result.summary, '外部摘要');
+  assert.equal(endpoint, 'https://api.deepseek.com/responses');
+  assert.equal(requestBody.model, 'deepseek-chat');
+  assert.equal(requestBody.reasoning.effort, 'none');
+  assert.equal(requestBody.text.format.type, 'json_object');
+  assert.equal(requestBody.input[0].role, 'user');
 });
 
 // ── 第 3 组：collectSummarySource / summarizeCandidate ──────

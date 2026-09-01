@@ -81,9 +81,9 @@
 - [catalog/ai/tool-update-review-ai.js](src/catalog/ai/tool-update-review-ai.js) — 工具专用更新 AI 语义建议 Adapter；本地 Bonsai 默认、DeepSeek 需显式成本确认，输入只含已采集证据/登记元数据，严格输出五字段，不写事实或 catalog。导出: `validateToolUpdateReviewValue, buildToolUpdateReviewInput, buildToolUpdateReviewInstructions, suggestToolUpdateReview`
 - [catalog/tool-update-review-contract.js](src/catalog/tool-update-review-contract.js) — 工具更新审核中性契约；统一五字段 decision 校验、decision source 与来源审核模式枚举。导出: `REVIEW_VERDICTS, REVIEW_SURFACES, REVIEW_FIELDS, DECISION_SOURCES, REVIEW_MODES, validateToolUpdateReviewValue, normalizeToolUpdateReviewValue`
 - [catalog/tool-update-evidence.js](src/catalog/tool-update-evidence.js) — 工具更新证据日期纯函数；统一官方发布时间、正文日期解析和 `date_mode: latest` 选择，不依赖 AI。导出: `isIsoDate, isoDateFromValue, officialDateOf, explicitDates, dateForEvidence`
-- [tool-update-review-planner.js](src/catalog/tool-update-review-planner.js) — 工具更新确定性 planner；校验 registry 来源、tool detail、产品表面、官方日期、置信度和向前更新门禁，输出 candidate/blocked，不 Apply。日期解析支持月份缩写/序数/点分隔与 `date_mode: latest`（多日期 changelog 页取最新）；无当前 `last_updated_date` 的 detail 允许首次填充候选（Apply 阶段走 fill_missing）。导出: `findToolDetail, sourceForEvidence, planToolUpdateCandidate, planToolUpdateCandidates`
-- [tool-update-review-store.js](src/catalog/tool-update-review-store.js) — 工具更新人工审核队列读写与幂等合并；按 product/source/date/content hash 去重，保留 approved/rejected，证据 hash 变化重新 pending，只保存摘录。导出: `defaultReviewQueue, validateReviewQueue, readReviewQueue, writeReviewQueue, mergeReviewQueue, mergeAndWriteReviewQueue`
-- [tool-update-collector.js](src/catalog/tool-update-collector.js) — 编程工具专用更新网页确定性采集层；从受校验的 `update_sources` 读取 GitHub Releases/文件或官方 HTML/Tavily Extract，统一产出可审计 UpdateEvidence，不调用 AI、不写 catalog。tavily_extract 优先直接抓官方 HTML（解决 Tavily 对 JS 渲染/缓存页丢失 changelog 日期），HTML 空壳/无日期回退 Tavily Extract；GitHub Release 正文为空但有官方 `published_at` 时仍以版本名/发布元数据生成 ready 证据。导出: `collectGithubRelease, collectGithubFile, collectTavilySource, collectUpdateEvidence, collectProductUpdateEvidence, htmlToText, fetchHtmlText`
+- [tool-update-review-planner.js](src/catalog/tool-update-review-planner.js) — 工具更新确定性 planner；校验 registry 来源、tool detail、产品表面、官方日期、置信度和向前更新门禁，输出 candidate/blocked/no-op，不 Apply。日期解析支持月份缩写/序数/点分隔与 `date_mode: latest`（多日期 changelog 页取最新）；无当前 `last_updated_date` 的 detail 允许首次填充候选（Apply 阶段走 fill_missing）。导出: `findToolDetail, sourceForEvidence, planToolUpdateCandidate, planToolUpdateCandidates`
+- [tool-update-review-store.js](src/catalog/tool-update-review-store.js) — 工具更新人工审核队列读写、候选替代生命周期与当前/历史视图；提供 revision 化白名单 projection、最新登记来源筛选、历史审计、仅修改 `review_status` 的 fail-closed 工作台 mutation，以及带 expected count/revision 断言的旧 `pending/blocked` 精确删除。导出: `readReviewQueue, writeReviewQueue, mergeReviewQueue, reviewQueueViews, readReviewQueueProjection, setReviewStatusReviewQueue, removePendingBlockedReviewItems`
+- [tool-update-collector.js](src/catalog/tool-update-collector.js) — 编程工具专用更新网页确定性采集层；从受校验的 `update_sources` 读取 GitHub Releases/文件或官方 HTML/Tavily Extract，校验 HTML 重定向仍在原官方域，统一产出可审计 UpdateEvidence，不调用 AI、不写 catalog。tavily_extract 优先直接抓官方 HTML（解决 Tavily 对 JS 渲染/缓存页丢失 changelog 日期），HTML 空壳/无日期回退 Tavily Extract；GitHub Release 正文为空但有官方 `published_at` 时仍以版本名/发布元数据生成 ready 证据。导出: `collectGithubRelease, collectGithubFile, collectTavilySource, collectUpdateEvidence, collectProductUpdateEvidence, htmlToText, fetchHtmlText`
 - [catalog/ai/concept-synthesis-prompt.js](src/catalog/ai/concept-synthesis-prompt.js) — 概念合成 input/instructions 纯函数构建；把待补术语与摘要/vibe-hub 证据组装为受约束的中文 JSON 任务。导出: `DEFAULT_CONCEPT_CATEGORIES, buildConceptSynthesisInput, buildConceptSynthesisInstructions`
 - [catalog/ai/concept-synthesis-ai.js](src/catalog/ai/concept-synthesis-ai.js) — 概念合成 Adapter（本地 Bonsai）；单段式调用结构化深 Module，ledger 必传 fail-closed，合成次数预占，返回 7 字段 glossary 条目（term 以待补卡为准防改词）。导出: `validateConceptValue, normalizeConceptEntry, synthesizeConceptFields`
 - [catalog-batch.js](src/catalog/catalog-batch.js) — **批量生成编排层（②→③ 链路）**：待补卡 → 三层查重（正式目录/进行中 draft/同批）→ 厂商/官方源解析（人工登记表 | Tavily）→ 成本估算/全局确认 → 逐 seed prepare→review→自动 apply → 批量报告；单 seed 失败跳过保留 draft 可 resume；**阶段 4：api_model 批量前置经 resolveBatchPlacements 解析二级归属**（人工 placement 优先并校验、确定性 existing/create、migration_required/fail_closed 阻断）；**阶段 5：无 confirmCost 且非 dry-run 时零付费返回三本账成本估算**（vendor_resolution / placement / research，registry 命中零成本），dry-run 也写确定性 placement_decision 进 preview、from-preview/resume 短路复用不重复调 AI，顺序投影维护同厂商候选最新成员数（第 4 个触发拆分）；`readPendingCards` 输入门禁校验容器/卡类型与 `detail_kind_hint` 类型，登记表命中但 seed 转换抛错（vague/非法 hint）收进 unresolved 不中断整批。导出: `readPendingCards, dedupeBatchCandidates, resolveBatchCandidates, runCatalogBatch, runBatchFromCards, resolveBatchPlacements`
@@ -115,6 +115,11 @@
 - [identity-review-ai.js](src/comparison/identity-review-ai.js) — 名称歧义 AI 建议 Adapter：复用结构化 JSON transport，本地 Bonsai 默认、DeepSeek 可显式升级；统一 prompt/schema，ledger 缺失 fail-closed。导出: `suggestIdentityReview`
 - [rebuild-comparison.js](src/comparison/rebuild-comparison.js) — **integrated 重建核心**：只消费统一模型身份解析（厂商限定 `model_key` + 明确 revision 隔离）→ 合并 4 源记录 → 先按 model-exclusions 过滤整系列 → 重新计算 Elo bounds/维度/综合分/性价比 → 系列投影；profile 分数进入 `lmarena_profiles`，不生成选择器行，同厂商同展示名最终强制追加身份消歧，写 index/data.json；排除只影响 integrated，raw 保留。导出: `rebuildIntegrated, collectSourceRecords, slugify, openrouterCanonical, llmStatsCanonical, lmarenaParse, livebenchParse, buildAliasMap, cleanModelDisplay, themeOfDimensions`
 - [run-comparison.js](src/comparison/run-comparison.js) — 抓取编排（cron 每日）：每源独立计数全量 + 失败隔离 WARN + 全绿才重建。导出: `runComparison, fetchSource, isFresh, readConfig`
+
+## src/maintainer-web/ — 本机维护者前端（原生 HTML/CSS/JS；固定 `/api/workbench/v1/`，不参与公开静态站构建）
+- [index.html](src/maintainer-web/index.html) — 编辑部审核工作台页面骨架；待办概览、新闻首审、关键词提纯生成/采纳、Top 待选池生成/选择/公开投影、工具更新审核/preview/确认 Apply、概念预览。
+- [css/workbench.css](src/maintainer-web/css/workbench.css) — 编辑部工作台响应式视觉样式与状态/队列/预览/工具确认组件样式。
+- [js/workbench.js](src/maintainer-web/js/workbench.js) — 固定工作台 API 客户端与交互；fragment token、revision 绑定写请求、新闻/关键词/Top 后续操作、工具 preview 与精确确认 Apply、工具更新当前待办与历史折叠、blocked 门禁、加载/错误/409 状态和 DOM 安全渲染。
 
 ## src/web/ — 前端静态站（原生 ES module，无打包器；build-dist.js 原样复制到 dist/）
 - [index.html](src/web/index.html) — 页面骨架与八视图 HTML 结构；AI 搜索首页为左中右布局（左侧「怎么用」三步引导栏 + 中间原样搜索主区 + 右侧留白），结果页三栏答案引擎。
@@ -151,9 +156,11 @@
 - [history-store.js](src/news/min/history-store.js) — 来源长期质量历史库（source-history.json 持久化 + 三率加权长期质量分，纯本地无 API）。导出: `readHistoryStore, writeHistoryStore, appendSamples, evaluateLongTermQuality, computeThreeRateScore, sourceKeyOf, perSampleRates`
 - [min-history.js](src/news/min/min-history.js) — 热点候选轻量历史（维护者手动归档；最近 30 批，每条仅保存 id/title，批次时间为北京时间 `YYYY-MM-DD-HH:MM:SS`）。导出: `readMinHistory, writeMinHistory, appendMinHistory, compactCandidates, formatBatchAt, archiveMinStore`
 - [review-v2.js](src/news/min/review-v2.js) — 热点管线 v2 审核层（L0 规则硬审：字段/AI 关键词/广告 + YouTube 简介明确 AI 生成披露硬排除 → L1 AI 审：高置信 approve/discard 自动分流，争议项 pending → L2 AI 建议+人工；单状态轴 pending/approved/discarded，不依赖旧双轴；复用 content-reviewer.reviewCandidate）。导出: `l0HardFilter, l1AiReview, l2AiAdvice, applyL1Verdicts, AI_DISCLOSURE_PATTERNS, DEFAULT_COMMENTS_TOP_N, DEFAULT_AUTO_APPROVE_CONFIDENCE, DEFAULT_AUTO_DISCARD_CONFIDENCE`
-- [min-store.js](src/news/min/min-store.js) — v2 单状态轴候选层读写（min-candidates.json；自动采集继续合并候选，维护者手动归档后才清空；人工结论不因重新采集重置）。导出: `readMinStore, writeMinStore, mergeCandidatesMin, setReviewStatusMin, setBatchReviewStatusMin, isMinPublicEligible, toPublicItemMin`
+- [min-store.js](src/news/min/min-store.js) — v2 单状态轴候选层读写与候选合并；维护者工作台 mutation 使用稳定 revision、pending→approved/discarded、仅 approved 的 Top 选择门禁，以及字幕写入（transcript/transcript_file）与字幕总结写回（summary/key_points）mutation。导出: `readMinStore, writeMinStore, commitMinStoreMutation, reviewPendingCandidates, setApprovedTopSelectedMin, setCandidateTranscriptMin, setCandidateTranscriptSummaryMin`
+- [keyword-actions.js](src/news/min/keyword-actions.js) — 关键词候选清单的子集采纳与丢弃、配置 revision 与原子提交；只更新 `keywords.ai_keywords` / `keywords.excluded_keywords`（丢弃词进黑名单防止再建议），供 CLI 与本机工作台共同调用。
 - [daily-projection.js](src/news/min/daily-projection.js) — v2 每日 top N 公开投影（approved 按北京时间自然日分组取前 N：含 YouTube 取 8 / 纯 X 取 5，纯逻辑不调 enrich/filter 两步）。导出: `buildDailyProjection`
-- [keyword-refine.js](src/news/min/keyword-refine.js) — 人工首次审核后关键词提纯（只读 approved 顶层原文，规则召回 + DeepSeek 跨语言归并为 English 四字段清单，dateKey 北京时间，清单文件名固定 keyword-refine.json；维护者填 adopted_keywords；不直接改配置）。导出: `refineKeywords, collectApprovedOriginals, buildRuleCandidates`
+- [keyword-refine.js](src/news/min/keyword-refine.js) — 人工首次审核后关键词提纯（**分批覆盖全部 approved**，每批截断标题/描述/评论适配本地模型上下文，跨批合并频次、排除已采纳与已丢弃词；清单记录 source_count/input_count/source_basis，dateKey 北京时间，文件名固定 keyword-refine.json；维护者填 adopted_keywords；不直接改配置）。导出: `refineKeywords, collectApprovedOriginals, chunkItems, mergeKeywordBatches, buildRuleCandidates, MAX_KEYWORD_REFINEMENT_INPUT`
+- [transcript-workflow.js](src/news/min/transcript-workflow.js) — 字幕文件落库与外部 AI 总结（维护者工作台）：校验文件名防路径穿越、字幕文本截断存储到 `data/manual/transcripts/<candidate_id>/<file>`（可提交、不发布），并写候选层 transcript；显式成本确认后用外部 DeepSeek 重新总结写回 summary/key_points。导出: `safeTranscriptFile, saveTranscriptFile, uploadTranscript, summarizeTranscripts, MAX_TRANSCRIPT_STORED_CHARS, MAX_SUMMARIZE_PER_RUN`
 - [pipeline-min.js](src/news/min/pipeline-min.js) — **热点管线 v2 总指挥（runMin 编排）**：严格读取 `collection.enabled` 统一总开关（关闭时全链零网络/零写入）→ 采集（默认 YouTube+X 并行，`options.platforms` 支持分时单平台；X credits/请求账本透传至 coverage 与 last-run）→ 去重 → L0 硬过滤 → 分类 → 评分（历史库）→ L1/L2 审核 → 候选落地 → 总结/本地化 → 自动生成待审清单（review-list，`options.autoReviewList=false` 可关）→ 每日公开投影写 hotspots.json → 写采集运行记录 last-run.json（ai-top 判定 hasYouTube 用）。X 采集窗口缺省「北京时间今天 0 点 → now」；每步失败降级记 coverage 不抛错。导出: `runMin, loadV2Config, isCollectionEnabled, normalizeNow, resolveXWindow`
 - [review-list.js](src/news/min/review-list.js) — 人工审核清单：自动生成待审清单 review.json（文件名固定去掉日期后缀，date 为北京时间；带 id、只含 pending、评分倒序；已存在时追加新 pending、保留人工结论、--force 强制重建）+ 应用人工结论批量写回候选层（apply；pending 跳过、无 id 旧格式拒绝）。维护者入口：bat/after-first-review.bat、bat/archive-min.bat（归档时重置当日人工清单）。导出: `scoreOf, suggestReview, buildReviewList, mergeReviewCandidates, loadReviewList, applyReviewList`
 
@@ -176,7 +183,7 @@
 ### cli/ — 命令行
 - [news-cli.js](src/news/cli/news-cli.js) — **CLI 分发器 + 入口**（仅保留 v2 命令组）。导出: `parseArgs, main, minReviewCommand`
 - [cmd-content.js](src/news/cli/cmd-content.js) — `classify/localize preview` 子命令（纯函数预览；批量分类/本地化已由 v2 管线内建）。导出: `classifyCommand, localizeCommand`
-- [cmd-min.js](src/news/cli/cmd-min.js) — **v2 `min-review` 命令组**（操作 min-candidates.json；`feedback` 默认接入 LLM 实体提取，feedback.llm_extract=false 关 / LLM 失败降级正则；`refine` 从 approved 原文调 DeepSeek 生成关键词清单，`refine-apply` 校验 adopted_keywords 后原子幂等追加配置；`ai-top` 产物带 id；`top-apply` 应用 top_selected=true；`apply` 写回首审结论；`archive` 由维护者确认后把当前候选压缩为轻量历史、清空候选层，并重置 data/manual 当日人工清单）。维护者入口：bat/after-first-review.bat、bat/archive-min.bat。导出: `minReviewCommand, applyRefineKeywords, applyTopSelectedList, resolveAiTopConfig, removeManualLists, MANUAL_LIST_FILES`
+- [cmd-min.js](src/news/cli/cmd-min.js) — **v2 `min-review` 命令组**（操作 min-candidates.json；`feedback` 默认接入 LLM 实体提取，feedback.llm_extract=false 关 / LLM 失败降级正则；`refine` 分批覆盖全部 approved 调本地模型生成关键词清单，`refine-apply` 校验 adopted_keywords 后原子幂等追加配置；`ai-top` 经 `topCandidatesForAi` 控制模型输入规模（`collection.ai_top_input_max` 可调）、优先以 last-run 判定 YouTube、缺失时回退 approved 平台字段，产物带 id 与输入范围统计；`top-apply` 应用 top_selected=true；`apply` 写回首审结论；`archive` 由维护者确认后把当前候选压缩为轻量历史、清空候选层，并重置 data/manual 当日人工清单）。维护者入口：维护者工作台、bat/after-first-review.bat、bat/archive-min.bat。导出: `minReviewCommand, resolveAiTopConfig, topCandidatesForAi, MAX_AI_TOP_INPUT, applyRefineKeywords, applyTopSelectedList, removeManualLists, MANUAL_LIST_FILES`
 
 ### transcripts/ — 收尾环节：字幕人工获取通知（独立于主链，只写清单文件）
 - [transcript-notify.js](src/news/transcripts/transcript-notify.js) — 每日"待人工获取字幕"清单（min 候选层挑评分最高 notify_count 个 YouTube，写 transcript-requests.json 交人工，文件名固定去掉日期后缀、dateKey 北京时间；不碰主链/不调采集总结）。导出: `notifyTranscripts, parseNotifyCount, scoreOf`
@@ -203,7 +210,9 @@
 - [fetch-tool-intel.js](src/acquisition/fetch-tool-intel.js) — **采集入口（编排 + 汇总 re-export 14 个）**。refresh-tool-intel.yml 依赖 `collectIntelligence`
 - [validate-intel.js](src/acquisition/validate-intel.js) — 情报数据校验。导出: `validate, validateSourceConfig, validateIntelData`
 
-## src/maintenance/ — 维护校验
+## src/maintenance/ — 维护校验与本机工作台
+- [maintainer-workbench-server.js](src/maintenance/maintainer-workbench-server.js) — 仅监听 `127.0.0.1` 的 Node 原生维护者工作台 server；静态资源白名单、fragment token/Bearer、同源 POST、32KiB JSON 上限和固定 API 路由，包含新闻后续流程与工具 preview/确认 Apply 的受控入口。导出: `createMaintainerWorkbenchServer`
+- [maintainer-workbench-service.js](src/maintenance/maintainer-workbench-service.js) — 维护者工作台领域编排与受控 DTO；复用新闻关键词/Top 生成、采纳与丢弃、字幕上传与外部 AI 总结、公开投影，以及工具更新 preview/确认 Apply，保留既有 revision、hash、成本和 Catalog 事务门禁。导出: `createMaintainerWorkbenchService`
 - [validate.js](src/maintenance/validate.js) — **校验聚合入口（require 即运行 + process.exit 0/1）**。scripts/validate.js 直接引用，CI 三处工作流依赖
 - [catalog-date-audit.js](src/maintenance/catalog-date-audit.js) — 纯本地只读五模块 catalog 日期语义审计；按 detail_kind、来源 title/url 和人工 repair 证据分类为 verified_release/verified_update/ambiguous/invalid_source，生成迁移清单但不修改正式 catalog。导出: `TARGET_FIELD_BY_KIND, auditCatalogDates, createCatalogDateAudit, loadRepairEvidence, repairFieldFromNote, runCatalogDateAudit, writeAuditReport`
 - [validate-catalog.js](src/maintenance/validate-catalog.js) — catalog 数据校验。导出: `validateCatalog, validateHtml`
@@ -211,6 +220,7 @@
 - [validate-comparison.js](src/maintenance/validate-comparison.js) — 模型对比数据校验（先校验 model-exclusions 规则与 integrated 无命中残留，再校验 index/data 交叉一致性、canonical/同厂商 display 唯一、series/member 引用完整性、identity/evaluation_profiles 契约、degree 不得伪装评测环境、composite 与 raw 自洽、维度 0-100、view-config/models-alias 契约形状；raw 快照存在则 schema 校验、缺失优雅跳过）。导出: `validateComparison, validateIndex, validateData`
 
 ## tests/ — 自动化回归
+- [index.js](tests/index.js) — 跨平台全量测试目录入口；递归加载所有 `*.test.js`，使 `node --test tests/` 可用。
 - [web-date-display.test.js](tests/web-date-display.test.js) — 前端 typed 日期、无日期/套餐及场景类型标签纯函数回归。
 - [catalog-interface.test.js](tests/catalog-interface.test.js) — 五模块目录 Interface、字段所有权、稳定引用、工具卡→三级详情以及场景/精选详情引用回归。
 - [catalog-date-audit.test.js](tests/catalog/catalog-date-audit.test.js) — 日期语义审计保守分类、目标字段和输入不变回归。
@@ -224,7 +234,7 @@
 - [catalog-release-dates.test.js](tests/catalog/catalog-release-dates.test.js) — catalog→comparison 共享投影发布回归：只投影 api_model/product_variant、tool_key join、逐条形状校验 fail-closed、读写冻结。
 - [tool-update-collector.test.js](tests/catalog/tool-update-collector.test.js) — 专用更新网页 collector 全离线回归：GitHub REST/raw 请求构造、来源仓库/路径校验、release 过滤、限流重试、tag-only discovery、Tavily Extract-only 和统一证据。
 - [tool-update-review.test.js](tests/catalog/tool-update-review.test.js) — 工具更新 AI/planner/store 全离线回归：五字段结构化输出、本地/DeepSeek 成本门禁、实体/组件/日期阻断、队列幂等、人工结论保留和 evidence hash 重开。
-- [tool-update-review-cli.test.js](tests/catalog/tool-update-review-cli.test.js) — 工具更新 CLI 离线回归：参数解析、Tavily/DeepSeek 门禁、scan 不 Apply、list 只读和 Apply 三重确认门禁。
+- [tool-update-review-cli.test.js](tests/catalog/tool-update-review-cli.test.js) — 工具更新 CLI 离线回归：参数解析、Tavily/DeepSeek 门禁、本地模型汉化与失败重试、外部摘要成本门禁、scan 不 Apply、localize 回填/list 只读和 Apply 三重确认门禁。
 - [concept-batch.test.js](tests/catalog/concept-batch.test.js) — 概念批量编排回归：读卡、双层查重、approved 摘要证据匹配与 K 上限、vibe-hub 补充/失败静默、成本估算、dry-run 零网络零写入、成本门禁、合成失败隔离、预览文件、apply 必填校验/去重/合并保序/terms 子集。
 - [vibe-hub-evidence.test.js](tests/catalog/vibe-hub-evidence.test.js) — vibe-hub 提取回归：term→slug（中文 null）、JSON-LD/正文结构化提取、缓存命中零网络、未命中 GET+写缓存、TTL 过期重抓、404/网络失败 null、串行节流、过期刷新与失败保留。
 - [deepseek-structured.test.js](tests/catalog/deepseek-structured.test.js) — DeepSeek 结构化 JSON 外壳、空/截断/非法响应、synthesis 预算预占与缺账本回归。
@@ -262,7 +272,9 @@
 - [content-classifier-rule.test.js](tests/news/content-classifier-rule.test.js) — 内容分类规则召回、类型判断与边界回归。
 - [feedback/llm-entity-extract.test.js](tests/news/feedback/llm-entity-extract.test.js) — 摘要实体提取结构化输出、类型与 fail-closed 回归。
 - [feedback/tool-feedback.test.js](tests/news/feedback/tool-feedback.test.js) — 热点摘要实体路由、待补工具/概念卡去重与笼统名拦截回归。
-- [keyword-refine.test.js](tests/news/keyword-refine.test.js) — 关键词候选规则召回、approved 原文收集与提纯回归。
+- [keyword-refine.test.js](tests/news/keyword-refine.test.js) — 关键词候选规则召回、approved 原文收集、有限输入规模、丢弃词排除与来源统计回归。
+- [keyword-actions.test.js](tests/news/keyword-actions.test.js) — 关键词采纳/丢弃 mutation 回归：丢弃黑名单幂等去重、revision 门禁、原子写与陈旧冲突拒绝。
+- [transcript-workflow.test.js](tests/news/transcript-workflow.test.js) — 字幕文件落库与外部 AI 总结回归：路径穿越/非法文件名拒绝、approved 门禁、成本确认、AI 总结写回、无字幕/缺失候选失败汇总、存储截断。
 - [min-history.test.js](tests/news/min-history.test.js) — 热点候选轻量历史归档、压缩与批次日期回归。
 - [news-cmd-min.test.js](tests/news/news-cmd-min.test.js) — `min-review` 审核/关键词/top/归档命令纯逻辑回归。
 - [news-localizer.test.js](tests/news/news-localizer.test.js) — 候选标题/描述本地化输入、输出与降级回归。
@@ -284,7 +296,7 @@
 - [catalog-generator.js](scripts/catalog-generator.js) — schema v3 五模块目录生成器 CLI；`plan/prepare` 零网络，`new/resume/probe/batch` 要求显式 `--tavily-access-mode` 并透传到 Tavily，Apply 要求维护者输入完整确认；支持 `remove --targets` 精确 ID 删除（revision/确认值/事务回滚）、`batch`（`--confirm-cost` 全局确认自动 apply / `--dry-run` 预览 / `--from-preview` 复用解析）以及双表 `url-registry vendor/product` 维护和纯本地 product freshness audit。导出: `parseArgs, main, readSeed, tavilyAccessModeFromFlags, generatorOptionsFromFlags`
 - [concept-generator.js](scripts/concept-generator.js) — **AI 概念库生成器 CLI（与五模块目录生成器分离）**：`batch --file <待补概念卡> --dry-run/--confirm-cost` 合成预览 → `preview` → `apply [--terms]` 人工写 glossary。导出: `parseArgs, main`
 - [catalog-series-migration.js](scripts/catalog-series-migration.js) — LLM 二级系列迁移 CLI：预览（人类可读 / `--json`）加载政策 + 当前快照输出变更；`--apply <targetRevision>` 阶段 3 原子 Apply——按当前快照重算目标 revision 校验防漂移，经 commitSnapshotChange 五文件事务 + dist 重建提交，expectedRevision 绑定防并发冲突。导出: `currentPlan, humanReport, applyMigration, main`
-- [tool-update-review.js](scripts/tool-update-review.js) — 编程工具专用更新审核 CLI：`preflight` 只读环境检查，`scan` 采集/AI/planner 后只写 review queue，`list/preview` 只读，`apply` 仅消费 approved 并复用日期批量事务。导出: `PRODUCT_KEYS, parseArgs, accessModeOf, runPreflight, runScan, runList, runPreview, runApply, main`
+- [tool-update-review.js](scripts/tool-update-review.js) — 编程工具专用更新审核 CLI：`preflight` 只读环境检查，`scan` 采集/AI/planner 后写 review queue 并通过新闻链路本地模型生成中文展示摘要，`localize` 只回填已有队列且失败可重试，日期不晚于当前记录的证据作为 no-op，`list/preview` 只读，`apply` 仅消费 approved 并复用日期批量事务。外部摘要回退受显式成本确认与账本门禁约束。导出: `PRODUCT_KEYS, parseArgs, accessModeOf, runPreflight, runScan, runLocalize, localizeToolCandidate, runList, runPreview, runApply, main`
 - [refresh-vibe-hub-cache.js](scripts/refresh-vibe-hub-cache.js) — 定时刷新 vibe-hub 概念缓存（CI 入口，由 refresh-vibe-hub-cache.yml 每 3 天北京 19:00 调用）；只刷 `fetched_at` 距今 > 3 天 TTL 的条目，空缓存/全新鲜零网络，纯 HTTP 不读任何 Key。导出: `main`
 - [news-cli.js](scripts/news-cli.js) — CLI 分发入口（透传 src/news/cli/news-cli，含 **`min-review` 命令组**）
 - [fetch-comparison.js](scripts/fetch-comparison.js) — 模型对比数据管线 CLI（run 定时抓取+全绿重建 / fetch <source> 手动单跑 / rebuild / review 输出零网络零写入的待人工名称歧义清单 / status）；`.github/workflows/refresh-comparison.yml` 每日 cron 调用。

@@ -1,0 +1,515 @@
+1
+00:00:00,560 --> 00:00:02,679
+Bu Excel dosyasının içine bilerek 7
+
+2
+00:00:02,679 --> 00:00:04,720
+tuzak koydum. Aynı dosyayı Cloud'a,
+
+3
+00:00:04,720 --> 00:00:06,839
+Copilot'a ve chat GPT'ye vereceğim.
+
+4
+00:00:06,839 --> 00:00:09,639
+Hangisi gerçek hataları bulacak? Hangisi
+
+5
+00:00:09,639 --> 00:00:12,360
+uzun konuşup puan kaybedecek? Kazananı
+
+6
+00:00:12,360 --> 00:00:15,120
+videonun sonunda göstereceğim. Bu testin
+
+7
+00:00:15,120 --> 00:00:17,160
+sonunda yalnızca kazananı
+
+8
+00:00:17,160 --> 00:00:18,840
+öğrenmeyeceksiniz.
+
+9
+00:00:18,840 --> 00:00:21,119
+Açıklamadaki dosyayı indirip kendi
+
+10
+00:00:21,119 --> 00:00:24,519
+kullandığınız yapay zekayı aynı sınava
+
+11
+00:00:24,519 --> 00:00:27,359
+siz de sokabileceksiniz. Üstelik size
+
+12
+00:00:27,359 --> 00:00:30,920
+hataları buldururken verinizi bozmasını
+
+13
+00:00:30,920 --> 00:00:33,239
+engelleyen tek parça prompt da
+
+14
+00:00:33,239 --> 00:00:35,760
+vereceğim. Çünkü asıl tehlike yapay
+
+15
+00:00:35,760 --> 00:00:38,520
+zekanın hata yapması değil. Doğru
+
+16
+00:00:38,520 --> 00:00:41,520
+görünen doğru görünen yanlış bir Excel
+
+17
+00:00:41,520 --> 00:00:44,320
+üretmesi. Bir formül yok hatası verirse
+
+18
+00:00:44,320 --> 00:00:47,480
+fark edersiniz ama toplam ciro %8 şişmiş
+
+19
+00:00:47,480 --> 00:00:49,920
+ve grafik hala çok güzel görünüyorsa o
+
+20
+00:00:49,920 --> 00:00:52,719
+rapor yönetici toplantısına kadar gider.
+
+21
+00:00:52,719 --> 00:00:55,000
+Öncelikle cloud'u açıyorum ve hatalı
+
+22
+00:00:55,000 --> 00:00:56,879
+veri setimi yani kirli veri seti
+
+23
+00:00:56,879 --> 00:01:00,160
+dediğimiz veri setini cloud'a yüklüyorum
+
+24
+00:01:00,160 --> 00:01:02,239
+ve şu promptu yazıyorum. Bu dosyada
+
+25
+00:01:02,239 --> 00:01:03,680
+verileri kalitesini bozacak tüm
+
+26
+00:01:03,680 --> 00:01:05,320
+sorunları bul. Hiçbir hücreyi
+
+27
+00:01:05,320 --> 00:01:07,280
+değiştirmeden önce kategori, hücre
+
+28
+00:01:07,280 --> 00:01:09,520
+adresi, mevcut değer, neden sorun ve
+
+29
+00:01:09,520 --> 00:01:11,840
+önerilen düzeltme olarak listele, emin
+
+30
+00:01:11,840 --> 00:01:14,320
+olmadığın değeri değiştirme, insan onayı
+
+31
+00:01:14,320 --> 00:01:17,040
+gereklediğe işaretle özellikle şu 7
+
+32
+00:01:17,040 --> 00:01:19,600
+alanı kontrol et dedim ve gönderdim.
+
+33
+00:01:19,600 --> 00:01:22,240
+Bakalım bize bu temizleme işlemini doğru
+
+34
+00:01:22,240 --> 00:01:24,159
+bir şekilde yapabilecek mi? Burada
+
+35
+00:01:24,159 --> 00:01:27,520
+biliyorsunuz cloud, copilot ve chat
+
+36
+00:01:27,520 --> 00:01:30,439
+GPT'yi karşılaştıracağız.
+
+37
+00:01:30,439 --> 00:01:33,640
+Bakın tamamladı. Beraber inceleyelim.
+
+38
+00:01:33,640 --> 00:01:36,280
+243 satırlık tabloda 15 sorun buldum
+
+39
+00:01:36,280 --> 00:01:38,000
+diyor. Hiçbiri düzeltilmedi. En kritik
+
+40
+00:01:38,000 --> 00:01:40,159
+üçü tam yenilenen kayıt iki satırda
+
+41
+00:01:40,159 --> 00:01:42,079
+metin olarak girilmiş diyor. Hepsini
+
+42
+00:01:42,079 --> 00:01:44,399
+burada bana tek tek listeledi. Mesela
+
+43
+00:01:44,399 --> 00:01:46,680
+boş satırları verdi. İşte bunları silmek
+
+44
+00:01:46,680 --> 00:01:48,280
+için ya da doldurmak için benden ona
+
+45
+00:01:48,280 --> 00:01:50,759
+istiyor. İşte yanlış veri tipi diyor. 5
+
+46
+00:01:50,759 --> 00:01:53,759
+adet yazmış. Yanlış veri tipi TL olacak
+
+47
+00:01:53,759 --> 00:01:55,759
+şekilde yazmamış. Farklı bir şekilde
+
+48
+00:01:55,759 --> 00:01:58,079
+yazmış. Hepsinin sonunda normal TL
+
+49
+00:01:58,079 --> 00:02:00,479
+amblemi varken onda TL yazıyor. Tarih
+
+50
+00:02:00,479 --> 00:02:02,600
+formatı hatalı. hatalı tarih
+
+51
+00:02:02,600 --> 00:02:04,320
+formatlarını buldu. Yani kirli verimi
+
+52
+00:02:04,320 --> 00:02:07,039
+aslında olması gerektiği gibi temizledi
+
+53
+00:02:07,039 --> 00:02:09,920
+ve yap diyorum. Şimdi onay veriyorum
+
+54
+00:02:09,920 --> 00:02:11,840
+dedim
+
+55
+00:02:11,840 --> 00:02:14,400
+ve benim o dosyamı hazırlayacak ve bana
+
+56
+00:02:14,400 --> 00:02:16,440
+verecek. İndirip sonrasında tertemiz
+
+57
+00:02:16,440 --> 00:02:18,599
+veriyi kullanabileceğim. Şimdi chat
+
+58
+00:02:18,599 --> 00:02:21,280
+GPT'yi açtım ve buna yine benim o
+
+59
+00:02:21,280 --> 00:02:23,400
+dosyamı yüklüyorum.
+
+60
+00:02:23,400 --> 00:02:25,160
+Geliyorum.
+
+61
+00:02:25,160 --> 00:02:27,640
+Kirli veriyi ekledim ve yine aynı
+
+62
+00:02:27,640 --> 00:02:30,319
+promptumu yazıyorum ve gönderiyorum.
+
+63
+00:02:30,319 --> 00:02:32,400
+Bakalım chat GPT bana nasıl sonuç
+
+64
+00:02:32,400 --> 00:02:35,400
+verecek.
+
+65
+00:02:35,560 --> 00:02:38,319
+Chat GPT'yi de tamamladı. Bakın bu da e
+
+66
+00:02:38,319 --> 00:02:41,360
+243 kayıt ve 14 alan tarandı. 15 ayrı
+
+67
+00:02:41,360 --> 00:02:43,760
+veri kalitesi sorunu grubu belirlendi
+
+68
+00:02:43,760 --> 00:02:45,760
+diyor. Eee gördüğünüz gibi benzer
+
+69
+00:02:45,760 --> 00:02:48,000
+şeyleri buldu. Satış kimliği belirsiz
+
+70
+00:02:48,000 --> 00:02:50,440
+diyor. Tarih veri türü hatalı diyor.
+
+71
+00:02:50,440 --> 00:02:52,519
+Bölge şehir tutarsızlığı var diyor.
+
+72
+00:02:52,519 --> 00:02:54,640
+Fiyat türü ve değer tutarsızlığı var
+
+73
+00:02:54,640 --> 00:02:57,400
+diyor. Aynılarını buldu. Fakat birazcık
+
+74
+00:02:57,400 --> 00:03:00,800
+daha cloud'a göre yavaş hareket etti.
+
+75
+00:03:00,800 --> 00:03:03,560
+Chat GPT çok daha yavaş sonuçlar verdi.
+
+76
+00:03:03,560 --> 00:03:05,879
+Buna da onaylıyorum dediğimde otomatik
+
+77
+00:03:05,879 --> 00:03:08,000
+olarak bu işlemi gerçekleştirecek. Şimdi
+
+78
+00:03:08,000 --> 00:03:10,360
+geçelim copilot'a bakalım. Copilot neler
+
+79
+00:03:10,360 --> 00:03:12,159
+yapacak? Biliyorsunuz ki copilot
+
+80
+00:03:12,159 --> 00:03:14,720
+Excel'in direkt olarak içinde çalışıyor.
+
+81
+00:03:14,720 --> 00:03:17,879
+Geldim copilot'u açtım ve aynı promptumu
+
+82
+00:03:17,879 --> 00:03:19,720
+şimdi copilot'a yapıştıracağım.
+
+83
+00:03:19,720 --> 00:03:21,799
+Gördüğünüz gibi aynı promptü yapıştırdım
+
+84
+00:03:21,799 --> 00:03:24,040
+ve gönderiyorum. Bakalım nasıl bir sonuç
+
+85
+00:03:24,040 --> 00:03:25,879
+verecek, nasıl bir temizlik yapacak.
+
+86
+00:03:25,879 --> 00:03:28,720
+neler yapacak? Evet, copilot da bitirdi.
+
+87
+00:03:28,720 --> 00:03:30,239
+Bakın burada gördüğünüz gibi sonucu
+
+88
+00:03:30,239 --> 00:03:32,200
+verdi. 14 sütun tarandı dedi. Hiçbir
+
+89
+00:03:32,200 --> 00:03:34,280
+hücre değiştirilmedi dedi. Diğerleri 15
+
+90
+00:03:34,280 --> 00:03:37,080
+bulmuştu. Bu 14 buldu. Bakın bulduğu
+
+91
+00:03:37,080 --> 00:03:40,239
+kritik sorunlar burada yer alıyor. Şöyle
+
+92
+00:03:40,239 --> 00:03:42,000
+sağa doğru kaydırdığımızda neler
+
+93
+00:03:42,000 --> 00:03:44,000
+olduğunu, benzer şeyleri buldu.
+
+94
+00:03:44,000 --> 00:03:46,760
+Gördüğünüz gibi boş satırlar, yine tarih
+
+95
+00:03:46,760 --> 00:03:49,560
+formatları, yine TL vesaire hataların
+
+96
+00:03:49,560 --> 00:03:51,720
+hepsini buldu. Tam mükerrer kayıtlar
+
+97
+00:03:51,720 --> 00:03:53,480
+diyor. Mükerrer kayıtları istersem
+
+98
+00:03:53,480 --> 00:03:55,480
+onları da silecek. birebir aynı olan
+
+99
+00:03:55,480 --> 00:03:59,000
+kayıtları buldu. Onları da silebiliyor.
+
+100
+00:03:59,000 --> 00:04:01,319
+Neler yaptığını gösteriyor. Bakın her
+
+101
+00:04:01,319 --> 00:04:03,720
+şeyi verdi. Buna da onay verdiğim zaman
+
+102
+00:04:03,720 --> 00:04:05,840
+hataları düzeltecek. Bence üçü de
+
+103
+00:04:05,840 --> 00:04:08,519
+birbirine yakın çalıştı ve eee hız
+
+104
+00:04:08,519 --> 00:04:11,239
+olarak ise en hızlısı cloudu, sonra
+
+105
+00:04:11,239 --> 00:04:14,000
+copilottu, sonra da chat GPT'ydi. Siz
+
+106
+00:04:14,000 --> 00:04:15,879
+olsanız hangisini tercih edersiniz?
+
+107
+00:04:15,879 --> 00:04:18,359
+Yorumlara yazmanızı rica ediyorum. Üç
+
+108
+00:04:18,359 --> 00:04:20,479
+kuralı unutmayın. Bir, önce teşhis
+
+109
+00:04:20,479 --> 00:04:22,960
+raporu isteyin. Düzeltmeyi ayrı adımda
+
+110
+00:04:22,960 --> 00:04:25,800
+yaptırın. 2. Her bulguda hücre adresi ve
+
+111
+00:04:25,800 --> 00:04:29,120
+gerekçe isteyin. 3. Toplam tarih aralığı
+
+112
+00:04:29,120 --> 00:04:31,800
+ve mükerrer kayıt sayısını kendiniz
+
+113
+00:04:31,800 --> 00:04:33,800
+çapraz kontrol edin. Yapay zeka
+
+114
+00:04:33,800 --> 00:04:36,880
+hızlandırır. Sorumluluğu asla devralmaz.
+
+115
+00:04:36,880 --> 00:04:39,479
+Açıklamadaki Excel dosyasında kirli
+
+116
+00:04:39,479 --> 00:04:41,960
+veri, temiz cevap anahtarı, kullandığım
+
+117
+00:04:41,960 --> 00:04:44,720
+promtlar ve boş score kart var. İndirin.
+
+118
+00:04:44,720 --> 00:04:47,440
+Kullandığınız aracı sınayın ve kaç puan
+
+119
+00:04:47,440 --> 00:04:50,000
+aldığını yoruma yalnızca araç adı ve
+
+120
+00:04:50,000 --> 00:04:52,400
+skor olarak yazın. Böylece yorumlarda
+
+121
+00:04:52,400 --> 00:04:54,600
+gerçek bir karşılaştırma tablosu
+
+122
+00:04:54,600 --> 00:04:57,520
+oluşacak. Bu dosyayı en çok hangi araç
+
+123
+00:04:57,520 --> 00:04:59,560
+doğru temizler görmek istiyorsanız
+
+124
+00:04:59,560 --> 00:05:02,120
+kanala abone olun. Bir sonraki videoda
+
+125
+00:05:02,120 --> 00:05:04,600
+kazanan araca düzeltmeleri yaptırıp
+
+126
+00:05:04,600 --> 00:05:07,360
+temiz dosyadan sıfır formülle yönetici
+
+127
+00:05:07,360 --> 00:05:09,520
+dashboardu çıkartacağım. Veriyi güce
+
+128
+00:05:09,520 --> 00:05:12,039
+dönüştürün. Görüşmek üzere. Beni takip
+
+129
+00:05:12,039 --> 00:05:15,000
+etmeyi unutmayın. Yeah.

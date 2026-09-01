@@ -168,6 +168,7 @@ async function reviewCandidates(items, options = {}) {
         verdict: suggestion.verdict,
         reasons: suggestion.reasons || [],
         confidence: suggestion.confidence || 0,
+        confidence_range: suggestion.confidence_range || null,
         reviewer: suggestion.reviewer,
         generated_at: suggestion.generated_at,
       };

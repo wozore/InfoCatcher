@@ -1,0 +1,151 @@
+1
+00:00:00,000 --> 00:00:02,680
+Ah, dude, my AI rag application freaking
+
+2
+00:00:02,680 --> 00:00:04,560
+sucks. How do I fix that?
+
+3
+00:00:04,560 --> 00:00:05,840
+>> Yeah, a lot of the time it's the
+
+4
+00:00:05,840 --> 00:00:08,200
+question itself. If someone asks a vague
+
+5
+00:00:08,200 --> 00:00:10,400
+question with zero context, your
+
+6
+00:00:10,400 --> 00:00:12,480
+retrieval is going to pull garbage. This
+
+7
+00:00:12,480 --> 00:00:14,600
+is where adding a rewrite step using the
+
+8
+00:00:14,600 --> 00:00:17,360
+conversation history or even asking a
+
+9
+00:00:17,360 --> 00:00:20,000
+quick clarifying question fixes half of
+
+10
+00:00:20,000 --> 00:00:21,200
+your bad answers.
+
+11
+00:00:21,200 --> 00:00:23,200
+>> Okay, but what about when the query is
+
+12
+00:00:23,200 --> 00:00:24,120
+actually good?
+
+13
+00:00:24,120 --> 00:00:25,320
+>> Yeah, I would start with a hybrid
+
+14
+00:00:25,320 --> 00:00:27,440
+approach. Vector search and keyword
+
+15
+00:00:27,440 --> 00:00:30,160
+search like BM25 combined. Vector
+
+16
+00:00:30,160 --> 00:00:32,439
+catches meaning while keyword catches
+
+17
+00:00:32,439 --> 00:00:35,080
+exact terms like error codes or SKUs
+
+18
+00:00:35,080 --> 00:00:37,320
+that semantic search typically misses.
+
+19
+00:00:37,320 --> 00:00:39,160
+>> I keep hearing about metadata. What
+
+20
+00:00:39,160 --> 00:00:39,840
+about that?
+
+21
+00:00:39,840 --> 00:00:41,560
+>> Yeah, you can use metadata filtering.
+
+22
+00:00:41,560 --> 00:00:43,400
+Tag chunks with things like dates or
+
+23
+00:00:43,400 --> 00:00:46,160
+document types. So a question about 2024
+
+24
+00:00:46,160 --> 00:00:49,040
+refund policy narrows the pool. So the
+
+25
+00:00:49,040 --> 00:00:51,840
+chunks come back from 2024 documents.
+
+26
+00:00:51,840 --> 00:00:53,880
+>> And reranking? Where does that fit in?
+
+27
+00:00:53,880 --> 00:00:56,560
+>> Mhm, reranking would come after. Hybrid
+
+28
+00:00:56,560 --> 00:00:59,200
+gives you a wider, messier pool. So a
+
+29
+00:00:59,200 --> 00:01:01,720
+reranker reads the query against those
+
+30
+00:01:01,720 --> 00:01:04,199
+candidates and reorders the best chunks
+
+31
+00:01:04,199 --> 00:01:05,199
+by relevance.
+
+32
+00:01:05,199 --> 00:01:07,000
+>> Okay, what's the order of operation
+
+33
+00:01:07,000 --> 00:01:07,360
+then?
+
+34
+00:01:07,360 --> 00:01:09,680
+>> Yeah, first clean the query, retrieve
+
+35
+00:01:09,680 --> 00:01:12,160
+with hybrid search, filter and narrow
+
+36
+00:01:12,160 --> 00:01:15,080
+with metadata, then rerank. Each step
+
+37
+00:01:15,080 --> 00:01:17,120
+fixes what the last one missed. Follow
+
+38
+00:01:17,120 --> 00:01:20,320
+and I'll keep you posted.

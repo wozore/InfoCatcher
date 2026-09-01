@@ -178,6 +178,16 @@ function htmlToText(html) {
     .trim();
 }
 
+function sameSourceOrigin(left, right) {
+  try {
+    const leftUrl = new URL(left);
+    const rightUrl = new URL(right);
+    const normalizeHost = host => host.toLowerCase().replace(/^www\./, '');
+    return leftUrl.protocol === rightUrl.protocol && normalizeHost(leftUrl.hostname) === normalizeHost(rightUrl.hostname) && leftUrl.port === rightUrl.port;
+  } catch {
+    return false;
+  }
+}
 async function fetchHtmlText(url, options = {}) {
   const fetchImpl = options.fetchImpl || globalThis.fetch;
   if (typeof fetchImpl !== 'function') return errorResult('UPDATE_COLLECTOR_FETCH_UNAVAILABLE', '当前运行环境无 fetch');
@@ -196,7 +206,7 @@ async function fetchHtmlText(url, options = {}) {
     const html = String(await response.text() || '');
     const text = htmlToText(html);
     if (!text.trim()) return errorResult('UPDATE_HTML_EMPTY', 'HTML 正文为空');
-    return { ok: true, text };
+    return { ok: true, text, final_url: String(response.url || url) };
   } catch (error) {
     const timeout = error?.name === 'AbortError' || error?.name === 'TimeoutError' || error?.code === 'ETIMEDOUT';
     return errorResult(timeout ? 'UPDATE_HTML_TIMEOUT' : 'UPDATE_HTML_NETWORK_ERROR', String(error?.message || error));
@@ -340,6 +350,12 @@ async function collectTavilySource(productKey, source, options = {}) {
   // 优先直接抓取官方页面 HTML：Tavily Extract 对 JS 渲染/缓存页经常丢失 changelog 条目日期。
   // 仅当 HTML 文本能解析出至少一个日期时才采用，否则回退 Tavily Extract（HTML 可能是 JS 空壳/反爬页）。
   const html = await fetchHtmlText(url, options);
+  if (html.ok && html.final_url && !sameSourceOrigin(url, html.final_url)) {
+    return errorResult('UPDATE_HTML_REDIRECT_UNTRUSTED', '官方更新源重定向到了不同产品域名', {
+      source_url: url,
+      final_url: html.final_url,
+    });
+  }
   if (html.ok && explicitDates(html.text).length) {
     return {
       ok: true,

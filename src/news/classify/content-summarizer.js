@@ -25,7 +25,7 @@
 
 'use strict';
 
-const { summarizeWithDeepSeek, SUMMARY_MAX_TRANSCRIPT_CHARS } = require('./llm-provider');
+const { summarizeWithDeepSeek, summarizeWithExternalDeepSeek, SUMMARY_MAX_TRANSCRIPT_CHARS } = require('./llm-provider');
 
 // ═══════════════════════════════════════════════════════════════
 // 固定并发池：按 concurrency 并行执行 worker，保持输入顺序。
@@ -95,7 +95,7 @@ async function summarizeCandidate(item, options = {}) {
   }
 
   if (provider === 'deepseek') {
-    const llm = await summarizeWithDeepSeek(
+    const llm = await (options.external === true ? summarizeWithExternalDeepSeek : summarizeWithDeepSeek)(
       { ...source, maxTranscriptChars: options.maxTranscriptChars ?? SUMMARY_MAX_TRANSCRIPT_CHARS },
       options
     );

@@ -4,9 +4,8 @@
  * 覆盖：
  *   1. hasYouTubeInLastRun：按用户拍板语义「YouTube 实际采到内容 items>0 才算有」——
  *      not_run / failed / items=0 / 缺失 均视为无（分时采集下 X 日 top10、YouTube+X 日 top15）；
- *   2. resolveAiTopConfig：ai-top 的 YouTube 判定 + top N 解析——无 approved → no_approved、
- *      last-run 缺失 → no_last_run（命令层据此抛错，供 bat/apply-review.bat errorlevel
- *      判定）；last-run 有/无 YouTube 内容分别解析出 topN 15/10。
+ *   2. resolveAiTopConfig：ai-top 的 YouTube 判定 + top N 解析——无 approved 时拒绝；
+ *      last-run 缺失时从 approved 候选的平台字段回退，避免已完成审核无法继续生成 Top。
  *   3. applyTopSelectedList：读 top 清单应用 top_selected=true 写回候选层——false/未标跳过、
  *      无 id 旧产物抛错、未命中报告 missing（供 bat/apply-top.bat 第 1 步）。
  *
@@ -26,6 +25,8 @@ const path = require('path');
 const {
   hasYouTubeInLastRun,
   resolveAiTopConfig,
+  topCandidatesForAi,
+  MAX_AI_TOP_INPUT,
   applyTopSelectedList,
   applyRefineKeywords,
   removeManualLists,
@@ -63,14 +64,14 @@ test('resolveAiTopConfig：无 approved 候选 → no_approved', () => {
   assert.deepEqual(resolveAiTopConfig(undefined, null, CONFIG), { ok: false, reason: 'no_approved' });
 });
 
-test('resolveAiTopConfig：last-run 缺失 → no_last_run', () => {
-  assert.deepEqual(resolveAiTopConfig(APPROVED, null, CONFIG), { ok: false, reason: 'no_last_run' });
-  assert.deepEqual(resolveAiTopConfig(APPROVED, undefined, CONFIG), { ok: false, reason: 'no_last_run' });
+test('resolveAiTopConfig：last-run 缺失时使用已批准候选的平台回退', () => {
+  assert.deepEqual(resolveAiTopConfig(APPROVED, null, CONFIG), { ok: true, hasYouTube: false, topN: 10, source: 'approved_candidates' });
+  assert.deepEqual(resolveAiTopConfig([{ ...APPROVED[0], platform: 'youtube' }], undefined, CONFIG), { ok: true, hasYouTube: true, topN: 15, source: 'approved_candidates' });
 });
 
 test('resolveAiTopConfig：YouTube 实际采到内容 → topN 15', () => {
   const lastRun = { collectors: { youtube: { status: 'success', items: 3 }, x: { status: 'success', items: 20 } } };
-  assert.deepEqual(resolveAiTopConfig(APPROVED, lastRun, CONFIG), { ok: true, hasYouTube: true, topN: 15 });
+  assert.deepEqual(resolveAiTopConfig(APPROVED, lastRun, CONFIG), { ok: true, hasYouTube: true, topN: 15, source: 'last_run' });
 });
 
 test('resolveAiTopConfig：无 YouTube 内容（X 日）→ topN 10', () => {
@@ -81,7 +82,7 @@ test('resolveAiTopConfig：无 YouTube 内容（X 日）→ topN 10', () => {
     { status: 'success', items: 0 },
   ]) {
     const lastRun = { collectors: { youtube, x: { status: 'success', items: 20 } } };
-    assert.deepEqual(resolveAiTopConfig(APPROVED, lastRun, CONFIG), { ok: true, hasYouTube: false, topN: 10 }, `youtube=${youtube.status}`);
+    assert.deepEqual(resolveAiTopConfig(APPROVED, lastRun, CONFIG), { ok: true, hasYouTube: false, topN: 10, source: 'last_run' }, `youtube=${youtube.status}`);
   }
 });
 
@@ -91,6 +92,18 @@ test('resolveAiTopConfig：配置缺字段 → 回退默认 15/10', () => {
   const withoutYt = { collectors: { youtube: { items: 0 } } };
   assert.equal(resolveAiTopConfig(APPROVED, withYt, cfg).topN, 15);
   assert.equal(resolveAiTopConfig(APPROVED, withoutYt, cfg).topN, 10);
+});
+
+test('topCandidatesForAi 限制模型输入并保持评分排序', () => {
+  const candidates = Array.from({ length: MAX_AI_TOP_INPUT + 3 }, (_, index) => ({
+    id: `id-${index}`,
+    title: `标题 ${index}`,
+    final_score: index,
+  }));
+  const selected = topCandidatesForAi(candidates);
+  assert.equal(selected.length, MAX_AI_TOP_INPUT);
+  assert.equal(selected[0].id, `id-${MAX_AI_TOP_INPUT + 2}`);
+  assert.equal(selected.at(-1).id, 'id-3');
 });
 
 // ── applyTopSelectedList：top 清单 top_selected=true → 写回候选层 ──

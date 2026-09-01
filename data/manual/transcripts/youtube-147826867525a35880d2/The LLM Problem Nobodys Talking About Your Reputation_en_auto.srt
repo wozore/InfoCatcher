@@ -1,0 +1,263 @@
+1
+00:00:00,080 --> 00:00:02,960
+winner. If you're curious about what
+
+2
+00:00:02,960 --> 00:00:05,600
+LLMs are saying about your company,
+
+3
+00:00:05,600 --> 00:00:08,080
+about you, about your competitors, it
+
+4
+00:00:08,080 --> 00:00:10,240
+can be really challenging to figure that
+
+5
+00:00:10,240 --> 00:00:12,960
+out. It takes me back to the days of
+
+6
+00:00:12,960 --> 00:00:15,759
+like old old school when we' be like,
+
+7
+00:00:15,759 --> 00:00:18,080
+"How do we get on Yahoo? How what how do
+
+8
+00:00:18,080 --> 00:00:21,359
+we rank on Alta Vista? What's LOS doing?
+
+9
+00:00:21,359 --> 00:00:23,680
+Why haven't they spidered our site yet?
+
+10
+00:00:23,680 --> 00:00:27,920
+What where do we show up on Excite?"
+
+11
+00:00:27,920 --> 00:00:30,160
+this pre Google
+
+12
+00:00:30,160 --> 00:00:32,320
+didn't exist yet. These are old, old
+
+13
+00:00:32,320 --> 00:00:35,760
+search engines. So, uh, elderly search
+
+14
+00:00:35,760 --> 00:00:38,719
+engines as it were. So, my friend Carrie
+
+15
+00:00:38,719 --> 00:00:41,600
+Dhy was like, "Well, I want to know what
+
+16
+00:00:41,600 --> 00:00:43,600
+LLM are saying about stuff, and I have
+
+17
+00:00:43,600 --> 00:00:45,920
+businesses who want to know what LLMs
+
+18
+00:00:45,920 --> 00:00:48,559
+are saying about them or what LLMs are
+
+19
+00:00:48,559 --> 00:00:50,160
+saying about their competitors. Are they
+
+20
+00:00:50,160 --> 00:00:51,920
+recommending their competitors more than
+
+21
+00:00:51,920 --> 00:00:54,719
+they're recommending my business?" So
+
+22
+00:00:54,719 --> 00:00:58,000
+she built a tool that allows you to
+
+23
+00:00:58,000 --> 00:01:02,559
+basically do a profile of your company.
+
+24
+00:01:02,559 --> 00:01:05,760
+It helps you know decide some questions
+
+25
+00:01:05,760 --> 00:01:08,320
+that it's going to use to identify
+
+26
+00:01:08,320 --> 00:01:10,159
+whether your company is being fairly
+
+27
+00:01:10,159 --> 00:01:14,960
+represented by you know claude Gemini
+
+28
+00:01:14,960 --> 00:01:18,400
+chat GPT and it takes a little wrangling
+
+29
+00:01:18,400 --> 00:01:21,360
+like you have to get your keys in there
+
+30
+00:01:21,360 --> 00:01:23,119
+so it can do the lookups and do the
+
+31
+00:01:23,119 --> 00:01:25,280
+things but then once you've set it it's
+
+32
+00:01:25,280 --> 00:01:27,119
+kind of set it and forget it. You can go
+
+33
+00:01:27,119 --> 00:01:29,840
+back on a regular basis and see am I
+
+34
+00:01:29,840 --> 00:01:32,320
+ranking any better? Am I getting more
+
+35
+00:01:32,320 --> 00:01:36,240
+views from the LLMs? Are people asking
+
+36
+00:01:36,240 --> 00:01:38,400
+questions about the type of company I'm
+
+37
+00:01:38,400 --> 00:01:40,479
+building or the type of solution I'm
+
+38
+00:01:40,479 --> 00:01:42,880
+delivering? And if you're like, I don't
+
+39
+00:01:42,880 --> 00:01:44,799
+know if I want to deal with all the keys
+
+40
+00:01:44,799 --> 00:01:47,040
+and all the techy stuff, the beauty of
+
+41
+00:01:47,040 --> 00:01:48,720
+this is Carrie will also take the time
+
+42
+00:01:48,720 --> 00:01:50,880
+to just help you set it up because as I
+
+43
+00:01:50,880 --> 00:01:52,560
+said, you go through it once and then it
+
+44
+00:01:52,560 --> 00:01:54,399
+just works and it keeps working and you
+
+45
+00:01:54,399 --> 00:01:56,560
+can run it and run it again. I ran
+
+46
+00:01:56,560 --> 00:02:00,079
+Silicon Florist through it and like 60%
+
+47
+00:02:00,079 --> 00:02:02,320
+of the time it was getting recommended.
+
+48
+00:02:02,320 --> 00:02:05,759
+I ran me through it, only 30% of the
+
+49
+00:02:05,759 --> 00:02:07,920
+time was I getting recommended. So that
+
+50
+00:02:07,920 --> 00:02:10,399
+was interesting and it and it gives me
+
+51
+00:02:10,399 --> 00:02:13,120
+pause to to kind of think about how I
+
+52
+00:02:13,120 --> 00:02:15,120
+might be doing a better job with my own
+
+53
+00:02:15,120 --> 00:02:16,800
+personal brand to ensure that I'm
+
+54
+00:02:16,800 --> 00:02:19,120
+ranking where I want to be ranking
+
+55
+00:02:19,120 --> 00:02:21,680
+because I want the the people to find me
+
+56
+00:02:21,680 --> 00:02:24,239
+through the LLMs. if they're asking
+
+57
+00:02:24,239 --> 00:02:26,319
+questions, I want to be here to help
+
+58
+00:02:26,319 --> 00:02:29,200
+them get through their questions. So,
+
+59
+00:02:29,200 --> 00:02:31,200
+thanks very much to Carrie for building
+
+60
+00:02:31,200 --> 00:02:34,000
+this. Uh, thanks for offering to help
+
+61
+00:02:34,000 --> 00:02:36,959
+people set it up. If you're even mildly
+
+62
+00:02:36,959 --> 00:02:40,239
+curious about where you're ranking in
+
+63
+00:02:40,239 --> 00:02:42,560
+LLMs, I highly encourage you to check
+
+64
+00:02:42,560 --> 00:02:44,239
+this out. I of course will link it up
+
+65
+00:02:44,239 --> 00:02:46,640
+and encourage you to try it as soon as
+
+66
+00:02:46,640 --> 00:02:49,920
+you can. You

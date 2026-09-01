@@ -2486,40 +2486,6 @@
       "detail_kind": "api_model"
     },
     {
-      "id": "tool-card:windsurf",
-      "tool_key": "windsurf",
-      "vendor_key": "windsurf-vendor",
-      "title": "Windsurf",
-      "vendor_label": "Windsurf",
-      "icon": "🧩",
-      "summary": "Windsurf Editor是首款AI原生IDE，提供代码补全、聊天、Cascade等智能功能，支持多种模型（如GPT-5.1、Gemini 3 Pro、SWE-1）以及Fast Context等技术，适合个人和企业用户。",
-      "theme": "dev",
-      "scenes": [
-        "个人开发",
-        "企业团队协作",
-        "大型代码库重构",
-        "多IDE环境"
-      ],
-      "best_for_preview": "适合需要AI辅助编码的各类开发者，尤其是处理大型代码库或需要合规支持的企业团队。",
-      "not_for_preview": "不适合不需要代码补全或AI交互的简单文本编辑场景。",
-      "price_badge": "freemium",
-      "access_level": "开放",
-      "search_terms": [
-        "Windsurf",
-        "Windsurf",
-        "windsurf",
-        "个人开发",
-        "企业团队协作",
-        "大型代码库重构",
-        "多IDE环境"
-      ],
-      "detail_ref": {
-        "kind": "tool-level3",
-        "id": "tool-level3:windsurf"
-      },
-      "detail_kind": "tool"
-    },
-    {
       "id": "tool-card:openai-codex",
       "tool_key": "openai-codex",
       "vendor_key": "openai",

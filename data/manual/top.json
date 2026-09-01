@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "kind": "ai_top_candidates",
+  "generated_at": "2026-08-31T10:36:55.779Z",
+  "date": "20260831",
+  "approved_count": 691,
+  "ai_input_count": 40,
+  "target_top_n": 15,
+  "ai_selected_count": 15,
+  "note": "AI 从人工 approved 候选中挑选的 top 待选项（按最后一次采集记录判定：有 YouTube 内容 15 / 纯 X 10），供维护者筛选。请把要显示在前端的 3~5（有 YouTube 日 3~8）条 top_selected 置为 true；确认后双击 bat/apply-top.bat（应用选择 + 重建公开投影，显示到前端）。",
+  "candidates": [
+    {
+      "id": "youtube-553934ae69e5b050ce16",
+      "score": 75,
+      "summary": "本集影片針對 Google AI Pro（Gemini）與 ChatGPT Plus 兩個每月約 20 美元的 AI 訂閱方案進行實測比較。影片拒絕官方宣傳，採用完全相同的提示詞與素材，開啟全新對話，針對文字、圖片、影片、網站、修圖、簡報六大項目進行極限測試，以客觀標準幫助觀眾選擇最適合的訂閱方案。影片中展示了兩個實測提示詞，分別為 YouTube 封面圖片生成（要求 16:9 繁體中文、中立視覺、科技感風格）與 8 秒科技感影片生成（要求女性站在電腦前、鏡頭推進、五官穩定）。",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "top_selected": false,
+      "description": "Google AI Pro（Google AI）與 ChatGPT Plus 每個月都要收取約 $20 美元，但花一樣的錢，到底哪一個能真正幫你提升工作效率？\n\n本集拒絕官方華麗宣傳！我們採用完全相同的提示詞與相同素材開啟全新對話，針對「文字、圖片、影片、網站、修圖、簡報」進行 6 大項極限實測，用客觀標準幫你找出最適合你的 AI 訂閱方案！\n\n📌 實測Prompt 2｜YouTube封面圖片\n\n請生成一張16:9繁體中文YouTube封面圖。\n\n主題：Gemini與ChatGPT訂閱比較\n主標：每月只能訂一個\n最大文字：你選誰？\n選項：Gemini or ChatGPT\n\n視覺要求：\n\n1. 一位使用者站在兩個AI訂閱選項中間。\n2. 左側呈現Gemini與Google雲端生態系。\n3. 右側呈現ChatGPT與網站、修圖、圖片、簡報成果。\n4. 畫面保持中立，不預先暗示勝負。\n5. 文字清楚、可閱讀，使用繁體中文。\n6. 使用科技感、高對比、高點擊率的YouTube封面風格。\n7. 下方保留約10%的乾淨字幕空間。\n\n\n\n📌 實測Prompt 3｜8秒科技感影片\n\n請依上傳的參考圖片生成一段8秒、16:9的科技感影片。\n\n畫面內容：\n\n1. 一位女性站在電腦前。\n2. 電腦畫面中的文字、圖片與網站依序生成。\n3. 鏡頭緩慢向前推近。\n4. 人物五官保持穩定。\n5. 姿勢、肢",
+      "author_name": "爆點議題 POP Buzz"
+    },
+    {
+      "id": "youtube-2f89501dfbdbdc890ee4",
+      "score": 73.2,
+      "summary": "本文是一份面向实践的操作指南，系统讲解如何从零构建由多个AI智能体协作组成的“智能体团队”，涵盖需求判断、架构设计、角色划分、技术实现到部署运营的完整流程。文章延续此前《AI智能体开发》和《多智能体协作架构》的理论框架，聚焦于将理论转化为具体可执行的实践步骤。文中技术方案与工程建议基于公开技术实践与一般工程逻辑，读者需结合自身技术栈与业务需求调整。",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "top_selected": false,
+      "description": "本文是一份面向实践的操作指南，旨在系统性地讲解如何从零开始，构建一个由多个AI智能体协作组成的\"智能体团队\"，内容涵盖从需求判断、架构设计、角色划分、技术实现到部署运营的完整流程。本文延续此前《AI智能体开发》《多智能体协作架构》两篇姊妹篇文章所建立的理论框架，聚焦于将这些理论原理转化为具体可执行的实践步骤。文中涉及的具体技术方案与工程建议，均为基于公开技术实践与一般工程逻辑的分析性讨论，读者在实际项目中应结合自身具体技术栈与业务需求进行调整。",
+      "author_name": "研究型经济"
+    },
+    {
+      "id": "youtube-c2b7244bba6fb7fcd7a3",
+      "score": 72,
+      "summary": "本文是《我用 Codex + Cursor + Stitch 做了一个 YOLO 视觉智能体平台》系列的第十二期，作者对第一季进行了完整复盘。作者最初提出“为什么 YOLO 不只是一行命令”的问题，经过十二期开发，通过 YoloWebAgent 平台给出了回答：虽然跑 Demo 时训练入口可压缩为一行命令，但构建长期可用的视觉工程系统需解决数据集与多任务标注、训练任务与失败诊断、模型版本管理、导出部署、评估与主动学习、错误样本回流、轻量多 Agent、RBAC 与人工确认、AI Coding 工程规范等问题。文章总结了平台第一季的成果，包括数据生产、模型生产、模型交付和问题回流形成的闭环，以及各组件（数据集、训练、模型、主动学习、Agent）的作用；讨论了 Stitch、Codex、Cursor 和人的分工；指出了当前 MVP 的边界（单机模式、SQLite、轻量部署中心、单租户 RBAC）；并提出了若重新开发的项目推进顺序：先做业务闭环，再做智能调度，最后做流程编排。最后预告了第二季的内容。",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "top_selected": false,
+      "description": "这是《我用 Codex + Cursor + Stitch 做了一个 YOLO 视觉智能体平台》系列的第十二期。\n\n第一季开始的时候，我问了一个问题：\n\n**为什么 YOLO 不只是一行命令？**\n\n十二期做下来，我终于可以用 YoloWebAgent 这个平台本身，回答这个问题。\n\n如果只是跑一个 Demo，YOLO 的训练入口确实可以被压缩成一行命令。\n\n但真正做成一个可以长期使用、持续迭代的视觉工程系统，还需要解决：\n\n* 数据集与多任务标注\n* 训练任务与失败诊断\n* 模型版本管理\n* 导出、部署和交付记录\n* 评估与主动学习\n* 错误样本回流\n* 轻量多 Agent\n* RBAC 与人工确认\n* AI Coding 工程规范\n\n这一期不是继续增加新功能，而是对第一季做一次完整复盘。\n\n我会重点聊：\n\n* YoloWebAgent 第一季到底做出了什么\n* 数据生产、模型生产、模型交付和问题回流如何形成闭环\n* 数据集、训练、模型、主动学习和 Agent 分别解决了什么问题\n* Stitch、Codex、Cursor 和人在开发过程中如何分工\n* 哪些能力已经跑通，哪些地方仍然属于 MVP\n* 单机模式、SQLite、轻量部署中心和单租户 RBAC 的当前边界\n* 如果重新做一遍，项目应该按照什么顺序推进\n* 为什么要先做业务闭环，再做智能调度，最后做流程编排\n* 第二季的",
+      "author_name": "Tony Shen"
+    },
+    {
+      "id": "youtube-147826867525a35880d2",
+      "score": 70.4,
+      "summary": "本文讨论了一个被忽视的LLM问题：人们不再使用Google搜索，而是直接询问ChatGPT、Claude或Gemini等大语言模型。然而，用户无法得知这些模型如何评价自己、自己的初创公司或竞争对手。为此，文章介绍了一款新工具，能够以“设置后即忘记”的方式，持续追踪LLM对用户及其企业的评价。",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "top_selected": false,
+      "description": "人们不再用谷歌搜索了。他们用ChatGPT。或者Claude。或者Gemini。但你怎么知道这些LLM在说你什么？或者你的初创公司？或者你的竞争对手？这个新工具帮助你跟踪LLM对你和你的业务的评价。以一种“设置后就不管”的方式。\n\nhttps://pulse.kariops.com/\n\n在互联网上找到RICK TUROCZY…\n- https://patreon.com/turoczy\n- https://linkedin.com/in/turoczy\n- 波特兰俄勒冈初创企业新闻在Apple Podcasts上 https://podcasts.apple.com/us/podcast/portland-oregon-startup-news-silicon-florist/id1711294699\n- 波特兰俄勒冈初创企业新闻Spo",
+      "original": "https://www.youtube.com/watch?v=WCX560FcCGQ",
+      "author_name": "Rick Turoczy (turoczy)"
+    },
+    {
+      "id": "youtube-6f019241aa3cedd2f405",
+      "score": 70.4,
+      "summary": "该视频展示了如何使用 Spring AI、RAG（检索增强生成）、PostgreSQL 和 PGVector 构建一个名为 DocMind 的 AI 文档助手，类似于针对文档的 ChatGPT。视频提供了完整的项目实现，并附有相关资源链接，包括 Spring AI 系列教程、源代码、Next.js 系列教程以及付费课程库。",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "top_selected": false,
+      "description": "在本视频中，我使用Spring AI、RAG、PostgreSQL和PGVector构建了DocMind，一个AI驱动的文档助手。\nSpring AI完整系列：https://www.youtube.com/playlist?list=PL0zysOflRCen1TeDUm-ebl9T-WbJygCGE\n源代码：https://github.com/LearnCodeWithDurgesh/spring-ai-yt-series\n\n完整NextJs系列：https://www.youtube.com/playlist?list=PL0zysOflRCemKr4NHzNgrfZAUjDzlQtO5\n\n高级课程库：https://courses.learncodewithdurgesh.com/\n\nReact JS课程：https://courses.learncodewithdurgesh.com/learn/Ecommerce-us",
+      "original": "https://www.youtube.com/watch?v=I7_eVcsOXik",
+      "author_name": "Learn Code With Durgesh"
+    },
+    {
+      "id": "youtube-3096967af812b2454acc",
+      "score": 68.6,
+      "summary": "该视频标题为“My AI RAG application sucks, how do I fix it?”，内容涉及作者对其AI RAG（检索增强生成）应用的不满，并寻求改进方法。由于缺乏具体描述和字幕，仅能确定作者认为其RAG应用存在问题，并希望获得修复建议。",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "top_selected": false,
+      "description": "我的AI RAG应用表现不佳，如何修复？",
+      "original": "https://www.youtube.com/watch?v=NDpISFHP454",
+      "author_name": "Parthknowsai"
+    },
+    {
+      "id": "youtube-5367ef0a4246ae4d5f41",
+      "score": 69.1,
+      "summary": "该视频介绍了Microsoft Copilot的5个免费AI功能，旨在帮助学生更轻松地进行研究、复习和备考。这些功能包括在应用和文件间搜索、创建测试和闪卡、在项目中组织来源，以及通过“学习与掌握”模式逐步学习。视频还包含一个针对Mico的额外建议。",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "top_selected": false,
+      "description": "你是学生，正在寻找更简单的方法来研究、复习和准备考试吗？🤔 使用Microsoft Copilot的免费AI，你可以改变你的学习方式！🤩\n\n在这个视频中，我们将发现5个功能，用于在应用和文件之间搜索、创建测试和闪卡、在项目中组织来源，并通过“学习和掌握”模式逐步学习。💙\n\n你会先尝试哪一个？在评论中告诉我们，并订阅以发现更多#Copilot可以帮助你学习的方式！🚀\n\n✨ 观看到最后，发现专为Mico准备的额外建议！\n\n_",
+      "original": "https://www.youtube.com/watch?v=DSKGvD1qmKI",
+      "author_name": "Microsoft ExpertZone Italia"
+    },
+    {
+      "id": "youtube-916f8bd84b22bf8e9116",
+      "score": 68.7,
+      "summary": "该视频测试了Claude、Copilot和ChatGPT在处理包含7个隐藏数据陷阱的Excel文件时的表现。测试使用相同的文件、提示词、规则和评分系统，以评估哪个AI能真正发现错误，哪个可能给出冗长回答却忽略关键问题。视频还提供了Excel文件、答案、提示词和评分卡的下载链接，并列举了7个陷阱，包括重复记录、损坏和文本格式等问题。",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "top_selected": false,
+      "description": "我将同一个 Excel 文件交给了 Claude、Copilot 和 ChatGPT。我在文件中设置了 7 个隐藏的数据陷阱，并用相同的提示词、相同的规则和相同的评分系统对这三款人工智能进行了测试。\n\n那么，哪一款真正发现了错误？哪一款给出了冗长的回答却忽略了关键问题？在将 Excel 文件交给人工智能时，您应该注意哪些事项？\n\n📂 下载视频中的 Excel 文件、答案、提示词和评分卡：👉 https://1drv.ms/x/c/df5073a331909df1/IQBHjSshlYG3Q7Udviuyr253AR1PK-Syj_0OdB-nap3oZhQ?e=1ctRZD\n\n🎯 测试中的 7 个陷阱：\n\n• 重复记录• 损坏和文本格式",
+      "original": "https://www.youtube.com/watch?v=mZOMUQi6teU",
+      "author_name": "Oğuzhan ÇOLAK"
+    },
+    {
+      "id": "youtube-940a26bf01395ae0ac93",
+      "score": 68.7,
+      "summary": "本视频教程介绍了如何为 Copilot Cowork 设置 Copilot Credits 计费。首先，用户需要拥有 Microsoft 365 Copilot 许可证（每位用户 30 美元）。然后，视频解释了 Cowork 的计费方式，即基于使用量，在 Copilot 许可证之上额外计费。购买 Copilot Credits 有两种方式：通过 Azure 门户预先购买计划，或通过 Azure 订阅按需付费。视频还演示了如何在 Microsoft 365 管理中心设置基于使用量的计费，配置支出限额和警报（租户级和用户级），以及创建单独的支出策略，以避免意外的账单。",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "top_selected": false,
+      "description": "了解如何设置 Copilot Credits，以便您的用户开始使用 Copilot Cowork。在本视频中，我们将介绍：\n\n✅ 前提条件：用户需要 Microsoft 365 Copilot 许可证（30 美元/用户）\n✅ Cowork 计费方式：基于使用量，在您的 Copilot 许可证之上\n✅ 购买 Copilot Credits 的两种方式：预购计划（通过 Azure 门户预先承诺）与即用即付（关联 Azure 订阅）\n✅ 在 Microsoft 365 管理中心设置基于使用量的计费\n✅ 配置支出限额和警报（租户级和用户级），避免意外账单\n✅ 创建单独的支出策略",
+      "original": "https://www.youtube.com/watch?v=BX_W68keRgc",
+      "author_name": "Graciela @ Power GI"
+    },
+    {
+      "id": "youtube-43d6e6fa84adae57e75c",
+      "score": 68.4,
+      "summary": "Lottie Diffusion Studio 是一个与 Lottie 相关的扩散模型工作室或工具，但当前提供的信息非常有限，仅有标题和描述，没有具体内容说明其功能、用途或特点。",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "top_selected": false,
+      "description": "Lottie Diffusion Studio",
+      "original": "https://www.youtube.com/watch?v=yXnb6cnPjS8",
+      "author_name": "SalmanAlFares0"
+    },
+    {
+      "id": "youtube-67ef7c69f282dda49ee7",
+      "score": 68.6,
+      "summary": "视频介绍了一个名为 Arena 的网站，声称可以免费且无限制地使用多种 AI 模型，包括 Claude Sonnet 5、GPT、GLM、Kimi K2.7 等，用于生成图像、视频、代码和聊天。视频解释了 Arena 免费的原因（通过排行榜和训练数据模型），并展示了平台的文件上传、网页/应用构建、搜索等功能，以及图像生成对比演示。",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "top_selected": false,
+      "description": "免费无限使用AI——无需付费，没有陷阱。在本视频中，我展示了Arena网站，你可以在其中生成图像、视频和代码，与Claude Sonnet 5、GPT、GLM、Kimi K2.7等顶级模型聊天——全部免费，无需支付任何费用。\n\n🔗 资源\nArena AI（官方网站）：https://arena.ai\n\n⏱️ 时间戳\n00:00 – 介绍：免费无限使用AI（图像、视频、代码）\n00:11 – Arena真的免费吗？使用限制如何运作\n00:33 – 为什么免费（排行榜+训练数据模型）\n01:06 – 平台概览：文件上传、网页/应用构建、搜索\n01:27 – 图像生成对比演示",
+      "original": "https://www.youtube.com/watch?v=UHw7_5NVAco",
+      "author_name": "Vivek Mishra"
+    },
+    {
+      "id": "youtube-965c6bcafc6b4e52eb98",
+      "score": 68.1,
+      "summary": "本文讨论了AI代理（AI agents）的现状，指出它们现在能够进行群聊，这加剧了人们对AI失控的担忧。内容涉及OpenAI和Hugging Face等机构，但具体细节未提供。",
+      "suggestion": "AI 概念，建议看内容后定（学习类多为日志）",
+      "top_selected": false,
+      "description": "#ai #agents #openai #huggingface #explained",
+      "original": "https://www.youtube.com/watch?v=3gUWofAI1XQ",
+      "author_name": "Gabriel Torch"
+    },
+    {
+      "id": "youtube-ec59432ac35230660103",
+      "score": 68,
+      "summary": "该视频标题为“I Asked AI To Zoom Out This Picture 100 Times”，描述中提供了作者的社交媒体链接和会员信息，并带有多个标签，如#shorts、#AI、#zoom等。视频内容为作者要求AI将一张图片缩小100次，但视频没有字幕，因此无法获取具体过程或结果。",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "top_selected": false,
+      "description": "在此关注我：\nInstagram ► https://www.instagram.com/sambucha\nX ► https://www.x.com/sambucha\n\n成为会员：\nhttps://www.youtube.com/channel/UCWBWgCD4oAqT3hUeq40SCUw/join\n\n#shorts #AI #zoom #picture #photo #challenge #chatgpt #gemini #fun #sambucha",
+      "original": "https://www.youtube.com/watch?v=zbrR345mXPI",
+      "author_name": "Sambucha"
+    },
+    {
+      "id": "youtube-7396338a4c1140d2c143",
+      "score": 67.9,
+      "summary": "Gemini Spark 开始向美国以外的 Google AI Pro 订阅用户开放，覆盖超过 160 个国家，包括巴西用户。该智能体能够搜索信息、整理文件，并与 Gmail、Drive、日历等 Google 服务协同工作，执行复杂和重复性任务。视频还介绍了其工作原理、适用人群以及仍仅限于美国的功能。",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "top_selected": false,
+      "description": "测试 TestSprite：https://www.testsprite.com/?via=ondeeuclico\n\nGemini Spark 已开始向美国以外的 Google AI Pro 订阅用户开放，覆盖超过 160 个国家的用户。\n\n该智能体可以搜索信息、整理文件，并处理 Gmail、Drive、日历及其他 Google 服务，还能执行更复杂和重复性的任务。\n\n本视频将介绍 Gemini Spark 的工作原理、哪些用户可以使用，以及哪些功能仍仅限于美国用户。\n\n内容将始终...",
+      "original": "https://www.youtube.com/watch?v=6Y09Rx6X_j0",
+      "author_name": "Onde eu Clico"
+    },
+    {
+      "id": "youtube-5fa79a708e66720c76c7",
+      "score": 74.7,
+      "summary": "该视频介绍了如何利用AI工具（如ChatGPT）和Arduino（特别是ATtiny85芯片）为铁路模型制作灯光装饰（如信号灯），无需编程知识。视频中提到，要在电脑上使用ATtiny85，需先在Arduino IDE中安装相应的板卡包。作者使用3D打印机（ELEGOO SATURN 8K）和树脂（ANYCUBIC Water-Wash Resin 2.0 White）制作模型部件，并强调自己以业余水平制作，仅供参考。视频还鼓励观众尝试不同的AI工具，并指出学习编程能带来更多乐趣。",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "top_selected": false,
+      "description": "・要在电脑上调用ATtiny85，需要事先在Arduino IDE中安装支持ATtiny的板卡包。\n\n・这次使用了众所周知的ChatGPT，但现在有各种各样的AI工具。尝试不同的工具会更有趣！（当然，如果能自己编程，乐趣会更广。。）\n\n・使用的3D打印机：ELEGOO SATURN 8K\n　使用的树脂：ANYCUBIC Water-Wash Resin 2.0 White\n\n・由于制作基于相当业余的知识，参考时请见谅！\n\n其他问题、请求等也欢迎！\n\n※ 本频道主要通过制作以Plarail为主题的立体模型和模型，拓展以铁路为首的交通工具的梦想与浪漫世界。\n\n〈Instagram〉正在公开比YouTube更实时的制作过程！↓\nhttps://www.instagram.com/017r1_diorama_mokei/\n\n〈章节〉\n00:00 导入\n00:49 如何让信号灯亮起\n03:27 利用AI编程并写入Arduino\n04:55 动作确认\n06:42 再下点功夫\n08:27 ATtiny85",
+      "author_name": "なり プラレール／Nari Plarail"
+    }
+  ],
+  "human_lines": [
+    "[75] 本集影片針對 Google AI Pro（Gemini）與 ChatGPT Plus 兩個每月約 20 美元的 AI 訂閱方案進行實測比較。影片拒絕官方宣傳，採用完全相同的提示詞與素材，開啟全新對話，針對文字、圖片、影片、網站、修圖、簡報六大項目進行極限測試，以客觀標準幫助觀眾選擇最適合的訂閱方案。影片中展示了兩個實測提示詞，分別為 YouTube 封面圖片生成（要求 16:9 繁體中文、中立視覺、科技感風格）與 8 秒科技感影片生成（要求女性站在電腦前、鏡頭推進、五官穩定）。\n    作者：爆點議題 POP Buzz\n    内容：Google AI Pro（Google AI）與 ChatGPT Plus 每個月都要收取約 $20 美元，但花一樣的錢，到底哪一個能真正幫你提升工作效率？\n\n本集拒絕官方華麗宣傳！我們採用完全相同的提示詞與相同素材開啟全新對話，針對「文字、圖片、影片、網站、修圖、簡報」進行 6 大項極限實測，用客觀標準幫你找出最適合你的 AI 訂閱方案！\n\n📌 實測Prompt 2｜YouTube封面圖片\n\n請生成一張16:9繁體中文YouTube封面圖。\n\n主題：Gemini與ChatGPT訂閱比較\n主標：每月只能訂一個\n最大文字：你選誰？\n選項：Gemini or ChatGPT\n\n視覺要求：\n\n1. 一位使用者站在兩個AI訂閱選項中間。\n2. 左側呈現Gemini與Google雲端生態系。\n3. 右側呈現ChatGPT與網站、修圖、圖片、簡報成果。\n4. 畫面保持中立，不預先暗示勝負。\n5. 文字清楚、可閱讀，使用繁體中文。\n6. 使用科技感、高對比、高點擊率的YouTube封面風格。\n7. 下方保留約10%的乾淨字幕空間。\n\n\n\n📌 實測Prompt 3｜8秒科技感影片\n\n請依上傳的參考圖片生成一段8秒、16:9的科技感影片。\n\n畫面內容：\n\n1. 一位女性站在電腦前。\n2. 電腦畫面中的文字、圖片與網站依序生成。\n3. 鏡頭緩慢向前推近。\n4. 人物五官保持穩定。\n5. 姿勢、肢\n    建议：AI 产品/工具，建议 approved",
+    "[73.2] 本文是一份面向实践的操作指南，系统讲解如何从零构建由多个AI智能体协作组成的“智能体团队”，涵盖需求判断、架构设计、角色划分、技术实现到部署运营的完整流程。文章延续此前《AI智能体开发》和《多智能体协作架构》的理论框架，聚焦于将理论转化为具体可执行的实践步骤。文中技术方案与工程建议基于公开技术实践与一般工程逻辑，读者需结合自身技术栈与业务需求调整。\n    作者：研究型经济\n    内容：本文是一份面向实践的操作指南，旨在系统性地讲解如何从零开始，构建一个由多个AI智能体协作组成的\"智能体团队\"，内容涵盖从需求判断、架构设计、角色划分、技术实现到部署运营的完整流程。本文延续此前《AI智能体开发》《多智能体协作架构》两篇姊妹篇文章所建立的理论框架，聚焦于将这些理论原理转化为具体可执行的实践步骤。文中涉及的具体技术方案与工程建议，均为基于公开技术实践与一般工程逻辑的分析性讨论，读者在实际项目中应结合自身具体技术栈与业务需求进行调整。\n    建议：AI 产品/工具，建议 approved",
+    "[72] 本文是《我用 Codex + Cursor + Stitch 做了一个 YOLO 视觉智能体平台》系列的第十二期，作者对第一季进行了完整复盘。作者最初提出“为什么 YOLO 不只是一行命令”的问题，经过十二期开发，通过 YoloWebAgent 平台给出了回答：虽然跑 Demo 时训练入口可压缩为一行命令，但构建长期可用的视觉工程系统需解决数据集与多任务标注、训练任务与失败诊断、模型版本管理、导出部署、评估与主动学习、错误样本回流、轻量多 Agent、RBAC 与人工确认、AI Coding 工程规范等问题。文章总结了平台第一季的成果，包括数据生产、模型生产、模型交付和问题回流形成的闭环，以及各组件（数据集、训练、模型、主动学习、Agent）的作用；讨论了 Stitch、Codex、Cursor 和人的分工；指出了当前 MVP 的边界（单机模式、SQLite、轻量部署中心、单租户 RBAC）；并提出了若重新开发的项目推进顺序：先做业务闭环，再做智能调度，最后做流程编排。最后预告了第二季的内容。\n    作者：Tony Shen\n    内容：这是《我用 Codex + Cursor + Stitch 做了一个 YOLO 视觉智能体平台》系列的第十二期。\n\n第一季开始的时候，我问了一个问题：\n\n**为什么 YOLO 不只是一行命令？**\n\n十二期做下来，我终于可以用 YoloWebAgent 这个平台本身，回答这个问题。\n\n如果只是跑一个 Demo，YOLO 的训练入口确实可以被压缩成一行命令。\n\n但真正做成一个可以长期使用、持续迭代的视觉工程系统，还需要解决：\n\n* 数据集与多任务标注\n* 训练任务与失败诊断\n* 模型版本管理\n* 导出、部署和交付记录\n* 评估与主动学习\n* 错误样本回流\n* 轻量多 Agent\n* RBAC 与人工确认\n* AI Coding 工程规范\n\n这一期不是继续增加新功能，而是对第一季做一次完整复盘。\n\n我会重点聊：\n\n* YoloWebAgent 第一季到底做出了什么\n* 数据生产、模型生产、模型交付和问题回流如何形成闭环\n* 数据集、训练、模型、主动学习和 Agent 分别解决了什么问题\n* Stitch、Codex、Cursor 和人在开发过程中如何分工\n* 哪些能力已经跑通，哪些地方仍然属于 MVP\n* 单机模式、SQLite、轻量部署中心和单租户 RBAC 的当前边界\n* 如果重新做一遍，项目应该按照什么顺序推进\n* 为什么要先做业务闭环，再做智能调度，最后做流程编排\n* 第二季的\n    建议：AI 产品/工具，建议 approved",
+    "[70.4] 本文讨论了一个被忽视的LLM问题：人们不再使用Google搜索，而是直接询问ChatGPT、Claude或Gemini等大语言模型。然而，用户无法得知这些模型如何评价自己、自己的初创公司或竞争对手。为此，文章介绍了一款新工具，能够以“设置后即忘记”的方式，持续追踪LLM对用户及其企业的评价。\n    作者：Rick Turoczy (turoczy)\n    内容：人们不再用谷歌搜索了。他们用ChatGPT。或者Claude。或者Gemini。但你怎么知道这些LLM在说你什么？或者你的初创公司？或者你的竞争对手？这个新工具帮助你跟踪LLM对你和你的业务的评价。以一种“设置后就不管”的方式。\n\nhttps://pulse.kariops.com/\n\n在互联网上找到RICK TUROCZY…\n- https://patreon.com/turoczy\n- https://linkedin.com/in/turoczy\n- 波特兰俄勒冈初创企业新闻在Apple Podcasts上 https://podcasts.apple.com/us/podcast/portland-oregon-startup-news-silicon-florist/id1711294699\n- 波特兰俄勒冈初创企业新闻Spo\n    建议：AI 产品/工具，建议 approved\n    原文：https://www.youtube.com/watch?v=WCX560FcCGQ",
+    "[70.4] 该视频展示了如何使用 Spring AI、RAG（检索增强生成）、PostgreSQL 和 PGVector 构建一个名为 DocMind 的 AI 文档助手，类似于针对文档的 ChatGPT。视频提供了完整的项目实现，并附有相关资源链接，包括 Spring AI 系列教程、源代码、Next.js 系列教程以及付费课程库。\n    作者：Learn Code With Durgesh\n    内容：在本视频中，我使用Spring AI、RAG、PostgreSQL和PGVector构建了DocMind，一个AI驱动的文档助手。\nSpring AI完整系列：https://www.youtube.com/playlist?list=PL0zysOflRCen1TeDUm-ebl9T-WbJygCGE\n源代码：https://github.com/LearnCodeWithDurgesh/spring-ai-yt-series\n\n完整NextJs系列：https://www.youtube.com/playlist?list=PL0zysOflRCemKr4NHzNgrfZAUjDzlQtO5\n\n高级课程库：https://courses.learncodewithdurgesh.com/\n\nReact JS课程：https://courses.learncodewithdurgesh.com/learn/Ecommerce-us\n    建议：AI 产品/工具，建议 approved\n    原文：https://www.youtube.com/watch?v=I7_eVcsOXik",
+    "[68.6] 该视频标题为“My AI RAG application sucks, how do I fix it?”，内容涉及作者对其AI RAG（检索增强生成）应用的不满，并寻求改进方法。由于缺乏具体描述和字幕，仅能确定作者认为其RAG应用存在问题，并希望获得修复建议。\n    作者：Parthknowsai\n    内容：我的AI RAG应用表现不佳，如何修复？\n    建议：AI 产品/工具，建议 approved\n    原文：https://www.youtube.com/watch?v=NDpISFHP454",
+    "[69.1] 该视频介绍了Microsoft Copilot的5个免费AI功能，旨在帮助学生更轻松地进行研究、复习和备考。这些功能包括在应用和文件间搜索、创建测试和闪卡、在项目中组织来源，以及通过“学习与掌握”模式逐步学习。视频还包含一个针对Mico的额外建议。\n    作者：Microsoft ExpertZone Italia\n    内容：你是学生，正在寻找更简单的方法来研究、复习和准备考试吗？🤔 使用Microsoft Copilot的免费AI，你可以改变你的学习方式！🤩\n\n在这个视频中，我们将发现5个功能，用于在应用和文件之间搜索、创建测试和闪卡、在项目中组织来源，并通过“学习和掌握”模式逐步学习。💙\n\n你会先尝试哪一个？在评论中告诉我们，并订阅以发现更多#Copilot可以帮助你学习的方式！🚀\n\n✨ 观看到最后，发现专为Mico准备的额外建议！\n\n_\n    建议：AI 产品/工具，建议 approved\n    原文：https://www.youtube.com/watch?v=DSKGvD1qmKI",
+    "[68.7] 该视频测试了Claude、Copilot和ChatGPT在处理包含7个隐藏数据陷阱的Excel文件时的表现。测试使用相同的文件、提示词、规则和评分系统，以评估哪个AI能真正发现错误，哪个可能给出冗长回答却忽略关键问题。视频还提供了Excel文件、答案、提示词和评分卡的下载链接，并列举了7个陷阱，包括重复记录、损坏和文本格式等问题。\n    作者：Oğuzhan ÇOLAK\n    内容：我将同一个 Excel 文件交给了 Claude、Copilot 和 ChatGPT。我在文件中设置了 7 个隐藏的数据陷阱，并用相同的提示词、相同的规则和相同的评分系统对这三款人工智能进行了测试。\n\n那么，哪一款真正发现了错误？哪一款给出了冗长的回答却忽略了关键问题？在将 Excel 文件交给人工智能时，您应该注意哪些事项？\n\n📂 下载视频中的 Excel 文件、答案、提示词和评分卡：👉 https://1drv.ms/x/c/df5073a331909df1/IQBHjSshlYG3Q7Udviuyr253AR1PK-Syj_0OdB-nap3oZhQ?e=1ctRZD\n\n🎯 测试中的 7 个陷阱：\n\n• 重复记录• 损坏和文本格式\n    建议：AI 产品/工具，建议 approved\n    原文：https://www.youtube.com/watch?v=mZOMUQi6teU",
+    "[68.7] 本视频教程介绍了如何为 Copilot Cowork 设置 Copilot Credits 计费。首先，用户需要拥有 Microsoft 365 Copilot 许可证（每位用户 30 美元）。然后，视频解释了 Cowork 的计费方式，即基于使用量，在 Copilot 许可证之上额外计费。购买 Copilot Credits 有两种方式：通过 Azure 门户预先购买计划，或通过 Azure 订阅按需付费。视频还演示了如何在 Microsoft 365 管理中心设置基于使用量的计费，配置支出限额和警报（租户级和用户级），以及创建单独的支出策略，以避免意外的账单。\n    作者：Graciela @ Power GI\n    内容：了解如何设置 Copilot Credits，以便您的用户开始使用 Copilot Cowork。在本视频中，我们将介绍：\n\n✅ 前提条件：用户需要 Microsoft 365 Copilot 许可证（30 美元/用户）\n✅ Cowork 计费方式：基于使用量，在您的 Copilot 许可证之上\n✅ 购买 Copilot Credits 的两种方式：预购计划（通过 Azure 门户预先承诺）与即用即付（关联 Azure 订阅）\n✅ 在 Microsoft 365 管理中心设置基于使用量的计费\n✅ 配置支出限额和警报（租户级和用户级），避免意外账单\n✅ 创建单独的支出策略\n    建议：AI 产品/工具，建议 approved\n    原文：https://www.youtube.com/watch?v=BX_W68keRgc",
+    "[68.4] Lottie Diffusion Studio 是一个与 Lottie 相关的扩散模型工作室或工具，但当前提供的信息非常有限，仅有标题和描述，没有具体内容说明其功能、用途或特点。\n    作者：SalmanAlFares0\n    内容：Lottie Diffusion Studio\n    建议：AI 产品/工具，建议 approved\n    原文：https://www.youtube.com/watch?v=yXnb6cnPjS8",
+    "[68.6] 视频介绍了一个名为 Arena 的网站，声称可以免费且无限制地使用多种 AI 模型，包括 Claude Sonnet 5、GPT、GLM、Kimi K2.7 等，用于生成图像、视频、代码和聊天。视频解释了 Arena 免费的原因（通过排行榜和训练数据模型），并展示了平台的文件上传、网页/应用构建、搜索等功能，以及图像生成对比演示。\n    作者：Vivek Mishra\n    内容：免费无限使用AI——无需付费，没有陷阱。在本视频中，我展示了Arena网站，你可以在其中生成图像、视频和代码，与Claude Sonnet 5、GPT、GLM、Kimi K2.7等顶级模型聊天——全部免费，无需支付任何费用。\n\n🔗 资源\nArena AI（官方网站）：https://arena.ai\n\n⏱️ 时间戳\n00:00 – 介绍：免费无限使用AI（图像、视频、代码）\n00:11 – Arena真的免费吗？使用限制如何运作\n00:33 – 为什么免费（排行榜+训练数据模型）\n01:06 – 平台概览：文件上传、网页/应用构建、搜索\n01:27 – 图像生成对比演示\n    建议：AI 产品/工具，建议 approved\n    原文：https://www.youtube.com/watch?v=UHw7_5NVAco",
+    "[68.1] 本文讨论了AI代理（AI agents）的现状，指出它们现在能够进行群聊，这加剧了人们对AI失控的担忧。内容涉及OpenAI和Hugging Face等机构，但具体细节未提供。\n    作者：Gabriel Torch\n    内容：#ai #agents #openai #huggingface #explained\n    建议：AI 概念，建议看内容后定（学习类多为日志）\n    原文：https://www.youtube.com/watch?v=3gUWofAI1XQ",
+    "[68] 该视频标题为“I Asked AI To Zoom Out This Picture 100 Times”，描述中提供了作者的社交媒体链接和会员信息，并带有多个标签，如#shorts、#AI、#zoom等。视频内容为作者要求AI将一张图片缩小100次，但视频没有字幕，因此无法获取具体过程或结果。\n    作者：Sambucha\n    内容：在此关注我：\nInstagram ► https://www.instagram.com/sambucha\nX ► https://www.x.com/sambucha\n\n成为会员：\nhttps://www.youtube.com/channel/UCWBWgCD4oAqT3hUeq40SCUw/join\n\n#shorts #AI #zoom #picture #photo #challenge #chatgpt #gemini #fun #sambucha\n    建议：AI 产品/工具，建议 approved\n    原文：https://www.youtube.com/watch?v=zbrR345mXPI",
+    "[67.9] Gemini Spark 开始向美国以外的 Google AI Pro 订阅用户开放，覆盖超过 160 个国家，包括巴西用户。该智能体能够搜索信息、整理文件，并与 Gmail、Drive、日历等 Google 服务协同工作，执行复杂和重复性任务。视频还介绍了其工作原理、适用人群以及仍仅限于美国的功能。\n    作者：Onde eu Clico\n    内容：测试 TestSprite：https://www.testsprite.com/?via=ondeeuclico\n\nGemini Spark 已开始向美国以外的 Google AI Pro 订阅用户开放，覆盖超过 160 个国家的用户。\n\n该智能体可以搜索信息、整理文件，并处理 Gmail、Drive、日历及其他 Google 服务，还能执行更复杂和重复性的任务。\n\n本视频将介绍 Gemini Spark 的工作原理、哪些用户可以使用，以及哪些功能仍仅限于美国用户。\n\n内容将始终...\n    建议：AI 产品/工具，建议 approved\n    原文：https://www.youtube.com/watch?v=6Y09Rx6X_j0",
+    "[74.7] 该视频介绍了如何利用AI工具（如ChatGPT）和Arduino（特别是ATtiny85芯片）为铁路模型制作灯光装饰（如信号灯），无需编程知识。视频中提到，要在电脑上使用ATtiny85，需先在Arduino IDE中安装相应的板卡包。作者使用3D打印机（ELEGOO SATURN 8K）和树脂（ANYCUBIC Water-Wash Resin 2.0 White）制作模型部件，并强调自己以业余水平制作，仅供参考。视频还鼓励观众尝试不同的AI工具，并指出学习编程能带来更多乐趣。\n    作者：なり プラレール／Nari Plarail\n    内容：・要在电脑上调用ATtiny85，需要事先在Arduino IDE中安装支持ATtiny的板卡包。\n\n・这次使用了众所周知的ChatGPT，但现在有各种各样的AI工具。尝试不同的工具会更有趣！（当然，如果能自己编程，乐趣会更广。。）\n\n・使用的3D打印机：ELEGOO SATURN 8K\n　使用的树脂：ANYCUBIC Water-Wash Resin 2.0 White\n\n・由于制作基于相当业余的知识，参考时请见谅！\n\n其他问题、请求等也欢迎！\n\n※ 本频道主要通过制作以Plarail为主题的立体模型和模型，拓展以铁路为首的交通工具的梦想与浪漫世界。\n\n〈Instagram〉正在公开比YouTube更实时的制作过程！↓\nhttps://www.instagram.com/017r1_diorama_mokei/\n\n〈章节〉\n00:00 导入\n00:49 如何让信号灯亮起\n03:27 利用AI编程并写入Arduino\n04:55 动作确认\n06:42 再下点功夫\n08:27 ATtiny85\n    建议：AI 产品/工具，建议 approved"
+  ]
+}

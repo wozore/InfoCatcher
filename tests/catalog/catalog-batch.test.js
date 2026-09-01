@@ -335,7 +335,6 @@ test('official-url-registry 产品条目支持正式目录工具和主流 Agent 
     ['Stable Diffusion', 'Stability AI'],
     ['DALL·E 3', 'OpenAI'],
     ['Ideogram', 'Ideogram AI'],
-    ['Windsurf', 'Windsurf'],
     ['OpenAI Codex', 'OpenAI'],
     ['Gemini CLI', 'Google'],
     ['Replit Agent', 'Replit'],

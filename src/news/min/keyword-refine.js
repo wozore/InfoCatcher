@@ -28,6 +28,12 @@ const EN_STOPWORDS = new Set([
   'https', 'http', 'www', 'com', 'co', 'org', 'net', 'io', 'ai', 'tco', 'bit',
   'rt', 'amp', 'gif', 'jpg', 'png', 'webp', 'can', 'one', 'get', 'got', 'new', 'now',
   'may', 'much', 'many', 'well', 'way', 'even', 'first', 'last', 'next', 'best', 'good',
+  // 常见英语填充词/泛词，避免在全局词频中污染 AI 关键词候选
+  'our', 'full', 'real', 'work', 'join', 'free', 'build', 'learn', 'learned', 'learning',
+  'explained', 'explain', 'tech', 'artificial', 'data', 'video', 'videos', 'really', 'want',
+  'need', 'know', 'like', 'time', 'day', 'days', 'way', 'things', 'thing', 'world', 'people',
+  'check', 'checkout', 'thanks', 'thank', 'please', 'subscribe', 'subscribe', 'channel',
+  'episode', 'episodes', 'part', 'series', 'update', 'updates', 'updated', 'version', 'versions',
 ]);
 
 const ZH_STOPWORDS = new Set([
@@ -46,6 +52,10 @@ const ZH_TERM_LEXICON = Object.freeze([
   '开源', '算力', '芯片', '数据', '算法', '架构', '上下文', '参数', '机器人',
   '自动驾驶', '数字人', '内容生成', '自动化', '效率', '成本', '产业', '应用场景',
 ]);
+const MAX_KEYWORD_REFINEMENT_INPUT = 12;
+const MAX_ORIGINAL_TITLE_CHARS = 80;
+const MAX_ORIGINAL_DESCRIPTION_CHARS = 200;
+const MAX_ORIGINAL_COMMENTS_CHARS = 80;
 
 /** 把原文切成跨语言初始候选；保留重复次数供规则预筛选。 */
 function tokenize(text) {
@@ -97,16 +107,26 @@ function buildRuleCandidates(freq, existingKeywords, topN) {
     .map(([word, stat]) => ({ word, count: stat.count }));
 }
 
-/** 仅组装 approved 候选的顶层原文，明确不带 localizations。 */
-function collectApprovedOriginals(store) {
+/**
+ * 仅组装 approved 候选顶层原文（按评分倒序），明确不带 localizations。
+ * 每条的标题/描述/评论按上限截断以适配本地模型上下文；limit 传入时限制条数
+ * （供分批场景），省略时返回全部 approved。
+ */
+function collectApprovedOriginals(store, limit) {
   const candidates = store && Array.isArray(store.candidates) ? store.candidates : [];
+  const hasLimit = Number.isInteger(limit) && limit > 0;
   return candidates
     .filter(item => item && item.review_status === 'approved')
-    .map(item => ({
+    .map((item, index) => ({ item, index, score: Number.isFinite(Number(item.final_score)) ? Number(item.final_score) : -Infinity }))
+    .sort((left, right) => right.score - left.score || left.index - right.index)
+    .filter((_, index) => !hasLimit || index < limit)
+    .map(({ item }) => ({
       id: String(item.id || ''),
-      title: String(item.title || ''),
-      description: String(item.description || ''),
-      comments: Array.isArray(item.comments) ? item.comments.map(String) : String(item.comments || ''),
+      title: String(item.title || '').slice(0, MAX_ORIGINAL_TITLE_CHARS),
+      description: String(item.description || '').slice(0, MAX_ORIGINAL_DESCRIPTION_CHARS),
+      comments: Array.isArray(item.comments)
+        ? [item.comments.map(String).join('\n').slice(0, MAX_ORIGINAL_COMMENTS_CHARS)]
+        : String(item.comments || '').slice(0, MAX_ORIGINAL_COMMENTS_CHARS),
     }));
 }
 
@@ -125,22 +145,49 @@ async function refineKeywords(store, config, options = {}) {
   const source = options.store ?? store ?? readMinStore();
   const keywords = (config && config.keywords) || {};
   const existingKeywords = Array.isArray(keywords.ai_keywords) ? keywords.ai_keywords : [];
-  const ruleTopN = Number(keywords.refine_high_frequency_top_n) || 5;
+  const excludedKeywords = Array.isArray(keywords.excluded_keywords) ? keywords.excluded_keywords : [];
+  const knownKeywords = [...existingKeywords, ...excludedKeywords];
   const manualFolder = (config && config.manual_folder) || 'data/manual';
-  const approved = collectApprovedOriginals(source);
-  const freq = buildWordFreq(approved);
-  const ruleCandidates = buildRuleCandidates(freq, existingKeywords, ruleTopN);
+  const approvedAll = collectApprovedOriginals(source);
+  const contextSize = Number(keywords.refine_batch_size) || MAX_KEYWORD_REFINEMENT_INPUT;
+  const ruleTopN = Number(keywords.refine_rule_top_n) || 30;
+  const outputMax = Number(keywords.refine_max_output) || 20;
+  const timeoutMs = options.timeoutMs ?? (Number(keywords.refine_timeout_ms) || 60000);
+  const retries = Number(keywords.refine_batch_retries ?? 1) || 0;
+  if (!approvedAll.length) throw new Error('无 approved 候选可供提纯');
+
+  // 全局词频：全部 approved 都贡献候选与频次（不再只取高分子集），规则候选带全局 count。
+  const globalFreq = buildWordFreq(approvedAll);
+  const ruleCandidates = buildRuleCandidates(globalFreq, knownKeywords, ruleTopN);
+  // 送模型做语义归并的上下文：取评分最高的有限条原文，控制单次调用输入规模。
+  const contextOriginals = approvedAll.slice(0, contextSize);
+
   const extract = options.keywordExtractor || refineKeywordsWithDeepSeek;
-  const result = await extract(approved, ruleCandidates, {
+  const callOptions = {
     apiKey: options.apiKey,
     fetchImpl: options.fetchImpl,
-    timeoutMs: options.timeoutMs,
+    timeoutMs,
     model: options.model,
-    existingKeywords,
-  });
+    existingKeywords: knownKeywords,
+    filterExisting: true,
+  };
+  let result = await extract(contextOriginals, ruleCandidates, callOptions);
+  for (let attempt = 0; attempt < retries && (!result || result.ok !== true); attempt += 1) {
+    result = await extract(contextOriginals, ruleCandidates, callOptions);
+  }
   if (!result || result.ok !== true) {
     throw new Error(`AI 关键词提取失败：${result && result.error ? result.error : '未知错误'}${result && result.code ? `（${result.code}）` : ''}`);
   }
+
+  // 直接命中的词用全局频次校准 count（模型归并出的新词保留其估计值）。
+  const freqMap = new Map([...globalFreq.entries()].map(([word, stat]) => [word, stat.count]));
+  const candidates = (result.keywords || [])
+    .map(kw => ({ ...kw, count: freqMap.get(kw.word.toLowerCase()) ?? kw.count }))
+    .slice(0, outputMax);
+  if (!candidates.length) {
+    throw new Error('AI 关键词提取失败：无有效关键词可生成');
+  }
+  const sourceBasis = 'all_approved_frequency';
 
   const date = dateKeyOf(options.now);
   const file = path.join(manualFolder, 'keyword-refine.json');
@@ -152,12 +199,16 @@ async function refineKeywords(store, config, options = {}) {
     kind: 'keyword_refine_candidates',
     date,
     source_review_status: 'approved',
-    candidates: result.keywords,
+    source_count: approvedAll.length,
+    input_count: approvedAll.length,
+    source_basis: sourceBasis,
+    candidates,
     adopted_keywords: [],
+    discarded_keywords: [],
   };
   fs.mkdirSync(manualFolder, { recursive: true });
   writeJsonAtomic(file, payload, 'keyword-refine');
-  return { candidates: result.keywords, file, approvedCount: approved.length, ruleCandidates };
+  return { candidates, file, approvedCount: approvedAll.length, inputCount: approvedAll.length, sourceBasis, batches: 1, failedBatches: 0, ruleCandidates: ruleCandidates.length, contextSize };
 }
 
 module.exports = {
@@ -165,6 +216,7 @@ module.exports = {
   buildWordFreq,
   buildRuleCandidates,
   collectApprovedOriginals,
+  MAX_KEYWORD_REFINEMENT_INPUT,
   dateKeyOf,
   refineKeywords,
 };

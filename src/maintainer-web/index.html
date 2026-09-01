@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>知览 · 编辑部工作台</title>
+  <link rel="stylesheet" href="css/workbench.css">
+  <script src="js/workbench.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#top" aria-label="知览编辑部工作台首页">
+        <span class="brand-mark" aria-hidden="true">知</span>
+        <span><strong>知览</strong><small>KNOWVIEW / MAINTAINER</small></span>
+      </a>
+      <div class="header-meta">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span>本机维护者工作台</span>
+        <button class="button button-quiet" id="refreshButton" type="button">刷新数据</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="workbench" id="top">
+    <div class="page-intro">
+      <div>
+        <p class="kicker">EDITORIAL DESK / 01</p>
+        <h1>审核工作台</h1>
+        <p class="lede">把公开信息变成可追溯、可发布的编辑决定。</p>
+      </div>
+      <div class="revision-note" id="revisionNote" aria-live="polite">等待连接工作台 API</div>
+    </div>
+
+    <div class="notice" id="appNotice" role="status" aria-live="polite" hidden></div>
+    <section class="token-gate" id="tokenGate" hidden aria-labelledby="tokenGateTitle">
+      <p class="kicker">ACCESS REQUIRED</p>
+      <h2 id="tokenGateTitle">请从带 token 的工作台链接进入</h2>
+      <p>token 只从当前 URL fragment 读取，不会显示或写入页面。</p>
+    </section>
+
+    <section class="overview-section" aria-labelledby="overviewTitle">
+      <div class="section-heading">
+        <div><p class="kicker">TODAY / QUEUE</p><h2 id="overviewTitle">今日待办</h2></div>
+        <span class="load-state" id="overviewState">未加载</span>
+      </div>
+      <div class="overview-grid" id="overviewCards">
+        <div class="skeleton-card" aria-hidden="true"></div><div class="skeleton-card" aria-hidden="true"></div><div class="skeleton-card" aria-hidden="true"></div><div class="skeleton-card" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <div class="desk-grid">
+      <section class="panel panel-news" id="newsPanel" aria-labelledby="newsTitle">
+        <div class="section-heading"><div><p class="kicker">01 / FIRST READ</p><h2 id="newsTitle">新闻首审</h2></div><span class="load-state" id="newsState">未加载</span></div>
+        <p class="panel-lead">只对明确勾选的候选执行决定，保留每一条原始 ID 的审计边界。</p>
+        <div class="toolbar"><label class="check-all"><input type="checkbox" id="newsSelectAll"> <span>全选当前待审</span></label><span class="selection-count" id="newsSelectionCount">0 条已选</span><button class="button button-danger" id="newsDiscardButton" type="button" disabled>丢弃所选</button><button class="button button-primary" id="newsApproveButton" type="button" disabled>批准所选</button></div>
+        <div class="item-list" id="newsList" aria-live="polite"></div>
+      </section>
+      <section class="panel panel-keywords" id="keywordsPanel" aria-labelledby="keywordsTitle">
+        <div class="section-heading"><div><p class="kicker">02 / SIGNALS</p><h2 id="keywordsTitle">关键词候选</h2></div><span class="load-state" id="keywordsState">未加载</span></div>
+        <p class="panel-lead">完成新闻首审后，可在此生成 AI 提纯候选；采纳后才会进入后续采集配置，丢弃的词会进入黑名单避免再次建议。</p>
+        <div class="toolbar"><button class="button button-quiet" id="keywordGenerateButton" type="button">生成关键词候选</button><label class="check-all"><input type="checkbox" id="keywordSelectAll"> <span>全选候选</span></label><span class="selection-count" id="keywordSelectionCount">0 条已选</span><button class="button button-danger" id="keywordDiscardButton" type="button" disabled>丢弃所选</button><button class="button button-primary" id="keywordAdoptButton" type="button" disabled>采纳所选</button></div>
+        <p class="panel-note" id="keywordSourceNote"></p>
+        <div class="item-list" id="keywordList" aria-live="polite"></div>
+      </section>
+    </div>
+
+    <section class="panel panel-top" id="topPanel" aria-labelledby="topTitle">
+      <div class="section-heading"><div><p class="kicker">03 / EDITOR'S CUT</p><h2 id="topTitle">Top 选择与发布预览</h2></div><span class="load-state" id="topState">未加载</span></div>
+      <p class="panel-lead">先生成 AI 有限待选池（纯 X 10 / 有 YouTube 15），从中选 3~5（有 YouTube 3~8）条；保存选择后才可重建公开投影。</p>
+      <div class="top-layout"><div><div class="toolbar"><div class="toolbar" id="topSelectionControls"><button class="button button-quiet" id="topGenerateButton" type="button">生成 Top 待选池</button><label class="check-all"><input type="checkbox" id="topSelectAll"> <span>全选可选项目</span></label><span class="selection-count" id="topSelectionCount">0 条已选</span><button class="button button-primary" id="topSaveButton" type="button" disabled>保存 Top 选择</button></div><button class="button button-primary" id="publishNewsButton" type="button">重建公开投影</button></div><div class="item-list" id="topList" aria-live="polite"></div></div><aside class="preview-card" aria-labelledby="publishPreviewTitle"><div class="preview-heading"><p class="kicker">PUBLISH PROJECTION</p><h3 id="publishPreviewTitle">公开发布预览</h3><span class="load-state" id="previewState">未加载</span></div><div id="publishPreview" class="preview-body"><p class="muted">保存 Top 选择后，可在此处确认并重建公开投影。</p></div><button class="button button-quiet button-full" id="previewRefreshButton" type="button">刷新预览</button></aside></div>
+      <section class="panel transcript-panel" aria-labelledby="transcriptTitle"><div class="section-heading"><div><p class="kicker">TRANSCRIPTS</p><h2 id="transcriptTitle">字幕与详情增强</h2></div><span class="load-state" id="transcriptState">未加载</span></div><p class="panel-lead">为选中的 Top YouTube 条目上传字幕文件；保存后用 AI 重新总结，公开卡片的摘要会更丰富。字幕文件存入 <code>data/manual/transcripts/</code>，不随站点发布。</p><div class="item-list" id="transcriptList" aria-live="polite"></div><div class="toolbar transcript-actions"><label class="cost-check"><input type="checkbox" id="transcriptCostConfirm"> <span>已确认：AI 总结可能使用配置的模型服务并产生费用</span></label><button class="button button-primary" id="transcriptSummarizeButton" type="button" disabled>总结选中字幕（AI）</button></div></section>
+    </section>
+
+    <div class="desk-grid">
+      <section class="panel" id="toolUpdatesPanel" aria-labelledby="toolUpdatesTitle"><div class="section-heading"><div><p class="kicker">04 / PRODUCT WATCH</p><h2 id="toolUpdatesTitle">工具更新审核</h2></div><span class="load-state" id="toolUpdatesState">未加载</span></div><p class="panel-lead">仅显示当前可操作的审核项。已批准更新可先生成日期变更预览；确认 revision、hash 与变更内容后，输入确认语句才可 Apply。</p><div class="item-list" id="toolUpdatesList" aria-live="polite"></div><div class="tool-apply-panel"><div class="toolbar"><button class="button button-quiet" id="toolPreviewButton" type="button">预览已批准更新</button><span class="selection-count" id="toolPreviewState">尚未生成预览</span></div><div class="tool-preview" id="toolPreview" aria-live="polite"><p class="muted">预览只读取当前 Catalog 和审核队列，不会写入数据。</p></div><label class="tool-confirm-label" for="toolApplyConfirm">确认 Apply：输入预览要求的完整确认语句</label><div class="toolbar"><input class="tool-confirm-input" id="toolApplyConfirm" type="text" autocomplete="off" spellcheck="false" placeholder="APPLY TOOL-UPDATES &lt;preview hash&gt;"><button class="button button-danger" id="toolApplyButton" type="button" disabled>Apply 已批准更新</button></div></div></section>
+      <section class="panel" id="conceptsPanel" aria-labelledby="conceptsTitle"><div class="section-heading"><div><p class="kicker">05 / KNOWLEDGE</p><h2 id="conceptsTitle">概念预览</h2></div><span class="load-state" id="conceptsState">未加载</span></div><p class="panel-lead">只读查看待发布概念的摘要与证据，不在本工作台修改概念资料。</p><div class="item-list" id="conceptsList" aria-live="polite"></div></section>
+    </div>
+    <footer class="workbench-footer"><span>固定 API：<code>/api/workbench/v1/</code></span><span>所有写操作均绑定当前 revision</span></footer>
+  </main>
+</body>
+</html>

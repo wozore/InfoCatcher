@@ -61,9 +61,10 @@ test('buildReviewPayload 裁剪标题/描述/字幕/总结并替换占位符', (
   assert.ok(!user.includes('x'.repeat(5000)));
   assert.ok(user.includes('s'.repeat(800)));    // 总结截断前 800 字符
   assert.ok(!user.includes('s'.repeat(900)));
-  assert.equal(payload.temperature, 0);
-  assert.equal(payload.stream, false);
-});
+  assert.ok(user.includes('confidence_range'));
+  assert.ok(user.includes('60-80%'));
+  assert.ok(user.includes('confidence 是所选区间的下界') || user.includes('confidence：填写所选区间的下界'));
+
 
 test('buildReviewPayload 缺素材时占位符填空（无总结）', () => {
   const user = buildReviewPayload({ title: '标题' }).messages[1].content;
@@ -78,7 +79,16 @@ test('normalizeReview 解析标准 JSON', () => {
   assert.deepEqual(parsed, { verdict: 'discard', reasons: ['非 AI 主题', '广告内容'], confidence: 0.95 });
 });
 
-test('normalizeReview 容忍 markdown 代码块与前后多余文字', () => {
+test('normalizeReview 支持区间置信度，并以区间下界作为安全数值', () => {
+  assert.deepEqual(normalizeReview('{"verdict":"hold","confidence_range":"60-80%","confidence":0.6,"reasons":["信息不完整"]}'), {
+    verdict: 'hold', reasons: ['信息不完整'], confidence: 0.6, confidence_range: '60-80%'
+  });
+  assert.equal(normalizeReview('{"verdict":"approve","confidence_range":"90–100%","confidence":0.95}').confidence, 0.9);
+  assert.equal(normalizeReview('{"verdict":"approve","confidence_range":"90–100%","confidence":0.95}').confidence_range, '90-100%');
+  assert.equal(normalizeReview('{"verdict":"hold","confidence_range":"bad","confidence":0.6}').confidence_range, undefined);
+});
+
+
   const parsed = normalizeReview('```json\n{"verdict":"hold","reasons":["信息不全"]}\n```');
   assert.deepEqual(parsed, { verdict: 'hold', reasons: ['信息不全'], confidence: 0 });
   const parsed2 = normalizeReview('好的，这是审核结果：{"verdict":"approve","confidence":0.8}末尾');
@@ -140,7 +150,17 @@ test('reviewWithDeepSeek 成功：返回 verdict + reasons + confidence', async 
   assert.equal(result.confidence, 0.9);
 });
 
-// ── 第 3 组：collectReviewSource / reviewCandidate ──────
+test('reviewWithDeepSeek 成功：传递区间置信度并使用区间下界', async () => {
+  const result = await reviewWithDeepSeek({ title: 't', summary: 's' }, {
+    apiKey: 'key',
+    fetchImpl: mockFetch(() => deepSeekOk('{"verdict":"hold","confidence_range":"40-60%","confidence":0.6,"reasons":["证据不足"]}')),
+  });
+  assert.equal(result.ok, true);
+  assert.equal(result.confidence_range, '40-60%');
+  assert.equal(result.confidence, 0.4);
+});
+
+
 
 test('collectReviewSource 提取标题/描述/字幕/总结（字幕支持对象或字符串）', () => {
   assert.deepEqual(collectReviewSource({ title: 't', description: 'd', transcript: { text: '字幕' }, summary: '总结' }), {

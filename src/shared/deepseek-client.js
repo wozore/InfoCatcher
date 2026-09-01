@@ -25,6 +25,21 @@ function redact(value) {
     .slice(0, 500);
 }
 
+function requestSignal(timeoutMs, parentSignal) {
+  const timeoutSignal = typeof AbortSignal?.timeout === 'function' ? AbortSignal.timeout(timeoutMs) : null;
+  if (!parentSignal) return timeoutSignal;
+  if (!timeoutSignal) return parentSignal;
+  if (typeof AbortSignal?.any === 'function') return AbortSignal.any([parentSignal, timeoutSignal]);
+  const controller = new AbortController();
+  const abort = () => controller.abort();
+  if (parentSignal.aborted || timeoutSignal.aborted) controller.abort();
+  else {
+    parentSignal.addEventListener('abort', abort, { once: true });
+    timeoutSignal.addEventListener('abort', abort, { once: true });
+  }
+  return controller.signal;
+}
+
 async function requestResponses(payload, options = {}) {
   const providerName = options.provider || 'deepseek';
   const resolved = resolveProvider(providerName);
@@ -47,7 +62,7 @@ async function requestResponses(payload, options = {}) {
 
   let response;
   try {
-    const signal = typeof AbortSignal?.timeout === 'function' ? AbortSignal.timeout(timeoutMs) : undefined;
+    const signal = requestSignal(timeoutMs, options.signal);
     response = await fetchImpl(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },

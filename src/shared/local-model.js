@@ -62,7 +62,7 @@ async function probeLocal(fetchImpl) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(buildProbePayload()),
-      ...(typeof AbortSignal?.timeout === 'function' ? { signal: AbortSignal.timeout(5_000) } : {}),
+      ...(typeof AbortSignal?.timeout === 'function' ? { signal: AbortSignal.timeout(30_000) } : {}),
     });
     return true;
   } catch (error) {

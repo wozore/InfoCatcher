@@ -5,8 +5,8 @@
  * 操作 v2 单状态轴候选层（data/news/runtime/min-candidates.json，min-store）。
  *
  *   min-review list    [--status pending|approved|discarded] [--platform ...] [--limit N] [--top N] [--store min] [--json] [--manual [--force]]
- *   min-review set     --id <id> --status pending|approved|discarded [--store min]
- *   min-review batch   --ids <id1,id2,...> --status approved [--store min]
+ *   min-review set     --id <id> --status approved|discarded [--expected-revision <revision>] [--store min]
+ *   min-review batch   --ids <id1,id2,...> --status approved|discarded [--expected-revision <revision>] [--store min]
  *   min-review transcripts [--store min]
  *   min-review feedback     [--store min]
  *   min-review refine       [--store min]
@@ -26,8 +26,8 @@
  *       --force 覆盖已含人工结论的清单。
  *       --top N：按评分倒序取前 N 供人工审（R7 审核范围；缺省读 config.collection.
  *       review_top_pure_x / review_top_with_youtube，有 YouTube 候选时用后者）。
- *     - set/batch：单条/批量设置审核状态，写入 min-candidates.json（reviewed_at 由
- *       min-store 写入，不覆盖既有状态）；状态轴只允许 pending/approved/discarded。
+ *     - set/batch：按明确 id 仅将 pending 候选设置为 approved/discarded，写入 min-candidates.json；
+ *       expected revision 不匹配时拒绝写入。
  *     - transcripts：调 transcript-notify.notifyTranscripts 生成「待人工获取字幕」清单，
  *       写 config.manual_folder/transcript-requests.json（固定格式，文件名去掉日期后缀）。
  *     - feedback：调 tool-feedback.feedbackFromSummaries，从 approved summary 提取
@@ -39,12 +39,13 @@
  *     - refine-apply：读取关键词清单中维护者确认的 adopted_keywords，校验必须属于
  *       candidates 后幂等追加到 news-config-v2.json 的 keywords.ai_keywords；不发布、不建 dist。
  *     - ai-top：第二阶段，AI 从 approved 候选提供 top 待选项（纯 X 10 / 有 YouTube 15，
- *       按**最后一次采集记录** last-run.json 判定是否"有 YouTube"：youtube 平台实际采到
- *       内容 items>0 → 15，否则 10），写 manual_folder/top.json 供维护者筛选；
+ *       按最后一次采集记录 last-run.json 判定是否"有 YouTube"：youtube 平台实际采到
+ *       内容 items>0 → 15，否则 10；历史审核或手工导入缺 last-run 时，回退读取 approved
+ *       候选的 platform 字段判定，避免审核完成后无法生成待选池。
  *       每条 top_selected 默认 false。**失败一律抛错（exit 1）**：无 approved / last-run
  *       缺失 / AI 挑选失败——供 bat 一键入口用 errorlevel 判定，不静默成功。
- *     - top-selected：维护者从 ai-top 待选项确认最终显示 → top_selected 置 true；
- *       公开投影（publish）只取 approved && top_selected 的候选。
+ *     - top-selected：仅 approved 候选可由维护者显式 set/unset top_selected；本命令只更新候选层，
+ *       不发布公开投影。
  *     - top-apply：读取 --file top 清单里 **top_selected=true** 的条目（ai-top 产物已带 id），
  *       批量置候选层 top_selected=true；false/未标不动作（对齐 pending 跳过语义），
  *       无 id 条目报错拒绝（旧产物格式）。维护者一键入口：bat/apply-top.bat
@@ -61,12 +62,26 @@
 
 const fs = require('fs');
 const path = require('path');
-const { readMinStore, writeMinStore, setReviewStatusMin, setBatchReviewStatusMin, setTopSelectedMin, MIN_REVIEW_STATUSES } = require('../min/min-store');
+const {
+  readMinStore,
+  writeMinStore,
+  revisionOfMinStore,
+  commitMinStoreMutation,
+  reviewPendingCandidates,
+  setTopSelectedMin,
+  setApprovedTopSelectedMin,
+  MIN_REVIEW_STATUSES,
+} = require('../min/min-store');
 const { readMinHistory, writeMinHistory } = require('../min/min-history');
 const { archiveMinStore } = require('../min/min-history');
 const { notifyTranscripts } = require('../transcripts/transcript-notify');
 const { feedbackFromSummaries } = require('../feedback/tool-feedback');
 const { refineKeywords } = require('../min/keyword-refine');
+const {
+  applyRefineKeywords,
+  commitKeywordActions,
+  revisionOfConfig,
+} = require('../min/keyword-actions');
 const { buildReviewList, loadReviewList, applyReviewList, scoreOf, suggestReview } = require('../min/review-list');
 const { readJson, writeJsonAtomic } = require('../core/news-storage');
 const { CATALOG_GENERATOR_FILES, CONCEPT_FILES } = require('../../shared/paths');
@@ -93,6 +108,7 @@ const MANUAL_LIST_FILES = [
   'keyword-refine.json',
   'top.json',
 ];
+const MAX_AI_TOP_INPUT = 40;
 
 /** 删除当日人工清单（白名单内已存在的文件）。归档成功后才调用；任一删除失败整体抛错。 */
 function removeManualLists(config) {
@@ -119,6 +135,15 @@ function assertStoreFlag(flags) {
   }
 }
 
+/** CLI 未显式传 revision 时，绑定本次读到的版本；显式值可拒绝陈旧人工清单。 */
+function expectedMinRevision(flags, store) {
+  return flags.expected_revision || revisionOfMinStore(store);
+}
+
+function expectedConfigRevision(flags, config) {
+  return flags.expected_revision || revisionOfConfig(config);
+}
+
 /**
  * 判定"最后一次采集是否有 YouTube 内容"（ai-top 选 top N 用）。
  * 依据采集运行记录 last-run.json（pipeline-min runMin 末尾写）的 youtube 平台
@@ -135,27 +160,39 @@ function hasYouTubeInLastRun(lastRun) {
 
 /**
  * 解析 ai-top 的 YouTube 判定与 top 数量（纯逻辑，无 I/O，便于测试）。
- * 命令层在 no_approved / no_last_run 时抛错拒绝（供 bat/apply-review.bat errorlevel
- * 判定），本函数只返回判定结果，不 throw。
+ * 有 approved 候选时优先以最后一次采集记录判定；历史审核或手工导入缺少
+ * last-run 时，回退读取当前 approved 候选的 platform 字段，避免阻断后续编辑流程。
  * @param {Array} approved 候选层中 review_status==='approved' 的候选
  * @param {object|null} lastRun readJson(NEWS_FILES.lastRun, null) 的结果
  * @param {object} config v2 配置（读 collection.review_top_with_youtube / review_top_pure_x）
- * @returns {{ ok: true, hasYouTube: boolean, topN: number } |
- *            { ok: false, reason: 'no_approved'|'no_last_run' }}
+ * @returns {{ ok: true, hasYouTube: boolean, topN: number, source: 'last_run'|'approved_candidates' } |
+ *            { ok: false, reason: 'no_approved' }}
  */
 function resolveAiTopConfig(approved, lastRun, config) {
   if (!Array.isArray(approved) || approved.length === 0) {
     return { ok: false, reason: 'no_approved' };
   }
-  if (!lastRun) {
-    return { ok: false, reason: 'no_last_run' };
-  }
-  const hasYouTube = hasYouTubeInLastRun(lastRun);
+  const fromLastRun = Boolean(lastRun);
+  const hasYouTube = fromLastRun
+    ? hasYouTubeInLastRun(lastRun)
+    : approved.some(candidate => String(candidate?.platform || '').trim().toLowerCase() === 'youtube');
   const collection = (config && config.collection) || {};
   const topN = hasYouTube
     ? Number(collection.review_top_with_youtube) || 15
     : Number(collection.review_top_pure_x) || 10;
-  return { ok: true, hasYouTube, topN };
+  return { ok: true, hasYouTube, topN, source: fromLastRun ? 'last_run' : 'approved_candidates' };
+}
+
+function topCandidatesForAi(approved, limit = MAX_AI_TOP_INPUT) {
+  const safeLimit = Number.isInteger(limit) && limit > 0 ? limit : MAX_AI_TOP_INPUT;
+  return (Array.isArray(approved) ? approved : [])
+    .map(candidate => ({
+      id: candidate.id,
+      score: scoreOf(candidate),
+      summary: String(candidate.summary || candidate.title || '(无标题)').trim().slice(0, 120),
+    }))
+    .sort((left, right) => (right.score ?? -Infinity) - (left.score ?? -Infinity))
+    .slice(0, safeLimit);
 }
 
 /**
@@ -169,7 +206,7 @@ function resolveAiTopConfig(approved, lastRun, config) {
  * @returns {{ store, applied: number, selectedIds: string[], missing: string[], changed: number }}
  *   无 true 条目时 changed=0（不写回）；top_selected=true 但无 id → 抛错（旧产物格式）
  */
-function applyTopSelectedList(store, list) {
+function applyTopSelectedList(store, list, options = {}) {
   const candidates = (list && Array.isArray(list.candidates)) ? list.candidates : [];
   const selectedIds = [];
   const noIdSummaries = [];
@@ -187,60 +224,10 @@ function applyTopSelectedList(store, list) {
   if (selectedIds.length === 0) {
     return { store, applied: 0, selectedIds, missing: [], changed: 0 };
   }
-  const result = setTopSelectedMin(store, selectedIds, true);
+  const result = options.requireApproved === true
+    ? setApprovedTopSelectedMin(store, selectedIds, true, options)
+    : setTopSelectedMin(store, selectedIds, true, { requireApproved: false });
   return { store: result.store, applied: result.updated, selectedIds, missing: result.missing, changed: result.updated };
-}
-
-/**
- * 验证关键词候选清单并把人工确认词幂等追加至内存配置（纯逻辑，无 I/O）。
- * 未知采纳词或清单结构异常均在返回新配置前抛错，调用层因此不会写盘。
- */
-function applyRefineKeywords(config, list) {
-  if (!list || list.kind !== 'keyword_refine_candidates' || !Array.isArray(list.candidates) || !Array.isArray(list.adopted_keywords)) {
-    throw new Error('非法关键词清单：需要 kind=\'keyword_refine_candidates\'，且含 candidates 与 adopted_keywords 数组');
-  }
-  const candidateWords = new Set();
-  for (const candidate of list.candidates) {
-    if (!candidate || typeof candidate.word !== 'string' || !candidate.word.trim() || typeof candidate.category !== 'string' || !candidate.category.trim() || !['repeated', 'emerging'].includes(candidate.candidate_type) || !Number.isInteger(candidate.count) || candidate.count < 1) {
-      throw new Error('关键词清单含非法 candidates 条目（需 word、category、candidate_type、count 四字段）');
-    }
-    const key = candidate.word.trim().toLowerCase();
-    if (candidateWords.has(key)) throw new Error(`关键词清单含重复候选词：${candidate.word.trim()}`);
-    candidateWords.add(key);
-  }
-
-  const adopted = [];
-  const adoptedKeys = new Set();
-  let duplicates = 0;
-  for (const raw of list.adopted_keywords) {
-    if (typeof raw !== 'string' || !raw.trim()) throw new Error('adopted_keywords 只能包含非空字符串');
-    const word = raw.trim();
-    const key = word.toLowerCase();
-    if (!candidateWords.has(key)) throw new Error(`adopted_keywords 含不在 candidates 中的词：${word}`);
-    if (adoptedKeys.has(key)) {
-      duplicates += 1;
-      continue;
-    }
-    adoptedKeys.add(key);
-    adopted.push(word);
-  }
-
-  const nextConfig = { ...(config || {}), keywords: { ...((config && config.keywords) || {}) } };
-  const existing = Array.isArray(nextConfig.keywords.ai_keywords) ? nextConfig.keywords.ai_keywords.slice() : [];
-  const existingKeys = new Set(existing.map(word => String(word).trim().toLowerCase()));
-  const added = [];
-  const alreadyExists = [];
-  for (const word of adopted) {
-    if (existingKeys.has(word.toLowerCase())) {
-      alreadyExists.push(word);
-      continue;
-    }
-    existing.push(word);
-    existingKeys.add(word.toLowerCase());
-    added.push(word);
-  }
-  nextConfig.keywords.ai_keywords = existing;
-  return { config: nextConfig, added, already_exists: alreadyExists, duplicates, changed: added.length > 0 };
 }
 
 async function minReviewCommand(action, flags = {}) {
@@ -340,11 +327,16 @@ async function minReviewCommand(action, flags = {}) {
     if (!flags.id) throw new Error('min-review set 缺少 --id');
     if (!flags.status) throw new Error('min-review set 缺少 --status');
     const store = readMinStore();
-    const result = setReviewStatusMin(store, flags.id, flags.status);
-    writeMinStore(result.store, `min-review-set-${flags.id}-${Date.now()}`);
+    const expectedRevision = expectedMinRevision(flags, store);
+    const result = commitMinStoreMutation(
+      current => reviewPendingCandidates(current, [flags.id], flags.status, { expectedRevision }),
+      { expectedRevision, runId: `min-review-set-${flags.id}-${Date.now()}` },
+    );
+    if (result.missing.length) throw new Error(`候选不存在：${flags.id}`);
+    if (result.not_pending.length) throw new Error(`候选不是 pending，拒绝审核：${flags.id}`);
     const candidate = result.store.candidates.find(item => item.id === flags.id);
-    console.log(`✅ 已设置 ${flags.id} → ${flags.status}（reviewed_at=${candidate.reviewed_at}）`);
-    return { id: flags.id, status: flags.status, reviewed_at: candidate.reviewed_at, updated: result.updated };
+    console.log(`✅ 已设置 ${flags.id} → ${flags.status}（reviewed_at=${candidate && candidate.reviewed_at || '未变更'}）`);
+    return { id: flags.id, status: flags.status, reviewed_at: candidate && candidate.reviewed_at, ...result };
   }
 
   if (action === 'batch') {
@@ -353,8 +345,11 @@ async function minReviewCommand(action, flags = {}) {
     const ids = String(flags.ids).split(',').map(id => id.trim()).filter(Boolean);
     if (!ids.length) throw new Error('min-review batch 的 --ids 为空');
     const store = readMinStore();
-    const result = setBatchReviewStatusMin(store, ids, flags.status);
-    if (result.updated > 0) writeMinStore(result.store, `min-review-batch-${Date.now()}`);
+    const expectedRevision = expectedMinRevision(flags, store);
+    const result = commitMinStoreMutation(
+      current => reviewPendingCandidates(current, ids, flags.status, { expectedRevision }),
+      { expectedRevision, runId: `min-review-batch-${Date.now()}` },
+    );
     const missingNote = result.missing && result.missing.length
       ? `，未命中 ${result.missing.length} 条：${result.missing.join(',')}`
       : '';
@@ -400,8 +395,8 @@ async function minReviewCommand(action, flags = {}) {
   }
 
   if (action === 'refine') {
-    const result = await refineKeywords(undefined, config);
-    console.log(`✅ 关键词提纯候选：approved 原文 ${result.approvedCount} 条 → AI 归并 ${result.candidates.length} 个关键词 → ${result.file}`);
+    const result = await refineKeywords(undefined, config, { timeoutMs: Number(flags.timeout_ms) || undefined });
+    console.log(`✅ 关键词提纯候选：覆盖全部 ${result.approvedCount} 条 approved（全局词频，规则候选 ${result.ruleCandidates} 个）→ AI 归并 ${result.candidates.length} 个关键词 → ${result.file}`);
     for (const candidate of result.candidates) {
       console.log(`  [${candidate.candidate_type}] ${candidate.word}（${candidate.category}，${candidate.count} 次）`);
     }
@@ -411,8 +406,12 @@ async function minReviewCommand(action, flags = {}) {
   if (action === 'refine-apply') {
     if (!flags.file) throw new Error('min-review refine-apply 缺少 --file（关键词清单路径，如 data/manual/keyword-refine.json）');
     const list = readJson(flags.file, null);
-    const result = applyRefineKeywords(config, list);
-    if (result.changed) writeJsonAtomic(NEWS_FILES.configV2, result.config, `min-review-refine-apply-${Date.now()}`);
+    const expectedRevision = expectedConfigRevision(flags, config);
+    const result = commitKeywordActions(list, {
+      config,
+      expectedRevision,
+      runId: `min-review-refine-apply-${Date.now()}`,
+    });
     console.log(`✅ 已应用关键词清单 → news-config-v2.json：新增 ${result.added.length} / 已存在 ${result.already_exists.length} / 重复采纳 ${result.duplicates}`);
     if (!result.changed) console.log('   （无新关键词需要写回；未执行配置写入）');
     return result;
@@ -444,10 +443,10 @@ async function minReviewCommand(action, flags = {}) {
         : '缺少 last-run.json（最后一次采集记录）。请先运行 node scripts/build-news.js 产生采集记录后再试。');
     }
     const { hasYouTube, topN } = resolved;
-    // 喂给 AI 的输入：id + score + summary（精简，控制 token 成本）
-    const aiInput = approved
-      .map(c => ({ id: c.id, score: scoreOf(c), summary: String(c.summary || c.title || '(无标题)').trim().slice(0, 120) }))
-      .sort((a, b) => (b.score ?? -Infinity) - (a.score ?? -Infinity));
+    const collection = config.collection || {};
+    const aiTopInputMax = Number(collection.ai_top_input_max) || MAX_AI_TOP_INPUT;
+    // 仅让 AI 读取按评分排序的有限候选池，避免历史 approved 大量累积时超出本地模型上下文。
+    const aiInput = topCandidatesForAi(approved, aiTopInputMax);
     const result = await selectTopWithDeepSeek(aiInput, { min: Math.min(topN, approved.length), max: Math.min(topN, approved.length) });
     if (!result.ok) {
       throw new Error(`AI 挑选失败：${result.error}（${result.code}）。可稍后重试。`);
@@ -490,9 +489,11 @@ async function minReviewCommand(action, flags = {}) {
       generated_at: new Date().toISOString(),
       date: dateKey,
       approved_count: approved.length,
+      ai_input_count: aiInput.length,
       target_top_n: topN,
       ai_selected_count: selected.length,
-      note: 'AI 从人工 approved 候选中挑选的 top 待选项（按最后一次采集记录判定：有 YouTube 内容 15 / 纯 X 10），供维护者筛选。' +
+      note: 'AI 从人工 approved 候选中挑选的 top 待选项（按最后一次采集记录判定：有 YouTube 内容 15 / 纯 X 10；输入限定为评分最高的 '
+            + String(aiTopInputMax) + ' 条 approved，避免超出本地模型上下文）。' +
             '请把要显示在前端的 3~5（有 YouTube 日 3~8）条 top_selected 置为 true；' +
             '确认后双击 bat/apply-top.bat（应用选择 + 重建公开投影，显示到前端）。',
       candidates: selected,
@@ -507,10 +508,11 @@ async function minReviewCommand(action, flags = {}) {
     fs.mkdirSync(path.dirname(file), { recursive: true });
     writeJsonAtomic(file, payload, 'min-review-ai-top');
     console.log(`✅ AI 从 ${approved.length} 条 approved 中选出 ${selected.length} 条 top → ${file}`);
+    console.log(`   输入范围：评分前 ${aiTopInputMax} 条 approved（共 ${approved.length} 条）`);
     for (const c of selected) {
       console.log(`  [${c.score === null ? '-' : c.score}] ${c.summary.slice(0, 60)}（${c.author_name}）`);
     }
-    return { ok: true, file, approved_count: approved.length, ai_selected_count: selected.length, candidates: selected };
+    return { ok: true, file, approved_count: approved.length, ai_input_count: aiInput.length, target_top_n: topN, ai_selected_count: selected.length, candidates: selected };
   }
 
   // ── top-selected：第二阶段，维护者从 AI 待选项确认最终显示 → top_selected 置 true ──
@@ -520,15 +522,29 @@ async function minReviewCommand(action, flags = {}) {
     if (!flags.ids) throw new Error('min-review top-selected 缺少 --ids（逗号分隔的待显示 id 列表）');
     const ids = String(flags.ids).split(',').map(id => id.trim()).filter(Boolean);
     if (!ids.length) throw new Error('min-review top-selected 的 --ids 为空');
+    if (flags.selected !== undefined && flags.unset) throw new Error('top-selected 不能同时提供 --selected 与 --unset');
+    let selected = true;
+    if (flags.unset) selected = false;
+    else if (flags.selected !== undefined) {
+      if (flags.selected === true || flags.selected === 'true') selected = true;
+      else if (flags.selected === false || flags.selected === 'false') selected = false;
+      else throw new Error('min-review top-selected 的 --selected 需为 true 或 false');
+    }
     const store = readMinStore();
-    const result = setTopSelectedMin(store, ids, true);
-    if (result.updated > 0) writeMinStore(result.store, `min-review-top-selected-${Date.now()}`);
+    const expectedRevision = expectedMinRevision(flags, store);
+    const result = commitMinStoreMutation(
+      current => setApprovedTopSelectedMin(current, ids, selected, { expectedRevision }),
+      { expectedRevision, runId: `min-review-top-selected-${Date.now()}` },
+    );
     const missingNote = result.missing && result.missing.length
       ? `，未命中 ${result.missing.length} 条：${result.missing.join(',')}`
       : '';
-    console.log(`✅ 已标记 ${result.updated} 条为显示选中（top_selected=true）${missingNote}`);
-    console.log(`   下一步：node scripts/publish-news.js 重建公开投影（只取 approved && top_selected）`);
-    return { status: 'top_selected', ...result, updated_at: result.store.updated_at };
+    const notApprovedNote = result.not_approved && result.not_approved.length
+      ? `，非 approved ${result.not_approved.length} 条：${result.not_approved.join(',')}`
+      : '';
+    console.log(`✅ 已${selected ? '标记' : '取消'} ${result.updated} 条（top_selected=${selected}）${missingNote}${notApprovedNote}`);
+    console.log('   本操作仅更新候选层，不发布公开投影。');
+    return { status: 'top_selected', selected, ...result, updated_at: result.store.updated_at };
   }
 
   // ── top-apply：读 top 清单里 top_selected=true → 批量置候选层 top_selected=true ──
@@ -542,8 +558,11 @@ async function minReviewCommand(action, flags = {}) {
     if (!list || list.kind !== 'ai_top_candidates' || !Array.isArray(list.candidates)) {
       throw new Error(`非法 top 清单：${flags.file}（需要 kind='ai_top_candidates' 且含 candidates 数组）`);
     }
-    const result = applyTopSelectedList(store, list);
-    if (result.changed > 0) writeMinStore(result.store, `min-review-top-apply-${Date.now()}`);
+    const expectedRevision = expectedMinRevision(flags, store);
+    const result = commitMinStoreMutation(
+      current => applyTopSelectedList(current, list, { requireApproved: true, expectedRevision }),
+      { expectedRevision, runId: `min-review-top-apply-${Date.now()}` },
+    );
     console.log(`✅ 已应用 top 清单 → min-candidates.json：${result.applied} 条 top_selected=true`);
     if (result.missing && result.missing.length) {
       console.log(`   ⚠️ 未命中候选 ${result.missing.length} 条：${result.missing.join('、')}`);
@@ -595,8 +614,11 @@ async function minReviewCommand(action, flags = {}) {
     if (!flags.file) throw new Error('min-review apply 缺少 --file（待审清单路径，如 data/manual/review.json）');
     const store = readMinStore();
     const list = loadReviewList(flags.file);
-    const result = applyReviewList(store, list);
-    if (result.changed > 0) writeMinStore(result.store, `min-review-apply-${Date.now()}`);
+    const expectedRevision = expectedMinRevision(flags, store);
+    const result = commitMinStoreMutation(
+      current => applyReviewList(current, list),
+      { expectedRevision, runId: `min-review-apply-${Date.now()}` },
+    );
     console.log(`✅ 已应用人工审核结论 → min-candidates.json：approved ${result.applied.approved} / discarded ${result.applied.discarded}`);
     console.log(`   跳过 pending ${result.skipped} 条${result.noop ? `，状态未变化 ${result.noop} 条` : ''}`);
     if (result.invalid) {
@@ -622,8 +644,12 @@ module.exports = {
   assertStoreFlag,
   hasYouTubeInLastRun,
   resolveAiTopConfig,
+  topCandidatesForAi,
+  MAX_AI_TOP_INPUT,
   applyTopSelectedList,
   applyRefineKeywords,
+  expectedMinRevision,
+  expectedConfigRevision,
   MANUAL_LIST_FILES,
   removeManualLists,
 };
