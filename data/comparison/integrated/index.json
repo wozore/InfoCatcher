@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-30T23:28:25.544Z",
-  "model_count": 412,
-  "series_count": 175,
+  "generated_at": "2026-09-01T00:36:14.106Z",
+  "model_count": 397,
+  "series_count": 170,
   "sources": {
     "openrouter": {
       "fetched_at": "2026-08-30T23:28:08.253Z",
@@ -3371,76 +3371,6 @@
       ]
     },
     {
-      "series_key": "minimax--minimax-m1",
-      "display": "Minimax M1",
-      "vendor": "minimax",
-      "theme": "general",
-      "order": 9999,
-      "member_count": 3,
-      "model_count": 3,
-      "max_composite_score": 52.5,
-      "members": [
-        {
-          "member_key": "minimax--minimax-m1",
-          "display": "MiniMax M1",
-          "order": 9999,
-          "default_canonical": "minimax--minimax-m1",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "minimax--minimax-m1",
-              "display": "MiniMax M1",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "openrouter",
-                "lmarena"
-              ]
-            }
-          ],
-          "theme": "general"
-        },
-        {
-          "member_key": "minimax--minimax-m1-40k",
-          "display": "MiniMax M1 40K",
-          "order": 9999,
-          "default_canonical": "minimax--minimax-m1-40k",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "minimax--minimax-m1-40k",
-              "display": "MiniMax M1 40K",
-              "revision": null,
-              "composite_score": 51.2,
-              "sources": [
-                "llm_stats"
-              ]
-            }
-          ],
-          "theme": "general"
-        },
-        {
-          "member_key": "minimax--minimax-m1-80k",
-          "display": "MiniMax M1 80K",
-          "order": 9999,
-          "default_canonical": "minimax--minimax-m1-80k",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "minimax--minimax-m1-80k",
-              "display": "MiniMax M1 80K",
-              "revision": null,
-              "composite_score": 52.5,
-              "sources": [
-                "llm_stats"
-              ]
-            }
-          ],
-          "theme": "general"
-        }
-      ]
-    },
-    {
       "series_key": "mistral--mistral-medium",
       "display": "Mistral Medium",
       "vendor": "mistral",
@@ -4040,65 +3970,6 @@
       ]
     },
     {
-      "series_key": "mistral--magistral",
-      "display": "Magistral",
-      "vendor": "mistral",
-      "theme": "general",
-      "order": 74,
-      "member_count": 2,
-      "model_count": 3,
-      "max_composite_score": 41.8,
-      "members": [
-        {
-          "member_key": "mistral--magistral-medium",
-          "display": "Magistral Medium",
-          "order": 9999,
-          "default_canonical": "mistral--magistral-medium",
-          "variant_count": 2,
-          "variants": [
-            {
-              "canonical": "mistral--magistral-medium",
-              "display": "Magistral Medium",
-              "revision": null,
-              "composite_score": 41.8,
-              "sources": [
-                "llm_stats"
-              ]
-            },
-            {
-              "canonical": "mistral--magistral-medium@2025-06",
-              "display": "Magistral Medium (2025-06)",
-              "revision": "2025-06",
-              "composite_score": null,
-              "sources": [
-                "lmarena"
-              ]
-            }
-          ],
-          "theme": "general"
-        },
-        {
-          "member_key": "mistral--magistral-small",
-          "display": "Magistral Small",
-          "order": 9999,
-          "default_canonical": "mistral--magistral-small@2025-06",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "mistral--magistral-small@2025-06",
-              "display": "Magistral Small (2025-06)",
-              "revision": "2025-06",
-              "composite_score": 38.8,
-              "sources": [
-                "llm_stats"
-              ]
-            }
-          ],
-          "theme": "general"
-        }
-      ]
-    },
-    {
       "series_key": "openbmb--minicpm-sala",
       "display": "Minicpm Sala",
       "vendor": "openbmb",
@@ -4411,66 +4282,6 @@
       ]
     },
     {
-      "series_key": "google--gemini-2.5",
-      "display": "Gemini 2.5",
-      "vendor": "google",
-      "theme": "general",
-      "order": 9999,
-      "member_count": 2,
-      "model_count": 3,
-      "max_composite_score": 38.6,
-      "members": [
-        {
-          "member_key": "google--gemini-2.5-flash-lite",
-          "display": "Gemini 2.5 Flash-Lite",
-          "order": 9999,
-          "default_canonical": "google--gemini-2.5-flash-lite",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "google--gemini-2.5-flash-lite",
-              "display": "Gemini 2.5 Flash-Lite",
-              "revision": null,
-              "composite_score": 38.6,
-              "sources": [
-                "openrouter",
-                "llm_stats"
-              ]
-            }
-          ],
-          "theme": "general"
-        },
-        {
-          "member_key": "google--gemini-2.5-pro-preview",
-          "display": "Gemini 2.5 Pro Preview",
-          "order": 9999,
-          "default_canonical": "google--gemini-2.5-pro-preview",
-          "variant_count": 2,
-          "variants": [
-            {
-              "canonical": "google--gemini-2.5-pro-preview",
-              "display": "Gemini 2.5 Pro Preview",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "openrouter"
-              ]
-            },
-            {
-              "canonical": "google--gemini-2.5-pro-preview@06-05",
-              "display": "Gemini 2.5 Pro Preview (06-05)",
-              "revision": "06-05",
-              "composite_score": null,
-              "sources": [
-                "llm_stats"
-              ]
-            }
-          ],
-          "theme": "general"
-        }
-      ]
-    },
-    {
       "series_key": "mistral--devstral",
       "display": "Devstral",
       "vendor": "mistral",
@@ -4522,46 +4333,6 @@
       ]
     },
     {
-      "series_key": "mistral--mistral-small",
-      "display": "Mistral Small",
-      "vendor": "mistral",
-      "theme": "general",
-      "order": 9999,
-      "member_count": 1,
-      "model_count": 2,
-      "max_composite_score": 36.2,
-      "members": [
-        {
-          "member_key": "mistral--mistral-small-3.2-24b-instruct",
-          "display": "Mistral Small 3.2 24B",
-          "order": 9999,
-          "default_canonical": "mistral--mistral-small-3.2-24b-instruct",
-          "variant_count": 2,
-          "variants": [
-            {
-              "canonical": "mistral--mistral-small-3.2-24b-instruct",
-              "display": "Mistral Small 3.2 24B",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "openrouter"
-              ]
-            },
-            {
-              "canonical": "mistral--mistral-small-3.2-24b-instruct@2025-06",
-              "display": "Mistral Small 3.2 24B Instruct (2025-06)",
-              "revision": "2025-06",
-              "composite_score": 36.2,
-              "sources": [
-                "llm_stats"
-              ]
-            }
-          ],
-          "theme": "general"
-        }
-      ]
-    },
-    {
       "series_key": "mistral--shieldstral-1.0",
       "display": "Shieldstral 1.0",
       "vendor": "mistral",
@@ -4584,95 +4355,6 @@
               "revision": null,
               "composite_score": 22.5,
               "sources": [
-                "llm_stats"
-              ]
-            }
-          ],
-          "theme": "general"
-        }
-      ]
-    },
-    {
-      "series_key": "google--gemma-3n",
-      "display": "Gemma 3n",
-      "vendor": "google",
-      "theme": "general",
-      "order": 9999,
-      "member_count": 4,
-      "model_count": 4,
-      "max_composite_score": 20,
-      "members": [
-        {
-          "member_key": "google--gemma-3n-e2b",
-          "display": "Gemma 3n E2B",
-          "order": 9999,
-          "default_canonical": "google--gemma-3n-e2b",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "google--gemma-3n-e2b",
-              "display": "Gemma 3n E2B",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "llm_stats"
-              ]
-            }
-          ],
-          "theme": "general"
-        },
-        {
-          "member_key": "google--gemma-3n-e2b-it",
-          "display": "Gemma 3n E2B Instructed",
-          "order": 9999,
-          "default_canonical": "google--gemma-3n-e2b-it",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "google--gemma-3n-e2b-it",
-              "display": "Gemma 3n E2B Instructed",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "llm_stats"
-              ]
-            }
-          ],
-          "theme": "general"
-        },
-        {
-          "member_key": "google--gemma-3n-e4b",
-          "display": "Gemma 3n E4B",
-          "order": 9999,
-          "default_canonical": "google--gemma-3n-e4b",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "google--gemma-3n-e4b",
-              "display": "Gemma 3n E4B",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "llm_stats"
-              ]
-            }
-          ],
-          "theme": "general"
-        },
-        {
-          "member_key": "google--gemma-3n-e4b-it",
-          "display": "Gemma 3n E4B Instructed",
-          "order": 9999,
-          "default_canonical": "google--gemma-3n-e4b-it",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "google--gemma-3n-e4b-it",
-              "display": "Gemma 3n E4B Instructed",
-              "revision": null,
-              "composite_score": 20,
-              "sources": [
-                "lmarena",
                 "llm_stats"
               ]
             }
@@ -5326,6 +5008,37 @@
       ]
     },
     {
+      "series_key": "mistral--magistral",
+      "display": "Magistral",
+      "vendor": "mistral",
+      "theme": "general",
+      "order": 74,
+      "member_count": 1,
+      "model_count": 1,
+      "max_composite_score": null,
+      "members": [
+        {
+          "member_key": "mistral--magistral-medium",
+          "display": "Magistral Medium",
+          "order": 9999,
+          "default_canonical": "mistral--magistral-medium@2025-06",
+          "variant_count": 1,
+          "variants": [
+            {
+              "canonical": "mistral--magistral-medium@2025-06",
+              "display": "Magistral Medium (2025-06)",
+              "revision": "2025-06",
+              "composite_score": null,
+              "sources": [
+                "lmarena"
+              ]
+            }
+          ],
+          "theme": "general"
+        }
+      ]
+    },
+    {
       "series_key": "zai--glm-v",
       "display": "GLM Vision",
       "vendor": "zai",
@@ -5712,37 +5425,6 @@
             }
           ],
           "theme": "video"
-        }
-      ]
-    },
-    {
-      "series_key": "baidu--ernie-4.5",
-      "display": "Ernie 4.5",
-      "vendor": "baidu",
-      "theme": "general",
-      "order": 9999,
-      "member_count": 1,
-      "model_count": 1,
-      "max_composite_score": null,
-      "members": [
-        {
-          "member_key": "baidu--ernie-4.5",
-          "display": "ERNIE 4.5",
-          "order": 9999,
-          "default_canonical": "baidu--ernie-4.5",
-          "variant_count": 1,
-          "variants": [
-            {
-              "canonical": "baidu--ernie-4.5",
-              "display": "ERNIE 4.5",
-              "revision": null,
-              "composite_score": null,
-              "sources": [
-                "llm_stats"
-              ]
-            }
-          ],
-          "theme": "general"
         }
       ]
     },
@@ -10708,30 +10390,6 @@
       "file": "data.json"
     },
     {
-      "canonical": "baidu--ernie-4.5",
-      "identity": "ernie-4.5",
-      "family": "ernie-4.5",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "ERNIE 4.5",
-      "vendor": "baidu",
-      "theme": "general",
-      "series_key": "baidu--ernie-4.5",
-      "series_display": "Ernie 4.5",
-      "member_key": "baidu--ernie-4.5",
-      "member_display": "ERNIE 4.5",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
       "canonical": "baidu--ernie-5.0",
       "identity": "ernie-5.0",
       "family": "ernie-5.0",
@@ -11979,88 +11637,6 @@
       "file": "data.json"
     },
     {
-      "canonical": "google--gemini-2.5-flash-lite",
-      "identity": "gemini-2.5-flash-lite",
-      "family": "gemini-2.5",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {
-        "openrouter": [
-          {
-            "kind": "batch",
-            "raw_name": "google/gemini-2.5-flash-lite:batch"
-          }
-        ]
-      },
-      "display": "Gemini 2.5 Flash-Lite",
-      "vendor": "google",
-      "theme": "general",
-      "series_key": "google--gemini-2.5",
-      "series_display": "Gemini 2.5",
-      "member_key": "google--gemini-2.5-flash-lite",
-      "member_display": "Gemini 2.5 Flash-Lite",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 38.6,
-      "degrees": {},
-      "sources": [
-        "openrouter",
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "google--gemini-2.5-pro-preview",
-      "identity": "gemini-2.5-pro-preview",
-      "family": "gemini-2.5",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Gemini 2.5 Pro Preview",
-      "vendor": "google",
-      "theme": "general",
-      "series_key": "google--gemini-2.5",
-      "series_display": "Gemini 2.5",
-      "member_key": "google--gemini-2.5-pro-preview",
-      "member_display": "Gemini 2.5 Pro Preview",
-      "member_order": 9999,
-      "member_variant_count": 2,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "openrouter"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "google--gemini-2.5-pro-preview@06-05",
-      "identity": "gemini-2.5-pro-preview",
-      "family": "gemini-2.5",
-      "revisions": [
-        "06-05"
-      ],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Gemini 2.5 Pro Preview (06-05)",
-      "vendor": "google",
-      "theme": "general",
-      "series_key": "google--gemini-2.5",
-      "series_display": "Gemini 2.5",
-      "member_key": "google--gemini-2.5-pro-preview",
-      "member_display": "Gemini 2.5 Pro Preview",
-      "member_order": 9999,
-      "member_variant_count": 2,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
       "canonical": "google--gemini-3-flash",
       "identity": "gemini-3-flash",
       "family": "gemini-3",
@@ -12677,103 +12253,6 @@
       "degrees": {},
       "sources": [
         "lmarena"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "google--gemma-3n-e2b",
-      "identity": "gemma-3n-e2b",
-      "family": "gemma-3n",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Gemma 3n E2B",
-      "vendor": "google",
-      "theme": "general",
-      "series_key": "google--gemma-3n",
-      "series_display": "Gemma 3n",
-      "member_key": "google--gemma-3n-e2b",
-      "member_display": "Gemma 3n E2B",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "google--gemma-3n-e2b-it",
-      "identity": "gemma-3n-e2b-it",
-      "family": "gemma-3n",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Gemma 3n E2B Instructed",
-      "vendor": "google",
-      "theme": "general",
-      "series_key": "google--gemma-3n",
-      "series_display": "Gemma 3n",
-      "member_key": "google--gemma-3n-e2b-it",
-      "member_display": "Gemma 3n E2B Instructed",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "google--gemma-3n-e4b",
-      "identity": "gemma-3n-e4b",
-      "family": "gemma-3n",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Gemma 3n E4B",
-      "vendor": "google",
-      "theme": "general",
-      "series_key": "google--gemma-3n",
-      "series_display": "Gemma 3n",
-      "member_key": "google--gemma-3n-e4b",
-      "member_display": "Gemma 3n E4B",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "google--gemma-3n-e4b-it",
-      "identity": "gemma-3n-e4b-it",
-      "family": "gemma-3n",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Gemma 3n E4B Instructed",
-      "vendor": "google",
-      "theme": "general",
-      "series_key": "google--gemma-3n",
-      "series_display": "Gemma 3n",
-      "member_key": "google--gemma-3n-e4b-it",
-      "member_display": "Gemma 3n E4B Instructed",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 20,
-      "degrees": {},
-      "sources": [
-        "lmarena",
-        "llm_stats"
       ],
       "file": "data.json"
     },
@@ -14088,79 +13567,6 @@
       "file": "data.json"
     },
     {
-      "canonical": "minimax--minimax-m1",
-      "identity": "minimax-m1",
-      "family": "minimax-m1",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "MiniMax M1",
-      "vendor": "minimax",
-      "theme": "general",
-      "series_key": "minimax--minimax-m1",
-      "series_display": "Minimax M1",
-      "member_key": "minimax--minimax-m1",
-      "member_display": "MiniMax M1",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "openrouter",
-        "lmarena"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "minimax--minimax-m1-40k",
-      "identity": "minimax-m1-40k",
-      "family": "minimax-m1",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "MiniMax M1 40K",
-      "vendor": "minimax",
-      "theme": "general",
-      "series_key": "minimax--minimax-m1",
-      "series_display": "Minimax M1",
-      "member_key": "minimax--minimax-m1-40k",
-      "member_display": "MiniMax M1 40K",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 51.2,
-      "degrees": {},
-      "sources": [
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "minimax--minimax-m1-80k",
-      "identity": "minimax-m1-80k",
-      "family": "minimax-m1",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "MiniMax M1 80K",
-      "vendor": "minimax",
-      "theme": "general",
-      "series_key": "minimax--minimax-m1",
-      "series_display": "Minimax M1",
-      "member_key": "minimax--minimax-m1-80k",
-      "member_display": "MiniMax M1 80K",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 52.5,
-      "degrees": {},
-      "sources": [
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
       "canonical": "minimax--minimax-m2",
       "identity": "minimax-m2",
       "family": "minimax-m2",
@@ -14311,30 +13717,6 @@
       "file": "data.json"
     },
     {
-      "canonical": "mistral--magistral-medium",
-      "identity": "magistral-medium",
-      "family": "magistral-medium",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Magistral Medium",
-      "vendor": "mistral",
-      "theme": "general",
-      "series_key": "mistral--magistral",
-      "series_display": "Magistral",
-      "member_key": "mistral--magistral-medium",
-      "member_display": "Magistral Medium",
-      "member_order": 9999,
-      "member_variant_count": 2,
-      "has_composite": true,
-      "composite_score": 41.8,
-      "degrees": {},
-      "sources": [
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
       "canonical": "mistral--magistral-medium@2025-06",
       "identity": "magistral-medium",
       "family": "magistral-medium",
@@ -14351,38 +13733,12 @@
       "member_key": "mistral--magistral-medium",
       "member_display": "Magistral Medium",
       "member_order": 9999,
-      "member_variant_count": 2,
+      "member_variant_count": 1,
       "has_composite": false,
       "composite_score": null,
       "degrees": {},
       "sources": [
         "lmarena"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "mistral--magistral-small@2025-06",
-      "identity": "magistral-small",
-      "family": "magistral-small",
-      "revisions": [
-        "2025-06"
-      ],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Magistral Small (2025-06)",
-      "vendor": "mistral",
-      "theme": "general",
-      "series_key": "mistral--magistral",
-      "series_display": "Magistral",
-      "member_key": "mistral--magistral-small",
-      "member_display": "Magistral Small",
-      "member_order": 9999,
-      "member_variant_count": 1,
-      "has_composite": true,
-      "composite_score": 38.8,
-      "degrees": {},
-      "sources": [
-        "llm_stats"
       ],
       "file": "data.json"
     },
@@ -14877,56 +14233,6 @@
       "sources": [
         "openrouter",
         "lmarena",
-        "llm_stats"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "mistral--mistral-small-3.2-24b-instruct",
-      "identity": "mistral-small-3.2-24b-instruct",
-      "family": "mistral-small",
-      "revisions": [],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Mistral Small 3.2 24B",
-      "vendor": "mistral",
-      "theme": "general",
-      "series_key": "mistral--mistral-small",
-      "series_display": "Mistral Small",
-      "member_key": "mistral--mistral-small-3.2-24b-instruct",
-      "member_display": "Mistral Small 3.2 24B",
-      "member_order": 9999,
-      "member_variant_count": 2,
-      "has_composite": false,
-      "composite_score": null,
-      "degrees": {},
-      "sources": [
-        "openrouter"
-      ],
-      "file": "data.json"
-    },
-    {
-      "canonical": "mistral--mistral-small-3.2-24b-instruct@2025-06",
-      "identity": "mistral-small-3.2-24b-instruct",
-      "family": "mistral-small",
-      "revisions": [
-        "2025-06"
-      ],
-      "evaluation_profiles": [],
-      "offerings": {},
-      "display": "Mistral Small 3.2 24B Instruct (2025-06)",
-      "vendor": "mistral",
-      "theme": "general",
-      "series_key": "mistral--mistral-small",
-      "series_display": "Mistral Small",
-      "member_key": "mistral--mistral-small-3.2-24b-instruct",
-      "member_display": "Mistral Small 3.2 24B Instruct",
-      "member_order": 9999,
-      "member_variant_count": 2,
-      "has_composite": true,
-      "composite_score": 36.2,
-      "degrees": {},
-      "sources": [
         "llm_stats"
       ],
       "file": "data.json"
