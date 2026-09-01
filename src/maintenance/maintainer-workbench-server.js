@@ -10,6 +10,14 @@ const API_PREFIX = '/api/workbench/v1';
 const MAX_BODY_BYTES = 32 * 1024;
 const TRANSCRIPT_UPLOAD_MAX_BYTES = 3 * 1024 * 1024;
 const MIME_TYPES = Object.freeze({ '.css': 'text/css; charset=utf-8', '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.ico': 'image/x-icon' });
+const SAFE_ERROR_CODES = new Set([
+  'BAD_REQUEST', 'OPERATION_FAILED', 'PENDING_CANDIDATE_NOT_FOUND', 'PENDING_CANDIDATE_NOT_APPROVED',
+  'COST_CONFIRMATION_REQUIRED', 'PLAN_CHANGED', 'CONFIRMATION_INVALID', 'DRAFT_BLOCKED', 'DRAFT_ID_INVALID',
+  'PREVIEW_CHANGED', 'PREVIEW_INVALID', 'PREVIEW_CANDIDATES_INVALID', 'PREVIEW_SCHEMA_UNSUPPORTED',
+  'CONCEPT_TERM_NOT_FOUND', 'CONCEPT_TERM_ALREADY_EXISTS', 'CONCEPT_PREVIEW_INCOMPLETE', 'CONCEPT_TERMS_REQUIRED',
+  'CONCEPT_TERMS_INVALID', 'PENDING_REVIEW_DECISION_INVALID', 'PENDING_FILE_INVALID', 'PENDING_KIND_INVALID',
+  'PENDING_CANDIDATE_NAME_REQUIRED', 'PENDING_CANDIDATE_VAGUE', 'PENDING_DETAIL_KIND_INVALID',
+]);
 
 function randomToken() { return crypto.randomBytes(32).toString('base64url'); }
 function commonHeaders() {
@@ -123,6 +131,22 @@ function createMaintainerWorkbenchServer(options = {}) {
         else if (method === 'GET' && route === '/tool-updates/preview') result = service.previewToolUpdates();
         else if (method === 'POST' && route === '/tool-updates/apply') result = service.applyToolUpdates(body);
         else if (method === 'POST' && /^\/tool-updates\/[^/]+\/review$/.test(route)) result = service.reviewToolUpdate(decodeURIComponent(route.split('/')[2]), body);
+        else if (method === 'GET' && route === '/feedback/tools') result = service.pendingTools();
+        else if (method === 'GET' && route === '/feedback/concepts') result = service.pendingConcepts();
+        else if (method === 'POST' && /^\/feedback\/tools\/[^/]+\/review$/.test(route)) result = service.reviewPendingTool(decodeURIComponent(route.split('/')[3]), body);
+        else if (method === 'POST' && /^\/feedback\/concepts\/[^/]+\/review$/.test(route)) result = service.reviewPendingConcept(decodeURIComponent(route.split('/')[3]), body);
+        else if (method === 'POST' && route === '/knowledge/extract') result = service.extractKnowledge(body);
+        else if (method === 'GET' && route === '/catalog/plan') result = service.catalogPlan();
+        else if (method === 'POST' && route === '/catalog/prepare') result = service.catalogPrepare(body);
+        else if (method === 'GET' && route === '/catalog/drafts') result = service.catalogDrafts();
+        else if (method === 'GET' && /^\/catalog\/drafts\/[^/]+$/.test(route)) result = service.catalogDraft(decodeURIComponent(route.split('/')[3]));
+        else if (method === 'POST' && /^\/catalog\/drafts\/[^/]+\/review$/.test(route)) result = service.catalogReview(decodeURIComponent(route.split('/')[3]));
+        else if (method === 'POST' && /^\/catalog\/drafts\/[^/]+\/resume$/.test(route)) result = service.catalogResume(decodeURIComponent(route.split('/')[3]), body);
+        else if (method === 'POST' && /^\/catalog\/drafts\/[^/]+\/discard$/.test(route)) result = service.catalogDiscard(decodeURIComponent(route.split('/')[3]), body);
+        else if (method === 'POST' && route === '/catalog/apply') result = service.catalogApply(body);
+        else if (method === 'GET' && route === '/concepts/plan') result = service.conceptPlan();
+        else if (method === 'POST' && route === '/concepts/prepare') result = service.conceptPrepare(body);
+        else if (method === 'POST' && route === '/concepts/apply') result = service.conceptApply(body);
         else if (method === 'GET' && route === '/concepts/preview') result = service.conceptPreviews();
         else return send(res, 404, { error: 'NOT_FOUND' });
         result = await result;
@@ -141,7 +165,11 @@ function createMaintainerWorkbenchServer(options = {}) {
       if (error?.code === 'REVISION_CONFLICT') {
         return send(res, 409, { error: 'REVISION_CONFLICT', message: '数据已变化，请刷新后重试。' });
       }
-      return send(res, error.status || 400, { error: error.message || 'BAD_REQUEST' });
+      const status = Number.isInteger(error?.status) ? error.status : 400;
+      if (status === 413) return send(res, 413, { error: 'PAYLOAD_TOO_LARGE' });
+      if (status === 415) return send(res, 415, { error: 'UNSUPPORTED_MEDIA_TYPE' });
+      const code = SAFE_ERROR_CODES.has(error?.code) ? error.code : 'OPERATION_FAILED';
+      return send(res, status, { error: code });
     } finally {
       cleanupRequestSignal();
     }

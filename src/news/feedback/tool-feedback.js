@@ -21,13 +21,12 @@
 
 'use strict';
 
-const path = require('path');
-const fs = require('fs');
-const { readJson, writeJsonAtomic } = require('../core/news-storage');
+const { readJson } = require('../core/news-storage');
 const { readMinStore } = require('../min/min-store');
 const { catalog } = require('../../catalog-interface');
-const { CATALOG_FILES, CATALOG_GENERATOR_FILES, CONCEPT_FILES } = require('../../shared/paths');
+const { CATALOG_FILES } = require('../../shared/paths');
 const { beijingDateKey } = require('../../shared/beijing-time');
+const { mergePending, candidateKeyOf } = require('./pending-review-store');
 
 // ═══════════════════════════════════════════════════════════════
 // 默认实体提取（正则）
@@ -259,28 +258,23 @@ async function feedbackFromSummaries(store, config, options = {}) {
   }
 
   if (toolsPending.length > 0) {
-    const toolFile = CATALOG_GENERATOR_FILES.pendingTools;
-    fs.mkdirSync(path.dirname(toolFile), { recursive: true });
-    writeJsonAtomic(toolFile, {
-      schema_version: 1,
-      kind: 'tool_cards_pending',
-      generated_at: new Date().toISOString(),
-      date: dateKey,
-      count: toolsPending.length,
-      cards: toolsPending,
-    }, 'tool-feedback');
+    const pending = await mergePending('tools', toolsPending, {
+      toolFile: options.pendingToolFile,
+      generatedAt: new Date().toISOString(),
+      runId: 'tool-feedback',
+    });
+    const keys = new Set(toolsPending.map(card => candidateKeyOf('tools', card.name)));
+    // Return only candidates discovered in this run; the store itself retains all history.
+    toolsPending.splice(0, toolsPending.length, ...pending.cards.filter(card => keys.has(card.candidate_key)));
   }
   if (conceptsPending.length > 0) {
-    const conceptFile = CONCEPT_FILES.pendingConcepts;
-    fs.mkdirSync(path.dirname(conceptFile), { recursive: true });
-    writeJsonAtomic(conceptFile, {
-      schema_version: 1,
-      kind: 'concept_cards_pending',
-      generated_at: new Date().toISOString(),
-      date: dateKey,
-      count: conceptsPending.length,
-      cards: conceptsPending,
-    }, 'tool-feedback');
+    const pending = await mergePending('concepts', conceptsPending, {
+      conceptFile: options.pendingConceptFile,
+      generatedAt: new Date().toISOString(),
+      runId: 'tool-feedback',
+    });
+    const keys = new Set(conceptsPending.map(card => candidateKeyOf('concepts', card.term)));
+    conceptsPending.splice(0, conceptsPending.length, ...pending.cards.filter(card => keys.has(card.candidate_key)));
   }
 
   return { toolsFound, toolsPending, conceptsFound, conceptsPending };

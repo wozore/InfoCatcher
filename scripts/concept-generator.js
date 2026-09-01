@@ -59,8 +59,14 @@ async function main(argv = process.argv.slice(2)) {
     return { ok: true, ...(result || { message: '尚无概念预览文件 data/manual/concepts/concept-previews.json' }) };
   }
   if (command === 'apply') {
-    const terms = flags.terms ? String(flags.terms).split(',').map(item => item.trim()).filter(Boolean) : undefined;
-    const result = concept.applyConceptPreviews(undefined, { ...(terms ? { terms } : {}) });
+    const preview = concept.readConceptPreviews();
+    if (!preview) throw new Error('没有概念预览文件，请先运行 batch --confirm-cost 生成预览');
+    const allTerms = Array.isArray(preview.cards) ? preview.cards.map(card => card.term).filter(Boolean) : [];
+    const terms = flags.terms
+      ? String(flags.terms).split(',').map(item => item.trim()).filter(Boolean)
+      : allTerms;
+    if (!terms.length) throw new Error('预览中没有可 Apply 的概念');
+    const result = concept.applyConceptPreviews(preview, { terms });
     console.log(JSON.stringify(result, null, 2));
     return result;
   }

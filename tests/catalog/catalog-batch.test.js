@@ -144,7 +144,7 @@ test('resolveOfficialSource fail-closed：缺 name / 缺 TAVILY key 均不抛错
 
 test('runBatchFromCards --dry-run：查重+解析+成本估算，写 preview，不建 draft', async () => {
   const previewFile = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'cb-dry-')), 'preview.json');
-  const result = await runBatchFromCards([{ name: 'New Tool Alpha' }], {
+  const result = await runBatchFromCards([{ name: 'New Tool Alpha', review_status: 'approved' }], {
     dryRun: true,
     previewFile,
     generatorOptions: GEN_OPTIONS,
@@ -162,7 +162,7 @@ test('runBatchFromCards --dry-run：查重+解析+成本估算，写 preview，�
 
 test('runBatchFromCards 无 confirmCost → COST_CONFIRMATION_REQUIRED，零付费零解析', async () => {
   let resolved = false;
-  const result = await runBatchFromCards([{ name: 'New Tool Beta' }], {
+  const result = await runBatchFromCards([{ name: 'New Tool Beta', review_status: 'approved' }], {
     generatorOptions: GEN_OPTIONS,
     resolveOfficialSource: async () => { resolved = true; return { ok: true, vendor_name: 'Beta', official_url: 'https://beta.example.com' }; },
   });
@@ -740,7 +740,7 @@ test('runBatchFromCards --dry-run：写 placement_decision 进 preview，from-pr
     ok: true, hint: { usage_kind: 'general_llm', canonical_family: 'qwen', release_cohort: 'newest', confidence: 0.8 }, usage: {}, raw: {},
   });
   const dry = await runBatchFromCards(
-    [{ name: 'X-Futuristic-Model-3000', vendor_name: '阿里', vendor_key: 'alibaba', detail_kind_hint: 'api_model' }],
+    [{ name: 'X-Futuristic-Model-3000', vendor_name: '阿里', vendor_key: 'alibaba', detail_kind_hint: 'api_model', review_status: 'approved' }],
     {
       dryRun: true, previewFile, generatorOptions: GEN_OPTIONS, snapshotOf: () => snap,
       tools: [], drafts: [], // 隔离真实目录/草稿状态（查重仅针对本批）
@@ -756,7 +756,7 @@ test('runBatchFromCards --dry-run：写 placement_decision 进 preview，from-pr
 
   let aiCalls = 0;
   const rerun = await runBatchFromCards(
-    [{ name: 'X-Futuristic-Model-3000', vendor_name: '阿里', vendor_key: 'alibaba', detail_kind_hint: 'api_model' }],
+    [{ name: 'X-Futuristic-Model-3000', vendor_name: '阿里', vendor_key: 'alibaba', detail_kind_hint: 'api_model', review_status: 'approved' }],
     {
       fromPreview: true, confirmCost: true, previewFile, generatorOptions: GEN_OPTIONS, snapshotOf: () => snap,
       tools: [], drafts: [],
@@ -774,10 +774,31 @@ test('runBatchFromCards --dry-run：写 placement_decision 进 preview，from-pr
 test('runBatchFromCards from-preview 无 confirmCost → COST_CONFIRMATION_REQUIRED，零生成', async () => {
   const previewFile = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'cb-fp-')), 'preview.json');
   fs.writeFileSync(previewFile, JSON.stringify({ schema_version: 1, seeds: [{ detail_kind: 'tool', name: 'Foo' }], unresolved: [] }));
-  const result = await runBatchFromCards([{ name: 'Foo' }], {
+  const result = await runBatchFromCards([{ name: 'Foo', review_status: 'approved' }], {
     fromPreview: true, previewFile, generatorOptions: GEN_OPTIONS,
     prepareCatalogDraft: async () => { throw new Error('不应执行生成'); },
   });
   assert.equal(result.ok, false);
   assert.equal(result.code, 'COST_CONFIRMATION_REQUIRED');
+});
+
+test('runBatchFromCards 只消费 approved 卡：discarded/pending/无审核状态一律跳过', async () => {
+  let resolved = false;
+  const result = await runBatchFromCards([
+    { name: 'Approved Tool', review_status: 'approved' },
+    { name: 'Discarded Tool', review_status: 'discarded' },
+    { name: 'Pending Tool', review_status: 'pending' },
+    { name: 'Legacy Tool' }, // v1 无 review_status → 视为未审核
+  ], {
+    dryRun: true,
+    previewFile: path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'cb-gate-')), 'preview.json'),
+    generatorOptions: GEN_OPTIONS,
+    resolveOfficialSource: async () => { resolved = true; return { ok: true, vendor_name: 'X', official_url: 'https://x.example.com' }; },
+  });
+  assert.equal(result.ok, true);
+  assert.equal(result.skipped.skippedNotApproved.length, 3);
+  assert.deepEqual(result.skipped.skippedNotApproved.map(item => item.name).sort(), ['Discarded Tool', 'Legacy Tool', 'Pending Tool']);
+  assert.equal(result.seeds.length, 1);
+  assert.equal(result.seeds[0].name, 'Approved Tool');
+  assert.equal(resolved, true);
 });

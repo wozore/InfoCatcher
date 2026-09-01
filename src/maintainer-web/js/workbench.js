@@ -1068,6 +1068,8 @@
       loadTopAndTranscripts(),
       loadResource('toolUpdates', 'tool-updates', renderToolUpdates, { rootId: 'toolUpdatesList', stateId: 'toolUpdatesState' }),
       loadResource('concepts', 'concepts/preview', (payload) => renderConcepts(listFrom(payload, ['items', 'previews', 'concepts'])), { rootId: 'conceptsList', stateId: 'conceptsState' }),
+      loadKnowledgeLoop(),
+      loadConceptPreviewLoop(),
       loadPreview()
       ]);
     } finally {
@@ -1080,6 +1082,153 @@
     const queued = state.refreshTail.then(refreshAllNow, refreshAllNow);
     state.refreshTail = queued.catch(() => {});
     return queued;
+  }
+
+  async function reviewPending(kind, candidateKey, decision, button) {
+    const resource = kind === 'tools' ? 'pendingTools' : 'pendingConcepts';
+    const route = `feedback/${kind}/${encodeURIComponent(candidateKey)}/review`;
+    const original = button.textContent;
+    button.disabled = true;
+    button.textContent = '处理中…';
+    try {
+      await writeRequest(route, resource, { candidate_key: candidateKey, decision });
+      showNotice(decision === 'approved' ? '待补卡已批准，可进入生成计划。' : '待补卡已丢弃，后续提取不会复活它。');
+      await refreshAll();
+    } catch (error) { handleMutationError(error, resource, kind === 'tools' ? 'pendingToolsState' : 'pendingConceptsState', button); }
+    finally { button.textContent = original; button.disabled = false; }
+  }
+
+  const PENDING_STATE_ZH = Object.freeze({
+    pending_review: '待审核', approved_pending: '待生成', discarded: '已丢弃', completed: '已完成', approved: '待生成'
+  });
+  const BLOCKING_ZH = Object.freeze({
+    NOT_REVIEWED: '尚未审核', DISCARDED: '已丢弃', ALREADY_EXISTS: '正式知识库已存在'
+  });
+
+  function renderPendingCards(kind, payload) {
+    const resource = kind === 'tools' ? 'pendingTools' : 'pendingConcepts';
+    const root = $(`#${resource}List`);
+    clearChildren(root);
+    const items = listFrom(payload, ['items']);
+    state.items[resource] = items;
+    if (!items.length) addText(root, 'p', '当前没有待补卡。', 'empty-state');
+    for (const item of items) {
+      const article = document.createElement('article'); article.className = 'queue-item';
+      const content = document.createElement('div'); content.className = 'item-content';
+      addText(content, 'h3', itemTitle(item), 'item-title');
+      const meta = document.createElement('div'); meta.className = 'item-meta';
+      addBadge(meta, item.review_status || 'pending', item.review_status || 'pending');
+      const stateName = PENDING_STATE_ZH[item.workflow_state] || item.workflow_state || '待审核';
+      addBadge(meta, stateName, String(item.workflow_state || 'pending_review'));
+      if (kind === 'tools' && item.detail_kind_hint) addText(meta, item.detail_kind_hint);
+      content.appendChild(meta);
+      if (item.candidate_key) addText(content, 'p', `candidate_key：${item.candidate_key}`, 'item-id');
+      const blockedText = (Array.isArray(item.blocking_reasons) ? item.blocking_reasons : [])
+        .map(reason => BLOCKING_ZH[reason] || reason).join('；');
+      if (blockedText) addText(content, 'p', blockedText, 'item-blocked');
+      if (item.review_status === 'pending' && item.workflow_state !== 'completed') {
+        const actions = document.createElement('div'); actions.className = 'item-actions';
+        const discard = document.createElement('button'); discard.type = 'button'; discard.className = 'button button-danger'; discard.textContent = '丢弃'; discard.addEventListener('click', () => reviewPending(kind, item.candidate_key, 'discarded', discard)); actions.appendChild(discard);
+        const approve = document.createElement('button'); approve.type = 'button'; approve.className = 'button button-primary'; approve.textContent = '批准'; approve.addEventListener('click', () => reviewPending(kind, item.candidate_key, 'approved', approve)); actions.appendChild(approve);
+        content.appendChild(actions);
+      }
+      article.appendChild(document.createElement('span')); article.appendChild(content); root.appendChild(article);
+    }
+    setLoadState(kind === 'tools' ? 'pendingToolsState' : 'pendingConceptsState', `${items.length} 条`, 'success');
+  }
+
+  function renderCatalogDrafts(payload) {
+    state.catalogDrafts = listFrom(payload, ['items', 'drafts']);
+    const root = $('#catalogDraftList'); clearChildren(root);
+    for (const draft of state.catalogDrafts) {
+      const row = document.createElement('article'); row.className = 'queue-item';
+      const content = document.createElement('div'); content.className = 'item-content';
+      addText(content, 'h3', draft.draft_id || '未命名 Draft', 'item-title');
+      addText(content, 'p', `状态：${draft.state || draft.readiness || 'unknown'}`, 'item-summary');
+      if (draft.preview_hash) addText(content, 'p', `preview_hash：${draft.preview_hash}`, 'item-id');
+      if (draft.readiness === 'ready' || draft.state === 'preview_ready') {
+        const review = document.createElement('button'); review.type = 'button'; review.className = 'button button-quiet'; review.textContent = '读取审核信息'; review.addEventListener('click', () => reviewCatalogDraft(draft.draft_id, review)); content.appendChild(review);
+      }
+      row.appendChild(document.createElement('span')); row.appendChild(content); root.appendChild(row);
+    }
+  }
+
+  async function loadKnowledgeLoop() {
+    setLoadState('knowledgeLoopState', '加载中…', 'loading');
+    try {
+      const [toolsPayload, conceptsPayload, draftsPayload] = await Promise.all([request('feedback/tools'), request('feedback/concepts'), request('catalog/drafts')]);
+      state.revisions.pendingTools = revisionFrom(toolsPayload); state.revisions.pendingConcepts = revisionFrom(conceptsPayload);
+      renderPendingCards('tools', toolsPayload); renderPendingCards('concepts', conceptsPayload); renderCatalogDrafts(draftsPayload);
+      setLoadState('knowledgeLoopState', '已加载', 'success'); updateRevisionNote();
+      const source = $('#knowledgeSourceStats'); if (source) source.textContent = `来源统计：新闻 revision ${text(state.revisions.news || '未加载')}；工具待补 ${state.items.pendingTools.length}；概念待补 ${state.items.pendingConcepts.length}`;
+    } catch (error) { setLoadState('knowledgeLoopState', '加载失败', 'error'); showNotice('知识闭环数据加载失败。', 'error'); }
+  }
+
+  async function extractKnowledge(button) {
+    const original = button.textContent; button.disabled = true; button.textContent = '提取中…';
+    try {
+      const result = await writeRequest('knowledge/extract', 'news', {});
+      showNotice(`提取完成：新增/更新工具 ${Number(result?.tools_pending || 0)}、概念 ${Number(result?.concepts_pending || 0)}。`); await refreshAll();
+    } catch (error) { handleMutationError(error, 'news', 'knowledgeLoopState', button); }
+    finally { button.textContent = original; button.disabled = false; }
+  }
+
+  async function planCatalog(button) {
+    button.disabled = true;
+    try { state.catalogPlan = await request('catalog/plan'); state.revisions.catalog = state.catalogPlan.catalog_revision || ''; $('#catalogPrepareButton').disabled = !state.catalogPlan.ok; showNotice(state.catalogPlan.ok ? 'Catalog 计划已生成，请核对成本并确认。' : '当前没有可进入 Catalog 的已批准待补卡。', state.catalogPlan.ok ? 'success' : 'error'); }
+    catch (error) { showNotice(error.message || 'Catalog 计划失败。', 'error'); }
+    finally { button.disabled = false; }
+  }
+  async function prepareCatalog(button) {
+    const plan = state.catalogPlan;
+    if (!plan || !$('#catalogCostConfirm').checked) { showNotice('请先生成计划并确认 Catalog 成本。', 'error'); return; }
+    button.disabled = true;
+    try { const result = await request('catalog/prepare', { method: 'POST', body: JSON.stringify({ pending_revision: plan.pending_revision, catalog_revision: plan.catalog_revision, plan_hash: plan.plan_hash, confirm_cost: true }) }); if (!result?.ok) throw new Error(result?.code || 'Catalog Draft 准备被阻断'); showNotice('Catalog Draft 已准备，仍需逐项审核后 Apply。'); await refreshAll(); }
+    catch (error) { showNotice(error.message || 'Catalog Draft 准备失败。', 'error'); }
+    finally { button.disabled = false; }
+  }
+  async function reviewCatalogDraft(draftId, button) {
+    button.disabled = true;
+    try { const result = await request(`catalog/drafts/${encodeURIComponent(draftId)}/review`, { method: 'POST', body: JSON.stringify({}) }); if (!result?.ok) throw new Error(result?.code || 'Draft 审核阻断'); state.catalogReview = result; $('#catalogApplyButton').disabled = false; showNotice('Draft 已通过当前 revision 审核，可输入精确确认语句 Apply。'); }
+    catch (error) { showNotice(error.message || 'Draft 审核失败。', 'error'); }
+    finally { button.disabled = false; }
+  }
+  async function applyCatalog(button) {
+    const review = state.catalogReview; const confirm = $('#catalogApplyConfirm').value.trim();
+    if (!review || confirm !== `APPLY CATALOG DRAFT ${review.draft_id}`) { showNotice('Catalog Draft 确认语句不匹配，未执行 Apply。', 'error'); return; }
+    button.disabled = true;
+    try { const result = await request('catalog/apply', { method: 'POST', body: JSON.stringify({ draft_id: review.draft_id, expected_revision: review.current_revision, preview_hash: review.preview_hash, confirm }) }); if (!result?.ok) throw new Error(result?.code || 'Catalog Apply 被拒绝'); showNotice('正式知识库已更新，但公开站点仍需显式重建 dist。'); await refreshAll(); }
+    catch (error) { showNotice(error.message || 'Catalog Apply 失败。', 'error'); }
+    finally { button.disabled = false; }
+  }
+
+  async function planConcept(button) {
+    button.disabled = true;
+    try { state.conceptPlan = await request('concepts/plan'); $('#conceptPrepareButton').disabled = !state.conceptPlan.ok; showNotice(state.conceptPlan.ok ? '概念计划已生成，请确认成本。' : '当前没有已批准概念待补卡。', state.conceptPlan.ok ? 'success' : 'error'); }
+    catch (error) { showNotice(error.message || '概念计划失败。', 'error'); }
+    finally { button.disabled = false; }
+  }
+  async function prepareConcept(button) {
+    const plan = state.conceptPlan;
+    if (!plan || !$('#conceptCostConfirm').checked) { showNotice('请先生成概念计划并确认成本。', 'error'); return; }
+    button.disabled = true;
+    try { const result = await request('concepts/prepare', { method: 'POST', body: JSON.stringify({ pending_revision: plan.pending_revision, glossary_revision: plan.glossary_revision, plan_hash: plan.plan_hash, confirm_cost: true }) }); if (!result?.ok) throw new Error(result?.code || '概念预览准备被阻断'); showNotice('概念预览已生成，请逐项核对后 Apply。'); await refreshAll(); }
+    catch (error) { showNotice(error.message || '概念预览准备失败。', 'error'); }
+    finally { button.disabled = false; }
+  }
+  function renderKnowledgeConceptPreview(payload) {
+    const root = $('#conceptPreviewList'); clearChildren(root); const items = listFrom(payload, ['items']);
+    for (const item of items) { const row = document.createElement('article'); row.className = 'concept-item'; addText(row, 'h3', item.term || '未命名概念', 'item-title'); addText(row, 'p', item.summary || '暂无摘要', 'concept-definition'); root.appendChild(row); }
+    state.conceptPreview = payload; $('#conceptApplyButton').disabled = !payload?.preview_hash;
+  }
+  async function loadConceptPreviewLoop() { try { renderKnowledgeConceptPreview(await request('concepts/preview')); } catch (_) {} }
+  async function applyConcept(button) {
+    const preview = state.conceptPreview; const confirm = $('#conceptApplyConfirm').value.trim();
+    if (!preview?.preview_hash || confirm !== `APPLY CONCEPTS ${preview.preview_hash}`) { showNotice('概念 Apply 确认语句不匹配，未执行 Apply。', 'error'); return; }
+    button.disabled = true;
+    try { const result = await request('concepts/apply', { method: 'POST', body: JSON.stringify({ terms: (preview.items || []).map(item => item.term), expected_revision: preview.base_revision, preview_hash: preview.preview_hash, confirm }) }); if (!result?.ok) throw new Error(result?.code || '概念 Apply 被拒绝'); showNotice('正式知识库已更新，但公开站点仍需显式重建 dist。'); await refreshAll(); }
+    catch (error) { showNotice(error.message || '概念 Apply 失败。', 'error'); }
+    finally { button.disabled = false; }
   }
 
   function start() {
@@ -1111,6 +1260,15 @@
     $('#transcriptSummarizeButton').addEventListener('click', (event) => summarizeTranscripts(event.currentTarget));
     $('#toolPreviewButton').addEventListener('click', (event) => previewToolUpdates(event.currentTarget));
     $('#toolApplyButton').addEventListener('click', (event) => applyToolUpdates(event.currentTarget));
+    $('#knowledgeExtractButton').addEventListener('click', (event) => extractKnowledge(event.currentTarget));
+    $('#catalogPlanButton').addEventListener('click', (event) => planCatalog(event.currentTarget));
+    $('#catalogPrepareButton').addEventListener('click', (event) => prepareCatalog(event.currentTarget));
+    $('#catalogApplyButton').addEventListener('click', (event) => applyCatalog(event.currentTarget));
+    $('#conceptPlanButton').addEventListener('click', (event) => planConcept(event.currentTarget));
+    $('#conceptPrepareButton').addEventListener('click', (event) => prepareConcept(event.currentTarget));
+    $('#conceptApplyButton').addEventListener('click', (event) => applyConcept(event.currentTarget));
+    $('#catalogCostConfirm').addEventListener('change', () => { if (state.catalogPlan) $('#catalogPrepareButton').disabled = !state.catalogPlan.ok || !$('#catalogCostConfirm').checked; });
+    $('#conceptCostConfirm').addEventListener('change', () => { if (state.conceptPlan) $('#conceptPrepareButton').disabled = !state.conceptPlan.ok || !$('#conceptCostConfirm').checked; });
     $('#refreshButton').addEventListener('click', refreshAll);
     $('#previewRefreshButton').addEventListener('click', loadPreview);
     if (!state.token) {

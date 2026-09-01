@@ -27,6 +27,7 @@
 
 'use strict';
 
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const { readJson, writeJsonAtomic } = require('../news/core/news-storage');
@@ -37,10 +38,52 @@ const { createCostLedger } = require('./catalog-research');
 const { synthesizeConceptFields } = require('./ai/concept-synthesis-ai');
 const { DEFAULT_CONCEPT_CATEGORIES } = require('./ai/concept-synthesis-prompt');
 const { vibeHubSlugOf, fetchVibeHubDefinition } = require('./vibe-hub-evidence');
+const { candidateKeyOf, revisionOfPending } = require('../news/feedback/pending-review-store');
 
 const DEFAULT_MAX_EVIDENCE_PER_TERM = 3;
 const DEFAULT_MAX_EVIDENCE_CHARS = 1200;
 const EMPTY_COST = { responses_calls: 0, synthesis_calls: 0 };
+
+function stableValue(value) {
+  if (Array.isArray(value)) return value.map(stableValue);
+  if (value && typeof value === 'object') return Object.fromEntries(Object.keys(value).sort().map(key => [key, stableValue(value[key])]));
+  return value;
+}
+
+function digest(value) {
+  return `sha256:${crypto.createHash('sha256').update(JSON.stringify(stableValue(value)) + '\\n', 'utf8').digest('hex')}`;
+}
+
+/** Stable CAS revision for the formal glossary. */
+function revisionOfGlossary(glossary = []) {
+  return digest(Array.isArray(glossary) ? glossary : []);
+}
+
+/** Hash a v2 preview without trusting its self-reported preview_hash. */
+function conceptPreviewHashOf(preview) {
+  if (!preview || typeof preview !== 'object') return digest(null);
+  const { preview_hash: _ignored, ...withoutHash } = preview;
+  return digest(withoutHash);
+}
+
+function validateConceptPreview(preview, options = {}) {
+  const errors = [];
+  if (!preview || typeof preview !== 'object' || !Array.isArray(preview.cards)) return { ok: false, errors: [{ code: 'PREVIEW_INVALID' }] };
+  if (preview.schema_version !== 2) errors.push({ code: 'PREVIEW_SCHEMA_UNSUPPORTED' });
+  const expectedHash = conceptPreviewHashOf(preview);
+  if (preview.preview_hash !== expectedHash) errors.push({ code: 'PREVIEW_CHANGED' });
+  if (options.baseRevision && preview.base_revision !== options.baseRevision) errors.push({ code: 'REVISION_CONFLICT' });
+  if (options.sourcePendingRevision && preview.source_pending_revision !== options.sourcePendingRevision) errors.push({ code: 'REVISION_CONFLICT' });
+  if (!Array.isArray(preview.candidate_keys)) errors.push({ code: 'PREVIEW_CANDIDATES_INVALID' });
+  const keys = new Set(preview.candidate_keys || []);
+  for (const card of preview.cards) {
+    const term = String(card?.term || '').trim();
+    if (!term) errors.push({ code: 'CONCEPT_TERM_NOT_FOUND' });
+    if (card?.candidate_key && !keys.has(card.candidate_key)) errors.push({ code: 'PREVIEW_CANDIDATES_INVALID' });
+  }
+  return { ok: errors.length === 0, errors, expectedHash };
+}
+
 
 // ═══════════════════════════════════════════════════════════════
 // 1. 读入
@@ -201,8 +244,14 @@ function writeConceptPreview(preview, options = {}) {
  * @returns {Promise<object>} 批量报告（skipped/evidence/estimate/cards/failed/cost）
  */
 async function runConceptBatch(cards, options = {}) {
+  const all = Array.isArray(cards) ? cards : [];
+  const approved = all.filter(card => String(card?.review_status || 'pending').toLowerCase() === 'approved');
+  const skippedNotApproved = all
+    .filter(card => String(card?.review_status || 'pending').toLowerCase() !== 'approved')
+    .map(card => ({ term: card?.term || '?', reason: '未经人工审核（需先在工作台批准）' }));
   const glossary = readGlossary(options);
-  const dedup = dedupeConceptCandidates(cards, glossary);
+  const dedup = dedupeConceptCandidates(approved, glossary);
+  dedup.skippedNotApproved = skippedNotApproved;
   if (!dedup.deduped.length) {
     return {
       ok: true,
@@ -219,6 +268,10 @@ async function runConceptBatch(cards, options = {}) {
   });
   const estimate = planConceptCost(dedup.deduped);
   const conceptNames = dedup.deduped.map(card => card.term);
+  const baseRevision = options.baseGlossaryRevision || revisionOfGlossary(glossary);
+  const sourcePendingRevision = options.sourcePendingRevision || options.pendingRevision || revisionOfPending(
+    dedup.deduped.map(card => ({ ...card, candidate_key: card.candidate_key || candidateKeyOf('concepts', card.term) })),
+  );
 
   if (options.dryRun) {
     return { ok: true, dry_run: true, skipped: dedup, concepts: conceptNames, evidence, estimate };
@@ -240,7 +293,7 @@ async function runConceptBatch(cards, options = {}) {
     try {
       const result = await synthesizeFn({ card, evidence: concept.evidence, existingCategories, ledger }, options);
       if (result && result.ok) {
-        cardsOut.push({ ...result.value, evidence_count: concept.evidence.length, status: 'pending' });
+        cardsOut.push({ ...result.value, candidate_key: card.candidate_key || candidateKeyOf('concepts', card.term), evidence_count: concept.evidence.length, status: 'pending' });
       } else {
         failed.push({ term: card.term, reason: (result && (result.error || result.code)) || 'CONCEPT_SYNTHESIS_FAILED' });
       }
@@ -248,13 +301,17 @@ async function runConceptBatch(cards, options = {}) {
       failed.push({ term: card.term, reason: error?.message || String(error) });
     }
   }
-  const preview = {
-    schema_version: 1,
+  const previewBody = {
+    schema_version: 2,
     kind: 'concept_previews',
     generated_at: new Date().toISOString(),
+    base_revision: baseRevision,
+    source_pending_revision: sourcePendingRevision,
+    candidate_keys: cardsOut.map(card => card.candidate_key),
     count: cardsOut.length,
     cards: cardsOut,
   };
+  const preview = { ...previewBody, preview_hash: conceptPreviewHashOf(previewBody) };
   const previewFile = writeConceptPreview(preview, options);
   return {
     ok: true,
@@ -304,35 +361,48 @@ function normalizeGlossaryEntry(card) {
  * @param {object} [options] { terms: string[], glossary?, glossaryFile? }
  * @returns {{ ok: true, added: [], skipped: [], glossary_count: number }}
  */
+function applyStrictConceptPreviews(data, options = {}) {
+  const checked = validateConceptPreview(data, { sourcePendingRevision: options.sourcePendingRevision });
+  if (!checked.ok) return { ok: false, code: checked.errors[0]?.code || 'PREVIEW_CHANGED' };
+  const glossary = readGlossary(options);
+  const actualRevision = revisionOfGlossary(glossary);
+  const expectedRevision = String(options.expectedRevision || data.base_revision || '').trim();
+  if (!expectedRevision || actualRevision !== expectedRevision || data.base_revision !== actualRevision) {
+    return { ok: false, code: 'REVISION_CONFLICT' };
+  }
+  if (options.previewHash && options.previewHash !== checked.expectedHash) return { ok: false, code: 'PREVIEW_CHANGED' };
+  const terms = Array.isArray(options.terms) ? options.terms.map(termKeyOf).filter(Boolean) : [];
+  if (!terms.length) return { ok: false, code: 'CONCEPT_TERMS_REQUIRED' };
+  if (new Set(terms).size !== terms.length) return { ok: false, code: 'CONCEPT_TERMS_INVALID' };
+  const cardsByTerm = new Map(data.cards.map(card => [termKeyOf(card?.term), card]));
+  const selected = terms.map(term => cardsByTerm.get(term));
+  if (selected.some(card => !card)) return { ok: false, code: 'CONCEPT_TERM_NOT_FOUND' };
+  const existing = new Set(glossary.map(entry => termKeyOf(entry.term)));
+  if (selected.some(card => existing.has(termKeyOf(card.term)))) return { ok: false, code: 'CONCEPT_TERM_ALREADY_EXISTS' };
+  const candidateKeys = new Set(data.candidate_keys || []);
+  if (selected.some(card => !card.candidate_key || !candidateKeys.has(card.candidate_key))) return { ok: false, code: 'PREVIEW_CANDIDATES_INVALID' };
+  for (const card of selected) {
+    if (!card.category || !card.summary || !card.source || !String(card.source.name || '').trim()) {
+      return { ok: false, code: 'CONCEPT_PREVIEW_INCOMPLETE' };
+    }
+  }
+  const next = [...glossary, ...selected.map(normalizeGlossaryEntry)];
+  writeJsonAtomic(options.glossaryFile || CATALOG_FILES.glossary, next, 'concept-apply');
+  return { ok: true, added: selected.map(card => ({ term: card.term, candidate_key: card.candidate_key })), skipped: [], glossary_count: next.length, target_revision: revisionOfGlossary(next) };
+}
+
+/**
+ * Apply a concept preview.  Only schema v2 previews are accepted: the strict
+ * branch recomputes the preview hash, CAS-checks the glossary revision, and
+ * writes all-or-nothing.  Legacy v1 previews are rejected fail-closed so an
+ * expired or tampered preview can never reach the formal glossary.
+ */
 function applyConceptPreviews(preview, options = {}) {
   const data = preview || readConceptPreviews(options);
-  const cards = Array.isArray(data?.cards) ? data.cards : [];
-  const terms = Array.isArray(options.terms) && options.terms.length
-    ? new Set(options.terms.map(termKeyOf))
-    : null;
-  const glossary = readGlossary(options);
-  const existing = new Set(glossary.map(entry => termKeyOf(entry.term)));
-  const added = [];
-  const skipped = [];
-  const next = [...glossary];
-  for (const card of cards) {
-    const term = String(card?.term || '').trim();
-    const key = termKeyOf(term);
-    if (!term) { skipped.push({ term: card?.term || '(空)', reason: '缺少 term' }); continue; }
-    if (terms && !terms.has(key)) continue; // 不在指定子集
-    if (existing.has(key)) { skipped.push({ term, reason: 'glossary 已存在' }); continue; }
-    if (!card.category || !card.summary || !card.source || !String(card.source.name || '').trim()) {
-      skipped.push({ term, reason: '缺少必填字段 (category/summary/source.name)' });
-      continue;
-    }
-    next.push(normalizeGlossaryEntry(card));
-    existing.add(key);
-    added.push({ term });
+  if (!data || typeof data !== 'object' || data.schema_version !== 2) {
+    return { ok: false, code: 'PREVIEW_SCHEMA_UNSUPPORTED', error: '仅支持 schema_version 2 概念预览，请重新生成预览后 Apply' };
   }
-  if (added.length) {
-    writeJsonAtomic(options.glossaryFile || CATALOG_FILES.glossary, next, 'concept-apply');
-  }
-  return { ok: true, added, skipped, glossary_count: next.length };
+  return applyStrictConceptPreviews(data, options);
 }
 
 module.exports = {
@@ -341,6 +411,9 @@ module.exports = {
   collectConceptEvidence,
   planConceptCost,
   readGlossary,
+  revisionOfGlossary,
+  conceptPreviewHashOf,
+  validateConceptPreview,
   existingCategoriesOf,
   runConceptBatch,
   readConceptPreviews,

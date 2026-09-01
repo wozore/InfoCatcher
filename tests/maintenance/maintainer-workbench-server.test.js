@@ -18,6 +18,7 @@ const service = Object.freeze({
   overview: () => ({ ok: 'overview' }), newsReview: () => ({ items: [] }), reviewNews: body => ({ body }),
   keywords: () => ({ list: null }), generateKeywords: async () => ({ generated: 'keywords' }), applyKeywords: body => ({ body }), top: () => ({ items: [] }), generateTop: async () => ({ generated: 'top' }), applyTop: body => ({ body }),
   publishNews: () => ({ published: true }), publishPreview: () => ({ items: [] }), toolUpdates: () => ({ items: [] }), previewToolUpdates: () => ({ ok: true, preview_hash: 'hash' }), applyToolUpdates: body => ({ ok: true, body }), reviewToolUpdate: (key, body) => ({ key, body }), uploadTranscript: body => ({ ok: true, candidate_id: body.candidate_id }), summarizeTranscripts: body => ({ ok: true, summarized: (body.ids || []).map(id => ({ id })) }), conceptPreviews: () => ({ preview: null }),
+  pendingTools: () => ({ revision: 'p-r1', items: [] }), pendingConcepts: () => ({ revision: 'p-r1', items: [] }), reviewPendingTool: body => ({ ok: true, candidate_key: body.candidate_key, revision: 'p-r2' }), reviewPendingConcept: body => ({ ok: true, candidate_key: body.candidate_key, revision: 'p-r2' }), extractKnowledge: async () => ({ ok: true, tools_pending: 0, concepts_pending: 0 }), catalogPlan: () => ({ ok: true, plan_hash: 'plan-h', catalog_revision: 'c-r1', pending_revision: 'p-r1' }), catalogPrepare: async () => ({ ok: true, drafts: [] }), catalogDrafts: () => ({ items: [] }), catalogDraft: id => ({ draft_id: id }), catalogReview: id => ({ ok: true, draft_id: id, current_revision: 'c-r1', preview_hash: 'ph' }), catalogResume: async (id, body) => ({ ok: true, draft: { draft_id: id } }), catalogDiscard: (id, body) => ({ ok: true, draft_id: id, expected_revision: body?.expected_revision }), catalogApply: body => ({ ok: true, body }), conceptPlan: async () => ({ ok: true, plan_hash: 'cplan-h', glossary_revision: 'g-r1', pending_revision: 'p-r1' }), conceptPrepare: async () => ({ ok: true, preview: null }), conceptApply: body => ({ ok: true, added: (body.terms || []).map(term => ({ term })) }),
 });
 
 test('server binds localhost, provides GET API security headers, and protects mutations', async t => {
@@ -100,4 +101,34 @@ test('server rejects non-whitelisted paths, traversal, bad content, and oversize
   assert.equal((await request(port, 'POST', '/api/workbench/v1/news/top', { headers: auth })).status, 415);
   const response = await request(port, 'POST', '/api/workbench/v1/news/top', { body: { ids: ['x'.repeat(33000)] }, headers: auth });
   assert.equal(response.status, 413);
+});
+
+test('knowledge-loop mutations require Bearer and same-origin, and reject stale as 409', async t => {
+  const app = createMaintainerWorkbenchServer({ service, token: 'token' }); t.after(() => app.close());
+  const { port } = await app.start();
+  const auth = { Authorization: 'Bearer token', Origin: `http://127.0.0.1:${port}` };
+  const stale = { Authorization: 'Bearer token', Origin: `http://127.0.0.1:${port + 1}` };
+  const mutations = [
+    ['/feedback/tools/tool-key/review', { decision: 'approved', expected_revision: 'p-r1' }],
+    ['/knowledge/extract', { expected_revision: 'news-r1' }],
+    ['/catalog/prepare', { pending_revision: 'p-r1', catalog_revision: 'c-r1', plan_hash: 'plan-h', confirm_cost: true }],
+    ['/catalog/drafts/draft-abc/discard', { expected_revision: 'c-r1' }],
+    ['/catalog/apply', { draft_id: 'draft-abc', expected_revision: 'c-r1', preview_hash: 'ph', confirm: 'APPLY CATALOG DRAFT draft-abc' }],
+    ['/concepts/prepare', { pending_revision: 'p-r1', glossary_revision: 'g-r1', plan_hash: 'cplan-h', confirm_cost: true }],
+    ['/concepts/apply', { terms: ['RAG'], expected_revision: 'g-r1', preview_hash: 'ph', confirm: 'APPLY CONCEPTS ph' }],
+  ];
+  for (const [pathname, body] of mutations) {
+    assert.equal((await request(port, 'POST', `/api/workbench/v1${pathname}`, { body, headers: stale })).status, 403, pathname);
+    assert.equal((await request(port, 'POST', `/api/workbench/v1${pathname}`, { body, headers: auth })).status, 200, pathname);
+  }
+  const conflict = Object.assign(new Error('stale'), { code: 'REVISION_CONFLICT' });
+  const guarded = { ...service, reviewPendingTool: () => { throw conflict; } };
+  const app2 = createMaintainerWorkbenchServer({ service: guarded, token: 'token' }); t.after(() => app2.close());
+  const started = await app2.start();
+  const response = await request(started.port, 'POST', '/api/workbench/v1/feedback/tools/tool-key/review', {
+    body: { decision: 'approved', expected_revision: 'p-r1' },
+    headers: { Authorization: 'Bearer token', Origin: `http://127.0.0.1:${started.port}` },
+  });
+  assert.equal(response.status, 409);
+  assert.deepEqual(JSON.parse(response.body), { error: 'REVISION_CONFLICT', message: '数据已变化，请刷新后重试。' });
 });

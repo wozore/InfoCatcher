@@ -2,10 +2,15 @@
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 const { readJson } = require('../news/core/news-storage');
 const minStore = require('../news/min/min-store');
 const toolReviewStore = require('../catalog/tool-update-review-store');
-const { readConceptPreviews } = require('../catalog/concept-batch');
+const pendingStore = require('../news/feedback/pending-review-store');
+const { feedbackFromSummaries, toolExists, conceptExists } = require('../news/feedback/tool-feedback');
+const conceptBatch = require('../catalog/concept-batch');
+const { createCatalogWorkbench } = require('../catalog/catalog-workbench');
+const { loadCatalogSnapshot } = require('../catalog/catalog-snapshot-store');
 const { DIRS } = require('../shared/paths');
 const { loadProductUrlRegistry } = require('../catalog/official-url-registry');
 const { loadDotEnv } = require('../shared/env');
@@ -25,6 +30,49 @@ function expectedRevision(body) {
 function requireMutation(name, value) {
   if (typeof value !== 'function') throw new Error(`${name} mutation API 不可用`);
   return value;
+}
+
+function stableValue(value) {
+  if (Array.isArray(value)) return value.map(stableValue);
+  if (value && typeof value === 'object') return Object.fromEntries(Object.keys(value).sort().map(key => [key, stableValue(value[key])]));
+  return value;
+}
+function hash(value) { return `sha256:${crypto.createHash('sha256').update(JSON.stringify(stableValue(value)) + '\\n', 'utf8').digest('hex')}`; }
+function pendingProjection(kind, api, formal = { tools: [], glossary: [] }) {
+  const payload = api.read(kind);
+  const projected = pendingStore.projectPending(kind, payload);
+  const exists = kind === 'tools'
+    ? (item) => toolExists(item.name, formal.tools)
+    : (item) => conceptExists(item.term, formal.glossary);
+  return {
+    ...projected,
+    items: projected.items.map(item => {
+      if (item.review_status === 'approved' && exists(item)) return { ...item, workflow_state: 'completed' };
+      return item;
+    }),
+  };
+}
+function projectConceptPreview(preview) {
+  const cards = Array.isArray(preview?.cards) ? preview.cards : [];
+  return {
+    schema_version: preview?.schema_version || 1,
+    base_revision: preview?.base_revision || null,
+    source_pending_revision: preview?.source_pending_revision || null,
+    preview_hash: preview?.preview_hash || null,
+    count: cards.length,
+    items: cards.map(card => ({
+      candidate_key: card.candidate_key || null,
+      term: card.term || '',
+      full_name: card.full_name || '',
+      category: card.category || '',
+      summary: card.summary || card.definition || '',
+      related_terms: Array.isArray(card.related_terms) ? card.related_terms.slice() : [],
+      source: card.source && typeof card.source === 'object' ? { name: card.source.name || '', ...(card.source.url ? { url: card.source.url } : {}) } : null,
+      relevance: card.relevance || '',
+      evidence_count: Number(card.evidence_count || 0),
+      status: card.status || 'pending',
+    })),
+  };
 }
 
 function createDefaultApis(options = {}) {
@@ -60,7 +108,20 @@ function createDefaultApis(options = {}) {
       preview: () => previewToolUpdates({}, {}),
       apply: flags => applyToolUpdates(flags, {}),
     },
-    concepts: { readPreviews: () => readConceptPreviews() },
+    concepts: {
+      readPreviews: () => conceptBatch.readConceptPreviews({ previewFile: options.conceptPreviewFile }),
+      readPending: () => pendingStore.readPending('concepts', { conceptFile: options.pendingConceptFile }),
+      readGlossary: () => conceptBatch.readGlossary({ glossaryFile: options.glossaryFile }),
+      runBatch: (cards, batchOptions) => conceptBatch.runConceptBatch(cards, { ...batchOptions, previewFile: options.conceptPreviewFile, glossaryFile: options.glossaryFile }),
+      apply: (preview, applyOptions) => conceptBatch.applyConceptPreviews(preview, { ...applyOptions, previewFile: options.conceptPreviewFile, glossaryFile: options.glossaryFile }),
+    },
+    pending: {
+      read: kind => pendingStore.readPending(kind, { toolFile: options.pendingToolFile, conceptFile: options.pendingConceptFile }),
+      review: (kind, key, decision, revision) => pendingStore.reviewPending(kind, key, decision, revision, { toolFile: options.pendingToolFile, conceptFile: options.pendingConceptFile }),
+    },
+    feedback: {
+      extract: (store, config) => feedbackFromSummaries(store, config, { ...(options.feedbackOptions || {}), pendingToolFile: options.pendingToolFile, pendingConceptFile: options.pendingConceptFile }),
+    },
   };
 }
 
@@ -69,6 +130,13 @@ function createMaintainerWorkbenchService(options = {}) {
   const news = { ...defaults.news, ...(options.newsApi || {}) };
   const tools = { ...defaults.tools, ...(options.toolsApi || {}) };
   const concepts = { ...defaults.concepts, ...(options.conceptsApi || {}) };
+  const pending = { ...defaults.pending, ...(options.pendingApi || {}) };
+  const feedback = { ...defaults.feedback, ...(options.feedbackApi || {}) };
+  const catalogWorkbench = options.catalogWorkbench || createCatalogWorkbench({
+    ...(options.catalogWorkbenchOptions || {}),
+    readPending: () => pending.read('tools'),
+    ...(options.catalogApi || {}),
+  });
   const store = () => { const value = news.readStore(); return value && Array.isArray(value.candidates) ? value : { candidates: [] }; };
   const newsProjection = (items = store().candidates) => ({ revision: news.revisionOfStore(store()), items });
   const toolUpdatesProjection = () => {
@@ -89,6 +157,25 @@ function createMaintainerWorkbenchService(options = {}) {
       history_count: history.length,
     };
   };
+
+  async function conceptPlan() {
+    const pendingPayload = concepts.readPending();
+    const glossary = concepts.readGlossary();
+    const cards = (pendingPayload.cards || []).filter(card => card.review_status === 'approved');
+    const glossaryRevision = conceptBatch.revisionOfGlossary(glossary);
+    if (!cards.length) return { ok: false, code: 'PENDING_CANDIDATE_NOT_APPROVED', pending_revision: pendingPayload.revision, glossary_revision: glossaryRevision, candidate_keys: [] };
+    const batch = await concepts.runBatch(cards, { store: store(), glossary, dryRun: true, skipVibeHub: true });
+    const estimate = batch.estimate || conceptBatch.planConceptCost(cards);
+    const plan = { pending_revision: pendingPayload.revision, glossary_revision: glossaryRevision, candidate_keys: cards.map(card => card.candidate_key), estimate, evidence_count: (batch.evidence || []).reduce((count, item) => count + (item.evidence || []).length, 0) };
+    return { ok: true, status: 'cost_confirmation_required', ...plan, plan_hash: hash({ kind: 'concept-workbench-plan', ...plan }) };
+  }
+  async function assertConceptPlan(body) {
+    const plan = await conceptPlan();
+    if (!plan.ok) return plan;
+    if (body.pending_revision !== plan.pending_revision || body.glossary_revision !== plan.glossary_revision) { const error = new Error('REVISION_CONFLICT'); error.code = 'REVISION_CONFLICT'; throw error; }
+    if (body.plan_hash !== plan.plan_hash) { const error = new Error('PLAN_CHANGED'); error.code = 'PLAN_CHANGED'; throw error; }
+    return plan;
+  }
 
   return Object.freeze({
     overview() {
@@ -219,7 +306,95 @@ function createMaintainerWorkbenchService(options = {}) {
       if (!expected_revision || !preview_hash || !confirm) throw new Error('工具更新 Apply 缺少预览 revision、preview hash 或确认语句');
       return tools.apply({ expected_revision, preview_hash, confirm });
     },
-    conceptPreviews() { const preview = concepts.readPreviews(); return { items: Array.isArray(preview?.cards) ? preview.cards : [] }; },
+    pendingTools() {
+      let formal = { tools: [], glossary: [] };
+      try { const { snapshot } = loadCatalogSnapshot(); formal = { tools: snapshot['tool-card'] || [], glossary: [] }; } catch (_) { /* 测试或临时目录缺正式 catalog：视为无命中 */ }
+      return pendingProjection('tools', pending, formal);
+    },
+    pendingConcepts() {
+      let formal = { tools: [], glossary: [] };
+      try { const { snapshot } = loadCatalogSnapshot(); formal = { tools: snapshot['tool-card'] || [], glossary: concepts.readGlossary() }; } catch (_) { /* 同上 */ }
+      return pendingProjection('concepts', pending, formal);
+    },
+    async reviewPendingTool(candidateKey, body) {
+      const result = await pending.review('tools', candidateKey, body?.decision, expectedRevision(body));
+      return { ok: true, candidate_key: candidateKey, revision: result.revision };
+    },
+    async reviewPendingConcept(candidateKey, body) {
+      const result = await pending.review('concepts', candidateKey, body?.decision, expectedRevision(body));
+      return { ok: true, candidate_key: candidateKey, revision: result.revision };
+    },
+    async extractKnowledge(body) {
+      const revision = expectedRevision(body);
+      const current = store();
+      if (news.revisionOfStore(current) !== revision) throw Object.assign(new Error('REVISION_CONFLICT'), { code: 'REVISION_CONFLICT' });
+      const result = await feedback.extract(current, news.readConfig());
+      const toolPending = pending.read('tools');
+      const conceptPending = pending.read('concepts');
+      return {
+        ok: true,
+        tools_found: (result.toolsFound || []).length,
+        concepts_found: (result.conceptsFound || []).length,
+        tools_pending: (result.toolsPending || []).length,
+        concepts_pending: (result.conceptsPending || []).length,
+        pending_revisions: { tools: toolPending.revision, concepts: conceptPending.revision },
+      };
+    },
+    catalogPlan() { return catalogWorkbench.plan(); },
+    catalogPrepare(body) { return catalogWorkbench.prepare(body); },
+    catalogDrafts() { return catalogWorkbench.list(); },
+    catalogDraft(draftId) { return catalogWorkbench.read(draftId); },
+    catalogReview(draftId) { return catalogWorkbench.review(draftId); },
+    catalogResume(draftId, body) { return catalogWorkbench.resume(draftId, body); },
+    catalogDiscard(draftId, body) { return catalogWorkbench.discard(draftId, body); },
+    catalogApply(body) { return catalogWorkbench.apply(body); },
+    conceptPlan() { return conceptPlan(); },
+    async conceptPrepare(body) {
+      if (body?.confirm_cost !== true) return { ok: false, code: 'COST_CONFIRMATION_REQUIRED' };
+      const plan = await assertConceptPlan(body);
+      if (!plan.ok) return plan;
+      const pendingPayload = concepts.readPending();
+      const cards = (pendingPayload.cards || []).filter(card => card.review_status === 'approved');
+      const result = await concepts.runBatch(cards, {
+        ...(options.conceptBatchOptions || {}),
+        store: store(),
+        glossary: concepts.readGlossary(),
+        confirmCost: true,
+        sourcePendingRevision: plan.pending_revision,
+        baseGlossaryRevision: plan.glossary_revision,
+        skipVibeHub: options.conceptBatchOptions?.skipVibeHub,
+      });
+      const preview = concepts.readPreviews();
+      return {
+        ok: result?.ok === true,
+        status: result?.ok ? 'preview_ready' : 'blocked',
+        code: result?.code || null,
+        base_revision: plan.glossary_revision,
+        source_pending_revision: plan.pending_revision,
+        preview: preview?.schema_version === 2 ? projectConceptPreview(preview) : null,
+        failed: Array.isArray(result?.failed) ? result.failed.map(item => ({ term: item.term, reason: String(item.reason || 'OPERATION_FAILED').split(':')[0] })) : [],
+        cost: result?.cost || result?.estimate || null,
+      };
+    },
+    conceptPreviews() {
+      const preview = concepts.readPreviews();
+      return preview?.schema_version === 2 ? projectConceptPreview(preview) : { items: Array.isArray(preview?.cards) ? preview.cards : [] };
+    },
+    conceptApply(body) {
+      const preview = concepts.readPreviews();
+      if (!preview || preview.schema_version !== 2) return { ok: false, code: 'PREVIEW_INVALID' };
+      const pendingPayload = concepts.readPending();
+      const previewHash = String(body?.preview_hash || '').trim();
+      if (!previewHash || String(body?.confirm || '').trim() !== `APPLY CONCEPTS ${previewHash}`) return { ok: false, code: 'CONFIRMATION_INVALID' };
+      const result = concepts.apply(preview, {
+        strict: true,
+        terms: body?.terms,
+        expectedRevision: expectedRevision(body),
+        previewHash,
+        sourcePendingRevision: pendingPayload.revision,
+      });
+      return result;
+    },
   });
 }
 

@@ -425,12 +425,23 @@ function writeBatchPreview(preview, options = {}) {
  * 成本门禁（阶段 5）：无 confirmCost 且非 dry-run 时，零付费调用——先展示含
  * vendor_resolution / placement / research 三本账的成本估算，确认后才执行解析与生成。
  */
+/** 是否已通过人工审核（review_status === 'approved'；缺失视为未审核，fail-closed）。 */
+function isApprovedCard(card) {
+  return String(card?.review_status || 'pending').toLowerCase() === 'approved';
+}
+
 async function runBatchFromCards(cards, options = {}) {
-  const dedup = dedupeBatchCandidates(cards, options);
+  const all = Array.isArray(cards) ? cards : [];
+  const approvedCards = all.filter(isApprovedCard);
+  const notApproved = all
+    .filter(card => !isApprovedCard(card))
+    .map(card => ({ name: card?.name || card?.title || '?', reason: '未经人工审核（需先在工作台批准）' }));
+  const dedup = dedupeBatchCandidates(approvedCards, options);
   const skipped = {
     skippedExisting: dedup.skippedExisting,
     skippedDraft: dedup.skippedDraft,
     duplicateInBatch: dedup.duplicateInBatch,
+    skippedNotApproved: notApproved,
   };
   if (!dedup.unique.length) {
     return {
@@ -514,6 +525,7 @@ module.exports = {
   readPendingCards,
   dedupeBatchCandidates,
   resolveBatchCandidates,
+  estimateResolutionNeed,
   runCatalogBatch,
   runBatchFromCards,
   resolveBatchPlacements,

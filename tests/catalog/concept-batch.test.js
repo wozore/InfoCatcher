@@ -23,6 +23,8 @@ const {
   dedupeConceptCandidates,
   collectConceptEvidence,
   planConceptCost,
+  revisionOfGlossary,
+  conceptPreviewHashOf,
   runConceptBatch,
   readConceptPreviews,
   applyConceptPreviews,
@@ -58,6 +60,23 @@ function makeValue(term, overrides = {}) {
     relevance: '影响工具选择。',
     ...overrides,
   };
+}
+
+/** 构造带校验的 schema v2 概念预览（base_revision + candidate_keys + hash）。 */
+function makeV2Preview(cards, glossary, extra = {}) {
+  const withKeys = cards.map(card => ({ ...card, candidate_key: `concept_${card.term}` }));
+  const body = {
+    schema_version: 2,
+    kind: 'concept_previews',
+    generated_at: new Date().toISOString(),
+    base_revision: revisionOfGlossary(glossary || []),
+    source_pending_revision: 'p-r1',
+    candidate_keys: withKeys.map(card => card.candidate_key),
+    count: withKeys.length,
+    cards: withKeys,
+    ...extra,
+  };
+  return { ...body, preview_hash: conceptPreviewHashOf(body) };
 }
 
 // ── 第 1 组：读入 ─────────────────────────────────────────────
@@ -156,7 +175,7 @@ test('runConceptBatch dry-run 只查重+本地证据+成本，零 AI 零网络�
   let synthesizeCalls = 0;
   const previewFile = tmpFile('cb-dry-');
   const result = await runConceptBatch(
-    [{ term: 'New Concept' }],
+    [{ term: 'New Concept', review_status: 'approved' }],
     { store, glossary: [], dryRun: true, synthesize: async () => { synthesizeCalls += 1; return { ok: true, value: {} }; }, previewFile },
   );
   assert.equal(result.ok, true);
@@ -170,7 +189,7 @@ test('runConceptBatch dry-run 只查重+本地证据+成本，零 AI 零网络�
 
 test('runConceptBatch 无 --confirm-cost 返回 COST_CONFIRMATION_REQUIRED', async () => {
   const store = approvedStore([]);
-  const result = await runConceptBatch([{ term: 'A' }, { term: 'B' }], { store, glossary: [] });
+  const result = await runConceptBatch([{ term: 'A', review_status: 'approved' }, { term: 'B', review_status: 'approved' }], { store, glossary: [] });
   assert.equal(result.ok, false);
   assert.equal(result.code, 'COST_CONFIRMATION_REQUIRED');
   assert.deepEqual(result.cost_estimate.cost, { responses_calls: 2, synthesis_calls: 2 });
@@ -187,7 +206,7 @@ test('runConceptBatch --confirm-cost 合成写预览文件，失败隔离保留'
   };
   const previewFile = tmpFile('cb-batch-');
   const result = await runConceptBatch(
-    [{ term: 'Good Term' }, { term: 'Bad Term' }],
+    [{ term: 'Good Term', review_status: 'approved' }, { term: 'Bad Term', review_status: 'approved' }],
     { store, glossary: [], confirmCost: true, synthesize, previewFile, skipVibeHub: true },
   );
   assert.equal(result.ok, true);
@@ -211,7 +230,7 @@ test('runConceptBatch 集成 vibe-hub：纯 ASCII term 补充证据进入 eviden
     + '</script></head><body><p>vibe-hub 正文。</p></body></html>';
   const previewFile = tmpFile('cb-vibe-');
   const result = await runConceptBatch(
-    [{ term: 'Chat UI' }],
+    [{ term: 'Chat UI', review_status: 'approved' }],
     {
       store,
       glossary: [],
@@ -228,45 +247,84 @@ test('runConceptBatch 集成 vibe-hub：纯 ASCII term 补充证据进入 eviden
   assert.equal(result.cards[0].summary, 'summary,vibe-hub');
 });
 
+test('runConceptBatch 只消费 approved 概念卡，未审核/已丢弃卡进入 skipped', async () => {
+  const store = approvedStore(['Approved Concept 的摘要。']);
+  let synthesizeCalls = 0;
+  const previewFile = tmpFile('cb-gate-');
+  const result = await runConceptBatch(
+    [
+      { term: 'Approved Concept', review_status: 'approved' },
+      { term: 'Discarded Concept', review_status: 'discarded' },
+      { term: 'Pending Concept', review_status: 'pending' },
+      { term: 'Legacy Concept' }, // v1 无 review_status → 视为未审核
+    ],
+    { store, glossary: [], confirmCost: true, skipVibeHub: true, previewFile, synthesize: async ({ card }) => { synthesizeCalls += 1; return { ok: true, value: makeValue(card.term) }; } },
+  );
+  assert.equal(result.ok, true);
+  assert.equal(result.skipped.skippedNotApproved.length, 3);
+  assert.deepEqual(result.skipped.skippedNotApproved.map(item => item.term).sort(), ['Discarded Concept', 'Legacy Concept', 'Pending Concept']);
+  assert.equal(result.cards.length, 1);
+  assert.equal(result.cards[0].term, 'Approved Concept');
+  assert.equal(synthesizeCalls, 1, '只有 approved 卡参与付费合成');
+});
+
 // ── 第 6 组：人工 apply ───────────────────────────────────────
 
-test('applyConceptPreviews 校验必填 + 去重 + 合并保序，只写有变更的文件', () => {
+test('applyConceptPreviews v2 全量校验后合并保序追加，任一项冲突则整批零写入', () => {
   const glossaryFile = tmpFile('cb-apply-');
   fs.writeFileSync(glossaryFile, JSON.stringify([
     { term: 'Existing', category: '模型架构', summary: 's', source: { name: 'n' } },
   ]));
-  const preview = {
-    schema_version: 1,
-    kind: 'concept_previews',
-    generated_at: new Date().toISOString(),
-    count: 4,
-    cards: [
-      makeValue('New A'),
-      { term: 'existing' }, // glossary 已存在（大小写不敏感）
-      { term: 'New B', category: '', summary: 's', source: { name: 'n' } }, // 缺必填
-      makeValue('New C'),
-    ],
-  };
-  const result = applyConceptPreviews(preview, { glossaryFile, glossary: JSON.parse(fs.readFileSync(glossaryFile, 'utf8')) });
+  const glossary = JSON.parse(fs.readFileSync(glossaryFile, 'utf8'));
+  const expectedRevision = revisionOfGlossary(glossary);
+
+  // 任一 term 已存在 → 整批拒绝，glossary 不变（all-or-nothing，不做部分跳过）
+  const conflicting = makeV2Preview([makeValue('New A'), makeValue('Existing')], glossary);
+  const rejected = applyConceptPreviews(conflicting, { glossaryFile, glossary, expectedRevision, terms: ['New A', 'Existing'] });
+  assert.equal(rejected.ok, false);
+  assert.equal(rejected.code, 'CONCEPT_TERM_ALREADY_EXISTS');
+  assert.deepEqual(JSON.parse(fs.readFileSync(glossaryFile, 'utf8')).map(entry => entry.term), ['Existing'], '冲突时零写入');
+
+  // 全部合法 → 保留现有顺序，追加新条
+  const clean = makeV2Preview([makeValue('New A'), makeValue('New C')], glossary);
+  const result = applyConceptPreviews(clean, { glossaryFile, glossary, expectedRevision, terms: ['New A', 'New C'] });
+  assert.equal(result.ok, true);
   assert.deepEqual(result.added.map(item => item.term), ['New A', 'New C']);
-  assert.equal(result.skipped.length, 2);
-  assert.equal(result.skipped[0].term, 'existing');
-  assert.equal(result.skipped[1].term, 'New B');
+  assert.equal(result.skipped.length, 0);
   const written = JSON.parse(fs.readFileSync(glossaryFile, 'utf8'));
   assert.deepEqual(written.map(entry => entry.term), ['Existing', 'New A', 'New C'], '保留现有顺序，追加新条');
   assert.equal(written[2].source.name, 'Mock 论文 2026');
   assert.equal(written[2].source.url, 'https://arxiv.org/abs/mock');
+  assert.equal(result.glossary_count, 3);
+});
+
+test('applyConceptPreviews v1 预览被拒绝（PREVIEW_SCHEMA_UNSUPPORTED）且 hash/CAS 冲突拒写', () => {
+  const glossaryFile = tmpFile('cb-apply-v1-');
+  fs.writeFileSync(glossaryFile, '[]');
+  const legacy = { schema_version: 1, kind: 'concept_previews', cards: [makeValue('A')] };
+  const rejected = applyConceptPreviews(legacy, { glossaryFile, glossary: [] });
+  assert.equal(rejected.ok, false);
+  assert.equal(rejected.code, 'PREVIEW_SCHEMA_UNSUPPORTED');
+  assert.deepEqual(JSON.parse(fs.readFileSync(glossaryFile, 'utf8')), []);
+
+  const glossary = [];
+  const preview = makeV2Preview([makeValue('A')], glossary);
+  const tampered = { ...preview, cards: [{ ...preview.cards[0], summary: '被篡改' }] };
+  const badHash = applyConceptPreviews(tampered, { glossaryFile, glossary, expectedRevision: preview.base_revision });
+  assert.equal(badHash.ok, false);
+  assert.equal(badHash.code, 'PREVIEW_CHANGED');
+  const stale = applyConceptPreviews(preview, { glossaryFile, glossary, expectedRevision: 'sha256:stale' });
+  assert.equal(stale.ok, false);
+  assert.equal(stale.code, 'REVISION_CONFLICT');
+  assert.deepEqual(JSON.parse(fs.readFileSync(glossaryFile, 'utf8')), [], '所有冲突均零写入');
 });
 
 test('applyConceptPreviews --terms 子集只应用指定术语', () => {
   const glossaryFile = tmpFile('cb-apply-terms-');
   fs.writeFileSync(glossaryFile, '[]');
-  const preview = {
-    schema_version: 1,
-    kind: 'concept_previews',
-    cards: [makeValue('A'), makeValue('B')],
-  };
-  const result = applyConceptPreviews(preview, { terms: ['a'], glossary: [], glossaryFile });
+  const glossary = [];
+  const preview = makeV2Preview([makeValue('A'), makeValue('B')], glossary);
+  const result = applyConceptPreviews(preview, { terms: ['a'], glossary: [], glossaryFile, expectedRevision: preview.base_revision });
   assert.deepEqual(result.added.map(item => item.term), ['A'], '只应用指定子集');
   assert.equal(JSON.parse(fs.readFileSync(glossaryFile, 'utf8')).length, 1);
 });
