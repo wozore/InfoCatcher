@@ -178,11 +178,13 @@ function commitSnapshotChange(target, options = {}) {
     };
     journalWrite(journal, runId);
     writeSnapshotFiles(target, stagingCatalog);
-    buildDist({ catalogDir: stagingCatalog, outputDir: stagedDist });
-    journal.phase = 'dist_staged';
+    if (options.buildDist !== false) {
+      buildDist({ catalogDir: stagingCatalog, outputDir: stagedDist });
+    }
+    journal.phase = options.buildDist === false ? 'catalog_staged' : 'dist_staged';
     journalWrite(journal, runId);
     copyCatalogFiles(backupCatalog);
-    backupDistDirectory(backupDist);
+    if (options.buildDist !== false) backupDistDirectory(backupDist);
     journal.phase = 'committing';
     journal.replaced = Object.keys(FILE_BY_AREA);
     journalWrite(journal, runId);
@@ -191,12 +193,14 @@ function commitSnapshotChange(target, options = {}) {
     journalWrite(journal, runId);
     const after = loadCatalogSnapshot();
     if (after.revision !== targetRevision) throw new Error('TARGET_REVISION_MISMATCH');
-    journal.dist_replacement_started = true;
-    journalWrite(journal, runId);
-    replaceDirectory(stagedDist, path.join(DIRS.project, 'dist'));
-    journal.dist_replaced = true;
-    journal.phase = 'dist_verified';
-    journalWrite(journal, runId);
+    if (options.buildDist !== false) {
+      journal.dist_replacement_started = true;
+      journalWrite(journal, runId);
+      replaceDirectory(stagedDist, path.join(DIRS.project, 'dist'));
+      journal.dist_replaced = true;
+      journal.phase = 'dist_verified';
+      journalWrite(journal, runId);
+    }
     journal.phase = 'committed';
     journalWrite(journal, runId);
     // 发布 catalog api_model/product_variant release_date 共享投影（comparison 反查只读；
@@ -273,11 +277,13 @@ function commitCatalogChange(seed, options = {}) {
     writeSnapshotFiles(plan.snapshot, stagingCatalog);
     const stagedValidation = validateCatalogSnapshot(plan.snapshot);
     if (!stagedValidation.ok) throw new Error(`SNAPSHOT_INVALID:${stagedValidation.errors[0].message}`);
-    buildDist({ catalogDir: stagingCatalog, outputDir: stagedDist });
-    journal.phase = 'dist_staged';
+    if (options.buildDist !== false) {
+      buildDist({ catalogDir: stagingCatalog, outputDir: stagedDist });
+    }
+    journal.phase = options.buildDist === false ? 'catalog_staged' : 'dist_staged';
     journalWrite(journal, runId);
     copyCatalogFiles(backupCatalog);
-    backupDistDirectory(backupDist);
+    if (options.buildDist !== false) backupDistDirectory(backupDist);
     journal.phase = 'committing';
     journal.replaced = Object.keys(FILE_BY_AREA);
     journalWrite(journal, runId);
@@ -286,12 +292,14 @@ function commitCatalogChange(seed, options = {}) {
     journalWrite(journal, runId);
     const after = loadCatalogSnapshot();
     if (after.revision !== targetRevision) throw new Error('TARGET_REVISION_MISMATCH');
-    journal.dist_replacement_started = true;
-    journalWrite(journal, runId);
-    replaceDirectory(stagedDist, path.join(DIRS.project, 'dist'));
-    journal.dist_replaced = true;
-    journal.phase = 'dist_verified';
-    journalWrite(journal, runId);
+    if (options.buildDist !== false) {
+      journal.dist_replacement_started = true;
+      journalWrite(journal, runId);
+      replaceDirectory(stagedDist, path.join(DIRS.project, 'dist'));
+      journal.dist_replaced = true;
+      journal.phase = 'dist_verified';
+      journalWrite(journal, runId);
+    }
     journal.phase = 'committed';
     journalWrite(journal, runId);
     // 发布 catalog api_model/product_variant release_date 共享投影（comparison 反查只读；
@@ -340,21 +348,27 @@ function replaceToolLevel3(items, options = {}) {
     };
     journalWrite(journal, runId);
     writeSnapshotFiles(target, stagingCatalog);
-    buildDist({ catalogDir: stagingCatalog, outputDir: stagedDist });
-    journal.phase = 'dist_staged';
+    if (options.buildDist !== false) {
+      buildDist({ catalogDir: stagingCatalog, outputDir: stagedDist });
+    }
+    journal.phase = options.buildDist === false ? 'catalog_staged' : 'dist_staged';
     journalWrite(journal, runId);
     copyCatalogFiles(backupCatalog);
-    backupDistDirectory(backupDist);
+    if (options.buildDist !== false) backupDistDirectory(backupDist);
     journal.phase = 'committing';
     journal.replaced = Object.keys(FILE_BY_AREA);
     journalWrite(journal, runId);
     replaceCatalogFiles(stagingCatalog);
     journal.phase = 'catalog_validated';
     journalWrite(journal, runId);
-    journal.dist_replacement_started = true;
-    journalWrite(journal, runId);
-    replaceDirectory(stagedDist, path.join(DIRS.project, 'dist'));
-    journal.dist_replaced = true;
+    if (options.buildDist !== false) {
+      journal.dist_replacement_started = true;
+      journalWrite(journal, runId);
+      replaceDirectory(stagedDist, path.join(DIRS.project, 'dist'));
+      journal.dist_replaced = true;
+      journal.phase = 'dist_verified';
+      journalWrite(journal, runId);
+    }
     journal.phase = 'committed';
     journalWrite(journal, runId);
     // 发布 catalog api_model/product_variant release_date 共享投影（comparison 反查只读；

@@ -114,6 +114,20 @@ test('resolveBatchCandidates 将 detail_kind_hint 传入双表 lookup', async ()
   assert.equal(result.seeds[0].official_url, 'https://code.claude.com/docs/en/overview');
 });
 
+test('resolveBatchCandidates 兼容旧待补卡：带版本号模型误标 tool 时回退 api_model 登记表', async () => {
+  const registry = require('../../data/manual/archive/official-url-registry.json');
+  const cards = ['Qwen3.8-Max', 'DeepSeek V4-Flash', 'Gemini 3.5 Pro', 'Qwen 3.8 Max', 'GPT 5.6', 'DeepSeek V4 Pro', 'GLM 5.2', 'Qwen3.7-Max']
+    .map(name => ({ name, detail_kind_hint: 'tool', review_status: 'approved' }));
+  const result = await resolveBatchCandidates(cards, {
+    registry,
+    resolveOfficialSource: async () => { throw new Error('模型登记表命中时不应联网'); },
+  });
+  assert.equal(result.unresolved.length, 0);
+  assert.deepEqual(result.seeds.map(seed => seed.detail_kind), cards.map(() => 'api_model'));
+  assert.deepEqual(result.seeds.map(seed => seed.vendor_key), ['alibaba', 'deepseek', 'google', 'alibaba', 'openai', 'deepseek', 'zhipu', 'alibaba']);
+  assert.deepEqual(result.seeds.map(seed => seed.vendor_name), ['阿里巴巴（通义千问）', '深度求索', 'Google', '阿里巴巴（通义千问）', 'OpenAI', '深度求索', '智谱 AI（Z.ai）', '阿里巴巴（通义千问）']);
+});
+
 test('resolveBatchCandidates 保留候选指定的稳定层级引用', async () => {
   const registry = { schema_version: 1, entries: { 'Gemini 3.7 Flash': { vendor_name: 'Google', official_url: 'https://ai.google.dev' } } };
   const result = await resolveBatchCandidates([{

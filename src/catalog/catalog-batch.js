@@ -53,6 +53,28 @@ const { createCostLedger } = require('./catalog-research');
 const { slugify } = require('./catalog-record-builders');
 
 const EMPTY_COST = { search_queries: 0, pages: 0, responses_calls: 0, synthesis_calls: 0 };
+const MODEL_NAME_PATTERN = /(?:GPT|Claude|Gemini|Qwen|Llama|GLM|Mistral|DeepSeek|MiniMax|Grok|Kling)[\s-]?[A-Za-z]*\d/i;
+
+function lookupRegistryForCard(card, options = {}) {
+  const name = String(card?.name || card?.title || '').trim();
+  const lookupOptions = {
+    ...(options.registry !== undefined ? { registry: options.registry } : {}),
+    ...(options.productRegistry !== undefined ? { productRegistry: options.productRegistry } : {}),
+    ...(card?.detail_kind_hint ? { detailKind: card.detail_kind_hint } : {}),
+  };
+  const direct = lookupOfficialUrl(name, lookupOptions);
+  if (direct.ok || card?.detail_kind_hint !== 'tool' || !MODEL_NAME_PATTERN.test(name)) return direct;
+  const modelHit = lookupOfficialUrl(name, { ...lookupOptions, detailKind: 'api_model' });
+  return modelHit.ok ? { ...modelHit, detail_kind_hint: 'api_model' } : direct;
+}
+
+/** 旧反馈数据可能把带版本号的模型标成 tool；模型登记表命中时按 api_model 继续处理。 */
+function effectiveCardForResolution(card, resolution) {
+  return resolution?.detail_kind_hint === 'api_model' && card?.detail_kind_hint !== 'api_model'
+    ? { ...card, detail_kind_hint: 'api_model' }
+    : card;
+}
+
 
 /** 预估待补卡中需要付费 vendor 解析的数量（registry 命中零成本）。 */
 function estimateResolutionNeed(cards, options = {}) {
@@ -61,11 +83,7 @@ function estimateResolutionNeed(cards, options = {}) {
   for (const card of cards || []) {
     const name = String(card.name || card.title || '').trim();
     if (!name) continue;
-    const hit = lookupOfficialUrl(name, {
-      ...(options.registry !== undefined ? { registry: options.registry } : {}),
-      ...(options.productRegistry !== undefined ? { productRegistry: options.productRegistry } : {}),
-      ...(card.detail_kind_hint ? { detailKind: card.detail_kind_hint } : {}),
-    });
+    const hit = lookupRegistryForCard(card, options);
     if (hit.ok) free += 1; else paid += 1;
   }
   return {
@@ -244,15 +262,11 @@ async function resolveBatchCandidates(cards, options = {}) {
   for (const card of cards || []) {
     const name = String(card.name || card.title || '').trim();
     if (!name) continue;
-    const registryHit = lookupOfficialUrl(name, {
-      ...(options.registry !== undefined ? { registry: options.registry } : {}),
-      ...(options.productRegistry !== undefined ? { productRegistry: options.productRegistry } : {}),
-      ...(card.detail_kind_hint ? { detailKind: card.detail_kind_hint } : {}),
-    });
+    const registryHit = lookupRegistryForCard(card, options);
     if (registryHit.ok) {
       // registry 命中零解析成本，但 seed 转换（vague/非法 kind）仍可能抛错，须收进 unresolved 而非中断整批。
       try {
-        seeds.push(pendingCandidateToSeed(card, registryHit));
+        seeds.push(pendingCandidateToSeed(effectiveCardForResolution(card, registryHit), registryHit));
       } catch (error) {
         unresolved.push({ name: card.name, reason: error?.message || String(error) });
       }

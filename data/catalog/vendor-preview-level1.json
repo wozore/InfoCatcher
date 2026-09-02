@@ -43,6 +43,18 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:openai:openai-coding-plan"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:openai:gpt-realtime-2"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:openai:gpt-image-2"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:openai:gpt-5-6"
         }
       ]
     },
@@ -80,6 +92,10 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:anthropic:claude-code"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:anthropic:claude-opus-5"
         }
       ]
     },
@@ -121,6 +137,14 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:google:gemini-last"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:google:gemini-3-1-pro"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:google:gemini-3-5-pro"
         }
       ]
     },
@@ -154,6 +178,14 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:deepseek:deepseek"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:deepseek:deepseek-v4-flash"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:deepseek:deepseek-v4-pro"
         }
       ]
     },
@@ -294,6 +326,10 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:xai:grok"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:xai:grok-4-6"
         }
       ]
     },
@@ -360,6 +396,10 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:cohere:command"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:cohere:command-a"
         }
       ]
     },
@@ -397,6 +437,10 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:kuaishou:kling"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:kuaishou:kling-3-0"
         }
       ]
     },
@@ -487,6 +531,18 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:alibaba:qwen"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:alibaba:qwen3-8-max"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:alibaba:qwen-3-8-max"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:alibaba:qwen3-7-max"
         }
       ]
     },
@@ -750,7 +806,12 @@
           "text": "限制：搜索额度、模型可用性与 API 价格需以官方页面为准。"
         }
       ],
-      "level2_refs": []
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:perplexity:perplexity"
+        }
+      ]
     },
     {
       "id": "vendor-level1:microsoft",
@@ -888,6 +949,35 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:vidu:vidu-s1"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level1:ai-z-ai",
+      "vendor_key": "ai-z-ai",
+      "title": "智谱 AI（Z.ai）",
+      "icon": "🤖",
+      "official_url": "https://open.bigmodel.cn",
+      "description": "智谱AI开放平台是北京智谱华章科技股份有限公司旗下的AI模型服务平台，提供从旗舰到免费的多种GLM系列模型，支持文本、视觉等多模态API调用，并配套控制台、文档等开发者资源。",
+      "status": "verified",
+      "features": [
+        {
+          "tone": "positive",
+          "text": "支持1M上下文处理长任务"
+        },
+        {
+          "tone": "positive",
+          "text": "提供多种规格模型适配不同场景"
+        },
+        {
+          "tone": "positive",
+          "text": "新用户注册赠送2000万Tokens"
+        }
+      ],
+      "level2_refs": [
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:ai-z-ai:glm-5-2"
         }
       ]
     }

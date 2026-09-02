@@ -846,6 +846,37 @@
         "kind": "vendor-level1",
         "id": "vendor-level1:vidu"
       }
+    },
+    {
+      "id": "vendor-card:ai-z-ai",
+      "vendor_key": "ai-z-ai",
+      "title": "智谱 AI（Z.ai）",
+      "icon": "🤖",
+      "summary": "智谱AI开放平台提供GLM系列模型API，覆盖文本与多模态推理。",
+      "feature_preview": [
+        {
+          "tone": "positive",
+          "text": "支持1M上下文处理长任务"
+        },
+        {
+          "tone": "positive",
+          "text": "提供多种规格模型适配不同场景"
+        },
+        {
+          "tone": "positive",
+          "text": "新用户注册赠送2000万Tokens"
+        }
+      ],
+      "access_level": "开放",
+      "price_badge": "paid",
+      "search_terms": [
+        "智谱 AI（Z.ai）",
+        "ai-z-ai"
+      ],
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:ai-z-ai"
+      }
     }
   ]
 }

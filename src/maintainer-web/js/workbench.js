@@ -11,6 +11,9 @@
     uploading: new Set(),
     refreshTail: Promise.resolve(),
     toolPreview: null,
+    catalogBatch: null,
+    catalogRecovery: new Map(),
+    conceptPreview: null,
     loading: new Set()
   };
 
@@ -66,10 +69,12 @@
   }
 
   class ApiError extends Error {
-    constructor(status, message) {
+    constructor(status, message, payload = null) {
       super(message || `API 请求失败（${status}）`);
       this.name = 'ApiError';
       this.status = status;
+      this.payload = payload;
+      this.code = payload?.code || payload?.error || null;
     }
   }
 
@@ -94,8 +99,12 @@
       let payload = null;
       try { payload = await response.json(); } catch (_) { payload = null; }
       if (!response.ok) {
-        const serverMessage = payload && typeof payload.message === 'string' ? payload.message : (payload && typeof payload.error === 'string' ? payload.error : '');
-        throw new ApiError(response.status, serverMessage);
+        const serverMessage = payload && typeof payload.message === 'string'
+          ? payload.message
+          : (payload && typeof payload.error === 'string'
+            ? payload.error
+            : (payload && typeof payload.code === 'string' ? payload.code : ''));
+        throw new ApiError(response.status, serverMessage, payload);
       }
       return payload;
     } catch (error) {
@@ -312,6 +321,24 @@
     const zhTitle = zhLocalized(item, 'title') || zhLocalized(item, 'summary') || zhLocalized(item, 'full_name') || zhLocalized(item, 'term');
     if (zhTitle) return zhTitle;
     return first(item, ['title', 'product_name', 'name', 'term', 'label', ...extraKeys], '未命名条目');
+  }
+
+  function updateWorkspaceClearState(workspace) {
+    const button = $('#clearWorkbenchButton');
+    const stateNode = $('#workspaceClearState');
+    if (!button || !stateNode) return;
+    const clearable = workspace?.clearable === true;
+    button.disabled = !clearable;
+    if (clearable) {
+      stateNode.textContent = '全部审核已完成，可清空';
+      stateNode.dataset.state = 'success';
+      stateNode.title = '仅清理临时审核工作区，不删除正式知识库和历史记录。';
+      return;
+    }
+    const blockers = Array.isArray(workspace?.blockers) ? workspace.blockers : [];
+    stateNode.textContent = blockers.length ? `不可清空：${blockers[0].message}${blockers.length > 1 ? `（另有 ${blockers.length - 1} 项）` : ''}` : '等待完成态';
+    stateNode.dataset.state = blockers.length ? 'warning' : 'loading';
+    stateNode.title = blockers.map(item => item.message).join('；') || '请先刷新数据。';
   }
 
   function renderOverview(payload) {
@@ -796,9 +823,11 @@
       const revision = revisionFrom(payload);
       if (revision) state.revisions.overview = revision;
       renderOverview(payload);
+      updateWorkspaceClearState(payload?.workspace);
       setLoadState('overviewState', '已加载', 'success');
       updateRevisionNote();
     } catch (error) {
+      updateWorkspaceClearState(null);
       setLoadState('overviewState', '加载失败', 'error');
       showNotice(error instanceof ApiError && error.status === 409 ? '数据 revision 已变化，请刷新后再操作。' : '待办概览加载失败。', error instanceof ApiError && error.status === 409 ? 'conflict' : 'error');
     }
@@ -1137,20 +1166,121 @@
     setLoadState(kind === 'tools' ? 'pendingToolsState' : 'pendingConceptsState', `${items.length} 条`, 'success');
   }
 
+  function recoveryControlsFor(draft, content) {
+    if (!draft.recovery_kind || draft.readiness === 'ready') return;
+    const panel = document.createElement('div'); panel.className = 'recovery-panel';
+    addText(panel, 'p', `${draft.error_code || 'DRAFT_BLOCKED'}：${(draft.blocking_reasons || []).join('；')}`, 'item-blocked');
+    if (draft.missing_fields?.length) addText(panel, 'p', `缺失官方字段：${draft.missing_fields.join('、')}`, 'item-blocked');
+    if (draft.suggested_detail_kind) addText(panel, 'p', `建议候选类型：${draft.suggested_detail_kind}`, 'item-blocked');
+    const researchCanResume = draft.recovery_mode === 'research_resume' && ['evidence_required', 'seed_or_profile_required'].includes(draft.recovery_kind);
+    if (draft.recovery_kind === 'manual_required' || (['evidence_required', 'seed_or_profile_required'].includes(draft.recovery_kind) && !researchCanResume)) {
+      addText(panel, 'p', '此 Draft 需要人工补充资料或修正候选信息，不能通过运行配置重试。', 'muted');
+      content.appendChild(panel); return;
+    }
+    const controls = document.createElement('div'); controls.className = 'recovery-controls';
+    const configFields = Array.isArray(draft.missing_config_fields) ? draft.missing_config_fields : [];
+    const inputs = new Map();
+    const defaults = { model: 'deepseek-v4-flash', provider: 'deepseek', protocol: 'responses', retrieval_provider: 'tavily', access_mode: 'keyless' };
+    for (const field of configFields) {
+      if (!['model', 'provider', 'protocol', 'retrieval_provider', 'access_mode'].includes(field)) continue;
+      const label = document.createElement('label'); label.className = 'recovery-field'; label.textContent = field;
+      const input = document.createElement('input'); input.type = 'text'; input.value = defaults[field] || ''; input.autocomplete = 'off'; input.spellcheck = false; label.appendChild(input); controls.appendChild(label); inputs.set(field, input);
+    }
+    const cost = document.createElement('label'); cost.className = 'cost-check';
+    const checkbox = document.createElement('input'); checkbox.type = 'checkbox'; checkbox.disabled = true; cost.appendChild(checkbox); addText(cost, 'span', '确认本次增量 AI 成本'); controls.appendChild(cost);
+    const action = document.createElement('button'); action.type = 'button'; action.className = 'button button-quiet'; action.textContent = '生成恢复预览'; controls.appendChild(action);
+    const result = document.createElement('p'); result.className = 'recovery-result'; panel.appendChild(controls); panel.appendChild(result);
+    action.addEventListener('click', () => recoverDraft(draft, { action, checkbox, inputs, result }));
+    content.appendChild(panel);
+  }
+
+  async function recoverDraft(draft, controls) {
+    const id = draft.draft_id;
+    controls.action.disabled = true;
+    try {
+      let plan = state.catalogRecovery.get(id);
+      if (!plan) {
+        const generatorOptions = {};
+        for (const [field, input] of controls.inputs) generatorOptions[field] = input.value.trim();
+        plan = await request(`catalog/drafts/${encodeURIComponent(id)}/recovery-plan`, { method: 'POST', body: JSON.stringify({ expected_revision: state.revisions.catalog, generator_options: generatorOptions }) });
+        state.catalogRecovery.set(id, plan);
+        controls.checkbox.disabled = false;
+        controls.action.textContent = '确认成本并恢复';
+        controls.result.textContent = `恢复模式：${plan.recovery_mode}；预计新增 responses ${plan.cost_plan?.hard_limits?.responses_calls || 0}、synthesis ${plan.cost_plan?.hard_limits?.synthesis_calls || 0} 次。`;
+        return;
+      }
+      if (!controls.checkbox.checked) { controls.result.textContent = '请先勾选本 Draft 的增量成本确认。'; return; }
+      const generatorOptions = {};
+      for (const [field, input] of controls.inputs) generatorOptions[field] = input.value.trim();
+      const response = await request(`catalog/drafts/${encodeURIComponent(id)}/resume`, { method: 'POST', body: JSON.stringify({ expected_revision: plan.expected_revision, generator_options: generatorOptions, recovery_token: plan.recovery_token, confirm_cost: true }) });
+      if (!response?.ok) throw new Error(response?.code || 'Draft 恢复被阻断');
+      state.catalogRecovery.delete(id); showNotice(`${draft.candidate_name || 'Draft'} 已恢复，正在重新加载列表。`, 'success'); await refreshAll();
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 409) {
+        state.catalogRecovery.delete(id);
+        controls.checkbox.checked = false;
+        controls.checkbox.disabled = true;
+        controls.action.textContent = '重新生成恢复预览';
+        const code = error.code || error.payload?.code || error.payload?.error;
+        let msg = '恢复已被阻断，请重新生成恢复预览。';
+        if (code === 'RECOVERY_TOKEN_CHANGED') {
+          msg = '恢复参数或凭据已变化，已重置，请重新生成恢复预览。';
+        } else if (code === 'REVISION_CONFLICT') {
+          msg = 'Catalog 正式数据已发生变更，请点击顶部“刷新数据”后再试。';
+        } else if (code === 'DRAFT_RECOVERY_IN_PROGRESS') {
+          msg = '当前 Draft 正在恢复中，请勿重复操作。';
+        }
+        controls.result.textContent = msg;
+        showNotice(msg, 'conflict');
+      } else {
+        controls.result.textContent = error.message || '恢复失败。';
+        showNotice(controls.result.textContent, 'error');
+      }
+    } finally { controls.action.disabled = false; }
+  }
+
   function renderCatalogDrafts(payload) {
     state.catalogDrafts = listFrom(payload, ['items', 'drafts']);
+    if (payload?.catalog_revision) state.revisions.catalog = payload.catalog_revision;
+    state.catalogRecovery.clear();
     const root = $('#catalogDraftList'); clearChildren(root);
+    if (!state.catalogDrafts.length) addText(root, 'p', '当前没有待审核 Draft。', 'empty-state');
     for (const draft of state.catalogDrafts) {
       const row = document.createElement('article'); row.className = 'queue-item';
       const content = document.createElement('div'); content.className = 'item-content';
-      addText(content, 'h3', draft.draft_id || '未命名 Draft', 'item-title');
+      addText(content, 'h3', draft.candidate_name || '工具 / 模型 Draft', 'item-title');
       addText(content, 'p', `状态：${draft.state || draft.readiness || 'unknown'}`, 'item-summary');
-      if (draft.preview_hash) addText(content, 'p', `preview_hash：${draft.preview_hash}`, 'item-id');
-      if (draft.readiness === 'ready' || draft.state === 'preview_ready') {
-        const review = document.createElement('button'); review.type = 'button'; review.className = 'button button-quiet'; review.textContent = '读取审核信息'; review.addEventListener('click', () => reviewCatalogDraft(draft.draft_id, review)); content.appendChild(review);
-      }
+      if (draft.reused) addBadge(content, '已复用', 'reused');
+      recoveryControlsFor(draft, content);
       row.appendChild(document.createElement('span')); row.appendChild(content); root.appendChild(row);
     }
+  }
+
+  function renderCatalogBatchPreview(payload) {
+    const root = $('#catalogBatchPreview'); clearChildren(root);
+    state.catalogBatch = payload?.ok ? payload : null;
+    if (!payload?.ok) {
+      addText(root, 'p', payload?.code === 'DRAFTS_NOT_READY' ? '暂无可 Apply 的 Draft。' : '批次预览已阻断，请刷新数据后重试。', 'muted');
+      $('#catalogApplyButton').disabled = true;
+      return;
+    }
+    addText(root, 'p', `本批 ${Number(payload.draft_count || 0)} 个 Draft，将在一次事务中更新正式知识库。`, 'item-summary');
+    addText(root, 'p', `Catalog revision：${payload.expected_revision}`, 'item-id');
+    const changes = payload.change_preview || {};
+    const creates = Object.values(changes.creates || {}).flat();
+    const updates = Array.isArray(changes.updates) ? changes.updates : [];
+    const noops = Array.isArray(changes.noops) ? changes.noops : [];
+    addText(root, 'p', `新增 ${creates.length}，更新 ${updates.length}，无变化 ${noops.length}`, 'item-summary');
+    for (const draft of payload.drafts || []) {
+      const change = draft.change_preview || {};
+      addText(root, 'p', `${draft.candidate_key || draft.draft_id}：新增 ${Object.values(change.creates || {}).flat().length}，更新 ${(change.updates || []).length}`, 'item-summary');
+    }
+    for (const blocker of payload.blockers || []) {
+      const label = blocker.candidate_key || blocker.draft_id || 'Draft';
+      const reasons = Array.isArray(blocker.blocking_reasons) && blocker.blocking_reasons.length ? blocker.blocking_reasons.join('；') : '当前不可 Apply';
+      addText(root, 'p', `阻断：${label}（${reasons}）`, 'item-blocked');
+    }
+    $('#catalogApplyButton').disabled = false;
   }
 
   async function loadKnowledgeLoop() {
@@ -1159,6 +1289,10 @@
       const [toolsPayload, conceptsPayload, draftsPayload] = await Promise.all([request('feedback/tools'), request('feedback/concepts'), request('catalog/drafts')]);
       state.revisions.pendingTools = revisionFrom(toolsPayload); state.revisions.pendingConcepts = revisionFrom(conceptsPayload);
       renderPendingCards('tools', toolsPayload); renderPendingCards('concepts', conceptsPayload); renderCatalogDrafts(draftsPayload);
+      state.catalogBatch = null;
+      clearChildren($('#catalogBatchPreview')); addText($('#catalogBatchPreview'), 'p', '准备 Draft 后，可预览整批变更。', 'muted');
+      $('#catalogBatchPreviewButton').disabled = !state.catalogDrafts.length;
+      $('#catalogApplyButton').disabled = true;
       setLoadState('knowledgeLoopState', '已加载', 'success'); updateRevisionNote();
       const source = $('#knowledgeSourceStats'); if (source) source.textContent = `来源统计：新闻 revision ${text(state.revisions.news || '未加载')}；工具待补 ${state.items.pendingTools.length}；概念待补 ${state.items.pendingConcepts.length}`;
     } catch (error) { setLoadState('knowledgeLoopState', '加载失败', 'error'); showNotice('知识闭环数据加载失败。', 'error'); }
@@ -1193,13 +1327,30 @@
     catch (error) { showNotice(error.message || 'Draft 审核失败。', 'error'); }
     finally { button.disabled = false; }
   }
-  async function applyCatalog(button) {
-    const review = state.catalogReview; const confirm = $('#catalogApplyConfirm').value.trim();
-    if (!review || confirm !== `APPLY CATALOG DRAFT ${review.draft_id}`) { showNotice('Catalog Draft 确认语句不匹配，未执行 Apply。', 'error'); return; }
+  async function previewCatalogBatch(button) {
     button.disabled = true;
-    try { const result = await request('catalog/apply', { method: 'POST', body: JSON.stringify({ draft_id: review.draft_id, expected_revision: review.current_revision, preview_hash: review.preview_hash, confirm }) }); if (!result?.ok) throw new Error(result?.code || 'Catalog Apply 被拒绝'); showNotice('正式知识库已更新，但公开站点仍需显式重建 dist。'); await refreshAll(); }
-    catch (error) { showNotice(error.message || 'Catalog Apply 失败。', 'error'); }
-    finally { button.disabled = false; }
+    try {
+      const result = await request('catalog/batch-preview');
+      renderCatalogBatchPreview(result);
+      if (!result?.ok) throw new Error(result?.code || 'Catalog 批次预览被阻断');
+      showNotice(`Catalog 批次预览完成：${Number(result.draft_count || 0)} 个 Draft 将一次性提交。`, 'success');
+    } catch (error) {
+      state.catalogBatch = null; $('#catalogApplyButton').disabled = true;
+      showNotice(error instanceof ApiError && error.status === 409 ? 'Catalog 数据已变化，请刷新后重新预览。' : (error.message || 'Catalog 批次预览失败。'), error instanceof ApiError && error.status === 409 ? 'conflict' : 'error');
+    } finally { button.disabled = !state.catalogDrafts?.length; }
+  }
+  async function applyCatalog(button) {
+    const batch = state.catalogBatch;
+    if (!batch?.ok) { showNotice('请先预览全部 Catalog Draft。', 'error'); return; }
+    button.disabled = true;
+    try {
+      const result = await request('catalog/apply-batch', { method: 'POST', body: JSON.stringify({ draft_ids: batch.drafts.map(draft => draft.draft_id), expected_revision: batch.expected_revision, batch_token: batch.batch_token, confirm: `APPLY CATALOG DRAFTS ${batch.batch_token}` }) });
+      if (!result?.ok) throw new Error(result?.code || 'Catalog Apply 被拒绝');
+      state.catalogBatch = null; showNotice(result.status === 'cleanup_pending' ? 'Catalog 已更新，但仍有 Draft 待清理。' : '正式知识库已更新，但公开站点仍需显式重建 dist。'); await refreshAll();
+    } catch (error) {
+      state.catalogBatch = null; $('#catalogApplyButton').disabled = true;
+      showNotice(error instanceof ApiError && error.status === 409 ? 'Catalog 批次已过期，请刷新后重新预览。' : (error.message || 'Catalog Apply 失败。'), error instanceof ApiError && error.status === 409 ? 'conflict' : 'error');
+    } finally { if (state.catalogBatch) button.disabled = false; }
   }
 
   async function planConcept(button) {
@@ -1218,17 +1369,53 @@
   }
   function renderKnowledgeConceptPreview(payload) {
     const root = $('#conceptPreviewList'); clearChildren(root); const items = listFrom(payload, ['items']);
+    if (payload?.status === 'legacy_preview') {
+      const completed = Array.isArray(payload.completed_terms) ? payload.completed_terms : [];
+      addText(root, 'p', completed.length
+        ? `旧版概念预览不可提交；${completed.join('、')} 已在正式概念库中，无需再次 Apply。`
+        : '旧版概念预览缺少当前批次校验信息，不能 Apply；请重新生成概念预览。', 'item-blocked');
+    } else if (payload?.status === 'no_preview') {
+      addText(root, 'p', '尚未生成概念预览。请先生成计划并确认概念生成成本。', 'muted');
+    }
     for (const item of items) { const row = document.createElement('article'); row.className = 'concept-item'; addText(row, 'h3', item.term || '未命名概念', 'item-title'); addText(row, 'p', item.summary || '暂无摘要', 'concept-definition'); root.appendChild(row); }
-    state.conceptPreview = payload; $('#conceptApplyButton').disabled = !payload?.preview_hash;
+    state.conceptPreview = payload?.preview_hash ? payload : null; $('#conceptApplyButton').disabled = !state.conceptPreview?.preview_hash;
   }
   async function loadConceptPreviewLoop() { try { renderKnowledgeConceptPreview(await request('concepts/preview')); } catch (_) {} }
   async function applyConcept(button) {
-    const preview = state.conceptPreview; const confirm = $('#conceptApplyConfirm').value.trim();
-    if (!preview?.preview_hash || confirm !== `APPLY CONCEPTS ${preview.preview_hash}`) { showNotice('概念 Apply 确认语句不匹配，未执行 Apply。', 'error'); return; }
+    const preview = state.conceptPreview;
+    if (!preview?.preview_hash || !preview.items?.length) { showNotice('请先生成概念预览。', 'error'); return; }
     button.disabled = true;
-    try { const result = await request('concepts/apply', { method: 'POST', body: JSON.stringify({ terms: (preview.items || []).map(item => item.term), expected_revision: preview.base_revision, preview_hash: preview.preview_hash, confirm }) }); if (!result?.ok) throw new Error(result?.code || '概念 Apply 被拒绝'); showNotice('正式知识库已更新，但公开站点仍需显式重建 dist。'); await refreshAll(); }
-    catch (error) { showNotice(error.message || '概念 Apply 失败。', 'error'); }
-    finally { button.disabled = false; }
+    try {
+      const result = await request('concepts/apply', { method: 'POST', body: JSON.stringify({ apply_all: true, expected_revision: preview.base_revision }) });
+      if (!result?.ok) throw new Error(result?.code || '概念 Apply 被拒绝');
+      state.conceptPreview = null; showNotice('全部概念已写入正式知识库，但公开站点仍需显式重建 dist。'); await refreshAll();
+    } catch (error) {
+      state.conceptPreview = null; $('#conceptApplyButton').disabled = true;
+      showNotice(error instanceof ApiError && error.status === 409 ? '概念预览已过期，请刷新后重新生成。' : (error.message || '概念 Apply 失败。'), error instanceof ApiError && error.status === 409 ? 'conflict' : 'error');
+    } finally { if (state.conceptPreview) button.disabled = false; }
+  }
+
+  async function clearWorkbench(button) {
+    if (!window.confirm('确认清空工作台？\n\n仅清理已完成审核的临时队列、预览和当日人工清单；不会删除正式 Catalog、概念库或历史记录。')) return;
+    const original = button.textContent;
+    button.disabled = true;
+    button.textContent = '清理中…';
+    try {
+      const result = await request('workbench/clear', { method: 'POST', body: JSON.stringify({}) });
+      if (!result?.ok) throw new Error(result?.message || result?.code || '工作台清理被阻断');
+      state.catalogPlan = null;
+      state.catalogBatch = null;
+      state.catalogRecovery.clear();
+      state.conceptPlan = null;
+      state.conceptPreview = null;
+      showNotice('工作台已清空；正式知识库与历史记录已保留。', 'success');
+      await refreshAll();
+    } catch (error) {
+      updateWorkspaceClearState(null);
+      showNotice(error.message || '工作台清理失败。', error instanceof ApiError && error.status === 409 ? 'conflict' : 'error');
+    } finally {
+      button.textContent = original;
+    }
   }
 
   function start() {
@@ -1263,6 +1450,7 @@
     $('#knowledgeExtractButton').addEventListener('click', (event) => extractKnowledge(event.currentTarget));
     $('#catalogPlanButton').addEventListener('click', (event) => planCatalog(event.currentTarget));
     $('#catalogPrepareButton').addEventListener('click', (event) => prepareCatalog(event.currentTarget));
+    $('#catalogBatchPreviewButton').addEventListener('click', (event) => previewCatalogBatch(event.currentTarget));
     $('#catalogApplyButton').addEventListener('click', (event) => applyCatalog(event.currentTarget));
     $('#conceptPlanButton').addEventListener('click', (event) => planConcept(event.currentTarget));
     $('#conceptPrepareButton').addEventListener('click', (event) => prepareConcept(event.currentTarget));
@@ -1270,6 +1458,7 @@
     $('#catalogCostConfirm').addEventListener('change', () => { if (state.catalogPlan) $('#catalogPrepareButton').disabled = !state.catalogPlan.ok || !$('#catalogCostConfirm').checked; });
     $('#conceptCostConfirm').addEventListener('change', () => { if (state.conceptPlan) $('#conceptPrepareButton').disabled = !state.conceptPlan.ok || !$('#conceptCostConfirm').checked; });
     $('#refreshButton').addEventListener('click', refreshAll);
+    $('#clearWorkbenchButton').addEventListener('click', (event) => clearWorkbench(event.currentTarget));
     $('#previewRefreshButton').addEventListener('click', loadPreview);
     if (!state.token) {
       $('#tokenGate').hidden = false;

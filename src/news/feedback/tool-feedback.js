@@ -54,23 +54,34 @@ function isVagueName(name) {
   return VAGUE_FAMILY_NAMES.has(String(name || '').trim().toLowerCase());
 }
 
+// 精确匹配 AI 模型带版本号/后缀的结构（如 Kling 2.6 Pro, GPT-5.6, Claude Opus 4.8, Qwen3.8-Max）
+const AI_MODEL_PATTERN = /\b(?:GPT|Claude|Gemini|Qwen|Llama|Kling|GLM|Mistral|DeepSeek|MiniMax|Grok)[-\s]?[vV]?\d+(?:\.\d+)?(?:[-\s]?(?:Pro|Max|Ultra|Plus|Flash|Mini|Turbo|Preview|Instruct|Reasoning))?\b/gi;
+
+function matchWordOrChinese(text, name) {
+  const isAscii = /^[\x00-\x7F]+$/.test(name);
+  if (isAscii) {
+    const re = new RegExp(`\\b${name.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')}\\b`, 'i');
+    return re.test(text);
+  }
+  return String(text || '').toLowerCase().includes(name.toLowerCase());
+}
+
 /** 从一段文本提取疑似 AI 工具/概念名（默认正则实现，去重保序）。 */
 function extractEntitiesDefault(text) {
-  const lower = String(text || '').toLowerCase();
   const found = [];
-  for (const name of KNOWN_AI_NAMES) {
-    if (lower.includes(name.toLowerCase())) {
-      found.push(name);
+  // 1. 优先匹配明确带版本/系列号的 AI 模型名称
+  const patternMatches = String(text || '').match(AI_MODEL_PATTERN) || [];
+  for (const m of patternMatches) {
+    const trimmed = m.trim();
+    if (trimmed && !found.some(name => name.toLowerCase() === trimmed.toLowerCase())) {
+      found.push(trimmed);
     }
   }
-  // 补充：正则抓"大写品牌名"（3~12 位字母，首字母大写），排除常见英文词。
-  const brandRe = /\b[A-Z][a-z0-9]{2,11}\b/g;
-  const matches = String(text || '').match(brandRe) || [];
-  for (const m of matches) {
-    const l = m.toLowerCase();
-    // 排除词典常见词与口语词，避免误报
-    if (COMMON_ENGLISH_WORDS.has(l)) continue;
-    if (!found.some(name => name.toLowerCase() === l)) found.push(m);
+  // 2. 匹配知名 AI 品牌/工具名单（英文词边界，中文包含）
+  for (const name of KNOWN_AI_NAMES) {
+    if (matchWordOrChinese(text, name) && !found.some(n => n.toLowerCase() === name.toLowerCase())) {
+      found.push(name);
+    }
   }
   return found;
 }
@@ -124,16 +135,31 @@ function normalizeEntities(result) {
 // ═══════════════════════════════════════════════════════════════
 
 /** 工具库已有判定：name 或 id 子串匹配（双向，大小写不敏感）。 */
+function normalizeToolToken(val) {
+  return String(val || '').toLowerCase().replace(/[^a-z0-9一-龥]+/g, '');
+}
+
+/** 工具库已有判定：title/tool_key/name/id 子串或归一化相等匹配（双向，大小写不敏感，去标点）。 */
 function toolExists(toolName, tools) {
   const needle = String(toolName || '').toLowerCase();
   if (!needle) return false;
-  return (tools || []).some(tool =>
-    (tool.title && String(tool.title).toLowerCase().includes(needle)) ||
-    (tool.tool_key && String(tool.tool_key).toLowerCase().includes(needle)) ||
-    (tool.vendor_label && String(tool.vendor_label).toLowerCase().includes(needle)) ||
-    (needle.includes(String(tool.title || '').toLowerCase()) && tool.title) ||
-    (needle.includes(String(tool.tool_key || '').toLowerCase()) && tool.tool_key)
-  );
+  const needleNorm = normalizeToolToken(toolName);
+  return (tools || []).some(tool => {
+    const title = String(tool.title || tool.name || '');
+    const titleLower = title.toLowerCase();
+    const key = String(tool.tool_key || tool.id || '');
+    const keyLower = key.toLowerCase();
+    const vendor = String(tool.vendor_label || tool.vendor_name || '').toLowerCase();
+
+    if (needleNorm && (normalizeToolToken(title) === needleNorm || normalizeToolToken(key) === needleNorm)) return true;
+    return (
+      (title && titleLower.includes(needle)) ||
+      (key && keyLower.includes(needle)) ||
+      (vendor && vendor.includes(needle)) ||
+      (needle.includes(titleLower) && title) ||
+      (needle.includes(keyLower) && key)
+    );
+  });
 }
 
 /** 概念库已有判定：term 或 full_name 子串匹配（双向，大小写不敏感）。 */

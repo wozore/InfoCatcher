@@ -41,10 +41,14 @@ function sourceProjection(evidence) {
 }
 
 function trustedRootsForRepair(detail, repair) {
-  return officialRootsOf({
-    official_url: detail.official_url,
-    discovery_sources: (repair.official_roots || []).map(url => ({ kind: 'official_hint', url })),
-  });
+  const detailRoots = officialRootsOf({ official_url: detail.official_url });
+  const repairRoots = (repair.official_roots || [])
+    .map(url => canonicalizeUrl(url))
+    .map(url => {
+      try { return new URL(url).hostname.toLowerCase(); } catch { return ''; }
+    })
+    .filter(Boolean);
+  return [...new Set([...detailRoots, ...repairRoots])];
 }
 
 function cloneSnapshot(snapshot) {

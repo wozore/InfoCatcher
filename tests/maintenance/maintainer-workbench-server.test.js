@@ -15,10 +15,10 @@ function request(port, method, pathname, options = {}) {
 }
 
 const service = Object.freeze({
-  overview: () => ({ ok: 'overview' }), newsReview: () => ({ items: [] }), reviewNews: body => ({ body }),
+  overview: () => ({ ok: 'overview' }), clearWorkspace: () => ({ ok: true, status: 'cleared' }), newsReview: () => ({ items: [] }), reviewNews: body => ({ body }),
   keywords: () => ({ list: null }), generateKeywords: async () => ({ generated: 'keywords' }), applyKeywords: body => ({ body }), top: () => ({ items: [] }), generateTop: async () => ({ generated: 'top' }), applyTop: body => ({ body }),
   publishNews: () => ({ published: true }), publishPreview: () => ({ items: [] }), toolUpdates: () => ({ items: [] }), previewToolUpdates: () => ({ ok: true, preview_hash: 'hash' }), applyToolUpdates: body => ({ ok: true, body }), reviewToolUpdate: (key, body) => ({ key, body }), uploadTranscript: body => ({ ok: true, candidate_id: body.candidate_id }), summarizeTranscripts: body => ({ ok: true, summarized: (body.ids || []).map(id => ({ id })) }), conceptPreviews: () => ({ preview: null }),
-  pendingTools: () => ({ revision: 'p-r1', items: [] }), pendingConcepts: () => ({ revision: 'p-r1', items: [] }), reviewPendingTool: body => ({ ok: true, candidate_key: body.candidate_key, revision: 'p-r2' }), reviewPendingConcept: body => ({ ok: true, candidate_key: body.candidate_key, revision: 'p-r2' }), extractKnowledge: async () => ({ ok: true, tools_pending: 0, concepts_pending: 0 }), catalogPlan: () => ({ ok: true, plan_hash: 'plan-h', catalog_revision: 'c-r1', pending_revision: 'p-r1' }), catalogPrepare: async () => ({ ok: true, drafts: [] }), catalogDrafts: () => ({ items: [] }), catalogDraft: id => ({ draft_id: id }), catalogReview: id => ({ ok: true, draft_id: id, current_revision: 'c-r1', preview_hash: 'ph' }), catalogResume: async (id, body) => ({ ok: true, draft: { draft_id: id } }), catalogDiscard: (id, body) => ({ ok: true, draft_id: id, expected_revision: body?.expected_revision }), catalogApply: body => ({ ok: true, body }), conceptPlan: async () => ({ ok: true, plan_hash: 'cplan-h', glossary_revision: 'g-r1', pending_revision: 'p-r1' }), conceptPrepare: async () => ({ ok: true, preview: null }), conceptApply: body => ({ ok: true, added: (body.terms || []).map(term => ({ term })) }),
+  pendingTools: () => ({ revision: 'p-r1', items: [] }), pendingConcepts: () => ({ revision: 'p-r1', items: [] }), reviewPendingTool: body => ({ ok: true, candidate_key: body.candidate_key, revision: 'p-r2' }), reviewPendingConcept: body => ({ ok: true, candidate_key: body.candidate_key, revision: 'p-r2' }), extractKnowledge: async () => ({ ok: true, tools_pending: 0, concepts_pending: 0 }), catalogPlan: () => ({ ok: true, plan_hash: 'plan-h', catalog_revision: 'c-r1', pending_revision: 'p-r1' }), catalogPrepare: async () => ({ ok: true, drafts: [] }), catalogDrafts: () => ({ items: [] }), catalogDraft: id => ({ draft_id: id }), catalogReview: id => ({ ok: true, draft_id: id, current_revision: 'c-r1', preview_hash: 'ph' }), catalogRecoveryPlan: (id, body) => ({ ok: true, draft_id: id, body }), catalogResume: async (id, body) => ({ ok: true, draft: { draft_id: id }, body }), catalogDiscard: (id, body) => ({ ok: true, draft_id: id, expected_revision: body?.expected_revision }), catalogApply: body => ({ ok: true, body }), conceptPlan: async () => ({ ok: true, plan_hash: 'cplan-h', glossary_revision: 'g-r1', pending_revision: 'p-r1' }), conceptPrepare: async () => ({ ok: true, preview: null }), conceptApply: body => ({ ok: true, added: (body.terms || []).map(term => ({ term })) }),
 });
 
 test('server binds localhost, provides GET API security headers, and protects mutations', async t => {
@@ -34,6 +34,53 @@ test('server binds localhost, provides GET API security headers, and protects mu
   const allowed = await request(started.port, 'POST', '/api/workbench/v1/news/review', { body: { ids: ['x'], decision: 'approved', expected_revision: 'news-r1' }, headers: { Authorization: 'Bearer test-token', Origin: `http://127.0.0.1:${started.port}` } });
   assert.equal(allowed.status, 200); assert.deepEqual(JSON.parse(allowed.body).body, { ids: ['x'], decision: 'approved', expected_revision: 'news-r1' });
 });
+
+
+test('工作台清空接口要求本机同源并透传完成态门禁', async t => {
+  let calls = 0;
+  const guarded = { ...service, clearWorkspace: () => { calls += 1; return { ok: false, code: 'WORKBENCH_NOT_COMPLETE', message: '仍有待处理项' }; } };
+  const app = createMaintainerWorkbenchServer({ service: guarded, token: 'test-token' });
+  t.after(() => app.close());
+  const { port } = await app.start();
+  const auth = { Authorization: 'Bearer test-token', Origin: `http://127.0.0.1:${port}` };
+  const forbidden = await request(port, 'POST', '/api/workbench/v1/workbench/clear', { body: {}, headers: { Authorization: 'Bearer test-token', Origin: `http://127.0.0.1:${port + 1}` } });
+  assert.equal(forbidden.status, 403);
+  const blocked = await request(port, 'POST', '/api/workbench/v1/workbench/clear', { body: {}, headers: auth });
+  assert.equal(blocked.status, 400);
+  assert.equal(JSON.parse(blocked.body).code, 'WORKBENCH_NOT_COMPLETE');
+  assert.equal(calls, 1);
+});
+
+
+test('recovery endpoints preserve strict two-phase payloads and map token changes to 409', async t => {
+  const app = createMaintainerWorkbenchServer({ service, token: 'test-token' });
+  t.after(() => app.close());
+  const { port } = await app.start();
+  const auth = { Authorization: 'Bearer test-token', Origin: `http://127.0.0.1:${port}` };
+  const plan = await request(port, 'POST', '/api/workbench/v1/catalog/drafts/draft-blocked/recovery-plan', {
+    body: { expected_revision: 'c-r1', generator_options: { model: 'deepseek-v4-flash' } },
+    headers: auth,
+  });
+  assert.equal(plan.status, 200);
+  assert.equal(JSON.parse(plan.body).body.generator_options.model, 'deepseek-v4-flash');
+  const resumed = await request(port, 'POST', '/api/workbench/v1/catalog/drafts/draft-blocked/resume', {
+    body: { expected_revision: 'c-r1', generator_options: { model: 'deepseek-v4-flash' }, recovery_token: 'token', confirm_cost: true },
+    headers: auth,
+  });
+  assert.equal(resumed.status, 200);
+  assert.equal(JSON.parse(resumed.body).body.confirm_cost, true);
+  const changed = { ...service, catalogResume: () => ({ ok: false, code: 'RECOVERY_TOKEN_CHANGED' }) };
+  const app2 = createMaintainerWorkbenchServer({ service: changed, token: 'test-token' });
+  t.after(() => app2.close());
+  const started2 = await app2.start();
+  const conflict = await request(started2.port, 'POST', '/api/workbench/v1/catalog/drafts/draft-blocked/resume', {
+    body: { expected_revision: 'c-r1', recovery_token: 'token', confirm_cost: true },
+    headers: { Authorization: 'Bearer test-token', Origin: `http://127.0.0.1:${started2.port}` },
+  });
+  assert.equal(conflict.status, 409);
+  assert.equal(JSON.parse(conflict.body).code, 'RECOVERY_TOKEN_CHANGED');
+});
+
 
 test('工作台后续动作保持同源鉴权并等待异步服务结果', async t => {
   const app = createMaintainerWorkbenchServer({ service, token: 'test-token' });

@@ -3,6 +3,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const { emptySnapshot } = require('../../src/catalog/catalog-contract');
+const { loadCatalogSnapshot } = require('../../src/catalog/catalog-snapshot-store');
 const { revisionOf } = require('../../src/catalog/catalog-revision');
 const { planCatalogResearch } = require('../../src/catalog/catalog-profile-contract');
 const { researchCatalog } = require('../../src/catalog/catalog-research');
@@ -15,7 +16,9 @@ const {
   reviewCatalogDraft,
   discardCatalogDraft,
   resumeResearchLimits,
+  recoveryPlanForDraft,
 } = require('../../src/catalog/catalog-assistant');
+const { createDraft, deleteDraft } = require('../../src/catalog/catalog-draft-store');
 const { klingVideoSeed, createKlingDossierAdapters } = require('./fixtures/kling-video-dossier');
 
 const LIMITS = {
@@ -143,6 +146,124 @@ test('assistant creates and reviews a schema v3 ready Draft through offline adap
   }
 });
 
+
+test('assistant prepares a research-resume plan for evidence-blocked Drafts', () => {
+  const current = loadCatalogSnapshot();
+  const draft = createDraft({
+    state: 'preview_blocked',
+    base_revision: current.revision,
+    research: { ok: true, official_sources: [], warnings: [] },
+    coverage: { missing: [{ layer: 'detail', field: 'summary' }] },
+    readiness: { status: 'blocked', blocking_reasons: ['缺少官方证据字段'] },
+    last_error: { code: 'SYNTHESIS_COVERAGE_INCOMPLETE', missing_fields: ['detail.summary'] },
+  });
+  try {
+    const result = recoveryPlanForDraft(draft.draft_id, { expectedRevision: current.revision, generatorOptions: { model: 'deepseek-v4-flash' } });
+    assert.deepEqual(result, { ok: true, draft_id: draft.draft_id, expected_revision: current.revision, recovery_kind: 'evidence_required', recovery_mode: 'research_resume', error_code: 'SYNTHESIS_COVERAGE_INCOMPLETE', missing_fields: ['detail.summary'], missing_config_fields: [], suggested_detail_kind: null, cost_plan: { mode: 'research_resume', hard_limits: { search_queries: 4, pages: 8, responses_calls: 12, synthesis_calls: 1 }, previous_cost: null }, generator_options: { model: 'deepseek-v4-flash' }, recovery_token: result.recovery_token });
+  } finally {
+    deleteDraft(draft.draft_id);
+  }
+});
+
+test('assistant resume reuses completed research after a missing-model synthesis failure', async () => {
+  const requested = [];
+  let synthesisCalls = 0;
+  const adapters = {
+    discover: async input => {
+      requested.push(`discover:${input.scope.kind}`);
+      return { sources: [{ url: 'https://kling.ai/official-dossier', title: 'Kling official dossier', excerpt: 'Official facts.' }] };
+    },
+    acquire: async input => {
+      requested.push(`acquire:${input.scope.kind}`);
+      return { contents: input.sources.map(source => ({ url: source.url, content: 'Official facts.' })) };
+    },
+    synthesize: async input => {
+      synthesisCalls += 1;
+      if (synthesisCalls === 1) return { ok: false, code: 'DEEPSEEK_OUTPUT_INVALID', error: 'missing field `model`', cost: input.ledger.snapshot() };
+      return createKlingDossierAdapters().synthesize(input);
+    },
+  };
+  let draftId;
+  try {
+    const prepared = await prepareCatalogDraft(klingVideoSeed(), { ...ASSISTANT_OPTIONS, catalogAdapters: adapters });
+    draftId = prepared.draft_id;
+    assert.equal(prepared.ok, false);
+    assert.equal(prepared.code, 'MODEL_REQUIRED');
+    assert.equal(prepared.draft.last_error.recovery_kind, 'config_required');
+    assert.deepEqual(prepared.draft.last_error.missing_config_fields, ['model']);
+    const recovery = require('../../src/catalog/catalog-assistant').recoveryPlanForDraft(draftId, {
+      expectedRevision: prepared.draft.base_revision,
+      generatorOptions: { model: 'deepseek-v4-flash' },
+    });
+    const recoveryWithCost = require('../../src/catalog/catalog-assistant').recoveryPlanForDraft(draftId, {
+      expectedRevision: prepared.draft.base_revision,
+      generatorOptions: { model: 'deepseek-v4-flash', confirmCost: true },
+    });
+    assert.equal(recovery.ok, true);
+    assert.equal(recovery.recovery_token, recoveryWithCost.recovery_token);
+    assert.equal(recovery.recovery_mode, 'synthesis_only');
+    assert.equal(recovery.cost_plan.hard_limits.search_queries, 0);
+    assert.equal(recovery.cost_plan.hard_limits.pages, 0);
+
+    const staleAdapters = createKlingDossierAdapters();
+    const staleToken = await resumeCatalogDraft(draftId, {
+      ...ASSISTANT_OPTIONS,
+      model: 'deepseek-v4-flash',
+      expectedRevision: prepared.draft.base_revision,
+      recoveryToken: 'sha256:stale',
+      catalogAdapters: staleAdapters,
+    });
+    assert.equal(staleToken.code, 'RECOVERY_TOKEN_CHANGED');
+    assert.equal(staleAdapters.requested.length, 0);
+
+    const researchCallsBeforeResume = requested.slice();
+    const resumed = await resumeCatalogDraft(draftId, {
+      ...ASSISTANT_OPTIONS,
+      model: 'deepseek-v4-flash',
+      expectedRevision: prepared.draft.base_revision,
+      recoveryToken: recovery.recovery_token,
+      catalogAdapters: adapters,
+    });
+    assert.equal(resumed.ok, true, JSON.stringify(resumed));
+    assert.equal(resumed.draft.state, 'preview_ready');
+    assert.equal(synthesisCalls, 2);
+    assert.deepEqual(requested, researchCallsBeforeResume);
+  } finally {
+    if (draftId) discardCatalogDraft(draftId);
+  }
+});
+
+
+test('assistant allows only one concurrent resume claim for a Draft', async () => {
+  let synthesisCalls = 0;
+  let release;
+  const waiting = new Promise(resolve => { release = resolve; });
+  const adapters = {
+    discover: async () => ({ sources: [{ url: 'https://kling.ai/official-dossier', title: 'Kling official dossier', excerpt: 'Official facts.' }] }),
+    acquire: async ({ sources }) => ({ contents: sources.map(source => ({ url: source.url, content: 'Official facts.' })) }),
+    synthesize: async input => {
+      synthesisCalls += 1;
+      if (synthesisCalls === 1) return { ok: false, code: 'DEEPSEEK_OUTPUT_INVALID', error: 'missing field `model`', cost: input.ledger.snapshot() };
+      await waiting;
+      return createKlingDossierAdapters().synthesize(input);
+    },
+  };
+  let draftId;
+  try {
+    const prepared = await prepareCatalogDraft(klingVideoSeed(), { ...ASSISTANT_OPTIONS, catalogAdapters: adapters });
+    draftId = prepared.draft_id;
+    const options = { ...ASSISTANT_OPTIONS, model: 'deepseek-v4-flash', expectedRevision: prepared.draft.base_revision, catalogAdapters: adapters };
+    const first = resumeCatalogDraft(draftId, options);
+    const second = await resumeCatalogDraft(draftId, options);
+    assert.equal(second.code, 'DRAFT_RECOVERY_IN_PROGRESS');
+    release();
+    assert.equal((await first).ok, true);
+    assert.equal(synthesisCalls, 2);
+  } finally {
+    if (draftId) discardCatalogDraft(draftId);
+  }
+});
+
 test('assistant resume adds a new hard budget and requests only the missing detail scope', async () => {
   const incompleteAdapters = createKlingDossierAdapters({ missingFields: ['detail.access_level', 'detail.price_badge', 'detail.api_pricing'] });
   let draftId;
@@ -175,3 +296,21 @@ test('assistant resume adds a new hard budget and requests only the missing deta
     if (draftId) discardCatalogDraft(draftId);
   }
 });
+
+test('reviewCatalogDraftBatch merges duplicate vendor patches across drafts without duplicate error', async () => {
+  const { reviewCatalogDraftBatch } = require('../../src/catalog/catalog-assistant');
+  const adapters = createKlingDossierAdapters();
+  const prep1 = await prepareCatalogDraft(klingVideoSeed(), { ...ASSISTANT_OPTIONS, catalogAdapters: adapters });
+  const prep2 = await prepareCatalogDraft(klingVideoSeed(), { ...ASSISTANT_OPTIONS, catalogAdapters: adapters });
+  assert.equal(prep1.ok, true);
+  assert.equal(prep2.ok, true);
+  try {
+    const result = reviewCatalogDraftBatch([prep1.draft_id, prep2.draft_id]);
+    assert.equal(result.ok, true, JSON.stringify(result));
+    assert.equal(result.draft_ids.length, 2);
+  } finally {
+    discardCatalogDraft(prep1.draft_id);
+    discardCatalogDraft(prep2.draft_id);
+  }
+});
+

@@ -329,6 +329,16 @@ test('applyConceptPreviews --terms 子集只应用指定术语', () => {
   assert.equal(JSON.parse(fs.readFileSync(glossaryFile, 'utf8')).length, 1);
 });
 
-test('readConceptPreviews 缺文件返回 null', () => {
-  assert.equal(readConceptPreviews({ previewFile: tmpFile('cb-missing-') }), null);
+
+test('applyConceptPreviews apply_all 从服务端预览应用全部术语且拒绝混合模式', () => {
+  const glossaryFile = tmpFile('cb-apply-all-');
+  fs.writeFileSync(glossaryFile, '[]');
+  const glossary = [];
+  const preview = makeV2Preview([makeValue('A'), makeValue('B')], glossary);
+  const result = applyConceptPreviews(preview, { applyAll: true, glossary, glossaryFile, expectedRevision: preview.base_revision });
+  assert.equal(result.ok, true);
+  assert.deepEqual(result.added.map(item => item.term), ['A', 'B']);
+  assert.equal(JSON.parse(fs.readFileSync(glossaryFile, 'utf8')).length, 2);
+  const mixed = applyConceptPreviews(preview, { applyAll: true, terms: ['A'], glossary: [], glossaryFile, expectedRevision: preview.base_revision });
+  assert.equal(mixed.code, 'CONCEPT_APPLY_MODE_INVALID');
 });

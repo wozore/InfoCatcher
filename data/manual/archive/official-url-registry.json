@@ -242,7 +242,6 @@
     "nvidia": {
       "vendor_name": "Nvidia（NIM）",
       "official_urls": [
-        "https://huggingface.co/nvidia",
         "https://docs.api.nvidia.com/nim/reference/llm-apis",
         "https://docs.api.nvidia.com/nim/reference/retrieval-apis",
         "https://docs.api.nvidia.com/nim/reference/visual-models-apis",
@@ -278,9 +277,10 @@
     "perplexity": {
       "vendor_name": "Perplexity",
       "official_urls": [
-        "https://huggingface.co/perplexity-ai",
+        "https://www.perplexity.ai",
         "https://docs.perplexity.ai",
-        "https://docs.perplexity.ai/docs/getting-started/pricing"
+        "https://docs.perplexity.ai/docs/getting-started/pricing",
+        "https://docs.perplexity.ai/docs/resources/changelog"
       ],
       "model_prefixes": [
         "perplexity",
@@ -290,7 +290,10 @@
     },
     "microsoft": {
       "vendor_name": "Microsoft（Azure AI Foundry）",
-      "official_url": "https://huggingface.co/microsoft/collections",
+      "official_urls": [
+        "https://azure.microsoft.com/en-us/products/ai-foundry",
+        "https://learn.microsoft.com/en-us/azure/ai-foundry/"
+      ],
       "model_prefixes": [
         "microsoft",
         "fara",
@@ -338,8 +341,7 @@
       "vendor_name": "Luma AI",
       "official_urls": [
         "https://docs.lumalabs.ai",
-        "https://lumalabs.ai/pricing",
-        "https://huggingface.co/lumaai"
+        "https://lumalabs.ai/pricing"
       ],
       "model_prefixes": [
         "luma",
@@ -349,11 +351,10 @@
     "black-forest-labs": {
       "vendor_name": "Black Forest Labs（FLUX）",
       "official_urls": [
-        "https://huggingface.co/black-forest-labs/collections",
         "https://docs.bfl.ai",
         "https://docs.bfl.ai/quick_start/pricing",
         "https://bfl.ai/pricing",
-        "https://dashboard.bfl.a/licensing"
+        "https://dashboard.bfl.ai/licensing"
       ],
       "model_prefixes": [
         "flux",
@@ -364,7 +365,6 @@
       "vendor_name": "可灵（快手）",
       "official_urls": [
         "https://klingai.com/document-api",
-        "https://huggingface.co/KlingTeam/models",
         "https://klingai.com/document-api/pricing/base/video",
         "https://klingai.com/document-api/pricing/base/image",
         "https://klingai.com/document-api/updates/api",

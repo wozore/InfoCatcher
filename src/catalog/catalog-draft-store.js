@@ -40,7 +40,8 @@ function createDraft(input) {
     updated_at: new Date().toISOString(),
     base_revision: input?.base_revision || null,
     seed: input?.seed || {},
-    research: input?.research || { official_sources: [], warnings: [] },
+    research: input?.research || { ok: false, official_sources: [], warnings: [] },
+    research_progress: input?.research_progress || null,
     research_plan: input?.research_plan || null,
     coverage: input?.coverage || null,
     layer_patches: input?.layer_patches || [],
@@ -51,6 +52,7 @@ function createDraft(input) {
     change_preview: input?.change_preview || null,
     preview_hash: input?.preview_hash || null,
     apply_checkpoint: input?.apply_checkpoint || null,
+    recovery_checkpoint: input?.recovery_checkpoint || null,
     last_error: input?.last_error || null,
   };
   return writeDraft(draft, 'catalog-draft-create');

@@ -2962,6 +2962,180 @@
         "id": "tool-level3:codebuddy"
       },
       "detail_kind": "tool"
+    },
+    {
+      "id": "tool-card:perplexity",
+      "tool_key": "perplexity",
+      "vendor_key": "perplexity",
+      "title": "Perplexity",
+      "vendor_label": "Perplexity",
+      "icon": "🧩",
+      "summary": "Perplexity 提供实时网络搜索与问答能力，API 平台覆盖 Router、Agent、Search、Embeddings 等多类接口。",
+      "theme": "general",
+      "scenes": [
+        "实时信息检索",
+        "复杂问题多步推理",
+        "开发 AI 搜索应用",
+        "构建 RAG 系统"
+      ],
+      "best_for_preview": "需要联网获取最新信息或开发智能搜索应用的开发者与研究者",
+      "not_for_preview": "完全离线或对输出格式有严格定制要求的场景",
+      "price_badge": "usage_based",
+      "access_level": "开放",
+      "search_terms": [
+        "Perplexity",
+        "Perplexity",
+        "perplexity",
+        "实时信息检索",
+        "复杂问题多步推理",
+        "开发 AI 搜索应用",
+        "构建 RAG 系统"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:perplexity"
+      },
+      "detail_kind": "tool"
+    },
+    {
+      "id": "tool-card:gemini-3-5-pro",
+      "tool_key": "gemini-3-5-pro",
+      "vendor_key": "google",
+      "title": "Gemini 3.5 Pro",
+      "vendor_label": "Google",
+      "icon": "🤖",
+      "summary": "Gemini 系列文本模型，具有强大的推理和多模态理解能力。",
+      "theme": "general",
+      "scenes": [
+        "智能体",
+        "编码",
+        "多模态理解",
+        "高吞吐任务"
+      ],
+      "best_for_preview": "需要强大推理和多模态能力的智能体与编码任务。",
+      "not_for_preview": "对延迟敏感且成本要求极高的简单重复任务。",
+      "price_badge": "paid",
+      "access_level": "开放",
+      "search_terms": [
+        "Gemini 3.5 Pro",
+        "Google",
+        "gemini-3-5-pro",
+        "智能体",
+        "编码",
+        "多模态理解",
+        "高吞吐任务"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:gemini-3-5-pro"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:gpt-5-6",
+      "tool_key": "gpt-5-6",
+      "vendor_key": "openai",
+      "title": "GPT 5.6",
+      "vendor_label": "OpenAI",
+      "icon": "🤖",
+      "summary": "GPT-5.6 Sol 是 GPT-5.6 系列中的旗舰模型，专为前沿能力设计，支持复杂编码、计算机使用、研究及安全等工作，并具备最新的 API 高级功能。",
+      "theme": "general",
+      "scenes": [
+        "复杂编码与软件开发",
+        "计算机使用与自动化",
+        "前沿研究与推理",
+        "安全分析与漏洞挖掘"
+      ],
+      "best_for_preview": "适合需要高级推理、工具调用和复杂编码的开发者，用于构建前沿 AI 应用。",
+      "not_for_preview": "不适合对成本敏感的高频简单任务，因其价格较高。",
+      "price_badge": "paid",
+      "access_level": "开放",
+      "search_terms": [
+        "GPT 5.6",
+        "OpenAI",
+        "gpt-5-6",
+        "复杂编码与软件开发",
+        "计算机使用与自动化",
+        "前沿研究与推理",
+        "安全分析与漏洞挖掘"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:gpt-5-6"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:glm-5-2",
+      "tool_key": "glm-5-2",
+      "vendor_key": "ai-z-ai",
+      "title": "GLM 5.2",
+      "vendor_label": "智谱 AI（Z.ai）",
+      "icon": "🤖",
+      "summary": "GLM-5.2是智谱推出的旗舰文本模型，原生支持1M上下文，擅长长程任务与复杂开发场景。",
+      "theme": "general",
+      "scenes": [
+        "长程软件开发与多端部署",
+        "小程序迁移与开发",
+        "小游戏规则设计与实现",
+        "复杂工程上下文处理"
+      ],
+      "best_for_preview": "适合需要处理大规模代码库、完整项目开发链路的专业开发者。",
+      "not_for_preview": "不适合简单的对话或短文本生成任务。",
+      "price_badge": "paid",
+      "access_level": "开放",
+      "search_terms": [
+        "GLM 5.2",
+        "智谱 AI（Z.ai）",
+        "glm-5-2",
+        "长程软件开发与多端部署",
+        "小程序迁移与开发",
+        "小游戏规则设计与实现",
+        "复杂工程上下文处理"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:glm-5-2"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:qwen-3-8-max",
+      "tool_key": "qwen-3-8-max",
+      "vendor_key": "alibaba",
+      "title": "Qwen 3.8 Max",
+      "vendor_label": "阿里巴巴（通义千问）",
+      "icon": "🤖",
+      "summary": "GLM-5.2-US是智谱AI推出的面向长程任务设计的旗舰模型，支持1M超长上下文，具备强大逻辑推理、长文本理解与代码生成能力。",
+      "theme": "general",
+      "scenes": [
+        "智能交互",
+        "企业应用",
+        "开发辅助"
+      ],
+      "best_for_preview": [
+        "长文本处理场景",
+        "复杂代码生成任务"
+      ],
+      "not_for_preview": [
+        "轻量级实时对话",
+        "资源受限的嵌入式设备"
+      ],
+      "price_badge": "paid",
+      "access_level": "受限",
+      "search_terms": [
+        "Qwen 3.8 Max",
+        "阿里巴巴（通义千问）",
+        "qwen-3-8-max",
+        "智能交互",
+        "企业应用",
+        "开发辅助"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:qwen-3-8-max"
+      },
+      "detail_kind": "api_model"
     }
   ]
 }

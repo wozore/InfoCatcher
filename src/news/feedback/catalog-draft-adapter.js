@@ -58,7 +58,7 @@ function pendingCandidateToSeed(candidate, resolution = {}) {
     detail_kind: hint,
     name,
     vendor_name: vendorName,
-    vendor_key: candidate.vendor_key || null,
+    vendor_key: resolution.vendor_key || resolution.matched_key || candidate.vendor_key || null,
     tool_key: candidate.tool_key || null,
     ...(candidate.modality ? { modality: candidate.modality } : {}),
     official_url: officialUrl,

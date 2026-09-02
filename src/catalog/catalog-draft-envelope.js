@@ -3,6 +3,55 @@
 const { validatePlannedRecords } = require('./catalog-record-completeness');
 const { fieldCoverageOf } = require('./catalog-synthesis');
 
+const RETRYABLE_CODES = new Set([
+  'DEEPSEEK_TIMEOUT', 'DEEPSEEK_RATE_LIMITED', 'DEEPSEEK_PROVIDER_ERROR', 'DEEPSEEK_NETWORK_ERROR',
+  'DEEPSEEK_SYNTHESIS_INCOMPLETE', 'DEEPSEEK_SYNTHESIS_EMPTY', 'DEEPSEEK_SYNTHESIS_FAILED',
+  'DEEPSEEK_OUTPUT_INVALID', 'DEEPSEEK_SCHEMA_INVALID', 'COST_BUDGET_EXHAUSTED',
+]);
+const CONFIG_CODES = new Set([
+  'MODEL_REQUIRED', 'DEEPSEEK_AUTH_REQUIRED', 'DEEPSEEK_ENDPOINT_INVALID', 'AI_PROVIDER_UNSUPPORTED',
+  'AI_PROTOCOL_MISMATCH', 'RETRIEVAL_PROVIDER_UNSUPPORTED', 'TAVILY_AUTH_REQUIRED', 'TAVILY_ACCESS_MODE_REQUIRED',
+]);
+const PROFILE_CODES = new Set(['PROFILE_MISMATCH_SUSPECTED', 'PLACEMENT_MANUAL_REQUIRED', 'PLACEMENT_AI_FAILED', 'SEED_INVALID']);
+const EVIDENCE_CODES = new Set(['SYNTHESIS_COVERAGE_INCOMPLETE', 'SOURCE_ID_INVALID', 'PATCH_PROVENANCE_MISSING', 'OFFICIAL_SOURCE_REQUIRED']);
+
+function failureCodeOf(failure) {
+  const code = String(failure?.code || 'DRAFT_BLOCKED');
+  if (code === 'DEEPSEEK_OUTPUT_INVALID' && /missing field [`']?model/i.test(String(failure?.error || ''))) return 'MODEL_REQUIRED';
+  return code;
+}
+
+function classifyFailure(research, synthesis) {
+  const failure = !research?.ok ? research : !synthesis?.ok ? synthesis : null;
+  if (!failure && Array.isArray(synthesis?.coverage?.missing) && synthesis.coverage.missing.length) {
+    return { recovery_kind: 'evidence_required', error_code: 'SYNTHESIS_COVERAGE_INCOMPLETE' };
+  }
+  if (!failure) return { recovery_kind: 'manual_required', error_code: 'DRAFT_BLOCKED' };
+  const error_code = failureCodeOf(failure);
+  if (CONFIG_CODES.has(error_code)) return { recovery_kind: 'config_required', error_code };
+  if (RETRYABLE_CODES.has(error_code)) return { recovery_kind: 'retryable', error_code };
+  if (EVIDENCE_CODES.has(error_code) || Array.isArray(synthesis?.coverage?.missing)) return { recovery_kind: 'evidence_required', error_code };
+  if (PROFILE_CODES.has(error_code)) return { recovery_kind: 'seed_or_profile_required', error_code };
+  return { recovery_kind: 'manual_required', error_code };
+}
+
+function missingFieldsOf(research, synthesis) {
+  const fields = Array.isArray(synthesis?.coverage?.missing) ? synthesis.coverage.missing : [];
+  return [...new Set(fields.map(item => `${item.layer}.${item.field}`))];
+}
+
+function missingConfigFieldsOf(failure, errorCode) {
+  if (errorCode === 'MODEL_REQUIRED') return ['model'];
+  if (errorCode === 'AI_PROTOCOL_MISMATCH') return ['protocol'];
+  if (errorCode === 'RETRIEVAL_PROVIDER_UNSUPPORTED') return ['retrieval_provider'];
+  if (errorCode === 'TAVILY_ACCESS_MODE_REQUIRED') return ['access_mode'];
+  return Array.isArray(failure?.missing_config_fields) ? failure.missing_config_fields.filter(field => typeof field === 'string') : [];
+}
+
+function suggestedDetailKindOf(failure) {
+  return typeof failure?.suggested_detail_kind === 'string' ? failure.suggested_detail_kind : null;
+}
+
 function envelopeBlockingReasons(research, synthesis) {
   if (!research?.ok) return [research?.error || research?.code || '研究失败'];
   if (!synthesis?.ok) {
@@ -16,12 +65,27 @@ function envelopeBlockingReasons(research, synthesis) {
 
 function failureDetailsOf(research, synthesis, fallbackError) {
   const failure = !research?.ok ? research : !synthesis?.ok ? synthesis : null;
-  if (!failure) return { code: 'DRAFT_BLOCKED', error: fallbackError };
-  const details = {};
+  const classification = classifyFailure(research, synthesis);
+  if (!failure) return {
+    code: classification.error_code,
+    recovery_kind: classification.recovery_kind,
+    error: fallbackError,
+    missing_fields: missingFieldsOf(research, synthesis),
+    missing_config_fields: [],
+    suggested_detail_kind: null,
+  };
+  const details = {
+    code: classification.error_code,
+    recovery_kind: classification.recovery_kind,
+    error: classification.error_code === 'MODEL_REQUIRED' ? 'DeepSeek 模型配置缺失' : (failure.error || fallbackError),
+    missing_fields: missingFieldsOf(research, synthesis),
+    missing_config_fields: missingConfigFieldsOf(failure, classification.error_code),
+    suggested_detail_kind: suggestedDetailKindOf(failure),
+  };
   for (const key of ['response_status', 'incomplete_reason', 'output_types', 'output_preview', 'output_keys']) {
     if (failure[key] !== undefined) details[key] = failure[key];
   }
-  return { code: failure.code || 'DRAFT_BLOCKED', error: failure.error || fallbackError, ...details };
+  return details;
 }
 
 function buildCatalogDraftEnvelope({ seed, baseRevision, researchPlan, research, synthesis }) {
@@ -34,9 +98,11 @@ function buildCatalogDraftEnvelope({ seed, baseRevision, researchPlan, research,
     seed,
     research_plan: researchPlan,
     research: {
+      ok: research?.ok === true,
       official_sources: research?.official_sources || [],
       warnings: research?.warnings || [],
     },
+    research_progress: research?.research_progress || null,
     coverage: synthesis?.coverage || null,
     layer_patches: synthesis?.layer_patches || [],
     synthesis: synthesis?.synthesis || null,
@@ -80,4 +146,6 @@ function validateCatalogDraftEnvelope(draft) {
 module.exports = {
   buildCatalogDraftEnvelope,
   validateCatalogDraftEnvelope,
+  classifyFailure,
+  failureCodeOf,
 };

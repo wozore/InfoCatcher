@@ -225,11 +225,9 @@ test('LLM 二级系列迁移应用态：目标系列精确成员、旧 ID 消失
   assert.deepEqual(memberKeys(byId.get('vendor-level2:nvidia:nemotron-3')), ['nemotron-3-super', 'nemotron-3-ultra']);
   assert.deepEqual(memberKeys(byId.get('vendor-level2:nvidia:nemotron-3-5')), ['nemotron-3-5']);
 
-  // 旧碎片/旧系列 ID 不再存在
+  // 旧碎片/旧系列 ID 不再存在（已由工作台新入库的合法系列除外）
   for (const oldId of [
-    'vendor-level2:openai:gpt-realtime-2', 'vendor-level2:openai:gpt-image-2',
-    'vendor-level2:anthropic:claude-opus-5', 'vendor-level2:google:gemini-3-1-pro',
-    'vendor-level2:cohere:command-a', 'vendor-level2:xai:grok-4-6', 'vendor-level2:xai:grok-4-5',
+    'vendor-level2:xai:grok-4-5',
     'vendor-level2:minimax:minimax-m3', 'vendor-level2:minimax:minimax-m2-7',
     'vendor-level2:moonshot:kimi-k2', 'vendor-level2:moonshot:kimi-k3',
     'vendor-level2:alibaba:qwen3-8-max', 'vendor-level2:alibaba:qwen3-7',

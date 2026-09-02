@@ -29,7 +29,9 @@ test('GET projections include revisions and items without commits', () => {
   assert.equal(service.top().items.length, 0); // 无 top.json 时返回空池
   assert.match(service.top().note, /尚未生成 Top 待选池/);
   assert.deepEqual(service.keywords(), { revision: 'keyword-r1', items: [{ id: 'kw', word: 'AI', adopted: false, discarded: false }] });
-  assert.deepEqual(service.conceptPreviews(), { items: [{ term: 'RAG' }] });
+  const conceptPreview = service.conceptPreviews();
+  assert.deepEqual(conceptPreview.items, [{ term: 'RAG' }]);
+  assert.equal(conceptPreview.status, 'legacy_preview');
   assert.equal(state.commits.length, 0);
 });
 
@@ -141,6 +143,53 @@ test('工作台字幕上传与外部 AI 总结委托底层并保留成本确认'
   assert.equal(calls[0][1].candidate_id, 'yt-1');
   assert.equal(calls[1][2].confirmCost, true);
   assert.throws(() => service.uploadTranscript({ candidate_id: 'yt-1', expected_revision: 'news-r1' }), /文件名必填/);
+});
+
+
+test('Catalog recovery service enforces top-level request allowlists', () => {
+  const calls = [];
+  const service = createMaintainerWorkbenchService({
+    catalogWorkbench: {
+      recoveryPlan: (draftId, body) => { calls.push(['plan', draftId, body]); return { ok: true }; },
+      resume: (draftId, body) => { calls.push(['resume', draftId, body]); return { ok: true }; },
+    },
+    topFile: require('path').join(require('os').tmpdir(), 'knowview-wb-no-top.json'),
+    newsApi: { readStore: () => ({ candidates: [] }), revisionOfStore: () => 'n', commit: () => ({}), reviewMutation: () => ({}), topMutation: () => ({}), readKeywords: () => ({ candidates: [] }), readConfig: () => ({}), revisionOfConfig: () => 'k', commitKeywords: () => ({}) },
+    toolsApi: { readQueue: () => ({ revision: 't', items: [] }), review: () => ({}) },
+    conceptsApi: { readPreviews: () => ({ cards: [] }) },
+  });
+  assert.deepEqual(service.catalogRecoveryPlan('draft-1', { expected_revision: 'c-r1', generator_options: { model: 'deepseek-v4-flash' } }), { ok: true });
+  assert.deepEqual(service.catalogResume('draft-1', { expected_revision: 'c-r1', recovery_token: 'token', confirm_cost: true }), { ok: true });
+  assert.throws(() => service.catalogRecoveryPlan('draft-1', { expected_revision: 'c-r1', apiKey: 'secret' }), error => error.code === 'RECOVERY_OPTIONS_INVALID');
+  assert.throws(() => service.catalogResume('draft-1', { expected_revision: 'c-r1', recovery_token: 'token', confirm_cost: true, endpoint: 'https://evil.invalid' }), error => error.code === 'RECOVERY_OPTIONS_INVALID');
+  assert.equal(calls.length, 2);
+});
+
+test('工作台清空只允许全部审核完成并委托白名单清理', async () => {
+  const os = require('os');
+  const path = require('path');
+  const missingTop = path.join(os.tmpdir(), `knowview-wb-no-top-${Date.now()}.json`);
+  const makeService = (store, clear) => createMaintainerWorkbenchService({
+    topFile: missingTop,
+    newsApi: { readStore: () => store, revisionOfStore: () => 'news-r1', readKeywords: () => ({ candidates: [] }), readConfig: () => ({}), commit: () => ({}), reviewMutation: () => ({}), topMutation: () => ({}) },
+    toolsApi: { readQueue: () => ({ revision: 'tool-r1', items: [] }), readRegistry: () => ({ products: {} }), review: () => ({}) },
+    conceptsApi: { readPreviews: () => null, readPending: () => ({ revision: 'concept-r1', cards: [] }), readGlossary: () => [] },
+    pendingApi: { read: () => ({ revision: 'pending-r1', cards: [] }), review: () => ({}) },
+    catalogWorkbench: { list: () => ({ catalog_revision: 'catalog-r1', items: [] }) },
+    workspaceApi: { clear },
+  });
+  let clearCalls = 0;
+  const complete = makeService({ candidates: [] }, async () => { clearCalls += 1; return { removed_files: ['data/manual/top.json'] }; });
+  assert.equal(complete.workspaceStatus().clearable, true);
+  assert.deepEqual(await complete.clearWorkspace(), { ok: true, status: 'cleared', removed_files: ['data/manual/top.json'] });
+  assert.equal(clearCalls, 1);
+
+  const incomplete = makeService({ candidates: [{ id: 'news-1', review_status: 'pending' }] }, async () => { clearCalls += 1; return {}; });
+  const blocked = await incomplete.clearWorkspace();
+  assert.equal(blocked.ok, false);
+  assert.equal(blocked.code, 'WORKBENCH_NOT_COMPLETE');
+  assert.equal(blocked.blockers[0].code, 'NEWS_REVIEW_PENDING');
+  assert.equal(clearCalls, 1);
 });
 
 test('mutations require expected revision and delegate guarded commits', () => {

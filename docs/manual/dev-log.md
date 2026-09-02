@@ -99,6 +99,7 @@
 - [2026-08-17 · 本地 AI 迁移（Bonsai-27B）与自动启动](#log-entry-80)
 - [2026-08-19 · 模型对比系统（4 源管线 + 主键日期剥离与展示名清洗 + 维度实时渲染）](#log-entry-81)
 - [2026-08-21 · 模型身份歧义解析修复 + 手动审计入口](#log-entry-82)
+- [2026-09-02 · 维护者工作台知识闭环恢复与配置诊断](#log-entry-83)
 
 ---
 
@@ -2709,3 +2710,34 @@
 - [~] `identity-review.bat` 当前触发的是候选清单生成，不自动调用 AI；AI 建议 Adapter 已完成并由测试覆盖，实际调用仍需显式接入维护者确认流程。
 - [~] AI 建议不自动写入 `models-alias.json`；正式规则必须人工确认后登记。
 - [~] 本次改动尚未提交，待维护者决定提交信息。
+
+<a id="log-entry-83"></a>
+
+## 2026-09-02 · 维护者工作台知识闭环恢复与配置诊断
+
+**背景**：维护者工作台中已有 Catalog Draft 因供应商结构化请求缺少 `model` 配置而阻断；概念待补卡和工具 / 模型待补卡都需要明确区分可恢复失败与必须人工介入的问题，避免无效重试和重复检索成本。
+
+### 实际变更
+
+- [x] Catalog 生成器和维护者工作台注入默认配置（含 `deepseek-v4-flash`、Responses、Tavily），人工 override 采用字段白名单与服务端范围校验；API key、endpoint、fetch、signal 等敏感或运行时对象不进入网页请求。
+- [x] 旧 `DEEPSEEK_OUTPUT_INVALID + missing field model` 统一诊断为 `MODEL_REQUIRED / config_required`，工作台只展示缺失的非敏感配置字段；证据不足、Profile/Seed 错误和人工问题分别提示人工处理，不显示伪配置入口。
+- [x] 新增 Catalog Draft `recovery-plan → 成本确认 → resume` 两阶段链路；token 绑定 Draft、更新时间、状态、Catalog revision、恢复模式、有效配置和成本计划，stale revision/token 在外部调用前拒绝。
+- [x] 修复 `recovery_token` 计算中的非决定性 bug：`cleanGeneratorOptionsForToken` 剥离非配置控制字段 `confirmCost`，并将缺省 limits 规约为确定性数值；彻底解决 Plan（无 `confirmCost`）与 Resume（带 `confirmCost: true`）算出不同 Token 导致的误报 `RECOVERY_TOKEN_CHANGED (409)` 及刷新无效的死循环。
+- [x] 前端 `recoverDraft` 增强：409 时将 Draft 行状态与按钮重置为“重新生成恢复预览”，取消 checkbox 勾选并禁用，按精确错误代码（`RECOVERY_TOKEN_CHANGED` / `REVISION_CONFLICT` / `DRAFT_RECOVERY_IN_PROGRESS`）呈现针对性提示，无需依赖全局“刷新数据”。
+- [x] 已完成研究的 Draft 只重新合成，不重复 discover/acquire/Tavily；研究未完成时持久化 completed/failed scope，仅补做未完成范围；同一 Draft 的并发恢复请求受状态 claim 保护。
+- [x] 批量 Catalog Apply 修复：新增 `mergeBatchPatches`，处理同批次中同厂商（或同二级系列）的多个 Draft 带来的上层 Patch 重复问题（如多个 Draft 共享相同 `vendor-card (noop)` 或并发向 `vendor-level1` / `vendor-level2` 挂载引用）；消除 `PATCH_DUPLICATE` 阻断，使同厂商多个 ready Draft 能够顺利进入单次批量事务。
+- [x] 批量 Catalog Apply 继续只消费 ready Draft，blocked Draft 独立恢复；正式 Catalog 写入默认不自动构建 dist。
+
+### 验证结果
+
+- [x] 恢复专项测试 32/32 通过，覆盖 missing-model 只合成、`confirmCost` 前后 Token 决定性一致断言、Tavily 零重复调用、stale token 零外部调用、敏感字段拒绝和并发 Resume 互斥。
+- [x] 批量合并专项测试通过：验证同厂商多个 Draft 合并关联层引用且零 `PATCH_DUPLICATE` 错误。
+- [x] 全量测试：612/612 通过（串行）。
+- [x] `node scripts/validate.js` 通过；`git diff --check` 通过。
+- [x] 本机实际当前 9 个 Draft 执行 `batchPreview()` 验证：`ok: true, status: 'review_ready', draft_count: 9, blockers: []`，成功生成批次 `batch_token`。
+
+### 已知边界
+
+- [~] 当前环境没有可用浏览器自动化工具，未完成真实浏览器点击与截图验收；已完成页面静态检查、HTTP recovery preview 和 mock adapter 回归。
+- [~] 当前 7 条 Draft 的恢复仍需维护者在工作台确认增量成本并执行恢复；本轮没有代为恢复或 Apply。
+- [~] 本次改动尚未提交，待维护者明确要求后再提交。

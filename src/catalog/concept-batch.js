@@ -308,6 +308,7 @@ async function runConceptBatch(cards, options = {}) {
     base_revision: baseRevision,
     source_pending_revision: sourcePendingRevision,
     candidate_keys: cardsOut.map(card => card.candidate_key),
+    ...(options.planHash ? { plan_hash: options.planHash } : {}),
     count: cardsOut.length,
     cards: cardsOut,
   };
@@ -371,7 +372,11 @@ function applyStrictConceptPreviews(data, options = {}) {
     return { ok: false, code: 'REVISION_CONFLICT' };
   }
   if (options.previewHash && options.previewHash !== checked.expectedHash) return { ok: false, code: 'PREVIEW_CHANGED' };
-  const terms = Array.isArray(options.terms) ? options.terms.map(termKeyOf).filter(Boolean) : [];
+  const applyAll = options.applyAll === true;
+  if (applyAll && options.terms !== undefined) return { ok: false, code: 'CONCEPT_APPLY_MODE_INVALID' };
+  const terms = applyAll
+    ? data.cards.map(card => termKeyOf(card?.term)).filter(Boolean)
+    : (Array.isArray(options.terms) ? options.terms.map(termKeyOf).filter(Boolean) : []);
   if (!terms.length) return { ok: false, code: 'CONCEPT_TERMS_REQUIRED' };
   if (new Set(terms).size !== terms.length) return { ok: false, code: 'CONCEPT_TERMS_INVALID' };
   const cardsByTerm = new Map(data.cards.map(card => [termKeyOf(card?.term), card]));

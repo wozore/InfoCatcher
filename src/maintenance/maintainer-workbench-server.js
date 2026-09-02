@@ -14,9 +14,12 @@ const SAFE_ERROR_CODES = new Set([
   'BAD_REQUEST', 'OPERATION_FAILED', 'PENDING_CANDIDATE_NOT_FOUND', 'PENDING_CANDIDATE_NOT_APPROVED',
   'COST_CONFIRMATION_REQUIRED', 'PLAN_CHANGED', 'CONFIRMATION_INVALID', 'DRAFT_BLOCKED', 'DRAFT_ID_INVALID',
   'PREVIEW_CHANGED', 'PREVIEW_INVALID', 'PREVIEW_CANDIDATES_INVALID', 'PREVIEW_SCHEMA_UNSUPPORTED',
+  'REVISION_CONFLICT', 'BATCH_TOKEN_CHANGED', 'BATCH_TOKEN_EXPIRED', 'DRAFT_BATCH_STALE', 'SOURCE_PENDING_REVISION_CHANGED',
+  'DRAFT_IDS_INVALID', 'DRAFTS_NOT_READY',
+  'RECOVERY_OPTIONS_INVALID', 'MODEL_REQUIRED', 'RECOVERY_TOKEN_REQUIRED', 'RECOVERY_TOKEN_CHANGED', 'DRAFT_RECOVERY_FORBIDDEN', 'DRAFT_RECOVERY_IN_PROGRESS',
   'CONCEPT_TERM_NOT_FOUND', 'CONCEPT_TERM_ALREADY_EXISTS', 'CONCEPT_PREVIEW_INCOMPLETE', 'CONCEPT_TERMS_REQUIRED',
-  'CONCEPT_TERMS_INVALID', 'PENDING_REVIEW_DECISION_INVALID', 'PENDING_FILE_INVALID', 'PENDING_KIND_INVALID',
-  'PENDING_CANDIDATE_NAME_REQUIRED', 'PENDING_CANDIDATE_VAGUE', 'PENDING_DETAIL_KIND_INVALID',
+  'CONCEPT_TERMS_INVALID', 'CONCEPT_APPLY_MODE_INVALID', 'PENDING_REVIEW_DECISION_INVALID', 'PENDING_FILE_INVALID', 'PENDING_KIND_INVALID',
+  'PENDING_CANDIDATE_NAME_REQUIRED', 'PENDING_CANDIDATE_VAGUE', 'PENDING_DETAIL_KIND_INVALID', 'WORKBENCH_NOT_COMPLETE',
 ]);
 
 function randomToken() { return crypto.randomBytes(32).toString('base64url'); }
@@ -114,6 +117,7 @@ function createMaintainerWorkbenchServer(options = {}) {
         const body = method === 'POST' ? await readJsonBody(req, route === '/news/transcripts/upload' ? TRANSCRIPT_UPLOAD_MAX_BYTES : MAX_BODY_BYTES) : null;
         let result;
         if (method === 'GET' && route === '/overview') result = service.overview();
+        else if (method === 'POST' && route === '/workbench/clear') result = service.clearWorkspace();
         else if (method === 'GET' && route === '/news/review') result = service.newsReview();
         else if (method === 'POST' && route === '/news/review') result = service.reviewNews(body);
         else if (method === 'GET' && route === '/news/keywords') result = service.keywords();
@@ -141,8 +145,11 @@ function createMaintainerWorkbenchServer(options = {}) {
         else if (method === 'GET' && route === '/catalog/drafts') result = service.catalogDrafts();
         else if (method === 'GET' && /^\/catalog\/drafts\/[^/]+$/.test(route)) result = service.catalogDraft(decodeURIComponent(route.split('/')[3]));
         else if (method === 'POST' && /^\/catalog\/drafts\/[^/]+\/review$/.test(route)) result = service.catalogReview(decodeURIComponent(route.split('/')[3]));
+        else if (method === 'POST' && /^\/catalog\/drafts\/[^/]+\/recovery-plan$/.test(route)) result = service.catalogRecoveryPlan(decodeURIComponent(route.split('/')[3]), body);
         else if (method === 'POST' && /^\/catalog\/drafts\/[^/]+\/resume$/.test(route)) result = service.catalogResume(decodeURIComponent(route.split('/')[3]), body);
         else if (method === 'POST' && /^\/catalog\/drafts\/[^/]+\/discard$/.test(route)) result = service.catalogDiscard(decodeURIComponent(route.split('/')[3]), body);
+        else if (method === 'GET' && route === '/catalog/batch-preview') result = service.catalogBatchPreview();
+        else if (method === 'POST' && route === '/catalog/apply-batch') result = service.catalogApplyBatch(body);
         else if (method === 'POST' && route === '/catalog/apply') result = service.catalogApply(body);
         else if (method === 'GET' && route === '/concepts/plan') result = service.conceptPlan();
         else if (method === 'POST' && route === '/concepts/prepare') result = service.conceptPrepare(body);
@@ -151,7 +158,10 @@ function createMaintainerWorkbenchServer(options = {}) {
         else return send(res, 404, { error: 'NOT_FOUND' });
         result = await result;
         if (res.destroyed || res.writableEnded) return;
-        if (result && result.ok === false) return send(res, result.code === 'REVISION_CONFLICT' ? 409 : 400, result);
+        if (result && result.ok === false) {
+          const conflict = new Set(['REVISION_CONFLICT', 'PREVIEW_CHANGED', 'BATCH_TOKEN_CHANGED', 'BATCH_TOKEN_EXPIRED', 'DRAFT_BATCH_STALE', 'SOURCE_PENDING_REVISION_CHANGED', 'PLAN_CHANGED', 'RECOVERY_TOKEN_CHANGED', 'RECOVERY_PLAN_CHANGED']);
+          return send(res, conflict.has(result.code) ? 409 : 400, result);
+        }
         return send(res, 200, result);
       }
       if (method !== 'GET') return send(res, 405, { error: 'METHOD_NOT_ALLOWED' }, { Allow: 'GET' });
@@ -169,7 +179,8 @@ function createMaintainerWorkbenchServer(options = {}) {
       if (status === 413) return send(res, 413, { error: 'PAYLOAD_TOO_LARGE' });
       if (status === 415) return send(res, 415, { error: 'UNSUPPORTED_MEDIA_TYPE' });
       const code = SAFE_ERROR_CODES.has(error?.code) ? error.code : 'OPERATION_FAILED';
-      return send(res, status, { error: code });
+      const message = typeof error?.message === 'string' && error.message.length > 0 ? error.message : code;
+      return send(res, status, { error: code, message });
     } finally {
       cleanupRequestSignal();
     }

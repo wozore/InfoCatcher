@@ -748,6 +748,15 @@
       "catalog_aliases": []
     },
     {
+      "model_key": "openai--gpt-5.6",
+      "release_date": "2026-07-30",
+      "catalog_aliases": [
+        "GPT 5.6",
+        "gpt-5-6",
+        "GPT-5.6"
+      ]
+    },
+    {
       "model_key": "openai--gpt-5.6-luna",
       "release_date": "2026-07-09",
       "catalog_aliases": []

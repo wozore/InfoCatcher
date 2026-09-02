@@ -14,10 +14,41 @@ const { pendingCandidateToSeed } = require('../news/feedback/catalog-draft-adapt
 const { resolveBatchCandidates, estimateResolutionNeed } = require('./catalog-batch');
 const { loadCatalogSnapshot } = require('./catalog-snapshot-store');
 const { DIRS } = require('../shared/paths');
+const { getProvider } = require('../shared/ai-provider-registry');
 const assistant = require('./catalog-assistant');
 const draftStore = require('./catalog-draft-store');
 
 const PROJECT_ROOT = DIRS.project;
+const RECOVERY_OPTION_KEYS = Object.freeze([
+  'provider', 'model', 'protocol', 'retrieval_provider', 'access_mode', 'timeout_ms',
+  'max_search_queries', 'max_pages', 'max_responses_calls', 'max_synthesis_calls',
+  'search_depth', 'max_search_results', 'extract_depth', 'chunks_per_source',
+]);
+const RECOVERY_OPTION_LIMITS = Object.freeze({
+  timeout_ms: [1000, 600000], max_search_queries: [1, 20], max_pages: [1, 100],
+  max_responses_calls: [1, 50], max_synthesis_calls: [1, 5], max_search_results: [1, 20], chunks_per_source: [1, 10],
+});
+
+function normalizeRecoveryOptions(input, defaults) {
+  if (input === undefined) return assistant.normalizeGeneratorOptions(defaults);
+  if (!input || typeof input !== 'object' || Array.isArray(input)) throw codeError('RECOVERY_OPTIONS_INVALID');
+  const unknown = Object.keys(input).filter(key => !RECOVERY_OPTION_KEYS.includes(key));
+  if (unknown.length) throw codeError('RECOVERY_OPTIONS_INVALID');
+  for (const field of ['model', 'provider', 'protocol', 'retrieval_provider', 'access_mode']) {
+    if (input[field] !== undefined && (typeof input[field] !== 'string' || !input[field].trim())) throw codeError(field === 'model' ? 'MODEL_REQUIRED' : 'RECOVERY_OPTIONS_INVALID');
+  }
+  for (const [key, range] of Object.entries(RECOVERY_OPTION_LIMITS)) {
+    if (input[key] === undefined) continue;
+    const value = Number(input[key]);
+    if (!Number.isInteger(value) || value < range[0] || value > range[1]) throw codeError('RECOVERY_OPTIONS_INVALID');
+  }
+  if (input.access_mode !== undefined && !['keyed', 'keyless'].includes(String(input.access_mode))) throw codeError('RECOVERY_OPTIONS_INVALID');
+  const merged = assistant.normalizeGeneratorOptions({ ...defaults, ...input });
+  if (!merged.model || typeof merged.model !== 'string') throw codeError('MODEL_REQUIRED');
+  const provider = getProvider(merged.provider);
+  if (!provider || provider.protocol !== merged.protocol || merged.retrievalProvider !== 'tavily') throw codeError('RECOVERY_OPTIONS_INVALID');
+  return merged;
+}
 
 /** 脱敏本地路径，避免把绝对路径/临时路径泄露进浏览器 DTO。 */
 function sanitizeReason(value) {
@@ -56,16 +87,56 @@ function candidateKey(card) { return card.candidate_key; }
 
 function planHashOf(value) { return hash({ kind: 'catalog-workbench-plan', ...value }); }
 
+function recoveryDiagnostic(draft) {
+  if (draft?.readiness?.status === 'ready') return { recoveryKind: null, errorCode: null, missingFields: [], missingConfigFields: [], suggestedDetailKind: null, reason: null };
+  const failure = draft?.last_error || {};
+  let errorCode = String(failure.code || '').trim();
+  if (errorCode === 'DEEPSEEK_OUTPUT_INVALID' && /missing field [`']?model/i.test(String(failure.error || ''))) errorCode = 'MODEL_REQUIRED';
+  const missingFields = [...new Set([
+    ...(Array.isArray(failure.missing_fields) ? failure.missing_fields : []),
+    ...(Array.isArray(draft?.coverage?.missing) ? draft.coverage.missing.map(item => `${item.layer}.${item.field}`) : []),
+  ].filter(field => typeof field === 'string' && field.trim()))];
+  const missingConfigFields = [...new Set((Array.isArray(failure.missing_config_fields) ? failure.missing_config_fields : []).filter(field => typeof field === 'string' && field.trim()))];
+  let recoveryKind = failure.recovery_kind || null;
+  if (!recoveryKind) {
+    if (errorCode === 'MODEL_REQUIRED' || ['DEEPSEEK_AUTH_REQUIRED', 'DEEPSEEK_ENDPOINT_INVALID', 'AI_PROVIDER_UNSUPPORTED', 'AI_PROTOCOL_MISMATCH', 'RETRIEVAL_PROVIDER_UNSUPPORTED', 'TAVILY_ACCESS_MODE_REQUIRED'].includes(errorCode)) recoveryKind = 'config_required';
+    else if (['DEEPSEEK_TIMEOUT', 'DEEPSEEK_RATE_LIMITED', 'DEEPSEEK_PROVIDER_ERROR', 'DEEPSEEK_NETWORK_ERROR', 'DEEPSEEK_SYNTHESIS_INCOMPLETE', 'DEEPSEEK_SYNTHESIS_EMPTY', 'DEEPSEEK_SYNTHESIS_FAILED', 'DEEPSEEK_OUTPUT_INVALID', 'DEEPSEEK_SCHEMA_INVALID'].includes(errorCode)) recoveryKind = 'retryable';
+    else if (errorCode === 'PROFILE_MISMATCH_SUSPECTED' || errorCode.startsWith('PLACEMENT_') || errorCode === 'SEED_INVALID') recoveryKind = 'seed_or_profile_required';
+    else if (missingFields.length || errorCode === 'SYNTHESIS_COVERAGE_INCOMPLETE') recoveryKind = 'evidence_required';
+    else recoveryKind = 'manual_required';
+  }
+  const suggestedDetailKind = typeof failure.suggested_detail_kind === 'string' ? failure.suggested_detail_kind : null;
+  const researchComplete = draft?.research?.ok === true
+    || (draft?.research?.ok !== false && Array.isArray(draft?.research?.official_sources) && draft.research.official_sources.length > 0 && !draft.research_progress?.failed_scope);
+  const recoveryMode = researchComplete && ['config_required', 'retryable'].includes(recoveryKind) && !errorCode.startsWith('TAVILY_') ? 'synthesis_only' : 'research_resume';
+  const reason = {
+    MODEL_REQUIRED: '缺少 model 配置，请填写模型名后重试。',
+    DEEPSEEK_AUTH_REQUIRED: '缺少 DeepSeek 凭据，请在仓库根目录 .env 配置对应 key。',
+    TAVILY_ACCESS_MODE_REQUIRED: '缺少 Tavily access mode 配置。',
+    SYNTHESIS_COVERAGE_INCOMPLETE: missingFields.length ? `缺少官方证据字段：${missingFields.join('、')}` : '官方证据字段不完整。',
+    PROFILE_MISMATCH_SUSPECTED: suggestedDetailKind ? `候选类型可能应为 ${suggestedDetailKind}，请修正候选资料。` : '候选类型或 Profile 不匹配。',
+  }[errorCode] || (errorCode ? `恢复被阻断（${errorCode}）。` : 'Draft 当前不可恢复。');
+  return { recoveryKind, recoveryMode, errorCode: errorCode || 'DRAFT_BLOCKED', missingFields, missingConfigFields: missingConfigFields.length ? missingConfigFields : (errorCode === 'MODEL_REQUIRED' ? ['model'] : []), suggestedDetailKind, reason };
+}
+
 function projectDraft(draft, extra = {}) {
   if (!draft) return null;
   const readiness = draft.readiness || {};
+  const diagnostic = recoveryDiagnostic(draft);
   return {
     draft_id: draft.draft_id,
+    candidate_name: String(draft.seed?.name || '').trim() || null,
     state: draft.state,
     base_revision: draft.base_revision || null,
     preview_hash: draft.preview_hash || null,
     readiness: readiness.status || null,
-    blocking_reasons: Array.isArray(readiness.blocking_reasons) ? readiness.blocking_reasons.slice(0, 5).map(sanitizeReason) : [],
+    recovery_kind: diagnostic.recoveryKind,
+    recovery_mode: diagnostic.recoveryMode,
+    error_code: diagnostic.errorCode,
+    missing_fields: diagnostic.missingFields,
+    missing_config_fields: diagnostic.missingConfigFields,
+    suggested_detail_kind: diagnostic.suggestedDetailKind,
+    blocking_reasons: diagnostic.reason ? [diagnostic.reason] : [],
     warnings: Array.isArray(readiness.warnings) ? readiness.warnings.slice(0, 5).map(sanitizeReason) : [],
     updated_at: draft.updated_at || null,
     ...extra,
@@ -73,11 +144,16 @@ function projectDraft(draft, extra = {}) {
 }
 
 function createCatalogWorkbench(options = {}) {
+  const configuredGeneratorOptions = assistant.loadGeneratorConfig();
+  const generatorOptions = assistant.normalizeGeneratorOptions({ ...configuredGeneratorOptions, ...(options.generatorOptions || {}) });
   const planFn = options.planCatalogDraft || assistant.planCatalogDraft;
   const prepareFn = options.prepareCatalogDraft || assistant.prepareCatalogDraft;
   const resumeFn = options.resumeCatalogDraft || assistant.resumeCatalogDraft;
+  const recoveryPlanFn = options.recoveryPlanForDraft || assistant.recoveryPlanForDraft;
   const reviewFn = options.reviewCatalogDraft || assistant.reviewCatalogDraft;
+  const batchReviewFn = options.reviewCatalogDraftBatch || assistant.reviewCatalogDraftBatch;
   const applyFn = options.applyCatalogDraft || assistant.applyCatalogDraft;
+  const batchApplyFn = options.applyCatalogDrafts || assistant.applyCatalogDrafts;
   const discardFn = options.discardCatalogDraft || assistant.discardCatalogDraft;
   const listFn = options.listDrafts || draftStore.listDrafts;
   const readFn = options.readDraft || draftStore.readDraft;
@@ -97,13 +173,13 @@ function createCatalogWorkbench(options = {}) {
     const plans = [];
     for (const entry of seeds) {
       try {
-        const result = planFn(entry.seed, options.generatorOptions || {});
+        const result = planFn(entry.seed, generatorOptions);
         plans.push({ candidate_key: candidateKey(entry.card), name: entry.card.name, ok: result.ok, cost_plan: result.cost_plan || null, code: result.code || null });
       } catch (error) {
         plans.push({ candidate_key: candidateKey(entry.card), name: entry.card.name, ok: false, code: String(error?.message || 'PLAN_FAILED').split(':')[0] });
       }
     }
-    const resolveOptions = { ...(options.resolveOptions || {}), ...(options.generatorOptions || {}) };
+    const resolveOptions = { ...generatorOptions, ...(options.resolveOptions || {}) };
     const resolutionNeed = estimateResolutionNeed(cards, resolveOptions);
     const plan = {
       pending_revision: pending.revision,
@@ -142,35 +218,79 @@ function createCatalogWorkbench(options = {}) {
     const planned = assertPlan(input);
     if (!planned.ok) return planned;
     const { pending, cards } = approvedCandidates(options);
-    const resolveOptions = { ...(options.resolveOptions || {}), ...(options.generatorOptions || {}) };
-    let resolved;
-    try {
-      resolved = await (options.resolveBatchCandidates || resolveBatchCandidates)(cards, resolveOptions);
-    } catch (error) { return { ok: false, code: 'DRAFT_BLOCKED', blocking_reasons: ['官方来源解析失败'] }; }
-    const byName = new Map((resolved.seeds || []).map(seed => [String(seed.name).trim().toLowerCase(), seed]));
+    const reusable = listFn().filter(draft => draft.schema_version === 3
+      && draft.base_revision === planned.catalog_revision
+      && ['researching', 'preview_ready', 'preview_blocked', 'failed_retryable', 'rolled_back'].includes(draft.state));
+    const used = new Set();
     const drafts = [];
-    const blocked = [...(resolved.unresolved || []).map(item => ({ name: item.name, code: 'DRAFT_BLOCKED' })), ...(planned.blocked || [])];
+    const missingCards = [];
     for (const card of cards) {
-      const seed = byName.get(String(card.name).trim().toLowerCase());
-      if (!seed) continue;
+      const key = candidateKey(card);
+      const existing = reusable.find(draft => !used.has(draft.draft_id)
+        && (draft.seed?.candidate_key === key
+          || (!draft.seed?.candidate_key && String(draft.seed?.name || '').trim().toLowerCase() === String(card.name || '').trim().toLowerCase())));
+      if (existing) {
+        used.add(existing.draft_id);
+        drafts.push(projectDraft(existing, { candidate_key: key, reused: true }));
+      } else missingCards.push(card);
+    }
+    const resolveOptions = { ...generatorOptions, ...(options.resolveOptions || {}) };
+    let resolved = { seeds: [], unresolved: [] };
+    if (missingCards.length) {
       try {
-        const result = await prepareFn(seed, { ...(options.generatorOptions || {}), confirmCost: true, catalogAdapters: options.catalogAdapters });
-        if (result && result.draft) drafts.push(projectDraft(result.draft, { candidate_key: candidateKey(card) }));
+        resolved = await (options.resolveBatchCandidates || resolveBatchCandidates)(missingCards, resolveOptions);
+      } catch (error) { return { ok: false, code: 'DRAFT_BLOCKED', blocking_reasons: ['官方来源解析失败'] }; }
+    }
+    const byName = new Map((resolved.seeds || []).map(seed => [String(seed.name).trim().toLowerCase(), seed]));
+    const blocked = [...(resolved.unresolved || []).map(item => ({ name: item.name, code: 'DRAFT_BLOCKED' })), ...(planned.blocked || [])];
+    for (const card of missingCards) {
+      const resolvedSeed = byName.get(String(card.name).trim().toLowerCase());
+      if (!resolvedSeed) continue;
+      const seed = { ...resolvedSeed, candidate_key: candidateKey(card) };
+      try {
+        const result = await prepareFn(seed, { ...generatorOptions, confirmCost: true, catalogAdapters: options.catalogAdapters });
+        if (result && result.draft) drafts.push(projectDraft(result.draft, { candidate_key: candidateKey(card), reused: false }));
         else blocked.push({ candidate_key: candidateKey(card), code: result?.code || 'DRAFT_BLOCKED' });
       } catch (error) { blocked.push({ candidate_key: candidateKey(card), code: String(error?.message || 'DRAFT_BLOCKED').split(':')[0] }); }
     }
-    return { ok: drafts.length > 0, status: drafts.length ? 'drafts_ready' : 'drafts_blocked', pending_revision: pending.revision, catalog_revision: planned.catalog_revision, plan_hash: planned.plan_hash, drafts, blocked };
+    return { ok: drafts.length > 0, status: drafts.length ? 'drafts_ready' : 'drafts_blocked', pending_revision: pending.revision, catalog_revision: planned.catalog_revision, plan_hash: planned.plan_hash, drafts, reused: drafts.filter(draft => draft.reused).map(draft => draft.draft_id), blocked };
   }
 
   function list() {
     const drafts = listFn();
-    return { items: drafts.map(draft => projectDraft(draft)), count: drafts.length };
+    return { catalog_revision: snapshotOf(options).revision, items: drafts.map(draft => projectDraft(draft)), count: drafts.length };
   }
   function read(draftId) { return projectDraft(readFn(draftId)); }
   function review(draftId) { const result = reviewFn(draftId); return result.ok ? { ok: true, draft_id: draftId, current_revision: result.currentRevision, preview_hash: result.previewHash, status: 'review_ready' } : { ok: false, code: result.code || 'DRAFT_BLOCKED', draft_id: draftId, status: 'blocked' }; }
+  function recoveryPlan(draftId, input = {}) {
+    const expectedRevision = String(input.expected_revision || input.expectedRevision || snapshotOf(options).revision || '').trim();
+    if (!expectedRevision) return { ok: false, code: 'REVISION_CONFLICT' };
+    const rawOptions = Object.prototype.hasOwnProperty.call(input, 'generator_options') ? input.generator_options : input.generatorOptions;
+    const merged = normalizeRecoveryOptions(rawOptions, generatorOptions);
+    const result = recoveryPlanFn(draftId, { expectedRevision, generatorOptions: merged });
+    if (!result?.ok) return result;
+    return {
+      ...result,
+      generator_options: {
+        model: merged.model,
+        provider: merged.provider,
+        protocol: merged.protocol,
+        retrieval_provider: merged.retrievalProvider,
+        ...(merged.accessMode ? { access_mode: merged.accessMode } : {}),
+      },
+    };
+  }
   async function resume(draftId, input = {}) {
     if (input.confirm_cost !== true) return { ok: false, code: 'COST_CONFIRMATION_REQUIRED' };
-    const result = await resumeFn(draftId, { ...(options.generatorOptions || {}), confirmCost: true });
+    const expectedRevision = String(input.expected_revision || '').trim();
+    if (!expectedRevision || !input.recovery_token) return { ok: false, code: 'RECOVERY_TOKEN_REQUIRED' };
+    let merged;
+    try { merged = normalizeRecoveryOptions(input.generator_options, generatorOptions); }
+    catch (error) { return { ok: false, code: error.code || 'RECOVERY_OPTIONS_INVALID' }; }
+    const plan = recoveryPlan(draftId, { expected_revision: expectedRevision, generator_options: input.generator_options });
+    if (!plan.ok) return plan;
+    if (plan.recovery_token !== input.recovery_token) return { ok: false, code: 'RECOVERY_TOKEN_CHANGED' };
+    const result = await resumeFn(draftId, { ...merged, confirmCost: true, expectedRevision, recoveryToken: input.recovery_token, catalogAdapters: options.catalogAdapters });
     return result && result.draft ? { ok: result.ok, draft: projectDraft(result.draft), code: result.code || null } : { ok: false, code: result?.code || 'DRAFT_BLOCKED' };
   }
   function discard(draftId, input = {}) {
@@ -195,7 +315,53 @@ function createCatalogWorkbench(options = {}) {
     return result && result.ok ? { ok: true, status: 'completed', draft_id: draftId, target_revision: result.targetRevision } : { ok: false, code: result?.code || 'OPERATION_FAILED' };
   }
 
-  return Object.freeze({ plan: buildPlan, prepare, list, read, resume, review, discard, apply });
+  function batchPreview() {
+    const { pending } = approvedCandidates(options);
+    const allDrafts = listFn().filter(draft => draft.schema_version === 3 && draft.state !== 'cleanup_pending');
+    const blockedDrafts = allDrafts.filter(draft => draft.readiness?.status !== 'ready');
+    const drafts = allDrafts.filter(draft => draft.readiness?.status === 'ready');
+    const draftIds = drafts.map(draft => draft.draft_id).sort();
+    const blockers = blockedDrafts.map(draft => projectDraft(draft));
+    if (!draftIds.length) return { ok: false, code: 'DRAFTS_NOT_READY', status: 'blocked', draft_count: 0, source_pending_revision: pending.revision, blockers };
+    const checked = batchReviewFn(draftIds, { sourcePendingRevision: pending.revision });
+    if (!checked.ok) return { ok: false, code: checked.code || 'DRAFT_BATCH_STALE', status: 'blocked', draft_count: draftIds.length, source_pending_revision: pending.revision, blockers: [...blockers, { code: checked.code || 'DRAFT_BATCH_STALE' }] };
+    return {
+      ok: true,
+      status: 'review_ready',
+      expected_revision: checked.currentRevision,
+      source_pending_revision: pending.revision,
+      draft_count: checked.draft_ids.length,
+      drafts: checked.reviews.map(review => projectDraft(review.draft, { change_preview: review.plan.changePreview })),
+      change_preview: checked.plan.changePreview,
+      batch_token: checked.batchToken,
+      blockers,
+    };
+  }
+  function applyBatch(input = {}) {
+    const draftIds = input.draft_ids;
+    const expectedRevision = String(input.expected_revision || '').trim();
+    const batchToken = String(input.batch_token || '').trim();
+    if (!Array.isArray(draftIds) || !draftIds.length) return { ok: false, code: 'DRAFT_IDS_INVALID' };
+    if (!expectedRevision || !batchToken) return { ok: false, code: 'DRAFT_BATCH_STALE' };
+    if (String(input.confirm || '') !== `APPLY CATALOG DRAFTS ${batchToken}`) return { ok: false, code: 'CONFIRMATION_INVALID' };
+    const { pending } = approvedCandidates(options);
+    const result = batchApplyFn({ draftIds, expectedRevision, batchToken }, {
+      ...(options.applyOptions || {}),
+      buildDist: false,
+      sourcePendingRevision: pending.revision,
+    });
+    if (!result || result.ok !== true) return { ok: false, code: result?.code || 'OPERATION_FAILED' };
+    return {
+      ok: true,
+      status: result.status || 'completed',
+      target_revision: result.targetRevision,
+      applied_draft_ids: result.appliedDraftIds || draftIds,
+      cleanup_pending: result.cleanupPending || [],
+      cleanup_only: result.cleanupOnly === true,
+    };
+  }
+
+  return Object.freeze({ plan: buildPlan, prepare, list, read, resume, recoveryPlan, review, discard, apply, batchPreview, applyBatch });
 }
 
 function coordinator(options = {}) { return createCatalogWorkbench(options); }
@@ -205,8 +371,11 @@ function listCatalogDrafts(options = {}) { return coordinator(options).list(); }
 function readCatalogDraft(draftId, options = {}) { return coordinator(options).read(draftId); }
 function reviewCatalogDraft(draftId, options = {}) { return coordinator(options).review(draftId); }
 function resumeCatalogDraft(draftId, input, options = {}) { return coordinator(options).resume(draftId, input); }
+function recoveryPlanCatalogDraft(draftId, input = {}, options = {}) { return coordinator(options).recoveryPlan(draftId, input); }
 function discardCatalogDraft(draftId, input = {}, options = {}) { return coordinator(options).discard(draftId, input); }
 function applyCatalogDraft(input, options = {}) { return coordinator(options).apply(input); }
+function previewCatalogDraftBatch(options = {}) { return coordinator(options).batchPreview(); }
+function applyCatalogDraftBatch(input, options = {}) { return coordinator(options).applyBatch(input); }
 
 module.exports = {
   createCatalogWorkbench,
@@ -218,6 +387,9 @@ module.exports = {
   readCatalogDraft,
   reviewCatalogDraft,
   resumeCatalogDraft,
+  recoveryPlanCatalogDraft,
   discardCatalogDraft,
   applyCatalogDraft,
+  previewCatalogDraftBatch,
+  applyCatalogDraftBatch,
 };

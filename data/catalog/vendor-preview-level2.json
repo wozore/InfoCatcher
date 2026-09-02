@@ -912,6 +912,294 @@
           "id": "tool-level3:codebuddy"
         }
       ]
+    },
+    {
+      "id": "vendor-level2:openai:gpt-realtime-2",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:openai"
+      },
+      "vendor_key": "openai",
+      "title": "GPT-Realtime-2",
+      "official_url": "https://developers.openai.com",
+      "summary": "OpenAI 官方开发者平台，提供模型文档、API 指南和实时更新。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:gpt-realtime-2"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:openai:gpt-image-2",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:openai"
+      },
+      "vendor_key": "openai",
+      "title": "gpt-image-2",
+      "official_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
+      "summary": "GPT-Image-2 is OpenAI's state-of-the-art image generation model for fast, high-quality image generation and editing. It supports flexible image sizes and high-fidelity image inputs.",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:gpt-image-2"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:anthropic:claude-opus-5",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:anthropic"
+      },
+      "vendor_key": "anthropic",
+      "title": "Claude Opus 5",
+      "official_url": "https://www.anthropic.com/news/claude-opus-5",
+      "summary": "Anthropic 的 Claude Opus 5 模型，专为复杂智能体编码和企业级工作设计，提供前沿智能和高效性能。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:claude-opus-5"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:google:gemini-3-1-pro",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:google"
+      },
+      "vendor_key": "google",
+      "title": "Gemini 3.1 Pro",
+      "official_url": "https://ai.google.dev/gemini-api/docs/gemini-3",
+      "summary": "Gemini 3 系列是 Google 的最新一代多模态 AI 模型家族，包括 Pro、Flash、Flash-Lite 以及图像生成模型，支持 1M 上下文窗口，提供先进的推理、编码和智能体能力。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:gemini-3-1-pro"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:xai:grok-4-6",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:xai"
+      },
+      "vendor_key": "xai",
+      "title": "Grok 4.6",
+      "official_url": "https://docs.x.ai/developers/release-notes",
+      "summary": "SpaceXAI 的 Grok API 是面向开发者的模型接口，提供 Grok 系列基础模型的程序化访问，支持文本和图像输入及文本输出，具有 500k 上下文窗口，并提供多种定价选项。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:grok-4-6"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:cohere:command-a",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:cohere"
+      },
+      "vendor_key": "cohere",
+      "title": "Command A+",
+      "official_url": "https://docs.cohere.com/changelog/command-a-plus-05-2026",
+      "summary": "Command A+ 是 Cohere 发布的 Command A 系列旗舰模型，支持视觉输入、推理、翻译和代理任务，采用混合专家架构，支持48种语言，上下文长度128K输入和64K输出。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:command-a-plus"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:kuaishou:kling-3-0",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:kuaishou"
+      },
+      "vendor_key": "kuaishou",
+      "title": "Kling 3.0",
+      "official_url": "https://klingai.com",
+      "summary": "可灵AI是快手推出的人工智能视频与图像生成平台，提供多种视频与图像模型及API服务。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:kling-3-0"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:perplexity:perplexity",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:perplexity"
+      },
+      "vendor_key": "perplexity",
+      "title": "Perplexity",
+      "official_url": "https://www.perplexity.ai/",
+      "summary": "Perplexity 提供 AI 搜索与问答服务，拥有 API 平台、企业解决方案及多种产品。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:perplexity"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:google:gemini-3-5-pro",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:google"
+      },
+      "vendor_key": "google",
+      "title": "Gemini 3.5 Pro",
+      "official_url": "https://ai.google.dev/gemini-api/docs/models/gemini",
+      "summary": "Gemini API 提供多种文本与多模态模型，适用于智能体、代码生成、图像编辑等场景。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:gemini-3-5-pro"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:openai:gpt-5-6",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:openai"
+      },
+      "vendor_key": "openai",
+      "title": "GPT 5.6",
+      "official_url": "https://learn.chatgpt.com/api/docs",
+      "summary": "OpenAI API 平台提供 GPT-5.6 系列模型，包括 Sol、Terra 和 Luna，分别针对前沿能力、平衡性能与成本、高效高吞吐量场景。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:gpt-5-6"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:ai-z-ai:glm-5-2",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:ai-z-ai"
+      },
+      "vendor_key": "ai-z-ai",
+      "title": "GLM 5.2",
+      "official_url": "https://docs.z.ai",
+      "summary": "智谱AI的Z.AI开发者文档提供国际版GLM模型API与定价信息。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:glm-5-2"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:alibaba:qwen3-8-max",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:alibaba"
+      },
+      "vendor_key": "alibaba",
+      "title": "Qwen3.8-Max",
+      "official_url": "https://help.aliyun.com/zh/model-studio/qwen3-8-max",
+      "summary": "qwen3.8-max是阿里云百炼平台提供的Qwen3.8原生视觉语言系列旗舰模型，拥有2.4万亿参数，采用MoE架构，支持文本、图像和视频输入，文本输出，具备原生视觉理解能力，支持超长上下文和长程任务规划，适用于编程、办公、法律、金融、设计等专业场景。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:qwen3-8-max"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:deepseek:deepseek-v4-flash",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:deepseek"
+      },
+      "vendor_key": "deepseek",
+      "title": "DeepSeek V4-Flash",
+      "official_url": "https://api-docs.deepseek.com/",
+      "summary": "DeepSeek API 提供多个文本生成模型，包括 V4 系列（V4-Pro, V4-Flash, V4-Flash-Vision-Exp）及旧版 V3 系列，支持思考与非思考模式。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:deepseek-v4-flash"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:alibaba:qwen-3-8-max",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:alibaba"
+      },
+      "vendor_key": "alibaba",
+      "title": "Qwen 3.8 Max",
+      "official_url": "https://www.aliyun.com/product/bailian",
+      "summary": "阿里云百炼是面向企业客户及合作伙伴的一站式大模型服务平台，提供模型训练、微调、评估等工具及丰富的应用插件。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:qwen-3-8-max"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:deepseek:deepseek-v4-pro",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:deepseek"
+      },
+      "vendor_key": "deepseek",
+      "title": "DeepSeek V4 Pro",
+      "official_url": "https://api-docs.deepseek.com/",
+      "summary": "DeepSeek API 提供最新的 V4 系列模型，包括 V4-Pro 和 V4-Flash，支持 1M 上下文，并持续更新模型与功能。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:deepseek-v4-pro"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:alibaba:qwen3-7-max",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:alibaba"
+      },
+      "vendor_key": "alibaba",
+      "title": "Qwen3.7-Max",
+      "official_url": "https://help.aliyun.com/en/model-studio/qwen3-7-max",
+      "summary": "Qwen3.7系列中的Max模型，是千问3.7系列中规模最大、能力最强的旗舰模型，专为智能体时代设计，在编程、办公和长期自主执行等智能体级能力方面表现突出。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:qwen3-7-max"
+        }
+      ]
     }
   ]
 }

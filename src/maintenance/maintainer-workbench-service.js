@@ -11,7 +11,7 @@ const { feedbackFromSummaries, toolExists, conceptExists } = require('../news/fe
 const conceptBatch = require('../catalog/concept-batch');
 const { createCatalogWorkbench } = require('../catalog/catalog-workbench');
 const { loadCatalogSnapshot } = require('../catalog/catalog-snapshot-store');
-const { DIRS } = require('../shared/paths');
+const { DIRS, NEWS_FILES, CATALOG_GENERATOR_FILES, CONCEPT_FILES } = require('../shared/paths');
 const { loadProductUrlRegistry } = require('../catalog/official-url-registry');
 const { loadDotEnv } = require('../shared/env');
 const { minReviewCommand } = require('../news/cli/cmd-min');
@@ -52,27 +52,51 @@ function pendingProjection(kind, api, formal = { tools: [], glossary: [] }) {
     }),
   };
 }
-function projectConceptPreview(preview) {
-  const cards = Array.isArray(preview?.cards) ? preview.cards : [];
-  return {
-    schema_version: preview?.schema_version || 1,
-    base_revision: preview?.base_revision || null,
-    source_pending_revision: preview?.source_pending_revision || null,
-    preview_hash: preview?.preview_hash || null,
-    count: cards.length,
-    items: cards.map(card => ({
-      candidate_key: card.candidate_key || null,
-      term: card.term || '',
-      full_name: card.full_name || '',
-      category: card.category || '',
-      summary: card.summary || card.definition || '',
-      related_terms: Array.isArray(card.related_terms) ? card.related_terms.slice() : [],
-      source: card.source && typeof card.source === 'object' ? { name: card.source.name || '', ...(card.source.url ? { url: card.source.url } : {}) } : null,
-      relevance: card.relevance || '',
-      evidence_count: Number(card.evidence_count || 0),
-      status: card.status || 'pending',
-    })),
-  };
+function removeFile(file, removed) {
+  if (!file || !fs.existsSync(file)) return;
+  fs.unlinkSync(file);
+  removed.push(file);
+}
+
+async function clearWorkspaceFiles(options = {}) {
+  const config = readJson(NEWS_FILES.configV2, {}) || {};
+  const archive = await minReviewCommand('archive', {});
+  const removed = [];
+  const manualFolder = path.resolve(DIRS.project, config.manual_folder || 'data/manual');
+  for (const name of ['review.json', 'transcript-requests.json', 'keyword-refine.json', 'top.json']) {
+    removeFile(path.join(manualFolder, name), removed);
+  }
+  const pendingFiles = [
+    ['tools', options.pendingToolFile || CATALOG_GENERATOR_FILES.pendingTools],
+    ['concepts', options.pendingConceptFile || CONCEPT_FILES.pendingConcepts],
+  ];
+  const clearedPending = {};
+  for (const [kind, file] of pendingFiles) {
+    if (!fs.existsSync(file)) continue;
+    const current = pendingStore.readPending(kind, { toolFile: kind === 'tools' ? file : undefined, conceptFile: kind === 'concepts' ? file : undefined });
+    pendingStore.writePending(kind, [], { toolFile: kind === 'tools' ? file : undefined, conceptFile: kind === 'concepts' ? file : undefined, runId: `maintainer-workbench-clear-${kind}` });
+    clearedPending[kind] = current.cards.length;
+  }
+  removeFile(options.conceptPreviewFile || CONCEPT_FILES.previews, removed);
+  removeFile(options.batchSeedsPreviewFile || CATALOG_GENERATOR_FILES.batchSeedsPreview, removed);
+  return { archive, cleared_pending: clearedPending, removed_files: removed.map(file => path.relative(DIRS.project, file).split(path.sep).join('/')) };
+}
+
+function listItems(value, keys) {
+  if (Array.isArray(value)) return value;
+  for (const key of keys) if (Array.isArray(value?.[key])) return value[key];
+  return [];
+}
+
+function unresolvedKeywordCount(news) {
+  const config = news.readConfig() || {};
+  const list = news.readKeywords() || {};
+  const adopted = new Set(Array.isArray(config?.keywords?.ai_keywords) ? config.keywords.ai_keywords.map(word => String(word).trim().toLowerCase()) : []);
+  const discarded = new Set(Array.isArray(config?.keywords?.excluded_keywords) ? config.keywords.excluded_keywords.map(word => String(word).trim().toLowerCase()) : []);
+  return (Array.isArray(list.candidates) ? list.candidates : []).filter(item => {
+    const key = String(item?.word || '').trim().toLowerCase();
+    return key && !adopted.has(key) && !discarded.has(key);
+  }).length;
 }
 
 function createDefaultApis(options = {}) {
@@ -122,6 +146,9 @@ function createDefaultApis(options = {}) {
     feedback: {
       extract: (store, config) => feedbackFromSummaries(store, config, { ...(options.feedbackOptions || {}), pendingToolFile: options.pendingToolFile, pendingConceptFile: options.pendingConceptFile }),
     },
+    workspace: {
+      clear: () => clearWorkspaceFiles(options),
+    },
   };
 }
 
@@ -132,6 +159,7 @@ function createMaintainerWorkbenchService(options = {}) {
   const concepts = { ...defaults.concepts, ...(options.conceptsApi || {}) };
   const pending = { ...defaults.pending, ...(options.pendingApi || {}) };
   const feedback = { ...defaults.feedback, ...(options.feedbackApi || {}) };
+  const workspace = { ...defaults.workspace, ...(options.workspaceApi || {}) };
   const catalogWorkbench = options.catalogWorkbench || createCatalogWorkbench({
     ...(options.catalogWorkbenchOptions || {}),
     readPending: () => pending.read('tools'),
@@ -177,12 +205,57 @@ function createMaintainerWorkbenchService(options = {}) {
     return plan;
   }
 
+  function workspaceStatus() {
+    const current = store();
+    const blockers = [];
+    const newsPending = current.candidates.filter(item => item.review_status === 'pending').length;
+    if (newsPending) blockers.push({ code: 'NEWS_REVIEW_PENDING', count: newsPending, message: `还有 ${newsPending} 条新闻待首审` });
+    const keywordPending = unresolvedKeywordCount(news);
+    if (keywordPending) blockers.push({ code: 'KEYWORDS_PENDING', count: keywordPending, message: `还有 ${keywordPending} 个关键词待采纳或丢弃` });
+    const topData = fs.existsSync(options.topFile || path.join(DIRS.manual, 'top.json'))
+      ? readJson(options.topFile || path.join(DIRS.manual, 'top.json'), null)
+      : null;
+    const topItems = Array.isArray(topData?.candidates) ? topData.candidates : [];
+    const topSelected = current.candidates.filter(item => item.top_selected === true).length;
+    if (topItems.length && topSelected === 0) blockers.push({ code: 'TOP_SELECTION_PENDING', count: topItems.length, message: 'Top 待选池尚未完成最终选择' });
+    const pendingTools = pendingProjection('tools', pending, (() => {
+      try { const { snapshot } = loadCatalogSnapshot(); return { tools: [...(snapshot['tool-card'] || []), ...(snapshot['tool-level3'] || [])], glossary: [] }; } catch (_) { return { tools: [], glossary: [] }; }
+    })()).items.filter(item => item.review_status === 'pending' || (item.review_status === 'approved' && item.workflow_state !== 'completed'));
+    if (pendingTools.length) blockers.push({ code: 'TOOLS_PENDING', count: pendingTools.length, message: `还有 ${pendingTools.length} 个工具待补卡未完成` });
+    const pendingConceptItems = pendingProjection('concepts', pending, (() => {
+      try { const { snapshot } = loadCatalogSnapshot(); return { tools: [], glossary: concepts.readGlossary() }; } catch (_) { return { tools: [], glossary: [] }; }
+    })()).items.filter(item => item.review_status === 'pending' || (item.review_status === 'approved' && item.workflow_state !== 'completed'));
+    if (pendingConceptItems.length) blockers.push({ code: 'CONCEPTS_PENDING', count: pendingConceptItems.length, message: `还有 ${pendingConceptItems.length} 个概念待补卡未完成` });
+    const drafts = listItems(catalogWorkbench.list(), ['items', 'drafts']);
+    if (drafts.length) blockers.push({ code: 'CATALOG_DRAFTS_PENDING', count: drafts.length, message: `还有 ${drafts.length} 个 Catalog Draft 未完成` });
+    const preview = concepts.readPreviews();
+    const conceptPreviewPending = preview?.schema_version === 2 && Array.isArray(preview.cards) && preview.cards.length > 0;
+    if (conceptPreviewPending) blockers.push({ code: 'CONCEPT_PREVIEW_PENDING', count: preview.cards.length, message: `还有 ${preview.cards.length} 个概念预览待 Apply` });
+    const toolUpdateItems = toolUpdatesProjection().items;
+    if (toolUpdateItems.length) blockers.push({ code: 'TOOL_UPDATES_PENDING', count: toolUpdateItems.length, message: `还有 ${toolUpdateItems.length} 个工具更新待审核` });
+    return {
+      status: blockers.length ? 'incomplete' : 'complete',
+      clearable: blockers.length === 0,
+      blockers,
+      counts: { news_pending: newsPending, keywords_pending: keywordPending, top_candidates: topItems.length, top_selected: topSelected, tools_pending: pendingTools.length, concepts_pending: pendingConceptItems.length, catalog_drafts: drafts.length, concept_previews: conceptPreviewPending ? preview.cards.length : 0, tool_updates_pending: toolUpdateItems.length },
+    };
+  }
+
   return Object.freeze({
+    workspaceStatus,
+    async clearWorkspace() {
+      const status = workspaceStatus();
+      if (!status.clearable) return { ok: false, code: 'WORKBENCH_NOT_COMPLETE', message: status.blockers.map(item => item.message).join('；') || '所有审核工作完成后才能清空工作台。', status: status.status, blockers: status.blockers, counts: status.counts };
+      const result = await workspace.clear();
+      return { ok: true, status: 'cleared', ...result };
+    },
+
     overview() {
       const candidates = store().candidates;
       const toolQueue = toolUpdatesProjection();
       const previews = concepts.readPreviews();
-      return { news: { revision: news.revisionOfStore(store()), total: candidates.length, pending: candidates.filter(item => item.review_status === 'pending').length, approved: candidates.filter(item => item.review_status === 'approved').length, selected: candidates.filter(item => item.top_selected === true).length }, tool_updates: { revision: toolQueue.revision, pending: toolQueue.items.length, history: toolQueue.history_count }, concepts: { previews: Array.isArray(previews?.cards) ? previews.cards.length : 0 } };
+      const workspace = workspaceStatus();
+      return { news: { revision: news.revisionOfStore(store()), total: candidates.length, pending: candidates.filter(item => item.review_status === 'pending').length, approved: candidates.filter(item => item.review_status === 'approved').length, selected: candidates.filter(item => item.top_selected === true).length }, tool_updates: { revision: toolQueue.revision, pending: toolQueue.items.length, history: toolQueue.history_count }, concepts: { previews: Array.isArray(previews?.cards) ? previews.cards.length : 0 }, workspace };
     },
     newsReview() { return newsProjection(store().candidates.filter(item => item.review_status === 'pending')); },
     reviewNews(body) {
@@ -308,7 +381,7 @@ function createMaintainerWorkbenchService(options = {}) {
     },
     pendingTools() {
       let formal = { tools: [], glossary: [] };
-      try { const { snapshot } = loadCatalogSnapshot(); formal = { tools: snapshot['tool-card'] || [], glossary: [] }; } catch (_) { /* 测试或临时目录缺正式 catalog：视为无命中 */ }
+      try { const { snapshot } = loadCatalogSnapshot(); formal = { tools: [...(snapshot['tool-card'] || []), ...(snapshot['tool-level3'] || [])], glossary: [] }; } catch (_) { /* 测试或临时目录缺正式 catalog：视为无命中 */ }
       return pendingProjection('tools', pending, formal);
     },
     pendingConcepts() {
@@ -345,9 +418,32 @@ function createMaintainerWorkbenchService(options = {}) {
     catalogDrafts() { return catalogWorkbench.list(); },
     catalogDraft(draftId) { return catalogWorkbench.read(draftId); },
     catalogReview(draftId) { return catalogWorkbench.review(draftId); },
-    catalogResume(draftId, body) { return catalogWorkbench.resume(draftId, body); },
+    catalogRecoveryPlan(draftId, body = {}) {
+      const allowed = new Set(['expected_revision', 'generator_options']);
+      if (!body || typeof body !== 'object' || Array.isArray(body) || Object.keys(body).some(key => !allowed.has(key))) throw Object.assign(new Error('Catalog 恢复计划请求字段无效'), { code: 'RECOVERY_OPTIONS_INVALID' });
+      expectedRevision(body);
+      return catalogWorkbench.recoveryPlan(draftId, body);
+    },
+    catalogResume(draftId, body = {}) {
+      const allowed = new Set(['expected_revision', 'generator_options', 'recovery_token', 'confirm_cost']);
+      if (!body || typeof body !== 'object' || Array.isArray(body) || Object.keys(body).some(key => !allowed.has(key))) throw Object.assign(new Error('Catalog 恢复请求字段无效'), { code: 'RECOVERY_OPTIONS_INVALID' });
+      expectedRevision(body);
+      return catalogWorkbench.resume(draftId, body);
+    },
     catalogDiscard(draftId, body) { return catalogWorkbench.discard(draftId, body); },
     catalogApply(body) { return catalogWorkbench.apply(body); },
+    catalogBatchPreview() { return catalogWorkbench.batchPreview(); },
+    catalogApplyBatch(body) {
+      if (!body || typeof body !== 'object' || Array.isArray(body)) throw new Error('批量 Catalog 请求无效');
+      const allowed = new Set(['draft_ids', 'expected_revision', 'batch_token', 'confirm']);
+      if (Object.keys(body).some(key => !allowed.has(key))) throw new Error('批量 Catalog 请求字段无效');
+      return catalogWorkbench.applyBatch({
+        draft_ids: body.draft_ids,
+        expected_revision: body.expected_revision,
+        batch_token: body.batch_token,
+        confirm: body.confirm,
+      });
+    },
     conceptPlan() { return conceptPlan(); },
     async conceptPrepare(body) {
       if (body?.confirm_cost !== true) return { ok: false, code: 'COST_CONFIRMATION_REQUIRED' };
@@ -355,6 +451,26 @@ function createMaintainerWorkbenchService(options = {}) {
       if (!plan.ok) return plan;
       const pendingPayload = concepts.readPending();
       const cards = (pendingPayload.cards || []).filter(card => card.review_status === 'approved');
+      const existingPreview = concepts.readPreviews();
+      const expectedKeys = cards.map(card => card.candidate_key).sort();
+      const existingKeys = Array.isArray(existingPreview?.candidate_keys) ? existingPreview.candidate_keys.slice().sort() : [];
+      const reusableCheck = existingPreview?.schema_version === 2
+        && existingPreview.base_revision === plan.glossary_revision
+        && existingPreview.source_pending_revision === plan.pending_revision
+        && existingPreview.plan_hash === plan.plan_hash
+        && JSON.stringify(existingKeys) === JSON.stringify(expectedKeys)
+        && conceptBatch.validateConceptPreview(existingPreview, { baseRevision: plan.glossary_revision, sourcePendingRevision: plan.pending_revision }).ok;
+      if (reusableCheck) {
+        return {
+          ok: true,
+          status: 'preview_ready',
+          reused: true,
+          base_revision: plan.glossary_revision,
+          source_pending_revision: plan.pending_revision,
+          preview: projectConceptPreview(existingPreview),
+          cost: { responses_calls: 0, synthesis_calls: 0 },
+        };
+      }
       const result = await concepts.runBatch(cards, {
         ...(options.conceptBatchOptions || {}),
         store: store(),
@@ -362,6 +478,7 @@ function createMaintainerWorkbenchService(options = {}) {
         confirmCost: true,
         sourcePendingRevision: plan.pending_revision,
         baseGlossaryRevision: plan.glossary_revision,
+        planHash: plan.plan_hash,
         skipVibeHub: options.conceptBatchOptions?.skipVibeHub,
       });
       const preview = concepts.readPreviews();
@@ -378,22 +495,45 @@ function createMaintainerWorkbenchService(options = {}) {
     },
     conceptPreviews() {
       const preview = concepts.readPreviews();
-      return preview?.schema_version === 2 ? projectConceptPreview(preview) : { items: Array.isArray(preview?.cards) ? preview.cards : [] };
+      if (preview?.schema_version === 2) return projectConceptPreview(preview);
+      const items = Array.isArray(preview?.cards) ? preview.cards : [];
+      const glossary = concepts.readGlossary();
+      const completed_terms = items
+        .map(item => String(item?.term || '').trim())
+        .filter(term => term && conceptExists(term, glossary));
+      return {
+        schema_version: preview?.schema_version || null,
+        status: preview ? 'legacy_preview' : 'no_preview',
+        code: preview ? 'PREVIEW_SCHEMA_UNSUPPORTED' : 'PREVIEW_INVALID',
+        items,
+        completed_terms,
+      };
     },
     conceptApply(body) {
       const preview = concepts.readPreviews();
       if (!preview || preview.schema_version !== 2) return { ok: false, code: 'PREVIEW_INVALID' };
       const pendingPayload = concepts.readPending();
-      const previewHash = String(body?.preview_hash || '').trim();
-      if (!previewHash || String(body?.confirm || '').trim() !== `APPLY CONCEPTS ${previewHash}`) return { ok: false, code: 'CONFIRMATION_INVALID' };
-      const result = concepts.apply(preview, {
+      const applyAll = body?.apply_all === true;
+      if (applyAll && body?.terms !== undefined) return { ok: false, code: 'CONCEPT_APPLY_MODE_INVALID' };
+      if (!applyAll) {
+        const previewHash = String(body?.preview_hash || '').trim();
+        if (!previewHash || String(body?.confirm || '').trim() !== `APPLY CONCEPTS ${previewHash}`) return { ok: false, code: 'CONFIRMATION_INVALID' };
+        return concepts.apply(preview, {
+          strict: true,
+          terms: body?.terms,
+          expectedRevision: expectedRevision(body),
+          previewHash,
+          sourcePendingRevision: pendingPayload.revision,
+        });
+      }
+      const previewHash = conceptBatch.conceptPreviewHashOf(preview);
+      return concepts.apply(preview, {
         strict: true,
-        terms: body?.terms,
+        applyAll: true,
         expectedRevision: expectedRevision(body),
         previewHash,
         sourcePendingRevision: pendingPayload.revision,
       });
-      return result;
     },
   });
 }
