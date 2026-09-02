@@ -230,7 +230,7 @@ test('LLM 二级系列迁移应用态：目标系列精确成员、旧 ID 消失
     'vendor-level2:xai:grok-4-5',
     'vendor-level2:minimax:minimax-m3', 'vendor-level2:minimax:minimax-m2-7',
     'vendor-level2:moonshot:kimi-k2', 'vendor-level2:moonshot:kimi-k3',
-    'vendor-level2:alibaba:qwen3-8-max', 'vendor-level2:alibaba:qwen3-7',
+    'vendor-level2:alibaba:qwen3-7',
     'vendor-level2:stepfun:step-3-5-flash', 'vendor-level2:stepfun:step-3-7-flash',
     'vendor-level2:xiaomi:mimo-v2-5', 'vendor-level2:xiaomi:mimo-v2-5-pro',
     'vendor-level2:nvidia:nemotron-3-ultra', 'vendor-level2:nvidia:nemotron-3-super',

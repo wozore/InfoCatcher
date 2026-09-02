@@ -64,7 +64,7 @@ test('buildReviewPayload 裁剪标题/描述/字幕/总结并替换占位符', (
   assert.ok(user.includes('confidence_range'));
   assert.ok(user.includes('60-80%'));
   assert.ok(user.includes('confidence 是所选区间的下界') || user.includes('confidence：填写所选区间的下界'));
-
+});
 
 test('buildReviewPayload 缺素材时占位符填空（无总结）', () => {
   const user = buildReviewPayload({ title: '标题' }).messages[1].content;
@@ -88,7 +88,7 @@ test('normalizeReview 支持区间置信度，并以区间下界作为安全数�
   assert.equal(normalizeReview('{"verdict":"hold","confidence_range":"bad","confidence":0.6}').confidence_range, undefined);
 });
 
-
+test('normalizeReview 容忍 markdown 代码块与前后多余文字', () => {
   const parsed = normalizeReview('```json\n{"verdict":"hold","reasons":["信息不全"]}\n```');
   assert.deepEqual(parsed, { verdict: 'hold', reasons: ['信息不全'], confidence: 0 });
   const parsed2 = normalizeReview('好的，这是审核结果：{"verdict":"approve","confidence":0.8}末尾');
