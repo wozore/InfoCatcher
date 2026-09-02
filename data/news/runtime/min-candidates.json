@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-02T11:25:36.146Z",
+  "updated_at": "2026-09-02T17:32:02.513Z",
   "candidates": [
     {
       "id": "youtube-86e7a00b9c57b74debe6",
@@ -228653,6 +228653,87 @@
       "l1_review": null,
       "ai_advice": null,
       "top_selected": false
+    },
+    {
+      "id": "x-e677bf8a6252a74a3197",
+      "platform": "x",
+      "native_id": "2095196704769237137",
+      "source_type": "x_post",
+      "url": "https://x.com/GoogleDeepMind/status/2095196704769237137",
+      "title": "Gemini 3.8 Flash Cyber gives defenders a decisive advantage with expert vulnerability detection and autonomous patching.\n\nHere’s how it helps teams stay ahead of emerging threats \ud83e",
+      "description": "Gemini 3.8 Flash Cyber gives defenders a decisive advantage with expert vulnerability detection and autonomous patching.\n\nHere’s how it helps teams stay ahead of emerging threats 🧵 https://t.co/1RXF9bRWws",
+      "published_at": "2026-09-02T17:06:35.000Z",
+      "fetched_at": "2026-09-02T17:31:44.792Z",
+      "author_id": "x-a29a16abe45360eb21c8",
+      "author_name": "Google DeepMind",
+      "source_id": "x-a29a16abe45360eb21c8",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/HROdhUNacAMDX1q.jpg",
+      "metrics": {
+        "views": 17326,
+        "likes": 133,
+        "comments": null,
+        "reposts": 13,
+        "replies": 12
+      },
+      "explicit_links": [
+        "https://t.co/1RXF9bRWws"
+      ],
+      "content_type": "ai_technology",
+      "comments": [],
+      "content_type_status": "ai_suggested",
+      "classifier": "rule_based",
+      "classify_reasons": [
+        "命中模型名或技术/研究关键词"
+      ],
+      "final_score": 52.5,
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 99.8,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 17,
+        "type_preference": 50,
+        "long_term_status": "insufficient",
+        "applied_weights": {
+          "long_term_quality": 0.2,
+          "recent_timeliness": 0.15,
+          "light_user_experience": 0.05,
+          "source_reliability": 0.15,
+          "interaction_quality": 0.15,
+          "type_preference": 0.3
+        }
+      },
+      "review_status": "pending",
+      "l1_review": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "llm_error": "本地模型启动脚本不存在：D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1"
+      },
+      "ai_advice": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "reviewer": "llm_failed",
+        "generated_at": null,
+        "input_chars": 385,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "top_selected": false,
+      "summarizer": "llm_failed",
+      "summary_generated_at": null,
+      "summary_input_chars": 385,
+      "summary_llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）",
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_failed",
+          "generated_at": null,
+          "input_chars": 385,
+          "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+        }
+      }
     }
   ]
 }

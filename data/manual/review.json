@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "kind": "review_candidates",
-  "generated_at": "2026-09-02T11:24:14.476Z",
-  "date": "20260902",
-  "total_pending": 1897,
+  "generated_at": "2026-09-02T17:31:44.792Z",
+  "date": "20260903",
+  "total_pending": 1898,
   "note": "待人工审核清单：请逐条设置 review_status（pending/approved/discarded）。应用结论：双击 bat/apply-review.bat（或 node scripts/news-cli.js min-review apply --file 本文件），应用后自动生成 top 名单（ai-top）供二次审核；approved 才进后续 top-selected/publish。",
   "candidates": [
     {
@@ -13284,6 +13284,13 @@
       "summary": "#獨家 1台貴2萬! 記憶體漲5倍.螢幕漲1成 自組中階電腦破6-7萬｜TVBS新聞 @TVBSNEWS02",
       "suggestion": "人工判断：是否值得收录",
       "review_status": "pending"
+    },
+    {
+      "id": "x-e677bf8a6252a74a3197",
+      "score": 52.5,
+      "summary": "Gemini 3.8 Flash Cyber gives defenders a decisive advantage with expert vulnerab",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
     }
   ],
   "human_lines": [
@@ -15183,6 +15190,7 @@
     "[32] Aluminum + Nickel Diffusion Welding | 10 Seconds per Piece\n    建议：人工判断：是否值得收录",
     "[31.7] Lec 53 Hands-on on reverse diffusion process\n    建议：人工判断：是否值得收录",
     "[31.4] 任務結束! 伍程嶸遺體返鄉 同仁列隊送行｜TVBS新聞 @TVBSNEWS02\n    建议：人工判断：是否值得收录",
-    "[29.7] #獨家 1台貴2萬! 記憶體漲5倍.螢幕漲1成 自組中階電腦破6-7萬｜TVBS新聞 @TVBSNEWS02\n    建议：人工判断：是否值得收录"
+    "[29.7] #獨家 1台貴2萬! 記憶體漲5倍.螢幕漲1成 自組中階電腦破6-7萬｜TVBS新聞 @TVBSNEWS02\n    建议：人工判断：是否值得收录",
+    "[52.5] Gemini 3.8 Flash Cyber gives defenders a decisive advantage with expert vulnerab\n    建议：AI 技术/研究，建议 approved（如无重大争议）"
   ]
 }
