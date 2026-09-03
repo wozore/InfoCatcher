@@ -2,10 +2,10 @@
   "modules": {
     "catalog": {
       "enabled": true,
-      "provider": "deepseek",
+      "provider": "zhipu",
       "retrieval_provider": "tavily",
-      "model": "deepseek-v4-flash",
-      "protocol": "responses",
+      "model": "glm-5.3-flash",
+      "protocol": "messages",
       "timeout_ms": 180000,
       "max_search_queries": 4,
       "max_pages": 8,
@@ -15,9 +15,9 @@
     },
     "news": {
       "enabled": true,
-      "provider": "deepseek",
-      "model": "deepseek-v4-flash",
-      "protocol": "responses"
+      "provider": "zhipu",
+      "model": "glm-5.3-flash",
+      "protocol": "messages"
     }
   }
 }

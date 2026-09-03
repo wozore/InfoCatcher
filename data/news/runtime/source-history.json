@@ -12057,10 +12057,19 @@
           "comments": null,
           "reposts": 16,
           "replies": 23
+        },
+        {
+          "published_at": "2026-09-02T17:06:35.000Z",
+          "views": 65900,
+          "likes": 473,
+          "comments": null,
+          "reposts": 44,
+          "replies": 81
         }
       ],
       "seen_native_ids": [
-        "2085737848318124083"
+        "2085737848318124083",
+        "2095196704769237137"
       ]
     },
     "x:092568142b02564e2fe4": {
@@ -12080,11 +12089,74 @@
           "comments": null,
           "reposts": 40,
           "replies": 28
+        },
+        {
+          "published_at": "2026-09-02T21:30:08.000Z",
+          "views": 32439,
+          "likes": 421,
+          "comments": null,
+          "reposts": 21,
+          "replies": 30
+        },
+        {
+          "published_at": "2026-09-02T21:25:52.000Z",
+          "views": 134707,
+          "likes": 1134,
+          "comments": null,
+          "reposts": 31,
+          "replies": 63
+        },
+        {
+          "published_at": "2026-09-02T21:13:30.000Z",
+          "views": 17086,
+          "likes": 66,
+          "comments": null,
+          "reposts": 5,
+          "replies": 2
+        },
+        {
+          "published_at": "2026-09-02T20:58:18.000Z",
+          "views": 72577,
+          "likes": 218,
+          "comments": null,
+          "reposts": 9,
+          "replies": 17
+        },
+        {
+          "published_at": "2026-09-02T20:54:11.000Z",
+          "views": 166611,
+          "likes": 2070,
+          "comments": null,
+          "reposts": 90,
+          "replies": 128
+        },
+        {
+          "published_at": "2026-09-02T20:40:55.000Z",
+          "views": 1342174,
+          "likes": 2380,
+          "comments": null,
+          "reposts": 250,
+          "replies": 110
+        },
+        {
+          "published_at": "2026-09-02T19:36:19.000Z",
+          "views": 216993,
+          "likes": 2722,
+          "comments": null,
+          "reposts": 243,
+          "replies": 99
         }
       ],
       "seen_native_ids": [
         "2085455782682702185",
-        "2085397865858298143"
+        "2085397865858298143",
+        "2095263026517782748",
+        "2095261952562123217",
+        "2095258841495867712",
+        "2095255015535599765",
+        "2095253979060224308",
+        "2095250642159952261",
+        "2095234385129963666"
       ]
     },
     "x:72e8088a05b38ae3cffb": {
@@ -12135,13 +12207,31 @@
           "comments": null,
           "reposts": 6,
           "replies": 7
+        },
+        {
+          "published_at": "2026-09-03T09:35:41.000Z",
+          "views": 13586,
+          "likes": 122,
+          "comments": null,
+          "reposts": 19,
+          "replies": 6
+        },
+        {
+          "published_at": "2026-09-03T02:34:18.000Z",
+          "views": 86009,
+          "likes": 1910,
+          "comments": null,
+          "reposts": 106,
+          "replies": 30
         }
       ],
       "seen_native_ids": [
         "2085695365697712537",
         "2085693227827367982",
         "2085785015854444744",
-        "2085758063471120848"
+        "2085758063471120848",
+        "2095445616868446267",
+        "2095339572737486866"
       ]
     },
     "x:97195d2a8377b1621835": {
@@ -12153,10 +12243,55 @@
           "comments": null,
           "reposts": 5,
           "replies": 2
+        },
+        {
+          "published_at": "2026-09-02T20:18:08.000Z",
+          "views": 6574,
+          "likes": 35,
+          "comments": null,
+          "reposts": 7,
+          "replies": 1
+        },
+        {
+          "published_at": "2026-09-02T19:30:06.000Z",
+          "views": 54967,
+          "likes": 146,
+          "comments": null,
+          "reposts": 20,
+          "replies": 4
+        },
+        {
+          "published_at": "2026-09-02T18:38:15.000Z",
+          "views": 62255,
+          "likes": 249,
+          "comments": null,
+          "reposts": 35,
+          "replies": 28
+        },
+        {
+          "published_at": "2026-09-02T18:28:16.000Z",
+          "views": 27937,
+          "likes": 323,
+          "comments": null,
+          "reposts": 45,
+          "replies": 17
+        },
+        {
+          "published_at": "2026-09-02T18:00:08.000Z",
+          "views": 9477,
+          "likes": 51,
+          "comments": null,
+          "reposts": 5,
+          "replies": 3
         }
       ],
       "seen_native_ids": [
-        "2085549930542952810"
+        "2085549930542952810",
+        "2095244907183210550",
+        "2095232821912912328",
+        "2095219769893085299",
+        "2095217259610550730",
+        "2095210177687654880"
       ]
     },
     "x:ab0b777ab8dcd0190be9": {
@@ -17287,6 +17422,21 @@
       ],
       "seen_native_ids": [
         "2085797983384207444"
+      ]
+    },
+    "x:90d803d90501061cff59": {
+      "samples": [
+        {
+          "published_at": "2026-09-02T20:51:55.000Z",
+          "views": 2297,
+          "likes": 12,
+          "comments": null,
+          "reposts": 3,
+          "replies": 0
+        }
+      ],
+      "seen_native_ids": [
+        "2095253409725022366"
       ]
     }
   }

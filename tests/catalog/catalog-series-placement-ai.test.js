@@ -94,6 +94,44 @@ test('suggestSeriesPlacement 缺 ledger → COST_LEDGER_REQUIRED（fail-closed�
   assert.equal(result.code, 'COST_LEDGER_REQUIRED');
 });
 
+test('suggestSeriesPlacement 自适应当前 provider 的默认模型', async () => {
+  const calls = [];
+  const fetchImpl = async (url, init) => {
+    calls.push({ url, body: JSON.parse(init.body) });
+    return {
+      ok: true,
+      status: 200,
+      async json() {
+        return {
+          content: [{
+            type: 'text',
+            text: JSON.stringify({
+              usage_kind: 'general_llm',
+              modality: 'text',
+              canonical_vendor_key: 'zhipu',
+              canonical_family: 'glm',
+              major_line: 'glm5',
+              release_cohort: 'newest',
+              confidence: 0.9,
+              rationale: 'x',
+            }),
+          }],
+        };
+      },
+      async text() { return ''; },
+    };
+  };
+
+  const ledger = { reserve: () => ({ ok: true }) };
+  const res = await suggestSeriesPlacement({}, {
+    ledger,
+    apiKey: 'test-key',
+    fetchImpl,
+  });
+  assert.equal(res.ok, true);
+  assert.equal(calls[0].body.model, 'glm-5.3-flash');
+});
+
 // ── 3. resolveSeriesPlacement 各分支 ────────────────────────────
 
 test('resolve：人工 placement 合法 → manual（最高优先，不触发 AI）', async () => {

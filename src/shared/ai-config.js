@@ -2,15 +2,19 @@
 
 const fs = require('fs');
 const { AI_CONFIG_FILES } = require('./paths');
-const { AI_PROTOCOLS, getProvider } = require('./ai-provider-registry');
+const { getProvider, DEFAULT_PROVIDER_NAME } = require('./ai-provider-registry');
+
+// 默认外部 provider 开关（统一收口在 registry 的 DEFAULT_PROVIDER_NAME）。
+// config/catalog-generator.local.json 可按模块覆盖 provider/model/protocol。
+const DEFAULT_PROVIDER = getProvider(DEFAULT_PROVIDER_NAME);
 
 const DEFAULT_MODULE_CONFIGS = Object.freeze({
   catalog: Object.freeze({
     enabled: true,
-    provider: 'deepseek',
+    provider: DEFAULT_PROVIDER_NAME,
     retrieval_provider: 'tavily',
-    model: 'deepseek-v4-flash',
-    protocol: AI_PROTOCOLS.RESPONSES,
+    model: DEFAULT_PROVIDER.defaultModel,
+    protocol: DEFAULT_PROVIDER.protocol,
     timeout_ms: 180000,
     max_search_queries: 4,
     max_pages: 8,
@@ -20,9 +24,9 @@ const DEFAULT_MODULE_CONFIGS = Object.freeze({
   }),
   news: Object.freeze({
     enabled: false,
-    provider: 'deepseek',
-    model: 'deepseek-chat',
-    protocol: AI_PROTOCOLS.RESPONSES,
+    provider: DEFAULT_PROVIDER_NAME,
+    model: DEFAULT_PROVIDER.defaultModel,
+    protocol: DEFAULT_PROVIDER.protocol,
   }),
 });
 
@@ -62,8 +66,8 @@ function validateModuleConfig(moduleName, config) {
 function loadAiModuleConfig(moduleName, filePath = AI_CONFIG_FILES.local) {
   const defaults = clone(DEFAULT_MODULE_CONFIGS[moduleName] || {
     enabled: false,
-    provider: 'deepseek',
-    protocol: AI_PROTOCOLS.RESPONSES,
+    provider: DEFAULT_PROVIDER_NAME,
+    protocol: DEFAULT_PROVIDER.protocol,
   });
   const raw = readAiConfig(filePath);
   const configured = raw?.modules?.[moduleName];

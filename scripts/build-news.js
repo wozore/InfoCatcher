@@ -14,14 +14,15 @@
 'use strict';
 
 // 先加载 .env（密钥只经环境变量注入，见 src/shared/env.js），再加载实现。
-// 必须在 require 实现之前调用：实现模块顶层会读 process.env.DEEPSEEK_API_KEY。
+// 必须在 require 实现之前调用：实现模块顶层会读 provider 对应的环境变量
+// （ZHIPU_API_KEY / DEEPSEEK_API_KEY，见 src/shared/ai-provider-registry.js）。
 const { loadDotEnv } = require('../src/shared/env');
 loadDotEnv();
 
 // ── 热点管线 v2 CLI 入口（默认 / --platforms 分时）────────────────
 // 只做接线：调 runMin 编排，不重写任何 v2 模块。
 // 无 API key 时 YouTube/X 采集器各自降级返回空（coverage.status='failed'），
-// AI 步骤（分类/审核/总结/本地化）缺 DEEPSEEK_API_KEY 即时降级，管线不抛错。
+// AI 步骤（分类/审核/总结/本地化）缺外部 provider key 即时降级，管线不抛错。
 async function mainMin(platforms) {
   const { runMin } = require('../src/news/min/pipeline-min');
   const fixture = process.argv.includes('--fixture');

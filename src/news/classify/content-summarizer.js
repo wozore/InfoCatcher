@@ -72,10 +72,10 @@ function collectSummarySource(item) {
  * 对单条候选做内容总结（suggestion 模式，不改入参，返回建议对象）。
  *
  * 分级逻辑：
- *   - 未配置 provider（默认）：L0 规则式兜底 = 诚实置 null（不伪造总结，
+ *   - provider 未命中白名单：L0 规则式兜底 = 诚实置 null（不伪造总结，
  *     前端回退 description）——与分类器 L0 恒兜底不同，总结没有零成本规则基线。
- *   - provider=deepseek：先跑 L1 DeepSeek；成功返回总结建议；任何失败 resolve
- *     降级对象，调用方据此置 null。
+ *   - provider=deepseek/zhipu（AI 总结档）：本地 Bonsai 优先（external=true 时走
+ *     外部 provider），成功返回总结建议；任何失败 resolve 降级对象，调用方据此置 null。
  *
  * @param {object} item - 含 title / description / 可选 transcript
  * @param {{provider?: string, model?: string, apiKey?: string, fetchImpl?: Function,
@@ -84,8 +84,12 @@ function collectSummarySource(item) {
  *                     summarizer: string|null, generated_at: string|null,
  *                     input_chars: number, llm_error: string|null }>}
  */
+// AI 总结档 provider 白名单（标签 summarizer=llm_{provider}；本地/外部由 options.external 决定）。
+const SUMMARY_PROVIDERS = new Set(['deepseek', 'zhipu']);
+
 async function summarizeCandidate(item, options = {}) {
   const provider = options.provider || process.env.KNOWVIEW_SUMMARIZE_PROVIDER || process.env.INFOCATCHER_SUMMARIZE_PROVIDER || 'deepseek';
+  const model = options.model || process.env.KNOWVIEW_SUMMARIZE_MODEL || process.env.INFOCATCHER_SUMMARIZE_MODEL;
   const source = collectSummarySource(item);
   const inputChars = source.title.length + source.description.length + (source.transcript ? source.transcript.length : 0);
   const now = options.now || new Date().toISOString();
@@ -94,16 +98,16 @@ async function summarizeCandidate(item, options = {}) {
     return { summary: null, key_points: [], summarizer: null, generated_at: null, input_chars: 0, llm_error: 'no_source' };
   }
 
-  if (provider === 'deepseek') {
+  if (SUMMARY_PROVIDERS.has(provider)) {
     const llm = await (options.external === true ? summarizeWithExternalDeepSeek : summarizeWithDeepSeek)(
       { ...source, maxTranscriptChars: options.maxTranscriptChars ?? SUMMARY_MAX_TRANSCRIPT_CHARS },
-      options
+      { ...options, provider, model }
     );
     if (llm.ok) {
       return {
         summary: llm.summary,
         key_points: llm.key_points,
-        summarizer: 'llm_deepseek',
+        summarizer: `llm_${provider}`,
         generated_at: now,
         input_chars: inputChars,
         llm_error: null,
@@ -146,7 +150,7 @@ async function summarizeCandidates(items, options = {}) {
     const hasSource = Boolean(
       item && (item.title || item.description || (typeof item.transcript === 'string' && item.transcript) || item.transcript?.text)
     );
-    if (!item || !hasSource || item.summary) {
+    if (!item || !hasSource || String(item.summary || '').trim()) {
       skipped++;
       out[index] = item;
       return;
@@ -189,7 +193,7 @@ async function enrichCandidateSummaries(store, activeIds, options = {}) {
 
   const ids = new Set(activeIds || []);
   const targets = (store.candidates || [])
-    .filter(candidate => ids.has(candidate.id) && !candidate.summary)
+    .filter(candidate => ids.has(candidate.id) && !String(candidate.summary || '').trim())
     .slice(0, options.maxItems ?? 30);
 
   const result = await summarizeCandidates(targets, {

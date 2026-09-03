@@ -7,6 +7,8 @@
  *   min-review list    [--status pending|approved|discarded] [--platform ...] [--limit N] [--top N] [--store min] [--json] [--manual [--force]]
  *   min-review set     --id <id> --status approved|discarded [--expected-revision <revision>] [--store min]
  *   min-review batch   --ids <id1,id2,...> --status approved|discarded [--expected-revision <revision>] [--store min]
+ *   min-review enrich  [--batch-size 30] [--concurrency 5] [--limit N] [--skip-review] [--skip-summary] [--skip-localize] [--force] [--dry-run] [--no-repair] [--no-external] [--no-refresh-review-list] [--store min]
+ *   min-review repair  [--limit N] [--dry-run] [--no-external] [--no-refresh-review-list] [--store min]
  *   min-review transcripts [--store min]
  *   min-review feedback     [--store min]
  *   min-review refine       [--store min]
@@ -28,6 +30,9 @@
  *       review_top_pure_x / review_top_with_youtube，有 YouTube 候选时用后者）。
  *     - set/batch：按明确 id 仅将 pending 候选设置为 approved/discarded，写入 min-candidates.json；
  *       expected revision 不匹配时拒绝写入。
+ *     - enrich：热点「方案 A」本地 Bonsai 初审与翻译编排。分批调用本地 Bonsai 执行 L1 审核、
+ *       中文摘要（summary）与标题/描述翻译（localizations.zh）；仅非 discarded 项消费算力；
+ *       支持断点恢复；完成后默认自动强制刷新待审清单（data/manual/review.json）。
  *     - transcripts：调 transcript-notify.notifyTranscripts 生成「待人工获取字幕」清单，
  *       写 config.manual_folder/transcript-requests.json（固定格式，文件名去掉日期后缀）。
  *     - feedback：调 tool-feedback.feedbackFromSummaries，从 approved summary 提取
@@ -83,6 +88,13 @@ const {
   revisionOfConfig,
 } = require('../min/keyword-actions');
 const { buildReviewList, loadReviewList, applyReviewList, scoreOf, suggestReview } = require('../min/review-list');
+const {
+  enrichMinCandidates,
+  countEnrichmentWork,
+  repairIncompleteCandidates,
+  countRepairWork,
+  nonNegativeInteger,
+} = require('../min/local-enrichment');
 const { readJson, writeJsonAtomic } = require('../core/news-storage');
 const { CATALOG_GENERATOR_FILES, CONCEPT_FILES } = require('../../shared/paths');
 const { NEWS_FILES } = require('../../shared/paths');
@@ -357,6 +369,138 @@ async function minReviewCommand(action, flags = {}) {
     return { status: flags.status, ...result, updated_at: result.store.updated_at };
   }
 
+  if (action === 'enrich') {
+    assertStoreFlag(flags);
+    const store = readMinStore();
+    const config = loadV2Config();
+
+    const batchSize = flags.batch_size ? Number(flags.batch_size) : 30;
+    const concurrency = flags.concurrency ? Number(flags.concurrency) : undefined;
+    const limit = flags.limit != null ? nonNegativeInteger(flags.limit, undefined, '--limit') : undefined;
+    const skipReview = flags.skip_review === true;
+    const skipSummary = flags.skip_summary === true;
+    const skipLocalize = flags.skip_localize === true;
+    const force = flags.force === true;
+    const dryRun = flags.dry_run === true;
+    const refreshReviewList = !flags.no_refresh_review_list;
+    const externalEnabled = flags.no_external !== true;
+
+    const stats = countEnrichmentWork(store.candidates, {
+      l2Enabled: config?.review?.l2_enabled !== false,
+      skipReview,
+      skipSummary,
+      skipLocalize,
+      force,
+    });
+
+    console.log('🤖 本地 Bonsai 初审与翻译 (enrich)：');
+    console.log(`   候选总数: ${stats.total} 条 | 待初审: ${stats.review} | 待摘要: ${stats.summary} | 待翻译: ${stats.localize}`);
+    const conc = concurrency || config.collection?.concurrency || 5;
+    console.log(`   批次大小: ${batchSize} | 并发: ${conc}${limit ? ` | 限制条数: ${limit}` : ''}${force ? ' | [强制重做]' : ''}${dryRun ? ' | [dry-run 模拟]' : ''}`);
+
+    if (!stats.hasWork && !force) {
+      console.log('✅ 所有候选均已完成初审、摘要与本地化，无需处理。');
+      return { stats, enriched: null };
+    }
+
+    const onBatchDone = ({ batchIndex, totalBatches, batchSize: currentBatchSize, stats: bStats }) => {
+      console.log(`   [批次 ${batchIndex}/${totalBatches}] 完成 ${currentBatchSize} 条 (审核: ${bStats.reviewed}, 摘要: ${bStats.summarized}, 翻译: ${bStats.localized})`);
+    };
+
+    const enriched = await enrichMinCandidates(store, config, {
+      batchSize,
+      concurrency,
+      limit,
+      skipReview,
+      skipSummary,
+      skipLocalize,
+      force,
+      dryRun,
+      onBatchDone,
+    });
+
+    console.log(`✅ 本地 Enrich 完成：共处理 ${enriched.processed} 条，批次: ${enriched.batches}`);
+    if (!skipReview) {
+      console.log(`   初审: ${enriched.reviewed} 条 (自动通过: ${enriched.autoApproved}, 自动丢弃: ${enriched.autoDiscarded}, 留待人工: ${enriched.pending})`);
+    }
+    if (!skipSummary) {
+      console.log(`   摘要: ${enriched.summarized} 条`);
+    }
+    if (!skipLocalize) {
+      console.log(`   翻译: ${enriched.localized} 条`);
+    }
+
+    let repaired = null;
+    if (!flags.no_repair && !dryRun) {
+      const repairWork = countRepairWork(store.candidates, {
+        l2Enabled: config?.review?.l2_enabled !== false,
+        skipReview,
+        skipSummary,
+        skipLocalize,
+      });
+      if (repairWork.hasWork) {
+        console.log(`🔧 检测到 ${repairWork.total} 条残缺项（待审/建议: ${repairWork.review}, 摘要: ${repairWork.summary}, 翻译: ${repairWork.localize}），自动衔接双通道自愈修复...`);
+        repaired = await repairIncompleteCandidates(store, config, {
+          limit,
+          externalEnabled,
+          skipReview,
+          skipSummary,
+          skipLocalize,
+        });
+        console.log(`✅ 双通道自愈修复完成：修复审核 ${repaired.repairedReview} 条，摘要 ${repaired.repairedSummary} 条，翻译 ${repaired.repairedLocalize} 条，剩余残缺: ${repaired.remainingIncomplete}`);
+      }
+    }
+
+    let reviewListResult = null;
+    if (!dryRun && refreshReviewList) {
+      reviewListResult = buildReviewList(store, config, { updateSummaries: true });
+      console.log(`✅ 已同步安全更新待审清单：${reviewListResult.file}（待人工审核: ${reviewListResult.total_pending} 条，保留人工已审状态）`);
+    } else if (!dryRun && !refreshReviewList) {
+      console.log('   （已跳过刷新待审清单 --no-refresh-review-list）');
+    }
+
+    return { stats, enriched, repaired, review_list: reviewListResult };
+  }
+
+  if (action === 'repair') {
+    assertStoreFlag(flags);
+    const store = readMinStore();
+    const config = loadV2Config();
+    const limit = flags.limit != null ? nonNegativeInteger(flags.limit, undefined, '--limit') : undefined;
+    const dryRun = flags.dry_run === true;
+    const refreshReviewList = !flags.no_refresh_review_list;
+    const externalEnabled = flags.no_external !== true;
+
+    const repairWork = countRepairWork(store.candidates, {
+      l2Enabled: config?.review?.l2_enabled !== false,
+    });
+    console.log('🔧 热点候选双通道自愈修复 (repair)：');
+    console.log(`   残缺总数: ${repairWork.total} 条 | 待修复审核: ${repairWork.review} | 待修复摘要: ${repairWork.summary} | 待修复翻译: ${repairWork.localize}`);
+
+    if (!repairWork.hasWork) {
+      console.log('✅ 所有候选数据完整，无需修复。');
+      return { stats: repairWork, repaired: null };
+    }
+
+    const repaired = await repairIncompleteCandidates(store, config, {
+      limit,
+      externalEnabled,
+      dryRun,
+    });
+
+    console.log(`✅ 双通道自愈修复完成：修复审核 ${repaired.repairedReview} 条，摘要 ${repaired.repairedSummary} 条，翻译 ${repaired.repairedLocalize} 条，剩余残缺: ${repaired.remainingIncomplete}`);
+
+    let reviewListResult = null;
+    if (!dryRun && refreshReviewList) {
+      reviewListResult = buildReviewList(store, config, { updateSummaries: true });
+      console.log(`✅ 已同步安全更新待审清单：${reviewListResult.file}（待人工审核: ${reviewListResult.total_pending} 条，保留人工已审状态）`);
+    } else if (!dryRun && !refreshReviewList) {
+      console.log('   （已跳过刷新待审清单 --no-refresh-review-list）');
+    }
+
+    return { stats: repairWork, repaired, review_list: reviewListResult };
+  }
+
   if (action === 'transcripts') {
     const result = notifyTranscripts(undefined, config);
     console.log(`✅ 字幕清单：${result.requested.length} 条待人工获取 → ${result.file}`);
@@ -368,11 +512,11 @@ async function minReviewCommand(action, flags = {}) {
   }
 
   if (action === 'feedback') {
-    // LLM 提取：feedback.llm_extract !== false 且配置了 DEEPSEEK_API_KEY 时接入
-    // （方案 A + 检查遗漏；LLM 失败降级正则，宁多勿漏，不阻断反哺）。
+    // LLM 提取：feedback.llm_extract !== false 且配置了外部 provider key（ZHIPU/DEEPSEEK）
+    // 时接入（方案 A + 检查遗漏；提取默认走本地 Bonsai，LLM 失败降级正则，宁多勿漏，不阻断反哺）。
     const feedback = (config && config.feedback) || {};
     const options = {};
-    if (feedback.llm_extract !== false && process.env.DEEPSEEK_API_KEY) {
+    if (feedback.llm_extract !== false && (process.env.ZHIPU_API_KEY || process.env.DEEPSEEK_API_KEY)) {
       const { extractEntitiesWithLlm } = require('../feedback/llm-entity-extract');
       const { extractEntitiesDefault } = require('../feedback/tool-feedback');
       options.llmExtract = async text => {
@@ -633,7 +777,7 @@ async function minReviewCommand(action, flags = {}) {
     return result;
   }
 
-  throw new Error(`未知 min-review 命令: ${action}。支持：list | set | batch | transcripts | feedback | refine | refine-apply | ai-top | top-selected | top-apply | apply | archive`);
+  throw new Error(`未知 min-review 命令: ${action}。支持：list | set | batch | enrich | repair | transcripts | feedback | refine | refine-apply | ai-top | top-selected | top-apply | apply | archive`);
 }
 
 module.exports = {

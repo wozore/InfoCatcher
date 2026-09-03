@@ -10,6 +10,7 @@ const { loadProductUrlRegistry, updateSourcesForProduct, validateProductUrlRegis
 const { collectProductUpdateEvidence } = require('../src/catalog/tool-update-collector');
 const { suggestToolUpdateReview } = require('../src/catalog/ai/tool-update-review-ai');
 const { requestStructuredJson } = require('../src/catalog/ai/deepseek-structured');
+const { getProvider, DEFAULT_PROVIDER_NAME } = require('../src/shared/ai-provider-registry');
 const { localizeCandidate } = require('../src/news/classify/content-localizer');
 
 const TOOL_LOCALIZE_MAX_SOURCE_CHARS = 360;
@@ -89,7 +90,7 @@ function csvFlag(value) {
 
 function providerOf(flags) {
   const provider = String(flags.provider || 'local').trim().toLowerCase();
-  if (!['local', 'deepseek'].includes(provider)) throw new Error(`TOOL_UPDATE_REVIEW_PROVIDER_INVALID: ${provider}`);
+  if (!['local', 'deepseek', 'zhipu'].includes(provider)) throw new Error(`TOOL_UPDATE_REVIEW_PROVIDER_INVALID: ${provider}`);
   return provider;
 }
 
@@ -202,7 +203,7 @@ async function runPreflight(flags = {}, deps = {}) {
   } else {
     checks.local = { ok: true, skipped: true };
   }
-  if (mode === 'hybrid' && aiFallbackSources && provider === 'deepseek') {
+  if (mode === 'hybrid' && aiFallbackSources && provider !== 'local') {
     checks.deepseek = deps.deepseekProbe ? await deps.deepseekProbe() : { ok: true, requires_confirm_cost: true };
   } else checks.deepseek = { ok: true, skipped: true };
 
@@ -230,8 +231,8 @@ async function runScan(flags = {}, deps = {}) {
   const mode = modeOf(flags);
   const provider = providerOf(flags);
   const mayUseAi = mode === 'hybrid' && sources.some(source => source.review_mode !== 'deterministic');
-  if (mayUseAi && provider === 'deepseek' && flags.confirm_cost !== true) {
-    return { ok: false, command: 'scan', code: 'TOOL_UPDATE_REVIEW_COST_CONFIRM_REQUIRED', error: 'DeepSeek scan 必须显式提供 --confirm-cost' };
+  if (mayUseAi && provider !== 'local' && flags.confirm_cost !== true) {
+    return { ok: false, command: 'scan', code: 'TOOL_UPDATE_REVIEW_COST_CONFIRM_REQUIRED', error: `外部 provider=${provider} 的 scan 必须显式提供 --confirm-cost` };
   }
   const current = deps.loadSnapshot ? deps.loadSnapshot() : loadCatalogSnapshot();
   const aiSourceCount = sources.filter(source => source.review_mode !== 'deterministic').length;
@@ -370,8 +371,8 @@ async function summarizeToolEvidenceExternally(candidate, options = {}) {
       && value.summary.trim().length <= 600
       && chineseRatio(value.summary) >= 0.2,
   }, {
-    provider: 'deepseek',
-    model: options.externalModel || 'deepseek-v4-flash',
+    provider: DEFAULT_PROVIDER_NAME,
+    model: options.externalModel || getProvider(DEFAULT_PROVIDER_NAME).defaultModel,
     apiKey: options.externalApiKey,
     fetchImpl: options.externalFetchImpl || (typeof fetch === 'function' ? fetch : null),
     timeoutMs: options.externalTimeoutMs,
@@ -598,7 +599,7 @@ async function main(argv = process.argv.slice(2), deps = {}) {
   else if (command === 'list') result = runList(flags, deps);
   else if (command === 'preview') result = runPreview(flags, deps);
   else if (command === 'apply') result = await runApply(flags, deps);
-  else throw new Error('用法: tool-update-review preflight|scan|localize|list|preview|apply [--products a,b] [--tavily-access-mode keyed|keyless] [--provider local|deepseek]');
+  else throw new Error('用法: tool-update-review preflight|scan|localize|list|preview|apply [--products a,b] [--tavily-access-mode keyed|keyless] [--provider local|zhipu|deepseek]');
   if (deps.print !== false) console.log(JSON.stringify(result, null, 2));
   return result;
 }

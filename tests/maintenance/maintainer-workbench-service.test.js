@@ -23,7 +23,7 @@ function serviceWith(state) {
 }
 
 test('GET projections include revisions and items without commits', () => {
-  const state = { store: { candidates: [{ id: 'p', review_status: 'pending' }, { id: 'a', review_status: 'approved', top_selected: true }] }, commits: [] };
+  const state = { store: { candidates: [{ id: 'p', review_status: 'pending', l1_review: { verdict: 'hold' } }, { id: 'a', review_status: 'approved', top_selected: true }] }, commits: [] };
   const service = serviceWith(state);
   assert.deepEqual(service.newsReview(), { revision: 'news-r1', items: [state.store.candidates[0]] });
   assert.equal(service.top().items.length, 0); // 无 top.json 时返回空池
@@ -33,6 +33,33 @@ test('GET projections include revisions and items without commits', () => {
   assert.deepEqual(conceptPreview.items, [{ term: 'RAG' }]);
   assert.equal(conceptPreview.status, 'legacy_preview');
   assert.equal(state.commits.length, 0);
+});
+
+test('newsReview() 在有未完成初审条目时返回 enriching 锁定状态与门禁统计', () => {
+  const state = { store: { candidates: [{ id: 'raw', review_status: 'pending' }, { id: 'done', review_status: 'pending', l1_review: { verdict: 'hold' } }] }, commits: [] };
+  const service = serviceWith(state);
+  const res = service.newsReview();
+  assert.equal(res.status, 'enriching');
+  assert.equal(res.unreviewed_count, 1);
+  assert.equal(res.items.length, 0);
+  assert.match(res.message, /本地 Bonsai 正在进行 AI 初审分流与汉化/);
+});
+
+test('newsReview() 不因失败的 ai_advice 外壳解除门禁', () => {
+  const state = {
+    store: {
+      candidates: [{
+        id: 'failed',
+        review_status: 'pending',
+        ai_advice: { verdict: null, reasons: [], llm_error: 'timeout' },
+      }],
+    },
+    commits: [],
+  };
+  const res = serviceWith(state).newsReview();
+  assert.equal(res.status, 'enriching');
+  assert.equal(res.unreviewed_count, 1);
+  assert.equal(res.items.length, 0);
 });
 
 test('top() 只返回 top.json 池内且已 approved 的项', () => {

@@ -8,6 +8,7 @@
  */
 
 const { requestStructuredJson } = require('../catalog/ai/deepseek-structured');
+const { resolveProvider } = require('../shared/ai-provider-registry');
 const { LOCAL_API_BASE, LOCAL_MODEL } = require('../shared/llm-endpoints');
 const { validateSuggestion } = require('./identity-review');
 
@@ -34,14 +35,15 @@ function buildInput(candidate) {
 
 /**
  * @param {object} candidate identity-review.collectReviewCandidates 返回项
- * @param {object} options { provider:'local'|'deepseek', ledger, model, endpoint, apiKey, fetchImpl }
+ * @param {object} options { provider:'local'|'deepseek'|'zhipu', ledger, model, endpoint, apiKey, fetchImpl }
  */
 async function suggestIdentityReview(candidate, options = {}) {
   const provider = options.provider || 'local';
-  if (!['local', 'deepseek'].includes(provider)) {
+  if (!['local', 'deepseek', 'zhipu'].includes(provider)) {
     return { ok: false, code: 'IDENTITY_REVIEW_PROVIDER_UNSUPPORTED', error: `不支持的 identity review provider: ${provider}` };
   }
   const isLocal = provider === 'local';
+  const externalProvider = isLocal ? null : resolveProvider(provider);
   return requestStructuredJson({
     kind: 'identity_review',
     instructions: buildInstructions(),
@@ -51,9 +53,10 @@ async function suggestIdentityReview(candidate, options = {}) {
     validate: validateSuggestion,
   }, {
     ...options,
-    provider: 'deepseek',
+    ...(isLocal ? { provider: 'deepseek' } : { provider }),
     endpoint: options.endpoint || (isLocal ? LOCAL_API_BASE : undefined),
-    model: options.model || (isLocal ? LOCAL_MODEL : 'deepseek-v4-flash'),
+    model: options.model
+      || (isLocal ? LOCAL_MODEL : (externalProvider?.ok ? externalProvider.provider.defaultModel : 'deepseek-v4-flash')),
     // 本地 llama-server 不鉴权；transport 仍需非空值以通过统一安全门禁。
     ...(isLocal && !options.apiKey ? { apiKey: 'local' } : {}),
   });

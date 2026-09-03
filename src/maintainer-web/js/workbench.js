@@ -220,7 +220,7 @@
     return value == null ? '' : String(value);
   }
 
-  const VERDICT_ZH = { approve: '建议通过', discard: '建议丢弃', hold: '建议保留', rejected: '建议拒绝', approved: '建议通过' };
+  const VERDICT_ZH = { approve: '建议通过', discard: '建议丢弃', hold: '需人工细看', rejected: '建议拒绝', approved: '建议通过' };
   const BLOCKED_REASON_ZH = Object.freeze({
     AI_REVIEW_REQUIRED: '需要 AI 复核',
     AI_OUTPUT_INVALID: 'AI 复核结果无效',
@@ -262,16 +262,20 @@
     return Number.isFinite(confidence) && confidence >= 0 && confidence <= 1 ? confidence : null;
   }
 
-  function confidenceTone(value, range) {
+  function confidenceTone(value, range, verdict = '') {
     const confidence = confidenceLowerBound(value, range);
     if (confidence === null) return 'unknown';
-    if (confidence < 0.6) return 'low';
-    if (confidence < 0.8) return 'medium';
-    return 'high';
+    // 置信度有限 / 存疑待定统一使用黄色提醒
+    if (confidence < 0.6 || verdict === 'hold') return 'medium'; // 黄色风格
+    // 较高且判定为丢弃（识别出水文/低质/广告）使用红色
+    if (verdict === 'discard' || verdict === 'rejected') return 'low'; // 红色风格
+    // 较高且判定为通过/优质使用绿色
+    return 'high'; // 绿色风格
   }
 
   function confidenceDisplay(value, range, options = {}) {
     const confidence = confidenceLowerBound(value, range);
+    const verdict = options.verdict || '';
     if (confidence === null) return { prefix: '', value: '模型未提供把握度，需人工判断', suffix: '', tone: 'unknown' };
     const level = confidence < 0.6 ? '有限' : confidence < 0.8 ? '中等' : '较高';
     if (typeof range === 'string' && /^\d{1,3}-\d{1,3}%$/.test(range)) {
@@ -279,7 +283,7 @@
         prefix: '模型自评：',
         value: `${level}（${range}）`,
         suffix: '，非统计准确率',
-        tone: confidenceTone(value, range)
+        tone: confidenceTone(value, range, verdict)
       };
     }
     if (options.tool) {
@@ -287,14 +291,14 @@
         prefix: '模型置信度：',
         value: `${level}（${Math.round(confidence * 100)}%）`,
         suffix: '，非统计准确率',
-        tone: confidenceTone(value, range)
+        tone: confidenceTone(value, range, verdict)
       };
     }
     return {
       prefix: '历史模型自评：',
       value: `${level}（原始值 ${Math.round(confidence * 100)}%）`,
       suffix: '，非统计准确率；尚未提供区间',
-      tone: confidenceTone(value, range)
+      tone: confidenceTone(value, range, verdict)
     };
   }
 
@@ -393,7 +397,10 @@
     const head = document.createElement('div');
     head.className = 'ai-advice-head';
     addText(head, 'span', verdict ? `${label} · ${VERDICT_ZH[verdict] || verdict}` : label);
-    const confidenceDisplayValue = confidenceDisplay(advice.confidence, advice.confidence_range, { tool: options.tool === true });
+    const confidenceDisplayValue = confidenceDisplay(advice.confidence, advice.confidence_range, {
+      tool: options.tool === true,
+      verdict,
+    });
     const confidenceLabel = document.createElement('span');
     confidenceLabel.className = 'ai-confidence';
     if (confidenceDisplayValue.prefix) addText(confidenceLabel, 'span', confidenceDisplayValue.prefix);
@@ -1092,7 +1099,18 @@
     try {
     await Promise.all([
       loadOverview(),
-      loadResource('news', 'news/review', (payload) => renderQueue('news', 'newsList', listFrom(payload, ['items', 'candidates', 'queue', 'news']), 'newsState', { selectable: true, empty: '当前没有待首审新闻。' }), { rootId: 'newsList', stateId: 'newsState' }),
+      loadResource('news', 'news/review', (payload) => {
+        const value = unwrap(payload) || {};
+        if (value.status === 'enriching') {
+          const root = $('#newsList');
+          clearChildren(root);
+          addText(root, 'p', `🤖 ${value.message || '本地 Bonsai 正在进行 AI 初审分流与汉化，请稍候...'}`, 'panel-note');
+          setLoadState('newsState', 'AI 初审中…', 'loading');
+          updateSelectionControls('news');
+          return;
+        }
+        renderQueue('news', 'newsList', listFrom(payload, ['items', 'candidates', 'queue', 'news']), 'newsState', { selectable: true, empty: '当前没有待首审新闻。' });
+      }, { rootId: 'newsList', stateId: 'newsState' }),
       loadResource('keywords', 'news/keywords', renderKeywords, { rootId: 'keywordList', stateId: 'keywordsState' }),
       loadTopAndTranscripts(),
       loadResource('toolUpdates', 'tool-updates', renderToolUpdates, { rootId: 'toolUpdatesList', stateId: 'toolUpdatesState' }),
@@ -1180,7 +1198,7 @@
     const controls = document.createElement('div'); controls.className = 'recovery-controls';
     const configFields = Array.isArray(draft.missing_config_fields) ? draft.missing_config_fields : [];
     const inputs = new Map();
-    const defaults = { model: 'deepseek-v4-flash', provider: 'deepseek', protocol: 'responses', retrieval_provider: 'tavily', access_mode: 'keyless' };
+    const defaults = { model: 'glm-5.3-flash', provider: 'zhipu', protocol: 'messages', retrieval_provider: 'tavily', access_mode: 'keyless' };
     for (const field of configFields) {
       if (!['model', 'provider', 'protocol', 'retrieval_provider', 'access_mode'].includes(field)) continue;
       const label = document.createElement('label'); label.className = 'recovery-field'; label.textContent = field;

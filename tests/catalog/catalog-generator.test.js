@@ -49,7 +49,7 @@ test('v3 synthesis adapter uses object JSON mode and reserves synthesis plus res
     expected_layer_fields: { detail: ['summary'] },
     research: { official_sources: [{ source_id: 'source-1', url: 'https://kling.ai', title: 'Kling', content: 'facts', discovered_for: ['detail:kling-2-6-pro'] }] },
     ledger: { reserve(category, amount) { reservations.push([category, amount]); return { ok: true }; } },
-  }, { apiKey: 'test-key', fetchImpl });
+  }, { provider: 'deepseek', apiKey: 'test-key', fetchImpl });
 
   assert.equal(result.ok, true);
   assert.equal(result.layer_fields.detail.summary, '可灵 2.6 Pro');
@@ -93,7 +93,7 @@ test('v3 synthesis repair prefers matching seed evidence for official date', asy
       }],
     },
     ledger: { reserve() { return { ok: true }; } },
-  }, { apiKey: 'test-key', fetchImpl });
+  }, { provider: 'deepseek', apiKey: 'test-key', fetchImpl });
 
   assert.equal(result.ok, true);
   assert.equal(result.layer_fields.detail.last_updated_date, '2025-07-07');

@@ -1,6 +1,7 @@
 'use strict';
 
 const { requestStructuredJson } = require('./deepseek-structured');
+const { resolveProvider } = require('../../shared/ai-provider-registry');
 const { LOCAL_API_BASE, LOCAL_MODEL } = require('../../shared/llm-endpoints');
 const {
   REVIEW_VERDICTS,
@@ -79,20 +80,22 @@ function providerOptions(options = {}) {
       ...(options.apiKey ? {} : { apiKey: 'local' }),
     };
   }
+  const resolved = resolveProvider(provider);
+  const fallbackModel = resolved.ok ? resolved.provider.defaultModel : 'deepseek-v4-flash';
   return {
     ...options,
     provider,
-    model: options.model || 'deepseek-v4-flash',
+    model: options.model || fallbackModel,
   };
 }
 
 async function suggestToolUpdateReview(input = {}, options = {}) {
   const provider = options.provider || 'local';
-  if (!['local', 'deepseek'].includes(provider)) {
+  if (!['local', 'deepseek', 'zhipu'].includes(provider)) {
     return { ok: false, code: 'TOOL_UPDATE_REVIEW_PROVIDER_UNSUPPORTED', error: `不支持的工具更新审核 provider: ${provider}` };
   }
-  if (provider === 'deepseek' && options.confirmCost !== true) {
-    return { ok: false, code: 'TOOL_UPDATE_REVIEW_COST_CONFIRM_REQUIRED', error: 'DeepSeek 工具更新审核必须显式确认成本' };
+  if (provider !== 'local' && options.confirmCost !== true) {
+    return { ok: false, code: 'TOOL_UPDATE_REVIEW_COST_CONFIRM_REQUIRED', error: `外部 provider=${provider} 的工具更新审核必须显式确认成本` };
   }
   if (!options.ledger?.reserve) {
     return { ok: false, code: 'COST_LEDGER_REQUIRED', error: '工具更新审核缺少成本账本' };

@@ -202,6 +202,16 @@ function mergeCandidatesMin(store, items) {
       // ai_advice / l1_review：本轮已有新的（incoming 已生成）则保留新的，否则保留既有。
       if (prev.ai_advice && incoming.ai_advice === undefined) incoming.ai_advice = prev.ai_advice;
       if (prev.l1_review && incoming.l1_review === undefined) incoming.l1_review = prev.l1_review;
+      // 人工/AI 加工结果：重新采集未提供时必须保留，避免丢失字幕、总结和本地化。
+      // 含字幕付费总结的保护元数据（transcript_summarized_at 等），丢失会导致保护失效。
+      for (const field of [
+        'transcript', 'transcript_file', 'summary', 'summary_key_points',
+        'transcript_summarized_at', 'transcript_summary_llm', 'transcript_summary_error',
+        'localizations', 'localizations_meta', 'summarizer', 'summary_generated_at',
+        'summary_input_chars', 'summary_llm_error',
+      ]) {
+        if (prev[field] !== undefined && incoming[field] === undefined) incoming[field] = prev[field];
+      }
     } else {
       // 新条目缺省以 pending 进入待审核；top_selected 默认 false（尚未被选中显示）。
       if (incoming.review_status === undefined) incoming.review_status = DEFAULT_REVIEW_STATUS;

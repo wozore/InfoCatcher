@@ -100,6 +100,7 @@
 - [2026-08-19 · 模型对比系统（4 源管线 + 主键日期剥离与展示名清洗 + 维度实时渲染）](#log-entry-81)
 - [2026-08-21 · 模型身份歧义解析修复 + 手动审计入口](#log-entry-82)
 - [2026-09-02 · 维护者工作台知识闭环恢复与配置诊断](#log-entry-83)
+- [2026-09-03 · 外部 AI provider 开关：接入智谱 Messages 兼容端点，默认切 glm-5.3-flash（对齐 Lite 套餐）](#log-entry-84)
 
 ---
 
@@ -2740,4 +2741,46 @@
 
 - [~] 当前环境没有可用浏览器自动化工具，未完成真实浏览器点击与截图验收；已完成页面静态检查、HTTP recovery preview 和 mock adapter 回归。
 - [~] 当前 7 条 Draft 的恢复仍需维护者在工作台确认增量成本并执行恢复；本轮没有代为恢复或 Apply。
+- [~] 本次改动尚未提交，待维护者明确要求后再提交。
+
+---
+
+<a id="log-entry-84"></a>
+
+## 2026-09-03 · 外部 AI provider 开关与泛用/专用架构重构（对齐 Lite 套餐 + 厂商配置独立目录）
+
+**背景**：DeepSeek 外部调用成本偏高，用户持有智谱清言 Lite 套餐（Coding Plan / 编程计划）。排查 CC Switch 发现其调用端点并非开放平台 PaaS 端点（`api/paas/v4/chat/completions`，调用 `glm-5.3-flash` 会报 1113 余额不足），而是智谱 Anthropic 兼容端点（`https://open.bigmodel.cn/api/anthropic/v1/messages`）；该端点下用户的 Lite 套餐直接生效，`glm-5.3-flash`、`glm-4.5-air`、`glm-4.7-flash` 均可正常调用且状态码全为 200。随后按开闭原则与策略模式，将底层厂商元数据与网关通信彻底重构成“泛用网关 + 厂商独立目录 + 向后兼容垫片”架构。
+
+### 实际变更
+
+- [x] **厂商配置独立目录化（`src/shared/providers/`）**：
+  - 各厂商元数据彻底分拆为独立模块：`zhipu.js`（Anthropic Messages 端点、`glm-5.3-flash`）、`deepseek.js`（Responses / Chat 双端点、`deepseek-v4-flash`）、`local.js`（本地 llama-server 8080、`bonsai`）、`openai.js` 与 `anthropic.js`（规范预留）；
+  - `protocols.js`：收口协议常量（`RESPONSES` / `MESSAGES` / `CHAT`）；
+  - `index.js`：汇总注册表，维护全局默认开关 `DEFAULT_PROVIDER_NAME = 'zhipu'`，提供 `getProvider`、`resolveProvider` 与 `apiKeyForProvider`；
+  - `src/shared/ai-provider-registry.js`：降级为纯向后兼容代理，透传 `providers/index.js`，保证全仓老调用方零破坏。
+- [x] **统一泛用网关（`src/shared/llm-gateway.js`）**：
+  - 提供 `requestStructuredJson`（结构化 JSON 提取与 schema 校验）与 `requestLlmText`（通用自然语言文本生成）两大统一入口；
+  - 内部实现 `resolveTransportRoute`，自动按 provider 协议调度底层通信（Messages / Responses / Chat / local），自动处理顶层 system/user 消息折叠与思维链关闭（`thinking: { type: 'disabled' }` / `chat_template_kwargs: { enable_thinking: false }`）；
+  - 保留成本账本 `reserveResponses(ledger)` fail-closed 门禁与响应截断（`max_tokens`/`length`/`incomplete`）统一诊断。
+- [x] **向后兼容垫片（Shim）与新闻层瘦身**：
+  - `src/catalog/ai/deepseek-structured.js` 重构为轻量 re-export shim，透传网关核心方法，catalog 侧 7 个消费模块零变动；
+  - `src/news/classify/llm-provider.js` 消除约 500 行重复网络通信代码，底层全面委托至 `requestLlmText`，外层包裹 `try ... catch` 坚守采集管线绝不崩溃的降级契约，清理冗余死代码；
+  - `src/catalog/ai/catalog-series-placement-ai.js` 修复写死 DeepSeek 默认模型的问题，自适应当前 provider 的默认模型。
+- [x] **传输层与配置同步**：
+  - `deepseek-client.js`：新增 `requestMessages` 传输通道（POST + `x-api-key` + `anthropic-version: 2023-06-01`）；`textFromResponse` 增强兼容提取 Anthropic `content: [{type:'text'}]`；放宽 `requestChatCompletions` 动态 CHAT 协议放行；
+  - 默认值与配置：`ai-config.js` 模块默认配置继承 `glm-5.3-flash / messages`；维护者工作台恢复配置改 `glm-5.3-flash / messages`；`.env.example` 与 `catalog-generator.example.json` 同步更新；`local-enrichment.js` 外部通道 B 鉴权 header 自适应。
+
+### 验证结果
+
+- [x] 本机真实 API 四链路端到端连通验证（使用 `.env` 中的真实 key 直测 `glm-5.3-flash`）：
+  - 1. `requestMessages` 直连 `glm-5.3-flash`：status 200，usage 正常；
+  - 2. `requestStructuredJson` 结构化合成：输出正确 JSON `{"summary":"工具为 Cursor，版本 2.0。"}`，耗时短，零多余 thinking 开销；
+  - 3. `classifyWithDeepSeek` 分类：输出 `ai_product`，置信度 0.85；
+  - 4. `summarizeWithExternalDeepSeek` 总结：输出高质量中文摘要 + 核心要点。
+- [x] 全量测试 676/676 全部通过（`node tests/index.js`）。
+- [x] `git diff --check`（零 trailing whitespace）与 `scripts/validate.js` 全部通过。
+
+### 已知边界
+
+- [~] CI 需在 GitHub 仓库 Secrets 添加 `ZHIPU_API_KEY`。
 - [~] 本次改动尚未提交，待维护者明确要求后再提交。

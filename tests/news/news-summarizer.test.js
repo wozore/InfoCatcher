@@ -110,10 +110,11 @@ test('summarizeWithDeepSeek 输出无法解析：invalid_summary', async () => {
   assert.equal(result.code, 'invalid_summary');
 });
 
-test('summarizeWithExternalDeepSeek 使用外部 Responses endpoint，不经过本地模型门禁', async () => {
+test('summarizeWithExternalDeepSeek(provider=deepseek) 使用外部 Responses endpoint，不经过本地模型门禁', async () => {
   let endpoint = '';
   let requestBody = null;
   const result = await summarizeWithExternalDeepSeek({ title: '字幕标题', description: '视频描述', transcript: '字幕内容' }, {
+    provider: 'deepseek',
     apiKey: 'key',
     fetchImpl: async (url, options) => {
       endpoint = String(url);
@@ -128,6 +129,27 @@ test('summarizeWithExternalDeepSeek 使用外部 Responses endpoint，不经过�
   assert.equal(requestBody.reasoning.effort, 'none');
   assert.equal(requestBody.text.format.type, 'json_object');
   assert.equal(requestBody.input[0].role, 'user');
+});
+
+test('summarizeWithExternalDeepSeek(默认 zhipu) 走智谱 Anthropic 端点 + glm-5.3-flash', async () => {
+  let endpoint = '';
+  let requestBody = null;
+  const result = await summarizeWithExternalDeepSeek({ title: '字幕标题', description: '视频描述', transcript: '字幕内容' }, {
+    apiKey: 'key',
+    fetchImpl: async (url, options) => {
+      endpoint = String(url);
+      requestBody = JSON.parse(options.body);
+      return { ok: true, status: 200, json: async () => ({ content: [{ type: 'text', text: '{"summary":"智谱摘要","key_points":["要点"]}' }] }) };
+    },
+  });
+  assert.equal(result.ok, true);
+  assert.equal(result.summary, '智谱摘要');
+  assert.deepEqual(result.key_points, ['要点']);
+  assert.equal(endpoint, 'https://open.bigmodel.cn/api/anthropic/v1/messages');
+  assert.equal(requestBody.model, 'glm-5.3-flash');
+  assert.ok(requestBody.system);
+  assert.equal(requestBody.messages[0].role, 'user');
+  assert.deepEqual(requestBody.thinking, { type: 'disabled' });
 });
 
 // ── 第 3 组：collectSummarySource / summarizeCandidate ──────

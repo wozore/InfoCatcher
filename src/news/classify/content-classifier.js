@@ -8,8 +8,9 @@
  * ═══════════════════════════════════════════════════════════════
  *   L0 规则式基线 —— 零外部依赖、零成本、可离线。基于标题/描述关键词与
  *                     catalog 词典（tools/glossary）匹配内容类型六类。
- *   L1 AI 分类    —— DeepSeek（llm-provider.js），对规则式不确定的候选做语义分类；
- *                     任何失败自动回退 L0。当前唯一支持的 provider 为 deepseek。
+ *   L1 AI 分类    —— 外部 provider（默认 zhipu，可切 deepseek；llm-provider.js），
+ *                     对规则式不确定的候选做语义分类；
+ *                     任何失败自动回退 L0。
  *
  * 内容类型状态机（路径 A：ai_suggested → reviewed）：
  *   content_type_status: unclassified → ai_suggested → reviewed
@@ -239,9 +240,10 @@ function classifyRuleBased(item) {
  *
  * 分级逻辑：
  *   - 未配置 provider：L0 规则式基线（classifier=rule_based）。
- *   - provider=deepseek：先跑 L1 DeepSeek 语义分类；成功用 L1 结果（classifier=llm_deepseek），
- *     任何失败（缺 key/网络/超时/输出无法映射）自动回退 L0（classifier=rule_based_fallback），
- *     并保留 L0 的 reasons 供审核回溯，保证不阻塞采集管线。
+ *   - provider=deepseek/zhipu：先跑 L1 外部语义分类（provider 开关决定端点与密钥；
+ *     标签 classifier=llm_{provider}），任何失败（缺 key/网络/超时/输出无法映射）
+ *     自动回退 L0（classifier=rule_based_fallback），并保留 L0 的 reasons 供审核
+ *     回溯，保证不阻塞采集管线。
  *   - provider 为其他未知值：回退 L0 并标注（不产出 unclassified 占位）。
  *
  * @param {object} item - 含 title / description（可选 source_type）
@@ -249,29 +251,33 @@ function classifyRuleBased(item) {
  * @returns {Promise<{ content_type: string, content_type_status: string, classifier: string,
  *                     ai_confidence: number|null, reasons: string[], hit_tools: string[], hit_concepts: string[] }>}
  */
+// 支持 L1 语义分类的外部 provider 白名单（开关见 shared/ai-provider-registry）。
+const L1_PROVIDERS = new Set(['deepseek', 'zhipu']);
+
 async function classifyCandidate(item, options = {}) {
   const provider = options.provider || process.env.KNOWVIEW_CLASSIFY_PROVIDER || process.env.INFOCATCHER_CLASSIFY_PROVIDER;
+  const model = options.model || process.env.KNOWVIEW_CLASSIFY_MODEL || process.env.INFOCATCHER_CLASSIFY_MODEL;
   const ruleResult = classifyRuleBased(item);
   let classifier = 'rule_based';
   let aiConfidence = null;
   let extraReasons = [];
 
   if (provider) {
-    if (provider === 'deepseek') {
-      const llm = await classifyWithDeepSeek(item, options);
+    if (L1_PROVIDERS.has(provider)) {
+      const llm = await classifyWithDeepSeek(item, { ...options, provider, model });
       if (llm.ok) {
         return {
           content_type: llm.content_type,
           content_type_status: 'ai_suggested',
-          classifier: 'llm_deepseek',
+          classifier: `llm_${provider}`,
           ai_confidence: llm.ai_confidence,
-          reasons: [`L1 DeepSeek 语义分类（置信度 ${llm.ai_confidence}）`, ...ruleResult.reasons],
+          reasons: [`L1 ${provider} 语义分类（置信度 ${llm.ai_confidence}）`, ...ruleResult.reasons],
           hit_tools: ruleResult.hit_tools,
           hit_concepts: ruleResult.hit_concepts,
         };
       }
       classifier = 'rule_based_fallback';
-      extraReasons = [`L1 DeepSeek 分类失败（${llm.error}），回退 L0 规则式`];
+      extraReasons = [`L1 ${provider} 分类失败（${llm.error}），回退 L0 规则式`];
     } else {
       classifier = 'rule_based_fallback';
       extraReasons = [`未知分类 provider=${provider}，回退 L0 规则式`];

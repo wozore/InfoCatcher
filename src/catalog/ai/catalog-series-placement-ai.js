@@ -19,7 +19,7 @@
  *   否则确定性判定；needs_ai 时才允许调用 AI，再以 hint 重跑确定性 planner。
  */
 
-const { getProvider, resolveProvider, apiKeyForProvider } = require('../../shared/ai-provider-registry');
+const { getProvider, resolveProvider, apiKeyForProvider, DEFAULT_PROVIDER_NAME } = require('../../shared/ai-provider-registry');
 const { requestStructuredJson } = require('./deepseek-structured');
 const {
   normalizeVendorKey,
@@ -98,6 +98,8 @@ function validateSeriesPlacementValue(value) {
  * ledger 必传（requestStructuredJson fail-closed）；缺 → COST_LEDGER_REQUIRED。
  */
 async function suggestSeriesPlacement(input, options = {}) {
+  const providerName = options.provider || DEFAULT_PROVIDER_NAME;
+  const currentProvider = getProvider(providerName) || getProvider(DEFAULT_PROVIDER_NAME);
   const result = await requestStructuredJson({
     kind: 'series_placement',
     instructions: buildSeriesPlacementInstructions(),
@@ -106,10 +108,12 @@ async function suggestSeriesPlacement(input, options = {}) {
     ledger: options.ledger,
     validate: validateSeriesPlacementValue,
   }, {
-    model: options.model || getProvider('deepseek')?.defaultModel,
+    provider: options.provider,
+    model: options.model || currentProvider?.defaultModel,
     apiKey: options.apiKey,
     timeoutMs: options.timeoutMs,
     endpoint: options.endpoint,
+    fetchImpl: options.fetchImpl,
   });
   if (!result.ok) return result;
   const value = result.value;

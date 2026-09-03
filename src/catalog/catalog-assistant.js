@@ -1,5 +1,6 @@
 'use strict';
 
+const { getProvider, DEFAULT_PROVIDER_NAME } = require('../shared/ai-provider-registry');
 const { loadAiModuleConfig } = require('../shared/ai-config');
 const { loadCatalogSnapshot } = require('./catalog-snapshot-store');
 const { previewHashOf, revisionOf } = require('./catalog-revision');
@@ -55,10 +56,11 @@ function normalizeGeneratorOptions(options = {}) {
     const value = options[camel] ?? options[snake];
     return value === undefined || value === null || value === '' ? fallback : value;
   };
+  const defaultProvider = getProvider(DEFAULT_PROVIDER_NAME);
   return {
-    provider: valueOf('provider', 'provider', 'deepseek'),
-    model: valueOf('model', 'model', 'deepseek-v4-flash'),
-    protocol: valueOf('protocol', 'protocol', 'responses'),
+    provider: valueOf('provider', 'provider', DEFAULT_PROVIDER_NAME),
+    model: valueOf('model', 'model', defaultProvider.defaultModel),
+    protocol: valueOf('protocol', 'protocol', defaultProvider.protocol),
     retrievalProvider: valueOf('retrievalProvider', 'retrieval_provider', 'tavily'),
     accessMode: valueOf('accessMode', 'access_mode', undefined),
     timeoutMs: valueOf('timeoutMs', 'timeout_ms', undefined),

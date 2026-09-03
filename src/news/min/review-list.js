@@ -105,26 +105,54 @@ function buildReviewPayload(candidates, now, dateKey) {
 /**
  * 追加合并两份候选清单：保留已有条目（含人工结论与顺序），
  * 把 fresh 中不在已有集合的条目追加到尾部（按 id 去重）。
+ * options.updateSummaries === true 时：对于已有条目，若其处于 pending 状态，
+ * 同步更新其 summary、score、suggestion 为 fresh 的最新值，保留维护者已填写的非 pending 结论。
  * @param {Array} [existingCandidates]
  * @param {Array} [freshCandidates]
- * @returns {{ merged: Array, appended: number }}
+ * @param {object} [options]
+ * @returns {{ merged: Array, appended: number, updated: number }}
  */
-function mergeReviewCandidates(existingCandidates, freshCandidates) {
+function mergeReviewCandidates(existingCandidates, freshCandidates, options = {}) {
   const merged = [];
-  const seen = new Set();
-  for (const c of Array.isArray(existingCandidates) ? existingCandidates : []) {
-    merged.push(c);
-    if (c && c.id != null) seen.add(String(c.id));
+  const existingMap = new Map();
+  const freshMap = new Map();
+
+  for (const f of Array.isArray(freshCandidates) ? freshCandidates : []) {
+    if (f && f.id != null) freshMap.set(String(f.id), f);
   }
-  let appended = 0;
-  for (const c of Array.isArray(freshCandidates) ? freshCandidates : []) {
-    if (c && c.id != null && !seen.has(String(c.id))) {
-      seen.add(String(c.id));
+
+  let updated = 0;
+  for (const c of Array.isArray(existingCandidates) ? existingCandidates : []) {
+    if (c && c.id != null) {
+      const idStr = String(c.id);
+      existingMap.set(idStr, c);
+      if (options.updateSummaries && freshMap.has(idStr)) {
+        const fresh = freshMap.get(idStr);
+        // 如果维护者已人工修改了状态（如填成了 approved 或 discarded），绝不覆盖人工结论！
+        const manualStatus = c.review_status !== 'pending' ? c.review_status : fresh.review_status;
+        merged.push({
+          ...fresh,
+          review_status: manualStatus,
+        });
+        updated++;
+      } else {
+        merged.push(c);
+      }
+    } else {
       merged.push(c);
+    }
+  }
+
+  let appended = 0;
+  for (const f of Array.isArray(freshCandidates) ? freshCandidates : []) {
+    if (f && f.id != null && !existingMap.has(String(f.id))) {
+      existingMap.set(String(f.id), f);
+      merged.push(f);
       appended++;
     }
   }
-  return { merged, appended };
+
+  return { merged, appended, updated };
 }
 
 /**
@@ -177,15 +205,17 @@ function buildReviewList(store, config, options = {}) {
       writeJsonAtomic(file, payload, 'min-review-manual');
       return { file, total_pending: reviewList.length, candidates: reviewList, appended: 0, replaced: true, skipped: false };
     }
-    const { merged, appended } = mergeReviewCandidates(existing.candidates, reviewList);
+    const { merged, appended, updated } = mergeReviewCandidates(existing.candidates, reviewList, {
+      updateSummaries: options.updateSummaries === true,
+    });
     const totalPending = merged.filter(c => c && c.review_status === 'pending').length;
-    if (appended === 0) {
+    if (appended === 0 && (!options.updateSummaries || updated === 0)) {
       return { skipped: true, file, total_pending: totalPending, reason: 'no_new_pending', candidates: merged };
     }
     const payload = buildReviewPayload(merged, now, dateKey);
     fs.mkdirSync(path.dirname(file), { recursive: true });
     writeJsonAtomic(file, payload, 'min-review-manual');
-    return { file, total_pending: totalPending, candidates: merged, appended, replaced: false, skipped: false };
+    return { file, total_pending: totalPending, candidates: merged, appended, updated: updated || 0, replaced: false, skipped: false };
   }
 
   const payload = buildReviewPayload(reviewList, now, dateKey);

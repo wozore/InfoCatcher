@@ -1,13 +1,14 @@
 /**
  * llm-provider.js —— AI 内容加工的模型提供方封装（B16 路径 A + content-summarizer + content-reviewer + content-localizer）
  *
- * 当前实现：DeepSeek API（OpenAI 兼容 chat completions），提供四类调用：
+ * 当前实现：外部 provider 开关（默认 zhipu，可切回 deepseek；registry 统一注册）+ 本地 Bonsai，
+ * 提供四类调用：
  *   - classifyWithDeepSeek      —— L1 内容类型分类（content-classifier.js 用）
  *   - summarizeWithDeepSeek     —— 内容总结（content-summarizer.js 用）
  *   - reviewWithDeepSeek        —— AI 审核建议（content-reviewer.js 用）
  *   - localizeWithDeepSeek      —— 内容本地化翻译（content-localizer.js 用）
  * 与项目采集器一致使用 fetch 注入模式（options.fetchImpl 可在测试中替换为 mock），
- * 运行环境无 fetch 时通过 process.env.DEEPSEEK_API_KEY 读取密钥。
+ * 运行环境按 provider 读取对应密钥（ZHIPU_API_KEY / DEEPSEEK_API_KEY）。
  *
  * 失败语义：任何错误（缺 key / 无 fetch / 网络超时 / 非 200 / 输出无法解析）
  * 都 resolve 一个 { ok: false } 降级对象，绝不 reject、不抛错 —— 调用方（content-classifier /
@@ -20,17 +21,133 @@
 
 'use strict';
 
-const { requestDeepSeek, textFromResponse } = require('../../shared/deepseek-client');
+const { AI_PROTOCOLS, getProvider, DEFAULT_PROVIDER_NAME } = require('../../shared/ai-provider-registry');
+const { textFromResponse } = require('../../shared/deepseek-client');
 const { LOCAL_API_BASE, LOCAL_MODEL } = require('../../shared/llm-endpoints');
-const { ensureLocalModel } = require('../../shared/local-model');
+const { requestLlmText } = require('../../shared/llm-gateway');
 
 // ═══════════════════════════════════════════════════════════════
 // 常量
 // ═══════════════════════════════════════════════════════════════
 
-// 默认模型：deepseek-chat（DeepSeek-V3.x，价格最低；每百万输入 token 约 ¥0.5-1）
+// deepseek 历史外部默认模型与 chat 端点（provider=deepseek 时保持原路径不变）
 const DEFAULT_MODEL = 'deepseek-chat';
 const API_BASE = 'https://api.deepseek.com/chat/completions';
+
+/**
+ * 解析外部调用目标（provider 开关）：
+ *   - zhipu（默认）：智谱 Anthropic Messages 兼容端点 + ZHIPU_API_KEY + glm-5.3-flash
+ *   - deepseek（兼容切回）：DeepSeek chat 端点 + DEEPSEEK_API_KEY + deepseek-chat
+ * options.provider / options.apiKey 显式传入时优先。
+ */
+function externalTargetOf(options = {}) {
+  const providerName = options.provider || DEFAULT_PROVIDER_NAME;
+  const provider = getProvider(providerName);
+  if (!provider || provider.implemented === false) {
+    return { ok: false, error: `不支持的外部 provider：${providerName}`, code: 'unsupported_provider' };
+  }
+  return {
+    ok: true,
+    providerName,
+    label: provider.label,
+    protocol: provider.protocol,
+    apiKeyEnv: provider.apiKeyEnv,
+    // deepseek 外部直通的历史默认模型是 deepseek-chat（区别于 catalog Responses 路径的 v4-flash）
+    defaultModel: providerName === 'deepseek' ? DEFAULT_MODEL : (provider.defaultModel || DEFAULT_MODEL),
+    endpoint: providerName === 'deepseek'
+      ? API_BASE
+      : (provider.protocol === AI_PROTOCOLS.MESSAGES ? provider.messagesEndpoint : provider.chatEndpoint),
+  };
+}
+
+function mapGatewayError(result) {
+  if (result.code === 'missing_api_key' || String(result.code || '').endsWith('_AUTH_REQUIRED')) {
+    return { ok: false, error: result.error, code: 'missing_api_key' };
+  }
+  if (result.code === 'no_fetch' || (result.code?.endsWith('_NETWORK_ERROR') && result.error === '当前运行环境无 fetch')) {
+    return { ok: false, error: result.error, code: 'no_fetch' };
+  }
+  if (result.status) {
+    return { ok: false, error: result.error, code: `http_${result.status}`, status: result.status };
+  }
+  if (String(result.code || '').endsWith('_TIMEOUT') || result.code === 'timeout') {
+    return { ok: false, error: result.error, code: 'timeout' };
+  }
+  if (result.code === 'AI_PROVIDER_UNSUPPORTED' || result.code === 'unsupported_provider') {
+    return { ok: false, error: result.error, code: 'unsupported_provider' };
+  }
+  if (String(result.code || '').startsWith('LOCAL_MODEL_')) {
+    return { ok: false, error: result.error, code: result.code };
+  }
+  return {
+    ok: false,
+    error: result.error,
+    code: 'network_error',
+  };
+}
+
+/**
+ * 外部调用分发：委托给 llm-gateway 的 requestLlmText，错误码映射为业务现有语义。
+ */
+async function requestExternalChat(payload, options = {}) {
+  try {
+    const target = externalTargetOf(options);
+    if (!target.ok) return target;
+    const apiKey = options.apiKey ?? process.env[target.apiKeyEnv];
+    const fetchImpl = options.fetchImpl || (typeof fetch === 'function' ? fetch : null);
+    const timeoutMs = options.timeoutMs ?? 15_000;
+    if (!apiKey) return { ok: false, error: `缺少 ${target.apiKeyEnv}`, code: 'missing_api_key' };
+    if (!fetchImpl) return { ok: false, error: '当前运行环境无 fetch', code: 'no_fetch' };
+
+    const endpoint = options.endpoint
+      || (target.providerName === 'deepseek' && !payload.messages ? getProvider('deepseek').responsesEndpoint : target.endpoint);
+
+    const gatewayOptions = {
+      ...options,
+      provider: target.providerName,
+      apiKey,
+      fetchImpl,
+      timeoutMs,
+      endpoint,
+      model: payload.model || target.defaultModel,
+    };
+
+    const result = await requestLlmText(payload, gatewayOptions);
+    if (result.ok) return result;
+    return mapGatewayError(result);
+  } catch (err) {
+    return { ok: false, error: err?.message || String(err), code: 'network_error' };
+  }
+}
+
+/**
+ * 本地 Bonsai 调用分发：委托给 llm-gateway 的 requestLlmText，错误码映射为业务现有语义。
+ */
+async function requestLocalChat(payload, options = {}) {
+  try {
+    const apiKey = options.apiKey ?? 'local-bonsai';
+    const fetchImpl = options.fetchImpl || (typeof fetch === 'function' ? fetch : null);
+    const timeoutMs = options.timeoutMs ?? 15_000;
+    if (!apiKey) return { ok: false, error: '缺少 DEEPSEEK_API_KEY', code: 'missing_api_key' };
+    if (!fetchImpl) return { ok: false, error: '当前运行环境无 fetch', code: 'no_fetch' };
+
+    const gatewayOptions = {
+      ...options,
+      provider: 'local',
+      apiKey,
+      fetchImpl,
+      timeoutMs,
+      endpoint: options.endpoint || LOCAL_API_BASE,
+      model: payload.model || LOCAL_MODEL,
+    };
+
+    const result = await requestLlmText(payload, gatewayOptions);
+    if (result.ok) return result;
+    return mapGatewayError(result);
+  } catch (err) {
+    return { ok: false, error: err?.message || String(err), code: 'network_error' };
+  }
+}
 
 // 输入裁剪（与采集链路描述截断 ≤600 字符量级一致，控制单条 token 成本）
 const TITLE_MAX = 200;
@@ -77,6 +194,17 @@ const SUMMARY_MAX_TRANSCRIPT_CHARS = 3000;
 
 // 系统提示：强制输出 JSON，禁止解释/多余文字。
 const SUMMARY_SYSTEM_PROMPT = '你是 AI 资讯编辑。根据给定的热点资讯内容（标题、描述、视频字幕）生成内容总结。只输出一个 JSON 对象，不要输出任何其他文字、代码块标记或 JSON 外的内容。';
+
+/**
+ * 清理字符串中的非法 Unicode 孤立代理字符（Lone Surrogates: U+D800..U+DFFF）。
+ * 避免在将 JSON 载荷发往 llama-server / 原生 C++ JSON 解析器时抛出 500 解析错误。
+ * @param {string} str
+ * @returns {string}
+ */
+function sanitizeSurrogates(str) {
+  if (typeof str !== 'string') return '';
+  return str.replace(/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/g, '');
+}
 
 const SUMMARY_USER_PROMPT_TEMPLATE = `请为下面这条 AI 资讯生成内容总结，严格输出 JSON：
 {
@@ -249,58 +377,39 @@ function normalizeLabel(raw) {
   return null;
 }
 
-async function requestLegacyDeepSeek(payload, options = {}) {
-  const apiKey = options.apiKey ?? process.env.DEEPSEEK_API_KEY;
-  const fetchImpl = options.fetchImpl || (typeof fetch === 'function' ? fetch : null);
-  const timeoutMs = options.timeoutMs ?? 15_000;
-  if (!apiKey) return { ok: false, error: '缺少 DEEPSEEK_API_KEY', code: 'missing_api_key' };
-  if (!fetchImpl) return { ok: false, error: '当前运行环境无 fetch', code: 'no_fetch' };
-  const result = await requestDeepSeek(payload, { apiKey, fetchImpl, timeoutMs, endpoint: API_BASE });
-  if (result.ok) return result;
-  return {
-    ok: false,
-    error: result.error,
-    code: result.status ? `http_${result.status}` : (result.code === 'DEEPSEEK_TIMEOUT' ? 'timeout' : 'network_error'),
-  };
-}
-
-
 /**
- * 对单条候选做 DeepSeek 语义分类。
+ * 对单条候选做外部语义分类（provider 开关：默认 zhipu，可切回 deepseek）。
  * @param {{title?: string, description?: string}} item
- * @param {{apiKey?: string, model?: string, fetchImpl?: Function, timeoutMs?: number}} [options]
+ * @param {{apiKey?: string, model?: string, provider?: string, fetchImpl?: Function, timeoutMs?: number}} [options]
  * @returns {Promise<{ ok: true, content_type: string, ai_confidence: number, raw: string } |
  *                    { ok: false, error: string, code: string }>}
  *   失败时 resolve 降级对象（不 reject）。
  */
 async function classifyWithDeepSeek(item, options = {}) {
-  const apiKey = options.apiKey ?? process.env.DEEPSEEK_API_KEY;
+  const target = externalTargetOf(options);
+  if (!target.ok) return target;
   const fetchImpl = options.fetchImpl || (typeof fetch === 'function' ? fetch : null);
-  const timeoutMs = options.timeoutMs ?? 15_000;
 
-  if (!apiKey) {
-    return { ok: false, error: '缺少 DEEPSEEK_API_KEY', code: 'missing_api_key' };
-  }
   if (!fetchImpl) {
     return { ok: false, error: '当前运行环境无 fetch', code: 'no_fetch' };
   }
 
   let payload;
   try {
-    payload = buildDeepSeekPayload(item, options.model);
+    payload = buildDeepSeekPayload(item, options.model || target.defaultModel);
   } catch (err) {
     return { ok: false, error: err.message, code: 'payload_error' };
   }
 
-  const result = await requestLegacyDeepSeek(payload, options);
+  const result = await requestExternalChat(payload, options);
   if (!result.ok) return result;
-  const content = result.data?.choices?.[0]?.message?.content;
+  const content = textFromResponse(result.data);
   if (typeof content !== 'string' || !content.trim()) {
-    return { ok: false, error: 'DeepSeek 返回空内容', code: 'empty_content' };
+    return { ok: false, error: `${target.label} 返回空内容`, code: 'empty_content' };
   }
   const label = normalizeLabel(content);
   if (!label) {
-    return { ok: false, error: `DeepSeek 输出无法映射到六类：${content.slice(0, 60)}`, code: 'invalid_label' };
+    return { ok: false, error: `${target.label} 输出无法映射到六类：${content.slice(0, 60)}`, code: 'invalid_label' };
   }
   return { ok: true, content_type: label, ai_confidence: 0.85, raw: content };
 }
@@ -314,11 +423,13 @@ async function classifyWithDeepSeek(item, options = {}) {
  * 输入：title + description + transcript（存在才拼入，否则该段留空）。
  * @param {{title?: string, description?: string, transcript?: string}} item
  * @param {string} [model]
+ * @param {object|number} [options] - 可选 options 对象或 maxDescChars
  * @returns {object} chat completions payload
  */
-function buildSummaryPayload(item, model = LOCAL_MODEL) {
+function buildSummaryPayload(item, model = LOCAL_MODEL, options = {}) {
+  const maxDesc = (typeof options === 'number' ? options : options?.maxDescChars) ?? DESC_MAX;
   const title = String(item.title || '').slice(0, TITLE_MAX);
-  const description = String(item.description || '').slice(0, DESC_MAX);
+  const description = String(item.description || '').slice(0, maxDesc);
   const transcript = String(item.transcript || '')
     .replace(/\s+/g, ' ')
     .trim()
@@ -386,42 +497,49 @@ function buildSummaryResponsesPayload(item, model = DEFAULT_MODEL) {
 }
 
 async function summarizeWithExternalDeepSeek(item, options = {}) {
-  const apiKey = options.apiKey ?? process.env.DEEPSEEK_API_KEY;
+  const target = externalTargetOf(options);
+  if (!target.ok) return target;
   const fetchImpl = options.fetchImpl || (typeof fetch === 'function' ? fetch : null);
-  const timeoutMs = options.timeoutMs ?? 15_000;
-  if (!apiKey) return { ok: false, error: '缺少 DEEPSEEK_API_KEY', code: 'missing_api_key' };
   if (!fetchImpl) return { ok: false, error: '当前运行环境无 fetch', code: 'no_fetch' };
   let payload;
   try {
-    payload = buildSummaryResponsesPayload(item, options.model);
+    payload = target.providerName === 'deepseek'
+      ? buildSummaryResponsesPayload(item, options.model)
+      : buildExternalJsonChatPayload(
+        buildSummaryPayload(item, options.model || target.defaultModel, options),
+      );
   } catch (error) {
     return { ok: false, error: error.message, code: 'payload_error' };
   }
-  const result = await requestDeepSeek(payload, { apiKey, fetchImpl, timeoutMs, signal: options.signal });
-  if (!result.ok) {
-    const code = result.code === 'DEEPSEEK_TIMEOUT' ? 'timeout' : (result.status ? `http_${result.status}` : 'network_error');
-    return { ok: false, error: result.error, code };
-  }
+  const result = await requestExternalChat(payload, options);
+  if (!result.ok) return result;
   const content = textFromResponse(result.data);
-  if (!content) return { ok: false, error: 'DeepSeek 返回空内容', code: 'empty_content' };
+  if (!content) return { ok: false, error: `${target.label} 返回空内容`, code: 'empty_content' };
   const parsed = normalizeSummary(content);
-  if (!parsed) return { ok: false, error: 'DeepSeek 输出无法解析为 JSON 总结', code: 'invalid_summary' };
+  if (!parsed) return { ok: false, error: `${target.label} 输出无法解析为 JSON 总结`, code: 'invalid_summary' };
   return { ok: true, summary: parsed.summary, key_points: parsed.key_points, raw: content };
+}
+
+/** 外部 chat payload 统一整理：去掉本地 llama-server 专属参数，约束 JSON 输出。 */
+function buildExternalJsonChatPayload(chatPayload) {
+  const payload = { ...chatPayload };
+  delete payload.chat_template_kwargs;
+  payload.response_format = { type: 'json_object' };
+  return payload;
 }
 
 /**
  * 对单条候选做 DeepSeek 内容总结。
  * @param {{title?: string, description?: string, transcript?: string}} item
  * @param {{apiKey?: string, model?: string, fetchImpl?: Function, timeoutMs?: number,
- *          maxTranscriptChars?: number}} [options]
+ *          maxTranscriptChars?: number, maxDescChars?: number}} [options]
  * @returns {Promise<{ ok: true, summary: string, key_points: string[], raw: string } |
  *                    { ok: false, error: string, code: string }>}
  *   失败时 resolve 降级对象（不 reject），调用方据 summary 缺失回退 description。
  */
 async function summarizeWithDeepSeek(item, options = {}) {
-  const apiKey = options.apiKey ?? process.env.DEEPSEEK_API_KEY;
+  const apiKey = options.apiKey ?? 'local-bonsai';
   const fetchImpl = options.fetchImpl || (typeof fetch === 'function' ? fetch : null);
-  const timeoutMs = options.timeoutMs ?? 15_000;
 
   if (!apiKey) {
     return { ok: false, error: '缺少 DEEPSEEK_API_KEY', code: 'missing_api_key' };
@@ -430,50 +548,25 @@ async function summarizeWithDeepSeek(item, options = {}) {
     return { ok: false, error: '当前运行环境无 fetch', code: 'no_fetch' };
   }
 
-  const localGate = await ensureLocalModelOrError(fetchImpl);
-  if (localGate) return localGate;
-
   let payload;
   try {
-    payload = buildSummaryPayload(item, options.model);
+    payload = buildSummaryPayload(item, options.model, options);
   } catch (err) {
     return { ok: false, error: err.message, code: 'payload_error' };
   }
 
-  try {
-    const response = await fetchImpl(LOCAL_API_BASE, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(timeoutMs),
-    });
+  const result = await requestLocalChat(payload, options);
+  if (!result.ok) return result;
 
-    if (!response.ok) {
-      let detail = '';
-      try {
-        const text = await response.text();
-        detail = (text || '').slice(0, 200);
-      } catch { /* 读取错误体失败不影响降级返回 */ }
-      return { ok: false, error: `DeepSeek HTTP ${response.status}${detail ? `: ${detail}` : ''}`, code: `http_${response.status}` };
-    }
-
-    const data = await response.json();
-    const content = data?.choices?.[0]?.message?.content;
-    if (typeof content !== 'string' || !content.trim()) {
-      return { ok: false, error: 'DeepSeek 返回空内容', code: 'empty_content' };
-    }
-    const parsed = normalizeSummary(content);
-    if (!parsed) {
-      return { ok: false, error: `DeepSeek 输出无法解析为 JSON 总结：${content.slice(0, 60)}`, code: 'invalid_summary' };
-    }
-    return { ok: true, summary: parsed.summary, key_points: parsed.key_points, raw: content };
-  } catch (err) {
-    const code = err?.name === 'TimeoutError' || err?.code === 'ETIMEDOUT' ? 'timeout' : 'network_error';
-    return { ok: false, error: err?.message || String(err), code };
+  const content = result.text || textFromResponse(result.data);
+  if (typeof content !== 'string' || !content.trim()) {
+    return { ok: false, error: 'DeepSeek 返回空内容', code: 'empty_content' };
   }
+  const parsed = normalizeSummary(content);
+  if (!parsed) {
+    return { ok: false, error: `DeepSeek 输出无法解析为 JSON 总结：${content.slice(0, 60)}`, code: 'invalid_summary' };
+  }
+  return { ok: true, summary: parsed.summary, key_points: parsed.key_points, raw: content };
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -485,16 +578,18 @@ async function summarizeWithDeepSeek(item, options = {}) {
  * 输入：title + description + transcript + summary（存在才拼入，否则该段填空）。
  * @param {{title?: string, description?: string, transcript?: string, summary?: string}} item
  * @param {string} [model]
+ * @param {object|number} [options] - 可选 options 对象或 maxDescChars
  * @returns {object} chat completions payload
  */
-function buildReviewPayload(item, model = LOCAL_MODEL) {
-  const title = String(item.title || '').slice(0, TITLE_MAX);
-  const description = String(item.description || '').slice(0, DESC_MAX);
-  const transcript = String(item.transcript || '')
+function buildReviewPayload(item, model = LOCAL_MODEL, options = {}) {
+  const maxDesc = (typeof options === 'number' ? options : options?.maxDescChars) ?? DESC_MAX;
+  const title = sanitizeSurrogates(String(item.title || '')).slice(0, TITLE_MAX);
+  const description = sanitizeSurrogates(String(item.description || '')).slice(0, maxDesc);
+  const transcript = sanitizeSurrogates(String(item.transcript || ''))
     .replace(/\s+/g, ' ')
     .trim()
     .slice(0, SUMMARY_MAX_TRANSCRIPT_CHARS);
-  const summary = String(item.summary || '').trim().slice(0, REVIEW_MAX_SUMMARY_CHARS);
+  const summary = sanitizeSurrogates(String(item.summary || '')).trim().slice(0, REVIEW_MAX_SUMMARY_CHARS);
   const prompt = REVIEW_USER_PROMPT_TEMPLATE
     .replace('{title}', title || '（无标题）')
     .replace('{description}', description || '（无描述）')
@@ -553,15 +648,14 @@ function normalizeReview(raw) {
 /**
  * 对单条候选做 DeepSeek 审核建议（verdict + reasons + confidence）。
  * @param {{title?: string, description?: string, transcript?: string, summary?: string}} item
- * @param {{apiKey?: string, model?: string, fetchImpl?: Function, timeoutMs?: number}} [options]
+ * @param {{apiKey?: string, model?: string, fetchImpl?: Function, timeoutMs?: number, maxDescChars?: number}} [options]
  * @returns {Promise<{ ok: true, verdict: string, reasons: string[], confidence: number, raw: string } |
  *                    { ok: false, error: string, code: string }>}
  *   失败时 resolve 降级对象（不 reject），调用方据此置 verdict null（不误杀）。
  */
 async function reviewWithDeepSeek(item, options = {}) {
-  const apiKey = options.apiKey ?? process.env.DEEPSEEK_API_KEY;
+  const apiKey = options.apiKey ?? 'local-bonsai';
   const fetchImpl = options.fetchImpl || (typeof fetch === 'function' ? fetch : null);
-  const timeoutMs = options.timeoutMs ?? 15_000;
 
   if (!apiKey) {
     return { ok: false, error: '缺少 DEEPSEEK_API_KEY', code: 'missing_api_key' };
@@ -570,50 +664,62 @@ async function reviewWithDeepSeek(item, options = {}) {
     return { ok: false, error: '当前运行环境无 fetch', code: 'no_fetch' };
   }
 
-  const localGate = await ensureLocalModelOrError(fetchImpl);
-  if (localGate) return localGate;
-
   let payload;
   try {
-    payload = buildReviewPayload(item, options.model);
+    payload = buildReviewPayload(item, options.model, options);
   } catch (err) {
     return { ok: false, error: err.message, code: 'payload_error' };
   }
 
-  try {
-    const response = await fetchImpl(LOCAL_API_BASE, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(timeoutMs),
-    });
+  const result = await requestLocalChat(payload, options);
+  if (!result.ok) return result;
 
-    if (!response.ok) {
-      let detail = '';
-      try {
-        const text = await response.text();
-        detail = (text || '').slice(0, 200);
-      } catch { /* 读取错误体失败不影响降级返回 */ }
-      return { ok: false, error: `DeepSeek HTTP ${response.status}${detail ? `: ${detail}` : ''}`, code: `http_${response.status}` };
-    }
-
-    const data = await response.json();
-    const content = data?.choices?.[0]?.message?.content;
-    if (typeof content !== 'string' || !content.trim()) {
-      return { ok: false, error: 'DeepSeek 返回空内容', code: 'empty_content' };
-    }
-    const parsed = normalizeReview(content);
-    if (!parsed) {
-      return { ok: false, error: `DeepSeek 输出无法解析为审核建议：${content.slice(0, 60)}`, code: 'invalid_review' };
-    }
-    return { ok: true, verdict: parsed.verdict, reasons: parsed.reasons, confidence: parsed.confidence, confidence_range: parsed.confidence_range || null, raw: content };
-  } catch (err) {
-    const code = err?.name === 'TimeoutError' || err?.code === 'ETIMEDOUT' ? 'timeout' : 'network_error';
-    return { ok: false, error: err?.message || String(err), code };
+  const content = result.text || textFromResponse(result.data);
+  if (typeof content !== 'string' || !content.trim()) {
+    return { ok: false, error: 'DeepSeek 返回空内容', code: 'empty_content' };
   }
+  const parsed = normalizeReview(content);
+  if (!parsed) {
+    return { ok: false, error: `DeepSeek 输出无法解析为审核建议：${content.slice(0, 60)}`, code: 'invalid_review' };
+  }
+  return { ok: true, verdict: parsed.verdict, reasons: parsed.reasons, confidence: parsed.confidence, confidence_range: parsed.confidence_range || null, raw: content };
+}
+
+/**
+ * 使用外部 API 对单条候选做审核建议（绕过本地 Bonsai 模型；provider 开关默认 zhipu）。
+ * @param {{title?: string, description?: string, transcript?: string, summary?: string}} item
+ * @param {{apiKey?: string, model?: string, provider?: string, fetchImpl?: Function, timeoutMs?: number, maxDescChars?: number}} [options]
+ * @returns {Promise<{ ok: true, verdict: string, reasons: string[], confidence: number, raw: string } |
+ *                    { ok: false, error: string, code: string }>}
+ *   失败时 resolve 降级对象（不 reject）。
+ */
+async function reviewWithExternalDeepSeek(item, options = {}) {
+  const target = externalTargetOf(options);
+  if (!target.ok) return target;
+  const fetchImpl = options.fetchImpl || (typeof fetch === 'function' ? fetch : null);
+
+  if (!fetchImpl) {
+    return { ok: false, error: '当前运行环境无 fetch', code: 'no_fetch' };
+  }
+
+  let payload;
+  try {
+    payload = buildExternalJsonChatPayload(buildReviewPayload(item, options.model || target.defaultModel, options));
+  } catch (err) {
+    return { ok: false, error: err.message, code: 'payload_error' };
+  }
+
+  const result = await requestExternalChat(payload, options);
+  if (!result.ok) return result;
+  const content = textFromResponse(result.data);
+  if (typeof content !== 'string' || !content.trim()) {
+    return { ok: false, error: `${target.label} 返回空内容`, code: 'empty_content' };
+  }
+  const parsed = normalizeReview(content);
+  if (!parsed) {
+    return { ok: false, error: `${target.label} 输出无法解析为审核建议：${content.slice(0, 60)}`, code: 'invalid_review' };
+  }
+  return { ok: true, verdict: parsed.verdict, reasons: parsed.reasons, confidence: parsed.confidence, confidence_range: parsed.confidence_range || null, raw: content };
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -625,11 +731,13 @@ async function reviewWithDeepSeek(item, options = {}) {
  * 输入：title + description（原文）。
  * @param {{title?: string, description?: string}} item
  * @param {string} [model]
+ * @param {object|number} [options] - 可选 options 对象或 maxDescChars
  * @returns {object} chat completions payload
  */
-function buildLocalizePayload(item, model = LOCAL_MODEL) {
+function buildLocalizePayload(item, model = LOCAL_MODEL, options = {}) {
+  const maxDesc = (typeof options === 'number' ? options : options?.maxDescChars) ?? DESC_MAX;
   const title = String(item.title || '').slice(0, TITLE_MAX);
-  const description = String(item.description || '').slice(0, DESC_MAX);
+  const description = String(item.description || '').slice(0, maxDesc);
   const prompt = LOCALIZE_USER_PROMPT_TEMPLATE
     .replace('{title}', title || '（无标题）')
     .replace('{description}', description || '（无描述）');
@@ -676,15 +784,14 @@ function normalizeLocalization(raw) {
 /**
  * 对单条候选做 DeepSeek 内容翻译（title + description → 目标语言）。
  * @param {{title?: string, description?: string}} item
- * @param {{apiKey?: string, model?: string, fetchImpl?: Function, timeoutMs?: number}} [options]
+ * @param {{apiKey?: string, model?: string, fetchImpl?: Function, timeoutMs?: number, maxDescChars?: number}} [options]
  * @returns {Promise<{ ok: true, title: string, description: string, raw: string } |
  *                    { ok: false, error: string, code: string }>}
  *   失败时 resolve 降级对象（不 reject），调用方据此不写 localizations（回退原文）。
  */
 async function localizeWithDeepSeek(item, options = {}) {
-  const apiKey = options.apiKey ?? process.env.DEEPSEEK_API_KEY;
+  const apiKey = options.apiKey ?? 'local-bonsai';
   const fetchImpl = options.fetchImpl || (typeof fetch === 'function' ? fetch : null);
-  const timeoutMs = options.timeoutMs ?? 15_000;
 
   if (!apiKey) {
     return { ok: false, error: '缺少 DEEPSEEK_API_KEY', code: 'missing_api_key' };
@@ -693,50 +800,62 @@ async function localizeWithDeepSeek(item, options = {}) {
     return { ok: false, error: '当前运行环境无 fetch', code: 'no_fetch' };
   }
 
-  const localGate = await ensureLocalModelOrError(fetchImpl);
-  if (localGate) return localGate;
-
   let payload;
   try {
-    payload = buildLocalizePayload(item, options.model);
+    payload = buildLocalizePayload(item, options.model, options);
   } catch (err) {
     return { ok: false, error: err.message, code: 'payload_error' };
   }
 
-  try {
-    const response = await fetchImpl(LOCAL_API_BASE, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(timeoutMs),
-    });
+  const result = await requestLocalChat(payload, options);
+  if (!result.ok) return result;
 
-    if (!response.ok) {
-      let detail = '';
-      try {
-        const text = await response.text();
-        detail = (text || '').slice(0, 200);
-      } catch { /* 读取错误体失败不影响降级返回 */ }
-      return { ok: false, error: `DeepSeek HTTP ${response.status}${detail ? `: ${detail}` : ''}`, code: `http_${response.status}` };
-    }
-
-    const data = await response.json();
-    const content = data?.choices?.[0]?.message?.content;
-    if (typeof content !== 'string' || !content.trim()) {
-      return { ok: false, error: 'DeepSeek 返回空内容', code: 'empty_content' };
-    }
-    const parsed = normalizeLocalization(content);
-    if (!parsed) {
-      return { ok: false, error: `DeepSeek 输出无法解析为翻译：${content.slice(0, 60)}`, code: 'invalid_translation' };
-    }
-    return { ok: true, title: parsed.title, description: parsed.description, raw: content };
-  } catch (err) {
-    const code = err?.name === 'TimeoutError' || err?.code === 'ETIMEDOUT' ? 'timeout' : 'network_error';
-    return { ok: false, error: err?.message || String(err), code };
+  const content = result.text || textFromResponse(result.data);
+  if (typeof content !== 'string' || !content.trim()) {
+    return { ok: false, error: 'DeepSeek 返回空内容', code: 'empty_content' };
   }
+  const parsed = normalizeLocalization(content);
+  if (!parsed) {
+    return { ok: false, error: `DeepSeek 输出无法解析为翻译：${content.slice(0, 60)}`, code: 'invalid_translation' };
+  }
+  return { ok: true, title: parsed.title, description: parsed.description, raw: content };
+}
+
+/**
+ * 使用外部 API 对单条候选做内容翻译（绕过本地 Bonsai 模型；provider 开关默认 zhipu）。
+ * @param {{title?: string, description?: string}} item
+ * @param {{apiKey?: string, model?: string, provider?: string, fetchImpl?: Function, timeoutMs?: number, maxDescChars?: number}} [options]
+ * @returns {Promise<{ ok: true, title: string, description: string, raw: string } |
+ *                    { ok: false, error: string, code: string }>}
+ *   失败时 resolve 降级对象（不 reject）。
+ */
+async function localizeWithExternalDeepSeek(item, options = {}) {
+  const target = externalTargetOf(options);
+  if (!target.ok) return target;
+  const fetchImpl = options.fetchImpl || (typeof fetch === 'function' ? fetch : null);
+
+  if (!fetchImpl) {
+    return { ok: false, error: '当前运行环境无 fetch', code: 'no_fetch' };
+  }
+
+  let payload;
+  try {
+    payload = buildExternalJsonChatPayload(buildLocalizePayload(item, options.model || target.defaultModel, options));
+  } catch (err) {
+    return { ok: false, error: err.message, code: 'payload_error' };
+  }
+
+  const result = await requestExternalChat(payload, options);
+  if (!result.ok) return result;
+  const content = textFromResponse(result.data);
+  if (typeof content !== 'string' || !content.trim()) {
+    return { ok: false, error: `${target.label} 返回空内容`, code: 'empty_content' };
+  }
+  const parsed = normalizeLocalization(content);
+  if (!parsed) {
+    return { ok: false, error: `${target.label} 输出无法解析为翻译：${content.slice(0, 60)}`, code: 'invalid_translation' };
+  }
+  return { ok: true, title: parsed.title, description: parsed.description, raw: content };
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -807,17 +926,13 @@ function normalizeSelectTop(content) {
  * @returns {Promise<{ok: boolean, count?: number, ids?: string[], raw?: string, error?: string, code?: string}>}
  */
 async function selectTopWithDeepSeek(candidates, options = {}) {
-  const apiKey = options.apiKey ?? process.env.DEEPSEEK_API_KEY;
+  const apiKey = options.apiKey ?? 'local-bonsai';
   const fetchImpl = options.fetchImpl || (typeof fetch === 'function' ? fetch : null);
-  const timeoutMs = options.timeoutMs ?? 15_000;
   if (!apiKey) return { ok: false, error: '缺少 DEEPSEEK_API_KEY', code: 'missing_api_key' };
   if (!fetchImpl) return { ok: false, error: '当前运行环境无 fetch', code: 'no_fetch' };
   if (!Array.isArray(candidates) || !candidates.length) {
     return { ok: false, error: '无 approved 候选可供挑选', code: 'empty_candidates' };
   }
-
-  const localGate = await ensureLocalModelOrError(fetchImpl);
-  if (localGate) return localGate;
 
   let payload;
   try {
@@ -826,32 +941,18 @@ async function selectTopWithDeepSeek(candidates, options = {}) {
     return { ok: false, error: err.message, code: 'payload_error' };
   }
 
-  try {
-    const response = await fetchImpl(LOCAL_API_BASE, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
-      body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(timeoutMs),
-    });
-    if (!response.ok) {
-      let detail = '';
-      try { const text = await response.text(); detail = (text || '').slice(0, 200); } catch { /* ignore */ }
-      return { ok: false, error: `DeepSeek HTTP ${response.status}${detail ? `: ${detail}` : ''}`, code: `http_${response.status}` };
-    }
-    const data = await response.json();
-    const content = data?.choices?.[0]?.message?.content;
-    if (typeof content !== 'string' || !content.trim()) {
-      return { ok: false, error: 'DeepSeek 返回空内容', code: 'empty_content' };
-    }
-    const parsed = normalizeSelectTop(content);
-    if (!parsed) {
-      return { ok: false, error: `DeepSeek 输出无法解析为 top 选择：${content.slice(0, 60)}`, code: 'invalid_select_top' };
-    }
-    return { ok: true, count: parsed.count, ids: parsed.ids, raw: content };
-  } catch (err) {
-    const code = err?.name === 'TimeoutError' || err?.code === 'ETIMEDOUT' ? 'timeout' : 'network_error';
-    return { ok: false, error: err?.message || String(err), code };
+  const result = await requestLocalChat(payload, options);
+  if (!result.ok) return result;
+
+  const content = result.text || textFromResponse(result.data);
+  if (typeof content !== 'string' || !content.trim()) {
+    return { ok: false, error: 'DeepSeek 返回空内容', code: 'empty_content' };
   }
+  const parsed = normalizeSelectTop(content);
+  if (!parsed) {
+    return { ok: false, error: `DeepSeek 输出无法解析为 top 选择：${content.slice(0, 60)}`, code: 'invalid_select_top' };
+  }
+  return { ok: true, count: parsed.count, ids: parsed.ids, raw: content };
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -970,17 +1071,13 @@ function normalizeKeywordRefine(content, existingKeywords = [], options = {}) {
  * @param {{existingKeywords?: string[], apiKey?: string, fetchImpl?: Function, model?: string, timeoutMs?: number}} [options]
  */
 async function refineKeywordsWithDeepSeek(approvedItems, ruleCandidates, options = {}) {
-  const apiKey = options.apiKey ?? process.env.DEEPSEEK_API_KEY;
+  const apiKey = options.apiKey ?? 'local-bonsai';
   const fetchImpl = options.fetchImpl || (typeof fetch === 'function' ? fetch : null);
-  const timeoutMs = options.timeoutMs ?? 15_000;
   if (!apiKey) return { ok: false, error: '缺少 DEEPSEEK_API_KEY', code: 'missing_api_key' };
   if (!fetchImpl) return { ok: false, error: '当前运行环境无 fetch', code: 'no_fetch' };
   if (!Array.isArray(approvedItems) || !approvedItems.length) {
     return { ok: false, error: '无 approved 候选可供提纯', code: 'empty_candidates' };
   }
-
-  const localGate = await ensureLocalModelOrError(fetchImpl);
-  if (localGate) return localGate;
 
   let payload;
   try {
@@ -989,43 +1086,18 @@ async function refineKeywordsWithDeepSeek(approvedItems, ruleCandidates, options
     return { ok: false, error: err.message, code: 'payload_error' };
   }
 
-  try {
-    const response = await fetchImpl(LOCAL_API_BASE, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
-      body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(timeoutMs),
-    });
-    if (!response.ok) {
-      let detail = '';
-      try { const text = await response.text(); detail = (text || '').slice(0, 200); } catch { /* ignore */ }
-      return { ok: false, error: `DeepSeek HTTP ${response.status}${detail ? `: ${detail}` : ''}`, code: `http_${response.status}` };
-    }
-    const data = await response.json();
-    const content = data?.choices?.[0]?.message?.content;
-    if (typeof content !== 'string' || !content.trim()) {
-      return { ok: false, error: 'DeepSeek 返回空内容', code: 'empty_content' };
-    }
-    const keywords = normalizeKeywordRefine(content, options.existingKeywords, { filterExisting: options.filterExisting === true });
-    if (!keywords) {
-      return { ok: false, error: `DeepSeek 输出无法解析为关键词清单：${content.slice(0, 60)}`, code: 'invalid_keyword_refine' };
-    }
-    return { ok: true, keywords, raw: content };
-  } catch (err) {
-    const code = err?.name === 'TimeoutError' || err?.code === 'ETIMEDOUT' ? 'timeout' : 'network_error';
-    return { ok: false, error: err?.message || String(err), code };
-  }
-}
+  const result = await requestLocalChat(payload, options);
+  if (!result.ok) return result;
 
-/**
- * 本地 AI 门：确保本地服务在线（离线自动启动），失败输出报错并返回降级对象。
- * 注入自定义 fetchImpl（测试 mock）时 ensureLocalModel 直接放行，不探测不启动。
- */
-async function ensureLocalModelOrError(fetchImpl) {
-  const state = await ensureLocalModel({ fetchImpl });
-  if (state.ok) return null;
-  console.error(`[local-model] ${state.error}`);
-  return { ok: false, error: state.error, code: state.code };
+  const content = result.text || textFromResponse(result.data);
+  if (typeof content !== 'string' || !content.trim()) {
+    return { ok: false, error: 'DeepSeek 返回空内容', code: 'empty_content' };
+  }
+  const keywords = normalizeKeywordRefine(content, options.existingKeywords, { filterExisting: options.filterExisting === true });
+  if (!keywords) {
+    return { ok: false, error: `DeepSeek 输出无法解析为关键词清单：${content.slice(0, 60)}`, code: 'invalid_keyword_refine' };
+  }
+  return { ok: true, keywords, raw: content };
 }
 
 module.exports = {
@@ -1051,10 +1123,12 @@ module.exports = {
   buildReviewPayload,
   normalizeReview,
   reviewWithDeepSeek,
+  reviewWithExternalDeepSeek,
   LOCALIZE_MAX_TOKENS,
   buildLocalizePayload,
   normalizeLocalization,
   localizeWithDeepSeek,
+  localizeWithExternalDeepSeek,
   SELECT_TOP_MAX_TOKENS,
   buildSelectTopPayload,
   normalizeSelectTop,

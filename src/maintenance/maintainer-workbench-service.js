@@ -257,7 +257,25 @@ function createMaintainerWorkbenchService(options = {}) {
       const workspace = workspaceStatus();
       return { news: { revision: news.revisionOfStore(store()), total: candidates.length, pending: candidates.filter(item => item.review_status === 'pending').length, approved: candidates.filter(item => item.review_status === 'approved').length, selected: candidates.filter(item => item.top_selected === true).length }, tool_updates: { revision: toolQueue.revision, pending: toolQueue.items.length, history: toolQueue.history_count }, concepts: { previews: Array.isArray(previews?.cards) ? previews.cards.length : 0 }, workspace };
     },
-    newsReview() { return newsProjection(store().candidates.filter(item => item.review_status === 'pending')); },
+    newsReview() {
+      const allPending = store().candidates.filter(item => item.review_status === 'pending');
+      // 失败对象（verdict 为空）不能解除工作台门禁
+      const unreviewed = allPending.filter(item => {
+        const hasL1 = Boolean(item.l1_review && item.l1_review.verdict != null);
+        const hasAdvice = Boolean(item.ai_advice?.verdict);
+        return !hasL1 && !hasAdvice;
+      });
+      if (unreviewed.length > 0) {
+        return {
+          revision: news.revisionOfStore(store()),
+          status: 'enriching',
+          message: `本地 Bonsai 正在进行 AI 初审分流与汉化，请稍候...（待初审: ${unreviewed.length} / 待审总数: ${allPending.length}）`,
+          unreviewed_count: unreviewed.length,
+          items: [],
+        };
+      }
+      return newsProjection(allPending);
+    },
     reviewNews(body) {
       const ids = idsOf(body?.ids); const revision = expectedRevision(body);
       const decision = body?.decision;

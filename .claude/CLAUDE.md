@@ -10,7 +10,7 @@ Index: `../CODEBASE-MAP.md`. Read it before changing code; keep it in sync whene
 
 - All runtime API keys live only in the repository-root `.env`; never request, print, copy, or persist key values in code, drafts, JSON, docs, or commands.
 - Project CLI entry points load `.env` themselves. Before calling internal modules via `node -e`, tests, or custom scripts, call `loadDotEnv()` from `src/shared/env` first; bypassing this step makes configured providers appear unauthenticated.
-- Catalog generation is fail-closed: it requires both `DEEPSEEK_API_KEY` and `TAVILY_API_KEY` from `.env`. Do not replace failed research/synthesis with hand-authored catalog records.
+- Catalog generation is fail-closed: it requires both the configured extraction provider key (`ZHIPU_API_KEY` by default; `DEEPSEEK_API_KEY` when the provider switch is set back to deepseek) and `TAVILY_API_KEY` from `.env`. Do not replace failed research/synthesis with hand-authored catalog records.
 - `config/catalog-generator.local.json` is optional and currently absent. Use module defaults unless a local config is intentionally added; do not create or commit it as an implicit workaround.
 - `scripts/build-dist.js` recursively replaces the generated `dist/` directory. Treat `dist/` as disposable build output, not a source of truth.
 

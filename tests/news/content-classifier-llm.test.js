@@ -86,7 +86,7 @@ test('normalizeLabel 规整合法枚举 / 中文标签 / 带解释的脏输出',
   assert.equal(normalizeLabel(''), null);
 });
 
-test('classifyWithDeepSeek 成功返回 ok + 合法枚举', async () => {
+test('classifyWithDeepSeek(provider=deepseek) 成功返回 ok + 合法枚举', async () => {
   const fetchImpl = async (url, options) => {
     assert.equal(url, API_BASE);
     assert.equal(options.headers.Authorization, 'Bearer test-key');
@@ -94,9 +94,29 @@ test('classifyWithDeepSeek 成功返回 ok + 合法枚举', async () => {
     assert.equal(body.model, DEFAULT_MODEL);
     return okJsonResponse('ai_tool');
   };
-  const result = await classifyWithDeepSeek({ title: 'x', description: 'y' }, { apiKey: 'test-key', fetchImpl });
+  const result = await classifyWithDeepSeek({ title: 'x', description: 'y' }, { provider: 'deepseek', apiKey: 'test-key', fetchImpl });
   assert.equal(result.ok, true);
   assert.equal(result.content_type, 'ai_tool');
+  assert.equal(result.ai_confidence, 0.85);
+});
+
+test('classifyWithDeepSeek(默认 zhipu) 走智谱 Anthropic 端点 + glm-5.3-flash', async () => {
+  const fetchImpl = async (url, options) => {
+    assert.equal(url, 'https://open.bigmodel.cn/api/anthropic/v1/messages');
+    assert.equal(options.headers['x-api-key'], 'test-key');
+    const body = JSON.parse(options.body);
+    assert.equal(body.model, 'glm-5.3-flash');
+    assert.ok(body.system);
+    return {
+      ok: true,
+      status: 200,
+      json: async () => ({ content: [{ type: 'text', text: 'ai_product' }] }),
+      text: async () => '',
+    };
+  };
+  const result = await classifyWithDeepSeek({ title: 'x', description: 'y' }, { apiKey: 'test-key', fetchImpl });
+  assert.equal(result.ok, true);
+  assert.equal(result.content_type, 'ai_product');
   assert.equal(result.ai_confidence, 0.85);
 });
 
@@ -112,6 +132,14 @@ test('classifyWithDeepSeek 网络失败返回降级对象（不抛错）', async
   assert.equal(result.ok, false);
   assert.equal(result.code, 'network_error');
   assert.ok(result.error.length > 0);
+});
+
+test('classifyWithDeepSeek 抛出同步异常时 resolve 降级而不 reject', async () => {
+  const fetchImpl = () => { throw new TypeError('unexpected sync crash'); };
+  const result = await classifyWithDeepSeek({ title: 'x' }, { apiKey: 'test-key', fetchImpl });
+  assert.equal(result.ok, false);
+  assert.equal(result.code, 'network_error');
+  assert.ok(result.error.includes('unexpected sync crash'));
 });
 
 test('classifyWithDeepSeek 非 200 返回降级对象并带 HTTP 状态', async () => {
@@ -148,6 +176,26 @@ test('classifyCandidate 脏输出经 normalizeLabel 规整为合法枚举', asyn
   const result = await classifyCandidate({ title: 'x', description: 'y' }, { provider: 'deepseek', apiKey: 'test-key', fetchImpl });
   assert.equal(result.content_type, 'ai_industry');
   assert.equal(result.classifier, 'llm_deepseek');
+});
+
+test('classifyCandidate 模型可经 env 覆盖（options.model > KNOWVIEW_CLASSIFY_MODEL）', async () => {
+  const original = process.env.KNOWVIEW_CLASSIFY_MODEL;
+  process.env.KNOWVIEW_CLASSIFY_MODEL = 'glm-4-plus';
+  const bodies = [];
+  try {
+    const fetchImpl = async (_url, options) => {
+      bodies.push(JSON.parse(options.body));
+      return okJsonResponse('ai_tool');
+    };
+    const viaEnv = await classifyCandidate({ title: 'x' }, { provider: 'zhipu', apiKey: 'k', fetchImpl });
+    assert.equal(viaEnv.ok !== false, true);
+    assert.equal(bodies[0].model, 'glm-4-plus');
+    await classifyCandidate({ title: 'x' }, { provider: 'zhipu', apiKey: 'k', model: 'explicit-model', fetchImpl });
+    assert.equal(bodies[1].model, 'explicit-model');
+  } finally {
+    if (original === undefined) delete process.env.KNOWVIEW_CLASSIFY_MODEL;
+    else process.env.KNOWVIEW_CLASSIFY_MODEL = original;
+  }
 });
 
 test('classifyCandidate L1 网络失败自动回退 L0 并保留原因', async () => {

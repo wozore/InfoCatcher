@@ -29,7 +29,7 @@
 
 'use strict';
 
-const { reviewWithDeepSeek } = require('./llm-provider');
+const { reviewWithDeepSeek, reviewWithExternalDeepSeek } = require('./llm-provider');
 
 // 合法判定集合（与 llm-provider.js 的 VALID_VERDICTS 一致）
 const VERDICTS = Object.freeze(['approve', 'hold', 'discard']);
@@ -90,8 +90,12 @@ function collectReviewSource(item) {
  *                     reviewer: string|null, generated_at: string|null,
  *                     input_chars: number, llm_error: string|null }>}
  */
+// AI 审核档 provider 白名单（标签 reviewer=llm_{provider}；本地/外部由 options.external 决定）。
+const REVIEW_PROVIDERS = new Set(['deepseek', 'zhipu']);
+
 async function reviewCandidate(item, options = {}) {
   const provider = options.provider || process.env.KNOWVIEW_REVIEW_PROVIDER || process.env.INFOCATCHER_REVIEW_PROVIDER || 'deepseek';
+  const model = options.model || process.env.KNOWVIEW_REVIEW_MODEL || process.env.INFOCATCHER_REVIEW_MODEL;
   const source = collectReviewSource(item);
   const inputChars = source.title.length + source.description.length
     + (source.transcript ? source.transcript.length : 0)
@@ -102,14 +106,14 @@ async function reviewCandidate(item, options = {}) {
     return { verdict: null, reasons: [], confidence: 0, reviewer: null, generated_at: null, input_chars: 0, llm_error: 'no_source' };
   }
 
-  if (provider === 'deepseek') {
-    const llm = await reviewWithDeepSeek(source, options);
+  if (REVIEW_PROVIDERS.has(provider)) {
+    const llm = await (options.external === true ? reviewWithExternalDeepSeek : reviewWithDeepSeek)(source, { ...options, provider, model });
     if (llm.ok) {
       return {
         verdict: llm.verdict,
         reasons: llm.reasons,
         confidence: llm.confidence,
-        reviewer: 'llm_deepseek',
+        reviewer: `llm_${provider}`,
         generated_at: now,
         input_chars: inputChars,
         llm_error: null,

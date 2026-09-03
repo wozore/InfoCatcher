@@ -102,10 +102,10 @@ test('product registry add/remove and audit stay local and validate vendor refer
 
 test('catalog module config maps snake_case limits to internal options', () => {
   const options = normalizeGeneratorOptions(loadGeneratorConfig());
-  assert.equal(options.provider, 'deepseek');
+  assert.equal(options.provider, 'zhipu');
   assert.equal(options.retrievalProvider, 'tavily');
-  assert.equal(options.model, 'deepseek-v4-flash');
-  assert.equal(options.protocol, 'responses');
+  assert.equal(options.model, 'glm-5.3-flash');
+  assert.equal(options.protocol, 'messages');
   assert.equal(options.timeoutMs, 180000);
   assert.equal(options.maxSearchQueries, 4);
   assert.equal(options.maxRepairCalls, 1);
@@ -122,14 +122,14 @@ test('Tavily capability probe succeeds via keyless without a search key', async 
   assert.equal(result.retrieval_provider, 'tavily');
 });
 
-test('Tavily capability probe fails closed without a DeepSeek key', async () => {
+test('Tavily capability probe fails closed without the default provider key', async () => {
   const result = await probeCatalogCapabilities({
     apiKey: '',
     searchApiKey: '',
     fetchImpl: async () => ({ ok: true, status: 200, json: async () => ({ results: [] }) }),
   });
   assert.equal(result.ok, false);
-  assert.equal(result.code, 'DEEPSEEK_AUTH_REQUIRED');
+  assert.equal(result.code, 'ZHIPU_AUTH_REQUIRED');
 });
 
 test('shared DeepSeek client classifies auth and rate limit errors', async () => {

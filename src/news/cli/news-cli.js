@@ -24,8 +24,8 @@
  *   classify —— 热点内容类型分类（content-classifier）
  *     classify preview     --title <t> [--description <d>]
  *     （L0 规则式分类零成本、可离线（默认，不配 --provider 时）。L1 AI 分类：
- *       --provider deepseek 走 DeepSeek（需环境变量 DEEPSEEK_API_KEY，缺 key 时自动回退 L0，
- *       不阻塞）；--model 可覆盖默认 deepseek-chat）
+ *       --provider zhipu|deepseek 走外部 provider（zhipu 需 ZHIPU_API_KEY，deepseek 需
+ *       DEEPSEEK_API_KEY，缺 key 时自动回退 L0，不阻塞）；--model 可覆盖 provider 默认模型）
  *
  *   localize —— 热点内容本地化（content-localizer）
  *     localize preview     --title <t> [--description <d>] [--locale zh]

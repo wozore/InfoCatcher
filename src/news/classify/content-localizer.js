@@ -28,7 +28,7 @@
 
 'use strict';
 
-const { localizeWithDeepSeek } = require('./llm-provider');
+const { localizeWithDeepSeek, localizeWithExternalDeepSeek } = require('./llm-provider');
 
 // ═══════════════════════════════════════════════════════════════
 // 固定并发池：按 concurrency 并行执行 worker，保持输入顺序。
@@ -65,6 +65,16 @@ function collectLocalizeSource(item) {
   };
 }
 
+function hasLocalizedContent(item, locale = 'zh') {
+  const source = collectLocalizeSource(item);
+  const localized = item?.localizations?.[locale];
+  if (!localized) return false;
+  return Boolean(
+    (!source.title || String(localized.title || '').trim()) &&
+    (!source.description || String(localized.description || '').trim())
+  );
+}
+
 /**
  * 对单条候选做本地化翻译（suggestion 模式，不改入参，返回建议对象）。
  * 无素材 / LLM 失败 → title/description 置 null（诚实不误杀，前端回退原文）。
@@ -76,8 +86,12 @@ function collectLocalizeSource(item) {
  *                     localizer: string|null, generated_at: string|null,
  *                     input_chars: number, llm_error: string|null }>}
  */
+// AI 翻译档 provider 白名单（标签 localizer=llm_{provider}；本地/外部由 options.external 决定）。
+const LOCALIZE_PROVIDERS = new Set(['deepseek', 'zhipu']);
+
 async function localizeCandidate(item, options = {}) {
   const provider = options.provider || process.env.KNOWVIEW_LOCALIZE_PROVIDER || process.env.INFOCATCHER_LOCALIZE_PROVIDER || 'deepseek';
+  const model = options.model || process.env.KNOWVIEW_LOCALIZE_MODEL || process.env.INFOCATCHER_LOCALIZE_MODEL;
   const locale = options.locale || 'zh';
   const source = collectLocalizeSource(item);
   const inputChars = source.title.length + source.description.length;
@@ -87,14 +101,14 @@ async function localizeCandidate(item, options = {}) {
     return { locale, title: null, description: null, localizer: null, generated_at: null, input_chars: 0, llm_error: 'no_source' };
   }
 
-  if (provider === 'deepseek') {
-    const llm = await localizeWithDeepSeek(source, options);
+  if (LOCALIZE_PROVIDERS.has(provider)) {
+    const llm = await (options.external === true ? localizeWithExternalDeepSeek : localizeWithDeepSeek)(source, { ...options, provider, model });
     if (llm.ok) {
       return {
         locale,
         title: llm.title,
         description: llm.description,
-        localizer: 'llm_deepseek',
+        localizer: `llm_${provider}`,
         generated_at: now,
         input_chars: inputChars,
         llm_error: null,
@@ -141,7 +155,8 @@ async function localizeCandidates(items, options = {}) {
   source.forEach((item, index) => {
     const src = item ? collectLocalizeSource(item) : null;
     const hasSource = Boolean(src && (src.title || src.description));
-    if (!item || !hasSource || item.localizations?.[locale]) {
+    const hasExisting = hasLocalizedContent(item, locale);
+    if (!item || !hasSource || hasExisting) {
       skipped++;
       out[index] = item;
       return;
@@ -158,7 +173,7 @@ async function localizeCandidates(items, options = {}) {
         title: suggestion.title || '',
         description: suggestion.description || '',
       };
-      localized++;
+      if (hasLocalizedContent(item, suggestion.locale)) localized++;
     }
     item.localizations_meta ||= {};
     item.localizations_meta[suggestion.locale] = {
@@ -190,7 +205,7 @@ async function enrichCandidateLocalizations(store, activeIds, options = {}) {
   const locale = options.locale || 'zh';
   const ids = new Set(activeIds || []);
   const targets = (store.candidates || [])
-    .filter(candidate => ids.has(candidate.id) && !candidate.localizations?.[locale])
+    .filter(candidate => ids.has(candidate.id) && !hasLocalizedContent(candidate, locale))
     .slice(0, options.maxItems ?? 30);
 
   const result = await localizeCandidates(targets, {
@@ -210,6 +225,7 @@ async function enrichCandidateLocalizations(store, activeIds, options = {}) {
 module.exports = {
   runPool,
   collectLocalizeSource,
+  hasLocalizedContent,
   localizeCandidate,
   localizeCandidates,
   enrichCandidateLocalizations,

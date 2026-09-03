@@ -268,7 +268,27 @@ test('受 maxItems 截断', async () => {
   assert.equal(localizedCount, 2);
 });
 
-// ── 第 7 组：mergeCandidatesMin 保留既有审核结论（重新采集不重置）──
+test('localizeCandidates：部分本地化结果不计为完成并可重试', async () => {
+  const item = {
+    id: 'partial',
+    title: 'English title',
+    description: 'English description',
+  };
+  const fetchImpl = async () => ({
+    ok: true,
+    status: 200,
+    json: async () => ({
+      choices: [{ message: { content: JSON.stringify({ title: '中文标题' }) } }],
+    }),
+  });
+
+  const result = await localizeCandidates([item], { fetchImpl, apiKey: 'test-key' });
+  assert.equal(result.localized, 0);
+  assert.equal(item.localizations.zh.title, '中文标题');
+  assert.equal(item.localizations.zh.description, '');
+});
+
+
 
 test('mergeCandidatesMin 保留既有 review_status，重新采集不重置人工结论', () => {
   const prev = { schema_version: 1, updated_at: null, candidates: [
@@ -280,7 +300,42 @@ test('mergeCandidatesMin 保留既有 review_status，重新采集不重置人�
   assert.equal(store1.candidates[0].top_selected, true);
 });
 
-// ── 第 8 组：toPublicItemMin / buildDailyProjection 透传 ──
+test('mergeCandidatesMin 保留既有字幕、总结和本地化加工结果', () => {
+  const previous = {
+    candidates: [{
+      id: 'processed',
+      review_status: 'approved',
+      transcript: '人工上传字幕',
+      transcript_file: 'processed/source.srt',
+      transcript_summarized_at: '2026-09-02T10:00:00Z',
+      transcript_summary_llm: 'deepseek',
+      summary: '既有总结',
+      summary_key_points: ['既有要点'],
+      localizations: { zh: { title: '既有中文标题', description: '既有中文描述' } },
+      localizations_meta: { zh: { localizer: 'llm_deepseek' } },
+    }],
+  };
+
+  const merged = mergeCandidatesMin(previous, [{
+    id: 'processed',
+    title: '重新采集标题',
+    review_status: 'pending',
+  }]);
+  const candidate = merged.candidates[0];
+
+  assert.equal(candidate.review_status, 'approved');
+  assert.equal(candidate.transcript, '人工上传字幕');
+  assert.equal(candidate.transcript_file, 'processed/source.srt');
+  // 字幕付费总结的保护元数据必须原子保留，否则保护失效、工作台状态错乱
+  assert.equal(candidate.transcript_summarized_at, '2026-09-02T10:00:00Z');
+  assert.equal(candidate.transcript_summary_llm, 'deepseek');
+  assert.equal(candidate.summary, '既有总结');
+  assert.deepEqual(candidate.summary_key_points, ['既有要点']);
+  assert.deepEqual(candidate.localizations, { zh: { title: '既有中文标题', description: '既有中文描述' } });
+  assert.deepEqual(candidate.localizations_meta, { zh: { localizer: 'llm_deepseek' } });
+});
+
+
 
 test('toPublicItemMin 保留 localizations、剔除 localizations_meta', () => {
   const publicItem = toPublicItemMin({

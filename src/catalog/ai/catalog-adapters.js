@@ -1,6 +1,6 @@
 'use strict';
 
-const { getProvider, resolveProvider, apiKeyForProvider } = require('../../shared/ai-provider-registry');
+const { getProvider, resolveProvider, apiKeyForProvider, DEFAULT_PROVIDER_NAME } = require('../../shared/ai-provider-registry');
 const { canonicalizeUrl, searchTavily, extractTavily, probeTavily } = require('../../shared/tavily-client');
 const { LOCAL_API_BASE } = require('../../shared/llm-endpoints');
 const { synthesizeLayerFields } = require('./deepseek-catalog-ai');
@@ -113,7 +113,7 @@ async function acquireOfficialSources(input, options = {}) {
 }
 
 async function probeCatalogCapabilities(options = {}) {
-  const resolved = resolveProvider(options.provider || 'deepseek');
+  const resolved = resolveProvider(options.provider || DEFAULT_PROVIDER_NAME);
   if (!resolved.ok) return resolved;
   const provider = resolved.provider;
   const extractionKey = apiKeyForProvider(provider, options.apiKey);

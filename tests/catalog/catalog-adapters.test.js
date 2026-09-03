@@ -139,10 +139,10 @@ test('catalog acquire uses Tavily cleaned content and canonical URLs', async () 
   assert.equal(result.contents[0].content, '# Pricing\n1 unit per second');
 });
 
-test('catalog capability probe checks Tavily without invoking DeepSeek', async () => {
+test('catalog capability probe checks Tavily without invoking the extraction LLM', async () => {
   let calls = 0;
   const result = await probeCatalogCapabilities({
-    apiKey: 'deepseek-key',
+    apiKey: 'zhipu-key',
     searchApiKey: 'tavily-key',
     accessMode: 'keyed',
     fetchImpl: async () => { calls += 1; return response({ results: [{ url: 'https://docs.tavily.com', title: 'Docs', content: 'Tavily' }] }); },
@@ -150,7 +150,7 @@ test('catalog capability probe checks Tavily without invoking DeepSeek', async (
   assert.equal(result.ok, true);
   assert.equal(result.retrieval_provider, 'tavily');
   assert.equal(result.access_mode, 'keyed');
-  assert.equal(result.extraction_provider, 'deepseek');
+  assert.equal(result.extraction_provider, 'zhipu');
   assert.equal(calls, 1);
 });
 
