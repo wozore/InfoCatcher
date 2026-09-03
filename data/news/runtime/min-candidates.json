@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-02T11:25:36.146Z",
+  "updated_at": "2026-09-03T09:27:52.378Z",
   "candidates": [
     {
       "id": "youtube-86e7a00b9c57b74debe6",
@@ -228647,6 +228647,1230 @@
         "張與辰"
       ],
       "duration_seconds": 160,
+      "review_status": "discarded",
+      "discard_stage": "l0",
+      "discard_reason": "not_ai",
+      "l1_review": null,
+      "ai_advice": null,
+      "top_selected": false
+    },
+    {
+      "id": "x-e677bf8a6252a74a3197",
+      "platform": "x",
+      "native_id": "2095196704769237137",
+      "source_type": "x_post",
+      "url": "https://x.com/GoogleDeepMind/status/2095196704769237137",
+      "title": "Gemini 3.8 Flash Cyber gives defenders a decisive advantage with expert vulnerability detection and autonomous patching.\n\nHere’s how it helps teams stay ahead of emerging threats \ud83e",
+      "description": "Gemini 3.8 Flash Cyber gives defenders a decisive advantage with expert vulnerability detection and autonomous patching.\n\nHere’s how it helps teams stay ahead of emerging threats 🧵 https://t.co/1RXF9bRWws",
+      "published_at": "2026-09-02T17:06:35.000Z",
+      "fetched_at": "2026-09-03T09:27:36.797Z",
+      "author_id": "x-a29a16abe45360eb21c8",
+      "author_name": "Google DeepMind",
+      "source_id": "x-a29a16abe45360eb21c8",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": "https://pbs.twimg.com/tweet_video_thumb/HROdhUNacAMDX1q.jpg",
+      "metrics": {
+        "views": 63369,
+        "likes": 455,
+        "comments": null,
+        "reposts": 42,
+        "replies": 76
+      },
+      "explicit_links": [
+        "https://t.co/1RXF9bRWws"
+      ],
+      "content_type": "ai_technology",
+      "comments": [],
+      "content_type_status": "ai_suggested",
+      "classifier": "rule_based",
+      "classify_reasons": [
+        "命中模型名或技术/研究关键词"
+      ],
+      "final_score": 51.5,
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 93.5,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 16.7,
+        "type_preference": 50,
+        "long_term_status": "insufficient",
+        "applied_weights": {
+          "long_term_quality": 0.2,
+          "recent_timeliness": 0.15,
+          "light_user_experience": 0.05,
+          "source_reliability": 0.15,
+          "interaction_quality": 0.15,
+          "type_preference": 0.3
+        }
+      },
+      "review_status": "pending",
+      "l1_review": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "llm_error": "本地模型启动脚本不存在：D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1"
+      },
+      "ai_advice": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "reviewer": "llm_failed",
+        "generated_at": null,
+        "input_chars": 385,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "top_selected": false,
+      "summarizer": "llm_failed",
+      "summary_generated_at": null,
+      "summary_input_chars": 385,
+      "summary_llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）",
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_failed",
+          "generated_at": null,
+          "input_chars": 385,
+          "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+        }
+      }
+    },
+    {
+      "id": "x-727f85a1e2a798f1ca8c",
+      "platform": "x",
+      "native_id": "2095263026517782748",
+      "source_type": "x_post",
+      "url": "https://x.com/AIatMeta/status/2095263026517782748",
+      "title": "RT @LuminaBench: 🚨 Meta just mogged Gemini 3.8 Flash a few hours after launch\n\nMuse Spark 1.3 is already scoring 62 on Artificial Analysis…",
+      "description": "RT @LuminaBench: 🚨 Meta just mogged Gemini 3.8 Flash a few hours after launch\n\nMuse Spark 1.3 is already scoring 62 on Artificial Analysis…",
+      "published_at": "2026-09-02T21:30:08.000Z",
+      "fetched_at": "2026-09-03T09:27:36.797Z",
+      "author_id": "x-092568142b02564e2fe4",
+      "author_name": "AI at Meta",
+      "source_id": "x-092568142b02564e2fe4",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 30401,
+        "likes": 407,
+        "comments": null,
+        "reposts": 21,
+        "replies": 29
+      },
+      "explicit_links": [],
+      "content_type": "ai_technology",
+      "comments": [],
+      "content_type_status": "ai_suggested",
+      "classifier": "rule_based",
+      "classify_reasons": [
+        "命中模型名或技术/研究关键词"
+      ],
+      "final_score": 45.7,
+      "score_breakdown": {
+        "long_term_quality": 17,
+        "recent_timeliness": 95.2,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 20.1,
+        "type_preference": 50,
+        "long_term_status": "long_term",
+        "applied_weights": {
+          "long_term_quality": 0.2,
+          "recent_timeliness": 0.15,
+          "light_user_experience": 0.05,
+          "source_reliability": 0.15,
+          "interaction_quality": 0.15,
+          "type_preference": 0.3
+        }
+      },
+      "review_status": "pending",
+      "l1_review": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "ai_advice": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "reviewer": "llm_failed",
+        "generated_at": null,
+        "input_chars": 280,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "top_selected": false,
+      "summarizer": "llm_failed",
+      "summary_generated_at": null,
+      "summary_input_chars": 280,
+      "summary_llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）",
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_failed",
+          "generated_at": null,
+          "input_chars": 280,
+          "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+        }
+      }
+    },
+    {
+      "id": "x-fc12116060df21ba583c",
+      "platform": "x",
+      "native_id": "2095261952562123217",
+      "source_type": "x_post",
+      "url": "https://x.com/AIatMeta/status/2095261952562123217",
+      "title": "RT @shiri_shh: so...you're telling me Meta's new model is already ranking right next to Fable 5 and GPT 5.6 Sol?\n\nthere is absolutely no wa…",
+      "description": "RT @shiri_shh: so...you're telling me Meta's new model is already ranking right next to Fable 5 and GPT 5.6 Sol?\n\nthere is absolutely no wa…",
+      "published_at": "2026-09-02T21:25:52.000Z",
+      "fetched_at": "2026-09-03T09:27:36.797Z",
+      "author_id": "x-092568142b02564e2fe4",
+      "author_name": "AI at Meta",
+      "source_id": "x-092568142b02564e2fe4",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 115858,
+        "likes": 1048,
+        "comments": null,
+        "reposts": 27,
+        "replies": 54
+      },
+      "explicit_links": [],
+      "content_type": "ai_technology",
+      "comments": [],
+      "content_type_status": "ai_suggested",
+      "classifier": "rule_based",
+      "classify_reasons": [
+        "命中模型名或技术/研究关键词"
+      ],
+      "final_score": 45.3,
+      "score_breakdown": {
+        "long_term_quality": 17,
+        "recent_timeliness": 95.2,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 17.6,
+        "type_preference": 50,
+        "long_term_status": "long_term",
+        "applied_weights": {
+          "long_term_quality": 0.2,
+          "recent_timeliness": 0.15,
+          "light_user_experience": 0.05,
+          "source_reliability": 0.15,
+          "interaction_quality": 0.15,
+          "type_preference": 0.3
+        }
+      },
+      "review_status": "pending",
+      "l1_review": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "ai_advice": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "reviewer": "llm_failed",
+        "generated_at": null,
+        "input_chars": 280,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "top_selected": false,
+      "summarizer": "llm_failed",
+      "summary_generated_at": null,
+      "summary_input_chars": 280,
+      "summary_llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）",
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_failed",
+          "generated_at": null,
+          "input_chars": 280,
+          "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+        }
+      }
+    },
+    {
+      "id": "x-f036a2f92ead320cca39",
+      "platform": "x",
+      "native_id": "2095258841495867712",
+      "source_type": "x_post",
+      "url": "https://x.com/AIatMeta/status/2095258841495867712",
+      "title": "RT @altryne: Damn, gloves are off! \n\nUnreleased Meta Muse Spark with max reasoning is beating even Fable 5, while the xhigh that is availab…",
+      "description": "RT @altryne: Damn, gloves are off! \n\nUnreleased Meta Muse Spark with max reasoning is beating even Fable 5, while the xhigh that is availab…",
+      "published_at": "2026-09-02T21:13:30.000Z",
+      "fetched_at": "2026-09-03T09:27:36.797Z",
+      "author_id": "x-092568142b02564e2fe4",
+      "author_name": "AI at Meta",
+      "source_id": "x-092568142b02564e2fe4",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 16433,
+        "likes": 65,
+        "comments": null,
+        "reposts": 5,
+        "replies": 2
+      },
+      "explicit_links": [],
+      "content_type": "other",
+      "comments": [],
+      "content_type_status": "ai_suggested",
+      "classifier": "rule_based",
+      "classify_reasons": [
+        "未命中明确类别，归为 other"
+      ],
+      "final_score": 38.9,
+      "score_breakdown": {
+        "long_term_quality": 17,
+        "recent_timeliness": 95.1,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 14.8,
+        "type_preference": 30,
+        "long_term_status": "long_term",
+        "applied_weights": {
+          "long_term_quality": 0.2,
+          "recent_timeliness": 0.15,
+          "light_user_experience": 0.05,
+          "source_reliability": 0.15,
+          "interaction_quality": 0.15,
+          "type_preference": 0.3
+        }
+      },
+      "review_status": "pending",
+      "l1_review": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "ai_advice": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "reviewer": "llm_failed",
+        "generated_at": null,
+        "input_chars": 280,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "top_selected": false,
+      "summarizer": "llm_failed",
+      "summary_generated_at": null,
+      "summary_input_chars": 280,
+      "summary_llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）",
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_failed",
+          "generated_at": null,
+          "input_chars": 280,
+          "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+        }
+      }
+    },
+    {
+      "id": "x-d4f505e817ba972ba9b0",
+      "platform": "x",
+      "native_id": "2095255015535599765",
+      "source_type": "x_post",
+      "url": "https://x.com/AIatMeta/status/2095255015535599765",
+      "title": "RT @TimJayas: Muse Spark 1.3 &gt;&gt; Fable 5\n\nmuse spark just teleported into #3 spot and it's the first ever model to get in between Claude and…",
+      "description": "RT @TimJayas: Muse Spark 1.3 &gt;&gt; Fable 5\n\nmuse spark just teleported into #3 spot and it's the first ever model to get in between Claude and…",
+      "published_at": "2026-09-02T20:58:18.000Z",
+      "fetched_at": "2026-09-03T09:27:36.797Z",
+      "author_id": "x-092568142b02564e2fe4",
+      "author_name": "AI at Meta",
+      "source_id": "x-092568142b02564e2fe4",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 69856,
+        "likes": 211,
+        "comments": null,
+        "reposts": 8,
+        "replies": 15
+      },
+      "explicit_links": [],
+      "content_type": "ai_technology",
+      "comments": [],
+      "content_type_status": "ai_suggested",
+      "classifier": "rule_based",
+      "classify_reasons": [
+        "命中模型名或技术/研究关键词"
+      ],
+      "final_score": 44.8,
+      "score_breakdown": {
+        "long_term_quality": 17,
+        "recent_timeliness": 95,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 14.2,
+        "type_preference": 50,
+        "long_term_status": "long_term",
+        "applied_weights": {
+          "long_term_quality": 0.2,
+          "recent_timeliness": 0.15,
+          "light_user_experience": 0.05,
+          "source_reliability": 0.15,
+          "interaction_quality": 0.15,
+          "type_preference": 0.3
+        }
+      },
+      "review_status": "pending",
+      "l1_review": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "ai_advice": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "reviewer": "llm_failed",
+        "generated_at": null,
+        "input_chars": 292,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "top_selected": false,
+      "summarizer": "llm_failed",
+      "summary_generated_at": null,
+      "summary_input_chars": 292,
+      "summary_llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）",
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_failed",
+          "generated_at": null,
+          "input_chars": 292,
+          "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+        }
+      }
+    },
+    {
+      "id": "x-c194c9e48f0c60299262",
+      "platform": "x",
+      "native_id": "2095253979060224308",
+      "source_type": "x_post",
+      "url": "https://x.com/AIatMeta/status/2095253979060224308",
+      "title": "RT @kimmonismus: wtf Muse Spark 1.3 It has achieved first place in DeepSWE with 75.4%, even ahead of GPT-5.6 Sol and Fable 5.\n\nWhat's going…",
+      "description": "RT @kimmonismus: wtf Muse Spark 1.3 It has achieved first place in DeepSWE with 75.4%, even ahead of GPT-5.6 Sol and Fable 5.\n\nWhat's going…",
+      "published_at": "2026-09-02T20:54:11.000Z",
+      "fetched_at": "2026-09-03T09:27:36.797Z",
+      "author_id": "x-092568142b02564e2fe4",
+      "author_name": "AI at Meta",
+      "source_id": "x-092568142b02564e2fe4",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 157638,
+        "likes": 2007,
+        "comments": null,
+        "reposts": 88,
+        "replies": 125
+      },
+      "explicit_links": [],
+      "content_type": "ai_technology",
+      "comments": [],
+      "content_type_status": "ai_suggested",
+      "classifier": "rule_based",
+      "classify_reasons": [
+        "命中模型名或技术/研究关键词"
+      ],
+      "final_score": 45.6,
+      "score_breakdown": {
+        "long_term_quality": 17,
+        "recent_timeliness": 94.9,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 19.7,
+        "type_preference": 50,
+        "long_term_status": "long_term",
+        "applied_weights": {
+          "long_term_quality": 0.2,
+          "recent_timeliness": 0.15,
+          "light_user_experience": 0.05,
+          "source_reliability": 0.15,
+          "interaction_quality": 0.15,
+          "type_preference": 0.3
+        }
+      },
+      "review_status": "pending",
+      "l1_review": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "ai_advice": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "reviewer": "llm_failed",
+        "generated_at": null,
+        "input_chars": 280,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "top_selected": false,
+      "summarizer": "llm_failed",
+      "summary_generated_at": null,
+      "summary_input_chars": 280,
+      "summary_llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）",
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_failed",
+          "generated_at": null,
+          "input_chars": 280,
+          "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+        }
+      }
+    },
+    {
+      "id": "x-fc201b409627b97e750c",
+      "platform": "x",
+      "native_id": "2095250642159952261",
+      "source_type": "x_post",
+      "url": "https://x.com/AIatMeta/status/2095250642159952261",
+      "title": "RT @ArtificialAnlys: Meta has released Muse Spark 1.3, their fourth Muse Spark model release in five months. Muse Spark 1.3 (max), which is…",
+      "description": "RT @ArtificialAnlys: Meta has released Muse Spark 1.3, their fourth Muse Spark model release in five months. Muse Spark 1.3 (max), which is…",
+      "published_at": "2026-09-02T20:40:55.000Z",
+      "fetched_at": "2026-09-03T09:27:36.797Z",
+      "author_id": "x-092568142b02564e2fe4",
+      "author_name": "AI at Meta",
+      "source_id": "x-092568142b02564e2fe4",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 1264227,
+        "likes": 2278,
+        "comments": null,
+        "reposts": 242,
+        "replies": 104
+      },
+      "explicit_links": [],
+      "content_type": "ai_technology",
+      "comments": [],
+      "content_type_status": "ai_suggested",
+      "classifier": "rule_based",
+      "classify_reasons": [
+        "命中模型名或技术/研究关键词"
+      ],
+      "final_score": 44.7,
+      "score_breakdown": {
+        "long_term_quality": 17,
+        "recent_timeliness": 94.9,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 13.6,
+        "type_preference": 50,
+        "long_term_status": "long_term",
+        "applied_weights": {
+          "long_term_quality": 0.2,
+          "recent_timeliness": 0.15,
+          "light_user_experience": 0.05,
+          "source_reliability": 0.15,
+          "interaction_quality": 0.15,
+          "type_preference": 0.3
+        }
+      },
+      "review_status": "pending",
+      "l1_review": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "ai_advice": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "reviewer": "llm_failed",
+        "generated_at": null,
+        "input_chars": 280,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "top_selected": false,
+      "summarizer": "llm_failed",
+      "summary_generated_at": null,
+      "summary_input_chars": 280,
+      "summary_llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）",
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_failed",
+          "generated_at": null,
+          "input_chars": 280,
+          "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+        }
+      }
+    },
+    {
+      "id": "x-7a415ff80f1de7652276",
+      "platform": "x",
+      "native_id": "2095234385129963666",
+      "source_type": "x_post",
+      "url": "https://x.com/AIatMeta/status/2095234385129963666",
+      "title": "We’re excited to release Muse Spark 1.3 with improved performance on agentic and coding tasks, and a focus on real-world usability.\n\nKey capabilities:\n→ Sustains longer-horizon wor",
+      "description": "We’re excited to release Muse Spark 1.3 with improved performance on agentic and coding tasks, and a focus on real-world usability.\n\nKey capabilities:\n→ Sustains longer-horizon work across multiple workflows in a single thread\n→ More actively collaborates with users: it asks clarifying questions, flags when it's stuck, confirms before consequential actions\n→ Better calibrated on its own limits instead of hallucinating outcomes\n→ ~20% fewer tool calls and ~25% fewer tokens vs. Muse Spark 1.2 in internal comparisons",
+      "published_at": "2026-09-02T19:36:19.000Z",
+      "fetched_at": "2026-09-03T09:27:36.797Z",
+      "author_id": "x-092568142b02564e2fe4",
+      "author_name": "AI at Meta",
+      "source_id": "x-092568142b02564e2fe4",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": "https://pbs.twimg.com/media/HRO-xtxbgAAyyYe.jpg",
+      "metrics": {
+        "views": 204430,
+        "likes": 2635,
+        "comments": null,
+        "reposts": 238,
+        "replies": 92
+      },
+      "explicit_links": [],
+      "content_type": "ai_product",
+      "comments": [],
+      "content_type_status": "ai_suggested",
+      "classifier": "rule_based",
+      "classify_reasons": [
+        "命中工具名或 AI 产品 + 发布/更新类关键词"
+      ],
+      "final_score": 57.6,
+      "score_breakdown": {
+        "long_term_quality": 17,
+        "recent_timeliness": 94.4,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 20.1,
+        "type_preference": 90,
+        "long_term_status": "long_term",
+        "applied_weights": {
+          "long_term_quality": 0.2,
+          "recent_timeliness": 0.15,
+          "light_user_experience": 0.05,
+          "source_reliability": 0.15,
+          "interaction_quality": 0.15,
+          "type_preference": 0.3
+        }
+      },
+      "review_status": "pending",
+      "l1_review": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "ai_advice": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "reviewer": "llm_failed",
+        "generated_at": null,
+        "input_chars": 699,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "top_selected": false,
+      "summarizer": "llm_failed",
+      "summary_generated_at": null,
+      "summary_input_chars": 699,
+      "summary_llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）",
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_failed",
+          "generated_at": null,
+          "input_chars": 699,
+          "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+        }
+      }
+    },
+    {
+      "id": "x-6aaed2c1cf92de9739e3",
+      "platform": "x",
+      "native_id": "2095339572737486866",
+      "source_type": "x_post",
+      "url": "https://x.com/huggingface/status/2095339572737486866",
+      "title": "RT @Thom_Wolf: LLM training labs: the capabilities we are giving our models are god-like, they are now hacking into other companies and bui…",
+      "description": "RT @Thom_Wolf: LLM training labs: the capabilities we are giving our models are god-like, they are now hacking into other companies and bui…",
+      "published_at": "2026-09-03T02:34:18.000Z",
+      "fetched_at": "2026-09-03T09:27:36.797Z",
+      "author_id": "x-d203a277f19a8f7d78fe",
+      "author_name": "Hugging Face",
+      "source_id": "x-d203a277f19a8f7d78fe",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 72483,
+        "likes": 1632,
+        "comments": null,
+        "reposts": 97,
+        "replies": 28
+      },
+      "explicit_links": [],
+      "content_type": "ai_technology",
+      "comments": [],
+      "content_type_status": "ai_suggested",
+      "classifier": "rule_based",
+      "classify_reasons": [
+        "命中模型名或技术/研究关键词"
+      ],
+      "final_score": 47.1,
+      "score_breakdown": {
+        "long_term_quality": 18.3,
+        "recent_timeliness": 97.2,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 25.4,
+        "type_preference": 50,
+        "long_term_status": "long_term",
+        "applied_weights": {
+          "long_term_quality": 0.2,
+          "recent_timeliness": 0.15,
+          "light_user_experience": 0.05,
+          "source_reliability": 0.15,
+          "interaction_quality": 0.15,
+          "type_preference": 0.3
+        }
+      },
+      "review_status": "pending",
+      "l1_review": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "ai_advice": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "reviewer": "llm_failed",
+        "generated_at": null,
+        "input_chars": 280,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "top_selected": false,
+      "summarizer": "llm_failed",
+      "summary_generated_at": null,
+      "summary_input_chars": 280,
+      "summary_llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）",
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_failed",
+          "generated_at": null,
+          "input_chars": 280,
+          "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+        }
+      }
+    },
+    {
+      "id": "x-2d98092573b327c3b9b5",
+      "platform": "x",
+      "native_id": "2095244907183210550",
+      "source_type": "x_post",
+      "url": "https://x.com/NVIDIAAI/status/2095244907183210550",
+      "title": "RT @pa_balland: @nvidia is now the leading company in the number of open-source AI repositories on @huggingface.\n\nThis chart tracks major H…",
+      "description": "RT @pa_balland: @nvidia is now the leading company in the number of open-source AI repositories on @huggingface.\n\nThis chart tracks major H…",
+      "published_at": "2026-09-02T20:18:08.000Z",
+      "fetched_at": "2026-09-03T09:27:36.797Z",
+      "author_id": "x-97195d2a8377b1621835",
+      "author_name": "NVIDIA AI",
+      "source_id": "x-97195d2a8377b1621835",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 6220,
+        "likes": 32,
+        "comments": null,
+        "reposts": 7,
+        "replies": 1
+      },
+      "explicit_links": [],
+      "content_type": "ai_technology",
+      "comments": [],
+      "content_type_status": "ai_suggested",
+      "classifier": "rule_based",
+      "classify_reasons": [
+        "命中模型名或技术/研究关键词"
+      ],
+      "final_score": 44.8,
+      "score_breakdown": {
+        "long_term_quality": 15.9,
+        "recent_timeliness": 94.7,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 15.8,
+        "type_preference": 50,
+        "long_term_status": "long_term",
+        "applied_weights": {
+          "long_term_quality": 0.2,
+          "recent_timeliness": 0.15,
+          "light_user_experience": 0.05,
+          "source_reliability": 0.15,
+          "interaction_quality": 0.15,
+          "type_preference": 0.3
+        }
+      },
+      "review_status": "pending",
+      "l1_review": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "ai_advice": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "reviewer": "llm_failed",
+        "generated_at": null,
+        "input_chars": 280,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "top_selected": false,
+      "summarizer": "llm_failed",
+      "summary_generated_at": null,
+      "summary_input_chars": 280,
+      "summary_llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）",
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_failed",
+          "generated_at": null,
+          "input_chars": 280,
+          "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+        }
+      }
+    },
+    {
+      "id": "x-80114a3980327be8274e",
+      "platform": "x",
+      "native_id": "2095232821912912328",
+      "source_type": "x_post",
+      "url": "https://x.com/NVIDIAAI/status/2095232821912912328",
+      "title": "DGX Spark Live: Perplexity Portable Computer Goes Local https://t.co/jYwLOCtKly",
+      "description": "DGX Spark Live: Perplexity Portable Computer Goes Local https://t.co/jYwLOCtKly",
+      "published_at": "2026-09-02T19:30:06.000Z",
+      "fetched_at": "2026-09-03T09:27:36.797Z",
+      "author_id": "x-97195d2a8377b1621835",
+      "author_name": "NVIDIA AI",
+      "source_id": "x-97195d2a8377b1621835",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 52001,
+        "likes": 142,
+        "comments": null,
+        "reposts": 19,
+        "replies": 4
+      },
+      "explicit_links": [
+        "https://t.co/jYwLOCtKly"
+      ],
+      "content_type": "other",
+      "comments": [],
+      "content_type_status": "ai_suggested",
+      "classifier": "rule_based",
+      "classify_reasons": [
+        "未命中明确类别，归为 other"
+      ],
+      "final_score": 38.5,
+      "score_breakdown": {
+        "long_term_quality": 15.9,
+        "recent_timeliness": 94.4,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 14.1,
+        "type_preference": 30,
+        "long_term_status": "long_term",
+        "applied_weights": {
+          "long_term_quality": 0.2,
+          "recent_timeliness": 0.15,
+          "light_user_experience": 0.05,
+          "source_reliability": 0.15,
+          "interaction_quality": 0.15,
+          "type_preference": 0.3
+        }
+      },
+      "review_status": "pending",
+      "l1_review": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "ai_advice": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "reviewer": "llm_failed",
+        "generated_at": null,
+        "input_chars": 158,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "top_selected": false,
+      "summarizer": "llm_failed",
+      "summary_generated_at": null,
+      "summary_input_chars": 158,
+      "summary_llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）",
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_failed",
+          "generated_at": null,
+          "input_chars": 158,
+          "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+        }
+      }
+    },
+    {
+      "id": "x-4a97a5bbf256bff97248",
+      "platform": "x",
+      "native_id": "2095219769893085299",
+      "source_type": "x_post",
+      "url": "https://x.com/NVIDIAAI/status/2095219769893085299",
+      "title": "RT @nvidia: Across Europe, AI communities have been moving the field forward for years. This October, Berlin becomes a meeting point for th…",
+      "description": "RT @nvidia: Across Europe, AI communities have been moving the field forward for years. This October, Berlin becomes a meeting point for th…",
+      "published_at": "2026-09-02T18:38:15.000Z",
+      "fetched_at": "2026-09-03T09:27:36.797Z",
+      "author_id": "x-97195d2a8377b1621835",
+      "author_name": "NVIDIA AI",
+      "source_id": "x-97195d2a8377b1621835",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 58618,
+        "likes": 238,
+        "comments": null,
+        "reposts": 35,
+        "replies": 28
+      },
+      "explicit_links": [],
+      "content_type": "other",
+      "comments": [],
+      "content_type_status": "ai_suggested",
+      "classifier": "rule_based",
+      "classify_reasons": [
+        "未命中明确类别，归为 other"
+      ],
+      "final_score": 38.5,
+      "score_breakdown": {
+        "long_term_quality": 15.9,
+        "recent_timeliness": 94.1,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 15,
+        "type_preference": 30,
+        "long_term_status": "long_term",
+        "applied_weights": {
+          "long_term_quality": 0.2,
+          "recent_timeliness": 0.15,
+          "light_user_experience": 0.05,
+          "source_reliability": 0.15,
+          "interaction_quality": 0.15,
+          "type_preference": 0.3
+        }
+      },
+      "review_status": "pending",
+      "l1_review": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "ai_advice": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "reviewer": "llm_failed",
+        "generated_at": null,
+        "input_chars": 280,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "top_selected": false,
+      "summarizer": "llm_failed",
+      "summary_generated_at": null,
+      "summary_input_chars": 280,
+      "summary_llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）",
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_failed",
+          "generated_at": null,
+          "input_chars": 280,
+          "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+        }
+      }
+    },
+    {
+      "id": "x-35d7a0da15d8f9b60cc8",
+      "platform": "x",
+      "native_id": "2095217259610550730",
+      "source_type": "x_post",
+      "url": "https://x.com/NVIDIAAI/status/2095217259610550730",
+      "title": "The Open Secure AI Alliance is beginning its next chapter with the Linux Foundation.\n\nWe helped form the alliance to bring organizations together around open, practical ways to sec",
+      "description": "The Open Secure AI Alliance is beginning its next chapter with the Linux Foundation.\n\nWe helped form the alliance to bring organizations together around open, practical ways to secure AI systems. Great to see that work continue with the Linux Foundation.",
+      "published_at": "2026-09-02T18:28:16.000Z",
+      "fetched_at": "2026-09-03T09:27:36.797Z",
+      "author_id": "x-97195d2a8377b1621835",
+      "author_name": "NVIDIA AI",
+      "source_id": "x-97195d2a8377b1621835",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 26589,
+        "likes": 310,
+        "comments": null,
+        "reposts": 44,
+        "replies": 15
+      },
+      "explicit_links": [],
+      "content_type": "other",
+      "comments": [],
+      "content_type_status": "ai_suggested",
+      "classifier": "rule_based",
+      "classify_reasons": [
+        "未命中明确类别，归为 other"
+      ],
+      "final_score": 39.2,
+      "score_breakdown": {
+        "long_term_quality": 15.9,
+        "recent_timeliness": 94,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 19.6,
+        "type_preference": 30,
+        "long_term_status": "long_term",
+        "applied_weights": {
+          "long_term_quality": 0.2,
+          "recent_timeliness": 0.15,
+          "light_user_experience": 0.05,
+          "source_reliability": 0.15,
+          "interaction_quality": 0.15,
+          "type_preference": 0.3
+        }
+      },
+      "review_status": "pending",
+      "l1_review": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "ai_advice": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "reviewer": "llm_failed",
+        "generated_at": null,
+        "input_chars": 434,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "top_selected": false,
+      "summarizer": "llm_failed",
+      "summary_generated_at": null,
+      "summary_input_chars": 434,
+      "summary_llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）",
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_failed",
+          "generated_at": null,
+          "input_chars": 434,
+          "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+        }
+      }
+    },
+    {
+      "id": "x-1305be8c08c1493b23f3",
+      "platform": "x",
+      "native_id": "2095210177687654880",
+      "source_type": "x_post",
+      "url": "https://x.com/NVIDIAAI/status/2095210177687654880",
+      "title": "AITX Austin Hackathon Winners Spotlight https://t.co/JHdIq4f7GV",
+      "description": "AITX Austin Hackathon Winners Spotlight https://t.co/JHdIq4f7GV",
+      "published_at": "2026-09-02T18:00:08.000Z",
+      "fetched_at": "2026-09-03T09:27:36.797Z",
+      "author_id": "x-97195d2a8377b1621835",
+      "author_name": "NVIDIA AI",
+      "source_id": "x-97195d2a8377b1621835",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 8885,
+        "likes": 50,
+        "comments": null,
+        "reposts": 5,
+        "replies": 3
+      },
+      "explicit_links": [
+        "https://t.co/JHdIq4f7GV"
+      ],
+      "content_type": "other",
+      "comments": [],
+      "content_type_status": "ai_suggested",
+      "classifier": "rule_based",
+      "classify_reasons": [
+        "未命中明确类别，归为 other"
+      ],
+      "final_score": 38.6,
+      "score_breakdown": {
+        "long_term_quality": 15.9,
+        "recent_timeliness": 93.8,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 15.8,
+        "type_preference": 30,
+        "long_term_status": "long_term",
+        "applied_weights": {
+          "long_term_quality": 0.2,
+          "recent_timeliness": 0.15,
+          "light_user_experience": 0.05,
+          "source_reliability": 0.15,
+          "interaction_quality": 0.15,
+          "type_preference": 0.3
+        }
+      },
+      "review_status": "pending",
+      "l1_review": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "ai_advice": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "reviewer": "llm_failed",
+        "generated_at": null,
+        "input_chars": 126,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "top_selected": false,
+      "summarizer": "llm_failed",
+      "summary_generated_at": null,
+      "summary_input_chars": 126,
+      "summary_llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）",
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_failed",
+          "generated_at": null,
+          "input_chars": 126,
+          "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+        }
+      }
+    },
+    {
+      "id": "x-4f9db82af12cf8a31c90",
+      "platform": "x",
+      "native_id": "2095253409725022366",
+      "source_type": "x_post",
+      "url": "https://x.com/StabilityAI/status/2095253409725022366",
+      "title": "RT @stableaudio: Intimacy, not distance. That's the future of creative AI: smaller models, running locally, becoming integral to the creati…",
+      "description": "RT @stableaudio: Intimacy, not distance. That's the future of creative AI: smaller models, running locally, becoming integral to the creati…",
+      "published_at": "2026-09-02T20:51:55.000Z",
+      "fetched_at": "2026-09-03T09:27:36.797Z",
+      "author_id": "x-90d803d90501061cff59",
+      "author_name": "Stability AI",
+      "source_id": "x-90d803d90501061cff59",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 2176,
+        "likes": 11,
+        "comments": null,
+        "reposts": 3,
+        "replies": 0
+      },
+      "explicit_links": [],
+      "content_type": "ai_technology",
+      "comments": [],
+      "content_type_status": "ai_suggested",
+      "classifier": "rule_based",
+      "classify_reasons": [
+        "命中模型名或技术/研究关键词"
+      ],
+      "final_score": 51.6,
+      "score_breakdown": {
+        "long_term_quality": 50,
+        "recent_timeliness": 94.9,
+        "light_user_experience": 50,
+        "source_reliability": 50,
+        "interaction_quality": 15.8,
+        "type_preference": 50,
+        "long_term_status": "insufficient",
+        "applied_weights": {
+          "long_term_quality": 0.2,
+          "recent_timeliness": 0.15,
+          "light_user_experience": 0.05,
+          "source_reliability": 0.15,
+          "interaction_quality": 0.15,
+          "type_preference": 0.3
+        }
+      },
+      "review_status": "pending",
+      "l1_review": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "ai_advice": {
+        "verdict": null,
+        "reasons": [],
+        "confidence": 0,
+        "reviewer": "llm_failed",
+        "generated_at": null,
+        "input_chars": 280,
+        "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+      },
+      "top_selected": false,
+      "summarizer": "llm_failed",
+      "summary_generated_at": null,
+      "summary_input_chars": 280,
+      "summary_llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）",
+      "localizations_meta": {
+        "zh": {
+          "localizer": "llm_failed",
+          "generated_at": null,
+          "input_chars": 280,
+          "llm_error": "本地 AI 服务离线（上次启动未就绪，120s 内不再重复启动；可手动执行 D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1）"
+        }
+      }
+    },
+    {
+      "id": "x-914d765aa39e2385d7b4",
+      "platform": "x",
+      "native_id": "2095339602542280872",
+      "source_type": "x_post",
+      "url": "https://x.com/huggingface/status/2095339602542280872",
+      "title": "RT @RemiFabreRobot: Robots don't have to be scary!\n\nMicroduck discovers Reachy Mini. Give me your best scenario for these two and I'll see…",
+      "description": "RT @RemiFabreRobot: Robots don't have to be scary!\n\nMicroduck discovers Reachy Mini. Give me your best scenario for these two and I'll see…",
+      "published_at": "2026-09-03T02:34:25.000Z",
+      "fetched_at": "2026-09-03T09:27:36.797Z",
+      "author_id": "x-d203a277f19a8f7d78fe",
+      "author_name": "Hugging Face",
+      "source_id": "x-d203a277f19a8f7d78fe",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": null,
+      "metrics": {
+        "views": 86161,
+        "likes": 1222,
+        "comments": null,
+        "reposts": 132,
+        "replies": 80
+      },
+      "explicit_links": [],
+      "content_type": null,
+      "comments": [],
       "review_status": "discarded",
       "discard_stage": "l0",
       "discard_reason": "not_ai",

@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "kind": "review_candidates",
-  "generated_at": "2026-09-02T11:24:14.476Z",
-  "date": "20260902",
-  "total_pending": 1897,
+  "generated_at": "2026-09-03T09:27:36.797Z",
+  "date": "20260903",
+  "total_pending": 1912,
   "note": "待人工审核清单：请逐条设置 review_status（pending/approved/discarded）。应用结论：双击 bat/apply-review.bat（或 node scripts/news-cli.js min-review apply --file 本文件），应用后自动生成 top 名单（ai-top）供二次审核；approved 才进后续 top-selected/publish。",
   "candidates": [
     {
@@ -13284,6 +13284,111 @@
       "summary": "#獨家 1台貴2萬! 記憶體漲5倍.螢幕漲1成 自組中階電腦破6-7萬｜TVBS新聞 @TVBSNEWS02",
       "suggestion": "人工判断：是否值得收录",
       "review_status": "pending"
+    },
+    {
+      "id": "x-7a415ff80f1de7652276",
+      "score": 57.6,
+      "summary": "We’re excited to release Muse Spark 1.3 with improved performance on agentic and",
+      "suggestion": "AI 产品/工具，建议 approved",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-4f9db82af12cf8a31c90",
+      "score": 51.6,
+      "summary": "RT @stableaudio: Intimacy, not distance. That's the future of creative AI: small",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-e677bf8a6252a74a3197",
+      "score": 51.5,
+      "summary": "Gemini 3.8 Flash Cyber gives defenders a decisive advantage with expert vulnerab",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-6aaed2c1cf92de9739e3",
+      "score": 47.1,
+      "summary": "RT @Thom_Wolf: LLM training labs: the capabilities we are giving our models are ",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-727f85a1e2a798f1ca8c",
+      "score": 45.7,
+      "summary": "RT @LuminaBench: 🚨 Meta just mogged Gemini 3.8 Flash a few hours after launch M",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-c194c9e48f0c60299262",
+      "score": 45.6,
+      "summary": "RT @kimmonismus: wtf Muse Spark 1.3 It has achieved first place in DeepSWE with ",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-fc12116060df21ba583c",
+      "score": 45.3,
+      "summary": "RT @shiri_shh: so...you're telling me Meta's new model is already ranking right ",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-d4f505e817ba972ba9b0",
+      "score": 44.8,
+      "summary": "RT @TimJayas: Muse Spark 1.3 &gt;&gt; Fable 5 muse spark just teleported into #3",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-2d98092573b327c3b9b5",
+      "score": 44.8,
+      "summary": "RT @pa_balland: @nvidia is now the leading company in the number of open-source ",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-fc201b409627b97e750c",
+      "score": 44.7,
+      "summary": "RT @ArtificialAnlys: Meta has released Muse Spark 1.3, their fourth Muse Spark m",
+      "suggestion": "AI 技术/研究，建议 approved（如无重大争议）",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-35d7a0da15d8f9b60cc8",
+      "score": 39.2,
+      "summary": "The Open Secure AI Alliance is beginning its next chapter with the Linux Foundat",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-f036a2f92ead320cca39",
+      "score": 38.9,
+      "summary": "RT @altryne: Damn, gloves are off! Unreleased Meta Muse Spark with max reasoning",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-1305be8c08c1493b23f3",
+      "score": 38.6,
+      "summary": "AITX Austin Hackathon Winners Spotlight https://t.co/JHdIq4f7GV",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-80114a3980327be8274e",
+      "score": 38.5,
+      "summary": "DGX Spark Live: Perplexity Portable Computer Goes Local https://t.co/jYwLOCtKly",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
+    },
+    {
+      "id": "x-4a97a5bbf256bff97248",
+      "score": 38.5,
+      "summary": "RT @nvidia: Across Europe, AI communities have been moving the field forward for",
+      "suggestion": "人工判断：是否值得收录",
+      "review_status": "pending"
     }
   ],
   "human_lines": [
@@ -15183,6 +15288,21 @@
     "[32] Aluminum + Nickel Diffusion Welding | 10 Seconds per Piece\n    建议：人工判断：是否值得收录",
     "[31.7] Lec 53 Hands-on on reverse diffusion process\n    建议：人工判断：是否值得收录",
     "[31.4] 任務結束! 伍程嶸遺體返鄉 同仁列隊送行｜TVBS新聞 @TVBSNEWS02\n    建议：人工判断：是否值得收录",
-    "[29.7] #獨家 1台貴2萬! 記憶體漲5倍.螢幕漲1成 自組中階電腦破6-7萬｜TVBS新聞 @TVBSNEWS02\n    建议：人工判断：是否值得收录"
+    "[29.7] #獨家 1台貴2萬! 記憶體漲5倍.螢幕漲1成 自組中階電腦破6-7萬｜TVBS新聞 @TVBSNEWS02\n    建议：人工判断：是否值得收录",
+    "[57.6] We’re excited to release Muse Spark 1.3 with improved performance on agentic and\n    建议：AI 产品/工具，建议 approved",
+    "[51.6] RT @stableaudio: Intimacy, not distance. That's the future of creative AI: small\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[51.5] Gemini 3.8 Flash Cyber gives defenders a decisive advantage with expert vulnerab\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[47.1] RT @Thom_Wolf: LLM training labs: the capabilities we are giving our models are \n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[45.7] RT @LuminaBench: 🚨 Meta just mogged Gemini 3.8 Flash a few hours after launch M\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[45.6] RT @kimmonismus: wtf Muse Spark 1.3 It has achieved first place in DeepSWE with \n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[45.3] RT @shiri_shh: so...you're telling me Meta's new model is already ranking right \n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[44.8] RT @TimJayas: Muse Spark 1.3 &gt;&gt; Fable 5 muse spark just teleported into #3\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[44.8] RT @pa_balland: @nvidia is now the leading company in the number of open-source \n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[44.7] RT @ArtificialAnlys: Meta has released Muse Spark 1.3, their fourth Muse Spark m\n    建议：AI 技术/研究，建议 approved（如无重大争议）",
+    "[39.2] The Open Secure AI Alliance is beginning its next chapter with the Linux Foundat\n    建议：人工判断：是否值得收录",
+    "[38.9] RT @altryne: Damn, gloves are off! Unreleased Meta Muse Spark with max reasoning\n    建议：人工判断：是否值得收录",
+    "[38.6] AITX Austin Hackathon Winners Spotlight https://t.co/JHdIq4f7GV\n    建议：人工判断：是否值得收录",
+    "[38.5] DGX Spark Live: Perplexity Portable Computer Goes Local https://t.co/jYwLOCtKly\n    建议：人工判断：是否值得收录",
+    "[38.5] RT @nvidia: Across Europe, AI communities have been moving the field forward for\n    建议：人工判断：是否值得收录"
   ]
 }
