@@ -5,8 +5,9 @@
     "x"
   ],
   "schedule": {
-    "youtube_cron": "0 12 */3 * *",
+    "youtube_cron": "0 12 * * *",
     "youtube_tz": "Asia/Shanghai",
+    "youtube_interval_hours": 72,
     "youtube_window_days": 3,
     "x_cron_first": "0 5 * * *",
     "x_cron_second": "0 14 * * *",

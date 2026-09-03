@@ -3,9 +3,10 @@ name: Collect AI News
 on:
   schedule:
     # GitHub Actions cron 固定按 UTC；此处统一按「北京时间」换算（UTC = 北京 - 8h）：
-    #   YouTube：每 3 天北京 20:00 → UTC 12:00
+    #   YouTube：每天北京 20:00 → UTC 12:00（管线内 72h 到期闸决定是否真正采集；
+    #            不用 */3 因其按月历日触发，月末会 31→1 背靠背）
     #   X：每天北京 13:00 → UTC 05:00；每天北京 22:00 → UTC 14:00
-    - cron: '0 12 */3 * *'
+    - cron: '0 12 * * *'
     - cron: '0 5 * * *'
     - cron: '0 14 * * *'
   workflow_dispatch:
@@ -46,6 +47,7 @@ jobs:
       contents: read
     outputs:
       config_enabled: ${{ steps.config.outputs.enabled }}
+      youtube_due: ${{ steps.config.outputs.youtube_due }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -57,18 +59,32 @@ jobs:
 
       - name: Resolve versioned collection switch
         id: config
+        env:
+          GITHUB_SCHEDULE: ${{ github.event.schedule }}
         run: |
           node - <<'NODE'
           const fs = require('fs');
-          const { loadV2Config, isCollectionEnabled } = require('./src/news/min/pipeline-min');
-          const enabled = isCollectionEnabled(loadV2Config());
+          const { loadV2Config, isCollectionEnabled, isYoutubeDue } = require('./src/news/min/pipeline-min');
+          const config = loadV2Config();
+          const enabled = isCollectionEnabled(config);
           fs.appendFileSync(process.env.GITHUB_OUTPUT, `enabled=${enabled}\n`);
           console.log(`Versioned collection switch: ${enabled ? 'enabled' : 'disabled'}`);
+          // YouTube 到期预检：仅 YouTube 调度槽（每日 UTC 12:00）需要；X 槽 / 手动触发恒为 due。
+          // 预检不通过则整个 collect job 不启动（不占并发、不碰 Secrets）；
+          // 权威判定仍在管线内（collect job 以 --scheduled 再核一次，状态文件随后提交）。
+          let youtubeDue = true;
+          if (enabled && process.env.GITHUB_SCHEDULE === '0 12 * * *') {
+            let state = null;
+            try { state = JSON.parse(fs.readFileSync('data/news/runtime/schedule-state.json', 'utf8')); } catch {}
+            youtubeDue = isYoutubeDue(config, state, new Date());
+          }
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `youtube_due=${youtubeDue}\n`);
+          console.log(`YouTube due precheck: ${youtubeDue}`);
           NODE
 
   collect:
     needs: collection_gate
-    if: ${{ needs.collection_gate.result == 'success' && needs.collection_gate.outputs.config_enabled == 'true' }}
+    if: ${{ needs.collection_gate.result == 'success' && needs.collection_gate.outputs.config_enabled == 'true' && needs.collection_gate.outputs.youtube_due != 'false' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -93,8 +109,9 @@ jobs:
           PLATFORMS_INPUT: ${{ github.event.inputs.platforms }}
           SCHEDULE: ${{ github.event.schedule }}
         run: |
-          # schedule 触发无 inputs：按 cron 模式映射（R1：YouTube 每 3 天北京 20:00 /
-          # X 每日北京 13:00 / 22:00，cron 为 UTC 值）；workflow_dispatch 的 platforms 输入优先覆盖。
+          # schedule 触发无 inputs：按 cron 模式映射（YouTube 每日北京 20:00，是否真正采集
+          # 由管线内 72h 到期闸决定 / X 每日北京 13:00 / 22:00，cron 为 UTC 值）；
+          # workflow_dispatch 的 platforms 输入优先覆盖。
           # runMin 只认平台名数组，'both' 译为双平台，勿把 'both' 直接传给 --platforms。
           if [[ -n "$PLATFORMS_INPUT" ]]; then
             if [[ "$PLATFORMS_INPUT" == "both" ]]; then
@@ -102,7 +119,7 @@ jobs:
             else
               echo "NEWS_PLATFORMS=$PLATFORMS_INPUT" >> "$GITHUB_ENV"
             fi
-          elif [[ "$SCHEDULE" == "0 12 */3 * *" ]]; then
+          elif [[ "$SCHEDULE" == "0 12 * * *" ]]; then
             echo "NEWS_PLATFORMS=youtube" >> "$GITHUB_ENV"
           else
             echo "NEWS_PLATFORMS=x" >> "$GITHUB_ENV"
@@ -114,7 +131,14 @@ jobs:
           X_API_KEY: ${{ secrets.X_API_KEY }}
           ZHIPU_API_KEY: ${{ secrets.ZHIPU_API_KEY }}
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-        run: node scripts/build-news.js --platforms "$NEWS_PLATFORMS"
+        run: |
+          # 仅 schedule 触发传 --scheduled：受 YouTube 72h 到期闸约束并写调度状态；
+          # workflow_dispatch（手动）不带此标志——手动采集与调度节奏互不影响。
+          FLAGS=""
+          if [[ "$GITHUB_EVENT_NAME" == "schedule" ]]; then
+            FLAGS="--scheduled"
+          fi
+          node scripts/build-news.js --platforms "$NEWS_PLATFORMS" $FLAGS
 
       - name: Record X usage summary
         if: always()
@@ -157,8 +181,10 @@ jobs:
         id: review
         run: |
           # v2：采集只产生内部候选层 min-candidates.json + 待审清单 review.json（不发布）；
+          # schedule-state.json 是 YouTube 72h 到期闸状态，随批次一并提交（YouTube 全新收录、
+          # 候选零变化时它可能是唯一变更，漏提交会导致到期闸失效、每天都采）。
           # 公开投影在审核 PR 合并后由 publish-news.yml 重建，不在此直接提交 main。
-          if git diff --quiet -- data/news/runtime/min-candidates.json data/manual/review.json; then
+          if git diff --quiet -- data/news/runtime/min-candidates.json data/manual/review.json data/news/runtime/schedule-state.json; then
             echo "No candidate changes"
             exit 0
           fi
@@ -170,7 +196,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -b "${branch}"
-          git add data/news/runtime/min-candidates.json data/manual/review.json
+          git add data/news/runtime/min-candidates.json data/manual/review.json data/news/runtime/schedule-state.json
           git commit -m "chore(data): update min candidates + review list (${batch})"
           git push origin "${branch}"
 

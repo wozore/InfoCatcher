@@ -3,9 +3,10 @@ name: Refresh VibeHub Cache
 on:
   schedule:
     # GitHub Actions cron 固定按 UTC；北京时间 = UTC + 8h。
-    # YouTube 采集 = 每 3 天北京 20:00 → UTC 12:00（见 collect-news.yml）。
-    # 本任务在采集前 1h 刷新 vibe-hub 概念缓存：每 3 天北京 19:00 → UTC 11:00。
-    - cron: '0 11 */3 * *'
+    # YouTube 采集 = 每天北京 20:00 → UTC 12:00（是否真正采集由管线 72h 到期闸决定，见 collect-news.yml）。
+    # 本任务在采集前 1h 刷新 vibe-hub 概念缓存：每天北京 19:00 → UTC 11:00；
+    # 缓存全新鲜时零网络直接跳过，每日触发无额外成本。
+    - cron: '0 11 * * *'
   workflow_dispatch:
 
 permissions:

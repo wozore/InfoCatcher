@@ -20,7 +20,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
-const { runMin, isCollectionEnabled, normalizeNow, resolveXWindow } = require('../../src/news/min/pipeline-min');
+const { runMin, isCollectionEnabled, isYoutubeDue, normalizeNow, resolveXWindow } = require('../../src/news/min/pipeline-min');
 const { NEWS_FILES } = require('../../src/shared/paths');
 const { readJson, writeJsonAtomic } = require('../../src/news/core/news-storage');
 
@@ -278,6 +278,100 @@ test('采集状态汇总：单平台失败/降级为 partial，全部失败才�
   assert.equal((await runCase('success', 'failed')).coverage.status, 'partial');
   assert.equal((await runCase('success', 'partial')).coverage.status, 'partial');
   assert.equal((await runCase('failed', 'failed')).coverage.status, 'failed');
+});
+
+// ── YouTube 72h 到期闸（每日 cron + 管线内到期判定） ──
+
+test('isYoutubeDue：缺状态/非法时间戳/未来时间视为到期，72h 内未到期，间隔可配置', () => {
+  const NOW_DUE = new Date('2026-09-04T12:00:00Z');
+  const state = hours => ({ youtube_last_collected_at: new Date(NOW_DUE.getTime() - hours * 3600000).toISOString() });
+
+  assert.equal(isYoutubeDue(CONFIG, null, NOW_DUE), true);
+  assert.equal(isYoutubeDue(CONFIG, {}, NOW_DUE), true);
+  assert.equal(isYoutubeDue(CONFIG, { youtube_last_collected_at: 'not-a-date' }, NOW_DUE), true);
+  // 时钟倒挂（状态时间在未来）→ 到期，宁可多采不可漏采
+  assert.equal(isYoutubeDue(CONFIG, { youtube_last_collected_at: new Date(NOW_DUE.getTime() + 3600000).toISOString() }, NOW_DUE), true);
+  // 71.9h 未到期 / 72h 整到期
+  assert.equal(isYoutubeDue(CONFIG, state(71.9), NOW_DUE), false);
+  assert.equal(isYoutubeDue(CONFIG, state(72), NOW_DUE), true);
+  // 间隔配置覆盖（24h 间隔 → 23h 未到期）
+  const config24 = { schedule: { ...CONFIG.schedule, youtube_interval_hours: 24 } };
+  assert.equal(isYoutubeDue(config24, state(23), NOW_DUE), false);
+  assert.equal(isYoutubeDue(config24, state(25), NOW_DUE), true);
+  // 缺省间隔：config 无 schedule.youtube_interval_hours → 默认 72h
+  assert.equal(isYoutubeDue({ schedule: {} }, state(48), NOW_DUE), false);
+});
+
+/** 到期闸 runMin 集成用例：仅 YouTube 平台 + 空采集结果 + 全链 mock 存根。 */
+const runDueGateCase = async ({ scheduled, scheduleState, youtubeStatus }) => {
+  const calls = { youtube: 0, stateOut: 0 };
+  const result = await runMin({
+    config: CONFIG,
+    now: NOW,
+    platforms: ['youtube'],
+    scheduled: scheduled === true,
+    scheduleStateIn: () => scheduleState,
+    scheduleStateOut: () => { calls.stateOut += 1; },
+    collectors: {
+      youtube: async () => {
+        calls.youtube += 1;
+        return { items: [], quota: {}, coverage: { status: youtubeStatus, reason: youtubeStatus === 'success' ? null : 'youtube_test' } };
+      },
+      x: async () => { throw new Error('x 不应被调用'); },
+    },
+    review: async () => ({ kept: [], discarded: [] }),
+    summarize: async () => ({ summarized: 0 }),
+    localize: async () => ({ localized: 0 }),
+    historyIn: () => ({ sources: {} }),
+    historyOut: () => {},
+    minStoreIn: () => ({ schema_version: 1, updated_at: null, candidates: [] }),
+    minStoreOut: () => {},
+    lastRunOut: () => {},
+    autoReviewList: false,
+  });
+  return { result, calls };
+};
+
+const FRESH_STATE = { youtube_last_collected_at: hoursAgo(24) };
+
+test('到期闸：调度运行 + 72h 内已采 → 跳过 YouTube（not_due）且不写调度状态', async () => {
+  const { result, calls } = await runDueGateCase({ scheduled: true, scheduleState: FRESH_STATE, youtubeStatus: 'success' });
+  assert.equal(calls.youtube, 0);
+  assert.equal(calls.stateOut, 0);
+  assert.equal(result.coverage.collectors.youtube.status, 'not_due');
+  assert.equal(result.coverage.collectors.youtube.reason, 'not_due');
+  assert.equal(result.coverage.status, 'complete');
+});
+
+test('到期闸：调度运行 + 已到期/无状态 → 采集并在 success/partial 后写调度状态', async () => {
+  const due = await runDueGateCase({ scheduled: true, scheduleState: null, youtubeStatus: 'success' });
+  assert.equal(due.calls.youtube, 1);
+  assert.equal(due.calls.stateOut, 1);
+  assert.equal(due.result.coverage.collectors.youtube.status, 'success');
+  assert.equal(due.result.coverage.status, 'complete');
+
+  const stale = await runDueGateCase({ scheduled: true, scheduleState: { youtube_last_collected_at: hoursAgo(73) }, youtubeStatus: 'success' });
+  assert.equal(stale.calls.youtube, 1);
+  assert.equal(stale.calls.stateOut, 1);
+
+  // partial（采到部分内容）也算实际采集 → 刷新到期基准
+  const partial = await runDueGateCase({ scheduled: true, scheduleState: null, youtubeStatus: 'partial' });
+  assert.equal(partial.calls.stateOut, 1);
+});
+
+test('到期闸：调度运行 + 采集失败 → 不写调度状态（失败不吞窗口）', async () => {
+  const { result, calls } = await runDueGateCase({ scheduled: true, scheduleState: null, youtubeStatus: 'failed' });
+  assert.equal(calls.youtube, 1);
+  assert.equal(calls.stateOut, 0);
+  assert.equal(result.coverage.collectors.youtube.status, 'failed');
+  assert.equal(result.coverage.status, 'failed');
+});
+
+test('到期闸：手动/本地运行（无 scheduled）不受闸限制、也绝不写调度状态', async () => {
+  const { result, calls } = await runDueGateCase({ scheduled: false, scheduleState: FRESH_STATE, youtubeStatus: 'success' });
+  assert.equal(calls.youtube, 1, '手动采集即使 72h 内已采过也要执行');
+  assert.equal(calls.stateOut, 0, '手动采集不刷新到期基准，不影响调度节奏');
+  assert.equal(result.coverage.collectors.youtube.status, 'success');
 });
 
 test('pipeline-min 全链：L0 丢弃 → 分类 → 评分 → 审核 → 候选 → 投影', async () => {

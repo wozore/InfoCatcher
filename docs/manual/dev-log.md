@@ -2782,5 +2782,32 @@
 
 ### 已知边界
 
-- [~] CI 需在 GitHub 仓库 Secrets 添加 `ZHIPU_API_KEY`。
-- [~] 本次改动尚未提交，待维护者明确要求后再提交。
+- [x] 密钥边界：GitHub CI 维持轻量抓取与 L0 规则运行（零外部商业 LLM 消耗），无需且不应在 GitHub Secrets 添加 `ZHIPU_API_KEY`；所有重量级 AI 丰富（L1/L2 初审、中文摘要、本地化翻译）统一由维护者拉回本地后运行 `local-enrichment`（结合本地模型）完成。
+
+## 2026-09-04 · YouTube 调度审计与到期闸修复（每日 cron + 72h 滚动间隔）
+
+### 问题诊断（用户观察到"开启门禁后每天采一次 YouTube"）
+
+- [x] 拉取 GitHub Actions 运行历史核实：8/30 开启 `NEWS_COLLECTION_ENABLED` 门禁后，YouTube 采集器实际运行仅 3 次——8/31 18:32 UTC（调度✓）、9/1 15:51 UTC（调度✓但 Test generated data 步骤失败、数据丢弃无批次）、9/2 11:23 UTC（workflow_dispatch 手动补跑，即 PR #15 批次）；其余每日运行均为 X 的每日两次采集。
+- [x] 根因一（调度缺陷）：`0 12 */3 * *` 的日期步进按**月历日**触发（1,4,…,28,31），月末必然出现 31→1 背靠背（约 8 个月/年 + 二月 28→1），"每 3 天"名不副实。
+- [x] 根因二（观感放大）：8/27-9/3 GitHub 调度延迟达 3.5~6.5 小时（平时约 30 分钟），X 两次日采被挤到北京傍晚，Actions 列表看起来像每天在采 YouTube。
+- [x] 根因三（本地干扰）：本地跑 `build-news.js` 默认双平台，YouTube 采集器跟着跑，runtime 文件 `fetched_at` 天天刷新，易误读为调度行为。
+
+### 修复实现（用户拍板：每日 cron + 管线 72h 到期闸，手动采集不影响到期闸）
+
+- [x] [collect-news.yml](.github/workflows/collect-news.yml)：YouTube cron 改为每日 `0 12 * * *`（北京 20:00）；`collection_gate` job 增加 YouTube 到期预检（`isYoutubeDue`，仅 YouTube 调度槽生效，X 槽/手动恒 due），预检不过则 collect job 整体不启动；collect 步骤仅在 `schedule` 触发时传 `--scheduled`；review 分支步骤把 `data/news/runtime/schedule-state.json` 纳入 diff 检查与提交（YouTube 零新候选时它可能是唯一变更，漏提交会导致到期闸失效）。
+- [x] [pipeline-min.js](src/news/min/pipeline-min.js)：新增纯函数 `isYoutubeDue(config, scheduleState, now)`（缺状态/非法时间戳/时钟倒挂均视为到期，宁可多采不可漏采）；`options.scheduled` + `options.scheduleStateIn/Out` 注入点；仅「调度运行 + YouTube 采集 success/partial」写 `schedule-state.json`（not_due/failed/手动/本地一律不写——失败不吞窗口，手动不挤压调度节奏）；未到期时 youtube 槽记 `status: 'not_due'`。
+- [x] [build-news.js](scripts/build-news.js)：解析 `--scheduled` 标志传入 runMin；fixture 模式补齐 `lastRunOut`/`scheduleStateIn/Out` 内存存根（修复 fixture 会覆盖真实 `last-run.json` 的存量问题，冒烟时已实测触碰并还原）。
+- [x] 配置：`news-config-v2.json` `schedule.youtube_cron` → `"0 12 * * *"`，新增 `youtube_interval_hours: 72`；[news-config-v2.说明.md](data/news/config/news-config-v2.说明.md) 同步。
+- [x] 联动：[refresh-vibe-hub-cache.yml](.github/workflows/refresh-vibe-hub-cache.yml) 改每日 `0 11 * * *`（北京 19:00，采集前 1h；缓存全新鲜时零网络，每日触发无额外成本），与到期闸节奏保持对齐。
+- [x] 测试：news-pipeline-min.test.js 新增到期闸 5 组用例（纯函数边界 + 调度跳过/到期写状态/partial 写状态/失败不写/手动不受闸不写状态）。
+
+### 验证结果
+
+- [x] `node --test` 全部相关套件 126/126 通过；`scripts/validate.js` 通过；`--fixture` 冒烟通过且 last-run.json md5 前后一致（fixture 不再触碰真实文件）。
+
+### 已知边界
+
+- [x] 手动 dispatch 采集 YouTube 后，下次调度采集仍按原节奏触发（手动与调度互不影响，用户拍板语义）；两次采集间候选可能短期重叠，由候选层去重兜底。
+- [x] `schedule-state.json` 需随审核 PR 合并进入 main 才生效；若 PR 长期不合并，到期闸按合并前的旧状态判定（保守方向为多采）。
+- [x] 9/1-9/2 三次 "Test generated data" 失败运行属另一问题（测试步骤失败），本次未处理，待后续排查。

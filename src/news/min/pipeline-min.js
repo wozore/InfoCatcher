@@ -34,6 +34,12 @@
  *                                                historyIn()→store，historyOut(store,runId)
  *   options.lastRunOut                           覆盖采集运行记录写盘（签名 lastRunOut(record, runId)，
  *                                                缺省原子写 data/news/runtime/last-run.json；fixture 注入存根）
+ *   options.scheduled                            标记本次为 GitHub Actions 调度触发（CLI 传 --scheduled）。
+ *                                                仅调度运行受 YouTube 到期闸约束并写调度状态；
+ *                                                手动 dispatch / 本地运行不受闸、不写状态（互不影响节奏）。
+ *   options.scheduleStateIn / options.scheduleStateOut  覆盖调度状态读写（签名 minStoreIn/Out 同款：
+ *                                                scheduleStateIn()→state，scheduleStateOut(state, runId)；
+ *                                                缺省读写 data/news/runtime/schedule-state.json）
  *
  * 加平台 = platforms 数组枚举 + options.collectors 注入点：
  *   新增采集平台时，在 platforms 缺省数组枚举该平台，并在 options.collectors 提供对应采集器；
@@ -67,7 +73,7 @@ const { localizeCandidates } = require('../classify/content-localizer');
 const { runPool } = require('../classify/content-reviewer');
 const { dedupeItems, enrichHotspotProjection } = require('../pipeline/projection');
 const { filterProjectionByWindow } = require('../core/news-public-gate');
-const { writeJsonAtomic } = require('../core/news-storage');
+const { readJson, writeJsonAtomic } = require('../core/news-storage');
 const { NEWS_FILES } = require('../../shared/paths');
 const V2_CONFIG_PATH = '../../../data/news/config/news-config-v2.json';
 
@@ -87,6 +93,33 @@ function loadV2Config() {
 /** 热点采集总开关：仅严格布尔 true 启用；缺失或类型错误均安全关闭。 */
 function isCollectionEnabled(config) {
   return config?.collection?.enabled === true;
+}
+
+/** YouTube 调度采集默认最小间隔（小时）；config.schedule.youtube_interval_hours 可覆盖。 */
+const DEFAULT_YOUTUBE_INTERVAL_HOURS = 72;
+
+/**
+ * YouTube 到期判定（纯函数）：距上次「调度触发」的成功采集 ≥ interval 小时才算到期。
+ * 背景：GitHub cron 的日期步进按月历日触发（1,4,…,28,31），月末出现 31→1 背靠背；
+ * 改为每日 cron + 管线内到期闸后，滚动间隔不再受月界与 GitHub 调度延迟影响。
+ * 状态缺失 / 时间戳非法 / 时钟倒挂（未来时间）均视为到期——宁可多采不可漏采。
+ */
+function isYoutubeDue(config, scheduleState, now) {
+  const intervalHours = Math.max(1, Number(config?.schedule?.youtube_interval_hours) || DEFAULT_YOUTUBE_INTERVAL_HOURS);
+  const raw = scheduleState && scheduleState.youtube_last_collected_at;
+  const lastAt = raw ? Date.parse(raw) : NaN;
+  if (!Number.isFinite(lastAt)) return true;
+  const nowMs = normalizeNow(now).getTime();
+  if (lastAt > nowMs) return true;
+  return (nowMs - lastAt) / 3600000 >= intervalHours;
+}
+
+function readScheduleState() {
+  return readJson(NEWS_FILES.scheduleState, null);
+}
+
+function writeScheduleState(state, runId) {
+  writeJsonAtomic(NEWS_FILES.scheduleState, state, runId);
 }
 
 /** 规范化 now：Date / ISO 字符串 / 非法值 → 回退当前时间。 */
@@ -169,7 +202,8 @@ async function runMin(options = {}) {
 
   // ═══════════════════════════════════════════════════════════════
   // 1. 采集：默认并行 YouTube + X（各平台失败降级返回空，不抛错）。
-  //    options.platforms 支持分时采集（如 R1：YouTube 每 3 天 22:00、X 每日 14:00/0:00 分开跑）：
+  //    options.platforms 支持分时采集（YouTube 每日北京 20:00 触发、管线 72h 到期闸
+  //    决定是否真正采集；X 每日 13:00 / 22:00）：
   //    只启动 platforms 列表内平台的采集 Task；未启用平台的 coverage.collectors[platform]
   //    保持初始 { status:'not_run', items:0, error:null }。后续去重/评分/审核/合并/投影
   //    仍跑全链——mergeCandidatesMin 读全量 min-candidates.json，单平台跑也产出完整每日投影。
@@ -181,8 +215,25 @@ async function runMin(options = {}) {
   const xCollector = (options.collectors && options.collectors.x) || collectXV2;
   const xWindow = resolveXWindow(options, now);
 
+  // YouTube 到期闸：仅调度运行生效（options.scheduled 由 CLI --scheduled 注入）。
+  // 手动 dispatch / 本地运行不受闸、也不写调度状态——手动采集与调度节奏互不影响。
+  const scheduledRun = options.scheduled === true;
+  let youtubeDue = true;
+  if (platforms.includes('youtube') && scheduledRun) {
+    let scheduleState = null;
+    try {
+      scheduleState = options.scheduleStateIn ? options.scheduleStateIn() : readScheduleState();
+    } catch (error) {
+      noteError('schedule_state_read', error);
+    }
+    youtubeDue = isYoutubeDue(config, scheduleState, now);
+    if (!youtubeDue) {
+      coverage.collectors.youtube = { status: 'not_due', items: 0, error: null, reason: 'not_due' };
+    }
+  }
+
   const collectTasks = [];
-  if (platforms.includes('youtube')) {
+  if (platforms.includes('youtube') && youtubeDue) {
     collectTasks.push((async () => {
       const slot = coverage.collectors.youtube;
       try {
@@ -225,6 +276,23 @@ async function runMin(options = {}) {
   const collectedArrays = await Promise.all(collectTasks);
   const mergedRaw = collectedArrays.flat();
   coverage.collected_total = mergedRaw.length;
+
+  // 调度状态落盘：仅「调度运行 + YouTube 实际采集（success/partial）」刷新到期基准。
+  // not_due、failed、手动/本地运行一律不写——失败不吞窗口，手动不挤压调度节奏。
+  if (platforms.includes('youtube') && scheduledRun && youtubeDue
+    && ['success', 'partial'].includes(coverage.collectors.youtube.status)) {
+    try {
+      const scheduleState = {
+        schema_version: 1,
+        youtube_last_collected_at: now.toISOString(),
+        run_id: runId,
+      };
+      if (options.scheduleStateOut) options.scheduleStateOut(scheduleState, runId);
+      else writeScheduleState(scheduleState, runId);
+    } catch (error) {
+      noteError('schedule_state_write', error);
+    }
+  }
 
   // ═══════════════════════════════════════════════════════════════
   // 2. 去重（按 platform:native_id）
@@ -330,8 +398,15 @@ async function runMin(options = {}) {
   let kept = [];
   let discarded = [];
   const reviewFn = options.review || applyL1Verdicts;
+  // 本地 Bonsai 初审调优参数（与修复通道 A 对齐）：30s 请求超时 + 描述上下文 1000 字符
+  const reviewOptions = {
+    ...options,
+    config,
+    timeoutMs: options.timeoutMs ?? 30000,
+    maxDescChars: options.maxDescChars ?? 1000,
+  };
   try {
-    const result = await reviewFn(l0Passed, config, { ...options, config });
+    const result = await reviewFn(l0Passed, config, reviewOptions);
     kept = Array.isArray(result.kept) ? result.kept : [];
     discarded = Array.isArray(result.discarded) ? result.discarded : [];
   } catch (error) {
@@ -388,6 +463,35 @@ async function runMin(options = {}) {
     noteError('min_write', error);
   }
   coverage.min_candidates = merged.candidates.length;
+
+  // ═══════════════════════════════════════════════════════════════
+  // 9.1 双通道自愈兜底：可选开启（options.autoRepair=true）
+  //     检测是否有初审/摘要/汉化残缺，自动触发本地+外部并发修复。
+  // ═══════════════════════════════════════════════════════════════
+  if (options.autoRepair === true) {
+    try {
+      const { repairIncompleteCandidates, countRepairWork } = require('./local-enrichment');
+      const repairWork = countRepairWork(merged.candidates, {
+        l2Enabled: config?.review?.l2_enabled !== false,
+      });
+      if (repairWork.hasWork) {
+        const repairOptions = {
+          ...options,
+          writeStore: options.minStoreOut,
+          runId,
+        };
+        const repaired = await repairIncompleteCandidates(merged, config, repairOptions);
+        coverage.repaired = {
+          reviewed: repaired.repairedReview,
+          summarized: repaired.repairedSummary,
+          localized: repaired.repairedLocalize,
+          remaining: repaired.remainingIncomplete,
+        };
+      }
+    } catch (error) {
+      noteError('repair', error);
+    }
+  }
 
   // ═══════════════════════════════════════════════════════════════
   // 9.5 人工审核清单（自动生成）：候选落地后、公开投影前，把 pending 候选
@@ -498,6 +602,7 @@ module.exports = {
   runMin,
   loadV2Config,
   isCollectionEnabled,
+  isYoutubeDue,
   normalizeNow,
   resolveXWindow,
 };

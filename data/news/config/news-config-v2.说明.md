@@ -9,7 +9,8 @@
 
 | 字段 | 默认值 | 说明 |
 |---|---|---|
-| `youtube_cron` | `"0 12 */3 * *"` | YouTube 抓取 cron（UTC 值；意图北京时间每 3 天 20:00 = UTC 12:00）。采集窗口 = 北京当天 0 点 → now |
+| `youtube_cron` | `"0 12 * * *"` | YouTube 抓取 cron（UTC 值；意图北京时间每天 20:00 触发，管线内 72h 到期闸决定是否真正采集）。不用 `*/3` 的原因：`*/3` 是月历日（1,4,…,28,31），月末出现 31→1 背靠背 |
+| `youtube_interval_hours` | `72` | YouTube 两次调度采集的最小间隔（小时）。距上次「调度触发」成功采集不足该间隔 → 当次跳过（`not_due`）。仅调度运行受闸并写状态；手动/本地运行不受闸、不写状态 |
 | `youtube_tz` | `"Asia/Shanghai"` | YouTube 抓取意图时区（北京时间） |
 | `youtube_window_days` | `3` | YouTube 采集窗口天数（回看 N 天内的新视频） |
 | `x_cron_first` | `"0 5 * * *"` | X 第一次抓取 cron（UTC 值；意图北京时间每天 13:00 = UTC 05:00） |

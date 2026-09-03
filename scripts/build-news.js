@@ -6,9 +6,11 @@
  *
  * 用法：
  *   node scripts/build-news.js                        # 热点管线 v2（默认；调 runMin；缺 API key 各平台降级不崩）
- *   node scripts/build-news.js --platforms youtube    # 分时采集：仅跑 YouTube（R1：每 3 天 22:00）
- *   node scripts/build-news.js --platforms x          # 分时采集：仅跑 X（R1：每日 14:00 / 0:00）
+ *   node scripts/build-news.js --platforms youtube    # 分时采集：仅跑 YouTube（每日 20:00 触发，到期闸在管线内）
+ *   node scripts/build-news.js --platforms x          # 分时采集：仅跑 X（每日 13:00 / 22:00）
  *   node scripts/build-news.js --platforms youtube,x  # 双平台采集（默认同缺省）
+ *   node scripts/build-news.js --scheduled            # GitHub Actions 调度触发标记：受 YouTube 72h
+ *                                                     # 到期闸约束并写调度状态；手动/本地运行不加此标志
  *   node scripts/build-news.js --fixture              # 注入 mock 采集器跑通全链（无网络、确定性）
  */
 'use strict';
@@ -26,8 +28,11 @@ loadDotEnv();
 async function mainMin(platforms) {
   const { runMin } = require('../src/news/min/pipeline-min');
   const fixture = process.argv.includes('--fixture');
-  const options = fixture ? buildMinFixtureOptions() : {};
+  const options = fixture ? buildMinFixtureOptions() : { autoRepair: true };
   if (Array.isArray(platforms) && platforms.length) options.platforms = platforms;
+  // --scheduled 仅由 collect-news.yml 的 schedule 触发传入：启用 YouTube 72h 到期闸 +
+  // 允许写调度状态；workflow_dispatch / 本地运行不带此标志（手动与调度节奏互不影响）。
+  if (process.argv.includes('--scheduled')) options.scheduled = true;
   const { coverage, minCandidates, publicItems } = await runMin(options);
   if (coverage.status === 'disabled') {
     console.log('ℹ️ 热点采集已关闭（data/news/config/news-config-v2.json: collection.enabled 未严格设为 true）');
@@ -139,13 +144,16 @@ function buildMinFixtureOptions() {
   };
 
   // 内存存根：fixture 全链验证用，绝不对真实运行时文件落盘
-  // （min-candidates.json / source-history.json 保持未被污染的状态）。
-  // 签名对齐 pipeline-min 注入点：historyIn()/historyOut(store,runId)/
-  // minStoreIn()/minStoreOut(store,runId)。
+  // （min-candidates.json / source-history.json / schedule-state.json / last-run.json
+  // 保持未被污染的状态）。签名对齐 pipeline-min 注入点：historyIn()/historyOut(store,runId)/
+  // minStoreIn()/minStoreOut(store,runId)/scheduleStateIn()/scheduleStateOut(state,runId)/
+  // lastRunOut(record,runId)。
   const memHistory = () => ({ sources: {} });
   const memHistoryOut = () => {};
   const memMin = () => ({ schema_version: 1, updated_at: null, candidates: [] });
   const memMinOut = () => {};
+  const memScheduleState = () => null;
+  const memScheduleStateOut = () => {};
 
   return {
     now,
@@ -158,6 +166,9 @@ function buildMinFixtureOptions() {
     historyOut: memHistoryOut,
     minStoreIn: memMin,
     minStoreOut: memMinOut,
+    scheduleStateIn: memScheduleState,
+    scheduleStateOut: memScheduleStateOut,
+    lastRunOut: memScheduleStateOut,
   };
 }
 
