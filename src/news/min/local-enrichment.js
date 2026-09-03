@@ -22,7 +22,7 @@ const {
   DEFAULT_AUTO_DISCARD_CONFIDENCE,
 } = require('./review-v2');
 const { summarizeCandidates } = require('../classify/content-summarizer');
-const { localizeCandidates, hasLocalizedContent } = require('../classify/content-localizer');
+const { localizeCandidates, hasUsableLocalizedContent } = require('../classify/content-localizer');
 const { runPool } = require('../classify/content-reviewer');
 const { readMinStore, writeMinStore, revisionOfMinStore } = require('./min-store');
 const { getProvider, DEFAULT_PROVIDER_NAME } = require('../../shared/ai-provider-registry');
@@ -37,6 +37,10 @@ function nonNegativeInteger(value, fallback, label) {
     throw new Error(`${label} 必须是有限的非负整数`);
   }
   return number;
+}
+
+function sleepMs(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -126,7 +130,8 @@ function needsLocalize(candidate, locale = 'zh') {
   if (!candidate || typeof candidate !== 'object') return false;
   if (candidate.review_status === 'discarded') return false;
 
-  if (hasLocalizedContent(candidate, locale)) return false;
+  // 可用判定：字段齐全且非"原样复述"假翻译，假翻译必须重新修复
+  if (hasUsableLocalizedContent(candidate, locale)) return false;
 
   const hasSource = Boolean(
     String(candidate.title || '').trim() ||
@@ -393,7 +398,7 @@ function mergeTargetsIntoFreshStore(fresh, targets, options = {}) {
       }
     }
 
-    if (!hasLocalizedContent(candidate, locale) && hasLocalizedContent(ours, locale)) {
+    if (!hasUsableLocalizedContent(candidate, locale) && hasUsableLocalizedContent(ours, locale)) {
       candidate.localizations ||= {};
       candidate.localizations[locale] = ours.localizations[locale];
       candidate.localizations_meta ||= {};
@@ -648,7 +653,7 @@ async function enrichMinCandidates(store, config = {}, options = {}) {
         batchStats.localized += localizeRes?.localized || 0;
         if (force) {
           for (const snap of forceSnapshot) {
-            if (!hasLocalizedContent(snap.item, locale)) {
+            if (!hasUsableLocalizedContent(snap.item, locale)) {
               if (snap.loc !== undefined) {
                 snap.item.localizations ||= {};
                 snap.item.localizations[locale] = snap.loc;
@@ -702,6 +707,8 @@ async function enrichMinCandidates(store, config = {}, options = {}) {
 
 /**
  * 运行单个通道的初审、摘要与翻译处理。
+ * 摘要/翻译首轮后如仍有残缺，延迟 retryDelayMs（默认 5s）后以减半并发自动补做一轮，
+ * 吸收限流、网络抖动等瞬时失败（持久失败交由上层合并语义保持诚实不写）。
  * @param {Array<object>} items - 目标条目副本
  * @param {object} config
  * @param {object} channelOpts
@@ -711,6 +718,7 @@ async function runRepairChannel(items, config, channelOpts) {
   const stats = { reviewed: 0, summarized: 0, localized: 0 };
   const conc = channelOpts.concurrency || 3;
   const locale = channelOpts.locale || 'zh';
+  const retryDelayMs = channelOpts.retryDelayMs ?? 5000;
 
   // 1. 审核：缺 L1 的走完整流程；仅缺 L2 建议的只补建议（不重跑 L1、不改状态）
   if (!channelOpts.skipReview) {
@@ -747,6 +755,8 @@ async function runRepairChannel(items, config, channelOpts) {
   }
 
   // 2. 摘要（仅非 discarded 项；保护只对有效摘要生效，空摘要允许重试）
+  //    仅外部通道（external）在首轮后仍有残缺时延迟重试一轮（减半并发，吸收限流/网络抖动）；
+  //    本地通道失败多为确定性（模型复述/离线），重试无收益只拖时长。
   if (!channelOpts.skipSummary) {
     const summaryTargets = items.filter(c => c.review_status !== 'discarded' && needsSummary(c));
     if (summaryTargets.length > 0) {
@@ -756,10 +766,25 @@ async function runRepairChannel(items, config, channelOpts) {
       } catch {
         /* 隔离异常 */
       }
+      if (channelOpts.external === true && retryDelayMs > 0) {
+        const summaryRetryTargets = summaryTargets.filter(c => needsSummary(c));
+        if (summaryRetryTargets.length > 0) {
+          await sleepMs(retryDelayMs);
+          try {
+            const retryRes = await summarizeCandidates(summaryRetryTargets, {
+              ...channelOpts,
+              concurrency: Math.max(1, Math.floor(conc / 2)),
+            });
+            stats.summarized += retryRes?.summarized || 0;
+          } catch {
+            /* 隔离异常 */
+          }
+        }
+      }
     }
   }
 
-  // 3. 翻译（仅非 discarded 项）
+  // 3. 翻译（仅非 discarded 项）；重试策略同摘要（仅外部通道）
   if (!channelOpts.skipLocalize) {
     const localizeTargets = items.filter(c => {
       if (c.review_status === 'discarded') return false;
@@ -771,6 +796,21 @@ async function runRepairChannel(items, config, channelOpts) {
         stats.localized = res?.localized || 0;
       } catch {
         /* 隔离异常 */
+      }
+      if (channelOpts.external === true && retryDelayMs > 0) {
+        const localizeRetryTargets = localizeTargets.filter(c => needsLocalize(c, locale));
+        if (localizeRetryTargets.length > 0) {
+          await sleepMs(retryDelayMs);
+          try {
+            const retryRes = await localizeCandidates(localizeRetryTargets, {
+              ...channelOpts,
+              concurrency: Math.max(1, Math.floor(conc / 2)),
+            });
+            stats.localized += retryRes?.localized || 0;
+          } catch {
+            /* 隔离异常 */
+          }
+        }
       }
     }
   }
@@ -851,6 +891,7 @@ async function repairIncompleteCandidates(store, config = {}, options = {}) {
     config,
   };
 
+  const externalApiKey = options.apiKeyB || options.apiKey || process.env[externalProviderInfo.apiKeyEnv];
   const channelBOpts = {
     ...options,
     timeoutMs: options.channelB?.timeoutMs ?? 15000,
@@ -858,7 +899,9 @@ async function repairIncompleteCandidates(store, config = {}, options = {}) {
     l2Enabled,
     external: true,
     provider: externalProvider,
-    apiKey: options.apiKeyB || options.apiKey || process.env[externalProviderInfo.apiKeyEnv],
+    apiKey: externalApiKey,
+    // 缺密钥时外部调用必然失败（missing_api_key 非瞬时错误），关闭重试避免无谓延迟
+    retryDelayMs: externalApiKey ? (options.retryDelayMs ?? 5000) : 0,
     fetchImpl: options.fetchImplB || options.fetchImpl,
     reviewCandidate: options.reviewCandidateB || options.reviewCandidate,
     locale,
@@ -944,13 +987,13 @@ async function repairIncompleteCandidates(store, config = {}, options = {}) {
       }
     }
 
-    // ── 本地化翻译合并 ──
-    const hasLocal = hasLocalizedContent(target, locale);
+    // ── 本地化翻译合并（可用判定：原样复述的假翻译不抢占合并结果） ──
+    const hasLocal = hasUsableLocalizedContent(target, locale);
     if (!hasLocal) {
       const aLoc = a.localizations?.[locale];
-      const aLocSuccess = hasLocalizedContent(a, locale);
+      const aLocSuccess = hasUsableLocalizedContent(a, locale);
       const bLoc = b.localizations?.[locale];
-      const bLocSuccess = hasLocalizedContent(b, locale);
+      const bLocSuccess = hasUsableLocalizedContent(b, locale);
 
       if (aLocSuccess) {
         target.localizations ||= {};

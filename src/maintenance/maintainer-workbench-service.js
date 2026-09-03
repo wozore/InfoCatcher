@@ -123,6 +123,10 @@ function createDefaultApis(options = {}) {
         loadDotEnv();
         return minReviewCommand('ai-top', {});
       },
+      repairNews: async (flags = {}) => {
+        loadDotEnv();
+        return minReviewCommand('repair', flags);
+      },
       publish: () => publishNewsProjection(),
     },
     tools: {
@@ -266,15 +270,21 @@ function createMaintainerWorkbenchService(options = {}) {
         return !hasL1 && !hasAdvice;
       });
       if (unreviewed.length > 0) {
+        if (options.autoRepair !== false && typeof news.repairNews === 'function') {
+          Promise.resolve().then(() => news.repairNews({ limit: unreviewed.length })).catch(() => {});
+        }
         return {
           revision: news.revisionOfStore(store()),
           status: 'enriching',
-          message: `本地 Bonsai 正在进行 AI 初审分流与汉化，请稍候...（待初审: ${unreviewed.length} / 待审总数: ${allPending.length}）`,
+          message: `本地 Bonsai 正在进行 AI 初审分流与汉化（已链接外部 API 双通道自愈兜底，请稍候... 待初审: ${unreviewed.length} / 待审总数: ${allPending.length}）`,
           unreviewed_count: unreviewed.length,
           items: [],
         };
       }
       return newsProjection(allPending);
+    },
+    async repairNews(body = {}) {
+      return news.repairNews(body);
     },
     reviewNews(body) {
       const ids = idsOf(body?.ids); const revision = expectedRevision(body);

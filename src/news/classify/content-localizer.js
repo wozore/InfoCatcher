@@ -75,6 +75,43 @@ function hasLocalizedContent(item, locale = 'zh') {
   );
 }
 
+// 假翻译：原文含拉丁字母而 zh 译文不含任何 CJK 字符 → 模型原样复述原文（本地小模型偶发行为）。
+// 判定前剥离 URL（https?://、www. 链接按翻译规则保留原文，纯 URL 描述不应被判假翻译）。
+// 描述侧另设可译文本量阈值：剥离 URL 后拉丁字母 ≤ DESC_ECHO_MIN_LATIN 视为"链接/品牌词清单"
+// （品牌名按规则不译），不判假翻译；整段英文复述（远超阈值）依然会被判出。
+const CJK_CHAR_RE = /[一-鿿]/;
+const STRIP_URL_RE = /\b(?:https?:\/\/|www\.)\S+/gi;
+const DESC_ECHO_MIN_LATIN = 30;
+
+function stripUrls(text) {
+  return String(text || '').replace(STRIP_URL_RE, ' ');
+}
+
+function latinLetterCount(text) {
+  return (String(text || '').match(/[A-Za-z]/g) || []).length;
+}
+
+/**
+ * 可用本地化判定：字段齐全（hasLocalizedContent）且不是"原样复述"的假翻译。
+ * 仅对 zh（CJK 目标语）启用零 CJK 启发式；其他 locale（如 en）不做该判定。
+ * 标题严格判定；描述需超过 DESC_ECHO_MIN_LATIN 才判，避免纯链接/品牌清单被误判导致无限重翻。
+ * 供 enrich/repair 的目标筛选与双通道合并质量门禁使用，防止假翻译抢占合并结果。
+ */
+function hasUsableLocalizedContent(item, locale = 'zh') {
+  const localized = item?.localizations?.[locale];
+  if (!hasLocalizedContent(item, locale)) return false;
+  const expectCJK = String(locale).toLowerCase().startsWith('zh');
+  if (!expectCJK) return true;
+  const source = collectLocalizeSource(item);
+  const srcTitle = stripUrls(source.title);
+  const srcDesc = stripUrls(source.description);
+  const zhTitle = stripUrls(localized.title);
+  const zhDesc = stripUrls(localized.description);
+  if (srcTitle && /[A-Za-z]/.test(srcTitle) && zhTitle && !CJK_CHAR_RE.test(zhTitle)) return false;
+  if (srcDesc && latinLetterCount(srcDesc) > DESC_ECHO_MIN_LATIN && zhDesc && !CJK_CHAR_RE.test(zhDesc)) return false;
+  return true;
+}
+
 /**
  * 对单条候选做本地化翻译（suggestion 模式，不改入参，返回建议对象）。
  * 无素材 / LLM 失败 → title/description 置 null（诚实不误杀，前端回退原文）。
@@ -155,7 +192,7 @@ async function localizeCandidates(items, options = {}) {
   source.forEach((item, index) => {
     const src = item ? collectLocalizeSource(item) : null;
     const hasSource = Boolean(src && (src.title || src.description));
-    const hasExisting = hasLocalizedContent(item, locale);
+    const hasExisting = hasUsableLocalizedContent(item, locale);
     if (!item || !hasSource || hasExisting) {
       skipped++;
       out[index] = item;
@@ -226,6 +263,7 @@ module.exports = {
   runPool,
   collectLocalizeSource,
   hasLocalizedContent,
+  hasUsableLocalizedContent,
   localizeCandidate,
   localizeCandidates,
   enrichCandidateLocalizations,

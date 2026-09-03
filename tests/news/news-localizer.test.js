@@ -27,6 +27,7 @@ const {
 } = require('../../src/news/classify/llm-provider');
 const {
   collectLocalizeSource,
+  hasUsableLocalizedContent,
   localizeCandidate,
   localizeCandidates,
   enrichCandidateLocalizations,
@@ -65,7 +66,7 @@ test('buildLocalizePayload 裁剪标题/描述并替换占位符', () => {
   assert.ok(!user.includes('d'.repeat(700)));
   assert.equal(payload.temperature, 0);
   assert.equal(payload.stream, false);
-  assert.equal(payload.max_tokens, 400);
+  assert.equal(payload.max_tokens, 800);
 });
 
 test('buildLocalizePayload 缺素材时占位符填空', () => {
@@ -75,6 +76,43 @@ test('buildLocalizePayload 缺素材时占位符填空', () => {
 });
 
 // ── 第 2 组：normalizeLocalization 容错 ─────────────
+
+test('hasUsableLocalizedContent：真中文通过，原样复述英文判为假翻译', () => {
+  // 真翻译 → 可用
+  assert.equal(hasUsableLocalizedContent({
+    title: 'Hello World',
+    localizations: { zh: { title: '你好世界' } },
+  }), true);
+  // 字段齐全但零 CJK（原样复述）→ 假翻译不可用
+  assert.equal(hasUsableLocalizedContent({
+    title: 'Hello World',
+    localizations: { zh: { title: 'Hello World' } },
+  }), false);
+  // 描述假翻译同样不可用（超过可译文本量阈值的整段英文复述）
+  assert.equal(hasUsableLocalizedContent({
+    title: '标题',
+    description: 'Some English description here with plenty of translatable prose that must be translated into Chinese',
+    localizations: { zh: { title: '中文标题', description: 'Some English description here with plenty of translatable prose that must be translated into Chinese' } },
+  }), false);
+  // 描述剥离 URL 后仅剩少量品牌词（≤阈值）→ 不判假翻译，避免无限重翻
+  assert.equal(hasUsableLocalizedContent({
+    title: 'Show announcement',
+    description: 'Spotify - https://open.spotify.com/show/1KkKuQe82tf1bW78ReQ0wM\nApple Podcasts - https://podcasts.apple.com/us/podcast/el',
+    localizations: { zh: { title: '节目公告', description: 'Spotify - https://open.spotify.com/show/1KkKuQe82tf1bW78ReQ0wM\nApple Podcasts - https://podcasts.apple.com/us/podcast/el' } },
+  }), true);
+  // 原文本身是中文（无拉丁字母）→ zh 与原文相同不算假翻译
+  assert.equal(hasUsableLocalizedContent({
+    title: '纯中文标题',
+    localizations: { zh: { title: '纯中文标题' } },
+  }), true);
+  // 非 zh 目标语不做零 CJK 判定
+  assert.equal(hasUsableLocalizedContent({
+    title: 'Hello',
+    localizations: { en: { title: 'Hello' } },
+  }, 'en'), true);
+  // 字段缺失仍不可用
+  assert.equal(hasUsableLocalizedContent({ title: 'Hello' }), false);
+});
 
 test('normalizeLocalization 解析标准 JSON', () => {
   const parsed = normalizeLocalization('{"title":"中文标题","description":"中文描述"}');

@@ -298,8 +298,9 @@ const REVIEW_USER_PROMPT_TEMPLATE = `请为下面这条 AI 资讯做初步审核
 // 内容本地化（翻译）相关常量（content-localizer.js 使用）
 // ═══════════════════════════════════════════════════════════════
 
-// 翻译输出上限（token）：标题 + 描述翻译，中量。
-const LOCALIZE_MAX_TOKENS = 400;
+// 翻译输出上限（token）：标题 + 描述翻译。600 字符长描述的中文输出会超过 400 token
+// 导致 JSON 截断解析失败（实测 19 条顽固缺翻译的根因），800 给足余量。
+const LOCALIZE_MAX_TOKENS = 800;
 
 // 系统提示：强制输出 JSON，禁止解释/多余文字。
 const LOCALIZE_SYSTEM_PROMPT = '你是资深 AI 资讯翻译。把给定的热点资讯标题与描述翻译成简体中文。只输出一个 JSON 对象，不要输出任何其他文字、代码块标记或 JSON 外的内容。';
@@ -428,9 +429,9 @@ async function classifyWithDeepSeek(item, options = {}) {
  */
 function buildSummaryPayload(item, model = LOCAL_MODEL, options = {}) {
   const maxDesc = (typeof options === 'number' ? options : options?.maxDescChars) ?? DESC_MAX;
-  const title = String(item.title || '').slice(0, TITLE_MAX);
-  const description = String(item.description || '').slice(0, maxDesc);
-  const transcript = String(item.transcript || '')
+  const title = sanitizeSurrogates(String(item.title || '')).slice(0, TITLE_MAX);
+  const description = sanitizeSurrogates(String(item.description || '')).slice(0, maxDesc);
+  const transcript = sanitizeSurrogates(String(item.transcript || ''))
     .replace(/\s+/g, ' ')
     .trim()
     .slice(0, SUMMARY_MAX_TRANSCRIPT_CHARS);
@@ -736,8 +737,8 @@ async function reviewWithExternalDeepSeek(item, options = {}) {
  */
 function buildLocalizePayload(item, model = LOCAL_MODEL, options = {}) {
   const maxDesc = (typeof options === 'number' ? options : options?.maxDescChars) ?? DESC_MAX;
-  const title = String(item.title || '').slice(0, TITLE_MAX);
-  const description = String(item.description || '').slice(0, maxDesc);
+  const title = sanitizeSurrogates(String(item.title || '')).slice(0, TITLE_MAX);
+  const description = sanitizeSurrogates(String(item.description || '')).slice(0, maxDesc);
   const prompt = LOCALIZE_USER_PROMPT_TEMPLATE
     .replace('{title}', title || '（无标题）')
     .replace('{description}', description || '（无描述）');

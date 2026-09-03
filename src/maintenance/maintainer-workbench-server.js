@@ -120,6 +120,7 @@ function createMaintainerWorkbenchServer(options = {}) {
         else if (method === 'POST' && route === '/workbench/clear') result = service.clearWorkspace();
         else if (method === 'GET' && route === '/news/review') result = service.newsReview();
         else if (method === 'POST' && route === '/news/review') result = service.reviewNews(body);
+        else if (method === 'POST' && route === '/news/repair') result = service.repairNews(body);
         else if (method === 'GET' && route === '/news/keywords') result = service.keywords();
         else if (method === 'POST' && route === '/news/keywords/generate') result = service.generateKeywords();
         else if (method === 'POST' && route === '/news/keywords') result = service.applyKeywords(body);

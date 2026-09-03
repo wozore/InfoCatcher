@@ -67,6 +67,12 @@ test('needsLocalize：非 discarded 且无对应语言翻译且有素材的条�
     title: 'Title',
     localizations: { zh: { title: '中文标题', description: '中文描述' } },
   }), false);
+  // 假翻译（原样复述英文）不算已本地化，必须重新修复
+  assert.equal(needsLocalize({
+    review_status: 'pending',
+    title: 'Title',
+    localizations: { zh: { title: 'Title', description: 'Echo description' } },
+  }), true);
   assert.equal(needsLocalize({
     review_status: 'approved',
     description: 'English description',
@@ -82,7 +88,7 @@ test('countEnrichmentWork：准确统计各项待处理工作量并支持过滤�
       review_status: 'approved',
       title: 'T3',
       summary: 'S3',
-      localizations: { zh: { title: 'ZH' } },
+      localizations: { zh: { title: '中文标题' } },
     }, // 不需要任何处理
     {
       id: '4',
@@ -430,14 +436,14 @@ test('needsRepair 与 countRepairWork：准确识别残缺项并统计', () => {
       review_status: 'approved',
       title: 'T3',
       summary: '',
-      localizations: { zh: { title: 'ZH' } },
+      localizations: { zh: { title: '中文标题' } },
     }, // 缺 summary
     {
       id: '4',
       review_status: 'approved',
       title: 'T4',
       summary: 'S4',
-      localizations: { zh: { title: 'ZH' } },
+      localizations: { zh: { title: '中文标题' } },
     }, // 完整
   ];
 
@@ -539,6 +545,130 @@ test('repairIncompleteCandidates：零成本优先与本地失败回退外部', 
   // discarded 项绝不吸纳摘要与翻译修复
   assert.equal(candidates[1].summary, undefined);
   assert.equal(candidates[1].localizations, undefined);
+});
+
+test('repairIncompleteCandidates：本地通道假翻译不抢占外部真翻译', async () => {
+  // 通道 A（本地）返回"原样复述英文"的假翻译；通道 B（外部）返回真中文。
+  // 合并质量门禁必须让 B 的真翻译胜出，绝不允许假翻译抢占合并结果。
+  const candidates = [
+    { id: 'c1', review_status: 'pending', title: 'Echo Title', description: 'Echo description' },
+  ];
+  const store = { schema_version: 1, updated_at: null, candidates };
+
+  const fetchImplA = async () => ({
+    ok: true,
+    status: 200,
+    json: async () => ({
+      choices: [{
+        message: {
+          content: JSON.stringify({
+            summary: '回声摘要',
+            key_points: ['要点'],
+            title: 'Echo Title',          // 假翻译：原样复述
+            description: 'Echo description',
+          }),
+        },
+      }],
+    }),
+  });
+  const reviewCandidateA = async () => ({ verdict: 'hold', confidence: 0.5, reasons: ['本地挂起'] });
+
+  const fetchImplB = async () => ({
+    ok: true,
+    status: 200,
+    json: async () => ({
+      choices: [{
+        message: {
+          content: JSON.stringify({
+            summary: '外部真摘要',
+            key_points: ['要点'],
+            title: '外部真翻译标题',
+            description: '外部真翻译描述',
+          }),
+        },
+      }],
+    }),
+  });
+  const reviewCandidateB = async () => ({ verdict: 'hold', confidence: 0.5, reasons: ['外部挂起'] });
+
+  const originalKey = process.env.ZHIPU_API_KEY;
+  process.env.ZHIPU_API_KEY = 'secret-test-key';
+  let result;
+  try {
+    result = await repairIncompleteCandidates(store, {}, {
+      fetchImplA,
+      fetchImplB,
+      reviewCandidateA,
+      reviewCandidateB,
+      writeStore: () => {},
+    });
+  } finally {
+    if (originalKey === undefined) delete process.env.ZHIPU_API_KEY;
+    else process.env.ZHIPU_API_KEY = originalKey;
+  }
+
+  assert.equal(result.totalTargets, 1);
+  // 本地 A 的假翻译不得抢占；必须采纳外部 B 的真中文
+  assert.equal(candidates[0].localizations?.zh?.title, '外部真翻译标题');
+  assert.equal(candidates[0].localizations?.zh?.description, '外部真翻译描述');
+});
+
+test('repairIncompleteCandidates：瞬时失败自动延迟重试（限流自愈）', async () => {
+  // 外部 B 通道首次调用返回 429 失败，延迟重试后成功 → 条目仍应被修复
+  const candidates = [
+    { id: 'c1', review_status: 'pending', title: 'Rate limited title', description: 'Rate limited description' },
+  ];
+  const store = { schema_version: 1, updated_at: null, candidates };
+
+  const reviewCandidateA = async () => ({ verdict: null, confidence: 0, reasons: [], llm_error: 'local_failed' });
+  const reviewCandidateB = async () => ({ verdict: 'hold', confidence: 0.5, reasons: ['外部挂起'] });
+
+  let bLocalizeCalls = 0;
+  const fetchImplB = async () => {
+    bLocalizeCalls += 1;
+    if (bLocalizeCalls === 1) {
+      return { ok: false, status: 429, json: async () => ({ error: 'rate_limited' }) };
+    }
+    return {
+      ok: true,
+      status: 200,
+      json: async () => ({
+        choices: [{
+          message: {
+            content: JSON.stringify({
+              summary: '重试后摘要',
+              key_points: ['要点'],
+              title: '重试后真翻译',
+              description: '重试后真描述',
+            }),
+          },
+        }],
+      }),
+    };
+  };
+
+  const originalKey = process.env.ZHIPU_API_KEY;
+  process.env.ZHIPU_API_KEY = 'secret-test-key';
+  let result;
+  try {
+    result = await repairIncompleteCandidates(store, {}, {
+      fetchImplA: async () => { throw new Error('local_offline'); },
+      fetchImplB,
+      reviewCandidateA,
+      reviewCandidateB,
+      channelB: { concurrency: 1 },
+      retryDelayMs: 1,
+      writeStore: () => {},
+    });
+  } finally {
+    if (originalKey === undefined) delete process.env.ZHIPU_API_KEY;
+    else process.env.ZHIPU_API_KEY = originalKey;
+  }
+
+  assert.ok(bLocalizeCalls >= 2, '外部通道至少调用两次（首轮 + 重试）');
+  assert.equal(candidates[0].localizations?.zh?.title, '重试后真翻译');
+  assert.equal(candidates[0].summary, '重试后摘要');
+  assert.equal(result.repairedLocalize, 1);
 });
 
 test('repairIncompleteCandidates：显式跳过阶段时不重新纳入对应残缺项', async () => {
