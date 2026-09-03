@@ -4,15 +4,15 @@
     "openrouter": {
       "interval_hours": 48,
       "full_every": 10,
-      "count": 5,
-      "last_run": "2026-08-30T23:28:08.255Z",
+      "count": 6,
+      "last_run": "2026-09-02T23:17:56.700Z",
       "url": "https://openrouter.ai/api/v1/models"
     },
     "lmarena": {
       "interval_hours": 48,
       "full_every": 10,
-      "count": 4,
-      "last_run": "2026-08-30T23:28:25.257Z"
+      "count": 5,
+      "last_run": "2026-09-02T23:18:12.865Z"
     },
     "livebench": {
       "interval_hours": 720,
