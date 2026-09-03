@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-03T12:26:51.543Z",
+  "updated_at": "2026-09-03T17:24:51.252Z",
   "candidates": [
     {
       "id": "youtube-86e7a00b9c57b74debe6",
@@ -223463,6 +223463,41 @@
         "replies": 88
       },
       "explicit_links": [],
+      "content_type": null,
+      "comments": [],
+      "review_status": "discarded",
+      "discard_stage": "l0",
+      "discard_reason": "not_ai",
+      "l1_review": null,
+      "ai_advice": null,
+      "top_selected": false
+    },
+    {
+      "id": "x-d791953be2a8d89b0309",
+      "platform": "x",
+      "native_id": "2095562001296572869",
+      "source_type": "x_post",
+      "url": "https://x.com/cohere/status/2095562001296572869",
+      "title": "https://t.co/rA95OAXO8t",
+      "description": "https://t.co/rA95OAXO8t",
+      "published_at": "2026-09-03T17:18:09.000Z",
+      "fetched_at": "2026-09-03T17:24:29.055Z",
+      "author_id": "x-72e8088a05b38ae3cffb",
+      "author_name": "Cohere",
+      "source_id": "x-72e8088a05b38ae3cffb",
+      "language": "zxx",
+      "source_tags": [],
+      "thumbnail": "https://pbs.twimg.com/media/HRTuCZmWcAI0kE7.jpg",
+      "metrics": {
+        "views": 888,
+        "likes": 14,
+        "comments": null,
+        "reposts": 1,
+        "replies": 2
+      },
+      "explicit_links": [
+        "https://t.co/rA95OAXO8t"
+      ],
       "content_type": null,
       "comments": [],
       "review_status": "discarded",
