@@ -13,7 +13,7 @@
  * 无日期者保守保留并进入诊断清单。
  */
 
-const { slugify } = require('./model-identity');
+const { slugify } = require('../identity/model-identity');
 
 const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const ALLOWED_KINDS = new Set(['api_model', 'product_variant']);

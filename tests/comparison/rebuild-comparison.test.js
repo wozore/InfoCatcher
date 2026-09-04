@@ -13,10 +13,10 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
 
-const { rebuildIntegrated, buildAliasMap, lmarenaParse, livebenchParse, openrouterCanonical, llmStatsCanonical, cleanModelDisplay, themeOfDimensions } = require('../../src/comparison/rebuild-comparison');
-const { parseCsv, aggregateGroups } = require('../../src/comparison/fetch-livebench');
-const { extractFlightChunks, extractInitialData } = require('../../src/comparison/fetch-llm-stats');
-const { validateLmarenaSnapshot, normalizeLmarena, normalizeIndex } = require('../../src/comparison/compare-schema');
+const { rebuildIntegrated, buildAliasMap, lmarenaParse, livebenchParse, openrouterCanonical, llmStatsCanonical, cleanModelDisplay, themeOfDimensions } = require('../../src/comparison/core/rebuild-comparison');
+const { parseCsv, aggregateGroups } = require('../../src/comparison/fetch/fetch-livebench');
+const { extractFlightChunks, extractInitialData } = require('../../src/comparison/fetch/fetch-llm-stats');
+const { validateLmarenaSnapshot, normalizeLmarena, normalizeIndex } = require('../../src/comparison/core/compare-schema');
 
 const FIXTURES = path.join(__dirname, 'fixtures', 'raw');
 const readFixture = name => JSON.parse(fs.readFileSync(path.join(FIXTURES, name), 'utf8'));

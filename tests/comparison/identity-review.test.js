@@ -7,8 +7,8 @@ const {
   collectReviewCandidates,
   shouldEscalate,
   reviewCandidates,
-} = require('../../src/comparison/identity-review');
-const { suggestIdentityReview } = require('../../src/comparison/identity-review-ai');
+} = require('../../src/comparison/identity/identity-review');
+const { suggestIdentityReview } = require('../../src/comparison/identity/identity-review-ai');
 
 const registry = { schema_version: 2, entries: [] };
 

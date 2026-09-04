@@ -11,8 +11,8 @@
  */
 
 const { fetchJson } = require('./compare-http');
-const { LMARENA_CONFIGS, validateLmarenaSnapshot } = require('./compare-schema');
-const { writeRawSnapshot } = require('./compare-store');
+const { LMARENA_CONFIGS, validateLmarenaSnapshot } = require('../core/compare-schema');
+const { writeRawSnapshot } = require('../core/compare-store');
 
 const ROWS_API_BASE = 'https://datasets-server.huggingface.co/rows';
 const DATASET = 'lmarena-ai/leaderboard-dataset';

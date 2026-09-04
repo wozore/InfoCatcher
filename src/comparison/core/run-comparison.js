@@ -3,22 +3,22 @@
 /**
  * run-comparison.js — 模型对比抓取编排（cron 每日调用）
  *
- * 每源独立计数全量 + 失败隔离（单源失败 WARN 不阻塞其余源）+ 全绿才重建。
- *   到间隔即抓 → count+1；count 达 full_every 该次升级为全量（归 0）。
- *   手动单跑（manual=true）不计 count。
+ * 每源独立计数全量 + 失败隔离（单源失败不阻塞其余源）+ 全绿才重建。
+ * 到间隔即抓 → count+1；count 达 full_every 该次升级为全量（归 0）。
+ * 手动单跑（manual=true）不计 count。
  * 全绿判定：4 源 raw 快照都存在且 fetched_at 距今 ≤ 各自 interval_hours；
- *   任一源未就绪 → 停住不重建，列出待修源。
+ * 任一源未就绪 → 停住不重建，列出待修源。
  */
 
 const fs = require('fs');
-const { COMPARISON_FILES } = require('../shared/paths');
+const { COMPARISON_FILES } = require('../../shared/paths');
 const { readRawSnapshot, writeJsonAtomic } = require('./compare-store');
-const { fetchOpenRouter } = require('./fetch-openrouter');
-const { fetchLmarena } = require('./fetch-lmarena');
-const { fetchLivebench } = require('./fetch-livebench');
-const { fetchLlmStats } = require('./fetch-llm-stats');
+const { fetchOpenRouter } = require('../fetch/fetch-openrouter');
+const { fetchLmarena } = require('../fetch/fetch-lmarena');
+const { fetchLivebench } = require('../fetch/fetch-livebench');
+const { fetchLlmStats } = require('../fetch/fetch-llm-stats');
 const { rebuildIntegrated } = require('./rebuild-comparison');
-const { advanceRetentionToNow } = require('../shared/retention');
+const { advanceRetentionToNow } = require('../../shared/retention');
 
 const SOURCE_ORDER = ['openrouter', 'lmarena', 'livebench', 'llm_stats'];
 
@@ -78,7 +78,6 @@ async function runComparison(options = {}) {
   // 每月初幂等推进共享 retention（cutoff = 当前年月 − 14 个月），漏跑自愈 snap 到正确目标；
   // 经 src/shared/retention.js 唯一写入口，写失败降级沿用旧 cutoff 不中断。
   const retention = advanceRetentionToNow();
-  if (!retention.ok) console.warn('⚠️ retention 推进写失败（沿用当前 cutoff）：', retention.error);
   const cutoffDate = retention.cutoff_date;
 
   for (const source of SOURCE_ORDER) {
@@ -100,7 +99,6 @@ async function runComparison(options = {}) {
     } else {
       summary.failed.push(source);
       summary.errors[source] = result.errors || [];
-      console.warn(`⚠️  ${source} 抓取失败：${(result.errors || []).join('; ')}`);
     }
   }
 
@@ -108,15 +106,12 @@ async function runComparison(options = {}) {
   const pending = SOURCE_ORDER.filter(source => !isFresh(source, config.sources[source]));
   if (pending.length) {
     summary.pending = pending;
-    console.warn(`⏸️  重建跳过：以下源未就绪（${pending.join(', ')}），修复后自动继续`);
   } else if (!options.skipRebuild) {
     const rebuild = rebuildIntegrated({ cutoffDate });
     if (rebuild.ok) {
       summary.rebuilt = true;
-      console.log(`✅ integrated 重建完成：${rebuild.models.length} 个模型`);
     } else {
       summary.errors.rebuild = rebuild.errors;
-      console.warn(`❌ integrated 重建失败：${rebuild.errors.join('; ')}`);
     }
   }
   return summary;

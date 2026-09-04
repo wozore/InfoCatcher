@@ -10,8 +10,8 @@
  */
 
 const { fetchText } = require('./compare-http');
-const { LLM_STATS_FIELDS, validateRowProjection } = require('./compare-schema');
-const { writeRawSnapshot } = require('./compare-store');
+const { LLM_STATS_FIELDS, validateRowProjection } = require('../core/compare-schema');
+const { writeRawSnapshot } = require('../core/compare-store');
 
 const PAGE_URL = 'https://llm-stats.com/leaderboards/open-llm-leaderboard';
 const MARKER = 'self.__next_f.push([1,';

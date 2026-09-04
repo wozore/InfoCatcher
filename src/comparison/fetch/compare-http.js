@@ -34,7 +34,6 @@ async function fetchText(url, options = {}) {
       });
       clearTimeout(timer);
       if (response.status === 429) {
-        // 限速：按 attempt 指数退避，最后一次仍 429 才放弃
         lastError = new Error('HTTP 429');
         if (attempt < retries) await new Promise(resolve => setTimeout(resolve, 6000 * (attempt + 1)));
         continue;

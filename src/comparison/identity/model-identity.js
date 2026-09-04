@@ -304,22 +304,13 @@ function normalizedDisplayKey(value) {
 
 module.exports = {
   SOURCE_KEYS,
-  OFFERING_SUFFIXES,
-  DEGREE_SUFFIXES,
   slugify,
   normalizeVendor,
-  inferVendorFromIdentity,
-  vendorAliasesOf,
-  extractRevision,
   stripRevision,
   normalizeVersionSeparators,
   removeTerminalOfferings,
-  removeTerminalDegree,
-  degreeOf,
   parseModelNameMetadata,
-  aliasMapOf,
   createModelIdentityResolver,
   resolveModelIdentity,
   normalizedDisplayKey,
-  toWords,
 };
