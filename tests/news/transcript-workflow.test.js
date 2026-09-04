@@ -6,6 +6,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const { createMinStore, revisionOfMinStore } = require('../../src/news/min/min-store');
+const { AI_PROTOCOLS, DEFAULT_PROVIDER_NAME, getProvider } = require('../../src/shared/ai-provider-registry');
 const {
   safeTranscriptFile,
   uploadTranscript,
@@ -98,7 +99,11 @@ test('summarizeTranscripts 需成本确认并调用外部 AI 写回 summary', as
   const revision = revisionOfMinStore(store);
   let written = null;
   await assert.rejects(() => summarizeTranscripts(['yt-1'], { store, expectedRevision: revision }), /成本确认/);
-  const fetchImpl = async () => localResponse({ summary: '基于字幕的中文总结', key_points: ['要点一', '要点二'] });
+  let requestedEndpoint = '';
+  const fetchImpl = async (endpoint) => {
+    requestedEndpoint = String(endpoint);
+    return localResponse({ summary: '基于字幕的中文总结', key_points: ['要点一', '要点二'] });
+  };
   const result = await summarizeTranscripts(['yt-1'], {
     store,
     expectedRevision: revision,
@@ -110,6 +115,8 @@ test('summarizeTranscripts 需成本确认并调用外部 AI 写回 summary', as
   assert.equal(result.ok, true);
   assert.equal(result.summarized.length, 1);
   assert.equal(result.summarized[0].summary, '基于字幕的中文总结');
+  const defaultProvider = getProvider(DEFAULT_PROVIDER_NAME);
+  assert.equal(requestedEndpoint, defaultProvider.protocol === AI_PROTOCOLS.MESSAGES ? defaultProvider.messagesEndpoint : defaultProvider.responsesEndpoint);
   assert.ok(written.candidates.find(c => c.id === 'yt-1').summary.includes('基于字幕'));
   assert.ok(written.candidates.find(c => c.id === 'yt-1').transcript_summarized_at);
   fs.rmSync(base, { recursive: true, force: true });
@@ -140,7 +147,7 @@ test('summarizeTranscripts 多条成功总结在一次 revision 门禁提交中�
   assert.equal(written.candidates.find(c => c.id === 'yt-2').summary, '总结 2');
 });
 
-test('summarizeTranscripts 使用外部 Responses 返回并限制为 2 并发', async () => {
+test('summarizeTranscripts 使用外部默认 provider 返回并限制为 2 并发', async () => {
   const store = approvedStore();
   const first = store.candidates.find(c => c.id === 'yt-1');
   first.transcript = 'transcript one';

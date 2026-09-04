@@ -83,10 +83,13 @@ function startLocalServer(spawnImpl = spawn) {
     return { started: false, error: `本地模型自动启动当前仅支持 Windows（脚本：${LOCAL_MODEL_SCRIPT}）` };
   }
   try {
+    // Windows 下禁用 detached：它映射 DETACHED_PROCESS，控制台程序（powershell.exe）
+    // 拿不到控制台会静默瞬间退出（实测 exit 0），启动脚本根本不会执行。
+    // Windows 子进程本就不随父进程退出而终止，unref 即可实现独立存活。
     const child = spawnImpl(
       'powershell.exe',
       ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', LOCAL_MODEL_SCRIPT],
-      { detached: true, stdio: 'ignore', windowsHide: true },
+      { detached: process.platform !== 'win32', stdio: 'ignore', windowsHide: true },
     );
     child.unref();
     return { started: true };

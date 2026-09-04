@@ -223,13 +223,24 @@ function cleanGeneratorOptionsForToken(options = {}) {
   };
 }
 
+// resuming 是恢复过程中的瞬态：本进程在途则拒绝重复恢复；进程重启遗留的孤儿
+// resuming（磁盘 state 卡死）按可恢复处理，否则该 Draft 将永久 DRAFT_RECOVERY_FORBIDDEN。
+function recoveryEntryBlocked(draftId, state) {
+  if (['preview_blocked', 'failed_retryable'].includes(state)) return null;
+  if (state === 'resuming') {
+    return activeDraftResumes.has(draftId) ? { ok: false, code: 'DRAFT_RECOVERY_IN_PROGRESS', state } : null;
+  }
+  return { ok: false, code: 'DRAFT_RECOVERY_FORBIDDEN', state };
+}
+
 function recoveryPlanForDraft(draftId, input = {}) {
   const draft = readDraft(draftId);
   if (draft.schema_version !== 3) return { ok: false, code: 'DRAFT_SCHEMA_UNSUPPORTED' };
   const current = loadCatalogSnapshot();
   if (String(input.expectedRevision || '') !== current.revision) return { ok: false, code: 'REVISION_CONFLICT', currentRevision: current.revision };
   if (draft.base_revision !== current.revision) return { ok: false, code: 'REVISION_CONFLICT', currentRevision: current.revision, baseRevision: draft.base_revision };
-  if (!['preview_blocked', 'failed_retryable'].includes(draft.state)) return { ok: false, code: 'DRAFT_RECOVERY_FORBIDDEN', state: draft.state };
+  const blocked = recoveryEntryBlocked(draftId, draft.state);
+  if (blocked) return blocked;
   const recovery = draftRecoveryOf(draft);
   if (recovery.recovery_kind === 'manual_required') return { ok: false, code: 'DRAFT_RECOVERY_FORBIDDEN', recovery_kind: recovery.recovery_kind };
   const tokenOptions = cleanGeneratorOptionsForToken(input.generatorOptions || {});
@@ -270,7 +281,9 @@ async function resumeCatalogDraftImpl(draftId, options = {}) {
   const normalized = normalizeGeneratorOptions(options);
   const previous = readDraft(draftId);
   if (previous.schema_version !== 3) return { ok: false, code: 'DRAFT_SCHEMA_UNSUPPORTED', error: '旧 schema Draft 不能 resume' };
-  if (!['preview_blocked', 'failed_retryable'].includes(previous.state)) return { ok: false, code: 'DRAFT_RECOVERY_FORBIDDEN', state: previous.state };
+  // 经由 resumeCatalogDraft 进入时 activeDraftResumes 已排除本进程在途恢复，
+  // 此处 resuming 只可能是进程重启遗留的孤儿状态，允许再次恢复。
+  if (!['preview_blocked', 'failed_retryable', 'resuming'].includes(previous.state)) return { ok: false, code: 'DRAFT_RECOVERY_FORBIDDEN', state: previous.state };
   if (normalized.confirmCost !== true) return {
     ok: false,
     code: 'COST_CONFIRMATION_REQUIRED',

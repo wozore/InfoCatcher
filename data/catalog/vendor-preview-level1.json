@@ -55,6 +55,10 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:openai:gpt-5-6"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:openai:gpt-6"
         }
       ]
     },
@@ -145,6 +149,10 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:google:gemini-3-5-pro"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:google:gemini-3-8-flash"
         }
       ]
     },
@@ -219,6 +227,10 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:zhipu:glm"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:zhipu:glm-5-3-flash"
         }
       ]
     },
@@ -543,6 +555,14 @@
         {
           "kind": "vendor-level2",
           "id": "vendor-level2:alibaba:qwen3-7-max"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:alibaba:qwen-3-8-flash"
+        },
+        {
+          "kind": "vendor-level2",
+          "id": "vendor-level2:alibaba:qwen3-8-flash"
         }
       ]
     },

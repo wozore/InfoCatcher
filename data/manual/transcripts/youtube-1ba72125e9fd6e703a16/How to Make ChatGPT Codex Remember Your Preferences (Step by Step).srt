@@ -1,0 +1,135 @@
+1
+00:00:00,180 --> 00:00:04,019
+Tired of telling Codex, "Use this style, do it this way,"
+
+2
+00:00:04,080 --> 00:00:05,270
+at the start of every chat?
+
+3
+00:00:05,700 --> 00:00:09,450
+Here's how to make Codex remember your preferences permanently with one file,
+
+4
+00:00:10,460 --> 00:00:12,560
+so it gets it right without you repeating yourself.
+
+5
+00:00:13,040 --> 00:00:15,280
+So say Codex just made this for me.
+
+6
+00:00:15,400 --> 00:00:18,460
+I like how it turned out, this layout, this style.
+
+7
+00:00:19,120 --> 00:00:22,160
+Normally, I'd have to describe this all over again next time,
+
+8
+00:00:22,180 --> 00:00:25,020
+but instead, I'm just going to tell it to remember it.
+
+9
+00:00:25,120 --> 00:00:29,040
+From now on, whenever I ask for a landing page and I don't specify styling,
+
+10
+00:00:29,480 --> 00:00:32,460
+please use this exact format and style.
+
+11
+00:00:33,000 --> 00:00:34,340
+Remember this going forward.
+
+12
+00:00:34,420 --> 00:00:35,075
+That's it.
+
+13
+00:00:35,160 --> 00:00:37,610
+I just told it, "Remember this going forward."
+
+14
+00:00:38,010 --> 00:00:39,760
+And what it's actually doing behind the scenes,
+
+15
+00:00:40,200 --> 00:00:44,680
+it's writing this into a file on your computer called agents.md.
+
+16
+00:00:45,480 --> 00:00:47,269
+That's your manual memory file.
+
+17
+00:00:47,740 --> 00:00:50,500
+Anything you specifically ask it to remember goes in here.
+
+18
+00:00:51,100 --> 00:00:54,320
+Now, let's paste another prompt to open the agents.md.
+
+19
+00:00:55,140 --> 00:00:58,880
+Open the agents.md file for this project and show me what's in it.
+
+20
+00:00:59,620 --> 00:01:00,820
+See that?
+
+21
+00:01:00,860 --> 00:01:05,150
+It literally wrote down what I like, the format, the style, everything,
+
+22
+00:01:05,560 --> 00:01:08,280
+in plain text right here in this file.
+
+23
+00:01:08,780 --> 00:01:09,840
+And here's the best part.
+
+24
+00:01:10,340 --> 00:01:12,420
+This isn't just for one chat.
+
+25
+00:01:13,040 --> 00:01:16,259
+Every new chat you start, Codex reads this file first,
+
+26
+00:01:16,800 --> 00:01:19,580
+so it already knows your preferences before you even ask.
+
+27
+00:01:20,160 --> 00:01:22,980
+And you don't only have to ask the agent to update it,
+
+28
+00:01:23,380 --> 00:01:29,920
+you can literally open this file yourself and edit it directly like a notepad.
+
+29
+00:01:30,040 --> 00:01:33,940
+Add rules, remove ones you don't like anymore, whatever you want.
+
+30
+00:01:34,580 --> 00:01:38,180
+This file is basically your agent's permanent instruction manual
+
+31
+00:01:38,280 --> 00:01:40,020
+for how you like things done.
+
+32
+00:01:40,640 --> 00:01:45,060
+So next time, instead of repeating yourself, just say, "Remember this,
+
+33
+00:01:45,520 --> 00:01:52,340
+check your agents.md file,"and boom, your agent never forgets your style again.
+
+34
+00:01:52,440 --> 00:01:54,880
+Try it out and let me know how it goes.

@@ -5,121 +5,73 @@
     <link>https://wozore.github.io/KnowView</link>
     <description>AI 热点、工具与模型情报，每日自动采集 + 人工精选</description>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 01 Sep 2026 14:00:04 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 04 Sep 2026 03:56:04 GMT</lastBuildDate>
     <generator>KnowView RSS Engine</generator>
     <atom:link href="https://wozore.github.io/KnowView/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
-      <title>Claude vs Copilot vs ChatGPT: Excel’de 7 Tuzak Testi!</title>
-      <link>https://www.youtube.com/watch?v=mZOMUQi6teU</link>
-      <description><![CDATA[Claude, Copilot ve ChatGPT’ye aynı Excel dosyasını verdim. Dosyanın içine 7 gizli veri tuzağı yerleştirdim ve üç yapay zekâyı aynı prompt, aynı kurallar ve aynı puanlama sistemiyle test ettim.
+      <title>Google Just Fixed Claude Code&apos;s Biggest Weakness</title>
+      <link>https://www.youtube.com/watch?v=dKA0UK-MKEA</link>
+      <description><![CDATA[Claude Code can code — but design? That&apos;s where it falls apart. Here&apos;s the Google repo that gives your coding agent an actual design system to follow. 👇
 
-Peki hangisi gerçek hataları buldu? Hangisi uzun bir cevap verip kritik sorunları kaçırdı? Excel dosyanızı yapay zekâya teslim ederken nelere dikkat etmelisiniz?
+✅ Why Claude Code produces generic AI-looking UIs
 
-📂 Videodaki Excel dosyasını, cevap anahtarını, promptları ve skor kartını indirin:👉 https://1drv.ms/x/c/df5073a331909df1/IQBHjSshlYG3Q7Udviuyr253AR1PK-Syj_0OdB-nap3oZhQ?e=1ctRZD
+✅ The Google repo that fixes it
 
-🎯 Testteki 7 tuzak:
+✅ Define colors, spacing &amp; components in one place
 
-• Mükerrer kayıtlar• Bozuk ve metin biçi]]></description>
-      <author>Oğuzhan ÇOLAK</author>
-      <pubDate>Sat, 08 Aug 2026 17:08:56 GMT</pubDate>
-      <guid isPermaLink="true">https://www.youtube.com/watch?v=mZOMUQi6teU</guid>
+✅ How to set it up in Claude Code (30 seconds)
+
+✅ Make every page consistent before Claude builds
+
+Comment &quot;design&quot; and I&apos;ll send the repo + setup guide.
+
+🔔 Subscribe to Coding Simplified Space for AI Agents, MCP, Claude Code, and dev productivity content.
+
+claude code design system, google claude code repo]]></description>
+      <author>Coding Simplified Space</author>
+      <pubDate>Wed, 02 Sep 2026 10:30:38 GMT</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/watch?v=dKA0UK-MKEA</guid>
       <category>youtube</category>
     </item>
     <item>
-      <title>🔥 I Built ChatGPT for Documents 🤯 | Spring AI and  RAG Full Project</title>
-      <link>https://www.youtube.com/watch?v=I7_eVcsOXik</link>
-      <description><![CDATA[In this video, I build DocMind, an AI-powered document assistant using Spring AI, RAG, PostgreSQL, and PGVector.
-🔥 I Built ChatGPT for Documents 🤯 | Spring AI and  RAG Full Project
+      <title>OpenClaw 2.0 Just Made AI Coding MULTIPLAYER 🤯 #Shorts</title>
+      <link>https://www.youtube.com/watch?v=DdBjIgOFoEg</link>
+      <description><![CDATA[OpenClaw 2.0 is here: the open source AI agent harness shipped its biggest release ever, with 933 contributors and over 16,000 pull requests merged. The headline feature is shared cloud sessions, so an entire team can work inside one AI agent instead of one harness per developer. Creator Peter Steinberger says local harnesses feel like relics of the past now, but reviewers note sandboxing and command approvals ship off by default, so teams should lock those down before rolling it out.
 
-Spring AI Complete Series: https://www.youtube.com/playlist?list=PL0zysOflRCen1TeDUm-ebl9T-WbJygCGE
-Source Code: https://github.com/LearnCodeWithDurgesh/spring-ai-yt-series
-
-Complete NextJs Series: https://www.youtube.com/playlist?list=PL0zysOflRCemKr4NHzNgrfZAUjDzlQtO5
-
-Premium Course Library: https://courses.learncodewithdurgesh.com/
-
-React JS Course : https://courses.learncodewithdurgesh.com/learn/Ecommerce-us]]></description>
-      <author>Learn Code With Durgesh</author>
-      <pubDate>Sat, 08 Aug 2026 13:00:52 GMT</pubDate>
-      <guid isPermaLink="true">https://www.youtube.com/watch?v=I7_eVcsOXik</guid>
+In this Short:
+• OpenClaw 2.0 (release 2026.8.1), the project&apos;s biggest update yet
+• 933 contributors, 16,000]]></description>
+      <author>AI for Work</author>
+      <pubDate>Tue, 01 Sep 2026 17:31:57 GMT</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/watch?v=DdBjIgOFoEg</guid>
       <category>youtube</category>
     </item>
     <item>
-      <title>如何构建智能体团队</title>
-      <link>https://www.youtube.com/watch?v=Gfn56pQpvdQ</link>
-      <description><![CDATA[本文是一份面向实践的操作指南，旨在系统性地讲解如何从零开始，构建一个由多个AI智能体协作组成的&quot;智能体团队&quot;，内容涵盖从需求判断、架构设计、角色划分、技术实现到部署运营的完整流程。本文延续此前《AI智能体开发》《多智能体协作架构》两篇姊妹篇文章所建立的理论框架，聚焦于将这些理论原理转化为具体可执行的实践步骤。文中涉及的具体技术方案与工程建议，均为基于公开技术实践与一般工程逻辑的分析性讨论，读者在实际项目中应结合自身具体技术栈与业务需求进行调整。]]></description>
-      <author>研究型经济</author>
-      <pubDate>Fri, 07 Aug 2026 20:03:55 GMT</pubDate>
-      <guid isPermaLink="true">https://www.youtube.com/watch?v=Gfn56pQpvdQ</guid>
+      <title>Github Senior does LeetCode mock to Microsoft Engineer</title>
+      <link>https://www.youtube.com/watch?v=ps76pb-HrCc</link>
+      <description><![CDATA[Welcome Anna - Senior Engineer at Github, who mastered interviews, and is going to roast me today.
+Anna is good in all interview types: algos, system design, oop, but she is CRAZY good at behavioral, and I will strongly recomend to visit her substack and read the articles to know more about how to prep: https://nammemememe.substack.com/
+
+
+I have been doing Leetcode since 2020, solved 800+ problems, got a Leetcode cap, and landed 3 big tech offers (Google, Microsoft, Snowflake), and today I&apos;m taking mock interview with Github Senior Engineer to see how it goes.
+Today it is purely Leetcode algor]]></description>
+      <author>andreyka26_se</author>
+      <pubDate>Tue, 01 Sep 2026 14:19:51 GMT</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/watch?v=ps76pb-HrCc</guid>
       <category>youtube</category>
     </item>
     <item>
-      <title>My AI RAG application sucks, how do I fix it? #ai #tech</title>
-      <link>https://www.youtube.com/watch?v=NDpISFHP454</link>
-      <description><![CDATA[]]></description>
-      <author>Parthknowsai</author>
-      <pubDate>Fri, 07 Aug 2026 13:15:01 GMT</pubDate>
-      <guid isPermaLink="true">https://www.youtube.com/watch?v=NDpISFHP454</guid>
-      <category>youtube</category>
-    </item>
-    <item>
-      <title>YOLO视觉智能体 Vol.12｜YOLO 不只是一行命令：我做完一个视觉智能体平台后的复盘</title>
-      <link>https://www.youtube.com/watch?v=S7O3E6bFISw</link>
-      <description><![CDATA[这是《我用 Codex + Cursor + Stitch 做了一个 YOLO 视觉智能体平台》系列的第十二期。
+      <title>How to Make ChatGPT Codex Remember Your Preferences (Step by Step)</title>
+      <link>https://www.youtube.com/watch?v=5R-h7CAek7s</link>
+      <description><![CDATA[How to make Codex remember your preferences: tell ChatGPT Codex your formatting and style rules once, and every new chat starts with them.
 
-第一季开始的时候，我问了一个问题：
+If you use OpenAI Codex at work, you probably retype the same instructions all day. Use this layout. Keep the tone plain. Here is the one sentence that ends that loop. You say remember this going forward, and Codex saves your preference into a plain text AGENTS.md file on your computer. Every new chat reads that file first, so your house style is set before you ask. You can also open the file and edit it yourself, like a notepad.
 
-**为什么 YOLO 不只是一行命令？**
-
-十二期做下来，我终于可以用 YoloWebAgent 这个平台本身，回答这个问题。
-
-如果只是跑一个 Demo，YOLO 的训练入口确实可以被压缩成一行命令。
-
-但真正做成一个可以长期使用、持续迭代的视觉工程系统，还需要解决：
-
-* 数据集与多任务标注
-* 训练任务与失败诊断
-* 模型版本管理
-* 导出、部署和交付记录
-* 评估与主动学习
-* 错误样本回流
-* 轻量多 Agent
-* RBAC 与人工确认
-* AI Coding 工程规范
-
-这一期不是继续增加新功能，而是对第一季做一次完整复盘。
-
-我会重点聊：
-
-* YoloWebAgent 第一季到底做出了什么
-* 数据生产、模型生产、模型交付和问题回流如何形成闭环
-* 数据集、训练、模型、主动学习和 Agent 分别解决了什么问题
-* Stitch、Codex、Cursor 和人在开发过程中如何分工
-* 哪些能力已经跑通，哪些地方仍然属于 MVP
-* 单机模式、SQLite、轻量部署中心和单租户 RBAC 的当前边界
-* 如果重新做一遍，项目应该按照什么顺序推进
-* 为什么要先做业务闭环，再做智能调度，最后做流程编排
-* 第二季的]]></description>
-      <author>Tony Shen</author>
-      <pubDate>Fri, 07 Aug 2026 07:37:23 GMT</pubDate>
-      <guid isPermaLink="true">https://www.youtube.com/watch?v=S7O3E6bFISw</guid>
-      <category>youtube</category>
-    </item>
-    <item>
-      <title>The LLM Problem Nobody&apos;s Talking About – Your Reputation</title>
-      <link>https://www.youtube.com/watch?v=WCX560FcCGQ</link>
-      <description><![CDATA[Folks don&apos;t Google anymore. They ChatGPT. Or Claude. Or Gemini. But how do you know what those LLMs are saying about you? Or your startup? Or your competitors? This new tool helps you keep track of what LLMs are saying about you and your business. In a &quot;set it and forget it&quot; sort of way. 
-
-https://pulse.kariops.com/
-
-FIND RICK TUROCZY ON THE INTERNET AT…
-- https://patreon.com/turoczy
-- https://linkedin.com/in/turoczy
-- Portland Oregon startup news on Apple Podcasts https://podcasts.apple.com/us/podcast/portland-oregon-startup-news-silicon-florist/id1711294699
-- Portland Oregon startup news Spo]]></description>
-      <author>Rick Turoczy (turoczy)</author>
-      <pubDate>Thu, 06 Aug 2026 17:00:02 GMT</pubDate>
-      <guid isPermaLink="true">https://www.youtube.com/watch?v=WCX560FcCGQ</guid>
+What you&apos;ll learn:
+- The ]]></description>
+      <author>Lvl 99 TechSkillz</author>
+      <pubDate>Mon, 31 Aug 2026 04:00:14 GMT</pubDate>
+      <guid isPermaLink="true">https://www.youtube.com/watch?v=5R-h7CAek7s</guid>
       <category>youtube</category>
     </item>
   </channel>

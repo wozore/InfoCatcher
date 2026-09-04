@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-02T10:07:21.882Z",
+  "generated_at": "2026-09-04T05:02:40.925Z",
   "entries": [
     {
       "detail_id": "tool-level3:claude-opus-5",
@@ -67,6 +67,14 @@
       "release_date": "2026-08-13"
     },
     {
+      "detail_id": "tool-level3:gemini-3-8-flash",
+      "detail_kind": "api_model",
+      "vendor_key": "google",
+      "title": "Gemini 3.8 Flash",
+      "tool_key": "gemini-3-8-flash",
+      "release_date": "2025-12-17"
+    },
+    {
       "detail_id": "tool-level3:gemini-3.5-flash",
       "detail_kind": "api_model",
       "vendor_key": "google",
@@ -91,6 +99,14 @@
       "release_date": "2026-01-30"
     },
     {
+      "detail_id": "tool-level3:glm-5-3-flash",
+      "detail_kind": "api_model",
+      "vendor_key": "zhipu",
+      "title": "GLM 5.3 Flash",
+      "tool_key": "glm-5-3-flash",
+      "release_date": "2026-07-30"
+    },
+    {
       "detail_id": "tool-level3:gpt-5-5",
       "detail_kind": "api_model",
       "vendor_key": "openai",
@@ -105,6 +121,14 @@
       "title": "GPT 5.6",
       "tool_key": "gpt-5-6",
       "release_date": "2026-08-12"
+    },
+    {
+      "detail_id": "tool-level3:gpt-6",
+      "detail_kind": "api_model",
+      "vendor_key": "openai",
+      "title": "GPT-6",
+      "tool_key": "gpt-6",
+      "release_date": "2026-05-04"
     },
     {
       "detail_id": "tool-level3:gpt-image-2",
@@ -171,6 +195,14 @@
       "release_date": "2025-12-02"
     },
     {
+      "detail_id": "tool-level3:qwen-3-8-flash",
+      "detail_kind": "api_model",
+      "vendor_key": "alibaba",
+      "title": "Qwen 3.8 Flash",
+      "tool_key": "qwen-3-8-flash",
+      "release_date": "2026-08-03"
+    },
+    {
       "detail_id": "tool-level3:qwen-3-8-max",
       "detail_kind": "api_model",
       "vendor_key": "alibaba",
@@ -201,6 +233,14 @@
       "title": "Qwen3.7 Plus",
       "tool_key": "qwen3-7-plus",
       "release_date": "2026-05-26"
+    },
+    {
+      "detail_id": "tool-level3:qwen3-8-flash",
+      "detail_kind": "api_model",
+      "vendor_key": "alibaba",
+      "title": "Qwen3.8-Flash",
+      "tool_key": "qwen3-8-flash",
+      "release_date": "2026-02-06"
     },
     {
       "detail_id": "tool-level3:qwen3-8-max",

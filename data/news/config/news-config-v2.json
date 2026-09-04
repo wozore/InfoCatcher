@@ -101,14 +101,18 @@
       "codex",
       "studio",
       "reasoning",
-      "tvbs"
+      "tvbs",
+      "nvidia",
+      "coding"
     ],
     "excluded_keywords": [
       "youtube",
       "flash",
       "robot",
       "search",
-      "con"
+      "con",
+      "ai agent",
+      "agentic"
     ],
     "refine_rule_top_n": 30,
     "refine_batch_size": 8,

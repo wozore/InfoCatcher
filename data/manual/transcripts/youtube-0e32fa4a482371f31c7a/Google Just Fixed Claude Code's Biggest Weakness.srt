@@ -1,0 +1,71 @@
+1
+00:00:00,140 --> 00:00:03,699
+देखो Claude Code coding में तो lethal है, लेकिन design वहाँ सब बिखर जाता है।
+
+2
+00:00:03,759 --> 00:00:07,019
+और Google ने अभी एक repo drop किया है, जो exactly यह fix करता है।
+
+3
+00:00:07,059 --> 00:00:07,879
+देखो problem समझो।
+
+4
+00:00:07,919 --> 00:00:11,279
+बिना clear design rules के Claude guess करने लगता है random spacing,
+
+5
+00:00:11,539 --> 00:00:15,859
+buttons हर जगह अलग और वही generic AI वाली website, जो हर कोई बना रहा है।
+
+6
+00:00:15,899 --> 00:00:18,899
+इस repo से तुम एक ही जगह define करते हो colors, spacing,
+
+7
+00:00:19,059 --> 00:00:21,079
+components और overall design style।
+
+8
+00:00:21,079 --> 00:00:24,520
+Claude उन rules को follow करता है, तो हर नई page consistent रहती है।
+
+9
+00:00:24,600 --> 00:00:26,319
+एक ही design system पूरे project में।
+
+10
+00:00:26,340 --> 00:00:27,039
+setup simple है।
+
+11
+00:00:27,099 --> 00:00:30,319
+GitHub repo grab करो, Claude Code में paste करो और बोलो पूरा setup कर दे।
+
+12
+00:00:30,319 --> 00:00:33,159
+फिर एक file बनाओ जो describe करे तुम्हें project कैसा चाहिए।
+
+13
+00:00:33,200 --> 00:00:37,039
+जैसे clean founder dashboard, tight spacing, no generic gradients.
+
+14
+00:00:37,119 --> 00:00:40,099
+अब हर landing page या dashboard उसी direction को follow करेगा,
+
+15
+00:00:40,119 --> 00:00:41,899
+Claude के build शुरू करने से पहले ही।
+
+16
+00:00:41,939 --> 00:00:45,739
+यही तरीका है AI built website को AI built लगने से रोकने का।
+
+17
+00:00:45,739 --> 00:00:49,079
+comment "Design" और मैं तुम्हें repo और setup guide दोनों भेज दूंगा।
+
+18
+00:00:49,079 --> 00:00:49,704
+and all good।

@@ -86,7 +86,7 @@ function createKlingDossierAdapters(options = {}) {
   return {
     requested,
     discover: async input => {
-      requested.push({ scope: input.scope.kind, predicates: [...input.missing_predicates] });
+      requested.push({ scope: input.scope.kind, predicates: [...input.missing_predicates], domain_scope: input.domain_scope || 'seed' });
       return { sources: [{ url: OFFICIAL_URL, title: 'Kling official dossier', excerpt: EXACT_QUOTE }] };
     },
     acquire: async ({ sources }) => ({ contents: sources.map(source => ({ url: source.url, content: EXACT_QUOTE })) }),

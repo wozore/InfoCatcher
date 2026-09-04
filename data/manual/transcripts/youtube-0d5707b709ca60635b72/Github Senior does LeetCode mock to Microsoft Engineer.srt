@@ -1,0 +1,4290 @@
+1
+00:00:00,160 --> 00:00:09,679
+All right, welcome everyone. As I have
+promised you before, today we are going
+
+2
+00:00:04,960 --> 00:00:16,960
+to conduct a mock interview. Um, it will
+be a algo session with my friend Anna
+
+3
+00:00:13,199 --> 00:00:22,640
+who uh has worked at GitHub and who is
+right now senior software engineer in
+
+4
+00:00:20,640 --> 00:00:26,960
+working on infrastructure interesting
+exciting stuff. I will leave some of the
+
+5
+00:00:24,480 --> 00:00:31,599
+links about the Anna. So she's doing
+articles in Substack. So please go and
+
+6
+00:00:29,039 --> 00:00:35,600
+subscribe. She's doing a lot of uh great
+articles related to interview experience
+
+7
+00:00:33,759 --> 00:00:39,840
+uh specifically behavioral interview and
+stuff like that. So now Anna please
+
+8
+00:00:37,600 --> 00:00:44,479
+introduce yourself.
+>> Thank you so much Andre. Uh also do want
+
+9
+00:00:42,320 --> 00:00:48,000
+to give you a huge shout out because you
+were the person who helped me get my
+
+10
+00:00:46,479 --> 00:00:52,159
+current job. You helped me a lot with
+system design and this is how we met.
+
+11
+00:00:50,320 --> 00:00:56,640
+And yeah, hi everybody. My name is Anna.
+I was looking for a job over the last
+
+12
+00:00:53,840 --> 00:01:02,159
+year. It was pretty bumpy. Uh but
+fortunately I did get a job and now I'm
+
+13
+00:00:58,558 --> 00:01:06,640
+a senior engineer. Uh I work on back end
+and infra side of things and I'm excited
+
+14
+00:01:04,558 --> 00:01:08,799
+to do this mock because I want Andre to
+also get a great job.
+
+15
+00:01:08,400 --> 00:01:15,438
+>> Yep.
+>> As soon as possible. So we're gonna get
+
+16
+00:01:10,959 --> 00:01:18,640
+going and um we will share the feedback
+afterwards.
+
+17
+00:01:17,359 --> 00:01:24,159
+>> Sure.
+Uh, okay. Andre, I see you in the dock.
+
+18
+00:01:21,200 --> 00:01:28,879
+And I guess I'm gonna start with one
+problem and then just so you know, we
+
+19
+00:01:27,359 --> 00:01:33,438
+will also have another problem if you
+get through this quickly. But uh, let me
+
+20
+00:01:31,040 --> 00:01:37,438
+start with just explaining to you what
+is the problem that I'd like to solve
+
+21
+00:01:35,680 --> 00:01:41,920
+with you. I kind of mostly just want to
+hear how you think and how you approach
+
+22
+00:01:39,200 --> 00:01:49,280
+this problem. Again, I will explain this
+to you. So imagine you have a number.
+
+23
+00:01:44,719 --> 00:01:58,000
+For example, I give you a number 9973
+and you can swap two digits only once
+
+24
+00:01:54,239 --> 00:02:01,759
+and I ask you that you return me the
+highest the maximum integer we can get
+
+25
+00:02:00,239 --> 00:02:06,319
+from this number. So if you look at this
+number it is already the max right it
+
+26
+00:02:04,239 --> 00:02:12,719
+cannot get higher than this. We couldn't
+make it 37 or we couldn't make it if we
+
+27
+00:02:09,598 --> 00:02:18,000
+were to put for example 7 93 that
+doesn't get higher right so here we
+
+28
+00:02:15,439 --> 00:02:25,120
+don't need to get a swap so you can just
+return me this number is however if I
+
+29
+00:02:20,560 --> 00:02:30,800
+give you a number for example 2836
+uh can you give me the maximum number we
+
+30
+00:02:28,080 --> 00:02:35,439
+could get from here if we swap only two
+digits just once do you think will be
+
+31
+00:02:33,199 --> 00:02:42,639
+the max number from this
+Well, probably I would say we have to
+
+32
+00:02:38,959 --> 00:02:46,560
+swap first two digits, right?
+This will give us the largest we can do.
+
+33
+00:02:45,360 --> 00:02:50,639
+No.
+>> Yes, it's correct. Again, we could have
+
+34
+00:02:48,639 --> 00:02:55,919
+done it for example. Sorry, I will just
+put it right here. Again, this is not
+
+35
+00:02:52,639 --> 00:03:03,519
+correct, but we the largest number we
+could have gotten would be 86
+
+36
+00:02:59,519 --> 00:03:08,800
+um 32. However, if you notice here, we
+have to swap them more than once, right?
+
+37
+00:03:05,680 --> 00:03:13,680
+We have to swap the first and the third
+and then the third and the zero, right?
+
+38
+00:03:11,519 --> 00:03:18,959
+So, you're correct. The largest number
+we can get from here is 8236.
+
+39
+00:03:16,639 --> 00:03:22,400
+And I just want to kind of see how you
+think we can get there. And remember,
+
+40
+00:03:20,639 --> 00:03:28,239
+all I'm asking you is just that you
+return this maximum number and you're
+
+41
+00:03:24,878 --> 00:03:32,959
+allowed to swap two digits at most once.
+>> All right. All right. I see. I see. So
+
+42
+00:03:31,120 --> 00:03:37,280
+um the fact that we need to swap only
+once uh simplifies the problem a lot to
+
+43
+00:03:36,000 --> 00:03:42,799
+be honest.
+>> Um so my initial intuition would be
+
+44
+00:03:41,199 --> 00:03:46,639
+probably
+um to start from left to right.
+
+45
+00:03:45,519 --> 00:03:53,360
+>> Mhm.
+>> And as we can see um in case we are
+
+46
+00:03:50,400 --> 00:03:57,438
+going and we seeing numbers that are
+same or lower than we have previously
+
+47
+00:03:55,439 --> 00:04:02,639
+from left to right we cannot do
+anything. So essentially if we start
+
+48
+00:04:00,080 --> 00:04:07,840
+from left and we see any number that is
+larger than current one we want to swap
+
+49
+00:04:05,199 --> 00:04:14,400
+them. Why the left and why we come from
+left why we go from left to right is
+
+50
+00:04:10,400 --> 00:04:19,120
+because leftmost digits are uh
+contributing the most uh to the size of
+
+51
+00:04:17,040 --> 00:04:25,040
+the integer essentially.
+>> Uh so yeah I'm thinking right now that
+
+52
+00:04:23,120 --> 00:04:29,839
+uh what can be the other can it be like
+this?
+
+53
+00:04:26,800 --> 00:04:32,800
+What if we have I'm just thinking about
+more examples. What if we have this
+
+54
+00:04:31,680 --> 00:04:36,240
+case? [snorts]
+>> Mhm.
+
+55
+00:04:33,680 --> 00:04:40,879
+>> In this case, I don't think we want to
+swap with the first largest. Right. So,
+
+56
+00:04:38,478 --> 00:04:46,560
+probably this situation fails here
+>> because we would if we would swap the
+
+57
+00:04:42,879 --> 00:04:51,918
+first one here, we would have 3286.
+But probably the best number here would
+
+58
+00:04:48,399 --> 00:04:55,439
+be 8236,
+I guess.
+
+59
+00:04:54,800 --> 00:05:02,319
+>> Yep.
+>> No, no, no. 83
+
+60
+00:04:58,079 --> 00:05:08,800
+26 because we would swap 8 and two.
+Yeah. 8 2 83. Yes. Yes. 8326. So
+
+61
+00:05:06,079 --> 00:05:14,079
+probably this is the largest number.
+So it seems like from left to right we
+
+62
+00:05:11,439 --> 00:05:23,120
+should just go through the number and
+find the largest one to the left that we
+
+63
+00:05:16,959 --> 00:05:28,079
+can find. And if we did find it [snorts]
+then
+
+64
+00:05:26,000 --> 00:05:32,560
+Uh yes yes yes yes yes. Then we should
+swap it. But apparently we might have
+
+65
+00:05:30,478 --> 00:05:37,038
+case that we don't want to swap the
+leftmost but we might have case like
+
+66
+00:05:35,120 --> 00:05:44,839
+that for example.
+>> Mhm.
+
+67
+00:05:38,319 --> 00:05:44,839
+>> And in this case we also sort of want to
+
+68
+00:05:44,879 --> 00:05:52,240
+yeah we should still
+we should still swap eight and two right
+
+69
+00:05:50,879 --> 00:05:56,560
+here.
+>> Yep. This would be the correct answer in
+
+70
+00:05:54,959 --> 00:06:00,560
+this case.
+>> Do I get it right?
+
+71
+00:05:58,879 --> 00:06:05,279
+>> Uh yeah, that's correct. Yes, you can
+only swap once.
+
+72
+00:06:01,759 --> 00:06:11,759
+>> Okay. [snorts] Okay. Okay. Okay. So,
+yes, in this case, yeah, let me think.
+
+73
+00:06:09,038 --> 00:06:16,879
+Let me think.
+Um
+
+74
+00:06:14,560 --> 00:06:21,839
+well to go from left to right we
+probably will need to either reverse the
+
+75
+00:06:19,279 --> 00:06:27,680
+number so we can cut it mathematically
+or we can go and change it to string or
+
+76
+00:06:25,600 --> 00:06:30,240
+array. Uh how do you feel about that? Is
+it okay?
+
+77
+00:06:29,038 --> 00:06:33,038
+>> Yeah that's totally fine you can do
+that. Y
+
+78
+00:06:31,038 --> 00:06:37,759
+>> okay so let's say we have this and we
+can easily operate on the on the array.
+
+79
+00:06:36,278 --> 00:06:45,600
+[snorts]
+>> And now what can be the algo here? Um
+
+80
+00:06:42,319 --> 00:06:53,199
+it bit feels like monotonic stack to
+some extent but not quite sure yet.
+
+81
+00:06:50,079 --> 00:06:57,439
+So let's see we go nine and we see two.
+We don't want to swap with two we
+
+82
+00:06:54,800 --> 00:07:01,598
+continue.
+Yeah. And I think in case we don't want
+
+83
+00:06:59,199 --> 00:07:08,959
+to swap with two
+current number should be changed to two
+
+84
+00:07:05,759 --> 00:07:14,240
+then. Yeah. Let me try to to to see can
+we do it with monotonic stack in
+
+85
+00:07:10,639 --> 00:07:19,279
+general. So if we just try uh to put it
+into the stack we see
+
+86
+00:07:17,038 --> 00:07:28,199
+two which is bigger than nine. So we
+putting two here and then we are 38
+
+87
+00:07:23,918 --> 00:07:28,199
+up until we find six.
+
+88
+00:07:32,160 --> 00:07:35,160
+Yeah.
+
+89
+00:07:36,478 --> 00:07:42,279
+No, probably it's not that it's it
+shouldn't be the way.
+
+90
+00:07:43,680 --> 00:07:50,879
+All right.
+Yeah, definitely the the approach should
+
+91
+00:07:48,478 --> 00:07:55,199
+be that we should find something bigger
+on the right side than we have on the
+
+92
+00:07:52,399 --> 00:07:58,959
+left side. The only thing I I just still
+couldn't figure out yet
+
+93
+00:07:56,959 --> 00:08:04,800
+>> is how to proceed with this case that we
+might have uh already biggest digit on
+
+94
+00:08:03,439 --> 00:08:10,600
+the left.
+>> Mhm.
+
+95
+00:08:07,199 --> 00:08:14,519
+>> So in this case
+[snorts]
+
+96
+00:08:11,360 --> 00:08:14,519
+uh well
+
+97
+00:08:15,759 --> 00:08:25,038
+why don't you actually go through just a
+basic case? What if you go through the
+
+98
+00:08:20,959 --> 00:08:29,120
+case where the largest digit is to the
+to the left of you? So how would you go
+
+99
+00:08:27,360 --> 00:08:33,200
+through that? Just take this case and
+then we can talk about the case if the
+
+100
+00:08:30,959 --> 00:08:37,360
+largest digits is the first digit. How
+would you approach this because you kind
+
+101
+00:08:34,479 --> 00:08:43,278
+of had the right idea.
+>> Yeah. So in this case if we are sure the
+
+102
+00:08:39,679 --> 00:08:48,200
+largest uh number on the right which we
+can be sure through many things
+
+103
+00:08:48,320 --> 00:08:56,080
+in this case we need just to find the
+largest on the right. So essentially
+
+104
+00:08:52,559 --> 00:09:00,958
+maximum on the right part [snorts]
+find first value largest value and
+
+105
+00:08:58,639 --> 00:09:06,639
+largest index and then just swap them
+and it will be it. I guess it should
+
+106
+00:09:02,879 --> 00:09:12,000
+work. So given the case
+uh the tricky case was which one this
+
+107
+00:09:09,440 --> 00:09:16,080
+was the tricky case that we have two we
+have three and we have eight and then
+
+108
+00:09:14,000 --> 00:09:20,958
+let's say one
+>> so in this case we don't want to swap
+
+109
+00:09:18,399 --> 00:09:25,120
+with first largest so instead we would
+just keep I don't know we can save in
+
+110
+00:09:23,600 --> 00:09:28,320
+some data structure like what is the
+maximum number for this range let's say
+
+111
+00:09:27,839 --> 00:09:33,919
+>> mhm
+>> and for this range it will be eight I
+
+112
+00:09:30,720 --> 00:09:38,320
+will find the index of eight and Then I
+would just swap to an eight and that
+
+113
+00:09:36,480 --> 00:09:42,720
+would be it.
+>> Uh
+
+114
+00:09:40,799 --> 00:09:46,720
+does it sound good as a as a idea
+itself?
+
+115
+00:09:43,679 --> 00:09:50,320
+>> I honestly think this is the idea. I
+kind of want to talk to you. This is the
+
+116
+00:09:48,639 --> 00:09:56,559
+working idea. We can talk a little bit
+about the case when the largest number
+
+117
+00:09:53,440 --> 00:10:01,120
+comes first. But tell me do you think
+what's will be like the runtime space
+
+118
+00:09:58,080 --> 00:10:05,839
+complexity of this approach?
+>> Yeah, it should be linear. uh for this
+
+119
+00:10:03,839 --> 00:10:10,399
+case should be linear because in ON we
+would store maximum number for
+
+120
+00:10:07,839 --> 00:10:16,159
+particular uh suffix
+>> in O that's for sure
+
+121
+00:10:12,720 --> 00:10:21,839
+>> and then uh
+given this number even if we have the
+
+122
+00:10:18,879 --> 00:10:26,720
+largest on the left side already and we
+would need to proceed one by one
+
+123
+00:10:24,000 --> 00:10:30,480
+>> still due to suffix uh we would have it
+linear time and for space complexity it
+
+124
+00:10:28,720 --> 00:10:39,759
+will be O1 as well.
+>> Mhm. Uh not sure we can do better here
+
+125
+00:10:34,559 --> 00:10:43,440
+honestly for now. Maybe we can. Um
+>> I think it's an optimal solution like
+
+126
+00:10:41,440 --> 00:10:46,078
+honestly of N is as good as it's going
+to get because we have to touch every
+
+127
+00:10:45,200 --> 00:10:54,720
+digit.
+>> Yep. Yep. Yep. Makes sense. Makes sense.
+
+128
+00:10:48,879 --> 00:10:58,879
+So now let's consider the case of um
+having the largest one on the left
+
+129
+00:10:56,639 --> 00:11:04,958
+already and then we should kind of
+proceed.
+
+130
+00:11:00,320 --> 00:11:11,039
+>> Uh so let me try to visualize what I
+would have in my um maximum suffix. So
+
+131
+00:11:09,360 --> 00:11:15,440
+probably we would get maximum suffix. So
+constant time to resolve maximum number
+
+132
+00:11:12,799 --> 00:11:18,799
+for from particular index till the end.
+Mhm.
+
+133
+00:11:15,839 --> 00:11:23,120
+>> Uh so let me draw yeah let me add this
+as indices
+
+134
+00:11:20,720 --> 00:11:30,559
+and then
+the suffix map which is going to be
+
+135
+00:11:27,679 --> 00:11:36,159
+yeah whatever now now it's suffix map so
+it's index it's number
+
+136
+00:11:32,799 --> 00:11:42,399
+>> and this is suffix map so we would start
+with four this going to be four this
+
+137
+00:11:38,639 --> 00:11:46,879
+going to be four oh sorry what four I'm
+I'm checking the indices values so this
+
+138
+00:11:44,639 --> 00:11:51,278
+going to be six this going to be eight
+so far then we're going to have eight
+
+139
+00:11:49,360 --> 00:11:57,200
+again because this is the largest eight
+again and then nine in the end so this
+
+140
+00:11:53,519 --> 00:12:02,320
+is going to be kind of maximum suffix
+>> uh that we see so far
+
+141
+00:12:00,078 --> 00:12:05,839
+>> and I think we can try to proceed from
+left to right so let's say we have
+
+142
+00:12:03,919 --> 00:12:10,559
+converted it to array
+>> start from the left index and if current
+
+143
+00:12:08,320 --> 00:12:15,440
+value is equal to maximum suffix we kind
+of skip it and continue and then we see
+
+144
+00:12:12,879 --> 00:12:20,879
+that current value is less then maximum
+suffix and we swap it straight away.
+
+145
+00:12:18,159 --> 00:12:26,958
+>> That's it. The only thing uh in order to
+swap uh pretty quickly we need we cannot
+
+146
+00:12:24,240 --> 00:12:32,078
+do string. So we should do array
+probably for swapping and we need to
+
+147
+00:12:29,759 --> 00:12:39,360
+maintain the index of this maximum
+number as well. Uh
+
+148
+00:12:35,919 --> 00:12:43,519
+so how would I maintain? Um yeah and for
+that I need actually start asking
+
+149
+00:12:41,519 --> 00:12:48,240
+questions about input and constraints.
+So first one uh are the digits unique or
+
+150
+00:12:46,559 --> 00:12:51,360
+no?
+>> Are they not unique?
+
+151
+00:12:49,360 --> 00:12:57,039
+>> They're not unique.
+Okay. Uh
+
+152
+00:12:55,200 --> 00:13:04,000
+okay, that makes sense. That makes
+sense. Uh then second question, can we
+
+153
+00:13:01,039 --> 00:13:08,320
+get integer overload because or
+overflow? Sorry, overflow.
+
+154
+00:13:06,159 --> 00:13:13,519
+>> Assume no. The largest number you can
+have is 10 to the^ of eight. Um but
+
+155
+00:13:11,600 --> 00:13:17,919
+assume like don't be concerned with
+overload.
+
+156
+00:13:14,320 --> 00:13:23,039
+>> Okay. Okay. So this will be my suffix
+map. And in this case uh since we might
+
+157
+00:13:20,559 --> 00:13:28,159
+have duplicates what we want to maintain
+is the first index of the value that we
+
+158
+00:13:25,679 --> 00:13:35,440
+search for example. If we got eight as a
+maximum and we have two eights here
+
+159
+00:13:32,159 --> 00:13:42,639
+probably or no maybe we want the last.
+So comparing if you have this case uh
+
+160
+00:13:38,958 --> 00:13:50,240
+probably I guess that this would be
+lower than
+
+161
+00:13:46,240 --> 00:13:54,639
+sorry then this one right?
+Yes. So this number is larger than this
+
+162
+00:13:52,639 --> 00:14:00,000
+one. So it means we need to maintain the
+first occurrence of this particular
+
+163
+00:13:57,278 --> 00:14:07,198
+value. That's it. And for that
+>> uh for that I can add map. Uh so let's
+
+164
+00:14:03,759 --> 00:14:12,799
+say I'm going to have in map that would
+store the following. It would store
+
+165
+00:14:08,639 --> 00:14:19,278
+value to first index essentially
+>> and I will also while I'll be traversing
+
+166
+00:14:16,159 --> 00:14:23,759
+uh the I can actually traverse from the
+from the end and just apply yeah so I'll
+
+167
+00:14:22,320 --> 00:14:28,078
+be
+>> the idea of the algo and the plan
+
+168
+00:14:25,440 --> 00:14:32,240
+itself. So I going to convert this to
+array.
+
+169
+00:14:29,198 --> 00:14:35,039
+>> Mhm. First I will traverse from right to
+the left.
+
+170
+00:14:33,440 --> 00:14:42,480
+>> Mhm.
+>> While traversing this one I would add up
+
+171
+00:14:37,839 --> 00:14:47,519
+to my maximum suffix and map that stores
+value and the last index occurrence
+
+172
+00:14:45,198 --> 00:14:52,519
+which will be essentially the first
+index in this case.
+
+173
+00:14:49,519 --> 00:14:52,519
+>> Um
+
+174
+00:14:54,078 --> 00:15:04,720
+>> no yes the first yeah the first index in
+this case. Uh and then in the end I
+
+175
+00:15:01,519 --> 00:15:10,399
+would just go from left to right and the
+first time I see maximum in my suffix
+
+176
+00:15:06,799 --> 00:15:18,799
+bigger than value I just swap it with
+the uh with the last index of the val of
+
+177
+00:15:17,039 --> 00:15:20,480
+the maximum value.
+>> Yes.
+
+178
+00:15:19,360 --> 00:15:23,039
+>> Great.
+>> Does it sound good? Tell me if it's
+
+179
+00:15:22,480 --> 00:15:27,360
+okay.
+>> Yes. This sounds very reasonable to me.
+
+180
+00:15:25,039 --> 00:15:32,000
+Yeah. Um, and then again just to
+confirm, you said this is what we're
+
+181
+00:15:28,958 --> 00:15:33,360
+going to get in terms of space and a
+runtime, correct?
+
+182
+00:15:32,879 --> 00:15:35,679
+>> Yep.
+>> Oh, and
+
+183
+00:15:34,320 --> 00:15:40,320
+>> yes.
+>> Okay. Awesome. Yeah. Let's code it up
+
+184
+00:15:37,600 --> 00:15:43,039
+and then we can do a dry run on both of
+these examples.
+
+185
+00:15:41,198 --> 00:15:46,480
+>> Sure. Sure. Sure. Makes sense. Okay.
+>> The idea sounds great to me.
+
+186
+00:15:44,559 --> 00:15:50,879
+>> Great. Great. Makes sense. Makes sense.
+So let's say I don't know, let's put it
+
+187
+00:15:48,639 --> 00:15:55,839
+as a solve. We have some number. It's
+going to be integer.
+
+188
+00:15:53,839 --> 00:16:01,320
+Then first initial thing I would convert
+it to array which is simple conversion I
+
+189
+00:15:58,320 --> 00:16:01,320
+guess
+
+190
+00:16:01,519 --> 00:16:12,000
+uh maybe yeah yeah yeah as far as I
+don't really remember will it work in
+
+191
+00:16:09,278 --> 00:16:15,679
+Python or no
+>> uh don't stress about it like if you
+
+192
+00:16:13,440 --> 00:16:20,480
+don't remember the library just write me
+like uh in the note what do you want to
+
+193
+00:16:17,600 --> 00:16:24,559
+convert to and from. So the thing is
+that I want to convert this as let's say
+
+194
+00:16:22,720 --> 00:16:33,198
+this is a number and I want to have in
+the end
+
+195
+00:16:27,278 --> 00:16:36,559
+uh 9 2 3 8 8 86 essentially I can parse
+it up on my own. No worries. So I can
+
+196
+00:16:36,240 --> 00:16:40,159
+make
+>> Yeah, it's okay. Assume this this does
+
+197
+00:16:38,480 --> 00:16:44,240
+it. Honestly I think it just need a
+string here but um yeah assume like this
+
+198
+00:16:43,519 --> 00:16:49,679
+is what it does.
+>> Yeah. Yeah. I think maybe we can do
+
+199
+00:16:46,879 --> 00:16:53,679
+this. Yeah, probably. Yeah, I will need
+to check Python API, but if it doesn't
+
+200
+00:16:51,919 --> 00:16:55,519
+work, I can code it up and pass it
+myself.
+
+201
+00:16:54,078 --> 00:16:59,039
+>> Yeah, don't stress about it. Assume
+assume this works.
+
+202
+00:16:56,559 --> 00:17:04,318
+>> Okay. Okay. Makes sense. Makes sense. Uh
+then following our plan, I'm starting
+
+203
+00:17:01,039 --> 00:17:10,480
+from the from the end till the
+beginning. So for that I would need my
+
+204
+00:17:06,959 --> 00:17:14,959
+suffix max uh which is going to be this
+one. current maximum which is going to
+
+205
+00:17:13,359 --> 00:17:18,599
+be
+uh the last element
+
+206
+00:17:19,519 --> 00:17:22,519
+uh
+
+207
+00:17:22,959 --> 00:17:32,558
+yeah this is for future
+I will ask it later so let's say we are
+
+208
+00:17:30,240 --> 00:17:40,160
+not empty for now
+maximum is the last one
+
+209
+00:17:35,759 --> 00:17:45,359
+and then we also should have our map
+not default
+
+210
+00:17:41,279 --> 00:17:51,038
+just map and we start for index in
+reversed range
+
+211
+00:17:47,919 --> 00:17:57,839
+lengths array
+1 2 3 1 exactly.
+
+212
+00:17:54,640 --> 00:18:03,359
+So uh
+as we are going we would say we try to
+
+213
+00:18:01,038 --> 00:18:12,640
+find our maximum which is going to be
+maximum of our array index.
+
+214
+00:18:08,798 --> 00:18:18,319
+So this is going to be maximum.
+Then we are adding or appending value to
+
+215
+00:18:15,919 --> 00:18:22,919
+our no suffix we cannot append. So for
+that reason I actually have to do this
+
+216
+00:18:23,038 --> 00:18:29,119
+because I I need it in original order as
+well. Uh so index is going to be
+
+217
+00:18:27,440 --> 00:18:34,640
+maximum.
+Then we are adding
+
+218
+00:18:32,558 --> 00:18:39,519
+um
+so from the right to left order we are
+
+219
+00:18:37,759 --> 00:18:43,519
+adding only the first occurrence of the
+index. For that reason I will just check
+
+220
+00:18:41,919 --> 00:18:50,880
+if
+uh array
+
+221
+00:18:45,599 --> 00:18:59,000
+index in map sorry not in map only. In
+that case I will add it as a value. So
+
+222
+00:18:54,240 --> 00:18:59,000
+array index equals index
+
+223
+00:19:00,400 --> 00:19:09,279
+Yep.
+All right. And after this
+
+224
+00:19:06,079 --> 00:19:13,679
+for loop, we essentially should have
+already premputed suffix,
+
+225
+00:19:11,919 --> 00:19:18,160
+premputed
+uh map of our indices and the largest
+
+226
+00:19:16,240 --> 00:19:23,759
+value. And now we're starting our last
+piece of the algo. Uh so we are
+
+227
+00:19:21,119 --> 00:19:29,400
+traversing from left to right right now.
+um
+
+228
+00:19:26,079 --> 00:19:29,400
+in range
+
+229
+00:19:29,440 --> 00:19:33,720
+links array.
+
+230
+00:19:34,000 --> 00:19:41,440
+And now we are checking if our current
+value
+
+231
+00:19:39,279 --> 00:19:49,480
+is less than
+yeah it should be less than our suffix
+
+232
+00:19:45,679 --> 00:19:49,480
+at this index.
+
+233
+00:19:49,759 --> 00:20:01,679
+In this case we need to swap.
+So how do we do that? We find the
+
+234
+00:19:58,240 --> 00:20:08,798
+right index via map.
+So map is going to be our well yeah our
+
+235
+00:20:06,240 --> 00:20:13,519
+maximum value which is suffix by the
+way.
+
+236
+00:20:11,519 --> 00:20:17,480
+And then we just essentially doing the
+following uh
+
+237
+00:20:17,679 --> 00:20:22,359
+just typical Python swap.
+
+238
+00:20:22,720 --> 00:20:27,359
+Uh let me know if it makes sense because
+otherwise I would need to do it via
+
+239
+00:20:26,400 --> 00:20:29,839
+temporary variable.
+>> No, it's it looks good. No, no, it looks
+
+240
+00:20:29,038 --> 00:20:35,200
+good.
+>> Okay, so after we swap at this point we
+
+241
+00:20:32,558 --> 00:20:39,919
+should break
+and also in the end we need to convert
+
+242
+00:20:37,200 --> 00:20:46,480
+our array back to number.
+So for that uh for that I would first
+
+243
+00:20:43,359 --> 00:20:53,919
+convert it to string probably. So let's
+say string equals
+
+244
+00:20:49,919 --> 00:20:58,079
+join whatever we have
+and then I would actually return int
+
+245
+00:20:56,400 --> 00:21:01,679
+string.
+>> Sounds great. Yeah.
+
+246
+00:20:59,279 --> 00:21:04,880
+>> Let me now check uh whether it all makes
+sense at all. [laughter]
+
+247
+00:21:04,000 --> 00:21:11,440
+>> Yeah. Yeah. [snorts] And I actually have
+a question for you because um the map
+
+248
+00:21:08,880 --> 00:21:17,200
+you populated here, correct? That's like
+that's where you use it.
+
+249
+00:21:15,038 --> 00:21:20,960
+>> This is where where I'm populating it
+and I'm using it here.
+
+250
+00:21:19,038 --> 00:21:23,038
+>> Right here. Okay. Sounds great. Yeah.
+>> Yes.
+
+251
+00:21:21,359 --> 00:21:26,798
+>> Yeah. Sounds great. Yeah. Let's do a dry
+run. Honestly, pick any example. Maybe
+
+252
+00:21:25,119 --> 00:21:30,240
+start with something simple like don't
+go into like the heavy example if you
+
+253
+00:21:28,400 --> 00:21:34,720
+want. Just like let's see how it works
+here.
+
+254
+00:21:31,119 --> 00:21:38,400
+>> Oh, okay. Okay. Okay. So uh yeah let's
+let's run I have three examples to run
+
+255
+00:21:37,119 --> 00:21:41,440
+in uh
+>> Sure.
+
+256
+00:21:39,038 --> 00:21:46,038
+>> So this one
+sorry to run through and then
+
+257
+00:21:46,640 --> 00:21:54,119
+this one and our heavyweight
+uh this guy.
+
+258
+00:21:54,720 --> 00:22:02,159
+>> Okay.
+>> So for the first one uh let's see
+
+259
+00:22:00,000 --> 00:22:05,839
+uh let's see. So I would straight away I
+would just assume that uh this thing
+
+260
+00:22:04,079 --> 00:22:11,038
+will convert it straight away to my
+array.
+
+261
+00:22:07,919 --> 00:22:16,480
+So it should be this already
+and then I would add essentially
+
+262
+00:22:13,519 --> 00:22:21,359
+indices. So we have it in mind and I
+would add suffix
+
+263
+00:22:18,880 --> 00:22:24,359
+which is
+uh
+
+264
+00:22:26,240 --> 00:22:35,119
+yep and initially suffix is zero
+completely
+
+265
+00:22:32,640 --> 00:22:41,200
+>> and our map
+is also empty.
+
+266
+00:22:37,679 --> 00:22:48,480
+So uh we do start from the rightmost
+index to the leftmost and current
+
+267
+00:22:44,480 --> 00:22:52,759
+maximum for us is uh the last element in
+array which is six.
+
+268
+00:22:53,599 --> 00:23:02,558
+So
+yes yes yes it's going to be six and now
+
+269
+00:22:59,599 --> 00:23:07,440
+we are starting so we can computing the
+maximum so far which is six and six
+
+270
+00:23:04,798 --> 00:23:15,839
+going to be six suffix for this index is
+going to be six
+
+271
+00:23:10,480 --> 00:23:21,759
+great uh then we are finding that our
+number six is not an in array yet
+
+272
+00:23:19,359 --> 00:23:26,839
+>> uh so we are adding it so it's going to
+be six current index three.
+
+273
+00:23:27,038 --> 00:23:35,919
+We move forward. We find out the number
+a sorry number three. Uh for number
+
+274
+00:23:34,000 --> 00:23:40,720
+three the suffix is still going to be oh
+sorry the maximum is going to be six. So
+
+275
+00:23:38,000 --> 00:23:46,400
+we put six here as well. And then we are
+adding map. So for value three we have
+
+276
+00:23:44,079 --> 00:23:52,000
+index two.
+Now we are moving eight is going to be
+
+277
+00:23:48,798 --> 00:23:56,880
+sorry max is going to be eight. Again,
+we don't have it here. So, we put eight
+
+278
+00:23:54,960 --> 00:24:00,480
+one.
+And this guy is going to be eight now
+
+279
+00:23:58,558 --> 00:24:05,279
+because maximum has changed. And the
+last one, again, we didn't see this
+
+280
+00:24:02,558 --> 00:24:10,798
+number yet. So, we put it zero. And
+maximum is going to be eight. Now, we're
+
+281
+00:24:07,599 --> 00:24:18,159
+going from range blah blah. We see array
+from left to right. Again, uh current
+
+282
+00:24:13,359 --> 00:24:25,278
+array number is two. So, it's less than
+maximum suffix. So we do apply our algo
+
+283
+00:24:22,240 --> 00:24:30,079
+and we find right index through the map
+of the value of suffix. So we go eight
+
+284
+00:24:27,679 --> 00:24:35,278
+we find eight it will be index one which
+is this guy. Amazing. Now we are just
+
+285
+00:24:32,720 --> 00:24:41,599
+swapping. So what will happen is this
+becomes this this becomes that
+
+286
+00:24:38,798 --> 00:24:47,440
+and then we break and then we join array
+back to 8 236
+
+287
+00:24:45,759 --> 00:24:52,480
+and then it will be integer. So this
+will be the answer. Uh to me this simple
+
+288
+00:24:50,400 --> 00:24:57,839
+one works.
+Uh let me try run the next one.
+
+289
+00:24:56,159 --> 00:25:02,640
+>> Yeah, if you want to feel free to like
+shorten uh the amount of numbers that
+
+290
+00:25:00,960 --> 00:25:05,679
+you have like it doesn't have to be so
+many. Up to you.
+
+291
+00:25:03,759 --> 00:25:10,319
+>> Yeah, I will shortcut the debugging
+process in general because we kind of
+
+292
+00:25:07,599 --> 00:25:13,278
+make sure most of this is working.
+>> Yeah.
+
+293
+00:25:10,798 --> 00:25:20,278
+>> So we don't waste much time about that
+>> on this. Uh so anyway, let's try again.
+
+294
+00:25:16,960 --> 00:25:20,278
+0 0 0.
+
+295
+00:25:22,640 --> 00:25:31,038
+So maximum is the last one which is six.
+Map is empty.
+
+296
+00:25:28,240 --> 00:25:39,038
+Okay. Again we are going from right. Uh
+we find maximum six. We put six equals 5
+
+297
+00:25:35,599 --> 00:25:46,640
+and we put here six. Then we go here. We
+find eight. We put eight here. And since
+
+298
+00:25:43,519 --> 00:25:52,480
+it doesn't exist yet, we still put it to
+the map. So it's going to be four index.
+
+299
+00:25:49,679 --> 00:25:58,400
+We move on. Maximum is still eight. So
+we put eight. We see that it is in map.
+
+300
+00:25:55,440 --> 00:26:02,720
+So we skip it.
+Uh then we move forward with three. Uh
+
+301
+00:26:00,960 --> 00:26:09,839
+three is not bigger than eight. So still
+eight. We put three equals to
+
+302
+00:26:07,119 --> 00:26:15,440
+second index. We find out two. Same
+thing again. It's still eight. And we
+
+303
+00:26:12,720 --> 00:26:23,919
+put two equal to index one. And the last
+one is nine which is actually greater
+
+304
+00:26:18,558 --> 00:26:30,640
+than uh eight. So we put updated one
+and we put it index zero. Now let's try
+
+305
+00:26:26,159 --> 00:26:36,319
+to move from left to right. So we see
+current value 9 is not less than our
+
+306
+00:26:33,679 --> 00:26:43,359
+maximum. So we just skip. Next iteration
+is going to be uh number two. For number
+
+307
+00:26:39,200 --> 00:26:51,519
+two, it is less than uh than eight. So
+we process and we go into this if
+
+308
+00:26:47,038 --> 00:26:57,278
+we go find uh index four as uh as this
+uh digit we swap two and eight. So this
+
+309
+00:26:54,000 --> 00:27:01,200
+becomes eight. This becomes two and yeah
+the rest is the same. We break convert
+
+310
+00:26:58,960 --> 00:27:09,038
+to string and this will be the largest
+number. So uh does look good uh for now.
+
+311
+00:27:07,200 --> 00:27:13,119
+>> Yeah. Uh, Andrea, I do have a question
+for you. If we just think, again, I
+
+312
+00:27:11,519 --> 00:27:18,240
+don't think we can do better runtime
+wise, but I think we could do better
+
+313
+00:27:15,759 --> 00:27:21,359
+memory wise. Can you without like
+changing the code, I don't want you to
+
+314
+00:27:19,599 --> 00:27:25,759
+change anything. I just want you to tell
+me where you think we could optimize
+
+315
+00:27:23,599 --> 00:27:30,880
+memory. And I specifically I'm looking
+at both of these data structures and I
+
+316
+00:27:28,720 --> 00:27:38,720
+wonder do you think we could maybe like
+drop one of them or just to kind of
+
+317
+00:27:33,919 --> 00:27:38,720
+optimize the memory? What do you think?
+
+318
+00:27:38,960 --> 00:27:51,480
+Yep. I guess I guess we can.
+>> I guess we can. Uh
+
+319
+00:27:47,200 --> 00:27:51,480
+>> what would we drop and why?
+
+320
+00:27:53,759 --> 00:28:05,278
+>> Well, let's think logically and try to
+rule out both of them uh one at a time.
+
+321
+00:28:00,640 --> 00:28:11,599
+So, can we remove suffix in general? Can
+we do that? Um, if we're going from
+
+322
+00:28:08,640 --> 00:28:15,480
+right,
+we kind of
+
+323
+00:28:16,398 --> 00:28:24,480
+let me think through it. Maybe we even
+can. I don't know. Uh, so we have number
+
+324
+00:28:21,599 --> 00:28:29,159
+nine and we need to know that this
+number is not the one to change.
+
+325
+00:28:43,119 --> 00:28:47,679
+Let me let me help you. Let me give you
+a hint or a thought.
+
+326
+00:28:46,159 --> 00:28:51,038
+>> Okay. Sure. Sure.
+>> If we were not because you have a map,
+
+327
+00:28:49,440 --> 00:28:54,398
+right? I really think you need a map,
+right? Because you need to know where
+
+328
+00:28:52,319 --> 00:28:58,640
+you stand and what you're looking at. So
+I think if you don't know where you are
+
+329
+00:28:56,960 --> 00:29:02,079
+and what you're looking at, like I don't
+think you can solve this problem. So
+
+330
+00:28:59,919 --> 00:29:08,480
+let's say let's agree that we need this.
+The question is
+
+331
+00:29:04,079 --> 00:29:15,839
+in the map, if you were not saving
+whatever you had in the suffix map, what
+
+332
+00:29:12,240 --> 00:29:18,750
+else can you be saving as your value in
+the map? [snorts]
+
+333
+00:29:23,440 --> 00:29:27,880
+I might straight.
+
+334
+00:29:31,359 --> 00:29:38,558
+So actually talking back about the map,
+we actually can get rid of it and we
+
+335
+00:29:36,798 --> 00:29:45,278
+might not even store index and then in
+all we can find our value and it will be
+
+336
+00:29:41,919 --> 00:29:50,079
+of n + n which will be n anyway. So we
+can drop map. Let's be honest, it will
+
+337
+00:29:47,038 --> 00:29:54,558
+be a bit slower average runtime, but
+worst case it will be still the same.
+
+338
+00:29:52,480 --> 00:29:58,798
+But let's not talk about this. Let's
+think about
+
+339
+00:29:56,319 --> 00:30:04,640
+uh our suffix.
+>> Mhm.
+
+340
+00:30:00,000 --> 00:30:11,278
+>> So potentially maybe we can store
+index I don't know straight away. Uh
+
+341
+00:30:09,038 --> 00:30:15,679
+can we?
+So if suffix
+
+342
+00:30:13,599 --> 00:30:21,679
+Yeah, why not? we can store index
+straight away and we can just instead of
+
+343
+00:30:18,798 --> 00:30:27,679
+checking u
+the suffix itself we can check like this
+
+344
+00:30:25,839 --> 00:30:34,640
+let's say
+and in this case we can store uh we can
+
+345
+00:30:31,359 --> 00:30:40,398
+kind of detect when it will be lower or
+whatever and then we can update index
+
+346
+00:30:37,359 --> 00:30:44,480
+instead of maximum so we can but I don't
+see how index storing index in suffix
+
+347
+00:30:42,720 --> 00:30:48,960
+would improve runtime anyhow how oh
+sorry uh space complexity anyhow
+
+348
+00:30:47,119 --> 00:30:54,480
+>> yeah I'll just give you an idea so I
+actually think uh you wouldn't need the
+
+349
+00:30:51,679 --> 00:30:59,759
+suffix map I think what you could store
+is your index where you're at right like
+
+350
+00:30:58,000 --> 00:31:01,200
+right now you're at zero or right now
+you're at one
+
+351
+00:31:00,720 --> 00:31:06,079
+>> y
+>> and you could just store the digits
+
+352
+00:31:03,519 --> 00:31:11,440
+itself right so here you were mapping
+them to suffix but you could just map it
+
+353
+00:31:07,919 --> 00:31:17,759
+to themselves and when you come here you
+basically will be comparing to like
+
+354
+00:31:15,519 --> 00:31:23,119
+exactly where you're at and what's
+basically
+
+355
+00:31:19,759 --> 00:31:28,240
+uh behind you. You will only swap
+if the thing ahead of you you can
+
+356
+00:31:25,519 --> 00:31:31,679
+because you can look at this number,
+right? Like you can take eight and
+
+357
+00:31:29,599 --> 00:31:36,319
+three. You know that you're standing at
+one and you know that you're standing at
+
+358
+00:31:33,200 --> 00:31:42,398
+two and it would only make that swap if
+whatever is at two is greater than
+
+359
+00:31:39,200 --> 00:31:46,640
+whatever is at one. Right? So
+what I'm trying to say is that this map
+
+360
+00:31:44,798 --> 00:31:51,839
+could be mapping. I still think you
+absolutely need this map, but I say that
+
+361
+00:31:50,480 --> 00:31:56,798
+you don't need to flip it through
+suffixes. You can just map directly to
+
+362
+00:31:54,798 --> 00:32:01,679
+the numbers that you're looking at. Do
+you see what I mean?
+
+363
+00:31:58,880 --> 00:32:08,798
+>> Uh let me try to
+reverse it back to original example. So
+
+364
+00:32:05,038 --> 00:32:14,038
+if I see anything bigger than uh current
+value. Okay. So in this case,
+
+365
+00:32:17,839 --> 00:32:22,558
+but I still need to get somehow to
+eight, right?
+
+366
+00:32:22,319 --> 00:32:26,798
+>> Right.
+>> I mean, I can straight away maybe swap.
+
+367
+00:32:24,720 --> 00:32:31,519
+So can I can I just keep swapping up
+until it's less?
+
+368
+00:32:29,200 --> 00:32:36,480
+>> Uh you can only swap once.
+>> Yeah. Yeah. Yeah. That that makes sense.
+
+369
+00:32:33,278 --> 00:32:42,000
+But I mean um
+like technically in the end it can be
+
+370
+00:32:38,480 --> 00:32:47,200
+counted as a uh single one. So what do I
+mean by that is that we can kind of
+
+371
+00:32:43,839 --> 00:32:53,119
+internally do like propagating it all
+all the way down. So what I mean by that
+
+372
+00:32:49,038 --> 00:32:57,599
+is we first swap this and kind of up
+until two is less
+
+373
+00:32:55,679 --> 00:33:02,558
+No, it doesn't make sense.
+>> No, it doesn't make sense. Forget about
+
+374
+00:33:00,240 --> 00:33:06,079
+what I just said.
+>> No, but I think the idea is correct.
+
+375
+00:33:04,159 --> 00:33:11,440
+Like your algorithm is correct. You can
+check though because also,
+
+376
+00:33:08,880 --> 00:33:14,640
+you know, the largest digit you can have
+is nine, right? Like it cannot be
+
+377
+00:33:13,278 --> 00:33:23,359
+greater than nine, whatever you're
+looking at. And then you can just go
+
+378
+00:33:19,119 --> 00:33:28,880
+from nine all the way to eight and ask
+yourself,
+
+379
+00:33:24,960 --> 00:33:37,599
+is what I'm looking at greater than the
+largest digit I've seen so far?
+
+380
+00:33:32,480 --> 00:33:42,240
+And basically it's um it's two nested
+loops but it will still be of n.
+
+381
+00:33:40,319 --> 00:33:49,839
+Exactly. You cannot do better than of n
+or worse than of you shouldn't be doing
+
+382
+00:33:44,000 --> 00:33:54,159
+worse than of and you will um swap the
+digit. I will show you what I meant
+
+383
+00:33:51,839 --> 00:33:57,839
+afterwards. But overall like the idea of
+your algorithm is correct.
+
+384
+00:33:55,599 --> 00:34:04,960
+>> Yeah. Yeah. Okay. Sorry. I I think I I
+don't get uh yet to this. Um I will need
+
+385
+00:34:02,000 --> 00:34:09,280
+to think through it. Okay. Anyway, uh I
+should have asked you before but uh yeah
+
+386
+00:34:07,519 --> 00:34:13,918
+just for for the audience
+>> we talked with Anna before and I already
+
+387
+00:34:11,199 --> 00:34:17,280
+know I going to have two questions but
+in real case you should always ask
+
+388
+00:34:15,599 --> 00:34:20,960
+whether this is the only single question
+you're going to solve or no
+
+389
+00:34:19,039 --> 00:34:25,199
+>> because yeah you will conclude a lot of
+about complexity and time management.
+
+390
+00:34:23,918 --> 00:34:30,159
+>> Sorry.
+>> Yep.
+
+391
+00:34:26,719 --> 00:34:35,119
+Yeah. All good. So let's carry on and
+let's talk about actually I want to give
+
+392
+00:34:32,239 --> 00:34:40,639
+you a tree question if that's okay.
+>> Sure.
+
+393
+00:34:36,000 --> 00:34:44,159
+>> So um I want to show you and tell me if
+you solve this problem before. Maybe you
+
+394
+00:34:42,239 --> 00:34:50,079
+know it exactly how it goes. But
+actually I really want to talk to you
+
+395
+00:34:46,000 --> 00:34:54,398
+about how to traverse a tree in a zigzag
+level order. And I'll show you what I
+
+396
+00:34:51,519 --> 00:35:01,440
+mean. So let's say we have the stream
+and sorry uh basically you can tell that
+
+397
+00:34:57,599 --> 00:35:07,199
+we have three 9 20 no children on the
+left 15 and seven but what I'm asking
+
+398
+00:35:03,679 --> 00:35:13,119
+you is to take the route as it is and
+then go first
+
+399
+00:35:09,440 --> 00:35:17,599
+left to right so 29 to 9. So, we're
+going this way. And then on the next
+
+400
+00:35:15,760 --> 00:35:23,838
+level, we're actually going to go the
+usual way, right? Uh, sorry,
+
+401
+00:35:21,280 --> 00:35:30,880
+left to right. So, yes, right to left,
+left to right. So, however levels we
+
+402
+00:35:27,280 --> 00:35:35,199
+have, we first start right to left and
+then we go left to right.
+
+403
+00:35:32,320 --> 00:35:38,480
+>> Okay, let me just quickly draw an
+example as a tree. So,
+
+404
+00:35:37,358 --> 00:35:43,440
+>> sure. Mhm.
+>> So I can visually Yeah, Google Doc is
+
+405
+00:35:41,599 --> 00:35:46,159
+not the best probably for
+>> Yeah, I'm sorry.
+
+406
+00:35:44,559 --> 00:35:54,719
+>> Yeah, that's that's that's good. That's
+good. So let's say we have two here,
+
+407
+00:35:49,679 --> 00:35:58,039
+three here, and then we have
+I don't know
+
+408
+00:35:59,280 --> 00:36:08,239
+these two.
+And here we have four, five, six, seven,
+
+409
+00:36:05,199 --> 00:36:10,880
+whatever. Uh it's not balanced as I can
+see right so I cannot assume it's
+
+410
+00:36:09,679 --> 00:36:17,838
+balance.
+>> Yeah
+
+411
+00:36:11,358 --> 00:36:23,599
+>> sure. Uh so zigzag so we we are starting
+as one then
+
+412
+00:36:20,239 --> 00:36:29,760
+oh my god we are starting as what what
+just happened sorry we're starting as
+
+413
+00:36:25,519 --> 00:36:32,400
+one then we go three two and then we go
+four five six seven.
+
+414
+00:36:31,838 --> 00:36:39,599
+>> That's correct.
+>> This is the idea. Okay. Uh-huh.
+
+415
+00:36:35,920 --> 00:36:43,599
+>> Okay. Um, I'm not sure I solved exactly
+this question, but something about
+
+416
+00:36:41,280 --> 00:36:47,519
+zigzaga I remember, but I don't really
+remember the solution, so I'm not sure.
+
+417
+00:36:46,480 --> 00:36:51,039
+Um,
+>> it's okay. We'll solve it together.
+
+418
+00:36:49,519 --> 00:36:57,039
+>> Okay.
+Okay. Okay. So, what do I think about
+
+419
+00:36:54,239 --> 00:37:02,400
+this? Uh, and it's always level wise.
+So, if I let's say remove these two and
+
+420
+00:36:59,440 --> 00:37:07,119
+set them to null, uh, it will be still
+one.
+
+421
+00:37:03,679 --> 00:37:11,119
+3 2 6 7
+>> correct. Yeah. Yeah. I don't want to see
+
+422
+00:37:08,719 --> 00:37:12,880
+nulls like in your answer even though we
+see them here, right?
+
+423
+00:37:12,400 --> 00:37:15,599
+>> Yeah. Yeah.
+>> Yeah. We don't need them in answer.
+
+424
+00:37:14,079 --> 00:37:19,280
+>> I just assume that we don't have any.
+Okay. Okay. Makes sense. Makes sense.
+
+425
+00:37:17,119 --> 00:37:25,039
+Makes sense. Okay.
+>> So, since this is sort of level order uh
+
+426
+00:37:22,639 --> 00:37:28,639
+thingy, so let's assume three and it
+always grows to the bottom. So, we're
+
+427
+00:37:27,119 --> 00:37:32,960
+going to have more nodes in the end than
+in the beginning. And we want them to
+
+428
+00:37:30,880 --> 00:37:39,760
+traverse zigzag
+uh level by level. And by level I mean
+
+429
+00:37:36,719 --> 00:37:44,719
+uh how far the node the nodes on the
+current level are from the root. So
+
+430
+00:37:42,880 --> 00:37:51,519
+nodes on the same level have exactly
+same distance to the root essentially
+
+431
+00:37:48,480 --> 00:37:58,639
+>> um or they don't exist in case of not
+full uh tree. Mhm.
+
+432
+00:37:54,320 --> 00:38:03,280
+>> So to me it feels initial idea to do a
+BFS
+
+433
+00:38:00,159 --> 00:38:07,679
+because uh the natural
+way how BFS works that we are going to
+
+434
+00:38:05,358 --> 00:38:12,400
+work every single time with single row
+>> and then we can just maintain some state
+
+435
+00:38:09,838 --> 00:38:15,119
+variable that will tell us should we go
+from right to left or from left to
+
+436
+00:38:14,159 --> 00:38:19,199
+right.
+>> Sure.
+
+437
+00:38:16,559 --> 00:38:24,719
+>> This is the basic uh approach that I'm
+thinking right now. uh the complexity
+
+438
+00:38:21,599 --> 00:38:33,039
+here would be
+of which is where n is number of nodes
+
+439
+00:38:28,400 --> 00:38:38,559
+space- wise it will be the biggest level
+so if in the if in the end of the tree
+
+440
+00:38:35,599 --> 00:38:43,519
+we have I don't know 10 nodes the the
+leaves 10 leaves it'll be over all all
+
+441
+00:38:41,838 --> 00:38:48,320
+of 10 essentially
+>> so this is my general idea for now how
+
+442
+00:38:45,838 --> 00:38:50,880
+does it feel is it okay or no we should
+do better
+
+443
+00:38:49,358 --> 00:38:55,679
+>> yeah this sounds Can you tell me a
+little bit more about uh this variable
+
+444
+00:38:54,480 --> 00:39:00,960
+that you're going to do? What are you
+going to do when you come to a case like
+
+445
+00:38:58,239 --> 00:39:05,358
+this? How would you
+um
+
+446
+00:39:02,480 --> 00:39:08,000
+like what will this variable exactly be
+that's going to tell you what level
+
+447
+00:39:06,639 --> 00:39:10,800
+you're at? Like how will you know that
+you're at that level? It's just going to
+
+448
+00:39:09,280 --> 00:39:16,079
+be like incremental plus one.
+>> Uh no no sorry for variable I was
+
+449
+00:39:13,039 --> 00:39:23,519
+thinking this variable will uh represent
+whether it is reversed or no. So or I
+
+450
+00:39:20,159 --> 00:39:27,440
+don't know uh it can be right to left
+whatever and we starting with right to
+
+451
+00:39:25,119 --> 00:39:33,920
+left
+>> and then uh once I process all the nodes
+
+452
+00:39:31,519 --> 00:39:40,400
+on current level I switch right to left
+to opposite so it will be right to left
+
+453
+00:39:38,000 --> 00:39:45,519
+uh not right to left essentially after
+each of the level and I don't actually
+
+454
+00:39:42,480 --> 00:39:52,960
+need to maintain which level am I right
+now because BFS
+
+455
+00:39:48,079 --> 00:39:58,480
+uh well it will be sort of uh implicitly
+maintained in the way that we are doing
+
+456
+00:39:55,039 --> 00:40:04,079
+BFS with a bit hack on top that we are
+going to process only the number of
+
+457
+00:40:01,280 --> 00:40:09,039
+nodes we discovered before. So
+essentially the way I'm going to do it I
+
+458
+00:40:06,159 --> 00:40:14,880
+will maintain Q of course essentially Q
+will start with one we just visit one
+
+459
+00:40:11,199 --> 00:40:19,599
+and add it to output then meanwhile we
+are visiting one we explored two nodes
+
+460
+00:40:18,000 --> 00:40:24,719
+right
+>> then uh I would be process since I know
+
+461
+00:40:22,480 --> 00:40:28,800
+there are two nodes I explored before
+I'm going to pop only two items from the
+
+462
+00:40:27,119 --> 00:40:32,239
+queue
+>> and while I'm popping two items in the
+
+463
+00:40:30,719 --> 00:40:37,679
+queue of course I going to add six and
+seven at some point So when when I'm at
+
+464
+00:40:35,039 --> 00:40:43,039
+three uh so let me draw it a bit. So
+let's say this is the queue.
+
+465
+00:40:39,358 --> 00:40:47,679
+>> I'm adding one and I popped one and I
+explored two and three.
+
+466
+00:40:44,960 --> 00:40:54,480
+>> Then I popped three but I remember that
+my size was uh two which is
+
+467
+00:40:52,559 --> 00:40:58,800
+two and three right.
+>> Mhm.
+
+468
+00:40:55,760 --> 00:41:04,480
+>> So once I pop three here and I explored
+six and seven. So I will add six and
+
+469
+00:41:01,838 --> 00:41:08,159
+seven. So in the original BFS I would
+actually traverse them but since I know
+
+470
+00:41:06,400 --> 00:41:13,440
+the size is three I going to do only one
+more pop and I will leave my next level
+
+471
+00:41:11,119 --> 00:41:17,599
+as it is and then next level we proceed
+again the same way. So we are going to
+
+472
+00:41:15,199 --> 00:41:24,400
+pop only two elements and explore. Let's
+say these two nodes have two child each.
+
+473
+00:41:22,079 --> 00:41:32,079
+In this case uh in the end we're going
+to have uh four more items popped here
+
+474
+00:41:27,760 --> 00:41:36,239
+and sorry added here and two ones popped
+essentially. This is the idea.
+
+475
+00:41:34,800 --> 00:41:39,760
+>> Sounds great. Can I just ask you one
+more thing? I just want to make sure
+
+476
+00:41:37,760 --> 00:41:44,559
+let's say this tree makes a lot of
+sense, right? Because when we get to the
+
+477
+00:41:41,838 --> 00:41:50,639
+last level, we kind of see the kids.
+>> What if you had four or five here, but
+
+478
+00:41:47,119 --> 00:41:58,800
+you had nothing
+uh on this side? Um how would you go
+
+479
+00:41:54,159 --> 00:42:02,639
+from three to four five?
+And basically,
+
+480
+00:42:00,559 --> 00:42:09,519
+yeah, you're going to go get this and
+then you go this way, right?
+
+481
+00:42:06,559 --> 00:42:14,199
+Um yeah, how can you like grab those
+kits? [snorts]
+
+482
+00:42:11,199 --> 00:42:14,199
+>> Uh
+
+483
+00:42:14,639 --> 00:42:20,519
+okay. So um the problem is with ordering
+probably.
+
+484
+00:42:23,358 --> 00:42:30,079
+Yeah, give me
+maybe we don't even need to reverse in
+
+485
+00:42:27,358 --> 00:42:31,760
+this case. Let me think. So yeah, it
+will
+
+486
+00:42:30,400 --> 00:42:34,960
+>> there are many ways to go about it.
+Yeah.
+
+487
+00:42:32,559 --> 00:42:42,318
+>> Uh essentially it will still work. So
+let's assume um
+
+488
+00:42:38,400 --> 00:42:46,800
+we have two three no we have three two
+right because we go from right to left.
+
+489
+00:42:45,599 --> 00:42:53,400
+Yes we have 32.
+>> Yes. Yes.
+
+490
+00:42:48,960 --> 00:42:53,400
+>> And then uh
+
+491
+00:42:54,480 --> 00:42:58,679
+append pop left.
+
+492
+00:42:58,800 --> 00:43:09,358
+Pop left is the first one that goes. So
+first one that came essentially okay let
+
+493
+00:43:06,000 --> 00:43:14,880
+me add this is the beginning of the
+queue and this is the end of the queue
+
+494
+00:43:11,119 --> 00:43:22,079
+so we don't confuse each other so if I'm
+adding uh three and then two
+
+495
+00:43:20,159 --> 00:43:28,960
+I will add
+three and then two this will be my Q
+
+496
+00:43:26,159 --> 00:43:33,440
+>> because pop left in Python at least
+should return the
+
+497
+00:43:31,760 --> 00:43:39,199
+the first. No. So it should be
+essentially this three and two. Yes. And
+
+498
+00:43:36,159 --> 00:43:44,559
+so we append appends to the right. Uh so
+this is append place and this is pop
+
+499
+00:43:42,880 --> 00:43:51,280
+left place. So this is just to not
+confuse myself and then we would pop
+
+500
+00:43:48,800 --> 00:43:55,039
+left three.
+Three doesn't have anything. So we would
+
+501
+00:43:53,280 --> 00:43:59,760
+just pop it and [snorts]
+do whatever. Okay. Uh Q is empty. We
+
+502
+00:43:58,159 --> 00:44:04,480
+didn't add anything.
+And then uh of course we would add it to
+
+503
+00:44:02,800 --> 00:44:09,838
+answer.
+Then when we have two we would explore
+
+504
+00:44:07,440 --> 00:44:16,920
+and append.
+Uh and now we should understand which
+
+505
+00:44:13,119 --> 00:44:16,920
+direction we should append.
+
+506
+00:44:18,159 --> 00:44:24,639
+Uh yeah we should keep the variable
+actually. Yeah we should keep the
+
+507
+00:44:23,280 --> 00:44:27,119
+variable.
+>> Mhm.
+
+508
+00:44:25,199 --> 00:44:31,440
+>> So we know which one we add. We add
+first right child or left child. That
+
+509
+00:44:29,358 --> 00:44:37,480
+makes sense.
+Yes.
+
+510
+00:44:33,739 --> 00:44:37,480
+[snorts] Yes. And since
+
+511
+00:44:37,760 --> 00:44:42,960
+so I need them to start from the
+beginning because I don't know what
+
+512
+00:44:40,239 --> 00:44:49,199
+should be the variable. So initially we
+should go from left to right. Then this
+
+513
+00:44:45,039 --> 00:44:55,679
+one is right to left. Left to right.
+>> So right to left is false initially.
+
+514
+00:44:53,440 --> 00:44:59,239
+If it's false.
+If it's false.
+
+515
+00:44:59,358 --> 00:45:07,039
+Yeah. So I would do with right to left
+equals to false initially because the
+
+516
+00:45:04,719 --> 00:45:14,960
+initial item is still left to right the
+root itself. Then we go right to left as
+
+517
+00:45:10,000 --> 00:45:17,960
+in the example. Uh since we go right to
+left.
+
+518
+00:45:19,358 --> 00:45:30,400
+Yeah. Yes. Yes. So given root I will see
+that right to left is false and it means
+
+519
+00:45:26,239 --> 00:45:34,800
+I need to add them reversed. Uh so like
+traversal itself right to left will be
+
+520
+00:45:33,119 --> 00:45:37,920
+false but I will be adding them exactly
+right to left because the next iteration
+
+521
+00:45:36,318 --> 00:45:39,280
+I going to do is going to be right to
+left.
+
+522
+00:45:38,880 --> 00:45:46,159
+>> Mhm.
+>> So I would add first right then left
+
+523
+00:45:42,239 --> 00:45:52,480
+children which is going to be append uh
+three and two.
+
+524
+00:45:48,400 --> 00:45:54,159
+Uh yes. Then I will switch it to true
+again.
+
+525
+00:45:53,679 --> 00:45:58,400
+>> Mhm.
+>> Which means the next case or or in this
+
+526
+00:45:56,318 --> 00:46:04,519
+case Yeah. The next case I going to add
+them is from left to right.
+
+527
+00:46:01,519 --> 00:46:04,519
+>> Mhm.
+
+528
+00:46:05,119 --> 00:46:15,838
+Wait a moment.
+Wait a moment.
+
+529
+00:46:10,639 --> 00:46:22,639
+Will it work? It wouldn't work.
+It will not work.
+
+530
+00:46:19,280 --> 00:46:26,719
+So I think there is a bit better idea.
+There is a bit better idea. We don't
+
+531
+00:46:24,159 --> 00:46:33,920
+care about variable at all up until we
+populate uh whole level. So let's not
+
+532
+00:46:30,880 --> 00:46:37,838
+care about variable completely.
+We just do regular BFS from left to
+
+533
+00:46:36,000 --> 00:46:43,838
+right all the time.
+>> We still do level order traversal in a
+
+534
+00:46:40,800 --> 00:46:47,838
+sense. So every single time uh we are
+going to have result as a single line or
+
+535
+00:46:45,920 --> 00:46:55,358
+single level.
+That's it. It will be our exactly
+
+536
+00:46:50,639 --> 00:46:58,880
+complexity of uh uh max level of the
+space complexity.
+
+537
+00:46:56,639 --> 00:47:05,199
+>> And while we have this thing then we
+will just use variable and then we will
+
+538
+00:47:01,679 --> 00:47:08,719
+just either do it from the end or from
+the left from the right side or from the
+
+539
+00:47:07,679 --> 00:47:12,400
+left side
+>> and then we will just keep traversing
+
+540
+00:47:10,639 --> 00:47:18,000
+same way from left to right all the
+time. So all like we start BFS we
+
+541
+00:47:15,119 --> 00:47:22,559
+process these two uh nodes and we will
+add these two nodes from left to right
+
+542
+00:47:20,318 --> 00:47:28,079
+again same thing here we start with this
+from left to right from left to right
+
+543
+00:47:24,400 --> 00:47:32,239
+but in the end uh we are going to have
+resulting array from left to right which
+
+544
+00:47:29,920 --> 00:47:36,079
+we can just decide either we're going
+from right to left or from left to right
+
+545
+00:47:33,920 --> 00:47:39,119
+deciding or based on this variable that
+we're going to be swapping essentially
+
+546
+00:47:37,358 --> 00:47:43,760
+this idea
+>> uh
+
+547
+00:47:40,639 --> 00:47:48,880
+I guess it should talk at least this
+this is my gut feeling for now.
+
+548
+00:47:46,079 --> 00:47:53,199
+>> Yeah. Um this makes sense to me and
+honestly like you got the idea correctly
+
+549
+00:47:51,358 --> 00:47:57,920
+like you literally go level by level and
+then you decide to reverse it or not to
+
+550
+00:47:55,119 --> 00:48:02,960
+reverse it. Uh then again there are many
+levers right like you can you can count
+
+551
+00:48:00,000 --> 00:48:06,719
+you can check the length. Uh but yeah
+let's just like one more time agree what
+
+552
+00:48:05,039 --> 00:48:08,719
+is the runtime and space complexity of
+what you're proposing.
+
+553
+00:48:08,318 --> 00:48:13,440
+>> Okay
+>> what would it be? So runtime we always
+
+554
+00:48:11,199 --> 00:48:21,599
+need to traverse all the nodes. So it
+will be
+
+555
+00:48:16,318 --> 00:48:30,400
+uh n of nodes and this will be all one
+for the this is time complexity for the
+
+556
+00:48:25,358 --> 00:48:33,400
+space complexity it's going to be
+of
+
+557
+00:48:34,639 --> 00:48:43,119
+number of leaves.
+This will be the space complexity like
+
+558
+00:48:40,159 --> 00:48:49,358
+or maybe maximum number of leaves what
+but it will be anyway maximum. So well
+
+559
+00:48:46,800 --> 00:48:55,039
+yes yes yes. So this is the maximum
+number of list is special complexity. So
+
+560
+00:48:51,119 --> 00:48:58,480
+the y the end line essentially.
+>> Yeah this sounds great. Yeah let's code
+
+561
+00:48:56,719 --> 00:49:02,960
+it up and then maybe we can do like a
+simple dry run.
+
+562
+00:48:59,920 --> 00:49:06,880
+>> Okay. Sure sure makes sense. Uh all
+right. All right. So how would start? We
+
+563
+00:49:05,679 --> 00:49:10,400
+have uh
+>> yeah assume I give you a root. I can
+
+564
+00:49:08,480 --> 00:49:12,400
+give you a signature if you want but
+assume you're giving the root.
+
+565
+00:49:11,599 --> 00:49:18,400
+>> Okay.
+>> And the root and the the tree node has
+
+566
+00:49:16,239 --> 00:49:21,039
+value left and right.
+>> If you want I can drop that for you as
+
+567
+00:49:19,838 --> 00:49:26,400
+well. Yeah.
+>> I think I think yeah we we've all solved
+
+568
+00:49:23,199 --> 00:49:33,119
+like thousands of these questions and uh
+good. Uh so I would assume there is some
+
+569
+00:49:29,519 --> 00:49:39,519
+global variable which is result
+that we are going to return. So yeah,
+
+570
+00:49:34,880 --> 00:49:44,800
+let me maybe put it. Okay, let me put it
+this way. So this is going to be just
+
+571
+00:49:42,639 --> 00:49:50,000
+task or whatever. And here we're going
+to maintain result [snorts]
+
+572
+00:49:47,920 --> 00:49:55,358
+which is the resulting scene. We're
+going to return essentially this two
+
+573
+00:49:52,400 --> 00:50:01,358
+dimensional array. Mhm.
+>> We're going to have Q which is D Q with
+
+574
+00:49:58,960 --> 00:50:06,559
+our root
+and then
+
+575
+00:50:03,599 --> 00:50:09,559
+uh we are doing the following.
+So
+
+576
+00:50:09,599 --> 00:50:19,039
+yeah we don't have visited set because
+we cannot get the same nodes uh I guess
+
+577
+00:50:15,358 --> 00:50:23,358
+but [snorts] yeah yeah we cannot.
+So then I would do while length of Q is
+
+578
+00:50:21,599 --> 00:50:34,760
+still while we have something in the
+queue we remember the size um
+
+579
+00:50:28,719 --> 00:50:34,760
+and then we also keep maintaining uh
+
+580
+00:50:34,800 --> 00:50:43,760
+or let's do it left to right initially
+let's do it this it feels more natural
+
+581
+00:50:40,318 --> 00:50:46,960
+to me. Uh so initially this is our root
+and for root we traverse left to right
+
+582
+00:50:45,679 --> 00:50:49,920
+because next one should be right to
+left.
+
+583
+00:50:47,920 --> 00:50:56,719
+>> Mhm. So now we are doing the following.
+We are traversing uh and
+
+584
+00:50:53,920 --> 00:51:03,519
+for
+number of times of size
+
+585
+00:50:59,679 --> 00:51:11,119
+we're essentially going to pop node. Uh
+Q pop left the first one we got. Then if
+
+586
+00:51:08,318 --> 00:51:16,880
+node left
+um
+
+587
+00:51:14,079 --> 00:51:24,079
+if we have node left we would do q
+append node left
+
+588
+00:51:20,400 --> 00:51:27,960
+value. No not value.
+I have node right
+
+589
+00:51:31,119 --> 00:51:34,679
+node right.
+
+590
+00:51:36,480 --> 00:51:47,679
+And now still we want and we want to
+append all this time we have some array
+
+591
+00:51:44,880 --> 00:51:52,639
+like I don't know
+level or whatever
+
+592
+00:51:50,880 --> 00:51:59,358
+>> this is the array and whatever we append
+we do level append node value
+
+593
+00:51:56,800 --> 00:52:05,519
+>> this will be our scene that we are going
+to store in as a second dimension in
+
+594
+00:52:01,838 --> 00:52:11,519
+result array. So we this is going to
+have just a root.
+
+595
+00:52:08,800 --> 00:52:16,440
+So once we processed everything then we
+decide
+
+596
+00:52:13,039 --> 00:52:16,440
+uh if
+
+597
+00:52:21,599 --> 00:52:31,280
+yeah we would need to reverse if if it's
+not left to right
+
+598
+00:52:29,119 --> 00:52:37,760
+I would assume we can do the following.
+You can do or does Python has this like
+
+599
+00:52:35,280 --> 00:52:41,358
+level reverse?
+>> Uh I'm not sure Python has this but I
+
+600
+00:52:40,318 --> 00:52:45,838
+can just do it then.
+>> Yeah. Or you can do this thing the
+
+601
+00:52:43,838 --> 00:52:49,920
+double colon minus one. Do you remember
+that one?
+
+602
+00:52:48,719 --> 00:52:56,039
+This one.
+>> Oh yes yes yes.
+
+603
+00:52:51,760 --> 00:52:56,039
+>> Up to you. But reversed also works.
+
+604
+00:52:57,119 --> 00:53:02,639
+>> I've seen it. Never used it.
+[laughter] It's actually minus one, by
+
+605
+00:53:00,960 --> 00:53:06,079
+the way. It's minus one because you're
+telling it to Yeah, it's just like a
+
+606
+00:53:04,480 --> 00:53:09,639
+code. Mhm. That's right.
+>> Okay. Okay. Okay.
+
+607
+00:53:09,760 --> 00:53:16,000
+Uh, okay. So, I guess I need to also
+reassign it probably.
+
+608
+00:53:14,239 --> 00:53:23,838
+>> Nice.
+>> And so then we are just result append
+
+609
+00:53:21,280 --> 00:53:27,559
+this level array and then we reassign in
+level to be empty.
+
+610
+00:53:27,838 --> 00:53:33,239
+Oh, it will be reassigned anyway
+upstairs. Whatever.
+
+611
+00:53:33,920 --> 00:53:41,440
+>> At some point we will just
+return
+
+612
+00:53:39,920 --> 00:53:45,119
+result.
+>> Now let me just dry check it quickly.
+
+613
+00:53:44,239 --> 00:53:50,480
+>> Sure.
+>> Yeah. Pick like a small
+
+614
+00:53:47,838 --> 00:53:57,047
+>> result Q root. Sorry [snorts] left to
+right. True.
+
+615
+00:53:52,559 --> 00:54:00,199
+And we also need to reset our left to
+[snorts] right
+
+616
+00:54:01,760 --> 00:54:12,559
+to not forget this. Now size Q level is
+our array
+
+617
+00:54:08,159 --> 00:54:19,079
+and this size. Cool. Pop left.
+Working with values. Great. [snorts]
+
+618
+00:54:15,039 --> 00:54:19,079
+Working with notes. Great.
+
+619
+00:54:22,000 --> 00:54:28,838
+Yeah, essentially let me dry run these
+two examples.
+
+620
+00:54:31,519 --> 00:54:45,599
+Uh so first one this one.
+So we would have left uh to right equals
+
+621
+00:54:40,719 --> 00:54:49,639
+true initially. This is our Q
+and this is our level.
+
+622
+00:54:51,039 --> 00:54:59,119
+Let's start. First we have one in the
+queue. Uh size is going to be one. So we
+
+623
+00:54:56,719 --> 00:55:06,159
+are going to do okay let me put size is
+one. Uh we are going to do
+
+624
+00:55:04,159 --> 00:55:13,440
+yeah only single pop. So we're popping
+one. We put it to level. Uh just here uh
+
+625
+00:55:11,199 --> 00:55:19,000
+we do have two nodes. So we append first
+left then right. So we append two.
+
+626
+00:55:19,760 --> 00:55:29,440
+Uh since it's Q let me be careful. So
+this is pop left and this is append. So
+
+627
+00:55:26,239 --> 00:55:36,960
+in this case we are appending two and
+then we are appending three. Cool.
+
+628
+00:55:34,719 --> 00:55:43,039
+Since it's size kind of decreased to
+zero in for loop we checking it's not
+
+629
+00:55:40,400 --> 00:55:48,400
+left to right. No it is left to right.
+So we don't reverse anything. Uh we
+
+630
+00:55:45,519 --> 00:55:53,760
+reversing left to right again. uh back
+to false
+
+631
+00:55:50,719 --> 00:56:01,760
+at the moment and then we are appending
+result of our level to result. So
+
+632
+00:55:56,880 --> 00:56:06,000
+essentially result is going to be one.
+Cool.
+
+633
+00:56:03,760 --> 00:56:11,838
+Then we are iterating again because Q is
+not empty. We're going to go size three
+
+634
+00:56:09,199 --> 00:56:17,679
+two sorry size two. And then we're going
+pop left which is
+
+635
+00:56:14,719 --> 00:56:23,519
+uh we are popping two
+and with node two we have four and five.
+
+636
+00:56:20,639 --> 00:56:29,280
+So we are adding
+four and five.
+
+637
+00:56:26,798 --> 00:56:34,880
+That's it. Then we pop
+third. Of course we're adding this guy
+
+638
+00:56:31,838 --> 00:56:40,719
+to our level which got reassigned. So
+we're adding it too.
+
+639
+00:56:38,159 --> 00:56:45,119
+Now we're popping again third one and
+three doesn't [snorts] uh explore any
+
+640
+00:56:43,599 --> 00:56:52,159
+more nodes. So we're just appending it
+to the level again. And after that we
+
+641
+00:56:49,199 --> 00:56:56,079
+kind of move out from this uh from this
+for loop. We're checking if it's not
+
+642
+00:56:54,079 --> 00:57:02,400
+left to right which it is not. We're
+reversing. So our level is going to be
+
+643
+00:56:58,798 --> 00:57:08,880
+32 instead of 2 three.
+And then
+
+644
+00:57:04,480 --> 00:57:16,079
+and then we are going to be appending it
+to our level. Oh sorry to our result
+
+645
+00:57:13,358 --> 00:57:22,000
+and this is going to be true again.
+Amazing. Now we have four. Four is going
+
+646
+00:57:19,039 --> 00:57:28,880
+to be just popped uh size is going to be
+two again. Uh so four is going to be
+
+647
+00:57:25,920 --> 00:57:35,920
+popped and appended here. And five is
+going to be popped and appended here.
+
+648
+00:57:32,798 --> 00:57:38,920
+Now we have empty Q by the way and still
+it's
+
+649
+00:57:39,599 --> 00:57:50,239
+uh this one is going to be false because
+it is left to right and we are assigning
+
+650
+00:57:44,639 --> 00:57:58,079
+it back appending this fox here.
+So 1 3 2 4 5 amazing next example.
+
+651
+00:57:55,599 --> 00:58:02,480
+Uh yeah in the end we return it. Okay
+next example is going to be this one. So
+
+652
+00:58:00,079 --> 00:58:09,440
+essentially the same we can do a bit of
+shortcut. Uh so
+
+653
+00:58:06,559 --> 00:58:13,920
+for 32 it it will be exactly the same
+result. And now let's just do the last
+
+654
+00:58:11,920 --> 00:58:18,719
+level of
+uh how we would explore it. Or maybe
+
+655
+00:58:16,480 --> 00:58:23,199
+yeah maybe let's start with one. So
+we're going to have
+
+656
+00:58:20,798 --> 00:58:28,039
+uh initially
+two and three.
+
+657
+00:58:29,519 --> 00:58:38,000
+Yes. Then we pop two.
+Append it to level. We don't find
+
+658
+00:58:35,039 --> 00:58:47,239
+anything. So we don't append anything.
+Then we pop three. We found six seven.
+
+659
+00:58:41,119 --> 00:58:47,239
+Uh sorry 67. And we put three here.
+
+660
+00:58:48,239 --> 00:58:58,639
+Initially our left to right was true
+then now it's false so we reverse
+
+661
+00:58:55,440 --> 00:59:04,239
+and we append it
+again and 67 now 67 how it should be uh
+
+662
+00:59:02,400 --> 00:59:11,838
+we're again popping everything and
+essentially we would put it here since
+
+663
+00:59:07,039 --> 00:59:15,679
+left to right wait true false true then
+it's going to be true at that at that
+
+664
+00:59:13,519 --> 00:59:21,358
+point
+So we don't reverse and we just adding
+
+665
+00:59:18,639 --> 00:59:24,760
+it to the result. To me it makes sense.
+It should work.
+
+666
+00:59:25,199 --> 00:59:33,679
+>> Uh sounds great. Yeah. Let's cut it
+here. Like let's take off our
+
+667
+00:59:30,079 --> 00:59:37,838
+interviewer's hats. Um blah blah blah.
+Okay. You have some water. But my first
+
+668
+00:59:36,079 --> 00:59:43,440
+question to you is like how do you think
+you did?
+
+669
+00:59:39,440 --> 00:59:48,639
+>> Uh well I think I did average kind of
+okay. Uh
+
+670
+00:59:46,480 --> 00:59:54,880
+the only thing that I didn't get the
+feedback about sorry follow up about the
+
+671
+00:59:52,559 --> 01:00:00,159
+space complexity which is I just I just
+couldn't I just couldn't grasp this like
+
+672
+00:59:57,760 --> 01:00:03,599
+it my brain just stuck at the moment and
+I didn't know because
+
+673
+01:00:01,920 --> 01:00:07,039
+>> okay yeah I think it's a part of being
+nervous and you just can't think
+
+674
+01:00:05,199 --> 01:00:11,119
+straight
+uh but like don't worry about the space
+
+675
+01:00:08,880 --> 01:00:15,838
+how do you think like in general how do
+you think was your code like were you
+
+676
+01:00:13,679 --> 01:00:20,719
+super lost? Were you super confused like
+what the is going on or do you
+
+677
+01:00:18,480 --> 01:00:24,239
+think you kind of had a good grasp on
+like how to move through the through the
+
+678
+01:00:23,280 --> 01:00:28,318
+problems?
+>> No, honestly. Okay, it might sound a bit
+
+679
+01:00:26,318 --> 01:00:35,280
+cocky, but I think I would get higher
+for sure after this interview. But uh
+
+680
+01:00:33,679 --> 01:00:39,679
+talking about my experience, at some
+point I got lost with this zigzag
+
+681
+01:00:37,199 --> 01:00:46,079
+because I started messing up this uh
+variable and I started thinking deeply
+
+682
+01:00:42,880 --> 01:00:52,639
+about different examples that if I just
+try to not work with the level as a line
+
+683
+01:00:49,920 --> 01:00:57,599
+but try to
+try to make a decision how do I append.
+
+684
+01:00:55,119 --> 01:01:03,280
+So I maybe I will append you know. So I
+was thinking about this so to to change
+
+685
+01:00:59,838 --> 01:01:07,039
+the order of appending
+>> based on this variable left to right. So
+
+686
+01:01:05,519 --> 01:01:10,559
+something like this I I was thinking to
+do
+
+687
+01:01:07,760 --> 01:01:15,760
+>> and it got me so deep in different edge
+cases and I got at some point stuck and
+
+688
+01:01:13,039 --> 01:01:19,280
+lost and then I just stopped myself and
+thought that okay we anyway have worst
+
+689
+01:01:17,440 --> 01:01:21,920
+case that we have this level let's do it
+as simple as possible and then it kind
+
+690
+01:01:21,119 --> 01:01:26,000
+of
+>> got progressed uh easy because this is
+
+691
+01:01:24,159 --> 01:01:32,318
+the pattern kind of I I can blindly
+quote any time so I did it so many times
+
+692
+01:01:28,880 --> 01:01:38,239
+but just this in initial intuition
+>> uh like while I just got the problem and
+
+693
+01:01:35,440 --> 01:01:42,159
+this first five 10 minutes up until I
+really have mental model and have an
+
+694
+01:01:39,838 --> 01:01:45,039
+idea of how do I proceed these are kind
+of hard but once I have the idea coding
+
+695
+01:01:44,400 --> 01:01:49,760
+part is
+>> yeah and listen you've never seen these
+
+696
+01:01:48,079 --> 01:01:53,119
+problems before right I mean honestly
+for somebody who's never I don't know
+
+697
+01:01:51,440 --> 01:01:58,000
+maybe you saw them like years ago you
+forgot you did really really well
+
+698
+01:01:55,599 --> 01:02:02,239
+>> oh thank you uh so this one first
+problem I never solved it
+
+699
+01:02:00,159 --> 01:02:07,519
+>> uh second problem probably I have solved
+it but years ago like
+
+700
+01:02:05,119 --> 01:02:12,000
+>> it doesn't matter. Yeah. [snorts]
+>> Okay. I want to give you feedback
+
+701
+01:02:10,318 --> 01:02:15,838
+because again I know people are going to
+be watching this and they can just
+
+702
+01:02:13,519 --> 01:02:21,358
+listen in but I want you to do really
+well in your interview. So again my
+
+703
+01:02:18,480 --> 01:02:26,079
+verdict is I will pass you for L4 but
+again I just want to tell you because
+
+704
+01:02:23,440 --> 01:02:29,358
+from what my experience and from how I
+approach my interviews there are a
+
+705
+01:02:27,920 --> 01:02:32,960
+couple things you can be doing better.
+And again, I am leveling you for a
+
+706
+01:02:31,280 --> 01:02:36,639
+senior engineer, right?
+>> For L4, I think you did really, really
+
+707
+01:02:35,440 --> 01:02:40,798
+well.
+>> Um, but I want to kind of tell you like
+
+708
+01:02:39,280 --> 01:02:44,719
+what can be better for a senior
+engineer. So,
+
+709
+01:02:42,400 --> 01:02:50,159
+>> let's dive in. First of all, I want to
+tell you this is a little bit of smell.
+
+710
+01:02:47,119 --> 01:02:54,239
+>> What can you do about this?
+Tell me
+
+711
+01:02:52,559 --> 01:02:59,519
+>> uh
+>> these three things together.
+
+712
+01:02:57,760 --> 01:03:03,519
+Oh, well, I can return straight away
+from this place probably.
+
+713
+01:03:01,199 --> 01:03:08,000
+>> That's right. Please write it down.
+>> Uh, yeah, sure.
+
+714
+01:03:06,400 --> 01:03:12,798
+>> And I don't I don't want to see this
+variable either. So, you can do it
+
+715
+01:03:09,760 --> 01:03:16,159
+together. Yeah. Mhm.
+>> Yeah, that makes sense. Yeah, that makes
+
+716
+01:03:14,960 --> 01:03:18,798
+sense. That makes sense.
+>> Yeah, it's okay. You know, in the
+
+717
+01:03:17,519 --> 01:03:23,119
+interview, you just want to like write and but just like breaks in
+
+718
+01:03:21,519 --> 01:03:28,960
+general, try not to do that. I
+understand. Also, if you write it, just
+
+719
+01:03:25,119 --> 01:03:33,280
+say it. say. So, I know it's smelly. I
+know it's bad. Like, a better approach
+
+720
+01:03:30,880 --> 01:03:34,798
+is blah blah blah. Just say something.
+Okay.
+
+721
+01:03:34,000 --> 01:03:39,599
+>> Okay. All right.
+>> Uh, one thing, I think you were also a
+
+722
+01:03:38,239 --> 01:03:42,880
+little bit nervous when we're doing this
+problem. You didn't really ask me
+
+723
+01:03:40,880 --> 01:03:47,440
+clarifying questions. You came back to
+it afterwards and you asked me, can it
+
+724
+01:03:45,199 --> 01:03:53,039
+be a zero? Right? Like some point like
+after you like 20 minutes into it, you
+
+725
+01:03:50,639 --> 01:03:55,920
+asked me, can it be a zero? Can it be
+negative? Right? See, that was also a
+
+726
+01:03:54,719 --> 01:03:58,880
+valid question.
+>> Uh, yeah. And the truth is
+
+727
+01:03:57,119 --> 01:04:04,000
+>> Yeah. Yeah. Yeah. That's a bad Oh my
+god. Yes. Yes. Yes. I I was I was about
+
+728
+01:04:01,039 --> 01:04:07,358
+to ask, but then I started nervous.
+Forgot about this. That's why.
+
+729
+01:04:06,798 --> 01:04:11,358
+>> That's right.
+>> Uh, okay. So, sorry it's a little bit
+
+730
+01:04:09,039 --> 01:04:16,639
+loud here because of the truck, but my
+point is, so before you write anything,
+
+731
+01:04:14,480 --> 01:04:20,639
+I know you're just like eager to kind of
+think through, stop for a second,
+
+732
+01:04:18,559 --> 01:04:26,719
+breathe out, just like truly catch a
+break and ask yourself,
+
+733
+01:04:24,719 --> 01:04:32,159
+what's my input? Like, this input,
+frankly, could have been a string. Like,
+
+734
+01:04:28,639 --> 01:04:37,519
+you know, like you didn't ask me.
+And if it was a string, then you
+
+735
+01:04:34,000 --> 01:04:41,519
+wouldn't need to do this right?
+Um yes
+
+736
+01:04:39,039 --> 01:04:46,159
+>> I also don't I've seen a lot of people
+get like oh my god can it be like a wild
+
+737
+01:04:44,559 --> 01:04:50,239
+character like don't ask me the stupid like I told you it's a number right
+
+738
+01:04:47,838 --> 01:04:54,480
+okay so don't get like spend 10 minutes
+asking me about validation of input but
+
+739
+01:04:52,719 --> 01:04:57,039
+ask questions that really matter like
+honestly if this was a negative number
+
+740
+01:04:56,000 --> 01:05:00,079
+this would have been like a very
+different story right
+
+741
+01:04:57,920 --> 01:05:05,440
+>> yeah it will fail probably
+>> yeah so just take a moment like truly
+
+742
+01:05:03,519 --> 01:05:10,000
+breathe out and think what matters in
+this problem right Like and in the video
+
+743
+01:05:07,599 --> 01:05:15,119
+that I sent you, like they really tell
+you like for example ask if you have an
+
+744
+01:05:12,239 --> 01:05:20,239
+array, is it sorted? Um do we have
+strings? Do we have integers? Is it
+
+745
+01:05:17,920 --> 01:05:22,880
+mixed? Blah blah blah. Okay, I do want
+to say something that you were doing
+
+746
+01:05:21,358 --> 01:05:27,760
+really really great and I hope you don't
+stop doing it. You just really think out
+
+747
+01:05:25,519 --> 01:05:31,519
+loud and it is a skill, right? This is
+not a skill of solving lit code
+
+748
+01:05:29,440 --> 01:05:35,920
+problems. pretty much like your grandma
+can solve a lit code problem, but the
+
+749
+01:05:33,280 --> 01:05:41,119
+grandma cannot be hired because she has
+to come in and for 45 minutes she has to
+
+750
+01:05:38,639 --> 01:05:45,280
+talk and solve. It's two things you have
+to do at the same time and this is
+
+751
+01:05:42,798 --> 01:05:50,559
+mentally and cognitively very very hard.
+And I think you did really well. It is
+
+752
+01:05:47,199 --> 01:05:56,719
+hard to code it up, think it through,
+get lost, make mistakes, and keep
+
+753
+01:05:54,159 --> 01:06:00,079
+talking. Please do not change that. I
+want to tell you something that I do
+
+754
+01:05:58,000 --> 01:06:04,880
+myself that I hope will just help you
+when you move forward. So after I've
+
+755
+01:06:02,400 --> 01:06:11,679
+explained what I want to do. I stop and
+I do this. I put actually sometimes I'm
+
+756
+01:06:09,358 --> 01:06:16,480
+so lazy I just write n which I know is
+not correct. So do your own way write of
+
+757
+01:06:14,960 --> 01:06:22,639
+n
+what you wrote here. Sorry. Um and then
+
+758
+01:06:20,239 --> 01:06:28,719
+same thing here. So before you write
+code, I tell my interviewer what this is
+
+759
+01:06:25,679 --> 01:06:32,798
+going to be and then I ask them
+what do you think? How does that sound
+
+760
+01:06:30,639 --> 01:06:38,000
+to you? Right? So before I write any
+code, I know we're under gun to do so,
+
+761
+01:06:35,679 --> 01:06:41,440
+but my my approach is that I tell them
+like this is my idea. This is how much
+
+762
+01:06:40,159 --> 01:06:45,199
+it's going to cost time and space
+complexity. This what do you think?
+
+763
+01:06:43,599 --> 01:06:49,199
+Because
+the thing is that with this map, I will
+
+764
+01:06:47,199 --> 01:06:52,318
+show you the clean solution. Again, this
+is somebody who spent maybe three hours
+
+765
+01:06:50,880 --> 01:06:55,920
+optimizing it. So,
+>> yep.
+
+766
+01:06:52,880 --> 01:06:59,920
+>> I am not telling you like you your
+approach sucks or you're stupid because
+
+767
+01:06:57,519 --> 01:07:03,679
+again all I was saying is that you can
+just save what you're saving like save
+
+768
+01:07:02,480 --> 01:07:07,199
+on what you're saving. You don't need
+the suffixes. You can just save the
+
+769
+01:07:05,199 --> 01:07:09,920
+numbers and you can just do this
+reversal from nine. Anyway, you're going
+
+770
+01:07:08,798 --> 01:07:13,679
+to look at the solution. You will
+understand what I mean.
+
+771
+01:07:11,280 --> 01:07:20,079
+>> But the thing is that you jumped right
+after this. He didn't ask me and I could
+
+772
+01:07:15,838 --> 01:07:24,318
+have told you you don't need to do this
+again. I don't know if you would have
+
+773
+01:07:22,079 --> 01:07:27,838
+come up with a different solution right
+off the bat and at the end I would have
+
+774
+01:07:26,079 --> 01:07:31,599
+told you okay it just go write a
+brute force like write something like I
+
+775
+01:07:29,760 --> 01:07:37,760
+need you to write code.
+>> So but my trick is that after you've
+
+776
+01:07:34,960 --> 01:07:41,280
+done this just ask them do you think
+there is a better solution? Do you think
+
+777
+01:07:39,280 --> 01:07:45,679
+this works for you? And then after they
+give you a verbal yes, then you write
+
+778
+01:07:43,679 --> 01:07:50,639
+your code because otherwise I could have
+helped you here, but you just went
+
+779
+01:07:47,679 --> 01:07:56,400
+straight.
+Um, and then I think actually you were
+
+780
+01:07:54,400 --> 01:07:59,920
+validating your plan really well when we
+were on this problem, right? When we
+
+781
+01:07:58,000 --> 01:08:04,400
+were in the tree, you were very verbal
+with me and you were like, "Hey, what do
+
+782
+01:08:01,599 --> 01:08:08,159
+you think?" You asked me, right? Like,
+"What do you think? Can we do better or
+
+783
+01:08:06,639 --> 01:08:12,318
+whatever?" Like you somehow like I think
+you were not as nervous here anymore.
+
+784
+01:08:09,760 --> 01:08:16,319
+and you were way more in touch with me,
+which was great because at the end of
+
+785
+01:08:13,920 --> 01:08:20,640
+the day, I'm not like a Like, I
+want you to do well, but if you don't
+
+786
+01:08:17,759 --> 01:08:23,039
+ask me anything, then I can't help you.
+>> Makes sense.
+
+787
+01:08:21,359 --> 01:08:30,399
+>> Um,
+in general, I think this is basically
+
+788
+01:08:26,719 --> 01:08:36,238
+all the feedback I have for you. Uh,
+there was something else
+
+789
+01:08:33,679 --> 01:08:40,479
+about Oh, okay. I will show you. There
+is a trick to do this a little bit nicer
+
+790
+01:08:38,560 --> 01:08:44,079
+with like you kind of have to know this
+mathematical tricks about how many nodes
+
+791
+01:08:42,319 --> 01:08:47,920
+you have. But I also do want to tell you
+something else. When you are writing out
+
+792
+01:08:45,679 --> 01:08:53,279
+space complexity, listen, these are the
+same things, don't you think?
+
+793
+01:08:50,158 --> 01:08:58,992
+>> Uh, sorry. Where do I point? Uh,
+>> leaves and nodes. Do you see when I'm
+
+794
+01:08:55,359 --> 01:09:01,600
+highlighting it here?
+[sighs]
+
+795
+01:08:59,520 --> 01:09:05,079
+>> Um,
+think about it.
+
+796
+01:09:07,920 --> 01:09:16,079
+Well, not necessarily the same, right?
+If you have huge height,
+
+797
+01:09:14,158 --> 01:09:21,439
+but it will be much less. Yeah, it will
+be like the number of leaves would be a
+
+798
+01:09:18,880 --> 01:09:25,119
+majority of the nodes. That's true.
+That's true.
+
+799
+01:09:22,000 --> 01:09:30,079
+>> Yeah. You will never need to touch more
+than you have, right? You will only
+
+800
+01:09:27,359 --> 01:09:34,399
+touch every single thing once. If you
+don't have it, great. You just don't
+
+801
+01:09:32,479 --> 01:09:38,158
+have it.
+Okay. Okay. Okay.
+
+802
+01:09:35,520 --> 01:09:43,439
+>> Um,
+and in general, I actually also want to
+
+803
+01:09:40,798 --> 01:09:48,960
+tell you maybe one thing.
+>> Try to simplify when you do dry run. Try
+
+804
+01:09:46,719 --> 01:09:51,520
+to simplify your cases. Watch the clock
+a little bit.
+
+805
+01:09:51,039 --> 01:09:54,960
+>> Okay?
+>> Because again, I was telling you like
+
+806
+01:09:53,520 --> 01:09:58,719
+this number is too big. Like don't take
+this big number. You're just gonna like
+
+807
+01:09:56,399 --> 01:10:05,359
+waste time like checking this like three
+and eight like two times. Don't do it.
+
+808
+01:10:02,158 --> 01:10:10,319
+like just pick a clear
+um distinct example that shows your
+
+809
+01:10:08,800 --> 01:10:16,560
+point
+and just just keep it short like just
+
+810
+01:10:13,520 --> 01:10:19,520
+show that it works. Keep the dry run a
+little bit faster.
+
+811
+01:10:17,920 --> 01:10:25,119
+>> Okay, makes sense. Makes sense.
+>> Don't lose yourself because ultimately
+
+812
+01:10:22,079 --> 01:10:26,880
+you're wasting time on the follow-up.
+>> Makes sense.
+
+813
+01:10:25,520 --> 01:10:30,238
+>> If we're out of time, I cannot give you
+a follow-up.
+
+814
+01:10:27,760 --> 01:10:33,679
+>> Makes sense. Makes sense. Yep. So when
+you pick an example, right, like maybe
+
+815
+01:10:32,079 --> 01:10:38,000
+you were explaining your algorithm on
+this, like I loved it, but then when
+
+816
+01:10:36,319 --> 01:10:43,279
+you're doing a dry run, say like, hey,
+is it okay if I just keep take like a
+
+817
+01:10:41,039 --> 01:10:45,439
+smaller example or take a cleaner leaner
+case?
+
+818
+01:10:45,039 --> 01:10:48,800
+>> Okay.
+>> So that's kind of what I have for you
+
+819
+01:10:47,679 --> 01:10:51,679
+today.
+>> Okay. What's your cool?
+
+820
+01:10:50,399 --> 01:10:58,800
+>> Yeah. Yeah, I got the feedback.
+Definitely I will be I'll still be
+
+821
+01:10:54,800 --> 01:11:04,238
+prepping, right? Uh so
+yeah it's great to to have the feedback
+
+822
+01:11:01,039 --> 01:11:09,119
+so I I know some points to focus on um
+especially about clarification because
+
+823
+01:11:06,960 --> 01:11:11,840
+>> you know I'm doing this le code marathon
+for like past week and in lead code
+
+824
+01:11:11,520 --> 01:11:14,880
+right
+>> you don't have to clarify anything
+
+825
+01:11:13,359 --> 01:11:18,399
+because you know they they put the
+constraints you just go and check okay
+
+826
+01:11:16,479 --> 01:11:20,719
+can be negative and you see it's like
+less than or equal
+
+827
+01:11:19,119 --> 01:11:24,000
+>> or the test fails and that's how you
+know right
+
+828
+01:11:21,679 --> 01:11:29,039
+>> uh yeah yeah yeah well I I don't
+actually run it before I debugged did a
+
+829
+01:11:26,479 --> 01:11:33,119
+dry run. So, I'm following approach. I'm
+trying to follow. It's hard and requires
+
+830
+01:11:31,439 --> 01:11:35,679
+discipline and cognitive effort, but
+still I'm trying to do this.
+
+831
+01:11:34,560 --> 01:11:40,158
+>> Yeah. Yeah. Yeah.
+>> Um yeah, it was nice actually. Amazing
+
+832
+01:11:38,000 --> 01:11:43,119
+problems. Uh this one, could you pass me
+the
+
+833
+01:11:40,880 --> 01:11:45,920
+>> I will I'll send you both the problem
+and my solution and feel free to share
+
+834
+01:11:44,719 --> 01:11:49,039
+them with people as well.
+>> Oh, sure. Sure. I will.
+
+835
+01:11:47,279 --> 01:11:53,198
+>> If you can clean it up, please share
+like a cleaner solution as well. Uh but
+
+836
+01:11:51,600 --> 01:11:58,960
+then again, remember that this people
+spent hours doing that. So what you did
+
+837
+01:11:56,319 --> 01:12:03,198
+never having seen this problem before is
+much more relevable than people who
+
+838
+01:12:00,640 --> 01:12:06,399
+spent hours who knows with charge
+without charge doing that.
+
+839
+01:12:04,960 --> 01:12:07,600
+>> Uh but maybe there's something you can
+learn from them as well.
+
+840
+01:12:07,279 --> 01:12:11,600
+>> Sure.
+>> Just like in terms of cleaner code
+
+841
+01:12:09,359 --> 01:12:15,840
+cleaner just exits this type of stuff.
+And then again, listen, it's not a sin
+
+842
+01:12:13,520 --> 01:12:22,079
+if you do it. But just say that you know
+you can do better because I if you don't
+
+843
+01:12:18,079 --> 01:12:27,119
+tell me then like okay this truck this
+bro just rides breaks everywhere like at
+
+844
+01:12:24,960 --> 01:12:30,719
+this level you should know that this is
+not great. Okay. And you can say so.
+
+845
+01:12:29,439 --> 01:12:34,238
+>> Sure. Sure. Sure. Yeah. That makes
+sense. That I didn't even think it was
+
+846
+01:12:32,560 --> 01:12:37,840
+just Yeah. I didn't even think about
+that. [laughter] I was like break and I
+
+847
+01:12:36,399 --> 01:12:41,520
+return. Yeah. That's it.
+>> It's okay. like you just want to show
+
+848
+01:12:39,760 --> 01:12:46,640
+how it works, but you can do better.
+Just like verbally say like I know it's
+
+849
+01:12:43,039 --> 01:12:52,640
+a smell and try to like clean it up.
+>> All right. Uh so thank you. It was Anna,
+
+850
+01:12:49,679 --> 01:12:57,679
+senior engineer from
+uh please check the description and
+
+851
+01:12:55,039 --> 01:13:00,158
+follow her in stack uh Substack, I'm
+sorry. Follow her [laughter] on
+
+852
+01:12:59,039 --> 01:13:06,158
+Substack.
+>> Follow me on Stack Overflow.
+
+853
+01:13:03,439 --> 01:13:09,840
+>> Yeah. And on Stack Over overflow as
+well. Yeah. because uh if you're
+
+854
+01:13:08,238 --> 01:13:17,279
+especially if you're finding something
+for interview uh Anna Anna is a beast in
+
+855
+01:13:14,000 --> 01:13:20,560
+behavioral. So if you need to have some
+tips about behavioral you definitely
+
+856
+01:13:19,198 --> 01:13:23,679
+should go and read
+>> articles. So
+
+857
+01:13:22,399 --> 01:13:28,880
+>> yep
+>> and do mocks. We can do another mock
+
+858
+01:13:25,679 --> 01:13:33,198
+with you. [laughter]
+>> Yes, at some point at some point we will
+
+859
+01:13:31,119 --> 01:13:37,039
+need to do a mock for sure because I I
+suck at behavioral much more than in
+
+860
+01:13:35,119 --> 01:13:40,479
+lead code.
+All right,
+
+861
+01:13:38,238 --> 01:13:43,600
+>> go rest. Good job today. I will send you
+the solutions. Please share them with
+
+862
+01:13:41,840 --> 01:13:46,158
+people as well. And then hopefully we'll
+do another mock.
+
+863
+01:13:44,560 --> 01:13:49,439
+>> Thank you. Yeah, thank you. It was a
+nice time. Thank you so much and see
+
+864
+01:13:48,640 --> 01:13:52,399
+you.
+>> See you next time. Bye.
+

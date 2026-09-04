@@ -3,6 +3,7 @@
 const { getProvider, resolveProvider, apiKeyForProvider, DEFAULT_PROVIDER_NAME } = require('../../shared/ai-provider-registry');
 const { canonicalizeUrl, searchTavily, extractTavily, probeTavily } = require('../../shared/tavily-client');
 const { LOCAL_API_BASE } = require('../../shared/llm-endpoints');
+const { registrableHostOf } = require('../catalog-research');
 const { synthesizeLayerFields } = require('./deepseek-catalog-ai');
 const { requestStructuredJson } = require('./deepseek-structured');
 
@@ -16,9 +17,18 @@ function discoveryKeywords(predicates = []) {
   return keywords.join(' ');
 }
 
-function officialDomainsOf(plan) {
+function officialDomainsOf(plan, domainScope = 'seed') {
   const urls = [plan?.seed?.official_url, ...(plan?.seed?.discovery_sources || []).map(source => source?.url)].map(canonicalizeUrl).filter(Boolean);
-  return [...new Set(urls.map(url => new URL(url).hostname.toLowerCase().replace(/^www\./, '')))];
+  const hosts = [...new Set(urls.map(url => new URL(url).hostname.toLowerCase().replace(/^www\./, '')))];
+  // domain_scope='registrant'：扩域轮，把每个精确子域放宽到同厂商注册域根
+  //（platform.openai.com → +openai.com），让厂商主站公告/帮助中心进入搜索范围。
+  if (domainScope !== 'registrant') return hosts;
+  const widened = new Set(hosts);
+  for (const host of hosts) {
+    const root = registrableHostOf(host);
+    if (root) widened.add(root);
+  }
+  return [...widened];
 }
 
 function buildOfficialDiscoveryQuery({ plan, scope, missing_predicates: missingPredicates = [] }) {
@@ -62,7 +72,7 @@ async function discoverOfficialSources(input, options = {}) {
     accessMode: options.accessMode,
     fallbackToKey: options.fallbackToKey,
     query: buildOfficialDiscoveryQuery(input),
-    includeDomains: officialDomainsOf(input.plan),
+    includeDomains: officialDomainsOf(input.plan, input.domain_scope),
     searchDepth: options.searchDepth || 'advanced',
     maxResults: options.maxSearchResults ?? 5,
   });
@@ -228,6 +238,7 @@ async function resolveOfficialSource(name, options = {}) {
 
 module.exports = {
   buildOfficialDiscoveryQuery,
+  buildOfficialDomains: officialDomainsOf,
   discoverOfficialSources,
   acquireOfficialSources,
   probeCatalogCapabilities,

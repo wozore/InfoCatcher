@@ -1,0 +1,51 @@
+1
+00:00:00,119 --> 00:00:03,159
+OpenClaude 2.0 just dropped and it makes AI coding multiplayer.
+
+2
+00:00:06,159 --> 00:00:09,559
+The open source agent Harness calls this its biggest release ever.
+
+3
+00:00:10,539 --> 00:00:14,119
+933 contributors merged over 16,000 pull requests,
+
+4
+00:00:14,399 --> 00:00:16,819
+roughly half of everything ever merged into the project.
+
+5
+00:00:17,340 --> 00:00:19,840
+The headline feature, shared cloud sessions,
+
+6
+00:00:20,199 --> 00:00:22,119
+so your whole team works inside one agent.
+
+7
+00:00:22,979 --> 00:00:27,839
+Creator Peter Steinberger says local harnesses feel like relics of the past now.
+
+8
+00:00:28,180 --> 00:00:30,159
+One catch before you roll it out at work,
+
+9
+00:00:30,420 --> 00:00:34,419
+reviewers note sandboxing and command approvals ship off by default.
+
+10
+00:00:34,719 --> 00:00:35,899
+Lock those down first.
+
+11
+00:00:38,939 --> 00:00:41,919
+So would you put your whole team inside one shared agent,
+
+12
+00:00:42,119 --> 00:00:46,259
+or is one agent per developer the only sane way to work?
+
+13
+00:00:47,959 --> 00:00:54,699
+Subscribe for more AI news and tutorials every single day.

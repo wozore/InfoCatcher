@@ -2811,3 +2811,45 @@
 - [x] 手动 dispatch 采集 YouTube 后，下次调度采集仍按原节奏触发（手动与调度互不影响，用户拍板语义）；两次采集间候选可能短期重叠，由候选层去重兜底。
 - [x] `schedule-state.json` 需随审核 PR 合并进入 main 才生效；若 PR 长期不合并，到期闸按合并前的旧状态判定（保守方向为多采）。
 - [x] 9/1-9/2 三次 "Test generated data" 失败运行属另一问题（测试步骤失败），本次未处理，待后续排查。
+
+## 2026-09-04 · 模型待补卡面板重复 Draft 修复（prepare 互斥 + 复用补漏）
+
+### 问题诊断（用户观察到面板出现 4 条 GPT-6 等重复条目）
+
+- [x] 草稿存储核查：19 条草稿中 5 个候选各有 3~4 条完全同 `candidate_key`、同 `base_revision` 的重复草稿；GPT-6 四条的 `created_at` 全部落在 03:59:49–03:59:59 十秒窗口，且每条都各自消耗了完整研究预算（search 2~5 次、responses 1~5 次）——确认为并发 prepare 重复建草稿、重复烧 token。
+- [x] 根因一（无互斥）：[catalog-workbench.js](../../src/catalog/catalog-workbench.js) `prepare()` 是长任务，开局复用检查读不到其他在途调用尚未落盘的草稿；前端按钮 disabled 只防同按钮连点，fetch 超时/页面刷新/多标签页重试都会并发触发第二路 prepare。
+- [x] 根因二（复用白名单缺 `resuming`）：恢复中途（或进程重启遗留孤儿 resuming）再点 prepare，复用匹配不到该草稿，直接新建重复条目；与 assistant 侧"孤儿 resuming 可再恢复"规则不一致。
+
+### 修复实现
+
+- [x] [catalog-workbench.js](../../src/catalog/catalog-workbench.js)：prepare 加模块级互斥（在途时返回 `PREPARE_IN_PROGRESS`，锁覆盖所有实例化入口）；每卡调 `prepareCatalogDraft` 前复查一次 store 可复用（收窄官方来源解析期间的窗口）；`REUSABLE_DRAFT_STATES` 补 `resuming`。
+- [x] [workbench.js](../../src/maintainer-web/js/workbench.js)：前端识别 `PREPARE_IN_PROGRESS` 给出"等待完成后刷新"提示。
+- [x] 测试：并发 prepare 拒绝（第二次 `PREPARE_IN_PROGRESS`、prepareFn 仅 1 次调用）+ resuming 草稿复用不新建，共 2 组新用例。
+- [x] 存量清理：19 条重复草稿按 `candidate_key` 去重，每组保留最新 `preview_ready` 一条（共 5 条），其余 14 条移入 `data/manual/tools/catalog-drafts/.duplicates-backup-20260904/`（可逆备份，`listDrafts` 不扫描子目录）。
+
+### 验证结果
+
+- [x] `node --test "tests/catalog/*.test.js"` 277/277 通过；workbench 套件 12/12 通过。
+
+## 2026-09-04 · 字幕总结 4 连失败修复（provider 硬编码与模型配置错配）
+
+### 问题诊断（用户观察到"字幕总结完成：成功 0 条，失败 4 条"）
+
+- [x] 失败详情前端被丢弃（`result.failed` 未展示，提示语却让"查看失败原因"），先补 UI 再复现：用真实链路直跑 4 条拿到确切错误——DeepSeek API HTTP 400：`The supported API model names are deepseek-v4-pro, deepseek-v4-flash, and deepseek-v4-flash-vision-exp, but you passed glm-4-flash.`
+- [x] 根因（provider/模型错配）：[transcript-workflow.js](../../src/news/min/transcript-workflow.js) 硬编码 `provider: 'deepseek'`（deepseek 时代遗留），而 `.env` 的 `KNOWVIEW_SUMMARIZE_MODEL=glm-4-flash` 是智谱模型名（与采集富化通道 B 一致），模型名被原样发给 DeepSeek 端点 → 4 条全部同错。全项目默认外部 provider 已收口在 registry `DEFAULT_PROVIDER_NAME`（当前 zhipu），本链路是唯一漏改点。
+- [x] 附带发现：`transcript_summary_llm === 'deepseek'` 在 local-enrichment 的 4 处仅作"外部已总结"保护标记的兜底条件（主条件 `transcript_summarized_at` 恒覆盖），llm 标签如实写 provider 名不影响保护语义。
+
+### 修复实现
+
+- [x] [transcript-workflow.js](../../src/news/min/transcript-workflow.js)：`provider` 与写回 `llm` 标签改用 `DEFAULT_PROVIDER_NAME`（跟随项目级 provider 开关，模型配置随 provider 语义对齐），不再硬编码 deepseek。
+- [x] [workbench.js](../../src/maintainer-web/js/workbench.js)：字幕总结失败时把每条失败 id + 原因直接写进通知（原提示"请查看失败原因"但无处可看）。
+- [x] 测试：transcript-workflow 套件补断言——请求端点必须等于 registry 默认 provider 的对应协议端点（防 provider 硬编码回归）；测试标题去掉 Responses 专属措辞。
+
+### 验证结果
+
+- [x] 复现确认：修复前真实链路 4/4 失败（HTTP 400 模型名不匹配）；修复后重跑 4/4 成功，`transcript_summary_llm=zhipu`、summary/summary_key_points 落库正确。
+- [x] 全量测试 692/692 通过（`node tests/index.js`）。
+
+### 已知边界
+
+- [x] 运行中的工作台 server 进程需重启才能加载修复后的 summarize 路径（前端 JS 刷新页面即生效，服务端代码需重启进程）。

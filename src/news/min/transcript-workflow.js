@@ -4,8 +4,8 @@
  * 流程：Top 选中后，维护者在前端上传 YouTube 候选的字幕文件 →
  *   本模块把文件存到 data/manual/transcripts/<candidate_id>/<file>（可提交、不发布），
  *   并把字幕文本写入候选层 transcript 字段（不进公开投影）→
- *   维护者显式确认成本后，用外部 DeepSeek 对字幕重新总结，写回 summary /
- *   summary_key_points（随 approved 进公开投影，卡片摘要变厚）。
+ *   维护者显式确认成本后，用外部默认 provider（registry DEFAULT_PROVIDER_NAME）对字幕重新总结，
+ *   写回 summary / summary_key_points（随 approved 进公开投影，卡片摘要变厚）。
  *
  * 边界：文件名校验防路径穿越；字幕文本截断存储；外部 AI 必须 confirm_cost。
  */
@@ -15,6 +15,7 @@
 const fs = require('fs');
 const path = require('path');
 const { DIRS } = require('../../shared/paths');
+const { DEFAULT_PROVIDER_NAME } = require('../../shared/ai-provider-registry');
 const { readMinStore, commitMinStoreMutation, revisionOfMinStore, assertExpectedMinRevision, setCandidateTranscriptMin, setCandidateTranscriptSummaryMin } = require('./min-store');
 const { summarizeCandidate, runPool } = require('../classify/content-summarizer');
 
@@ -141,7 +142,7 @@ async function summarizeTranscripts(candidateIds, options = {}) {
       if (!candidate.transcript) return { id, ok: false, error: '无字幕可总结' };
       try {
         const suggestion = await summarizeCandidate(candidate, {
-          provider: 'deepseek',
+          provider: DEFAULT_PROVIDER_NAME,
           external: true,
           apiKey: options.apiKey,
           fetchImpl: options.fetchImpl,
@@ -167,7 +168,7 @@ async function summarizeTranscripts(candidateIds, options = {}) {
         const mutation = setCandidateTranscriptSummaryMin(next, result.id, {
           summary: result.summary,
           key_points: result.key_points,
-          llm: 'deepseek',
+          llm: DEFAULT_PROVIDER_NAME,
         }, { expectedRevision: revisionOfMinStore(next) });
         next = mutation.store;
       }

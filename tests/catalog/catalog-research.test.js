@@ -90,7 +90,7 @@ test('resume researches only scopes whose fields are still missing', async () =>
   const plan = planCatalogResearch(seed(), emptySnapshot());
   const requested = [];
   const localAdapters = adapters({
-    discover: async ({ scope }) => { requested.push(scope.kind); return { sources: [{ url: `https://kling.ai/${scope.kind}`, title: scope.kind, excerpt: 'Exact official quote.' }] }; },
+    discover: async ({ scope, domain_scope }) => { requested.push(domain_scope === 'registrant' ? `${scope.kind}:registrant` : scope.kind); return { sources: [{ url: `https://kling.ai/${scope.kind}`, title: scope.kind, excerpt: 'Exact official quote.' }] }; },
     acquire: async ({ sources }) => ({ contents: sources.map(source => ({ url: source.url, content: 'Exact official quote.' })) }),
   });
   const first = await researchCatalog(plan, localAdapters, { limits: { search_queries: 4, pages: 8 } });
@@ -99,17 +99,18 @@ test('resume researches only scopes whose fields are still missing', async () =>
   const resumed = await researchCatalog(plan, localAdapters, {
     existingResearch: first,
     missingFields: ['detail.api_pricing'],
-    limits: { search_queries: 4, pages: 8 },
+    // 镜像 assistant.resumeResearchLimits：恢复预算 = 已花 + 全新增量，扩宽轮消耗增量份额
+    limits: { search_queries: first.cost.spent.search_queries + 4, pages: 8 },
   });
   assert.equal(resumed.ok, true);
-  assert.deepEqual(requested, ['detail']);
+  assert.deepEqual(requested, ['detail', 'detail:registrant']);
 });
 
 test('budget exhaustion preserves partial sources for a missing-field resume', async () => {
   const plan = planCatalogResearch(seed(), emptySnapshot());
   const requested = [];
   const localAdapters = adapters({
-    discover: async ({ scope }) => { requested.push(scope.kind); return { sources: [{ url: `https://kling.ai/${scope.kind}`, title: scope.kind, excerpt: 'Exact official quote.' }] }; },
+    discover: async ({ scope, domain_scope }) => { requested.push(domain_scope === 'registrant' ? `${scope.kind}:registrant` : scope.kind); return { sources: [{ url: `https://kling.ai/${scope.kind}`, title: scope.kind, excerpt: 'Exact official quote.' }] }; },
     acquire: async ({ sources }) => ({ contents: sources.map(source => ({ url: source.url, content: 'Exact official quote.' })) }),
   });
   const failed = await researchCatalog(plan, localAdapters, { limits: { search_queries: 2, pages: 1 } });
@@ -122,10 +123,56 @@ test('budget exhaustion preserves partial sources for a missing-field resume', a
   const resumed = await researchCatalog(plan, localAdapters, {
     existingResearch: failed,
     missingFields: ['detail.api_pricing'],
-    limits: { search_queries: 4, pages: 8 },
+    limits: { search_queries: failed.cost.spent.search_queries + 4, pages: 8 },
   });
   assert.equal(resumed.ok, true);
-  assert.deepEqual(requested, ['detail']);
+  assert.deepEqual(requested, ['detail', 'detail:registrant']);
+});
+
+test('discovery widens to registrant roots when the seed-scope pass finds nothing new', async () => {
+  const subdomainSeed = {
+    ...seed(),
+    official_url: 'https://docs.kling.ai/model',
+    discovery_sources: [{ url: 'https://docs.kling.ai/model', kind: 'official_hint' }],
+  };
+  const snapshot = emptySnapshot();
+  snapshot['vendor-card'].push({ id: 'vendor-card:kuaishou', vendor_key: 'kuaishou' });
+  snapshot['vendor-level1'].push({ id: 'vendor-level1:kuaishou', vendor_key: 'kuaishou' });
+  snapshot['vendor-level2'].push({ id: 'vendor-level2:kuaishou:kling', vendor_key: 'kuaishou' });
+  const plan = planCatalogResearch(subdomainSeed, snapshot);
+  const scopes = [];
+  const result = await researchCatalog(plan, {
+    discover: async ({ domain_scope }) => {
+      scopes.push(domain_scope || 'seed');
+      if ((domain_scope || 'seed') === 'seed') return { sources: [{ url: 'https://third-party.example/kling', title: 'Third party', excerpt: 'Untrusted' }] };
+      return { sources: [{ url: 'https://www.kling.ai/news/kling-2-6-pro-launch', title: 'Launch', excerpt: 'Official launch announcement.' }] };
+    },
+    acquire: async ({ sources }) => ({ contents: sources.map(source => ({ url: source.url, content: 'Official launch announcement. API available.' })) }),
+  }, { limits: { search_queries: 4, pages: 4 } });
+  assert.equal(result.ok, true);
+  assert.deepEqual(scopes, ['seed', 'registrant']);
+  assert.ok(result.official_sources.some(source => source.url === 'https://www.kling.ai/news/kling-2-6-pro-launch'), '同厂商主域来源应通过官方闸门');
+  assert.equal(result.official_sources.some(source => source.url === 'https://third-party.example/kling'), false);
+});
+
+test('registrableHostOf widens vendor subdomains but not shared hosting roots', () => {
+  const { registrableHostOf } = require('../../src/catalog/catalog-research');
+  assert.equal(registrableHostOf('platform.openai.com'), 'openai.com');
+  assert.equal(registrableHostOf('openai.com'), null);
+  assert.equal(registrableHostOf('docs.kling.ai'), 'kling.ai');
+  assert.equal(registrableHostOf('foo.github.io'), null);
+  assert.equal(registrableHostOf(''), null);
+});
+
+test('official gate accepts vendor main domain once a subdomain hint exists', () => {
+  const { officialRootsOf, isTrustedOfficialUrl } = require('../../src/catalog/catalog-research');
+  const roots = officialRootsOf({
+    official_url: 'https://platform.openai.com/docs',
+    discovery_sources: [{ url: 'https://platform.openai.com/docs', kind: 'official_hint' }],
+  });
+  assert.ok(roots.includes('openai.com'));
+  assert.equal(isTrustedOfficialUrl('https://openai.com/index/gpt-6-astra/', roots), true);
+  assert.equal(isTrustedOfficialUrl('https://openai-competitor.example/index/gpt-6-astra/', roots), false);
 });
 
 test('scopeKindsOfFields maps fields to their owning layer scopes', () => {

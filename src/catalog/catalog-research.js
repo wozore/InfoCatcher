@@ -37,6 +37,21 @@ function hostOf(url) {
   try { return new URL(canonical).hostname.toLowerCase(); } catch { return ''; }
 }
 
+// 多租户托管后缀不是任何厂商的"注册域根"：平台.openai.com 可以放宽到 openai.com，
+// 但 foo.github.io 绝不能放宽到 github.io（否则所有托管项目都会被当成官方域）。
+const SHARED_HOSTING_SUFFIXES = new Set([
+  'github.io', 'gitlab.io', 'vercel.app', 'netlify.app', 'pages.dev', 'workers.dev',
+  'web.app', 'firebaseapp.com', 'herokuapp.com', 'blogspot.com', 'gitee.io',
+]);
+
+/** 取主机名的注册域根（最后两段）；主机已是根域或根是多租户托管后缀时返回 null。 */
+function registrableHostOf(host) {
+  const labels = String(host || '').split('.').filter(Boolean);
+  if (labels.length <= 2) return null;
+  const candidate = labels.slice(-2).join('.');
+  return SHARED_HOSTING_SUFFIXES.has(candidate) ? null : candidate;
+}
+
 // 公共代码托管/模型分享平台不作为官方根域名（否则该平台的所有项目、Spaces、同名文档都会被误当成官方文档）
 const COMMUNITY_HOST_BLOCKLIST = new Set([
   'huggingface.co',
@@ -51,11 +66,19 @@ function officialRootsOf(seed) {
   const hinted = (seed.discovery_sources || [])
     .filter(source => source?.kind === 'official_hint')
     .map(source => canonicalizeUrl(source.url));
-  return [...new Set([explicit, ...hinted]
+  const hosts = [...new Set([explicit, ...hinted]
     .filter(Boolean)
     .map((url, index) => ({ host: hostOf(url), explicit: index === 0 && Boolean(explicit) }))
     .filter(item => item.host && (item.explicit || !COMMUNITY_HOST_BLOCKLIST.has(item.host)))
     .map(item => item.host))];
+  // 同厂商官方域按注册域根放行：platform.openai.com 的公告/帮助页常落在 openai.com 主域，
+  // 闸门只认精确子域会把厂商主站的发布证据挡在门外（多租户托管后缀不放宽）。
+  const roots = new Set(hosts);
+  for (const host of hosts) {
+    const root = registrableHostOf(host);
+    if (root && !COMMUNITY_HOST_BLOCKLIST.has(root)) roots.add(root);
+  }
+  return [...roots];
 }
 
 function isTrustedOfficialUrl(url, roots) {
@@ -170,15 +193,34 @@ async function researchCatalog(plan, adapters, options = {}) {
     research_progress: { completed_scopes: [...completedScopes], failed_scope: failure.failed_scope || null },
   });
 
-  for (const scope of plan.research_scopes) {
+  const pendingScopes = plan.research_scopes.filter(scope => {
     const key = scopeKey(scope);
-    if (!neededKinds.includes(scope.kind) || (completedScopes.has(key) && !missingFields.length)) continue;
+    return neededKinds.includes(scope.kind) && !(completedScopes.has(key) && !missingFields.length);
+  });
+  for (const [scopeIndex, scope] of pendingScopes.entries()) {
+    const key = scopeKey(scope);
 
     let reservation = ledger.reserve('search_queries', 1);
     if (!reservation.ok) return failWithProgress(costFailure(reservation));
     const discovered = await callResearchAdapter(adapters.discover, { plan, scope, missing_predicates: scope.predicates, ledger }, 'RESEARCH_DISCOVER_FAILED');
     if (discovered?.ok === false) return failWithProgress({ ...discovered, failed_scope: key });
+    const sourceCountBefore = sources.length;
     addSources(sources, Array.isArray(discovered?.sources) ? discovered.sources : [], scope, roots, warnings);
+
+    // 窄域（种子自带官方域名）没搜到任何新来源，或这是定向补字段的重跑（上一轮窄域已被
+    // 证明拿不到该字段）→ 扩宽到同厂商注册域根再搜一次；扩宽轮失败只记警告，不中断本轮。
+    // 但剩余预算必须先保住后续 scope 的窄域搜索，不允许扩宽把后续 scope 挤成 COST_BUDGET_EXHAUSTED。
+    if (missingFields.length || sources.length === sourceCountBefore) {
+      const remainingNarrow = pendingScopes.length - scopeIndex - 1;
+      if (ledger.snapshot().remaining.search_queries >= 1 + remainingNarrow) {
+        reservation = ledger.reserve('search_queries', 1);
+        const widened = await callResearchAdapter(adapters.discover, { plan, scope, missing_predicates: scope.predicates, ledger, domain_scope: 'registrant' }, 'RESEARCH_DISCOVER_FAILED');
+        if (widened?.ok === false) warnings.push(`${scope.kind}: 扩域搜索失败已忽略（${widened.code || 'RESEARCH_DISCOVER_FAILED'}）`);
+        else addSources(sources, Array.isArray(widened?.sources) ? widened.sources : [], scope, roots, warnings);
+      } else {
+        warnings.push(`${scope.kind}: 搜索预算不足以安全扩域，跳过扩域搜索`);
+      }
+    }
 
     const toAcquireAll = sourcesForScope(sources, scope).filter(source => !source.content);
     const remainingPages = ledger.snapshot().remaining?.pages || 0;
@@ -220,6 +262,7 @@ module.exports = {
   DEFAULT_LIMITS,
   createCostLedger,
   canonicalizeUrl,
+  registrableHostOf,
   officialRootsOf,
   isTrustedOfficialUrl,
   sourceIdOf,

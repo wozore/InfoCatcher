@@ -677,10 +677,11 @@
     try {
       const result = await writeRequest('news/transcripts/summarize', 'transcripts', { ids, confirm_cost: true }, { timeoutMs: 100000 });
       const summarizedCount = Number(result?.summarized?.length || 0);
-      const failedCount = Number(result?.failed?.length || 0);
+      const failed = Array.isArray(result?.failed) ? result.failed : [];
       await refreshAll();
-      if (failedCount) {
-        showNotice(`字幕总结完成：成功 ${summarizedCount} 条，失败 ${failedCount} 条，请查看失败原因。`, 'error');
+      if (failed.length) {
+        const reasons = failed.map(item => `${item.id}: ${item.error || '总结失败'}`).join('；');
+        showNotice(`字幕总结完成：成功 ${summarizedCount} 条，失败 ${failed.length} 条。失败原因——${reasons}`, 'error');
       } else {
         showNotice(`已用 AI 总结 ${summarizedCount} 条字幕。`);
       }
@@ -1270,6 +1271,12 @@
         controls.result.textContent = msg;
         showNotice(msg, 'conflict');
       } else {
+        const code = error.code || error.payload?.code || error.payload?.error;
+        if (code === 'DRAFT_RECOVERY_FORBIDDEN') {
+          controls.result.textContent = '该 Draft 当前状态不支持恢复，请点击顶部“刷新数据”后重试。';
+          showNotice(controls.result.textContent, 'conflict');
+          return;
+        }
         controls.result.textContent = error.message || '恢复失败。';
         showNotice(controls.result.textContent, 'error');
       }
@@ -1355,7 +1362,10 @@
     if (!plan || !$('#catalogCostConfirm').checked) { showNotice('请先生成计划并确认 Catalog 成本。', 'error'); return; }
     button.disabled = true;
     try { const result = await request('catalog/prepare', { method: 'POST', body: JSON.stringify({ pending_revision: plan.pending_revision, catalog_revision: plan.catalog_revision, plan_hash: plan.plan_hash, confirm_cost: true }) }); if (!result?.ok) throw new Error(result?.code || 'Catalog Draft 准备被阻断'); showNotice('Catalog Draft 已准备，仍需逐项审核后 Apply。'); await refreshAll(); }
-    catch (error) { showNotice(error.message || 'Catalog Draft 准备失败。', 'error'); }
+    catch (error) {
+      const msg = (error.code || error.message) === 'PREPARE_IN_PROGRESS' ? '已有一轮 Catalog Draft 准备在执行中，请等待完成后点击“刷新数据”查看进度。' : (error.message || 'Catalog Draft 准备失败。');
+      showNotice(msg, 'error');
+    }
     finally { button.disabled = false; }
   }
   async function reviewCatalogDraft(draftId, button) {

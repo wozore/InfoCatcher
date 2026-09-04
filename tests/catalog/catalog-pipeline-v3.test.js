@@ -165,6 +165,54 @@ test('assistant prepares a research-resume plan for evidence-blocked Drafts', ()
   }
 });
 
+test('assistant recovers an orphaned resuming Draft but still forbids ready Drafts', () => {  const current = loadCatalogSnapshot();
+  const orphan = createDraft({
+    state: 'resuming',
+    base_revision: current.revision,
+    research: { ok: true, official_sources: [], warnings: [] },
+    coverage: { missing: [{ layer: 'detail', field: 'summary' }] },
+    readiness: { status: 'blocked', blocking_reasons: ['缺少官方证据字段'] },
+    last_error: { code: 'SYNTHESIS_COVERAGE_INCOMPLETE', missing_fields: ['detail.summary'] },
+    recovery_checkpoint: { recovery_token: 'sha256:orphan', recovery_mode: 'research_resume', started_at: new Date().toISOString() },
+  });
+  const ready = createDraft({
+    state: 'preview_ready',
+    base_revision: current.revision,
+    research: { ok: true, official_sources: [], warnings: [] },
+    readiness: { status: 'ready', blocking_reasons: [] },
+  });
+  try {
+    const recovered = recoveryPlanForDraft(orphan.draft_id, { expectedRevision: current.revision, generatorOptions: { model: 'deepseek-v4-flash' } });
+    assert.equal(recovered.ok, true, JSON.stringify(recovered));
+    assert.equal(recovered.recovery_kind, 'evidence_required');
+    const forbidden = recoveryPlanForDraft(ready.draft_id, { expectedRevision: current.revision, generatorOptions: { model: 'deepseek-v4-flash' } });
+    assert.equal(forbidden.ok, false);
+    assert.equal(forbidden.code, 'DRAFT_RECOVERY_FORBIDDEN');
+  } finally {
+    deleteDraft(orphan.draft_id);
+    deleteDraft(ready.draft_id);
+  }
+});
+
+test('assistant recovery plan treats kind-segmented schema failures as retryable', () => {
+  const current = loadCatalogSnapshot();
+  const draft = createDraft({
+    state: 'preview_blocked',
+    base_revision: current.revision,
+    research: { ok: true, official_sources: [{ source_id: 'src-1', url: 'https://kling.ai/docs', title: 'Docs' }], warnings: [] },
+    readiness: { status: 'blocked', blocking_reasons: ['ZhipuAI synthesis JSON 结构不符合契约'] },
+    last_error: { code: 'DEEPSEEK_SYNTHESIS_SCHEMA_INVALID', recovery_kind: 'manual_required', error: 'ZhipuAI synthesis JSON 结构不符合契约', missing_fields: [], missing_config_fields: [] },
+  });
+  try {
+    const plan = recoveryPlanForDraft(draft.draft_id, { expectedRevision: current.revision, generatorOptions: { model: 'deepseek-v4-flash' } });
+    assert.equal(plan.ok, true, JSON.stringify(plan));
+    assert.equal(plan.recovery_kind, 'retryable');
+    assert.equal(plan.recovery_mode, 'synthesis_only');
+  } finally {
+    deleteDraft(draft.draft_id);
+  }
+});
+
 test('assistant resume reuses completed research after a missing-model synthesis failure', async () => {
   const requested = [];
   let synthesisCalls = 0;
@@ -287,9 +335,13 @@ test('assistant resume adds a new hard budget and requests only the missing deta
     const resumeAdapters = createKlingDossierAdapters();
     const resumed = await resumeCatalogDraft(draftId, { ...ASSISTANT_OPTIONS, catalogAdapters: resumeAdapters });
     assert.equal(resumed.ok, true, JSON.stringify(resumed));
-    assert.equal(resumeAdapters.requested.length, 1);
+    // 定向补字段的重跑会先窄域再扩域（同厂商注册域根）各搜一次
+    assert.equal(resumeAdapters.requested.length, 2);
     assert.equal(resumeAdapters.requested[0].scope, 'detail');
-    assert.equal(resumed.draft.cost.spent.search_queries, prepared.draft.cost.spent.search_queries + 1);
+    assert.equal(resumeAdapters.requested[0].domain_scope, 'seed');
+    assert.equal(resumeAdapters.requested[1].scope, 'detail');
+    assert.equal(resumeAdapters.requested[1].domain_scope, 'registrant');
+    assert.equal(resumed.draft.cost.spent.search_queries, prepared.draft.cost.spent.search_queries + 2);
     assert.equal(resumed.draft.cost.spent.synthesis_calls, 2);
     assert.equal(reviewCatalogDraft(draftId).ok, true);
   } finally {

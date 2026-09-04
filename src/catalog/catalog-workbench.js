@@ -17,8 +17,23 @@ const { DIRS } = require('../shared/paths');
 const { getProvider } = require('../shared/ai-provider-registry');
 const assistant = require('./catalog-assistant');
 const draftStore = require('./catalog-draft-store');
+const { normalizeGatewayErrorCode } = require('./catalog-draft-envelope');
+
+const RETRYABLE_ERROR_CODES = new Set([
+  'DEEPSEEK_TIMEOUT', 'DEEPSEEK_RATE_LIMITED', 'DEEPSEEK_PROVIDER_ERROR', 'DEEPSEEK_NETWORK_ERROR',
+  'DEEPSEEK_SYNTHESIS_INCOMPLETE', 'DEEPSEEK_SYNTHESIS_EMPTY', 'DEEPSEEK_SYNTHESIS_FAILED',
+  'DEEPSEEK_OUTPUT_INVALID', 'DEEPSEEK_SCHEMA_INVALID',
+]);
 
 const PROJECT_ROOT = DIRS.project;
+// 与 assistant.recoveryEntryBlocked 对齐：孤儿 resuming（进程重启遗留）可复用，
+// 否则恢复中途再点 prepare 会绕过复用为同一候选重复建草稿、重复消耗研究成本。
+const REUSABLE_DRAFT_STATES = Object.freeze([
+  'researching', 'preview_ready', 'preview_blocked', 'failed_retryable', 'rolled_back', 'resuming',
+]);
+// prepare 是长任务且开局复用检查读不到其他在途调用尚未落盘的草稿；无互斥时
+// 并发/重复触发会为同一候选各建一条草稿并各自烧完整研究预算。
+let prepareInFlight = false;
 const RECOVERY_OPTION_KEYS = Object.freeze([
   'provider', 'model', 'protocol', 'retrieval_provider', 'access_mode', 'timeout_ms',
   'max_search_queries', 'max_pages', 'max_responses_calls', 'max_synthesis_calls',
@@ -90,17 +105,19 @@ function planHashOf(value) { return hash({ kind: 'catalog-workbench-plan', ...va
 function recoveryDiagnostic(draft) {
   if (draft?.readiness?.status === 'ready') return { recoveryKind: null, errorCode: null, missingFields: [], missingConfigFields: [], suggestedDetailKind: null, reason: null };
   const failure = draft?.last_error || {};
-  let errorCode = String(failure.code || '').trim();
+  let errorCode = normalizeGatewayErrorCode(failure.code);
   if (errorCode === 'DEEPSEEK_OUTPUT_INVALID' && /missing field [`']?model/i.test(String(failure.error || ''))) errorCode = 'MODEL_REQUIRED';
   const missingFields = [...new Set([
     ...(Array.isArray(failure.missing_fields) ? failure.missing_fields : []),
     ...(Array.isArray(draft?.coverage?.missing) ? draft.coverage.missing.map(item => `${item.layer}.${item.field}`) : []),
   ].filter(field => typeof field === 'string' && field.trim()))];
   const missingConfigFields = [...new Set((Array.isArray(failure.missing_config_fields) ? failure.missing_config_fields : []).filter(field => typeof field === 'string' && field.trim()))];
-  let recoveryKind = failure.recovery_kind || null;
+  // 存储 last_error 里的 recovery_kind 可能来自旧版误分类（如 kind 段错误码被判成
+  // manual_required），已知 retryable 码强制覆盖，否则该 Draft 在面板上永久丢失恢复入口。
+  let recoveryKind = RETRYABLE_ERROR_CODES.has(errorCode) ? 'retryable' : (failure.recovery_kind || null);
   if (!recoveryKind) {
     if (errorCode === 'MODEL_REQUIRED' || ['DEEPSEEK_AUTH_REQUIRED', 'DEEPSEEK_ENDPOINT_INVALID', 'AI_PROVIDER_UNSUPPORTED', 'AI_PROTOCOL_MISMATCH', 'RETRIEVAL_PROVIDER_UNSUPPORTED', 'TAVILY_ACCESS_MODE_REQUIRED'].includes(errorCode)) recoveryKind = 'config_required';
-    else if (['DEEPSEEK_TIMEOUT', 'DEEPSEEK_RATE_LIMITED', 'DEEPSEEK_PROVIDER_ERROR', 'DEEPSEEK_NETWORK_ERROR', 'DEEPSEEK_SYNTHESIS_INCOMPLETE', 'DEEPSEEK_SYNTHESIS_EMPTY', 'DEEPSEEK_SYNTHESIS_FAILED', 'DEEPSEEK_OUTPUT_INVALID', 'DEEPSEEK_SCHEMA_INVALID'].includes(errorCode)) recoveryKind = 'retryable';
+    else if (RETRYABLE_ERROR_CODES.has(errorCode)) recoveryKind = 'retryable';
     else if (errorCode === 'PROFILE_MISMATCH_SUSPECTED' || errorCode.startsWith('PLACEMENT_') || errorCode === 'SEED_INVALID') recoveryKind = 'seed_or_profile_required';
     else if (missingFields.length || errorCode === 'SYNTHESIS_COVERAGE_INCOMPLETE') recoveryKind = 'evidence_required';
     else recoveryKind = 'manual_required';
@@ -215,45 +232,59 @@ function createCatalogWorkbench(options = {}) {
 
   async function prepare(input = {}) {
     if (input.confirm_cost !== true) return { ok: false, code: 'COST_CONFIRMATION_REQUIRED' };
-    const planned = assertPlan(input);
-    if (!planned.ok) return planned;
-    const { pending, cards } = approvedCandidates(options);
-    const reusable = listFn().filter(draft => draft.schema_version === 3
-      && draft.base_revision === planned.catalog_revision
-      && ['researching', 'preview_ready', 'preview_blocked', 'failed_retryable', 'rolled_back'].includes(draft.state));
-    const used = new Set();
-    const drafts = [];
-    const missingCards = [];
-    for (const card of cards) {
-      const key = candidateKey(card);
-      const existing = reusable.find(draft => !used.has(draft.draft_id)
+    if (prepareInFlight) return { ok: false, code: 'PREPARE_IN_PROGRESS', blocking_reasons: ['已有一轮 Catalog Draft 准备在执行中，请等待其完成后再试。'] };
+    prepareInFlight = true;
+    try {
+      const planned = assertPlan(input);
+      if (!planned.ok) return planned;
+      const { pending, cards } = approvedCandidates(options);
+      const reusableOf = () => listFn().filter(draft => draft.schema_version === 3
+        && draft.base_revision === planned.catalog_revision
+        && REUSABLE_DRAFT_STATES.includes(draft.state));
+      const matchReusable = (reusable, key, card) => reusable.find(draft => !used.has(draft.draft_id)
         && (draft.seed?.candidate_key === key
           || (!draft.seed?.candidate_key && String(draft.seed?.name || '').trim().toLowerCase() === String(card.name || '').trim().toLowerCase())));
-      if (existing) {
-        used.add(existing.draft_id);
-        drafts.push(projectDraft(existing, { candidate_key: key, reused: true }));
-      } else missingCards.push(card);
-    }
-    const resolveOptions = { ...generatorOptions, ...(options.resolveOptions || {}) };
-    let resolved = { seeds: [], unresolved: [] };
-    if (missingCards.length) {
-      try {
-        resolved = await (options.resolveBatchCandidates || resolveBatchCandidates)(missingCards, resolveOptions);
-      } catch (error) { return { ok: false, code: 'DRAFT_BLOCKED', blocking_reasons: ['官方来源解析失败'] }; }
-    }
-    const byName = new Map((resolved.seeds || []).map(seed => [String(seed.name).trim().toLowerCase(), seed]));
-    const blocked = [...(resolved.unresolved || []).map(item => ({ name: item.name, code: 'DRAFT_BLOCKED' })), ...(planned.blocked || [])];
-    for (const card of missingCards) {
-      const resolvedSeed = byName.get(String(card.name).trim().toLowerCase());
-      if (!resolvedSeed) continue;
-      const seed = { ...resolvedSeed, candidate_key: candidateKey(card) };
-      try {
-        const result = await prepareFn(seed, { ...generatorOptions, confirmCost: true, catalogAdapters: options.catalogAdapters });
-        if (result && result.draft) drafts.push(projectDraft(result.draft, { candidate_key: candidateKey(card), reused: false }));
-        else blocked.push({ candidate_key: candidateKey(card), code: result?.code || 'DRAFT_BLOCKED' });
-      } catch (error) { blocked.push({ candidate_key: candidateKey(card), code: String(error?.message || 'DRAFT_BLOCKED').split(':')[0] }); }
-    }
-    return { ok: drafts.length > 0, status: drafts.length ? 'drafts_ready' : 'drafts_blocked', pending_revision: pending.revision, catalog_revision: planned.catalog_revision, plan_hash: planned.plan_hash, drafts, reused: drafts.filter(draft => draft.reused).map(draft => draft.draft_id), blocked };
+      const used = new Set();
+      const drafts = [];
+      const missingCards = [];
+      const initialReusable = reusableOf();
+      for (const card of cards) {
+        const key = candidateKey(card);
+        const existing = matchReusable(initialReusable, key, card);
+        if (existing) {
+          used.add(existing.draft_id);
+          drafts.push(projectDraft(existing, { candidate_key: key, reused: true }));
+        } else missingCards.push(card);
+      }
+      const resolveOptions = { ...generatorOptions, ...(options.resolveOptions || {}) };
+      let resolved = { seeds: [], unresolved: [] };
+      if (missingCards.length) {
+        try {
+          resolved = await (options.resolveBatchCandidates || resolveBatchCandidates)(missingCards, resolveOptions);
+        } catch (error) { return { ok: false, code: 'DRAFT_BLOCKED', blocking_reasons: ['官方来源解析失败'] }; }
+      }
+      const byName = new Map((resolved.seeds || []).map(seed => [String(seed.name).trim().toLowerCase(), seed]));
+      const blocked = [...(resolved.unresolved || []).map(item => ({ name: item.name, code: 'DRAFT_BLOCKED' })), ...(planned.blocked || [])];
+      for (const card of missingCards) {
+        const key = candidateKey(card);
+        // 官方来源解析期间其他入口可能已为同一候选建好草稿，建前再复查一次。
+        const again = matchReusable(reusableOf(), key, card);
+        if (again) {
+          used.add(again.draft_id);
+          drafts.push(projectDraft(again, { candidate_key: key, reused: true }));
+          continue;
+        }
+        const resolvedSeed = byName.get(String(card.name).trim().toLowerCase());
+        if (!resolvedSeed) continue;
+        const seed = { ...resolvedSeed, candidate_key: key };
+        try {
+          const result = await prepareFn(seed, { ...generatorOptions, confirmCost: true, catalogAdapters: options.catalogAdapters });
+          if (result && result.draft) drafts.push(projectDraft(result.draft, { candidate_key: key, reused: false }));
+          else blocked.push({ candidate_key: key, code: result?.code || 'DRAFT_BLOCKED' });
+        } catch (error) { blocked.push({ candidate_key: key, code: String(error?.message || 'DRAFT_BLOCKED').split(':')[0] }); }
+      }
+      return { ok: drafts.length > 0, status: drafts.length ? 'drafts_ready' : 'drafts_blocked', pending_revision: pending.revision, catalog_revision: planned.catalog_revision, plan_hash: planned.plan_hash, drafts, reused: drafts.filter(draft => draft.reused).map(draft => draft.draft_id), blocked };
+    } finally { prepareInFlight = false; }
   }
 
   function list() {

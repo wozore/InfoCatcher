@@ -15,8 +15,15 @@ const CONFIG_CODES = new Set([
 const PROFILE_CODES = new Set(['PROFILE_MISMATCH_SUSPECTED', 'PLACEMENT_MANUAL_REQUIRED', 'PLACEMENT_AI_FAILED', 'SEED_INVALID']);
 const EVIDENCE_CODES = new Set(['SYNTHESIS_COVERAGE_INCOMPLETE', 'SOURCE_ID_INVALID', 'PATCH_PROVENANCE_MISSING', 'OFFICIAL_SOURCE_REQUIRED']);
 
+// llm-gateway 按 DEEPSEEK_<kind>_<reason> 拼码（如 DEEPSEEK_SYNTHESIS_SCHEMA_INVALID），
+// 而 retryable 分类字面量无 kind 段；不归一会让模型输出抖动被误判成 manual_required，
+// Draft 在面板上永久失去恢复入口。
+function normalizeGatewayErrorCode(code) {
+  return String(code || '').replace(/^DEEPSEEK_(?:RESEARCH|SYNTHESIS)_(OUTPUT_INVALID|SCHEMA_INVALID)$/, 'DEEPSEEK_$1');
+}
+
 function failureCodeOf(failure) {
-  const code = String(failure?.code || 'DRAFT_BLOCKED');
+  const code = normalizeGatewayErrorCode(failure?.code) || 'DRAFT_BLOCKED';
   if (code === 'DEEPSEEK_OUTPUT_INVALID' && /missing field [`']?model/i.test(String(failure?.error || ''))) return 'MODEL_REQUIRED';
   return code;
 }
@@ -148,4 +155,5 @@ module.exports = {
   validateCatalogDraftEnvelope,
   classifyFailure,
   failureCodeOf,
+  normalizeGatewayErrorCode,
 };

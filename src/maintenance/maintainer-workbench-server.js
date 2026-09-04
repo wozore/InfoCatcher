@@ -160,7 +160,7 @@ function createMaintainerWorkbenchServer(options = {}) {
         result = await result;
         if (res.destroyed || res.writableEnded) return;
         if (result && result.ok === false) {
-          const conflict = new Set(['REVISION_CONFLICT', 'PREVIEW_CHANGED', 'BATCH_TOKEN_CHANGED', 'BATCH_TOKEN_EXPIRED', 'DRAFT_BATCH_STALE', 'SOURCE_PENDING_REVISION_CHANGED', 'PLAN_CHANGED', 'RECOVERY_TOKEN_CHANGED', 'RECOVERY_PLAN_CHANGED']);
+          const conflict = new Set(['REVISION_CONFLICT', 'PREVIEW_CHANGED', 'BATCH_TOKEN_CHANGED', 'BATCH_TOKEN_EXPIRED', 'DRAFT_BATCH_STALE', 'SOURCE_PENDING_REVISION_CHANGED', 'PLAN_CHANGED', 'RECOVERY_TOKEN_CHANGED', 'RECOVERY_PLAN_CHANGED', 'DRAFT_RECOVERY_IN_PROGRESS']);
           return send(res, conflict.has(result.code) ? 409 : 400, result);
         }
         return send(res, 200, result);

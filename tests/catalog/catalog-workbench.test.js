@@ -101,6 +101,58 @@ test('catalog workbench discard requires current catalog revision', () => {
   assert.equal(discarded, true);
 });
 
+test('catalog workbench rejects concurrent prepare to prevent duplicate drafts and spend', async () => {
+  const card = { name: 'GPT-6', candidate_key: candidateKeyOf('tools', 'GPT-6'), review_status: 'approved' };
+  let prepareCalls = 0;
+  const coordinator = createCatalogWorkbench({
+    readPending: () => ({ revision: 'pending-r1', cards: [card] }),
+    loadCatalog: () => ({ revision: 'catalog-r1' }),
+    planCatalogDraft: () => ({ ok: true, cost_plan: { hard_limits: { responses_calls: 1 } } }),
+    resolveBatchCandidates: async () => ({ seeds: [{ name: card.name }], unresolved: [] }),
+    prepareCatalogDraft: async () => {
+      prepareCalls += 1;
+      await new Promise(resolve => setTimeout(resolve, 20));
+      return { ok: true, draft: { draft_id: `draft-${prepareCalls}`, state: 'preview_ready', base_revision: 'catalog-r1', preview_hash: 'hash-1', readiness: { status: 'ready' } } };
+    },
+    listDrafts: () => [],
+  });
+  const plan = coordinator.plan();
+  const [first, second] = await Promise.all([
+    coordinator.prepare({ ...plan, confirm_cost: true }),
+    coordinator.prepare({ ...plan, confirm_cost: true }),
+  ]);
+  assert.equal(first.ok, true);
+  assert.equal(second.ok, false);
+  assert.equal(second.code, 'PREPARE_IN_PROGRESS');
+  assert.equal(prepareCalls, 1);
+});
+
+test('catalog workbench reuses resuming draft instead of creating a duplicate', async () => {
+  const card = { name: 'GPT-6', candidate_key: candidateKeyOf('tools', 'GPT-6'), review_status: 'approved' };
+  const calls = [];
+  const coordinator = createCatalogWorkbench({
+    readPending: () => ({ revision: 'pending-r1', cards: [card] }),
+    loadCatalog: () => ({ revision: 'catalog-r1' }),
+    planCatalogDraft: () => ({ ok: true, cost_plan: { hard_limits: { responses_calls: 1 } } }),
+    prepareCatalogDraft: async () => { calls.push('prepare'); return { ok: true, draft: {} }; },
+    listDrafts: () => [{
+      draft_id: 'draft-resuming',
+      schema_version: 3,
+      state: 'resuming',
+      base_revision: 'catalog-r1',
+      seed: { name: card.name, candidate_key: card.candidate_key },
+      readiness: { status: 'blocked', warnings: [] },
+    }],
+  });
+  const plan = coordinator.plan();
+  const prepared = await coordinator.prepare({ ...plan, confirm_cost: true });
+  assert.equal(prepared.ok, true);
+  assert.deepEqual(calls, []);
+  assert.deepEqual(prepared.reused, ['draft-resuming']);
+  assert.equal(prepared.drafts.length, 1);
+  assert.equal(prepared.drafts[0].draft_id, 'draft-resuming');
+});
+
 
 test('catalog draft projection exposes stable diagnostics without raw failure payloads', () => {
   const coordinator = createCatalogWorkbench({
@@ -203,4 +255,18 @@ test('catalog prepare reuses a matching ready draft without resolving or prepari
   const result = await coordinator.prepare({ ...plan, confirm_cost: true });
   assert.equal(result.reused[0], 'draft-reused');
   assert.equal(calls, 0);
+});
+
+test('projection reclassifies stale manual_required schema failures as retryable', () => {
+  const { projectDraft } = require('../../src/catalog/catalog-workbench');
+  const projected = projectDraft({
+    draft_id: 'draft-1',
+    state: 'preview_blocked',
+    research: { ok: true, official_sources: [{ source_id: 's1' }] },
+    readiness: { status: 'blocked', blocking_reasons: ['ZhipuAI synthesis JSON 结构不符合契约'] },
+    last_error: { code: 'DEEPSEEK_SYNTHESIS_SCHEMA_INVALID', recovery_kind: 'manual_required', error: 'ZhipuAI synthesis JSON 结构不符合契约' },
+  });
+  assert.equal(projected.recovery_kind, 'retryable');
+  assert.equal(projected.recovery_mode, 'synthesis_only');
+  assert.equal(projected.error_code, 'DEEPSEEK_SCHEMA_INVALID');
 });

@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "run_id": "min-1788436661472",
+  "collected_at": "2026-09-03T11:57:41.472Z",
+  "platforms": [
+    "youtube",
+    "x"
+  ],
+  "collectors": {
+    "youtube": {
+      "status": "failed",
+      "items": 0,
+      "error": null,
+      "reason": "search:fetch failed"
+    },
+    "x": {
+      "status": "partial",
+      "items": 17,
+      "error": null,
+      "reason": "credits_exhausted",
+      "credits": {
+        "used": 3615,
+        "budget": 3750,
+        "tweets": 240,
+        "articles": 0,
+        "requests": {
+          "total": 13,
+          "tweet": 13,
+          "article": 0,
+          "retries": 0
+        }
+      }
+    }
+  }
+}

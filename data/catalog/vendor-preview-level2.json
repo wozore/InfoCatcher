@@ -1200,6 +1200,96 @@
           "id": "tool-level3:qwen3-7-max"
         }
       ]
+    },
+    {
+      "id": "vendor-level2:alibaba:qwen-3-8-flash",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:alibaba"
+      },
+      "vendor_key": "alibaba",
+      "title": "Qwen 3.8 Flash",
+      "official_url": "https://help.aliyun.com/zh/model-studio/models",
+      "summary": "阿里云百炼提供千问及第三方文本生成模型服务，覆盖 qwen3.8-max、deepseek-v4-flash-0731、GLM-5.2、kimi-k3 等多种文本生成与深度思考模型。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:qwen-3-8-flash"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:openai:gpt-6",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:openai"
+      },
+      "vendor_key": "openai",
+      "title": "GPT-6",
+      "official_url": "https://platform.openai.com/docs/changelog",
+      "summary": "GPT-5.6 是 OpenAI 最新发布的旗舰模型家族，包含面向前沿能力的 GPT-5.6 Sol、平衡智能与成本的 GPT-5.6 Terra，以及面向高吞吐工作负载的 GPT-5.6 Luna，gpt-5.6 别名默认路由到 gpt-5.6-sol。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:gpt-6"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:zhipu:glm-5-3-flash",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:zhipu"
+      },
+      "vendor_key": "zhipu",
+      "title": "GLM 5.3 Flash",
+      "official_url": "https://docs.z.ai/guides/llm/glm-5.3",
+      "summary": "GLM-5.3 是 Z.AI 最新旗舰文本模型，在复杂软件工程、Agent 任务与网络安全能力上较 GLM-5.2 显著提升，GLM Coding Plan 用户可完整使用。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:glm-5-3-flash"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:alibaba:qwen3-8-flash",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:alibaba"
+      },
+      "vendor_key": "alibaba",
+      "title": "Qwen3.8-Flash",
+      "official_url": "https://help.aliyun.com/zh/model-studio",
+      "summary": "阿里云大模型服务平台百炼是面向企业客户及合作伙伴的一站式大模型商业化平台，基于通义大模型、行业大模型及三方大模型，提供模型训练、微调、评估等全链路工具，并通过 API 提供 Qwen、DeepSeek、GLM、Kimi 等多种模态的模型服务。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:qwen3-8-flash"
+        }
+      ]
+    },
+    {
+      "id": "vendor-level2:google:gemini-3-8-flash",
+      "level1_ref": {
+        "kind": "vendor-level1",
+        "id": "vendor-level1:google"
+      },
+      "vendor_key": "google",
+      "title": "Gemini 3.8 Flash",
+      "official_url": "https://ai.google.dev/gemini-api/docs/models",
+      "summary": "Gemini API 提供 Gemini 系列文本模型，包括稳定、预览、最新与实验性版本命名模式，供开发者通过 API 调用多模态理解与推理能力。",
+      "status": "active",
+      "detail_refs": [
+        {
+          "kind": "tool-level3",
+          "id": "tool-level3:gemini-3-8-flash"
+        }
+      ]
     }
   ]
 }

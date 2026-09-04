@@ -8605,6 +8605,649 @@
       "theme": "general",
       "release_date": "2026-08-01",
       "id": "tool-level3:qwen-3-8-max"
+    },
+    {
+      "vendor_key": "alibaba",
+      "detail_kind": "api_model",
+      "title": "Qwen 3.8 Flash",
+      "vendor_label": "阿里巴巴（通义千问）",
+      "icon": "🤖",
+      "official_url": "https://help.aliyun.com/en/model-studio/qwen3-8-flash",
+      "status": "active",
+      "summary": "qwen3.8-flash 是通义千问最新的多模态模型，原生支持百万 token 上下文窗口，推理速度快、成本有竞争力，完全兼容 OpenAI 与 Anthropic API 协议，适合高并发应用与智能工作流。",
+      "one_m_context": {
+        "status": "native",
+        "tokens": 1000000,
+        "conditions": "Context length 为 1000000 token，最大输入长度 991808，思考模式最大输入 983616。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "中国（北京）按量计费",
+            "pricing_basis": "按 token 用量计费",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "输入",
+                "amount": 0.8,
+                "unit": "每百万 token"
+              },
+              {
+                "label": "输出",
+                "amount": 2.7,
+                "unit": "每百万 token"
+              },
+              {
+                "label": "输入（缓存命中）",
+                "amount": 0.1,
+                "unit": "每百万 token"
+              },
+              {
+                "label": "输入（Batch File）",
+                "amount": 0.4,
+                "unit": "每百万 token"
+              },
+              {
+                "label": "输出（Batch File）",
+                "amount": 1.35,
+                "unit": "每百万 token"
+              },
+              {
+                "label": "显式缓存创建",
+                "amount": 1.25,
+                "unit": "每百万 token"
+              },
+              {
+                "label": "显式缓存命中",
+                "amount": 0.1,
+                "unit": "每百万 token"
+              }
+            ],
+            "conditions": "中国（北京）部署区原始模型调用价格，按输入/输出 token 用量计费，促销折扣以百炼控制台为准。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "编程辅助",
+          "description": "自动修复代码、配合 Claude Code 与 Codex 等开发工具完成编码任务。"
+        },
+        {
+          "title": "长上下文处理",
+          "description": "原生支持 1000000 token 上下文，可一次性处理长文档、整个代码库和复杂对话。"
+        },
+        {
+          "title": "视觉理解",
+          "description": "支持图片、文本、视频输入，可分析图表与长视频内容。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "模型微调",
+          "description": "官方能力表显示 Fine-tuning 为 Not supported，不适用于微调训练场景。"
+        },
+        {
+          "title": "国际区批量推理",
+          "description": "新加坡部署区 Batch inference 为 Not supported，批量推理需使用中国（北京）部署区。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "模型上架与更新 - 阿里云帮助文档",
+          "url": "https://help.aliyun.com/zh/model-studio/newly-released-models"
+        },
+        {
+          "title": "https://help.aliyun.com/zh/model-studio",
+          "url": "https://help.aliyun.com/zh/model-studio"
+        },
+        {
+          "title": "https://help.aliyun.com/zh/model-studio/models",
+          "url": "https://help.aliyun.com/zh/model-studio/models"
+        },
+        {
+          "title": "https://help.aliyun.com/zh/model-studio/coding-plan",
+          "url": "https://help.aliyun.com/zh/model-studio/coding-plan"
+        },
+        {
+          "title": "qwen3.8-flash - 阿里云帮助文档",
+          "url": "https://help.aliyun.com/en/model-studio/qwen3-8-flash"
+        },
+        {
+          "title": "Model inference pricing - 阿里云帮助文档",
+          "url": "https://help.aliyun.com/en/model-studio/model-pricing"
+        },
+        {
+          "title": "What is Alibaba Cloud Model Studio-Alibaba Cloud Model Studio(Model Studio)-阿里云帮助中心",
+          "url": "https://help.aliyun.com/en/model-studio/what-is-model-studio"
+        }
+      ],
+      "theme": "general",
+      "release_date": "2026-08-03",
+      "id": "tool-level3:qwen-3-8-flash"
+    },
+    {
+      "vendor_key": "openai",
+      "detail_kind": "api_model",
+      "title": "GPT-6",
+      "vendor_label": "OpenAI",
+      "icon": "🤖",
+      "official_url": "https://platform.openai.com/docs",
+      "status": "active",
+      "summary": "GPT-5.6 是 OpenAI API 平台上的旗舰文本模型，别名 gpt-5.6 路由到 gpt-5.6-sol，提供标准、Flex、Batch 与 Fast mode 等多种计费与处理档位，支持 Programmatic Tool Calling、显式提示缓存控制、持久化推理、max 推理力度与 Pro mode，并针对 Responses API 提供多智能体编排的 beta 能力。",
+      "one_m_context": {
+        "status": "native",
+        "tokens": 1000000,
+        "conditions": "GPT-5.6 家族在 API 定价中以短上下文与长上下文两档计费，长上下文档对应扩展上下文窗口能力，价格按每 1M tokens 计。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "标准档（Standard，短上下文）",
+            "pricing_basis": "按 token 计费，每 1M tokens",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "输入（gpt-5.6-sol）",
+                "amount": 4,
+                "unit": "USD / 1M tokens"
+              },
+              {
+                "label": "缓存输入（gpt-5.6-sol）",
+                "amount": 0.4,
+                "unit": "USD / 1M tokens"
+              },
+              {
+                "label": "缓存写入（gpt-5.6-sol）",
+                "amount": 5,
+                "unit": "USD / 1M tokens"
+              },
+              {
+                "label": "输出（gpt-5.6-sol）",
+                "amount": 20,
+                "unit": "USD / 1M tokens"
+              }
+            ],
+            "conditions": "旗舰模型标准服务层级、短上下文档位，价格每 1M tokens；区域数据处理（data residency）端点对 2026 年 3 月 5 日及之后发布的符合条件模型加收 10%。"
+          },
+          {
+            "label": "标准档（Standard，长上下文）",
+            "pricing_basis": "按 token 计费，每 1M tokens",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "输入（gpt-5.6-sol）",
+                "amount": 8,
+                "unit": "USD / 1M tokens"
+              },
+              {
+                "label": "缓存输入（gpt-5.6-sol）",
+                "amount": 0.8,
+                "unit": "USD / 1M tokens"
+              },
+              {
+                "label": "缓存写入（gpt-5.6-sol）",
+                "amount": 10,
+                "unit": "USD / 1M tokens"
+              },
+              {
+                "label": "输出（gpt-5.6-sol）",
+                "amount": 30,
+                "unit": "USD / 1M tokens"
+              }
+            ],
+            "conditions": "旗舰模型标准服务层级、长上下文档位，价格每 1M tokens；区域数据处理端点对 2026 年 3 月 5 日及之后发布的符合条件模型加收 10%。"
+          },
+          {
+            "label": "Fast mode（短上下文）",
+            "pricing_basis": "按 token 计费，每 1M tokens",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "输入（gpt-5.6-sol）",
+                "amount": 8,
+                "unit": "USD / 1M tokens"
+              },
+              {
+                "label": "缓存输入（gpt-5.6-sol）",
+                "amount": 0.8,
+                "unit": "USD / 1M tokens"
+              },
+              {
+                "label": "缓存写入（gpt-5.6-sol）",
+                "amount": 10,
+                "unit": "USD / 1M tokens"
+              },
+              {
+                "label": "输出（gpt-5.6-sol）",
+                "amount": 40,
+                "unit": "USD / 1M tokens"
+              }
+            ],
+            "conditions": "Fast mode（原 Priority Processing）服务层级，为 GPT-5.6 Sol 提供最高 2.5 倍于标准处理的速度，价格为标准的两倍；请求标记 priority 将自动使用 Fast mode。"
+          },
+          {
+            "label": "Flex / Batch（短上下文）",
+            "pricing_basis": "按 token 计费，每 1M tokens",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "输入（gpt-5.6-sol）",
+                "amount": 2,
+                "unit": "USD / 1M tokens"
+              },
+              {
+                "label": "缓存输入（gpt-5.6-sol）",
+                "amount": 0.2,
+                "unit": "USD / 1M tokens"
+              },
+              {
+                "label": "缓存写入（gpt-5.6-sol）",
+                "amount": 2.5,
+                "unit": "USD / 1M tokens"
+              },
+              {
+                "label": "输出（gpt-5.6-sol）",
+                "amount": 10,
+                "unit": "USD / 1M tokens"
+              }
+            ],
+            "conditions": "Flex 与 Batch 档位在短上下文档位下价格相同，为标准档的一半，适合对时延不敏感的工作负载。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "前沿推理任务",
+          "description": "GPT-5.6 Sol 面向前沿能力设计，gpt-5.6 别名默认路由到 gpt-5.6-sol，适合复杂的专业工作负载。"
+        },
+        {
+          "title": "高吞吐批量处理",
+          "description": "GPT-5.6 Luna 定位于高效的高吞吐工作负载，Batch 档位价格与标准档相同，适合大批量文本处理。"
+        },
+        {
+          "title": "低延迟生产调用",
+          "description": "Fast mode 为 GPT-5.6 Sol 提供最高 2.5 倍于标准处理的速度，适合延迟敏感的生产环境。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "超长上下文场景",
+          "description": "官方来源仅明确 GPT-5.5 支持 1M token 上下文窗口，未确认 GPT-5.6 具备同等原生 1M 上下文能力。"
+        },
+        {
+          "title": "免费使用场景",
+          "description": "GPT-5.6 通过 OpenAI API 平台按 token 用量计费，需要注册账号并使用 API 密钥，不提供免费调用档位。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Changelog | OpenAI API",
+          "url": "https://learn.chatgpt.com/api/docs/changelog"
+        },
+        {
+          "title": "Pricing | OpenAI API",
+          "url": "https://platform.openai.com/docs/pricing"
+        },
+        {
+          "title": "Changelog | OpenAI API",
+          "url": "https://platform.openai.com/docs/changelog"
+        },
+        {
+          "title": "ChatGPT & Codex changelog",
+          "url": "https://learn.chatgpt.com/docs/changelog"
+        },
+        {
+          "title": "https://platform.openai.com/docs",
+          "url": "https://platform.openai.com/docs"
+        },
+        {
+          "title": "https://platform.openai.com/",
+          "url": "https://platform.openai.com/"
+        },
+        {
+          "title": "https://chatgpt.com/pricing/",
+          "url": "https://chatgpt.com/pricing/"
+        },
+        {
+          "title": "Pricing | OpenAI API",
+          "url": "https://learn.chatgpt.com/api/docs/pricing"
+        },
+        {
+          "title": "OpenAI API Platform Documentation",
+          "url": "https://learn.chatgpt.com/api/docs"
+        }
+      ],
+      "theme": "general",
+      "release_date": "2026-05-04",
+      "id": "tool-level3:gpt-6"
+    },
+    {
+      "vendor_key": "zhipu",
+      "detail_kind": "api_model",
+      "title": "GLM 5.3 Flash",
+      "vendor_label": "智谱 AI（Z.ai）",
+      "icon": "🤖",
+      "official_url": "https://docs.z.ai/guides/llm/glm-5.3",
+      "status": "active",
+      "summary": "GLM-5.3 是 Z.AI 当前旗舰模型，与 GLM-5.2 使用相同基座，通过后训练在复杂编程、长程任务与漏洞挖掘等网络安全基准上取得显著提升，原生支持 1M 上下文，按 token 计费开放 API 调用。",
+      "one_m_context": {
+        "status": "native",
+        "tokens": 1000000,
+        "conditions": "官方模型概览标注 GLM-5.3 上下文长度为 1M，支持英文与中文。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "标准 API 按量计费",
+            "pricing_basis": "per_1m_tokens",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "输入",
+                "amount": 1.4,
+                "unit": "USD/1M tokens"
+              },
+              {
+                "label": "缓存输入",
+                "amount": 0.26,
+                "unit": "USD/1M tokens"
+              },
+              {
+                "label": "输出",
+                "amount": 4.4,
+                "unit": "USD/1M tokens"
+              }
+            ],
+            "conditions": "按每百万 token 计费，缓存输入存储限时免费；Coding Plan 内 API 调用按非高峰 1×、高峰 3× 积分消耗。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "复杂编码与智能体开发",
+          "description": "在 Z.ai Code Bench 上较 GLM-5.2 提升约 50%，适合复杂编程与长程任务。"
+        },
+        {
+          "title": "网络安全漏洞研究",
+          "description": "在 CyberGym 漏洞发现基准取得 84.5%，漏洞利用类基准得分超过 GLM-5.2 的两倍。"
+        },
+        {
+          "title": "Coding Plan 订阅调用",
+          "description": "GLM Coding Plan 用户可通过编码智能体使用，非高峰时段调用消耗更少积分。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "轻量低成本调用",
+          "description": "旗舰级按 token 计费成本较高，轻量场景建议选用 GLM-5.3-Flash 等低价模型。"
+        },
+        {
+          "title": "已订阅 Coding Plan 的多协议调用",
+          "description": "曾订阅 GLM Coding Plan（含过期）的用户目前只能通过 OpenAI Chat Completion 兼容协议调用模型 API。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "GLM-5.3 - Overview - Z.AI DEVELOPER DOCUMENT",
+          "url": "https://docs.z.ai/guides/llm/glm-5.3"
+        },
+        {
+          "title": "Plan Update Announcement - Overview",
+          "url": "https://docs.z.ai/devpack/notice/usage-revision"
+        },
+        {
+          "title": "Pricing - Overview - Z.AI DEVELOPER DOCUMENT",
+          "url": "https://docs.z.ai/guides/overview/pricing?plain=1"
+        },
+        {
+          "title": "Pricing - Overview - Z.AI DEVELOPER DOCUMENT",
+          "url": "https://docs.z.ai/guides/overview/pricing"
+        },
+        {
+          "title": "https://docs.z.ai/guides/overview/overview",
+          "url": "https://docs.z.ai/guides/overview/overview"
+        },
+        {
+          "title": "https://docs.bigmodel.cn/cn/guide/start/model-overview",
+          "url": "https://docs.bigmodel.cn/cn/guide/start/model-overview"
+        },
+        {
+          "title": "https://open.bigmodel.cn/pricing",
+          "url": "https://open.bigmodel.cn/pricing"
+        },
+        {
+          "title": "Quick Start - Overview - Z.AI DEVELOPER DOCUMENT",
+          "url": "https://docs.z.ai/guides/overview/quick-start"
+        },
+        {
+          "title": "Audio Transcriptions - Overview - Z.AI DEVELOPER DOCUMENT",
+          "url": "http://docs.z.ai/api-reference/audio/audio-transcriptions"
+        },
+        {
+          "title": "Retrieve Result - Overview - Z.AI DEVELOPER DOCUMENT",
+          "url": "http://docs.z.ai/api-reference/agents/get-async-result"
+        }
+      ],
+      "theme": "general",
+      "release_date": "2026-07-30",
+      "id": "tool-level3:glm-5-3-flash"
+    },
+    {
+      "vendor_key": "alibaba",
+      "detail_kind": "api_model",
+      "title": "Qwen3.8-Flash",
+      "vendor_label": "阿里巴巴（通义千问）",
+      "icon": "🤖",
+      "official_url": "https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.6-plus",
+      "status": "active",
+      "summary": "qwen3.6-plus 是阿里云百炼平台上的 Qwen 系列文本生成模型，支持推理、图片理解与文本生成，配置中标注支持 1,000,000 token 上下文窗口，可通过百炼按量计费 API 或 Coding Plan 套餐调用。",
+      "one_m_context": {
+        "status": "native",
+        "tokens": 1000000,
+        "conditions": "官方文档中 qwen3.6-plus 模型配置标注 contextWindow 为 1000000，maxTokens 为 65536。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "按量计费",
+            "pricing_basis": "按 token 用量计费",
+            "currency": "CNY",
+            "metrics": [
+              {
+                "label": "qwen2-vl-72b-instruct 输入",
+                "amount": 0.016,
+                "unit": "CNY/1,000 tokens"
+              },
+              {
+                "label": "qwen2-vl-72b-instruct 输出",
+                "amount": 0.048,
+                "unit": "CNY/1,000 tokens"
+              }
+            ],
+            "conditions": "百炼平台按量付费模式，按模型输入/输出 token 数计费，最新计费细节以 Model Studio 控制台为准。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "AI 编程与智能体集成",
+          "description": "兼容 Claude Code、Qoder、OpenClaw 等主流 AI 编程和智能体工具，可作为默认主力模型。"
+        },
+        {
+          "title": "长上下文文本生成",
+          "description": "支持约 1,000,000 token 的上下文窗口，适合处理长文档理解与生成任务。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "非交互式批量 API 自动化调用（套餐通道）",
+          "description": "通过 Coding Plan 套餐 API Key 禁止用于自动化脚本或应用后端的批量 API 调用，此类需求需使用按量计费通道。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Model Studio release notes and feature updates - Model Studio-Alibaba Cloud Model Studio(Model Studio)-阿里云帮助中心",
+          "url": "https://help.aliyun.com/en/model-studio/model-release-notes"
+        },
+        {
+          "title": "OpenClaw常见问题文档概述了用户在使用过程中可能遇到的主要问题及其解决方案。-轻量应用服务器(SAS)-阿里云帮助中心",
+          "url": "https://help.aliyun.com/zh/simple-application-server/use-cases/openclaw-faq"
+        },
+        {
+          "title": "Token Plan (Personal Edition)-Alibaba Cloud Model Studio ...",
+          "url": "https://help.aliyun.com/en/model-studio/token-plan-personal-overview"
+        },
+        {
+          "title": "https://help.aliyun.com/zh/model-studio",
+          "url": "https://help.aliyun.com/zh/model-studio"
+        },
+        {
+          "title": "https://help.aliyun.com/zh/model-studio/models",
+          "url": "https://help.aliyun.com/zh/model-studio/models"
+        },
+        {
+          "title": "https://help.aliyun.com/zh/model-studio/coding-plan",
+          "url": "https://help.aliyun.com/zh/model-studio/coding-plan"
+        },
+        {
+          "title": "Claude Code - 阿里云帮助文档",
+          "url": "https://help.aliyun.com/en/model-studio/claude-code"
+        },
+        {
+          "title": "Qwen Code - 阿里云文档",
+          "url": "https://help.aliyun.com/en/model-studio/qwen-code"
+        },
+        {
+          "title": "OpenCode - 阿里云帮助文档",
+          "url": "https://help.aliyun.com/en/model-studio/opencode"
+        },
+        {
+          "title": "What is Alibaba Cloud Model Studio? - 阿里云文档",
+          "url": "https://help.aliyun.com/en/model-studio/what-is-model-studio"
+        }
+      ],
+      "theme": "general",
+      "release_date": "2026-02-06",
+      "id": "tool-level3:qwen3-8-flash"
+    },
+    {
+      "vendor_key": "google",
+      "detail_kind": "api_model",
+      "title": "Gemini 3.8 Flash",
+      "vendor_label": "Google",
+      "icon": "🤖",
+      "official_url": "https://ai.google.dev/gemini-api/docs/gemini-3",
+      "status": "preview",
+      "summary": "gemini-3-flash-preview 是 Gemini 3 系列的预览模型，提供 Pro 级智能与 Flash 速度和价格，支持 1M 上下文窗口、64k 输出，定价为每百万 token 输入 $0.50、输出 $3。",
+      "one_m_context": {
+        "status": "native",
+        "tokens": 1000000,
+        "conditions": "gemini-3-flash-preview 上下文窗口为 1M 输入 / 64k 输出，知识截止为 2025 年 1 月。"
+      },
+      "api_pricing": {
+        "status": "available",
+        "rate_cards": [
+          {
+            "label": "gemini-3-flash-preview",
+            "pricing_basis": "按每百万 token 计费",
+            "currency": "USD",
+            "metrics": [
+              {
+                "label": "输入价格",
+                "amount": 0.5,
+                "unit": "USD / 1M tokens"
+              },
+              {
+                "label": "输出价格",
+                "amount": 3,
+                "unit": "USD / 1M tokens"
+              }
+            ],
+            "conditions": "Gemini 3 系列预览模型文本输入/输出，按每百万 token 计费，未标注特殊档位条件。"
+          }
+        ]
+      },
+      "plan": {
+        "status": "not_applicable",
+        "reason": "当前记录不是订阅套餐。"
+      },
+      "applicable_scenarios": [
+        {
+          "title": "高性能文本生成",
+          "description": "以 Flash 级速度和价格获得接近 Pro 级的推理与生成能力。"
+        },
+        {
+          "title": "长上下文处理",
+          "description": "利用 1M token 上下文窗口处理长文档与大规模输入。"
+        }
+      ],
+      "inapplicable_scenarios": [
+        {
+          "title": "长期稳定生产依赖",
+          "description": "预览模型可能受限流约束并会收到弃用通知，不适合作为长期稳定的唯一依赖。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Release notes | Gemini API - Google AI for Developers",
+          "url": "https://ai.google.dev/gemini-api/docs/changelog"
+        },
+        {
+          "title": "Models",
+          "url": "https://ai.google.dev/gemini-api/docs/models"
+        },
+        {
+          "title": "Gemini deprecations | Gemini API - Google AI for Developers",
+          "url": "https://ai.google.dev/gemini-api/docs/deprecations"
+        },
+        {
+          "title": "Gemini 3 developer guide | Gemini API | Google AI for Developers",
+          "url": "https://ai.google.dev/gemini-api/docs/gemini-3"
+        },
+        {
+          "title": "Grounding with Google Search - Interactions API",
+          "url": "https://ai.google.dev/gemini-api/docs/google-search"
+        },
+        {
+          "title": "https://ai.google.dev/gemini-api/docs",
+          "url": "https://ai.google.dev/gemini-api/docs"
+        },
+        {
+          "title": "Gemini Developer API pricing",
+          "url": "https://ai.google.dev/gemini-api/docs/pricing"
+        },
+        {
+          "title": "https://ai.google.dev/gemini-api/docs/latest-model",
+          "url": "https://ai.google.dev/gemini-api/docs/latest-model"
+        },
+        {
+          "title": "Gemini API reference | Google AI for Developers",
+          "url": "https://ai.google.dev/api"
+        }
+      ],
+      "theme": "general",
+      "release_date": "2025-12-17",
+      "id": "tool-level3:gemini-3-8-flash"
     }
   ]
 }

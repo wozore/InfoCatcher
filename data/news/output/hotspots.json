@@ -1,425 +1,238 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-01T14:00:04.405Z",
+  "generated_at": "2026-09-04T03:56:04.287Z",
   "items": [
     {
-      "id": "youtube-c2b7244bba6fb7fcd7a3",
+      "id": "youtube-0e32fa4a482371f31c7a",
       "platform": "youtube",
-      "native_id": "S7O3E6bFISw",
+      "native_id": "dKA0UK-MKEA",
       "content_type": "ai_tool",
-      "url": "https://www.youtube.com/watch?v=S7O3E6bFISw",
-      "title": "YOLO视觉智能体 Vol.12｜YOLO 不只是一行命令：我做完一个视觉智能体平台后的复盘",
-      "description": "这是《我用 Codex + Cursor + Stitch 做了一个 YOLO 视觉智能体平台》系列的第十二期。\n\n第一季开始的时候，我问了一个问题：\n\n**为什么 YOLO 不只是一行命令？**\n\n十二期做下来，我终于可以用 YoloWebAgent 这个平台本身，回答这个问题。\n\n如果只是跑一个 Demo，YOLO 的训练入口确实可以被压缩成一行命令。\n\n但真正做成一个可以长期使用、持续迭代的视觉工程系统，还需要解决：\n\n* 数据集与多任务标注\n* 训练任务与失败诊断\n* 模型版本管理\n* 导出、部署和交付记录\n* 评估与主动学习\n* 错误样本回流\n* 轻量多 Agent\n* RBAC 与人工确认\n* AI Coding 工程规范\n\n这一期不是继续增加新功能，而是对第一季做一次完整复盘。\n\n我会重点聊：\n\n* YoloWebAgent 第一季到底做出了什么\n* 数据生产、模型生产、模型交付和问题回流如何形成闭环\n* 数据集、训练、模型、主动学习和 Agent 分别解决了什么问题\n* Stitch、Codex、Cursor 和人在开发过程中如何分工\n* 哪些能力已经跑通，哪些地方仍然属于 MVP\n* 单机模式、SQLite、轻量部署中心和单租户 RBAC 的当前边界\n* 如果重新做一遍，项目应该按照什么顺序推进\n* 为什么要先做业务闭环，再做智能调度，最后做流程编排\n* 第二季的",
-      "published_at": "2026-08-07T07:37:23.000Z",
-      "fetched_at": "2026-08-09T04:49:58.935Z",
-      "author_id": "youtube-0feb32cc8d933a45f291",
-      "author_name": "Tony Shen",
-      "source_id": "youtube-0feb32cc8d933a45f291",
+      "url": "https://www.youtube.com/watch?v=dKA0UK-MKEA",
+      "title": "Google Just Fixed Claude Code's Biggest Weakness",
+      "description": "Claude Code can code — but design? That's where it falls apart. Here's the Google repo that gives your coding agent an actual design system to follow. 👇\n\n✅ Why Claude Code produces generic AI-looking UIs\n\n✅ The Google repo that fixes it\n\n✅ Define colors, spacing & components in one place\n\n✅ How to set it up in Claude Code (30 seconds)\n\n✅ Make every page consistent before Claude builds\n\nComment \"design\" and I'll send the repo + setup guide.\n\n🔔 Subscribe to Coding Simplified Space for AI Agents, MCP, Claude Code, and dev productivity content.\n\nclaude code design system, google claude code repo",
+      "published_at": "2026-09-02T10:30:38.000Z",
+      "fetched_at": "2026-09-02T11:24:14.476Z",
+      "author_id": "youtube-36c6ce960ef1e9ce8897",
+      "author_name": "Coding Simplified Space",
+      "source_id": "youtube-36c6ce960ef1e9ce8897",
       "language": "en",
       "source_tags": [],
-      "thumbnail": "https://i.ytimg.com/vi/S7O3E6bFISw/maxresdefault.jpg",
+      "thumbnail": "https://i.ytimg.com/vi/dKA0UK-MKEA/maxresdefault.jpg",
       "metrics": {
-        "views": 16,
-        "likes": 2,
-        "comments": 0,
+        "views": 377,
+        "likes": 12,
+        "comments": 1,
         "reposts": null,
         "replies": null
       },
       "explicit_links": [],
       "source_type": "youtube_video",
-      "category": "People & Blogs",
-      "comments": [],
-      "summary": "本文是《我用 Codex + Cursor + Stitch 做了一个 YOLO 视觉智能体平台》系列第十二期的复盘内容。作者通过 YoloWebAgent 平台回答了“为什么 YOLO 不只是一行命令”的问题，指出虽然跑一个 Demo 可以将训练入口压缩成一行命令，但真正做成长期可用的视觉工程系统还需解决数据集与多任务标注、训练任务与失败诊断、模型版本管理、导出部署与交付记录、评估与主动学习、错误样本回流、轻量多 Agent、RBAC 与人工确认以及 AI Coding 工程规范等问题。第一季形成了数据生产、模型生产、模型交付、问题回流和智能辅助五个环节，验证了这些模块能形成基本闭环，并强调了功能让系统能用、闭环让系统持续产生价值。文章还讨论了 Codex、Cursor、Stitch 和人在开发中的分工，以及当前 MVP 的边界和未来第二季的推进方向。",
-      "summary_key_points": [
-        "YOLO 不只是训练时的一行命令，而是需要覆盖数据集标注、训练诊断、模型版本管理、部署交付、评估回流等完整视觉工程环节。",
-        "YoloWebAgent 第一季形成了数据生产、模型生产、模型交付、问题回流和智能辅助五个环节，验证了视觉 AI 工程闭环的雏形。",
-        "功能让系统能用，闭环让系统持续产生价值。",
-        "Codex、Cursor、Stitch 和人在开发过程中各有分工。",
-        "当前能力仍是 MVP，存在单机模式、SQLite、轻量部署中心和单租户 RBAC 等限制。",
-        "重新做一遍时，应先做业务闭环，再做智能调度，最后做流程编排。",
-        "第二季将延续推进，具体方向在视频末尾提及。"
-      ],
-      "localizations": {
-        "zh": {
-          "title": "YOLO视觉智能体 Vol.12｜YOLO不只是一行命令：视觉智能体平台复盘",
-          "description": "这是《我用 Codex + Cursor + Stitch 做了一个 YOLO 视觉智能体平台》系列的第十二期。\n\n第一季开始的时候，我问了一个问题：\n\n**为什么 YOLO 不只是一行命令？**\n\n十二期做下来，我终于可以用 YoloWebAgent 这个平台本身，回答这个问题。\n\n如果只是跑一个 Demo，YOLO 的训练入口确实可以被压缩成一行命令。\n\n但真正做成一个可以长期使用、持续迭代的视觉工程系统，还需要解决：\n\n* 数据集与多任务标注\n* 训练任务与失败诊断\n* 模型版本管理\n* 导出、部署和交付记录\n* 评估与主动学习\n* 错误样本回流\n* 轻量多 Agent\n* RBAC 与人工确认\n* AI Coding 工程规范\n\n这一期不是继续增加新功能，而是对第一季做一次完整复盘。\n\n我会重点聊：\n\n* YoloWebAgent 第一季到底做出了什么\n* 数据生产、模型生产、模型交付和问题回流如何形成闭环\n* 数据集、训练、模型、主动学习和 Agent 分别解决了什么问题\n* Stitch、Codex、Cursor 和人在开发过程中如何分工\n* 哪些能力已经跑通，哪些地方仍然属于 MVP\n* 单机模式、SQLite、轻量部署中心和单租户 RBAC 的当前边界\n* 如果重新做一遍，项目应该按照什么顺序推进\n* 为什么要先做业务闭环，再做智能调度，最后做流程编排\n* 第二季的"
-        }
-      },
-      "hot_score": 1,
-      "evidence_excerpt": "这是《我用 Codex + Cursor + Stitch 做了一个 YOLO 视觉智能体平台》系列的第十二期。 第一季开始的时候，我问了一个问题： **为什么 YOLO 不只是一行命令？** 十二期做下来，我终于可以用 YoloWebAgent 这个平台本身，回答这个问题。 如果只是跑一个 Demo，YOLO…",
-      "related_resources": []
-    },
-    {
-      "id": "youtube-147826867525a35880d2",
-      "platform": "youtube",
-      "native_id": "WCX560FcCGQ",
-      "content_type": "ai_tool",
-      "url": "https://www.youtube.com/watch?v=WCX560FcCGQ",
-      "title": "The LLM Problem Nobody's Talking About – Your Reputation",
-      "description": "Folks don't Google anymore. They ChatGPT. Or Claude. Or Gemini. But how do you know what those LLMs are saying about you? Or your startup? Or your competitors? This new tool helps you keep track of what LLMs are saying about you and your business. In a \"set it and forget it\" sort of way. \n\nhttps://pulse.kariops.com/\n\nFIND RICK TUROCZY ON THE INTERNET AT…\n- https://patreon.com/turoczy\n- https://linkedin.com/in/turoczy\n- Portland Oregon startup news on Apple Podcasts https://podcasts.apple.com/us/podcast/portland-oregon-startup-news-silicon-florist/id1711294699\n- Portland Oregon startup news Spo",
-      "published_at": "2026-08-06T17:00:02.000Z",
-      "fetched_at": "2026-08-09T04:49:58.935Z",
-      "author_id": "youtube-94d510b69adaa43db69b",
-      "author_name": "Rick Turoczy (turoczy)",
-      "source_id": "youtube-94d510b69adaa43db69b",
-      "language": "en",
-      "source_tags": [],
-      "thumbnail": "https://i.ytimg.com/vi/WCX560FcCGQ/maxresdefault.jpg",
-      "metrics": {
-        "views": 22,
-        "likes": 2,
-        "comments": 2,
-        "reposts": null,
-        "replies": null
-      },
-      "explicit_links": [
-        "https://pulse.kariops.com/",
-        "https://patreon.com/turoczy",
-        "https://linkedin.com/in/turoczy",
-        "https://podcasts.apple.com/us/podcast/portland-oregon-startup-news-silicon-florist/id1711294699",
-        "https://open.spotify.com/show/2cmLDH8wrPdNMS2qtTnhcy",
-        "https://open.spotify.com/show/1Tk7bbzaNYowGouI9ucKC3",
-        "https://podcasts.apple.com/us/podcast/startup-stories-with-silicon-florist/id1849468494",
-        "https://podcasts.apple.com/us/podcast/the-long-con/id1810923457",
-        "https://open.spotify.com/show/48oglyT5JNKxVH5lnWTYKA",
-        "https://bsky.app/profile/turoczy.bsky.social"
-      ],
-      "source_type": "youtube_video",
-      "category": "News & Politics",
+      "category": "Science & Technology",
       "comments": [
         {
-          "text": "For more, visit <a href=\"https://pulse.kariops.com/\">https://pulse.kariops.com</a>",
-          "likeCount": 1
-        },
-        {
-          "text": "Whoaaa! I only know yahoo. <br>And then my mind went into mindblown mode when I suddenly realized,,, there were other companies!!! 😮",
-          "likeCount": 1
+          "text": "Design 🙌",
+          "likeCount": 0
         }
       ],
-      "summary": "该视频介绍了一款名为 Pulse 的新工具，它可以帮助用户追踪大型语言模型（LLMs）如 ChatGPT、Claude 和 Gemini 对自己的公司、个人或竞争对手的提及内容。视频指出，现在人们不再使用 Google 搜索，而是询问 LLMs，因此了解 LLM 如何评价你变得很重要。该工具允许用户创建公司档案，通过配置 API 密钥等设置，以“设置后无需管理”的方式定期查看提及情况，并比较自身与竞争对手的推荐度。创始人 Carrie 还提供设置帮助。",
+      "summary": "Google 发布了一个修复 Claude Code 设计能力不足的新 repo，提供了一套设计系统，帮助开发者在构建页面前定义颜色、间距和组件，确保 UI 一致性。",
       "summary_key_points": [
-        "人们现在不再使用 Google，而是使用 ChatGPT、Claude、Gemini 等 LLM 获取信息。",
-        "监控 LLM 对个人、公司或竞争对手的评价变得必要。",
-        "Pulse 工具能帮助用户创建公司档案，并追踪 LLM 中的提及情况。",
-        "该工具支持定期查看提及变化，比较自身与竞争对手的推荐度。",
-        "设置过程需要 API 密钥，但创始人提供帮助，实现“设置后无需管理”。"
+        "Claude Code 在代码生成方面表现良好，但在 UI 设计方面存在不足，常产生泛化的 AI 风格界面。",
+        "Google 提供的 repo 为 Claude Code 提供了一套设计系统，支持统一定义颜色、间距和组件。",
+        "通过该 repo，开发者可在 Claude Code 中快速配置设计系统，确保页面 UI 的一致性。",
+        "该 repo 可帮助开发者在生成代码前建立设计规范，提升 AI 代码生成器的整体效果。"
       ],
       "localizations": {
         "zh": {
-          "title": "无人提及的LLM问题——你的声誉",
-          "description": "人们不再用谷歌搜索了。他们用ChatGPT。或者Claude。或者Gemini。但你怎么知道这些LLM在说你什么？或者你的初创公司？或者你的竞争对手？这个新工具帮助你跟踪LLM对你和你的业务的评价。以一种“设置后就不管”的方式。\n\nhttps://pulse.kariops.com/\n\n在互联网上找到RICK TUROCZY…\n- https://patreon.com/turoczy\n- https://linkedin.com/in/turoczy\n- 波特兰俄勒冈初创企业新闻在Apple Podcasts上 https://podcasts.apple.com/us/podcast/portland-oregon-startup-news-silicon-florist/id1711294699\n- 波特兰俄勒冈初创企业新闻Spo"
+          "title": "Google 修复 Claude Code 最大短板",
+          "description": "Claude Code 能写代码，但设计？这正是其短板。以下是 Google 提供的 repo，为你的编码代理提供实际的设计系统。\n\n✅ Claude Code 为何产生通用的 AI 风格 UI\n✅ 修复问题的 Google repo\n✅ 在一个地方定义颜色、间距和组件\n✅ 如何在 Claude Code 中设置（仅需 30 秒)\n✅ 在 Claude 构建前确保每页一致\n\n评论 \"design\"，我将发送 repo 和设置指南。\n\n🔔 订阅 Coding Simplified Space 获取关于 AI 代理、MCP、Claude Code 和开发生产力内容的信息。\n\nclaude code design system, google claude code repo"
         }
       },
-      "hot_score": 16,
-      "evidence_excerpt": "Folks don't Google anymore. They ChatGPT. Or Claude. Or Gemini. But how do you know what those LLMs are saying about you? Or your startup? Or your competitors?…",
-      "related_resources": []
-    },
-    {
-      "id": "youtube-3096967af812b2454acc",
-      "platform": "youtube",
-      "native_id": "NDpISFHP454",
-      "content_type": "ai_tool",
-      "url": "https://www.youtube.com/watch?v=NDpISFHP454",
-      "title": "My AI RAG application sucks, how do I fix it? #ai #tech",
-      "description": "",
-      "published_at": "2026-08-07T13:15:01.000Z",
-      "fetched_at": "2026-08-09T04:49:58.935Z",
-      "author_id": "youtube-a20bcaca43cee2531a29",
-      "author_name": "Parthknowsai",
-      "source_id": "youtube-a20bcaca43cee2531a29",
-      "language": "en",
-      "source_tags": [],
-      "thumbnail": "https://i.ytimg.com/vi/NDpISFHP454/maxresdefault.jpg",
-      "metrics": {
-        "views": 9742,
-        "likes": 655,
-        "comments": 22,
-        "reposts": null,
-        "replies": null
-      },
-      "explicit_links": [],
-      "source_type": "youtube_video",
-      "category": "Education",
-      "comments": [
-        {
-          "text": "If you want to be acting as 2 people, it is easier for the viewer to follow when one person is facing a little left and the other person is facing a little right.",
-          "likeCount": 12
-        },
-        {
-          "text": "I have been enjoying your content bro.  Keep it up.",
-          "likeCount": 4
-        },
-        {
-          "text": "This is exactly how OpenClaw&#39;s memory work",
-          "likeCount": 2
-        },
-        {
-          "text": "So one thing I recognize there is value here is when you’re trying to look for a ton of information and you’re looking through even a larger data set to find specific info. But on a human scale, if you carefully read the material absorbed and understood series of papers or documents or policiesthen that may be very helpful for you to actually know the material so you can get the answers you’re looking for instead of having to use a tool to search for something that you didn’t bother to read in the first place. Reading is a powerful tool.",
-          "likeCount": 0
-        },
-        {
-          "text": "I just use a system I call context archive. This folder contains conversational history with comments describing each section. I rebuild this context every time I want to control memory usage. With relevant and descriptive comments GREP works perfectly. With this method I can essentially switch mid session which context I want to use.",
-          "likeCount": 0
-        },
-        {
-          "text": "More of what are your deepest thoughts on RAG pipelines and their future?",
-          "likeCount": 0
-        },
-        {
-          "text": "My esteemed sir, can you make a long form video on stuffs like this? <br><br>Like various proper and production grade &#39;system design&#39; patterns, but for AI eng 🤔🤔🤔",
-          "likeCount": 0
-        },
-        {
-          "text": "Can you throw some crumbs to your normal subscribers who refuse to watch shorts, I can&#39;t believe I have to crawl in here and beg.",
-          "likeCount": 1
-        },
-        {
-          "text": "I watch you all the time but sometimes like today I have no idea what the hell you are talking about. ❤",
-          "likeCount": 2
-        },
-        {
-          "text": "RAG is old school by now. Come on. There are better ways to skin a cat.",
-          "likeCount": 0
-        }
-      ],
-      "summary": "这段视频讨论了如何修复表现不佳的AI RAG（检索增强生成）应用。专家指出，问题往往出在用户提问本身，模糊的问题会导致检索结果质量差，可以通过添加重写步骤（利用对话历史）或提出澄清性问题来改进。对于好的查询，建议采用混合检索（结合向量搜索和关键词搜索如BM25），并使用元数据过滤来缩小范围，最后通过重排序（reranker）来优化结果顺序。整体操作流程是：清理查询、混合检索、元数据过滤、重排序。",
-      "summary_key_points": [
-        "模糊问题会导致检索结果差，可通过重写问题或澄清来改进。",
-        "混合检索（向量+关键词）能同时捕捉语义和精确术语。",
-        "元数据过滤（如日期、文档类型）可缩小检索范围。",
-        "重排序在混合检索后优化结果相关度。",
-        "正确流程：查询清理、混合检索、元数据过滤、重排序。"
-      ],
-      "localizations": {
-        "zh": {
-          "title": "我的AI RAG应用表现不佳，如何修复？",
-          "description": ""
-        }
-      },
-      "hot_score": 100,
-      "evidence_excerpt": "My AI RAG application sucks, how do I fix it? #ai #tech",
+      "hot_score": 70,
+      "evidence_excerpt": "Claude Code can code — but design? That's where it falls apart. Here's the Google repo that gives your coding agent an actual design system to follow. 👇 ✅ Why…",
       "related_resources": [
         {
-          "type": "concept",
-          "id": "concept-rag",
-          "label": "RAG"
-        }
-      ]
-    },
-    {
-      "id": "youtube-2f89501dfbdbdc890ee4",
-      "platform": "youtube",
-      "native_id": "Gfn56pQpvdQ",
-      "content_type": "ai_tool",
-      "url": "https://www.youtube.com/watch?v=Gfn56pQpvdQ",
-      "title": "如何构建智能体团队",
-      "description": "本文是一份面向实践的操作指南，旨在系统性地讲解如何从零开始，构建一个由多个AI智能体协作组成的\"智能体团队\"，内容涵盖从需求判断、架构设计、角色划分、技术实现到部署运营的完整流程。本文延续此前《AI智能体开发》《多智能体协作架构》两篇姊妹篇文章所建立的理论框架，聚焦于将这些理论原理转化为具体可执行的实践步骤。文中涉及的具体技术方案与工程建议，均为基于公开技术实践与一般工程逻辑的分析性讨论，读者在实际项目中应结合自身具体技术栈与业务需求进行调整。",
-      "published_at": "2026-08-07T20:03:55.000Z",
-      "fetched_at": "2026-08-09T04:49:58.935Z",
-      "author_id": "youtube-05c768f65c60068ac6eb",
-      "author_name": "研究型经济",
-      "source_id": "youtube-05c768f65c60068ac6eb",
-      "language": "en",
-      "source_tags": [],
-      "thumbnail": "https://i.ytimg.com/vi/Gfn56pQpvdQ/maxresdefault.jpg",
-      "metrics": {
-        "views": 4,
-        "likes": 2,
-        "comments": 0,
-        "reposts": null,
-        "replies": null
-      },
-      "explicit_links": [],
-      "source_type": "youtube_video",
-      "category": "People & Blogs",
-      "comments": [],
-      "summary": "本文是一份关于如何构建智能体团队的操作指南，旨在系统讲解从零开始构建由多个AI智能体协作组成的团队的完整流程，涵盖需求判断、架构设计、角色划分、技术实现到部署运营。文章延续此前《AI智能体开发》和《多智能体协作架构》两篇姊妹篇的理论框架，聚焦于将这些理论转化为具体可执行的实践步骤。文中提到的技术方案和工程建议是基于公开技术实践和一般工程逻辑的分析性讨论，读者应根据自身技术栈和业务需求进行调整。",
-      "summary_key_points": [
-        "文章是一份构建智能体团队的操作指南，覆盖从需求判断到部署运营的完整流程。",
-        "延续此前两篇文章的理论框架，将理论原理转化为实践步骤。",
-        "技术方案和工程建议基于公开技术实践和一般工程逻辑，读者需结合自身情况调整。"
-      ],
-      "localizations": {
-        "zh": {
-          "title": "构建智能体团队指南",
-          "description": "本文是一份面向实践的操作指南，旨在系统性地讲解如何从零开始，构建一个由多个AI智能体协作组成的\"智能体团队\"，内容涵盖从需求判断、架构设计、角色划分、技术实现到部署运营的完整流程。本文延续此前《AI智能体开发》《多智能体协作架构》两篇姊妹篇文章所建立的理论框架，聚焦于将这些理论原理转化为具体可执行的实践步骤。文中涉及的具体技术方案与工程建议，均为基于公开技术实践与一般工程逻辑的分析性讨论，读者在实际项目中应结合自身具体技术栈与业务需求进行调整。"
-        }
-      },
-      "hot_score": 0,
-      "evidence_excerpt": "本文是一份面向实践的操作指南，旨在系统性地讲解如何从零开始，构建一个由多个AI智能体协作组成的\"智能体团队\"，内容涵盖从需求判断、架构设计、角色划分、技术实现到部署运营的完整流程。本文延续此前《AI智能体开发》《多智能体协作架构》两篇姊妹篇文章所建立的理论框架，聚焦于将这些理论原理转化为具体可执行的实践步骤。…",
-      "related_resources": []
-    },
-    {
-      "id": "youtube-6f019241aa3cedd2f405",
-      "platform": "youtube",
-      "native_id": "I7_eVcsOXik",
-      "content_type": "ai_tool",
-      "url": "https://www.youtube.com/watch?v=I7_eVcsOXik",
-      "title": "🔥 I Built ChatGPT for Documents 🤯 | Spring AI and  RAG Full Project",
-      "description": "In this video, I build DocMind, an AI-powered document assistant using Spring AI, RAG, PostgreSQL, and PGVector.\n🔥 I Built ChatGPT for Documents 🤯 | Spring AI and  RAG Full Project\n\nSpring AI Complete Series: https://www.youtube.com/playlist?list=PL0zysOflRCen1TeDUm-ebl9T-WbJygCGE\nSource Code: https://github.com/LearnCodeWithDurgesh/spring-ai-yt-series\n\nComplete NextJs Series: https://www.youtube.com/playlist?list=PL0zysOflRCemKr4NHzNgrfZAUjDzlQtO5\n\nPremium Course Library: https://courses.learncodewithdurgesh.com/\n\nReact JS Course : https://courses.learncodewithdurgesh.com/learn/Ecommerce-us",
-      "published_at": "2026-08-08T13:00:52.000Z",
-      "fetched_at": "2026-08-09T04:49:58.935Z",
-      "author_id": "youtube-a670fb4931f4dc1eda27",
-      "author_name": "Learn Code With Durgesh",
-      "source_id": "youtube-a670fb4931f4dc1eda27",
-      "language": "en",
-      "source_tags": [],
-      "thumbnail": "https://i.ytimg.com/vi/I7_eVcsOXik/maxresdefault.jpg",
-      "metrics": {
-        "views": 1466,
-        "likes": 114,
-        "comments": 44,
-        "reposts": null,
-        "replies": null
-      },
-      "explicit_links": [
-        "https://www.youtube.com/playlist?list=PL0zysOflRCen1TeDUm-ebl9T-WbJygCGE",
-        "https://github.com/LearnCodeWithDurgesh/spring-ai-yt-series",
-        "https://www.youtube.com/playlist?list=PL0zysOflRCemKr4NHzNgrfZAUjDzlQtO5",
-        "https://courses.learncodewithdurgesh.com/",
-        "https://courses.learncodewithdurgesh.com/learn/Ecommerce-using-React-js",
-        "https://courses.learncodewithdurgesh.com/learn/Master-Spring-Boot-With-Project",
-        "https://t.me/learncodewithdurgesh",
-        "https://youtu.be/TjnWtDWFZFc",
-        "https://youtu.be/lZbl7Q21t4s",
-        "https://youtu.be/7GYHAJdHFbE"
-      ],
-      "source_type": "youtube_video",
-      "category": "Education",
-      "comments": [
-        {
-          "text": "spring, SpringBoot, microservices, React",
-          "likeCount": 1
+          "type": "tool",
+          "id": "google",
+          "label": "Google"
         },
-        {
-          "text": "DocMind complete in a single video",
-          "likeCount": 0
-        },
-        {
-          "text": "SpringBoot basic to microservices, spring ai, with production level project",
-          "likeCount": 0
-        },
-        {
-          "text": "SpringBoot basic to microservices, ai, production level",
-          "likeCount": 1
-        },
-        {
-          "text": "complete single video me full course please.",
-          "likeCount": 0
-        },
-        {
-          "text": "Doc mind",
-          "likeCount": 0
-        },
-        {
-          "text": "DocMind but not with very long videos 25 to 30 min each would be good Sir",
-          "likeCount": 0
-        },
-        {
-          "text": "Docmind",
-          "likeCount": 0
-        },
-        {
-          "text": "docmind",
-          "likeCount": 0
-        },
-        {
-          "text": "DocMInd",
-          "likeCount": 0
-        }
-      ],
-      "summary": "该视频介绍了 DocMind 项目，一个基于 Spring AI、RAG、PostgreSQL 和 PGVector 的 AI 文档助手。视频强调构建此类项目的重要性，因为它能显著提升求职面试的成功率，并可作为产品使用。视频将逐步演示项目构建过程，包括依赖的技术栈。",
-      "summary_key_points": [
-        "DocMind 是一个使用 Spring AI、RAG、PostgreSQL 和 PGVector 构建的 AI 文档助手。",
-        "构建类似项目可以增加面试成功机会。",
-        "该项目可作为产品部署。",
-        "视频将逐步讲解项目构建。"
-      ],
-      "localizations": {
-        "zh": {
-          "title": "Spring AI与RAG构建文档版ChatGPT完整项目",
-          "description": "在本视频中，我使用Spring AI、RAG、PostgreSQL和PGVector构建了DocMind，一个AI驱动的文档助手。\nSpring AI完整系列：https://www.youtube.com/playlist?list=PL0zysOflRCen1TeDUm-ebl9T-WbJygCGE\n源代码：https://github.com/LearnCodeWithDurgesh/spring-ai-yt-series\n\n完整NextJs系列：https://www.youtube.com/playlist?list=PL0zysOflRCemKr4NHzNgrfZAUjDzlQtO5\n\n高级课程库：https://courses.learncodewithdurgesh.com/\n\nReact JS课程：https://courses.learncodewithdurgesh.com/learn/Ecommerce-us"
-        }
-      },
-      "hot_score": 76,
-      "evidence_excerpt": "In this video, I build DocMind, an AI-powered document assistant using Spring AI, RAG, PostgreSQL, and PGVector. 🔥 I Built ChatGPT for Documents 🤯 | Spring…",
-      "related_resources": [
-        {
-          "type": "concept",
-          "id": "concept-rag",
-          "label": "RAG"
-        }
-      ]
-    },
-    {
-      "id": "youtube-916f8bd84b22bf8e9116",
-      "platform": "youtube",
-      "native_id": "mZOMUQi6teU",
-      "content_type": "ai_tool",
-      "url": "https://www.youtube.com/watch?v=mZOMUQi6teU",
-      "title": "Claude vs Copilot vs ChatGPT: Excel’de 7 Tuzak Testi!",
-      "description": "Claude, Copilot ve ChatGPT’ye aynı Excel dosyasını verdim. Dosyanın içine 7 gizli veri tuzağı yerleştirdim ve üç yapay zekâyı aynı prompt, aynı kurallar ve aynı puanlama sistemiyle test ettim.\n\nPeki hangisi gerçek hataları buldu? Hangisi uzun bir cevap verip kritik sorunları kaçırdı? Excel dosyanızı yapay zekâya teslim ederken nelere dikkat etmelisiniz?\n\n📂 Videodaki Excel dosyasını, cevap anahtarını, promptları ve skor kartını indirin:👉 https://1drv.ms/x/c/df5073a331909df1/IQBHjSshlYG3Q7Udviuyr253AR1PK-Syj_0OdB-nap3oZhQ?e=1ctRZD\n\n🎯 Testteki 7 tuzak:\n\n• Mükerrer kayıtlar• Bozuk ve metin biçi",
-      "published_at": "2026-08-08T17:08:56.000Z",
-      "fetched_at": "2026-08-09T04:49:58.935Z",
-      "author_id": "youtube-3edc33cf016253d370f8",
-      "author_name": "Oğuzhan ÇOLAK",
-      "source_id": "youtube-3edc33cf016253d370f8",
-      "language": "en",
-      "source_tags": [],
-      "thumbnail": "https://i.ytimg.com/vi/mZOMUQi6teU/maxresdefault.jpg",
-      "metrics": {
-        "views": 463,
-        "likes": 28,
-        "comments": 4,
-        "reposts": null,
-        "replies": null
-      },
-      "explicit_links": [
-        "https://1drv.ms/x/c/df5073a331909df1/IQBHjSshlYG3Q7Udviuyr253AR1PK-Syj_0OdB-nap3oZhQ?e=1ctRZD",
-        "https://ileriexcel.com/firmaniz-icin/",
-        "https://www.udemy.com/course/bastan-sona-excel-ogren-en-cok-kullanilan-islevler/?referralCode=081F805EACB6DAEEEAB8"
-      ],
-      "source_type": "youtube_video",
-      "category": "Education",
-      "comments": [
-        {
-          "text": "Opus5 high token tüketimi ne kadar",
-          "likeCount": 1
-        },
-        {
-          "text": "Gemini&#39;yi pas geçmişsiniz Hocam. Gemini de çok iyi. ChatGPT&#39;nin sürekli yorum yapması bıktırdı artık.",
-          "likeCount": 1
-        }
-      ],
-      "summary": "视频作者对Claude、Copilot和ChatGPT进行了Excel数据质量测试，在同一个包含7个隐藏陷阱的Excel文件中，用相同的提示词和评分标准测试三者。测试揭示了AI在处理数据时的潜在风险，尤其是生成看似正确但实际错误的Excel文件。作者还提供了测试文件、答案、提示词和评分卡供观众自行测试。",
-      "summary_key_points": [
-        "测试比较了Claude、Copilot和ChatGPT在识别Excel数据错误上的表现。",
-        "Excel文件中故意设置了7个陷阱，包括重复记录、文本格式的数值等。",
-        "测试使用相同的提示词，要求AI列出问题而不修改单元格。",
-        "Claude在243行数据中发现了15个问题，包括重复记录和文本格式数值。",
-        "作者强调AI的主要风险不是出错，而是生成看似正确但错误的Excel。",
-        "提供了测试文件、答案、提示词和评分卡供观众下载自测。"
-      ],
-      "localizations": {
-        "zh": {
-          "title": "Claude vs Copilot vs ChatGPT：Excel 7 大陷阱测试！",
-          "description": "我将同一个 Excel 文件交给了 Claude、Copilot 和 ChatGPT。我在文件中设置了 7 个隐藏的数据陷阱，并用相同的提示词、相同的规则和相同的评分系统对这三款人工智能进行了测试。\n\n那么，哪一款真正发现了错误？哪一款给出了冗长的回答却忽略了关键问题？在将 Excel 文件交给人工智能时，您应该注意哪些事项？\n\n📂 下载视频中的 Excel 文件、答案、提示词和评分卡：👉 https://1drv.ms/x/c/df5073a331909df1/IQBHjSshlYG3Q7Udviuyr253AR1PK-Syj_0OdB-nap3oZhQ?e=1ctRZD\n\n🎯 测试中的 7 个陷阱：\n\n• 重复记录• 损坏和文本格式"
-        }
-      },
-      "hot_score": 48,
-      "evidence_excerpt": "Claude, Copilot ve ChatGPT’ye aynı Excel dosyasını verdim. Dosyanın içine 7 gizli veri tuzağı yerleştirdim ve üç yapay zekâyı aynı prompt, aynı kurallar ve…",
-      "related_resources": [
         {
           "type": "tool",
           "id": "claude-code",
           "label": "Claude Code"
         }
       ]
+    },
+    {
+      "id": "youtube-fcddeddc9599aaf574b6",
+      "platform": "youtube",
+      "native_id": "DdBjIgOFoEg",
+      "content_type": "ai_product",
+      "url": "https://www.youtube.com/watch?v=DdBjIgOFoEg",
+      "title": "OpenClaw 2.0 Just Made AI Coding MULTIPLAYER 🤯 #Shorts",
+      "description": "OpenClaw 2.0 is here: the open source AI agent harness shipped its biggest release ever, with 933 contributors and over 16,000 pull requests merged. The headline feature is shared cloud sessions, so an entire team can work inside one AI agent instead of one harness per developer. Creator Peter Steinberger says local harnesses feel like relics of the past now, but reviewers note sandboxing and command approvals ship off by default, so teams should lock those down before rolling it out.\n\nIn this Short:\n• OpenClaw 2.0 (release 2026.8.1), the project's biggest update yet\n• 933 contributors, 16,000",
+      "published_at": "2026-09-01T17:31:57.000Z",
+      "fetched_at": "2026-09-02T11:24:14.476Z",
+      "author_id": "youtube-272b6c54fa9dc5b8b051",
+      "author_name": "AI for Work",
+      "source_id": "youtube-272b6c54fa9dc5b8b051",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": "https://i.ytimg.com/vi/DdBjIgOFoEg/maxresdefault.jpg",
+      "metrics": {
+        "views": 88,
+        "likes": 3,
+        "comments": 0,
+        "reposts": null,
+        "replies": null
+      },
+      "explicit_links": [
+        "https://www.youtube.com/@AIForWork?sub_confirmation=1",
+        "https://firecrawl.link/julian-oczkowski",
+        "https://wisprflow.ai/?ref=julian",
+        "https://openclaw.ai/blog/openclaw-2-accidentally",
+        "https://venturebeat.com/technology/openclaw-2-0-is-here-what-it-means-for-enterprises"
+      ],
+      "source_type": "youtube_video",
+      "category": "Science & Technology",
+      "comments": [],
+      "summary": "OpenClaw 2.0 发布了项目迄今为止最大的更新版本（2026.8.1），引入共享云会话功能，允许整个团队在一个 AI 代理中协同工作，而非每个开发者单独使用一个本地代理。该版本由 933 位贡献者参与，已合并超过 16,000 次拉取请求。虽然开发者认为本地代理已显得陈旧，但审查者指出，沙箱化和命令批准功能默认关闭，团队在推广前应确保这些安全设置已启用。",
+      "summary_key_points": [
+        "OpenClaw 2.0 版本（2026.8.1）是项目迄今为止最大的更新，由 933 位贡献者参与，已合并超过 16,000 次拉取请求。",
+        "引入共享云会话功能，支持团队在一个 AI 代理中协同工作，替代传统的每个开发者单独使用本地代理的方式。",
+        "开发者认为本地代理已显得陈旧，但审查者指出，沙箱化和命令批准功能默认关闭，团队在推广前应确保这些安全设置已启用。"
+      ],
+      "localizations": {
+        "zh": {
+          "title": "OpenClaw 2.0 推出：AI 编码实现多人游戏 🤯 #Shorts",
+          "description": "OpenClaw 2.0 已发布：开源 AI 代理工具发布了迄今为止的最大版本，共有 933 位贡献者，合并了超过 16,000 个 pull request。主要功能是共享云会话，这样整个团队可以在一个 AI 代理内部工作，而不是每个开发者一个 harness。创建者 Peter Steinberger 表示，本地 harness 现在感觉像是过去的遗物，但审评者指出，沙盒和命令审批默认关闭，因此团队在推广之前应该锁定这些功能。\n\nIn this Short:\n• OpenClaw 2.0（发布 2026.8.1），项目迄今为止最大的更新\n• 933 位贡献者，16,000"
+        }
+      },
+      "hot_score": 28,
+      "evidence_excerpt": "OpenClaw 2.0 is here: the open source AI agent harness shipped its biggest release ever, with 933 contributors and over 16,000 pull requests merged. The…",
+      "related_resources": []
+    },
+    {
+      "id": "youtube-0d5707b709ca60635b72",
+      "platform": "youtube",
+      "native_id": "ps76pb-HrCc",
+      "content_type": "ai_tool",
+      "url": "https://www.youtube.com/watch?v=ps76pb-HrCc",
+      "title": "Github Senior does LeetCode mock to Microsoft Engineer",
+      "description": "Welcome Anna - Senior Engineer at Github, who mastered interviews, and is going to roast me today.\nAnna is good in all interview types: algos, system design, oop, but she is CRAZY good at behavioral, and I will strongly recomend to visit her substack and read the articles to know more about how to prep: https://nammemememe.substack.com/\n\n\nI have been doing Leetcode since 2020, solved 800+ problems, got a Leetcode cap, and landed 3 big tech offers (Google, Microsoft, Snowflake), and today I'm taking mock interview with Github Senior Engineer to see how it goes.\nToday it is purely Leetcode algor",
+      "published_at": "2026-09-01T14:19:51.000Z",
+      "fetched_at": "2026-09-02T11:24:14.476Z",
+      "author_id": "youtube-bf8ab5c010f4c2f85ba4",
+      "author_name": "andreyka26_se",
+      "source_id": "youtube-bf8ab5c010f4c2f85ba4",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": "https://i.ytimg.com/vi/ps76pb-HrCc/maxresdefault.jpg",
+      "metrics": {
+        "views": 738,
+        "likes": 28,
+        "comments": 8,
+        "reposts": null,
+        "replies": null
+      },
+      "explicit_links": [
+        "https://nammemememe.substack.com/",
+        "https://t.me/programming_space",
+        "https://www.instagram.com/andreyka26_se/",
+        "https://www.threads.com/@andreyka26_se",
+        "https://x.com/andreyka26_"
+      ],
+      "source_type": "youtube_video",
+      "category": "Education",
+      "comments": [
+        {
+          "text": "Amazing mock interview from both sides - well done Andrii on solving these problems (especially the first one is a bit annoying for someone who never solved it before, did it in parallel with you during the video 😂), very valuable feedbacks from Anna that showing how great expert she is, not just providing some random general feedback but pointing everything that need to improve with examples.<br>Thank you guys for such content, I hope the next mock will be on System Design)))",
+          "likeCount": 1
+        },
+        {
+          "text": "Lets gooooo",
+          "likeCount": 0
+        },
+        {
+          "text": "Anna&#39;s substack: <a href=\"https://nammemememe.substack.com/\">https://nammemememe.substack.com/</a><br><br>My socials, sub to not miss anything!<br><br>Telegram: <a href=\"https://t.me/programming_space\">https://t.me/programming_space</a><br>Instagram: <a href=\"https://www.instagram.com/andreyka26_se/\">https://www.instagram.com/andreyka26_se/</a><br>Threds: <a href=\"https://www.threads.com/@andreyka26_se\">https://www.threads.com/@andreyka26_se</a><br>X: <a href=\"https://x.com/andreyka26_\">https://x.com/andreyka26_</a><br>Blog: <a href=\"http://andreyka26.com/\">andreyka26.com</a>",
+          "likeCount": 3
+        },
+        {
+          "text": "Nice video, very useful for my way on getting job offer in big tech. <br>could you also tell if all interviews for all companies going in google docs ? or some tools with code formatters are also used?<br>One thing to add the complexity of the second problem is not O(N) but O(N*N) as every second level is reversed and reverse operation is not for free but for O(N)",
+          "likeCount": 1
+        }
+      ],
+      "summary": "作者分享与GitHub高级工程师Anna进行的LeetCode模拟面试体验，强调Anna在行为面问题上的出色表现，并推荐读者通过其Substack了解面试准备策略。",
+      "summary_key_points": [
+        "作者与GitHub高级工程师Anna进行LeetCode模拟面试",
+        "Anna在算法、系统设计、面向对象和行为面问题方面均表现出色",
+        "作者强烈推荐访问Anna的Substack了解面试准备方法",
+        "作者自2020年起解决800+道LeetCode题目，获得LeetCode帽，并收到Google、Microsoft、Snowflake等大厂offer"
+      ],
+      "localizations": {
+        "zh": {
+          "title": "GitHub 高级工程师模拟 LeetCode 面试微软工程师",
+          "description": "欢迎 Anna - GitHub 高级工程师，擅长面试，今天将对我进行面试复盘。\n\nAnna 在各类面试中表现优异：算法、系统设计、面向对象，但在行为面方面尤为出色，强烈推荐访问她的 Substack 阅读文章，了解如何准备：https://nammemememe.substack.com/\n\n我自 2020 年以来一直在 LeetCode 刷题，已解决 800+ 道题目，获得 LeetCode 顶牌，并收到 Google、Microsoft、Snowflake 等三家大厂offer。今天我将与 GitHub 高级工程师进行模拟面试，看看表现如何。\n\n今天纯粹是 LeetCode 算法题"
+        }
+      },
+      "hot_score": 100,
+      "evidence_excerpt": "Welcome Anna - Senior Engineer at Github, who mastered interviews, and is going to roast me today. Anna is good in all interview types: algos, system design,…",
+      "related_resources": [
+        {
+          "type": "tool",
+          "id": "microsoft",
+          "label": "Microsoft（Azure AI Foundry）"
+        }
+      ]
+    },
+    {
+      "id": "youtube-1ba72125e9fd6e703a16",
+      "platform": "youtube",
+      "native_id": "5R-h7CAek7s",
+      "content_type": "ai_tool",
+      "url": "https://www.youtube.com/watch?v=5R-h7CAek7s",
+      "title": "How to Make ChatGPT Codex Remember Your Preferences (Step by Step)",
+      "description": "How to make Codex remember your preferences: tell ChatGPT Codex your formatting and style rules once, and every new chat starts with them.\n\nIf you use OpenAI Codex at work, you probably retype the same instructions all day. Use this layout. Keep the tone plain. Here is the one sentence that ends that loop. You say remember this going forward, and Codex saves your preference into a plain text AGENTS.md file on your computer. Every new chat reads that file first, so your house style is set before you ask. You can also open the file and edit it yourself, like a notepad.\n\nWhat you'll learn:\n- The ",
+      "published_at": "2026-08-31T04:00:14.000Z",
+      "fetched_at": "2026-09-02T11:24:14.476Z",
+      "author_id": "youtube-c5821d3cc20e9103818b",
+      "author_name": "Lvl 99 TechSkillz",
+      "source_id": "youtube-c5821d3cc20e9103818b",
+      "language": "en",
+      "source_tags": [],
+      "thumbnail": "https://i.ytimg.com/vi/5R-h7CAek7s/maxresdefault.jpg",
+      "metrics": {
+        "views": 17,
+        "likes": 1,
+        "comments": 0,
+        "reposts": null,
+        "replies": null
+      },
+      "explicit_links": [
+        "https://www.youtube.com/channel/UCJuRTDzjJrz7yPjHydsB9Vw?sub_confirmation=1"
+      ],
+      "source_type": "youtube_video",
+      "category": "Science & Technology",
+      "comments": [],
+      "summary": "该指南介绍如何利用 ChatGPT Codex 记住用户偏好。通过向 Codex 提供格式和风格规则，并声明“记住此内容，此后永远如此”，Codex 会将这些偏好保存为本地计算机上的 AGENTS.md 文本文件。每次新建对话时，Codex 会优先读取该文件，从而自动应用用户设定的风格。用户也可直接打开该文件手动编辑，使其类似一个记事本。",
+      "summary_key_points": [
+        "通过向 ChatGPT Codex 提供格式和风格规则，并声明‘记住此内容，此后永远如此’，可将偏好保存为本地 AGENTS.md 文件。",
+        "每次新建对话时，Codex 会优先读取该文件，自动应用用户设定的风格。",
+        "用户可直接打开 AGENTS.md 文件手动编辑，使其功能类似记事本。"
+      ],
+      "localizations": {
+        "zh": {
+          "title": "如何让ChatGPT Codex记住您的偏好（步骤详解）",
+          "description": "如何让Codex记住您的偏好：一次性告诉ChatGPT Codex您的格式和风格规则，每次新聊天都会以这些规则开始。\n\n如果您在工作中使用OpenAI Codex，您可能整天都在重复输入相同的指令。使用这个布局。保持语气平实。这就是结束这个循环的一句话。您说记住这个规则，然后Codex会将您的偏好保存到电脑上的一个纯文本AGENTS.md文件中。每次新聊天都会首先读取这个文件，所以您的风格在您提问之前就已经设置好了。您也可以打开这个文件并自行编辑，就像记事本一样。\n\n您将学习到：\n-"
+        }
+      },
+      "hot_score": 0,
+      "evidence_excerpt": "How to make Codex remember your preferences: tell ChatGPT Codex your formatting and style rules once, and every new chat starts with them. If you use OpenAI…",
+      "related_resources": []
     }
   ],
   "coverage": {
     "status": "published_min",
     "source": "min-candidates.json",
-    "generated_at": "2026-09-01T14:00:04.405Z"
+    "generated_at": "2026-09-04T03:56:04.287Z"
   }
 }

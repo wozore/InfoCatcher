@@ -3136,6 +3136,177 @@
         "id": "tool-level3:qwen-3-8-max"
       },
       "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:qwen-3-8-flash",
+      "tool_key": "qwen-3-8-flash",
+      "vendor_key": "alibaba",
+      "title": "Qwen 3.8 Flash",
+      "vendor_label": "阿里巴巴（通义千问）",
+      "icon": "🤖",
+      "summary": "qwen3.8-flash 是通义千问最新的多模态模型，原生支持百万 token 上下文窗口，推理速度快、成本有竞争力，完全兼容 OpenAI 与 Anthropic API 协议，适合高并发应用与智能工作流。",
+      "theme": "general",
+      "scenes": [
+        "编程辅助与智能体工作流",
+        "长文档与代码库一次性处理",
+        "图表与长视频等视觉理解",
+        "桌面应用操作自动化"
+      ],
+      "best_for_preview": "需要高并发、低延迟且兼顾强推理与视觉理解的开发者和企业应用场景。",
+      "not_for_preview": "模型微调训练场景（该模型不支持 Fine-tuning）；新加坡部署区暂不支持批量推理。",
+      "price_badge": "usage_based",
+      "access_level": "开放",
+      "search_terms": [
+        "Qwen 3.8 Flash",
+        "阿里巴巴（通义千问）",
+        "qwen-3-8-flash",
+        "编程辅助与智能体工作流",
+        "长文档与代码库一次性处理",
+        "图表与长视频等视觉理解",
+        "桌面应用操作自动化"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:qwen-3-8-flash"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:gpt-6",
+      "tool_key": "gpt-6",
+      "vendor_key": "openai",
+      "title": "GPT-6",
+      "vendor_label": "OpenAI",
+      "icon": "🤖",
+      "summary": "GPT-5.6 是 OpenAI API 平台上的旗舰文本模型，别名 gpt-5.6 路由到 gpt-5.6-sol，提供标准、Flex、Batch 与 Fast mode 等多种计费与处理档位，支持 Programmatic Tool Calling、显式提示缓存控制、持久化推理、max 推理力度与 Pro mode，并针对 Responses API 提供多智能体编排的 beta 能力。",
+      "theme": "general",
+      "scenes": [
+        "通过 Responses API 进行前沿推理与复杂任务处理",
+        "高吞吐、成本敏感的批量文本处理",
+        "需要低延迟的 Fast mode 生产场景"
+      ],
+      "best_for_preview": [
+        "需要前沿模型能力的复杂专业工作",
+        "高并发的批量推理工作负载",
+        "对响应速度要求高的生产 API 调用"
+      ],
+      "not_for_preview": [
+        "需要原生 1M token 上下文的超长文档任务（官方来源未明确说明该能力）",
+        "非 API 平台的消费级订阅场景"
+      ],
+      "price_badge": "usage_based",
+      "access_level": "开放",
+      "search_terms": [
+        "GPT-6",
+        "OpenAI",
+        "gpt-6",
+        "通过 Responses API 进行前沿推理与复杂任务处理",
+        "高吞吐、成本敏感的批量文本处理",
+        "需要低延迟的 Fast mode 生产场景"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:gpt-6"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:glm-5-3-flash",
+      "tool_key": "glm-5-3-flash",
+      "vendor_key": "zhipu",
+      "title": "GLM 5.3 Flash",
+      "vendor_label": "智谱 AI（Z.ai）",
+      "icon": "🤖",
+      "summary": "GLM-5.3 是 Z.AI 当前旗舰模型，与 GLM-5.2 使用相同基座，通过后训练在复杂编程、长程任务与漏洞挖掘等网络安全基准上取得显著提升，原生支持 1M 上下文，按 token 计费开放 API 调用。",
+      "theme": "general",
+      "scenes": [
+        "复杂软件工程与智能体编程",
+        "长程复杂任务执行",
+        "网络安全漏洞发现与分析",
+        "通用文本生成与推理"
+      ],
+      "best_for_preview": "需要高强度编码、智能体工作流和长程复杂任务的开发者与团队。",
+      "not_for_preview": "对成本极度敏感、只需轻量快速响应的简单调用场景。",
+      "price_badge": "paid",
+      "access_level": "开放",
+      "search_terms": [
+        "GLM 5.3 Flash",
+        "智谱 AI（Z.ai）",
+        "glm-5-3-flash",
+        "复杂软件工程与智能体编程",
+        "长程复杂任务执行",
+        "网络安全漏洞发现与分析",
+        "通用文本生成与推理"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:glm-5-3-flash"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:qwen3-8-flash",
+      "tool_key": "qwen3-8-flash",
+      "vendor_key": "alibaba",
+      "title": "Qwen3.8-Flash",
+      "vendor_label": "阿里巴巴（通义千问）",
+      "icon": "🤖",
+      "summary": "qwen3.6-plus 是阿里云百炼平台上的 Qwen 系列文本生成模型，支持推理、图片理解与文本生成，配置中标注支持 1,000,000 token 上下文窗口，可通过百炼按量计费 API 或 Coding Plan 套餐调用。",
+      "theme": "general",
+      "scenes": [
+        "AI 编程辅助",
+        "智能对话",
+        "文本生成"
+      ],
+      "best_for_preview": "适合需要在编程工具或智能体中使用、且需要长上下文和图片理解的推理与文本生成任务",
+      "not_for_preview": "不适合需要特定精确版本冻结或超出上下文窗口的超大规模单次处理的场景",
+      "price_badge": "usage_based",
+      "access_level": "开放",
+      "search_terms": [
+        "Qwen3.8-Flash",
+        "阿里巴巴（通义千问）",
+        "qwen3-8-flash",
+        "AI 编程辅助",
+        "智能对话",
+        "文本生成"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:qwen3-8-flash"
+      },
+      "detail_kind": "api_model"
+    },
+    {
+      "id": "tool-card:gemini-3-8-flash",
+      "tool_key": "gemini-3-8-flash",
+      "vendor_key": "google",
+      "title": "Gemini 3.8 Flash",
+      "vendor_label": "Google",
+      "icon": "🤖",
+      "summary": "gemini-3-flash-preview 是 Gemini 3 系列的预览模型，提供 Pro 级智能与 Flash 速度和价格，支持 1M 上下文窗口、64k 输出，定价为每百万 token 输入 $0.50、输出 $3。",
+      "theme": "general",
+      "scenes": [
+        "通过 Gemini API 发送文本提示进行生成与推理",
+        "处理长上下文文档与多模态输入",
+        "构建低成本的代理与自动化应用"
+      ],
+      "best_for_preview": "需要 Pro 级智能但追求 Flash 速度和价格的开发场景",
+      "not_for_preview": "需要长期稳定版本的生产环境（预览模型至少提前 2 周通知弃用）",
+      "price_badge": "paid",
+      "access_level": "开放",
+      "search_terms": [
+        "Gemini 3.8 Flash",
+        "Google",
+        "gemini-3-8-flash",
+        "通过 Gemini API 发送文本提示进行生成与推理",
+        "处理长上下文文档与多模态输入",
+        "构建低成本的代理与自动化应用"
+      ],
+      "detail_ref": {
+        "kind": "tool-level3",
+        "id": "tool-level3:gemini-3-8-flash"
+      },
+      "detail_kind": "api_model"
     }
   ]
 }
