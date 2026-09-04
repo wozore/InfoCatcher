@@ -2912,3 +2912,17 @@
 
 - [x] local-model.js:22 的 `INFOCATCHER_LOCAL_MODEL_SCRIPT` 环境变量回退保留（属启动脚本路径指定，非本轮 legacy 范围）。
 - [x] R4-1（待补卡域独立 src/pending/）未做——D4 第二半归 R4 轮；catalog→news 剩余边（catalog-batch 1、catalog-transaction-store 1、concept-batch 3、validate.js 3 等）在白名单中待 R4 清。
+
+## 2026-09-04 · 重构 R3 轮（news：provider 正名、旧卡兼容抹除、加工流程拆分）
+
+### 变更实现
+
+- [x] `llm-provider.js` 删除 provider 路由/错误映射重复实现与历史 DeepSeek 兼容路径；全部 `*WithDeepSeek` 导出及调用方更名为 provider 无关命名，统一经 llm-gateway 调用。
+- [x] `pending-review-store.js` 删除 `normalizeLegacyCards`；当前待补卡数据已无旧格式，旧输入进入现有 fail-closed 校验路径。
+- [x] 新闻加工按职责拆分：`enrichment-core.js` 统一残缺判定与单条加工，`local-enrichment.js` 只保留 enrich 编排，`min-repair.js` 独立拥有 repair 编排，`ai-top.js` 独立 AI Top 的确定性收敛。
+- [x] `feed-parser.js` 评估后保持跨采集器/投影共享（多消费者、单一网络与规范化职责，拆分会增加接口）。`cmd-min.js` 保持 CLI 编排职责，业务逻辑已下沉。
+- [x] CODEBASE-MAP 同步拆分文件职责与导出；规范白名单按实际违规数重建。
+
+### 验证结果
+
+- [x] 全量测试 711/711 通过；`check-standards`（138 个 src 文件，白名单外 0）、`validate.js` 与 `build-dist.js` 全部通过。

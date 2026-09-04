@@ -22,12 +22,11 @@ const {
   CONTENT_TYPES,
 } = require('../../src/news/classify/content-classifier');
 const {
-  buildDeepSeekPayload,
+  buildClassifyPayload,
   normalizeLabel,
-  classifyWithDeepSeek,
-  DEFAULT_MODEL,
-  API_BASE,
+  classifyContent,
 } = require('../../src/news/classify/llm-provider');
+const { getProvider } = require('../../src/shared/providers');
 
 // ── mock fetch 工具 ─────────────────────────────────────────────
 
@@ -51,8 +50,8 @@ function httpErrorResponse(status, body = 'error body') {
 
 // ── 第 1 组：llm-provider 单元 ─────────────────────────────────
 
-test('buildDeepSeekPayload 构建 OpenAI 兼容 chat 请求体', () => {
-  const payload = buildDeepSeekPayload(
+test('buildClassifyPayload 构建 OpenAI 兼容 chat 请求体', () => {
+  const payload = buildClassifyPayload(
     { title: '标题', description: '描述'.repeat(10) },
     'my-model'
   );
@@ -66,8 +65,8 @@ test('buildDeepSeekPayload 构建 OpenAI 兼容 chat 请求体', () => {
   assert.ok(payload.messages[1].content.includes('描述'));
 });
 
-test('buildDeepSeekPayload 裁剪超长标题/描述，控制单条 token 成本', () => {
-  const payload = buildDeepSeekPayload({ title: 'T'.repeat(500), description: 'D'.repeat(2000) });
+test('buildClassifyPayload 裁剪超长标题/描述，控制单条 token 成本', () => {
+  const payload = buildClassifyPayload({ title: 'T'.repeat(500), description: 'D'.repeat(2000) });
   const user = payload.messages[1].content;
   // 标题裁剪到 200 字符、描述裁剪到 600 字符（标题为 500 个 T 会被截断）
   assert.ok(user.includes('T'.repeat(200)));
@@ -86,21 +85,22 @@ test('normalizeLabel 规整合法枚举 / 中文标签 / 带解释的脏输出',
   assert.equal(normalizeLabel(''), null);
 });
 
-test('classifyWithDeepSeek(provider=deepseek) 成功返回 ok + 合法枚举', async () => {
+test('classifyContent(provider=deepseek) 经注册表路由到 chat 端点，成功返回 ok + 合法枚举', async () => {
+  const deepseek = getProvider('deepseek');
   const fetchImpl = async (url, options) => {
-    assert.equal(url, API_BASE);
+    assert.equal(url, deepseek.chatEndpoint);
     assert.equal(options.headers.Authorization, 'Bearer test-key');
     const body = JSON.parse(options.body);
-    assert.equal(body.model, DEFAULT_MODEL);
+    assert.equal(body.model, deepseek.defaultModel);
     return okJsonResponse('ai_tool');
   };
-  const result = await classifyWithDeepSeek({ title: 'x', description: 'y' }, { provider: 'deepseek', apiKey: 'test-key', fetchImpl });
+  const result = await classifyContent({ title: 'x', description: 'y' }, { provider: 'deepseek', apiKey: 'test-key', fetchImpl });
   assert.equal(result.ok, true);
   assert.equal(result.content_type, 'ai_tool');
   assert.equal(result.ai_confidence, 0.85);
 });
 
-test('classifyWithDeepSeek(默认 zhipu) 走智谱 Anthropic 端点 + glm-5.3-flash', async () => {
+test('classifyContent(默认 zhipu) 走智谱 Anthropic 端点 + glm-5.3-flash', async () => {
   const fetchImpl = async (url, options) => {
     assert.equal(url, 'https://open.bigmodel.cn/api/anthropic/v1/messages');
     assert.equal(options.headers['x-api-key'], 'test-key');
@@ -114,45 +114,45 @@ test('classifyWithDeepSeek(默认 zhipu) 走智谱 Anthropic 端点 + glm-5.3-fl
       text: async () => '',
     };
   };
-  const result = await classifyWithDeepSeek({ title: 'x', description: 'y' }, { apiKey: 'test-key', fetchImpl });
+  const result = await classifyContent({ title: 'x', description: 'y' }, { apiKey: 'test-key', fetchImpl });
   assert.equal(result.ok, true);
   assert.equal(result.content_type, 'ai_product');
   assert.equal(result.ai_confidence, 0.85);
 });
 
-test('classifyWithDeepSeek 缺 key 返回降级对象（不抛错）', async () => {
-  const result = await classifyWithDeepSeek({ title: 'x' }, { apiKey: '', fetchImpl: async () => okJsonResponse('other') });
+test('classifyContent 缺 key 返回降级对象（不抛错）', async () => {
+  const result = await classifyContent({ title: 'x' }, { apiKey: '', fetchImpl: async () => okJsonResponse('other') });
   assert.equal(result.ok, false);
   assert.equal(result.code, 'missing_api_key');
 });
 
-test('classifyWithDeepSeek 网络失败返回降级对象（不抛错）', async () => {
+test('classifyContent 网络失败返回降级对象（不抛错）', async () => {
   const fetchImpl = async () => { throw new Error('ECONNRESET'); };
-  const result = await classifyWithDeepSeek({ title: 'x' }, { apiKey: 'test-key', fetchImpl });
+  const result = await classifyContent({ title: 'x' }, { apiKey: 'test-key', fetchImpl });
   assert.equal(result.ok, false);
   assert.equal(result.code, 'network_error');
   assert.ok(result.error.length > 0);
 });
 
-test('classifyWithDeepSeek 抛出同步异常时 resolve 降级而不 reject', async () => {
+test('classifyContent 抛出同步异常时 resolve 降级而不 reject', async () => {
   const fetchImpl = () => { throw new TypeError('unexpected sync crash'); };
-  const result = await classifyWithDeepSeek({ title: 'x' }, { apiKey: 'test-key', fetchImpl });
+  const result = await classifyContent({ title: 'x' }, { apiKey: 'test-key', fetchImpl });
   assert.equal(result.ok, false);
   assert.equal(result.code, 'network_error');
   assert.ok(result.error.includes('unexpected sync crash'));
 });
 
-test('classifyWithDeepSeek 非 200 返回降级对象并带 HTTP 状态', async () => {
+test('classifyContent 非 200 返回降级对象并带 HTTP 状态', async () => {
   const fetchImpl = async () => httpErrorResponse(500, 'internal error');
-  const result = await classifyWithDeepSeek({ title: 'x' }, { apiKey: 'test-key', fetchImpl });
+  const result = await classifyContent({ title: 'x' }, { apiKey: 'test-key', fetchImpl });
   assert.equal(result.ok, false);
   assert.equal(result.code, 'http_500');
   assert.ok(result.error.includes('500'));
 });
 
-test('classifyWithDeepSeek 输出无法映射返回降级对象', async () => {
+test('classifyContent 输出无法映射返回降级对象', async () => {
   const fetchImpl = async () => okJsonResponse('随便说的内容');
-  const result = await classifyWithDeepSeek({ title: 'x' }, { apiKey: 'test-key', fetchImpl });
+  const result = await classifyContent({ title: 'x' }, { apiKey: 'test-key', fetchImpl });
   assert.equal(result.ok, false);
   assert.equal(result.code, 'invalid_label');
 });

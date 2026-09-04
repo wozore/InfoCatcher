@@ -12,7 +12,7 @@ const {
 const {
   buildKeywordRefinePayload,
   normalizeKeywordRefine,
-  refineKeywordsWithDeepSeek,
+  refineKeywords: refineKeywordsWithLlm,
 } = require('../../src/news/classify/llm-provider');
 
 test('关键词提纯仅读取 approved 顶层原文，忽略 localizations', () => {
@@ -130,7 +130,7 @@ test('关键词 provider 的 payload 标明不可信原文，并将多语言结�
 
 test('关键词 provider 使用 mock fetch，不发真实 DeepSeek 请求', async () => {
   let called = false;
-  const result = await refineKeywordsWithDeepSeek(
+  const result = await refineKeywordsWithLlm(
     [{ id: 'x-1', title: 'DeepSeek update', description: '', comments: [] }],
     [{ word: 'deepseek', count: 1 }],
     {
@@ -149,13 +149,13 @@ test('关键词 provider 使用 mock fetch，不发真实 DeepSeek 请求', asyn
 });
 
 test('关键词 provider 的非 JSON 或 HTTP 失败显式返回 ok=false', async () => {
-  const badJson = await refineKeywordsWithDeepSeek(
+  const badJson = await refineKeywordsWithLlm(
     [{ id: 'x-1', title: 'x', description: '', comments: [] }], [],
     { apiKey: 'test-key', fetchImpl: async () => ({ ok: true, json: async () => ({ choices: [{ message: { content: 'not-json' } }] }) }) },
   );
   assert.deepEqual(badJson.ok, false);
   assert.equal(badJson.code, 'invalid_keyword_refine');
-  const httpError = await refineKeywordsWithDeepSeek(
+  const httpError = await refineKeywordsWithLlm(
     [{ id: 'x-1', title: 'x', description: '', comments: [] }], [],
     { apiKey: 'test-key', fetchImpl: async () => ({ ok: false, status: 429, text: async () => 'rate limited' }) },
   );

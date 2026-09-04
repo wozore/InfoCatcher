@@ -88,13 +88,10 @@ const {
   revisionOfConfig,
 } = require('../min/keyword-actions');
 const { buildReviewList, loadReviewList, applyReviewList, scoreOf, suggestReview } = require('../min/review-list');
-const {
-  enrichMinCandidates,
-  countEnrichmentWork,
-  repairIncompleteCandidates,
-  countRepairWork,
-  nonNegativeInteger,
-} = require('../min/local-enrichment');
+const { enrichMinCandidates, countEnrichmentWork } = require('../min/local-enrichment');
+const { repairIncompleteCandidates } = require('../min/min-repair');
+const { nonNegativeInteger, countRepairWork } = require('../min/enrichment-core');
+const { selectTopCandidates } = require('../min/ai-top');
 const { readJson, writeJsonAtomic } = require('../../shared/json-store');
 const { CATALOG_GENERATOR_FILES, CONCEPT_FILES } = require('../../shared/paths');
 const { NEWS_FILES } = require('../../shared/paths');
@@ -574,7 +571,7 @@ async function minReviewCommand(action, flags = {}) {
     const path = require('path');
     const fs = require('fs');
     const { writeJsonAtomic } = require('../../shared/json-store');
-    const { selectTopWithDeepSeek } = require('../classify/llm-provider');
+    const { selectTopItems } = require('../classify/llm-provider');
     const store = readMinStore();
     const approved = store.candidates.filter(c => c && c.review_status === 'approved');
     // 判定"有 YouTube"：读最后一次采集记录（runMin 末尾写）。解析出 no_approved /
@@ -591,39 +588,11 @@ async function minReviewCommand(action, flags = {}) {
     const aiTopInputMax = Number(collection.ai_top_input_max) || MAX_AI_TOP_INPUT;
     // 仅让 AI 读取按评分排序的有限候选池，避免历史 approved 大量累积时超出本地模型上下文。
     const aiInput = topCandidatesForAi(approved, aiTopInputMax);
-    const result = await selectTopWithDeepSeek(aiInput, { min: Math.min(topN, approved.length), max: Math.min(topN, approved.length) });
+    const result = await selectTopItems(aiInput, { min: Math.min(topN, approved.length), max: Math.min(topN, approved.length) });
     if (!result.ok) {
       throw new Error(`AI 挑选失败：${result.error}（${result.code}）。可稍后重试。`);
     }
-    // 按 AI 返回的 ids 提取完整 approved 候选，按 AI 顺序输出；
-    // AI 可能少给（漏 id / 输出截断），不足 topN 时从剩余 approved 按评分倒序补齐到 topN，
-    // 保证待选项数量固定（纯 X 10 / 有 YouTube 15），供维护者从中选最终公开的少数条。
-    const byId = new Map(approved.map(c => [c.id, c]));
-    const aiOrdered = (result.ids || []).map(id => byId.get(id)).filter(Boolean);
-    const rest = approved
-      .filter(c => !aiOrdered.some(chosen => chosen.id === c.id))
-      .sort((a, b) => (scoreOf(b) ?? -Infinity) - (scoreOf(a) ?? -Infinity));
-    const selected = aiOrdered.concat(rest).slice(0, topN).map(c => {
-        const zh = c.localizations && c.localizations.zh;
-        // 第二阶段：具体内容 = 完整写入（优先汉化完整描述，完整不截断）；
-        // 原文参考 original 用 http 链接放最下面；若原文是中文则不需要 original。
-        const localizedDescription = (zh && (zh.description || zh.title)) || '';
-        const originalText = String(c.description || '').trim();
-        const isChinese = /[一-鿿]/.test(originalText);
-        return {
-          id: c.id,   // 候选层 id：供 bat/apply-top.bat 用 top-apply 直连定位（对齐 review 清单带 id 模式）
-          score: scoreOf(c),
-          summary: String(c.summary || c.title || '(无标题)').trim(),
-          suggestion: suggestReview(c),
-          // 第二阶段：top_selected 默认 false（AI 提供待选项，维护者确认显示后置 true）
-          top_selected: false,
-          // 具体内容：完整写入（汉化完整描述，非 http 格式）
-          description: localizedDescription || originalText,
-          // 原文参考：http 链接放最下面；原文是中文则省略
-          ...(isChinese ? {} : { original: c.url || '' }),
-          author_name: c.author_name || '',
-        };
-      });
+    const selected = selectTopCandidates(approved, result.ids, topN);
     const dateKey = new Date().toISOString().slice(0, 10).replace(/-/g, '');
     const manualFolder = (config && config.manual_folder) || 'data/manual';
     const file = path.join(manualFolder, 'top.json');

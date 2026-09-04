@@ -14,7 +14,7 @@ const path = require('path');
 const fs = require('fs');
 const { writeJsonAtomic } = require('../../shared/json-store');
 const { readMinStore } = require('./min-store');
-const { refineKeywordsWithDeepSeek } = require('../classify/llm-provider');
+const { refineKeywords: refineKeywordsWithLlm } = require('../classify/llm-provider');
 const { beijingDateKey } = require('../../shared/beijing-time');
 
 const EN_STOPWORDS = new Set([
@@ -162,7 +162,7 @@ async function refineKeywords(store, config, options = {}) {
   // 送模型做语义归并的上下文：取评分最高的有限条原文，控制单次调用输入规模。
   const contextOriginals = approvedAll.slice(0, contextSize);
 
-  const extract = options.keywordExtractor || refineKeywordsWithDeepSeek;
+  const extract = options.keywordExtractor || refineKeywordsWithLlm;
   const callOptions = {
     apiKey: options.apiKey,
     fetchImpl: options.fetchImpl,

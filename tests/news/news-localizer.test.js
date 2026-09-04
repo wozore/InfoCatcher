@@ -5,7 +5,7 @@
  *   不请求真实网络，注入 mock fetchImpl 验证：
  *     1. buildLocalizePayload 输入裁剪与占位符替换；
  *     2. normalizeLocalization 解析模型输出的 JSON 容错；
- *     3. localizeWithDeepSeek 成功/缺 key/网络失败/输出无法解析降级；
+ *     3. localizeContent 成功/缺 key/网络失败/输出无法解析降级；
  *     4. localizeCandidate 无素材不调 LLM/成功/失败降级；
  *     5. localizeCandidates 批量、跳过已有 localizations[locale]；
  *     6. enrichCandidateLocalizations 管线钩子按开关与条件过滤、maxItems 截断；
@@ -23,7 +23,7 @@ const assert = require('node:assert/strict');
 const {
   buildLocalizePayload,
   normalizeLocalization,
-  localizeWithDeepSeek,
+  localizeContent,
 } = require('../../src/news/classify/llm-provider');
 const {
   collectLocalizeSource,
@@ -133,16 +133,16 @@ test('normalizeLocalization 字段缺失/空串/非法返回 null', () => {
   assert.equal(normalizeLocalization(''), null);
 });
 
-// ── 第 3 组：localizeWithDeepSeek 降级语义 ──────────
+// ── 第 3 组：localizeContent 降级语义 ──────────
 
-test('localizeWithDeepSeek 缺 key：resolve 降级不 reject', async () => {
-  const result = await localizeWithDeepSeek({ title: 't' }, { apiKey: '' });
+test('localizeContent 缺 key：resolve 降级不 reject', async () => {
+  const result = await localizeContent({ title: 't' }, { apiKey: '' });
   assert.equal(result.ok, false);
   assert.equal(result.code, 'missing_api_key');
 });
 
-test('localizeWithDeepSeek 网络失败：resolve 降级', async () => {
-  const result = await localizeWithDeepSeek({ title: 't' }, {
+test('localizeContent 网络失败：resolve 降级', async () => {
+  const result = await localizeContent({ title: 't' }, {
     apiKey: 'key',
     fetchImpl: mockFetch(() => { throw new Error('network down'); }),
   });
@@ -150,8 +150,8 @@ test('localizeWithDeepSeek 网络失败：resolve 降级', async () => {
   assert.equal(result.code, 'network_error');
 });
 
-test('localizeWithDeepSeek 输出无法解析：invalid_translation', async () => {
-  const result = await localizeWithDeepSeek({ title: 't' }, {
+test('localizeContent 输出无法解析：invalid_translation', async () => {
+  const result = await localizeContent({ title: 't' }, {
     apiKey: 'key',
     fetchImpl: mockFetch(() => deepSeekOk('我不懂你在说什么')),
   });
@@ -159,8 +159,8 @@ test('localizeWithDeepSeek 输出无法解析：invalid_translation', async () =
   assert.equal(result.code, 'invalid_translation');
 });
 
-test('localizeWithDeepSeek 成功：返回翻译标题/描述', async () => {
-  const result = await localizeWithDeepSeek({ title: 'DeepSeek V4 released', description: 'New model' }, {
+test('localizeContent 成功：返回翻译标题/描述', async () => {
+  const result = await localizeContent({ title: 'DeepSeek V4 released', description: 'New model' }, {
     apiKey: 'key',
     fetchImpl: mockFetch(() => deepSeekOk('{"title":"DeepSeek V4 发布","description":"新模型"}')),
   });

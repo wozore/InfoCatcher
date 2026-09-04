@@ -32,6 +32,7 @@ const {
   removeManualLists,
   MANUAL_LIST_FILES,
 } = require('../../src/news/cli/cmd-min');
+const { selectTopCandidates } = require('../../src/news/min/ai-top');
 
 // 固定配置（不依赖真实配置文件，保证 topN 断言确定性）
 const CONFIG = { collection: { review_top_with_youtube: 15, review_top_pure_x: 10 } };
@@ -104,6 +105,17 @@ test('topCandidatesForAi 限制模型输入并保持评分排序', () => {
   assert.equal(selected.length, MAX_AI_TOP_INPUT);
   assert.equal(selected[0].id, `id-${MAX_AI_TOP_INPUT + 2}`);
   assert.equal(selected.at(-1).id, 'id-3');
+});
+
+test('selectTopCandidates：按 AI id 顺序取候选并按评分补齐', () => {
+  const candidates = [
+    { id: 'low', title: '低分', description: 'low', final_score: 1 },
+    { id: 'high', title: '高分', description: 'high', final_score: 9 },
+    { id: 'mid', title: '中分', description: 'mid', final_score: 5 },
+  ];
+  const selected = selectTopCandidates(candidates, ['mid', 'missing'], 3);
+  assert.deepEqual(selected.map(item => item.id), ['mid', 'high', 'low']);
+  assert.equal(selected.every(item => item.top_selected === false), true);
 });
 
 // ── applyTopSelectedList：top 清单 top_selected=true → 写回候选层 ──

@@ -77,11 +77,6 @@
       "note": "4 处: process.env 直读（行 91） | process.env 直读（行 91） | process.env 直读（行 92） …"
     },
     {
-      "file": "src/news/classify/llm-provider.js",
-      "count": 1,
-      "note": "1 处: process.env 直读（行 96）"
-    },
-    {
       "file": "src/news/cli/cmd-min.js",
       "count": 62,
       "note": "62 处: console.log（行 303） | console.log（行 306） | console.log（行 308） …"
@@ -102,9 +97,9 @@
       "note": "1 处: process.env 直读（行 210）"
     },
     {
-      "file": "src/news/min/local-enrichment.js",
+      "file": "src/news/min/min-repair.js",
       "count": 1,
-      "note": "1 处: process.env 直读（行 894）"
+      "note": "1 处: process.env 直读（行 216）"
     },
     {
       "file": "src/shared/catalog-release-dates.js",
@@ -216,7 +211,7 @@
     {
       "file": "src/news/classify/llm-provider.js",
       "count": 2,
-      "note": "2 处: 行数 1143 > 400 | 导出 38 个 > 15"
+      "note": "2 处: 行数 885 > 400 | 导出 21 个 > 15"
     },
     {
       "file": "src/news/cli/cmd-min.js",
@@ -232,11 +227,6 @@
       "file": "src/news/collectors/collector-youtube-v2.js",
       "count": 1,
       "note": "1 处: 行数 425 > 400"
-    },
-    {
-      "file": "src/news/min/local-enrichment.js",
-      "count": 1,
-      "note": "1 处: 行数 1062 > 400"
     },
     {
       "file": "src/news/min/min-store.js",

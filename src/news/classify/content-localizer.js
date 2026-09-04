@@ -28,7 +28,7 @@
 
 'use strict';
 
-const { localizeWithDeepSeek, localizeWithExternalDeepSeek } = require('./llm-provider');
+const { localizeContent, localizeWithExternal } = require('./llm-provider');
 
 // ═══════════════════════════════════════════════════════════════
 // 固定并发池：按 concurrency 并行执行 worker，保持输入顺序。
@@ -139,7 +139,7 @@ async function localizeCandidate(item, options = {}) {
   }
 
   if (LOCALIZE_PROVIDERS.has(provider)) {
-    const llm = await (options.external === true ? localizeWithExternalDeepSeek : localizeWithDeepSeek)(source, { ...options, provider, model });
+    const llm = await (options.external === true ? localizeWithExternal : localizeContent)(source, { ...options, provider, model });
     if (llm.ok) {
       return {
         locale,

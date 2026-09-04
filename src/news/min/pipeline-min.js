@@ -73,6 +73,7 @@ const { localizeCandidates } = require('../classify/content-localizer');
 const { runPool } = require('../classify/content-reviewer');
 const { dedupeItems, enrichHotspotProjection } = require('../pipeline/projection');
 const { filterProjectionByWindow } = require('../core/news-public-gate');
+const { countRepairWork } = require('./enrichment-core');
 const { readJson, writeJsonAtomic } = require('../../shared/json-store');
 const { NEWS_FILES } = require('../../shared/paths');
 const V2_CONFIG_PATH = '../../../data/news/config/news-config-v2.json';
@@ -470,7 +471,7 @@ async function runMin(options = {}) {
   // ═══════════════════════════════════════════════════════════════
   if (options.autoRepair === true) {
     try {
-      const { repairIncompleteCandidates, countRepairWork } = require('./local-enrichment');
+      const { repairIncompleteCandidates } = require('./min-repair');
       const repairWork = countRepairWork(merged.candidates, {
         l2Enabled: config?.review?.l2_enabled !== false,
       });

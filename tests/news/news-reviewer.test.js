@@ -5,7 +5,7 @@
  *   不请求真实网络，注入 mock fetchImpl 验证：
  *     1. buildReviewPayload 输入裁剪（title/desc/transcript/summary）与占位符替换；
  *     2. normalizeReview 解析模型输出的 JSON 容错（中文 verdict / confidence 置 0）；
- *     3. reviewWithDeepSeek 成功/缺 key/网络失败/输出无法解析降级；
+ *     3. reviewContent 成功/缺 key/网络失败/输出无法解析降级；
  *     4. reviewCandidate 成功（含字幕/总结）/失败降级/无素材；
  *     5. reviewCandidates 批量、跳过已有 ai_review；
  *     6. mergeCandidatesMin 保留既有审核结论（重新采集不重置人工结论）。
@@ -20,7 +20,7 @@ const assert = require('node:assert/strict');
 const {
   buildReviewPayload,
   normalizeReview,
-  reviewWithDeepSeek,
+  reviewContent,
 } = require('../../src/news/classify/llm-provider');
 const {
   collectReviewSource,
@@ -113,16 +113,16 @@ test('normalizeReview 非法/越界 confidence 钳制到 0-1，非法 verdict �
   assert.equal(normalizeReview(''), null);
 });
 
-// ── 第 2 组：reviewWithDeepSeek 降级语义 ─────────────────
+// ── 第 2 组：reviewContent 降级语义 ─────────────────
 
-test('reviewWithDeepSeek 缺 key：resolve 降级不 reject', async () => {
-  const result = await reviewWithDeepSeek({ title: 't' }, { apiKey: '' });
+test('reviewContent 缺 key：resolve 降级不 reject', async () => {
+  const result = await reviewContent({ title: 't' }, { apiKey: '' });
   assert.equal(result.ok, false);
   assert.equal(result.code, 'missing_api_key');
 });
 
-test('reviewWithDeepSeek 网络失败：resolve 降级', async () => {
-  const result = await reviewWithDeepSeek({ title: 't' }, {
+test('reviewContent 网络失败：resolve 降级', async () => {
+  const result = await reviewContent({ title: 't' }, {
     apiKey: 'key',
     fetchImpl: mockFetch(() => { throw new Error('network down'); }),
   });
@@ -130,8 +130,8 @@ test('reviewWithDeepSeek 网络失败：resolve 降级', async () => {
   assert.equal(result.code, 'network_error');
 });
 
-test('reviewWithDeepSeek 输出无法解析：invalid_review', async () => {
-  const result = await reviewWithDeepSeek({ title: 't' }, {
+test('reviewContent 输出无法解析：invalid_review', async () => {
+  const result = await reviewContent({ title: 't' }, {
     apiKey: 'key',
     fetchImpl: mockFetch(() => deepSeekOk('我不懂你在说什么')),
   });
@@ -139,8 +139,8 @@ test('reviewWithDeepSeek 输出无法解析：invalid_review', async () => {
   assert.equal(result.code, 'invalid_review');
 });
 
-test('reviewWithDeepSeek 成功：返回 verdict + reasons + confidence', async () => {
-  const result = await reviewWithDeepSeek({ title: 't', summary: 's' }, {
+test('reviewContent 成功：返回 verdict + reasons + confidence', async () => {
+  const result = await reviewContent({ title: 't', summary: 's' }, {
     apiKey: 'key',
     fetchImpl: mockFetch(() => deepSeekOk('{"verdict":"discard","reasons":["广告"],"confidence":0.9}')),
   });
@@ -150,8 +150,8 @@ test('reviewWithDeepSeek 成功：返回 verdict + reasons + confidence', async 
   assert.equal(result.confidence, 0.9);
 });
 
-test('reviewWithDeepSeek 成功：传递区间置信度并使用区间下界', async () => {
-  const result = await reviewWithDeepSeek({ title: 't', summary: 's' }, {
+test('reviewContent 成功：传递区间置信度并使用区间下界', async () => {
+  const result = await reviewContent({ title: 't', summary: 's' }, {
     apiKey: 'key',
     fetchImpl: mockFetch(() => deepSeekOk('{"verdict":"hold","confidence_range":"40-60%","confidence":0.6,"reasons":["证据不足"]}')),
   });

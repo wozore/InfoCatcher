@@ -29,7 +29,7 @@
 
 'use strict';
 
-const { reviewWithDeepSeek, reviewWithExternalDeepSeek } = require('./llm-provider');
+const { reviewContent, reviewWithExternal } = require('./llm-provider');
 
 // 合法判定集合（与 llm-provider.js 的 VALID_VERDICTS 一致）
 const VERDICTS = Object.freeze(['approve', 'hold', 'discard']);
@@ -107,7 +107,7 @@ async function reviewCandidate(item, options = {}) {
   }
 
   if (REVIEW_PROVIDERS.has(provider)) {
-    const llm = await (options.external === true ? reviewWithExternalDeepSeek : reviewWithDeepSeek)(source, { ...options, provider, model });
+    const llm = await (options.external === true ? reviewWithExternal : reviewContent)(source, { ...options, provider, model });
     if (llm.ok) {
       return {
         verdict: llm.verdict,

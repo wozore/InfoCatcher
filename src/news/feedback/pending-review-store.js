@@ -142,25 +142,22 @@ function normalizeCard(kind, input, old = null) {
   return normalized;
 }
 
-function normalizeLegacyCards(kind, cards) {
-  const byKey = new Map();
-  for (const card of cards || []) {
-    const normalized = normalizeCard(kind, card);
-    if (normalized) byKey.set(normalized.candidate_key, normalized);
-  }
-  return [...byKey.values()];
-}
-
 function readPending(kind, options = {}) {
   const payload = readRaw(kind, options);
-  const cards = normalizeLegacyCards(kind, payload.cards);
+  const field = nameField(kind);
+  // 卡片形状门禁：缺少 candidate_key 或名称字段的卡片拒绝读取（fail-closed），不做静默修复。
+  for (const card of payload.cards) {
+    if (!card || typeof card !== 'object' || !card.candidate_key || !String(card[field] || '').trim()) {
+      throw new Error('PENDING_FILE_INVALID');
+    }
+  }
   return {
     schema_version: SCHEMA_VERSION,
     kind: KINDS[kind],
     generated_at: payload.generated_at || null,
-    count: cards.length,
-    revision: revisionOfPending(cards),
-    cards,
+    count: payload.cards.length,
+    revision: revisionOfPending(payload.cards),
+    cards: payload.cards,
   };
 }
 
@@ -190,14 +187,13 @@ function projectPending(kind, value) {
 }
 
 function writePending(kind, cards, options = {}) {
-  const normalized = normalizeLegacyCards(kind, cards);
   const payload = {
     schema_version: SCHEMA_VERSION,
     kind: KINDS[kind],
     generated_at: options.generatedAt || new Date().toISOString(),
-    count: normalized.length,
-    revision: revisionOfPending(normalized),
-    cards: normalized,
+    count: cards.length,
+    revision: revisionOfPending(cards),
+    cards,
   };
   const file = fileFor(kind, options);
   fs.mkdirSync(path.dirname(file), { recursive: true });

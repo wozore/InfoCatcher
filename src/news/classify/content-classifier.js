@@ -28,7 +28,7 @@
 
 const fs = require('fs');
 const { catalog } = require('../../catalog-interface');
-const { classifyWithDeepSeek } = require('./llm-provider');
+const { classifyContent } = require('./llm-provider');
 
 // ═══════════════════════════════════════════════════════════════
 // 常量
@@ -264,7 +264,7 @@ async function classifyCandidate(item, options = {}) {
 
   if (provider) {
     if (L1_PROVIDERS.has(provider)) {
-      const llm = await classifyWithDeepSeek(item, { ...options, provider, model });
+      const llm = await classifyContent(item, { ...options, provider, model });
       if (llm.ok) {
         return {
           content_type: llm.content_type,

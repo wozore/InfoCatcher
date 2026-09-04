@@ -4,7 +4,7 @@
  * 测试原理：
  *   不请求真实网络，注入 mock fetchImpl 验证：
  *     1. normalizeSummary 解析模型输出的 JSON 容错；
- *     2. summarizeWithDeepSeek 成功/缺 key/网络失败/输出无法解析降级；
+ *     2. summarizeContent 成功/缺 key/网络失败/输出无法解析降级；
  *     3. summarizeCandidate 成功（含字幕）/失败降级/无素材；
  *     4. summarizeCandidates 批量、跳过已有 summary、并发限流；
  *     5. enrichCandidateSummaries 管线钩子按开关与条件过滤；
@@ -20,9 +20,10 @@ const assert = require('node:assert/strict');
 const {
   buildSummaryPayload,
   normalizeSummary,
-  summarizeWithDeepSeek,
-  summarizeWithExternalDeepSeek,
+  summarizeContent,
+  summarizeWithExternal,
 } = require('../../src/news/classify/llm-provider');
+const { getProvider } = require('../../src/shared/providers');
 const {
   collectSummarySource,
   summarizeCandidate,
@@ -84,16 +85,16 @@ test('normalizeSummary 过滤空要点，缺 summary 返回 null', () => {
   assert.equal(normalizeSummary(''), null);
 });
 
-// ── 第 2 组：summarizeWithDeepSeek 降级语义 ─────────────────
+// ── 第 2 组：summarizeContent 降级语义 ─────────────────
 
-test('summarizeWithDeepSeek 缺 key：resolve 降级不 reject', async () => {
-  const result = await summarizeWithDeepSeek({ title: 't' }, { apiKey: '' });
+test('summarizeContent 缺 key：resolve 降级不 reject', async () => {
+  const result = await summarizeContent({ title: 't' }, { apiKey: '' });
   assert.equal(result.ok, false);
   assert.equal(result.code, 'missing_api_key');
 });
 
-test('summarizeWithDeepSeek 网络失败：resolve 降级', async () => {
-  const result = await summarizeWithDeepSeek({ title: 't' }, {
+test('summarizeContent 网络失败：resolve 降级', async () => {
+  const result = await summarizeContent({ title: 't' }, {
     apiKey: 'key',
     fetchImpl: mockFetch(() => { throw new Error('network down'); }),
   });
@@ -101,8 +102,8 @@ test('summarizeWithDeepSeek 网络失败：resolve 降级', async () => {
   assert.equal(result.code, 'network_error');
 });
 
-test('summarizeWithDeepSeek 输出无法解析：invalid_summary', async () => {
-  const result = await summarizeWithDeepSeek({ title: 't' }, {
+test('summarizeContent 输出无法解析：invalid_summary', async () => {
+  const result = await summarizeContent({ title: 't' }, {
     apiKey: 'key',
     fetchImpl: mockFetch(() => deepSeekOk('我不懂你在说什么')),
   });
@@ -110,31 +111,32 @@ test('summarizeWithDeepSeek 输出无法解析：invalid_summary', async () => {
   assert.equal(result.code, 'invalid_summary');
 });
 
-test('summarizeWithExternalDeepSeek(provider=deepseek) 使用外部 Responses endpoint，不经过本地模型门禁', async () => {
+test('summarizeWithExternal(provider=deepseek) 经注册表路由到外部端点，不经过本地模型门禁', async () => {
   let endpoint = '';
   let requestBody = null;
-  const result = await summarizeWithExternalDeepSeek({ title: '字幕标题', description: '视频描述', transcript: '字幕内容' }, {
+  const result = await summarizeWithExternal({ title: '字幕标题', description: '视频描述', transcript: '字幕内容' }, {
     provider: 'deepseek',
     apiKey: 'key',
     fetchImpl: async (url, options) => {
       endpoint = String(url);
       requestBody = JSON.parse(options.body);
-      return { ok: true, status: 200, json: async () => ({ output_text: '{"summary":"外部摘要","key_points":["外部要点"]}' }) };
+      return { ok: true, status: 200, json: async () => ({ choices: [{ message: { content: '{"summary":"外部摘要","key_points":["外部要点"]}' } }] }) };
     },
   });
+  const deepseek = getProvider('deepseek');
   assert.equal(result.ok, true);
   assert.equal(result.summary, '外部摘要');
-  assert.equal(endpoint, 'https://api.deepseek.com/responses');
-  assert.equal(requestBody.model, 'deepseek-chat');
-  assert.equal(requestBody.reasoning.effort, 'none');
-  assert.equal(requestBody.text.format.type, 'json_object');
-  assert.equal(requestBody.input[0].role, 'user');
+  assert.equal(endpoint, deepseek.chatEndpoint);
+  assert.equal(requestBody.model, deepseek.defaultModel);
+  assert.deepEqual(requestBody.response_format, { type: 'json_object' });
+  assert.equal(requestBody.messages[1].role, 'user');
+  assert.equal(requestBody.chat_template_kwargs, undefined);
 });
 
-test('summarizeWithExternalDeepSeek(默认 zhipu) 走智谱 Anthropic 端点 + glm-5.3-flash', async () => {
+test('summarizeWithExternal(默认 zhipu) 走智谱 Anthropic 端点 + glm-5.3-flash', async () => {
   let endpoint = '';
   let requestBody = null;
-  const result = await summarizeWithExternalDeepSeek({ title: '字幕标题', description: '视频描述', transcript: '字幕内容' }, {
+  const result = await summarizeWithExternal({ title: '字幕标题', description: '视频描述', transcript: '字幕内容' }, {
     apiKey: 'key',
     fetchImpl: async (url, options) => {
       endpoint = String(url);

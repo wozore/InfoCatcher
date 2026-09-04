@@ -13,11 +13,15 @@ const {
   needsSummary,
   needsLocalize,
   needsRepair,
-  countEnrichmentWork,
   countRepairWork,
+} = require('../../src/news/min/enrichment-core');
+const {
+  countEnrichmentWork,
   enrichMinCandidates,
-  repairIncompleteCandidates,
 } = require('../../src/news/min/local-enrichment');
+const {
+  repairIncompleteCandidates,
+} = require('../../src/news/min/min-repair');
 
 // ── 第 1 组：纯函数判定 ─────────────────────────────────────
 
