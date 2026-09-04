@@ -56,37 +56,37 @@ function isNonNegativeInteger(value) {
   return Number.isInteger(value) && value >= 0;
 }
 
-/** 校验热点 v2 配置中的统一开关与 X 供应商安全预算边界。 */
+/** 校验热点配置中的统一开关与 X 供应商安全预算边界。 */
 function validateNewsConfig(data, onError = fail) {
   let valid = true;
-  const reject = message => { valid = false; onError(message); };
+  const reject = (code, message) => { valid = false; onError(`[${code}] ${message}`); };
   if (!data || typeof data !== 'object' || Array.isArray(data)) {
-    reject('news-config-v2.json 顶层应为对象');
+    reject('NEWS_CONFIG_TYPE_INVALID', 'news-config-v2.json 顶层应为对象');
     return false;
   }
   const collection = data.collection;
   if (!collection || typeof collection !== 'object' || Array.isArray(collection)) {
-    reject('news-config-v2.json.collection 应为对象');
+    reject('NEWS_CONFIG_SECTION_INVALID', 'news-config-v2.json.collection 应为对象');
     return false;
   }
   if (typeof collection.enabled !== 'boolean') {
-    reject('news-config-v2.json.collection.enabled 应为布尔值');
+    reject('NEWS_CONFIG_ENABLED_INVALID', 'news-config-v2.json.collection.enabled 应为布尔值');
   }
   const budget = collection.x_credits_per_run;
   if (!isNonNegativeInteger(budget) || budget > X_CREDITS_MAX_PER_RUN) {
-    reject(`news-config-v2.json.collection.x_credits_per_run 应为 0–${X_CREDITS_MAX_PER_RUN} 整数`);
+    reject('NEWS_CONFIG_BUDGET_INVALID', `news-config-v2.json.collection.x_credits_per_run 应为 0–${X_CREDITS_MAX_PER_RUN} 整数`);
   }
   const tweetCost = collection.x_credits_per_tweet;
   if (!Number.isInteger(tweetCost) || tweetCost < X_CREDITS_MIN_PER_TWEET) {
-    reject(`news-config-v2.json.collection.x_credits_per_tweet 应为不小于 ${X_CREDITS_MIN_PER_TWEET} 的整数`);
+    reject('NEWS_CONFIG_TWEET_COST_INVALID', `news-config-v2.json.collection.x_credits_per_tweet 应为不小于 ${X_CREDITS_MIN_PER_TWEET} 的整数`);
   }
   const articleCost = collection.x_credits_per_article;
   if (!Number.isInteger(articleCost) || articleCost < X_CREDITS_MIN_PER_ARTICLE) {
-    reject(`news-config-v2.json.collection.x_credits_per_article 应为不小于 ${X_CREDITS_MIN_PER_ARTICLE} 的整数`);
+    reject('NEWS_CONFIG_ARTICLE_COST_INVALID', `news-config-v2.json.collection.x_credits_per_article 应为不小于 ${X_CREDITS_MIN_PER_ARTICLE} 的整数`);
   }
   const requestMax = collection.x_tweets_per_request_max;
   if (!Number.isInteger(requestMax) || requestMax < X_TWEETS_MIN_PER_REQUEST_MAX) {
-    reject(`news-config-v2.json.collection.x_tweets_per_request_max 应为不小于 ${X_TWEETS_MIN_PER_REQUEST_MAX} 的整数`);
+    reject('NEWS_CONFIG_REQUEST_MAX_INVALID', `news-config-v2.json.collection.x_tweets_per_request_max 应为不小于 ${X_TWEETS_MIN_PER_REQUEST_MAX} 的整数`);
   }
   return valid;
 }
@@ -94,56 +94,56 @@ function validateNewsConfig(data, onError = fail) {
 /** 校验 last-run 中的 X credits/request 账本；失败/未运行允许 credits=null。 */
 function validateLastRun(data, onError = fail) {
   let valid = true;
-  const reject = message => { valid = false; onError(message); };
+  const reject = (code, message) => { valid = false; onError(`[${code}] ${message}`); };
   if (!data || typeof data !== 'object' || Array.isArray(data)) {
-    reject('last-run.json 顶层应为对象');
+    reject('LAST_RUN_TYPE_INVALID', 'last-run.json 顶层应为对象');
     return false;
   }
   const x = data.collectors && data.collectors.x;
   if (!x || typeof x !== 'object' || Array.isArray(x)) {
-    reject('last-run.json.collectors.x 应为对象');
+    reject('LAST_RUN_SECTION_INVALID', 'last-run.json.collectors.x 应为对象');
     return false;
   }
   const credits = x.credits;
   if (credits == null) {
     if (x.status === 'success' || x.status === 'partial') {
-      reject('last-run.json.collectors.x.credits 在 X 已运行时不得为空');
+      reject('LAST_RUN_CREDITS_REQUIRED', 'last-run.json.collectors.x.credits 在 X 已运行时不得为空');
     }
     return valid;
   }
   if (typeof credits !== 'object' || Array.isArray(credits)) {
-    reject('last-run.json.collectors.x.credits 应为对象或 null');
+    reject('LAST_RUN_CREDITS_TYPE_INVALID', 'last-run.json.collectors.x.credits 应为对象或 null');
     return false;
   }
   for (const field of ['used', 'budget', 'tweets', 'articles']) {
     if (!isNonNegativeInteger(credits[field])) {
-      reject(`last-run.json.collectors.x.credits.${field} 应为非负整数`);
+      reject('LAST_RUN_CREDITS_FIELD_INVALID', `last-run.json.collectors.x.credits.${field} 应为非负整数`);
     }
   }
   if (isNonNegativeInteger(credits.budget) && credits.budget > X_CREDITS_MAX_PER_RUN) {
-    reject(`last-run.json.collectors.x.credits.budget 不得超过 ${X_CREDITS_MAX_PER_RUN}`);
+    reject('LAST_RUN_BUDGET_OVERFLOW', `last-run.json.collectors.x.credits.budget 不得超过 ${X_CREDITS_MAX_PER_RUN}`);
   }
   if (isNonNegativeInteger(credits.used) && isNonNegativeInteger(credits.budget)
     && credits.used > credits.budget) {
-    reject('last-run.json.collectors.x.credits.used 不得超过 budget');
+    reject('LAST_RUN_CREDITS_OVER_BUDGET', 'last-run.json.collectors.x.credits.used 不得超过 budget');
   }
   const requests = credits.requests;
   if (!requests || typeof requests !== 'object' || Array.isArray(requests)) {
-    reject('last-run.json.collectors.x.credits.requests 应为对象');
+    reject('LAST_RUN_REQUESTS_TYPE_INVALID', 'last-run.json.collectors.x.credits.requests 应为对象');
     return false;
   }
   for (const field of ['total', 'tweet', 'article', 'retries']) {
     if (!isNonNegativeInteger(requests[field])) {
-      reject(`last-run.json.collectors.x.credits.requests.${field} 应为非负整数`);
+      reject('LAST_RUN_REQUESTS_FIELD_INVALID', `last-run.json.collectors.x.credits.requests.${field} 应为非负整数`);
     }
   }
   if (isNonNegativeInteger(requests.total) && isNonNegativeInteger(requests.tweet)
     && isNonNegativeInteger(requests.article) && requests.total !== requests.tweet + requests.article) {
-    reject('last-run.json.collectors.x.credits.requests.total 应等于 tweet + article');
+    reject('LAST_RUN_REQUESTS_INCONSISTENT', 'last-run.json.collectors.x.credits.requests.total 应等于 tweet + article');
   }
   if (isNonNegativeInteger(requests.retries) && isNonNegativeInteger(requests.total)
     && requests.retries > requests.total) {
-    reject('last-run.json.collectors.x.credits.requests.retries 不得超过 total');
+    reject('LAST_RUN_RETRIES_OVERFLOW', 'last-run.json.collectors.x.credits.requests.retries 不得超过 total');
   }
   return valid;
 }
@@ -224,11 +224,11 @@ function validateHotspots(data) {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// 热点管线 v2 候选层（min-candidates.json，单状态轴）校验
+// 热点管线候选层（min-candidates.json，单状态轴）校验
 //
-// v2 与旧候选层解耦：无 ai_processing_status 轴，review_status 只取
+// 单状态轴候选层：review_status 只取
 // pending/approved/discarded（MIN_REVIEW_STATUSES，读自 min-store）。
-// 文件不存在 → 优雅跳过（v2 管线未首跑，不阻塞）；空候选 → 通过。
+// 文件不存在 → 优雅跳过（管线未首跑，不阻塞）；空候选 → 通过。
 // 硬错误走 fail()（计入本模块 failed，由 validate.js 聚合退出码）；
 // approved 缺公开字段（title/url/published_at）只告警不阻塞。
 // ═══════════════════════════════════════════════════════════════
