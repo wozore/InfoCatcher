@@ -17,12 +17,12 @@ const {
   commitMinStoreMutation,
   reviewPendingCandidates,
   setApprovedTopSelectedMin,
-} = require('../src/news/min/min-store');
+} = require('../../src/news/min/min-store');
 const {
   revisionOfConfig,
   applyKeywordActions,
   commitKeywordActions,
-} = require('../src/news/min/keyword-actions');
+} = require('../../src/news/min/keyword-actions');
 
 function storeFixture() {
   return {

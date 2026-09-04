@@ -14,7 +14,7 @@
  * CI 不设代理走直连。
  */
 
-const fs = require('fs');
+const { readJson } = require('../src/shared/json-store');
 const { COMPARISON_FILES } = require('../src/shared/paths');
 const { runComparison, fetchSource, isFresh, readConfig } = require('../src/comparison/run-comparison');
 const { readRawSnapshot } = require('../src/comparison/compare-store');
@@ -39,9 +39,7 @@ function printStatus() {
 function printIdentityReviewCandidates() {
   const snapshots = Object.fromEntries(['openrouter', 'lmarena', 'livebench', 'llm_stats']
     .map(source => [source, readRawSnapshot(source)]));
-  const registry = fs.existsSync(COMPARISON_FILES.modelsAlias)
-    ? JSON.parse(fs.readFileSync(COMPARISON_FILES.modelsAlias, 'utf8'))
-    : { schema_version: 2, entries: [] };
+  const registry = readJson(COMPARISON_FILES.modelsAlias, { schema_version: 2, entries: [] });
   const candidates = collectReviewCandidates(snapshots, registry);
   console.log(JSON.stringify({
     generated_at: new Date().toISOString(),

@@ -5,7 +5,7 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const { loadDotEnv } = require('../src/shared/env');
+const { loadDotEnv } = require('../../src/shared/env');
 
 loadDotEnv();
 
@@ -16,7 +16,7 @@ const {
   reviewQueueRevision,
   setReviewStatusReviewQueue,
   writeReviewQueue,
-} = require('../src/catalog/tool-update/index');
+} = require('../../src/catalog/tool-update/index');
 
 const NOW = '2026-08-30T12:00:00.000Z';
 
