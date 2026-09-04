@@ -3,7 +3,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-const { hasComparisonData, filterEmptyModels } = require('../../src/comparison/empty-model-filter');
+const { hasComparisonData, filterEmptyModels } = require('../../src/comparison/identity/empty-model-filter');
 
 function model(vendor, identity, canonical, dims = [], compositeScore = null) {
   const dimensions = {};

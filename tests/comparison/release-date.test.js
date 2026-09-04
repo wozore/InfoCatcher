@@ -9,7 +9,7 @@ const {
   buildReleaseLookup,
   resolveReleaseDate,
   filterByReleaseCutoff,
-} = require('../../src/comparison/release-date');
+} = require('../../src/comparison/series/release-date');
 
 function record(canonical, identity, sources = {}) {
   return { canonical, identity, sources };

@@ -9,8 +9,8 @@
  */
 
 const { fetchText, fetchJson } = require('./compare-http');
-const { LIVEBENCH_CATEGORY_MAP, validateRawRows, LIVEBENCH_GROUP_FIELDS } = require('./compare-schema');
-const { writeRawSnapshot } = require('./compare-store');
+const { LIVEBENCH_CATEGORY_MAP, validateRawRows, LIVEBENCH_GROUP_FIELDS } = require('../core/compare-schema');
+const { writeRawSnapshot } = require('../core/compare-store');
 
 const SITE_BASE = 'https://livebench.ai';
 const CACHE_BUSTER = '?v=1787033560';

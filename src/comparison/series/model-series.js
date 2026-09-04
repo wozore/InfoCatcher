@@ -1,7 +1,7 @@
 'use strict';
 
 const fs = require('fs');
-const { COMPARISON_FILES } = require('../shared/paths');
+const { COMPARISON_FILES } = require('../../shared/paths');
 
 function readSeriesConfig(file = COMPARISON_FILES.modelSeries) {
   if (!file || !fs.existsSync(file)) return { schema_version: 1, series: [] };

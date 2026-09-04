@@ -9,7 +9,7 @@ const {
   parseModelNameMetadata,
   removeTerminalOfferings,
   resolveModelIdentity,
-} = require('../../src/comparison/model-identity');
+} = require('../../src/comparison/identity/model-identity');
 
 test('模型身份：跨源点号/连字符版本号统一，服务方式不生成新实体', () => {
   const lmarena = resolveModelIdentity({ source: 'lmarena', rawName: 'Claude Opus 4.8', vendorHint: 'anthropic' });

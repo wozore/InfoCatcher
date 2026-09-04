@@ -2,7 +2,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { validateExclusionConfig, exclusionForModel, filterExcludedRecords } = require('../../src/comparison/model-exclusions');
+const { validateExclusionConfig, exclusionForModel, filterExcludedRecords } = require('../../src/comparison/identity/model-exclusions');
 
 const config = {
   schema_version: 1,

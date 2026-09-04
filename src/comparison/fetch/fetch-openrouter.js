@@ -9,8 +9,8 @@
  */
 
 const { fetchJson } = require('./compare-http');
-const { OPENROUTER_FIELDS, validateRowProjection } = require('./compare-schema');
-const { writeRawSnapshot } = require('./compare-store');
+const { OPENROUTER_FIELDS, validateRowProjection } = require('../core/compare-schema');
+const { writeRawSnapshot } = require('../core/compare-store');
 
 const ENDPOINT = 'https://openrouter.ai/api/v1/models';
 

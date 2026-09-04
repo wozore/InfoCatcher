@@ -3,7 +3,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-const { attachSeriesMetadata, validateSeriesProjection } = require('../../src/comparison/model-series');
+const { attachSeriesMetadata, validateSeriesProjection } = require('../../src/comparison/series/model-series');
 
 function model(canonical, identity, family, vendor, composite = null, revisions = [], theme = 'general') {
   return {

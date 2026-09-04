@@ -9,7 +9,13 @@
 
 const fs = require('fs');
 const path = require('path');
-const { COMPARISON_FILES } = require('../shared/paths');
+const { COMPARISON_FILES } = require('../../shared/paths');
+
+const RAW_KEY_MAP = { openrouter: 'rawOpenRouter', lmarena: 'rawLmarena', livebench: 'rawLivebench', llm_stats: 'rawLlmStats' };
+
+function rawKeyOf(key) {
+  return RAW_KEY_MAP[key];
+}
 
 /** 读取 raw 快照；文件不存在返回 null；解析失败抛错（调用方 WARN 隔离）。 */
 function readRawSnapshot(key) {
@@ -17,12 +23,6 @@ function readRawSnapshot(key) {
   if (!file) throw new Error(`未知 raw 源: ${key}`);
   if (!fs.existsSync(file)) return null;
   return JSON.parse(fs.readFileSync(file, 'utf8'));
-}
-
-const RAW_KEY_MAP = { openrouter: 'rawOpenRouter', lmarena: 'rawLmarena', livebench: 'rawLivebench', llm_stats: 'rawLlmStats' };
-
-function rawKeyOf(key) {
-  return RAW_KEY_MAP[key];
 }
 
 /** 原子写 JSON 文件（临时文件 + rename）。 */

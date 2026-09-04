@@ -7,9 +7,9 @@
  * 两者都返回建议，绝不写人工登记表。
  */
 
-const { requestStructuredJson } = require('../shared/llm-gateway');
-const { resolveProvider } = require('../shared/providers');
-const { LOCAL_API_BASE, LOCAL_MODEL } = require('../shared/llm-endpoints');
+const { requestStructuredJson } = require('../../shared/llm-gateway');
+const { resolveProvider } = require('../../shared/providers');
+const { LOCAL_API_BASE, LOCAL_MODEL } = require('../../shared/llm-endpoints');
 const { validateSuggestion } = require('./identity-review');
 
 function buildInstructions() {

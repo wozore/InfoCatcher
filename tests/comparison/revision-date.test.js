@@ -3,7 +3,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-const { parseRevisionDate, normalizeRevision } = require('../../src/comparison/revision-date');
+const { parseRevisionDate, normalizeRevision } = require('../../src/comparison/series/revision-date');
 
 const NOW = new Date('2026-08-26T00:00:00Z');
 
