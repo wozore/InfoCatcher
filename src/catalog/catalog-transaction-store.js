@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const { DIRS, CATALOG_GENERATOR_FILES } = require('../shared/paths');
-const { readJson, writeJsonAtomic, acquireLock, releaseLock } = require('../news/core/news-storage');
+const { readJson, writeJsonAtomic, acquireLock, releaseLock } = require('../shared/json-store');
 const { validateCatalogSnapshot } = require('./catalog-snapshot-validator');
 const { revisionOf } = require('./catalog-revision');
 const { loadCatalogSnapshot, FILE_BY_AREA } = require('./catalog-snapshot-store');

@@ -9,7 +9,7 @@
 'use strict';
 
 const crypto = require('crypto');
-const { readJson, writeJsonAtomic } = require('../core/news-storage');
+const { readJson, writeJsonAtomic } = require('../../shared/json-store');
 const { NEWS_FILES } = require('../../shared/paths');
 
 function stableStringify(value) {

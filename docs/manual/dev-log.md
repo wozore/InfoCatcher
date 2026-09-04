@@ -2887,3 +2887,28 @@
 - [x] fetch-tool-intel.js:141 `process.exit(conflictCount > 0 ? 0 : 0)` 死表达式（无害，随 R2 acquisition 轮清理）；stripCommentsAndStrings 不解析正则字面量与模板 ${}（漏报方向、checker 头注释已声明）；cycles 白名单条目无 count 概念（增长防护靠 diff 人工审查）；whitelist-growth 理论可自豁免（编辑白名单 diff 可审，可选硬禁一行随后续轮）。
 - [x] 本机 Node v24.13.0 下 `node --test <目录>` 不展开目录（MODULE_NOT_FOUND），全量回归继续走 tests/index.js 聚合入口——计划 R8-4"统一测试入口"需按此环境事实重新评估。
 - [x] T3 验收曾因 sonnet 429 限额中断一次，限额重置后对终态完整重验通过。
+
+## 2026-09-04 · 重构 R1 轮（shared 重构收口）+ D8 拍板执行（acquisition 整链删除）+ R2 收尾
+
+> 全仓重构计划第二轮。D4 按推荐方案执行（news-storage 上移 shared）；D8 经维护者拍板整链删除（不再手动使用工具情报链路，仅保留维护者平台与 build-dist.bat 手动入口）。全程零行为变更。
+
+### 变更实现
+
+- [x] R1-2 存储层上移（D4 第一步）：[news-storage.js](../../../src/news/core/news-storage.js) → [json-store.js](../../../src/shared/json-store.js)（git mv 保历史），28 处 require 调用方全量迁移（catalog 9 + maintenance 1 + news 12 + scripts 1 + tests 1）；catalog→news 的 6 条纯 storage 依赖边归零。
+- [x] R1-1 传输层正名：[deepseek-client.js](../../../src/shared/deepseek-client.js) → [ai-transport.js](../../../src/shared/ai-transport.js)（实际承载 zhipu/anthropic/openai/local 全协议，命名去厂商化）；5 个调用方迁移；纯兼容别名 `requestDeepSeek` 删除（消费方仅 catalog-cli.test.js，已改用底层 `requestResponses` 等价透传）。
+- [x] R1-3 配置下沉：[ai-config.js](../../../src/catalog/ai-config.js) 从 shared 下沉 catalog（88 行仅服务 catalog-assistant）；测试随移 tests/catalog/；news 死配置段（enabled:false 且全仓无消费方）删除。
+- [x] R1-4 legacy 抹除：local-model.js 删 `LEGACY_AUTOSTART_ENV`（INFOCATCHER_AUTOSTART_LOCAL_MODEL 旧环境变量回退）；.env.example 核实无提及。
+- [x] R1-5 样板整理：json-store/ai-transport 文件头注释与新事实同步。
+- [x] D8 整链删除：src/acquisition/ 四文件（fetch-intel-http/normalize-intel/fetch-tool-intel/validate-intel，约 920 行）、data/acquisition/intel-sources.json、validate.js 门禁接入、paths.js 的 ACQUISITION_FILES 登记、check-standards LAYERS 域表条目、本地文档（operations.md 段落、acquisition.md 整份、architecture.md 七处、content-quality.md 一处）。
+- [x] R2 content 接线：generate-rss.js 自建 FEED_PATH 改用 paths.js 的 `RSS_FEED_PATH`（C3 遗留接线完成）。
+- [x] 白名单 98 → 89 条（只减不增）：acquisition 三条删除、catalog→news storage 边六条合法化删除、四条按真实违规数重建；check-standards.test.js 的域间互引 fixture 样本从 news-storage 换为仍违规的 min-store 引用（用例语义保持）。
+
+### 验证结果
+
+- [x] 全量 **711/711**（与基线持平：acquisition 零测试覆盖无可减、ai-config 用例不受 news 段删除影响）；validate.js / check-standards（135 文件白名单外 0 违规）/ build-dist（93 文件）全部通过。
+- [x] 零残留：news-storage/deepseek-client/acquisition/INFOCATCHER_AUTOSTART 在代码与 CI 中零命中（豁免仅 CODEBASE-MAP 同步前快照、dev-log 历史记录、重构计划文档）。
+
+### 已知边界
+
+- [x] local-model.js:22 的 `INFOCATCHER_LOCAL_MODEL_SCRIPT` 环境变量回退保留（属启动脚本路径指定，非本轮 legacy 范围）。
+- [x] R4-1（待补卡域独立 src/pending/）未做——D4 第二半归 R4 轮；catalog→news 剩余边（catalog-batch 1、catalog-transaction-store 1、concept-batch 3、validate.js 3 等）在白名单中待 R4 清。

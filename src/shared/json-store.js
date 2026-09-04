@@ -1,23 +1,23 @@
 /**
- * news-storage.js — JSON 原子写入与构建并发锁
+ * json-store.js — JSON 原子写入与并发锁（shared 基础设施）
  *
- * 在热点管线中的位置：最底层基础设施，被 build-news.js（构建编排）、
- * news-cli.js（运维入口）和 foundation 测试直接依赖。
+ * 位置：shared 层最底层基础设施，被 catalog（draft/snapshot/transaction/registry 等 store）、
+ * news（min-store/pipeline/projection/feedback 等）与 maintenance 服务共同依赖。
  *
  * 职责：
  *   1. 安全的 JSON 读写：文件不存在时返回 fallback，其他错误仍然抛出。
  *   2. 原子替换：先写唯一临时文件 → fsync → 同盘 rename，
  *      确保目标文件要么是旧完整版本、要么是新完整版本，不会出现半写状态。
  *   3. 构建锁：通过 fs.openSync(path, 'wx') 实现排他创建，
- *      同一时间只允许一个热点构建任务运行。
+ *      同一时间只允许一个任务持有同一把锁。
  *   4. 强制解锁审计：forceUnlock 必须提供 reason，操作写入审计 JSON。
  *
  * 为什么不用数据库事务：
  *   当前规模（数万条视频记录、单文件数 MB）用 JSON + 原子替换足够；
- *   文件过大时再迁移为固定分片或 SQLite。环 C 之前不引入数据库依赖。
+ *   文件过大时再迁移为固定分片或 SQLite。
  *
  * 使用示例：
- *   const { readJson, writeJsonAtomic, acquireLock, releaseLock } = require('./news-storage');
+ *   const { readJson, writeJsonAtomic, acquireLock, releaseLock } = require('./json-store');
  *   const data = readJson('state.json', { schema_version: 1, items: [] });
  *   acquireLock('.lock', { run_id: 'r1', pid: process.pid });
  *   writeJsonAtomic('state.json', data, 'r1');

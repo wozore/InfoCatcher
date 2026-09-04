@@ -29,7 +29,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { readJson, writeJsonAtomic } = require('../news/core/news-storage');
+const { readJson, writeJsonAtomic } = require('../shared/json-store');
 const { CONCEPT_FILES } = require('../shared/paths');
 
 const VIBE_HUB_ORIGIN = 'https://vibe-hub.org';

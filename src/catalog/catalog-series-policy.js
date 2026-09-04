@@ -21,7 +21,7 @@
  */
 
 const { CATALOG_GENERATOR_FILES } = require('../shared/paths');
-const { readJson } = require('../news/core/news-storage');
+const { readJson } = require('../shared/json-store');
 const { REF_TARGETS, emptySnapshot } = require('./catalog-contract');
 
 const USAGE_KINDS = Object.freeze([

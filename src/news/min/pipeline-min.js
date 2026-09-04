@@ -73,7 +73,7 @@ const { localizeCandidates } = require('../classify/content-localizer');
 const { runPool } = require('../classify/content-reviewer');
 const { dedupeItems, enrichHotspotProjection } = require('../pipeline/projection');
 const { filterProjectionByWindow } = require('../core/news-public-gate');
-const { readJson, writeJsonAtomic } = require('../core/news-storage');
+const { readJson, writeJsonAtomic } = require('../../shared/json-store');
 const { NEWS_FILES } = require('../../shared/paths');
 const V2_CONFIG_PATH = '../../../data/news/config/news-config-v2.json';
 

@@ -14,8 +14,7 @@
  *   - validate-news.js    — news 域数据校验（news-sources → hotspots），
  *     入口 validateNews()
  *   - 本文件（validate.js）—— 依次调用两个模块，随后执行：
- *       index.html 读取、intel-sources 委托校验（acquisition/validate-intel）、
- *       开发原则 1-6 门禁；最后汇总失败状态并 process.exit(0/1)
+ *       index.html 读取、开发原则 1-6 门禁；最后汇总失败状态并 process.exit(0/1)
  *
  * 每个模块与本文件各自维护 fail()/failed 失败计数，最终在
  * 本文件合并判断退出码，保证一次运行报告所有问题。
@@ -114,16 +113,6 @@ try {
   fail(`index.html 读取失败：${e.message}`);
 }
 
-// intel-sources.json（委托至 acquisition/validate-intel.js）
-try {
-  const result = require('../acquisition/validate-intel').validate({ silent: true });
-  result.errors.forEach(e => fail(`acquisition: ${e}`));
-  result.warnings.forEach(w => console.warn('⚠️  acquisition:', w));
-  console.log(`  intel-sources.json + tool-preview-level3.json: ${result.valid ? '通过' : '失败'}`);
-} catch (e) {
-  fail(`acquisition 校验异常: ${e.message}`);
-}
-
 // ═══════════════════════════════════════════════════════════════
 // 开发原则自动门禁（对应 CLAUDE.md 开发原则 1-6）
 // ═══════════════════════════════════════════════════════════════
@@ -168,7 +157,7 @@ try {
       if (declared !== validatedTools.length) console.warn(`  ⚠️  原则3: CLAUDE.md 声明 ${declared} 个工具，实际 ${validatedTools.length}（仅警告，不阻塞）`);
     }
 
-    // scripts/ 子目录全覆盖（CLAUDE.md 用树形格式如 ├── acquisition/）
+    // scripts/ 子目录全覆盖
     const scriptDirs = fs.readdirSync(DIRS.scripts, { withFileTypes: true })
       .filter(d => d.isDirectory()).map(d => d.name);
     for (const d of scriptDirs) {
@@ -217,7 +206,7 @@ try {
   (function collect(v) {
     if (typeof v === 'string' && v.includes(DIRS.data)) registered.add(path.resolve(v));
     else if (v && typeof v === 'object') Object.values(v).forEach(collect);
-  })({ DIRS: exports.DIRS, CATALOG_FILES: exports.CATALOG_FILES, CATALOG_GENERATOR_FILES: exports.CATALOG_GENERATOR_FILES, NEWS_FILES: exports.NEWS_FILES, ACQUISITION_FILES: exports.ACQUISITION_FILES });
+  })({ DIRS: exports.DIRS, CATALOG_FILES: exports.CATALOG_FILES, CATALOG_GENERATOR_FILES: exports.CATALOG_GENERATOR_FILES, NEWS_FILES: exports.NEWS_FILES });
 
   const dataJson = [];
   (function walk(d) {

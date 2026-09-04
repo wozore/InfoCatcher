@@ -22,7 +22,7 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const { runMin, isCollectionEnabled, isYoutubeDue, normalizeNow, resolveXWindow } = require('../../src/news/min/pipeline-min');
 const { NEWS_FILES } = require('../../src/shared/paths');
-const { readJson, writeJsonAtomic } = require('../../src/news/core/news-storage');
+const { readJson, writeJsonAtomic } = require('../../src/shared/json-store');
 
 const CONFIG = require('../../data/news/config/news-config-v2.json');
 

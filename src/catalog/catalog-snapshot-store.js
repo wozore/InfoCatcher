@@ -1,7 +1,7 @@
 'use strict';
 
 const { CATALOG_FILES, CATALOG_GENERATOR_FILES } = require('../shared/paths');
-const { readJson } = require('../news/core/news-storage');
+const { readJson } = require('../shared/json-store');
 const { normalizeSnapshot } = require('./catalog-contract');
 const { revisionOf } = require('./catalog-revision');
 

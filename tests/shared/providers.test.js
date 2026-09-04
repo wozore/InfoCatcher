@@ -10,7 +10,7 @@ const {
   resolveProvider,
   apiKeyForProvider,
 } = require('../../src/shared/providers');
-const { requestResponses, requestChatCompletions, requestMessages } = require('../../src/shared/deepseek-client');
+const { requestResponses, requestChatCompletions, requestMessages } = require('../../src/shared/ai-transport');
 
 test('provider registry maps each provider to its protocol and key env', () => {
   assert.equal(getProvider('deepseek').protocol, AI_PROTOCOLS.RESPONSES);

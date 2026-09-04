@@ -25,7 +25,7 @@ const path = require('path');
 const REPO_ROOT = path.resolve(__dirname, '..');
 const BROWSER_DOMAINS = new Set(['web', 'maintainer-web']);
 // 层级（§1.1，高→低）：浏览器 → server(maintenance) → 业务域 → shared；根级为 service 门面
-const LAYERS = { web: 3, 'maintainer-web': 3, maintenance: 2, catalog: 1, news: 1, comparison: 1, acquisition: 1, content: 1 };
+const LAYERS = { web: 3, 'maintainer-web': 3, maintenance: 2, catalog: 1, news: 1, comparison: 1, content: 1 };
 const NODE_BUILTINS = new Set(require('module').builtinModules);
 const LEGACY_RE = /已随 v\d|旧版|已删除的|不再校验|@deprecated|遗留/g;
 const ENV_EXEMPT_RE = /(^|\/)(env\.js|providers\/|load[^/]*Config\.js$)/;

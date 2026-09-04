@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const { CATALOG_GENERATOR_FILES } = require('../shared/paths');
-const { readJson, writeJsonAtomic } = require('../news/core/news-storage');
+const { readJson, writeJsonAtomic } = require('../shared/json-store');
 
 function ensureDraftDir() {
   fs.mkdirSync(CATALOG_GENERATOR_FILES.draftsDir, { recursive: true });

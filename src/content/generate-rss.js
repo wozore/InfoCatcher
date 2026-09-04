@@ -12,11 +12,9 @@
 'use strict';
 
 const fs = require('fs');
-const path = require('path');
-const { DIRS, NEWS_FILES } = require('../shared/paths');
+const { NEWS_FILES, RSS_FEED_PATH } = require('../shared/paths');
 const { filterPublicItems } = require('../news/core/news-public-gate');
 
-const FEED_PATH = path.join(DIRS.public, 'feed.xml');
 const FEED_ITEM_LIMIT = 30;
 const SITE_URL = 'https://wozore.github.io/KnowView';
 
@@ -109,10 +107,10 @@ function generateRss() {
   xml += '  </channel>\n';
   xml += '</rss>\n';
 
-  const tmp = FEED_PATH + '.tmp.' + Date.now();
+  const tmp = RSS_FEED_PATH + '.tmp.' + Date.now();
   fs.writeFileSync(tmp, xml, { encoding: 'utf8', flag: 'w' });
-  fs.renameSync(tmp, FEED_PATH);
-  console.log('📡 RSS feed 已生成：' + FEED_PATH + '（' + items.length + ' 条）');
+  fs.renameSync(tmp, RSS_FEED_PATH);
+  console.log('📡 RSS feed 已生成：' + RSS_FEED_PATH + '（' + items.length + ' 条）');
 }
 
 if (require.main === module) {

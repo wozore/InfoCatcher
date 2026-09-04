@@ -11,7 +11,7 @@
 
 'use strict';
 
-const { readJson } = require('../core/news-storage');
+const { readJson } = require('../../shared/json-store');
 const { normalizeUrl } = require('./feed-parser');
 const { CATALOG_FILES } = require('../../shared/paths');
 const { catalog } = require('../../catalog-interface');

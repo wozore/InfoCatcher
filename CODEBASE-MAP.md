@@ -47,7 +47,7 @@
 ## src/shared/ — 跨模块基础能力
 - [beijing-time.js](src/shared/beijing-time.js) — 固定 UTC+8 北京时间日期键、自然日键与当天零点 ISO 工具，避免本地 Windows 与 CI 时区差异。导出: `BEIJING_OFFSET_MS, beijingDateKey, beijingDayKey, beijingMidnightIso`
 - [env.js](src/shared/env.js) — dotenv 子集解析 + 项目根目录。导出: `loadDotEnv, PROJECT_DIR`
-- [paths.js](src/shared/paths.js) — 目录、catalog 文件与生成器事务路径常量，以及统一 AI 配置文件路径（全仓唯一数据登记点，含五模块 catalog、厂商/产品官方 URL 登记表、草案、锁、staging、backup、journal、日期审计清单、编程工具更新审核清单与概念链路 previews/vibeHubCache；data/manual 下分 archive 喂 AI 搜索历史 / tools 工具链路 / concepts 概念链路，待补卡路径已收拢为 CATALOG_GENERATOR_FILES.pendingTools / CONCEPT_FILES.pendingConcepts）。导出: `DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, CONCEPT_FILES, AI_CONFIG_FILES, NEWS_FILES, ACQUISITION_FILES, RSS_FEED_PATH`
+- [paths.js](src/shared/paths.js) — 目录、catalog 文件与生成器事务路径常量，以及统一 AI 配置文件路径（全仓唯一数据登记点，含五模块 catalog、厂商/产品官方 URL 登记表、草案、锁、staging、backup、journal、日期审计清单、编程工具更新审核清单与概念链路 previews/vibeHubCache；data/manual 下分 archive 喂 AI 搜索历史 / tools 工具链路 / concepts 概念链路，待补卡路径已收拢为 CATALOG_GENERATOR_FILES.pendingTools / CONCEPT_FILES.pendingConcepts）。导出: `DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, CONCEPT_FILES, AI_CONFIG_FILES, NEWS_FILES, RSS_FEED_PATH`
 - [providers/](src/shared/providers/) — 外部 AI 提供商独立目录，各厂商独立拥有自身元数据、端点与默认模型（开闭原则），由 `index.js` 统一汇聚导出。
   - [protocols.js](src/shared/providers/protocols.js) — 传输协议常量定义（RESPONSES / MESSAGES / CHAT）。导出: `AI_PROTOCOLS`
   - [zhipu.js](src/shared/providers/zhipu.js) — 智谱 ZhipuAI 提供方独立配置（Anthropic Messages 兼容端点，glm-5.3-flash）。
@@ -56,8 +56,8 @@
   - [openai.js](src/shared/providers/openai.js) — OpenAI 提供方独立配置。
   - [anthropic.js](src/shared/providers/anthropic.js) — Anthropic 原生提供方独立配置。
   - [index.js](src/shared/providers/index.js) — 统一汇总注册与提供方解析出口。导出: `AI_PROTOCOLS, AI_PROVIDERS, DEFAULT_PROVIDER_NAME, getProvider, resolveProvider, apiKeyForProvider`
-- [ai-config.js](src/shared/ai-config.js) — 按业务大模块读取、合并和校验 provider/model/protocol 与 Tavily retrieval 配置（默认值跟随 registry 开关）。导出: `DEFAULT_MODULE_CONFIGS, readAiConfig, loadAiModuleConfig, validateModuleConfig`
-- [deepseek-client.js](src/shared/deepseek-client.js) — provider-aware Responses/Chat transport、认证/HTTP/超时错误归一化；保留 DeepSeek 兼容包装；endpoint 校验放行本地 localhost HTTP（本地 Bonsai 接入点）。导出: `requestResponses, requestDeepSeek, requestChatCompletions, textFromResponse`
+- [ai-config.js](src/catalog/ai-config.js) — catalog 域 AI 配置：按模块读取、合并和校验 provider/model/protocol 与 Tavily retrieval 配置（默认值跟随 registry 开关）。导出: `DEFAULT_MODULE_CONFIGS, readAiConfig, loadAiModuleConfig, validateModuleConfig`
+- [ai-transport.js](src/shared/ai-transport.js) — provider-aware Responses/Chat transport、认证/HTTP/超时错误归一化；endpoint 校验放行本地 localhost HTTP（本地 Bonsai 接入点）。导出: `DEFAULT_BASE_URL, DEFAULT_RESPONSES_ENDPOINT, classifyHttpError, redact, requestResponses, requestChatCompletions, requestMessages, textFromResponse`
 - [llm-gateway.js](src/shared/llm-gateway.js) — 统一 AI 调用网关：实现 requestStructuredJson 与 requestLlmText，统一多协议（RESPONSES / MESSAGES / CHAT / local）路由分发、负载格式自适应折叠与错误码映射。导出: `requestStructuredJson, requestLlmText, resolveTransportRoute, extractJsonValues, diagnosticsOf, toChatCompletionsPayload, toMessagesPayload, toExternalChatPayload`
 - [llm-endpoints.js](src/shared/llm-endpoints.js) — 本地 Bonsai 模型 OpenAI 兼容端点与模型名常量（news 侧 5 个 + catalog 侧 3 个本地化任务统一引用）。导出: `LOCAL_API_BASE, LOCAL_MODEL`
 - [local-model.js](src/shared/local-model.js) — 本地 Bonsai 自动启动：调用本地 LLM 前确保服务在线——探测离线自动 spawn 启动脚本并轮询就绪（幂等 TTL 缓存、超时后 TTL 内不重复拉起）；注入自定义 fetchImpl（测试 mock）一律放行不探测不启动。导出: `LOCAL_MODEL_SCRIPT, buildProbePayload, probeLocal, startLocalServer, ensureLocalModel, resetLocalModelState, autostartEnabled`
@@ -157,7 +157,7 @@
 
 ## src/news/ — 新闻采集管线（CommonJS）
 ### core/ — 数据层（无网络副作用）
-- [news-storage.js](src/news/core/news-storage.js) — JSON 读写 + 原子写 + 并发锁。导出: `readJson, writeJsonAtomic, acquireLock, releaseLock, inspectLock, forceUnlock`
+- [json-store.js](src/shared/json-store.js) — JSON 读写 + 原子写 + 并发锁（跨域通用存储层）。导出: `readJson, writeJsonAtomic, acquireLock, releaseLock, inspectLock, forceUnlock`
 - [news-public-gate.js](src/news/core/news-public-gate.js) — 公开展示过滤。导出: `filterPublicItems, filterProjectionByWindow, isWithinPublicWindow, hasCompletePublicFields`
 
 ### min/ — 热点管线 v2 数据层（单状态轴审核/候选/投影 + 长期质量历史库）
@@ -214,11 +214,6 @@
 - [generate-rss.js](src/content/generate-rss.js) — RSS 生成。导出: `getFeedItems, generateRss`
 - [generate-og-image.js](src/content/generate-og-image.js) — OG 图生成；默认输出经 `DIRS.public` 写 `public/og-image.png`。导出: `generateOgImage`
 
-## src/acquisition/ — 工具情报采集
-- [fetch-intel-http.js](src/acquisition/fetch-intel-http.js) — HTTP 抓取层。导出: `requestText, fetchToolIntel`
-- [normalize-intel.js](src/acquisition/normalize-intel.js) — 价格/表格解析与合并。导出: `extractDeepSeekPricing, assignPrices, mergeIntelData...`
-- [fetch-tool-intel.js](src/acquisition/fetch-tool-intel.js) — 工具情报采集 CLI 入口（`require.main === module` 自运行，无库导出）；编排 fetch-intel-http 与 normalize-intel 完成"抓取 → 规范化 → 写 data/acquisition 产物"流程，手动运行（docs/operations.md 记载）
-- [validate-intel.js](src/acquisition/validate-intel.js) — 情报数据校验。导出: `validate, validateSourceConfig, validateIntelData`
 
 ## src/maintenance/ — 维护校验与本机工作台
 - [maintainer-workbench-server.js](src/maintenance/maintainer-workbench-server.js) — 仅监听 `127.0.0.1` 的 Node 原生维护者工作台 server；静态资源白名单、fragment token/Bearer、同源 POST、32KiB JSON 上限和固定 API 路由，包含新闻后续流程、pending 审核、Catalog Draft/Concept batch 闭环与工具 preview/确认 Apply 的受控入口。导出: `createMaintainerWorkbenchServer`
@@ -262,7 +257,7 @@
 - [tavily-client.test.js](tests/shared/tavily-client.test.js) — Tavily Search/Extract 请求、Key、URL canonicalization、失败响应和正文映射回归。
 - [providers.test.js](tests/shared/providers.test.js) — provider 协议、Key 环境变量映射和 Messages API fail-closed 回归。
 - [llm-gateway.test.js](tests/shared/llm-gateway.test.js) — 统一 AI 调用网关多协议路由（MESSAGES / RESPONSES / CHAT / local）、文本与结构化 JSON 提取及错误透传回归；含经真实 catalog 合成 Adapter 协作验证 `requestStructuredJson` 成本账本 fail-closed 的集成用例。
-- [ai-config.test.js](tests/shared/ai-config.test.js) — 业务模块配置合并、Tavily retrieval 配置和 protocol 校验回归。
+- [ai-config.test.js](tests/catalog/ai-config.test.js) — 业务模块配置合并、Tavily retrieval 配置和 protocol 校验回归。
 - [collector-x-v2.test.js](tests/news/collector-x-v2.test.js) — X 请求级 credits 硬预算回归：窗外/空长文/重试/零预算/低配置/超量响应/直接门禁。
 - [news-pipeline-min.test.js](tests/news/news-pipeline-min.test.js) — v2 全链编排、总开关、采集状态汇总、credits→last-run 透传回归。
 - [validate-news-config.test.js](tests/maintenance/validate-news-config.test.js) — news-config-v2 安全字段与 last-run X credits/request schema 校验。

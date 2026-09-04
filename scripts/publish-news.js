@@ -17,7 +17,7 @@
 'use strict';
 
 const { filterProjectionByWindow } = require('../src/news/core/news-public-gate');
-const { readJson, writeJsonAtomic } = require('../src/news/core/news-storage');
+const { readJson, writeJsonAtomic } = require('../src/shared/json-store');
 const { NEWS_FILES } = require('../src/shared/paths');
 const { generateRss } = require('../src/content/generate-rss');
 const { enrichHotspotProjection } = require('../src/news/pipeline/projection');

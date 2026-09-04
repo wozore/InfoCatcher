@@ -59,11 +59,11 @@ test('countExports 统计 CommonJS 命名导出、exports.x 与 ES 导出', (t) 
 // ── 检测项 1：依赖方向 ──
 test('依赖方向：业务域互引命中，→shared 与 maintenance→业务域放行', (t) => {
   const root = makeFixture(t, {
-    'src/catalog/a.js': "const { readJson } = require('../news/core/news-storage');\nconst { DIRS } = require('../shared/paths');\n",
-    'src/news/core/news-storage.js': "module.exports = { readJson };\n",
+    'src/catalog/a.js': "const { readJson } = require('../news/min/min-store');\nconst { DIRS } = require('../shared/paths');\n",
+    'src/news/min/min-store.js': "module.exports = { readJson };\n",
     'src/shared/paths.js': "module.exports = { DIRS };\n",
-    'src/maintenance/validate-x.js': "const { readJson } = require('../news/core/news-storage');\n",
-    'src/maintenance/bad.js': "function load() {\n  return require('../news/core/news-storage');\n}\n",
+    'src/maintenance/validate-x.js': "const { readJson } = require('../news/min/min-store');\n",
+    'src/maintenance/bad.js': "function load() {\n  return require('../news/min/min-store');\n}\n",
   });
   const violations = violationsFor(root, 'dependency-direction');
   assert.ok(violations.some(v => v.file === 'src/catalog/a.js' && v.message.includes('域间互引 catalog→news')), '域间互引应命中');
@@ -121,7 +121,7 @@ test('垫片：有自有逻辑的文件不误报', (t) => {
   const root = makeFixture(t, {
     'src/catalog/facade.js': `'use strict';
 const gateway = require('../shared/llm-gateway');
-const { readJson } = require('../news/core/news-storage');
+const { readJson } = require('../news/min/min-store');
 
 function run() {
   const data = readJson();
@@ -130,7 +130,7 @@ function run() {
 module.exports = { run, extractJson: gateway.extractJson };
 `,
     'src/shared/llm-gateway.js': "module.exports = { extractJson };\n",
-    'src/news/core/news-storage.js': "module.exports = { readJson };\n",
+    'src/news/min/min-store.js': "module.exports = { readJson };\n",
   });
   assert.strictEqual(violationsFor(root, 'shim').length, 0);
 });

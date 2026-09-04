@@ -95,7 +95,7 @@ const {
   countRepairWork,
   nonNegativeInteger,
 } = require('../min/local-enrichment');
-const { readJson, writeJsonAtomic } = require('../core/news-storage');
+const { readJson, writeJsonAtomic } = require('../../shared/json-store');
 const { CATALOG_GENERATOR_FILES, CONCEPT_FILES } = require('../../shared/paths');
 const { NEWS_FILES } = require('../../shared/paths');
 
@@ -573,7 +573,7 @@ async function minReviewCommand(action, flags = {}) {
   if (action === 'ai-top') {
     const path = require('path');
     const fs = require('fs');
-    const { writeJsonAtomic } = require('../core/news-storage');
+    const { writeJsonAtomic } = require('../../shared/json-store');
     const { selectTopWithDeepSeek } = require('../classify/llm-provider');
     const store = readMinStore();
     const approved = store.candidates.filter(c => c && c.review_status === 'approved');

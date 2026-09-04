@@ -12,7 +12,7 @@
 
 const path = require('path');
 const fs = require('fs');
-const { writeJsonAtomic } = require('../core/news-storage');
+const { writeJsonAtomic } = require('../../shared/json-store');
 const { readMinStore } = require('./min-store');
 const { refineKeywordsWithDeepSeek } = require('../classify/llm-provider');
 const { beijingDateKey } = require('../../shared/beijing-time');

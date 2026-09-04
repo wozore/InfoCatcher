@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const { readJson } = require('../news/core/news-storage');
+const { readJson } = require('../shared/json-store');
 const minStore = require('../news/min/min-store');
 const toolReviewStore = require('../catalog/tool-update-review-store');
 const pendingStore = require('../news/feedback/pending-review-store');

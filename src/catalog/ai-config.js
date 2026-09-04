@@ -1,8 +1,8 @@
 'use strict';
 
 const fs = require('fs');
-const { AI_CONFIG_FILES } = require('./paths');
-const { getProvider, DEFAULT_PROVIDER_NAME } = require('./providers');
+const { AI_CONFIG_FILES } = require('../shared/paths');
+const { getProvider, DEFAULT_PROVIDER_NAME } = require('../shared/providers');
 
 // 默认外部 provider 开关（统一收口在 registry 的 DEFAULT_PROVIDER_NAME）。
 // config/catalog-generator.local.json 可按模块覆盖 provider/model/protocol。
@@ -21,12 +21,6 @@ const DEFAULT_MODULE_CONFIGS = Object.freeze({
     max_responses_calls: 12,
     max_synthesis_calls: 1,
     max_repair_calls: 1,
-  }),
-  news: Object.freeze({
-    enabled: false,
-    provider: DEFAULT_PROVIDER_NAME,
-    model: DEFAULT_PROVIDER.defaultModel,
-    protocol: DEFAULT_PROVIDER.protocol,
   }),
 });
 

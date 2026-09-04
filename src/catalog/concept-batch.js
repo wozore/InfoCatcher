@@ -30,7 +30,7 @@
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
-const { readJson, writeJsonAtomic } = require('../news/core/news-storage');
+const { readJson, writeJsonAtomic } = require('../shared/json-store');
 const { readMinStore } = require('../news/min/min-store');
 const { CATALOG_FILES, CONCEPT_FILES } = require('../shared/paths');
 const { conceptExists } = require('../news/feedback/tool-feedback');

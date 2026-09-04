@@ -21,7 +21,7 @@
 
 'use strict';
 
-const { readJson } = require('../core/news-storage');
+const { readJson } = require('../../shared/json-store');
 const { readMinStore } = require('../min/min-store');
 const { catalog } = require('../../catalog-interface');
 const { CATALOG_FILES } = require('../../shared/paths');

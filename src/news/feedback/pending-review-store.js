@@ -12,7 +12,7 @@
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
-const { readJson, writeJsonAtomic, acquireLock, releaseLock } = require('../core/news-storage');
+const { readJson, writeJsonAtomic, acquireLock, releaseLock } = require('../../shared/json-store');
 const { CATALOG_GENERATOR_FILES, CONCEPT_FILES } = require('../../shared/paths');
 
 const SCHEMA_VERSION = 2;

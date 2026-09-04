@@ -6,7 +6,7 @@
 
 'use strict';
 
-const { readJson, writeJsonAtomic } = require('../core/news-storage');
+const { readJson, writeJsonAtomic } = require('../../shared/json-store');
 const { NEWS_FILES } = require('../../shared/paths');
 
 const MIN_HISTORY_PATH = NEWS_FILES.minCandidatesHistory;

@@ -21,7 +21,7 @@
 const fs = require('fs');
 const path = require('path');
 const { CATALOG_GENERATOR_FILES } = require('../shared/paths');
-const { readJson, writeJsonAtomic } = require('../news/core/news-storage');
+const { readJson, writeJsonAtomic } = require('../shared/json-store');
 const { canonicalizeUrl } = require('../shared/tavily-client');
 const { REVIEW_MODES } = require('./tool-update-review-contract');
 const { DATE_PATTERN } = require('./tool-update-evidence');

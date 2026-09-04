@@ -7,7 +7,7 @@ const { parseArgs, tavilyAccessModeFromFlags, generatorOptionsFromFlags } = requ
 const { publicPreview } = require('../../scripts/catalog-date-repair');
 const { probeCatalogCapabilities } = require('../../src/catalog/ai/catalog-adapters');
 const { loadGeneratorConfig, normalizeGeneratorOptions } = require('../../src/catalog/catalog-assistant');
-const { requestDeepSeek } = require('../../src/shared/deepseek-client');
+const { requestResponses } = require('../../src/shared/ai-transport');
 const {
   addProductUrlRegistryEntry,
   removeProductUrlRegistryEntry,
@@ -132,9 +132,9 @@ test('Tavily capability probe fails closed without the default provider key', as
   assert.equal(result.code, 'ZHIPU_AUTH_REQUIRED');
 });
 
-test('shared DeepSeek client classifies auth and rate limit errors', async () => {
-  const auth = await requestDeepSeek({}, { apiKey: '', fetchImpl: async () => ({}) });
+test('ai-transport classifies auth and rate limit errors', async () => {
+  const auth = await requestResponses({}, { provider: 'deepseek', apiKey: '', fetchImpl: async () => ({}) });
   assert.equal(auth.code, 'DEEPSEEK_AUTH_REQUIRED');
-  const limited = await requestDeepSeek({}, { apiKey: 'test-key', fetchImpl: async () => ({ ok: false, status: 429, text: async () => 'limited' }) });
+  const limited = await requestResponses({}, { provider: 'deepseek', apiKey: 'test-key', fetchImpl: async () => ({ ok: false, status: 429, text: async () => 'limited' }) });
   assert.equal(limited.code, 'DEEPSEEK_RATE_LIMITED');
 });

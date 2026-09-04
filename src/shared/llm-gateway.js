@@ -11,7 +11,7 @@ const {
   requestChatCompletions,
   requestMessages,
   textFromResponse,
-} = require('./deepseek-client');
+} = require('./ai-transport');
 const { ensureLocalModel } = require('./local-model');
 
 const MAX_OUTPUT_PREVIEW = 1200;

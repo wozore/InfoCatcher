@@ -7,16 +7,6 @@
   ],
   "assembly": [
     {
-      "file": "src/acquisition/fetch-tool-intel.js",
-      "count": 3,
-      "note": "3 处: console.log（行 129） | console.log（行 140） | console.error（行 143）"
-    },
-    {
-      "file": "src/acquisition/validate-intel.js",
-      "count": 6,
-      "note": "6 处: console.error（行 181） | console.error（行 182） | console.log（行 185） …"
-    },
-    {
       "file": "src/catalog/catalog-shared-publish.js",
       "count": 2,
       "note": "2 处: console.warn（行 53） | console.warn（行 63）"
@@ -63,8 +53,8 @@
     },
     {
       "file": "src/maintenance/validate.js",
-      "count": 18,
-      "note": "18 处: console.error（行 41） | console.log（行 77） | console.log（行 90） …"
+      "count": 16,
+      "note": "16 处: console.error（行 40） | console.log（行 76） | console.log（行 89） …"
     },
     {
       "file": "src/news/classify/content-classifier.js",
@@ -128,8 +118,8 @@
     },
     {
       "file": "src/shared/local-model.js",
-      "count": 5,
-      "note": "5 处: console.log（行 151） | process.env 直读（行 22） | process.env 直读（行 22） …"
+      "count": 4,
+      "note": "4 处: console.log（行 150） | process.env 直读（行 22） | process.env 直读（行 22） …"
     },
     {
       "file": "src/shared/release-index.js",
@@ -148,11 +138,6 @@
     }
   ],
   "size-exports": [
-    {
-      "file": "src/acquisition/normalize-intel.js",
-      "count": 1,
-      "note": "1 处: 行数 416 > 400"
-    },
     {
       "file": "src/catalog/catalog-assistant.js",
       "count": 2,
@@ -409,28 +394,13 @@
   "dependency-direction": [
     {
       "file": "src/catalog/catalog-batch.js",
-      "count": 2,
-      "note": "2 处: 域间互引 catalog→news: src/news/core/news-storage.js | 域间互引 catalog→news: src/news/feedback/catalog-draft-adapter.js"
-    },
-    {
-      "file": "src/catalog/catalog-draft-store.js",
       "count": 1,
-      "note": "1 处: 域间互引 catalog→news: src/news/core/news-storage.js"
-    },
-    {
-      "file": "src/catalog/catalog-series-policy.js",
-      "count": 1,
-      "note": "1 处: 域间互引 catalog→news: src/news/core/news-storage.js"
-    },
-    {
-      "file": "src/catalog/catalog-snapshot-store.js",
-      "count": 1,
-      "note": "1 处: 域间互引 catalog→news: src/news/core/news-storage.js"
+      "note": "1 处: 域间互引 catalog→news: src/news/feedback/catalog-draft-adapter.js"
     },
     {
       "file": "src/catalog/catalog-transaction-store.js",
-      "count": 2,
-      "note": "2 处: 域间互引 catalog→news: src/news/core/news-storage.js | src→scripts 反向依赖: ../../scripts/build-dist (行 11)"
+      "count": 1,
+      "note": "1 处: src→scripts 反向依赖: ../../scripts/build-dist (行 11)"
     },
     {
       "file": "src/catalog/catalog-workbench.js",
@@ -439,23 +409,8 @@
     },
     {
       "file": "src/catalog/concept-batch.js",
-      "count": 4,
-      "note": "4 处: 域间互引 catalog→news: src/news/core/news-storage.js | 域间互引 catalog→news: src/news/min/min-store.js | 域间互引 catalog→news: src/news/feedback/tool-feedback.js …"
-    },
-    {
-      "file": "src/catalog/official-url-registry.js",
-      "count": 1,
-      "note": "1 处: 域间互引 catalog→news: src/news/core/news-storage.js"
-    },
-    {
-      "file": "src/catalog/tool-update-review-store.js",
-      "count": 1,
-      "note": "1 处: 域间互引 catalog→news: src/news/core/news-storage.js"
-    },
-    {
-      "file": "src/catalog/vibe-hub-evidence.js",
-      "count": 1,
-      "note": "1 处: 域间互引 catalog→news: src/news/core/news-storage.js"
+      "count": 3,
+      "note": "3 处: 域间互引 catalog→news: src/news/min/min-store.js | 域间互引 catalog→news: src/news/feedback/tool-feedback.js | 域间互引 catalog→news: src/news/feedback/pending-review-store.js"
     },
     {
       "file": "src/content/generate-rss.js",
@@ -469,8 +424,8 @@
     },
     {
       "file": "src/maintenance/validate.js",
-      "count": 4,
-      "note": "4 处: src→scripts 反向依赖: ../../scripts/check-secrets (行 245) | 函数体内 require（应提到模块顶层）: 行 119 | 函数体内 require（应提到模块顶层）: 行 215 …"
+      "count": 3,
+      "note": "3 处: src→scripts 反向依赖: ../../scripts/check-secrets (行 234) | 函数体内 require（应提到模块顶层）: 行 204 | 函数体内 require（应提到模块顶层）: 行 234"
     },
     {
       "file": "src/news/cli/cmd-min.js",

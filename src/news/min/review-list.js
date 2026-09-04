@@ -26,7 +26,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { readJson, writeJsonAtomic } = require('../core/news-storage');
+const { readJson, writeJsonAtomic } = require('../../shared/json-store');
 const { createMinStore, setBatchReviewStatusMin } = require('./min-store');
 const { beijingDateKey } = require('../../shared/beijing-time');
 

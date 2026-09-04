@@ -14,7 +14,6 @@ const NEWS_DIR = path.join(DATA_DIR, 'news');
 const NEWS_CONFIG_DIR = path.join(NEWS_DIR, 'config');
 const NEWS_RUNTIME_DIR = path.join(NEWS_DIR, 'runtime');
 const NEWS_OUTPUT_DIR = path.join(NEWS_DIR, 'output');
-const ACQUISITION_DIR = path.join(DATA_DIR, 'acquisition');
 const COMPARISON_DIR = path.join(DATA_DIR, 'comparison'); // 模型对比：独立数据层（抓取 raw + 前端 integrated）
 const COMPARISON_RAW_DIR = path.join(COMPARISON_DIR, 'raw'); // 4 源原样快照（管线写，前端不读）
 const COMPARISON_INTEGRATED_DIR = path.join(COMPARISON_DIR, 'integrated'); // 前端唯一入口层（管线重建，前端只读）
@@ -41,7 +40,6 @@ const DIRS = Object.freeze({
   newsConfig: NEWS_CONFIG_DIR,
   newsRuntime: NEWS_RUNTIME_DIR,
   newsOutput: NEWS_OUTPUT_DIR,
-  acquisition: ACQUISITION_DIR,
   comparison: COMPARISON_DIR,
   comparisonRaw: COMPARISON_RAW_DIR,
   comparisonIntegrated: COMPARISON_INTEGRATED_DIR,
@@ -99,10 +97,6 @@ const NEWS_FILES = Object.freeze({
   hotspots: path.join(NEWS_OUTPUT_DIR, 'hotspots.json'),              // 公开热点投影，发布到 dist/
 });
 
-const ACQUISITION_FILES = Object.freeze({
-  intelSources: path.join(ACQUISITION_DIR, 'intel-sources.json'),
-});
-
 // 模型对比数据层（data/comparison）：抓取编排配置 + 前端 integrated + raw 快照。
 // 生命周期/语义/校验/许可与 catalog 四隔离，不入 catalog。管线不覆盖 view-config/models-alias。
 const COMPARISON_FILES = Object.freeze({
@@ -132,4 +126,4 @@ const SHARED_FILES = Object.freeze({
 
 const RSS_FEED_PATH = path.join(PUBLIC_DIR, 'feed.xml');
 
-module.exports = { DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, CONCEPT_FILES, AI_CONFIG_FILES, NEWS_FILES, ACQUISITION_FILES, COMPARISON_FILES, SHARED_FILES, RSS_FEED_PATH };
+module.exports = { DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, CONCEPT_FILES, AI_CONFIG_FILES, NEWS_FILES, COMPARISON_FILES, SHARED_FILES, RSS_FEED_PATH };

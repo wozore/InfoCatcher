@@ -30,7 +30,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { readJson, writeJsonAtomic } = require('../news/core/news-storage');
+const { readJson, writeJsonAtomic } = require('../shared/json-store');
 const { CATALOG_GENERATOR_FILES } = require('../shared/paths');
 const { catalog } = require('../catalog-interface');
 const { pendingCandidateToSeed } = require('../news/feedback/catalog-draft-adapter');
