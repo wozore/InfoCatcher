@@ -19,6 +19,7 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
 const { scanRepo, selftest, PATTERNS } = require('../../scripts/check-secrets');
+const maintenanceSecrets = require('../../src/maintenance/check-secrets');
 
 const PROJECT_DIR = path.resolve(__dirname, '..', '..');
 
@@ -58,4 +59,10 @@ test('无探测残留时仓库扫描零命中（validate.js 原则6 同保证）
   // 依赖上一条 t.after 已完成清理；若仓库未来出现真实密钥形态，
   // 本测试与 validate.js 原则6 会同时拦截——这正是守卫的用途。
   assert.deepEqual(scanRepo(), []);
+});
+
+test('src/maintenance/check-secrets 下沉模块与 scripts 一致且 selftest 通过', () => {
+  assert.equal(maintenanceSecrets.selftest(), true);
+  assert.equal(maintenanceSecrets.PATTERNS.length, PATTERNS.length);
+  assert.deepEqual(maintenanceSecrets.scanRepo(), []);
 });

@@ -27,10 +27,12 @@
 
 const fs = require('fs');
 const path = require('path');
-const { DIRS } = require('../shared/paths');
+const pathsExports = require('../shared/paths');
+const { DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, NEWS_FILES } = pathsExports;
 const catalog = require('./validate-catalog');
 const news = require('./validate-news');
 const comparison = require('./validate-comparison');
+const { scanRepo } = require('./check-secrets');
 
 const SRC_DIR = DIRS.src;
 let failed = false;
@@ -150,7 +152,7 @@ try {
   } else {
     const claudeMd = fs.readFileSync(claudePath, 'utf8');
 
-    // 五模块工具卡数量一致（仅识别 tool-cards.json 清单；旧 tools.json 格式已随 v1 移除）
+    // 五模块工具卡数量一致（仅识别 tool-cards.json 清单）
     const toolCountMatch = claudeMd.match(/tool-cards\.json\s+#\s*(\d+)\s*个工具/);
     if (toolCountMatch) {
       const declared = parseInt(toolCountMatch[1], 10);
@@ -201,12 +203,11 @@ try {
 
 // --- 原则 5: 先结构后逻辑 — paths.js 覆盖 data/ 所有 JSON ---
 try {
-  const exports = require('../shared/paths');
   const registered = new Set();
   (function collect(v) {
     if (typeof v === 'string' && v.includes(DIRS.data)) registered.add(path.resolve(v));
     else if (v && typeof v === 'object') Object.values(v).forEach(collect);
-  })({ DIRS: exports.DIRS, CATALOG_FILES: exports.CATALOG_FILES, CATALOG_GENERATOR_FILES: exports.CATALOG_GENERATOR_FILES, NEWS_FILES: exports.NEWS_FILES });
+  })({ DIRS: pathsExports.DIRS, CATALOG_FILES: pathsExports.CATALOG_FILES, CATALOG_GENERATOR_FILES: pathsExports.CATALOG_GENERATOR_FILES, NEWS_FILES: pathsExports.NEWS_FILES });
 
   const dataJson = [];
   (function walk(d) {
@@ -231,7 +232,6 @@ try {
 
 // --- 原则 6: 密钥零残留 — check-secrets 高熵扫描 ---
 try {
-  const { scanRepo } = require('../../scripts/check-secrets');
   const findings = scanRepo();
   if (findings.length) findings.forEach(f => fail(`原则6: ${f.file}:${f.line} 疑似密钥 [${f.pattern}] ${f.preview}`));
   else console.log('  原则6 密钥扫描: 通过');
