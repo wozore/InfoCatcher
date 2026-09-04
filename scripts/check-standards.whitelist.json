@@ -17,11 +17,6 @@
       "note": "1 处: console.error（行 188）"
     },
     {
-      "file": "src/comparison/rebuild-comparison.js",
-      "count": 2,
-      "note": "2 处: console.warn（行 794） | console.warn（行 796）"
-    },
-    {
       "file": "src/comparison/run-comparison.js",
       "count": 5,
       "note": "5 处: console.warn（行 81） | console.warn（行 103） | console.warn（行 111） …"
@@ -125,11 +120,6 @@
       "file": "src/shared/tavily-client.js",
       "count": 2,
       "note": "2 处: process.env 直读（行 57） | process.env 直读（行 95）"
-    },
-    {
-      "file": "src/web/js/compare-models.js",
-      "count": 2,
-      "note": "2 处: console.warn（行 281） | console.warn（行 331）"
     }
   ],
   "size-exports": [
@@ -182,31 +172,6 @@
       "file": "src/catalog/tool-update-review-store.js",
       "count": 2,
       "note": "2 处: 行数 657 > 400 | 导出 17 个 > 15"
-    },
-    {
-      "file": "src/comparison/compare-schema.js",
-      "count": 1,
-      "note": "1 处: 导出 20 个 > 15"
-    },
-    {
-      "file": "src/comparison/model-identity.js",
-      "count": 1,
-      "note": "1 处: 导出 20 个 > 15"
-    },
-    {
-      "file": "src/comparison/rebuild-comparison.js",
-      "count": 1,
-      "note": "1 处: 行数 812 > 400"
-    },
-    {
-      "file": "src/maintainer-web/js/workbench.js",
-      "count": 1,
-      "note": "1 处: 行数 1522 > 400"
-    },
-    {
-      "file": "src/maintenance/maintainer-workbench-service.js",
-      "count": 1,
-      "note": "1 处: 行数 570 > 400"
     },
     {
       "file": "src/news/classify/llm-provider.js",
@@ -267,41 +232,6 @@
       "file": "src/shared/providers/zhipu.js",
       "count": 1,
       "note": "1 处: CommonJS 单值默认导出（应命名导出）"
-    },
-    {
-      "file": "src/web/js/compare-models.js",
-      "count": 1,
-      "note": "1 处: 行数 1548 > 400"
-    },
-    {
-      "file": "src/web/js/compare.js",
-      "count": 2,
-      "note": "2 处: 行数 477 > 400 | 导出 19 个 > 15"
-    },
-    {
-      "file": "src/web/js/data.js",
-      "count": 2,
-      "note": "2 处: 行数 635 > 400 | 导出 61 个 > 15"
-    },
-    {
-      "file": "src/web/js/main.js",
-      "count": 1,
-      "note": "1 处: 行数 857 > 400"
-    },
-    {
-      "file": "src/web/js/search.js",
-      "count": 2,
-      "note": "2 处: 行数 984 > 400 | 导出 25 个 > 15"
-    },
-    {
-      "file": "src/web/js/tools.js",
-      "count": 1,
-      "note": "1 处: 行数 481 > 400"
-    },
-    {
-      "file": "src/web/js/trending.js",
-      "count": 1,
-      "note": "1 处: 行数 430 > 400"
     }
   ],
   "legacy-narrative": [
@@ -317,16 +247,6 @@
     },
     {
       "file": "src/content/generate-rss.js",
-      "count": 1,
-      "note": "1 处: 旧契约叙事短语: 已随 v1"
-    },
-    {
-      "file": "src/maintainer-web/js/workbench.js",
-      "count": 1,
-      "note": "1 处: 旧契约叙事短语: 旧版"
-    },
-    {
-      "file": "src/maintenance/validate.js",
       "count": 1,
       "note": "1 处: 旧契约叙事短语: 已随 v1"
     },
@@ -408,16 +328,6 @@
       "note": "1 处: 域间互引 content→news: src/news/core/news-public-gate.js"
     },
     {
-      "file": "src/maintenance/maintainer-workbench-service.js",
-      "count": 8,
-      "note": "8 处: src→scripts 反向依赖: ../../scripts/publish-news (行 18) | src→scripts 反向依赖: ../../scripts/tool-update-review (行 19) | 函数体内 require（应提到模块顶层）: 行 112 …"
-    },
-    {
-      "file": "src/maintenance/validate.js",
-      "count": 3,
-      "note": "3 处: src→scripts 反向依赖: ../../scripts/check-secrets (行 234) | 函数体内 require（应提到模块顶层）: 行 204 | 函数体内 require（应提到模块顶层）: 行 234"
-    },
-    {
       "file": "src/news/cli/cmd-min.js",
       "count": 6,
       "note": "6 处: 函数体内 require（应提到模块顶层）: 行 520 | 函数体内 require（应提到模块顶层）: 行 521 | 函数体内 require（应提到模块顶层）: 行 574 …"
@@ -443,19 +353,6 @@
       "note": "2 处: 函数体内 require（应提到模块顶层）: 行 473 | 函数体内 require（应提到模块顶层）: 行 506"
     }
   ],
-  "cycles": [
-    {
-      "cycle": [
-        "src/web/js/compare.js",
-        "src/web/js/glossary.js",
-        "src/web/js/main.js",
-        "src/web/js/scenes.js",
-        "src/web/js/search.js",
-        "src/web/js/tools.js",
-        "src/web/js/trending.js"
-      ],
-      "note": "R7-1 解（main↔search↔glossary、main↔compare）"
-    }
-  ],
+  "cycles": [],
   "codemap": []
 }

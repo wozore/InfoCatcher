@@ -2926,3 +2926,55 @@
 ### 验证结果
 
 - [x] 全量测试 711/711 通过；`check-standards`（138 个 src 文件，白名单外 0）、`validate.js` 与 `build-dist.js` 全部通过。
+
+## 2026-09-04 · 重构 R4 轮（catalog：子域重组、事务独立与 pending 域独立）
+
+### 变更实现
+
+- [x] **Catalog 子域化组织**：将平铺的 30 个 Catalog 文件梳理拆分为 `core`、`draft`、`intake`、`series`、`tool-update`、`concept`、`url-registry` 七大子域，各子域均建立真实装配的 `index.js` 门面，彻底移除纯转发 shim 垫片。
+- [x] **根门面归位**：原根目录 `src/catalog-interface.js` 迁入 `src/catalog/interface.js` 作为 Catalog 统一对外只读与操作门面，消除根目录散落文件。
+- [x] **Pending 域独立**：新建 `src/pending/` 独立业务域（`store.js`、`rules.js`、`catalog-seed.js`、`index.js`），彻底切断 Catalog 内部向 News 域的反向跨域依赖。
+- [x] **静态站构建与事务独立**：新建 `src/build/static-site.js` 负责静态站复制构建，`scripts/build-dist.js` 降级为薄 CLI 壳；新建 `src/catalog/transaction/`（`engine.js`、`directory-swap.js`、`removal-planner.js`、`index.js`），保持完整的 snapshot validation、journal、锁、CAS、Windows EPERM 回退与精确删除规划。
+- [x] **大文件拆分**：`catalog-assistant.js` 抽出 `draft-options.js`；`tool-update-collector.js` 抽出 `html-collector.js`；`tool-update-review-store.js` 抽出 `review-queue-store.js`；`official-url-registry.js` 抽出 `product-registry.js`。全部文件严格符合 ≤ 400 行与 ≤ 15 导出标准。
+
+### 验证结果
+
+- [x] 全量测试 720/720 全部通过；`check-standards`（160 个 src 文件，白名单外 0 违规）、`validate.js` 与 `build-dist.js`（93 个文件）全部通过。
+- [x] 提交基线：`b6e9ed8`。
+
+## 2026-09-05 · 重构 R5–R9 轮（comparison 子域化、工作台解耦、web 原生模块化与路径规范化）
+
+### 变更实现
+
+- [x] **R5（src/comparison）子域化与重建编排拆解**：
+  - 17 个平铺文件梳理重组为 `core`、`fetch`、`identity`、`series` 四个高内聚子域，并提供聚合门面 `src/comparison/index.js`；
+  - 原 812 行的 `rebuild-comparison.js` 拆分为 `rebuild-canonical.js`（名称别名规范化）、`rebuild-collector.js`（4 源数据聚拢）、`rebuild-dimensions.js`（评测维度聚合）与 `rebuild-comparison.js`（主重建编排），单文件均在 354 行以内；
+  - `compare-schema.js` 与 `model-identity.js` 私有导出收敛，所有模块单文件 ≤ 400 行、≤ 15 导出。
+- [x] **R6（src/maintenance 与 src/maintainer-web）工作台解耦与上帝文件拆分**：
+  - `maintainer-workbench-service.js`（原 843 行）解除对 `scripts/` 的反向依赖，按领域拆分出 `src/maintenance/workbench/`（`news-domain.js`、`tool-update-domain.js`、`catalog-domain.js`、`workspace-domain.js`），主服务瘦身至 266 行；
+  - 密钥扫描核心下沉至 `src/maintenance/check-secrets.js`；`validate-news.js` 与 `validate.js` 错误消息规范化；
+  - 前端工作台 `src/maintainer-web/js/workbench.js`（原 1,521 行）拆分为浏览器原生 ES 模块（`api.js`、`auth.js`、`state.js`、`panels/` 下 8 个专属面板模块），彻底消除上帝文件。
+- [x] **R7（src/web）循环依赖消除与前端大文件模块化**：
+  - 抽离 `src/web/js/state.js` 与 `modal.js`，通过事件监听与单向路由彻底消除 `main ↔ search ↔ glossary`、`main ↔ compare` 等所有历史循环导入，全站 cycles 彻底归零；
+  - `compare-models.js`（原 1,547 行）拆解为 `compare-selector.js`、`compare-chips.js`、`compare-dimensions.js`、`compare-table.js` 及对外门面；
+  - `search.js`（原 983 行）拆解为 `search-index.js`、`search-render.js` 及调度入口；
+  - `data.js`（原 634 行）拆解为 `data-loader.js`、`data-catalog.js`、`data-comparison.js`、`data-filters.js`、`ui-helpers.js`、`ui-icons.js`；
+  - 前端 33 个 JS 模块 100% 达成单文件 ≤ 400 行、导出 ≤ 15 个，保持纯原生浏览器 ES 模块，无需任何打包工具。
+- [x] **R8（scripts、bat、tests）薄 CLI 壳化与测试目录镜像归位**：
+  - `scripts/` 全面瘦身，`check-secrets.js` 委托至 `src/maintenance/check-secrets.js`；
+  - 盘点根目录 `bat/` 下全部 9 个批处理文件，与当前 Node CLI 参数完全对齐；
+  - `tests/` 目录完成镜像重构：散落在根目录的 4 个测试套件归位至 `tests/news/`、`tests/catalog/` 与新建的 `tests/web/`，根目录仅保留 `tests/index.js` 统一递归测试运行器。
+- [x] **R9（data、docs、public）登记表路径正名与契约清理**：
+  - 将活跃登记表目录从具有误导性的 `data/manual/archive/` 正名为 `data/manual/registries/`（使用 git mv）；
+  - `src/shared/paths.js` 正名 `REGISTRIES_DIR`、`REGISTRIES_FILES`，并保留向后兼容别名；
+  - 清理历史一次性种子 `catalog-seed-kling.json`；规范 `public/robots.txt` 与 `sitemap.xml`；
+  - 用户文档 `docs/manual/catalog-generator.md` 清理历史旧契约叙事，并补充 9 个 `.bat` 维护入口使用指南；
+  - 白名单 `scripts/check-standards.whitelist.json` 存量违规大规模削减（cycles 完全归零清空，size-exports 削减 12 条，assembly 削减 2 条，legacy-narrative 削减 2 条，dependency-direction 削减 2 条）。
+
+### 验证结果
+
+- [x] `node scripts/check-standards.js`：扫描 199 个 src 文件，白名单外违规 0 处；
+- [x] `node scripts/validate.js`：数据完整性校验、扩展点与原则 1–6 全部通过；
+- [x] `node tests/index.js`：全量测试 100% 通过（0 failure）；
+- [x] `node scripts/build-dist.js`：静态站构建完成，生成 107 个文件；
+- [x] `node scripts/browser-acceptance.js`：真实 Edge/CDP 浏览器端到端全链路验收全部通过（45 项 PASS）。

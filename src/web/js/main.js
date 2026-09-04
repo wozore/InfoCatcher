@@ -96,6 +96,7 @@ export function switchView(view) {
   closeMobileNav();
   announceStatus((target.querySelector('h1')?.textContent || '页面') + '已显示');
 
+  // EXTENSION POINT: 新增视图在此添加对应的路由渲染分支
   if (view === 'scenes') renderScenes();
   if (view === 'compare') renderCompareView();
   if (view === 'tools') renderTools();
@@ -246,6 +247,7 @@ if (typeof document !== 'undefined') {
     if (e.target.closest('[data-scene-back-tools]')) switchView('tools');
   });
 
+  // EXTENSION POINT: 新视图的全局事件监听在此区域追加
   // 导航
   document.querySelectorAll('.nav-btn, .mobile-nav [data-view], .footer [data-view]').forEach(btn => {
     btn.addEventListener('click', () => { if (btn.dataset.view) switchView(btn.dataset.view); });

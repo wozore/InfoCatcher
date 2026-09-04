@@ -21,6 +21,7 @@ export const DIM_GROUPS = [
   { key: 'pro', dims: ['finance', 'legal', 'healthcare'] },
   { key: 'lmarena', dims: ['text', 'vision', 'webdev', 'search', 'text_to_image', 'image_edit', 'image_to_video', 'text_to_video', 'video_edit'] },
   { key: 'agent', dims: ['agent_praise_complaint', 'agent_steerability', 'agent_bash_recovery_steps', 'agent_tool_hallucination', 'agent_task_outcome_explicit'] },
+  // EXTENSION POINT: 新增评测维度在此追加到 DIM_GROUPS 分组
 ];
 
 export const ALL_DIMS = DIM_GROUPS.flatMap(group => group.dims);

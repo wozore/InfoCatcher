@@ -36,6 +36,7 @@ export async function loadData() {
       dateEl.textContent = '数据更新: ' + new Date().toISOString().slice(0, 10);
     }
   }
+  // EXTENSION POINT: 新增静态数据集在此添加异步 fetch 加载逻辑
   try {
     const gResp = await fetch('data/catalog/glossary.json');
     state.glossary = await gResp.json();

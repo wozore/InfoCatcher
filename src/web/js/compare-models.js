@@ -89,7 +89,7 @@ function syncModeButtons() {
 }
 
 function renderResults() {
-  const out = document.getElementById('cmpChartOutput');
+  const out = document.getElementById('cmpResults');
   if (!out) return;
   const { indexMap, dataMap, indexData } = getComparisonState();
   if (!selected.length) {

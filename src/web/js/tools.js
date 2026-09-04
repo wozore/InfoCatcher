@@ -40,6 +40,7 @@ const TOOL_GROUPS = [
   { type: 'media', title: '视频、音乐与音频生成' },
 ];
 
+// EXTENSION POINT: 新增工具类型展示模式在此配置
 const TOOLS_COPY = {
   vendor: {
     eyebrow: '厂商全景',

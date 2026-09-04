@@ -1,18 +1,9 @@
 import { state } from './state.js';
+import { tokenFromFragment } from './auth.js';
+
+export { tokenFromFragment };
 
 export const API_ROOT = '/api/workbench/v1/';
-
-export function tokenFromFragment() {
-  const fragment = window.location.hash.startsWith('#') ? window.location.hash.slice(1) : window.location.hash;
-  if (!fragment) return '';
-  const params = new URLSearchParams(fragment);
-  const namedToken = params.get('token') || params.get('access_token');
-  if (namedToken) return namedToken;
-  if (!fragment.includes('=')) {
-    try { return decodeURIComponent(fragment); } catch (_) { return fragment; }
-  }
-  return '';
-}
 
 export function unwrap(payload) {
   if (payload && payload.data && typeof payload.data === 'object') return payload.data;

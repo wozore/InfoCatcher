@@ -16,11 +16,16 @@
 
 const { readJson } = require('../src/shared/json-store');
 const { COMPARISON_FILES } = require('../src/shared/paths');
-const { runComparison, fetchSource, isFresh, readConfig } = require('../src/comparison/run-comparison');
-const { readRawSnapshot } = require('../src/comparison/compare-store');
-const { rebuildIntegrated } = require('../src/comparison/rebuild-comparison');
+const {
+  runComparison,
+  fetchSource,
+  isFresh,
+  readConfig,
+  readRawSnapshot,
+  rebuildIntegrated,
+  collectReviewCandidates,
+} = require('../src/comparison');
 const { readRetentionState } = require('../src/shared/retention');
-const { collectReviewCandidates } = require('../src/comparison/identity-review');
 
 function printStatus() {
   const config = readConfig();

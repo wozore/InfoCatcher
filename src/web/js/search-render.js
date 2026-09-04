@@ -31,7 +31,7 @@ export function renderSearchHome() {
   if (!examples) return;
   const picks = (state.scenes || []).filter(s => s && typeof s.example === 'string' && s.example.trim()).slice(0, 4);
   examples.innerHTML = picks.map(scene =>
-    '<button class="search-example-item" type="button" data-search-example="' + escapeHtml(scene.example) + '">' +
+    '<button class="chip search-example" type="button" data-search-example="' + escapeHtml(scene.example) + '">' +
       '<span class="search-example-scene">' + escapeHtml(scene.name) + '</span>' +
       '<span class="search-example-query">' + escapeHtml(scene.example) + '</span>' +
     '</button>'

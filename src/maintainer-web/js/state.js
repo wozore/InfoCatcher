@@ -1,4 +1,4 @@
-import { tokenFromFragment } from './api.js';
+import { tokenFromFragment } from './auth.js';
 
 export const state = {
   token: tokenFromFragment(),
@@ -84,7 +84,7 @@ export function addBadge(parent, value, tone = '') {
   return badge;
 }
 
-export function safeHttpUrl(value) {
+function safeHttpUrl(value) {
   const raw = text(value).trim();
   if (!raw) return '';
   try {
@@ -93,7 +93,7 @@ export function safeHttpUrl(value) {
   } catch (_) { return ''; }
 }
 
-export function addSourceLink(parent, value, label = '') {
+function addSourceLink(parent, value, label = '') {
   const url = safeHttpUrl(value);
   if (!url) return;
   const link = document.createElement('a');
@@ -119,7 +119,7 @@ export function zhLocalized(item, field) {
 
 export const VERDICT_ZH = { approve: '建议通过', discard: '建议丢弃', hold: '需人工细看', rejected: '建议拒绝', approved: '建议通过' };
 
-export const BLOCKED_REASON_ZH = Object.freeze({
+const BLOCKED_REASON_ZH = Object.freeze({
   AI_REVIEW_REQUIRED: '需要 AI 复核',
   AI_OUTPUT_INVALID: 'AI 复核结果无效',
   AI_FALLBACK_FAILED: 'AI 复核调用失败',

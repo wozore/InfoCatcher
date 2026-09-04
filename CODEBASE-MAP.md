@@ -105,24 +105,32 @@
 - [catalog-retention-prune.js](src/catalog/catalog-retention-prune.js) — catalog 五模块 14 个月滚动级联删除：按 detail_kind 取时间字段（tool→last_updated_date、api_model/product_variant→release_date）筛过期详情，级联删 tool-card/vendor-level2/1/vendor-card（失去全部引用的父级）；subscription_plan 与无日期保守保留；featured 悬空只报不改；复用 planRecordRemoval + commitSnapshotChange 事务。cutoff 只读共享段。导出: `DATE_FIELD_BY_KIND, currentCutoffDate, collectPruneTargets, featuredDangling, planRetentionPrune, applyRetentionPrune`
 - [vibe-hub-evidence.js](src/catalog/vibe-hub-evidence.js) — vibe-hub.org 概念页提取与本地缓存（纯 HTTP 零 API 成本）：term→英文 kebab slug（含中文返回 null）、JSON-LD/正文结构化提取、缓存优先 + 串行 ≥500ms 节流、TTL 默认 3 天、过期重抓。导出: `vibeHubSlugOf, extractVibeHubText, loadVibeHubCache, saveVibeHubCache, fetchVibeHubDefinition, fetchPage, refreshStaleVibeHubCache`
 
-## src/comparison/ — 模型对比数据管线（CommonJS；抓取 4 公开源 → 重建 integrated）
-- [compare-schema.js](src/comparison/compare-schema.js) — 共享契约：源 key、维度键枚举（契约 §2）、各源 raw 快照 schema 白名单（fail-closed）、口径归一化（LMArena `(x+0.3)/0.5×100`、llm-stats index `(x+20)/80×100`、benchmark accuracy×100）。导出: `SOURCES, DIMENSION_KEYS, LMARENA_CONFIGS, validateRowProjection, validateRawRows, validateLmarenaSnapshot, normalizeLmarena, normalizeIndex, normalizeBenchmark`
-- [compare-http.js](src/comparison/compare-http.js) — 抓取共享 HTTP 层：合理 UA + 有限重试 + 429 指数退避 + 超时。导出: `fetchText, fetchJson`
-- [compare-store.js](src/comparison/compare-store.js) — raw 快照读写（原子写临时文件 + rename）。导出: `readRawSnapshot, writeRawSnapshot, writeJsonAtomic`
-- [fetch-openrouter.js](src/comparison/fetch-openrouter.js) — OpenRouter 官方免 key models API 抓取（pricing 字符串转 number，白名单投影），写 raw/openrouter.json。导出: `fetchOpenRouter, mapOpenRouterModel`
-- [fetch-lmarena.js](src/comparison/fetch-lmarena.js) — LMArena 官方数据集抓取（datasets-server rows API 直取 JSON，零依赖；实测 filter 参数无效 → 每 config 限量 3 页取各榜 top + 客户端收敛 overall）。导出: `fetchLmarena`
-- [fetch-livebench.js](src/comparison/fetch-livebench.js) — LiveBench 官方 CSV（table_<release>.csv + categories_<release>.json，类别分=类别内 task 均值聚合），零依赖 CSV 解析。导出: `fetchLivebench, parseCsv, aggregateGroups`
-- [fetch-llm-stats.js](src/comparison/fetch-llm-stats.js) — llm-stats RSC flight payload 确定性解析（initialData 数组），字段白名单 + 值域校验 fail-closed。导出: `fetchLlmStats, extractFlightChunks, extractInitialData`
-- [model-identity.js](src/comparison/model-identity.js) — 模型身份解析深 Module：安全统一厂商、跨源格式、服务方式、评测挡位与评测环境（如 `codex-harness`），保留参数/MoE/模式等实体差异；唯一返回 model_key/revision/offering/degree/evaluation_profile，人工 alias 命中优先且别名冲突 fail-closed。导出: `resolveModelIdentity, createModelIdentityResolver, parseModelNameMetadata, normalizeVendor`
-- [revision-date.js](src/comparison/revision-date.js) — revision 日期规范化（代码规则）：解析 MMDD/YYYYMMDD/YYMM/MM-YYYY 等混用格式为 (year,month,day)，本年不显示年份（MM-DD/MM）、往年保留（YYYY-MM-DD/YYYY-MM）；无年份时按系统年份推断，日期在未来回退到上年；同一日期不同写法规范化后同键自动合并。导出: `parseRevisionDate, normalizeRevision`
-- [model-series.js](src/comparison/model-series.js) — 模型系列分组深 Module：读取人工系列登记，按 series/member/configuration 三层生成稳定系列投影；revision 聚合为成员变体，canonical 不被系列合并。导出: `readSeriesConfig, seriesInfoFor, memberInfoFor, attachSeriesMetadata, validateSeriesProjection`
-- [model-exclusions.js](src/comparison/model-exclusions.js) — integrated 重建排除规则深 Module：读取/严格校验 `vendor + identity_prefix` 或 `identity_prefixes` token-boundary / exact identity 规则，过滤 source records 并返回命中诊断；只影响 integrated，不删除 raw。导出: `validateExclusionConfig, readExclusionConfig, exclusionForModel, filterExcludedRecords`
-- [empty-model-filter.js](src/comparison/empty-model-filter.js) — 无数据模型自动过滤（代码规则）：按 identity 分组，同一 identity 全部 revision 无有效评测维度且无综合分时整组从 integrated 移除（任一 revision 有数据则整组保留，不误杀主变体）；随抓取数据动态生效，模型日后有数据自动回归。导出: `hasComparisonData, filterEmptyModels`
-- [release-date.js](src/comparison/release-date.js) — 模型 release_date 多源解析 + 14 个月 cutoff 过滤：优先级 llm-stats `release_date` → catalog 反查（tool-preview-level3 + models-alias catalog_aliases 对齐）→ openrouter `created`（Unix 秒兜底）→ null 保守保留；`filterByReleaseCutoff` 在 Elo 前排除早于 cutoff 的模型；生成共享索引 `data/shared/model-release-dates.json`。导出: `isIsoDate, buildReleaseLookup, resolveReleaseDate, filterByReleaseCutoff, buildSharedReleaseIndex`
-- [identity-review.js](src/comparison/identity-review.js) — 名称歧义离线审计 Module：只收集确定性解析未分类 token，协调本地 Bonsai 建议与按阈值升级的 DeepSeek 复核；所有结果强制人工确认，不写正式 alias/数据。导出: `collectReviewCandidates, shouldEscalate, reviewCandidates`
-- [identity-review-ai.js](src/comparison/identity-review-ai.js) — 名称歧义 AI 建议 Adapter：复用结构化 JSON transport，本地 Bonsai 默认、DeepSeek 可显式升级；统一 prompt/schema，ledger 缺失 fail-closed。导出: `suggestIdentityReview`
-- [rebuild-comparison.js](src/comparison/rebuild-comparison.js) — **integrated 重建核心**：只消费统一模型身份解析（厂商限定 `model_key` + 明确 revision 隔离）→ 合并 4 源记录 → 先按 model-exclusions 过滤整系列 → 重新计算 Elo bounds/维度/综合分/性价比 → 系列投影；profile 分数进入 `lmarena_profiles`，不生成选择器行，同厂商同展示名最终强制追加身份消歧，写 index/data.json；排除只影响 integrated，raw 保留。导出: `rebuildIntegrated, collectSourceRecords, slugify, openrouterCanonical, llmStatsCanonical, lmarenaParse, livebenchParse, buildAliasMap, cleanModelDisplay, themeOfDimensions`
-- [run-comparison.js](src/comparison/run-comparison.js) — 抓取编排（cron 每日）：每源独立计数全量 + 失败隔离 WARN + 全绿才重建。导出: `runComparison, fetchSource, isFresh, readConfig`
+## src/comparison/ — 模型对比数据管线（CommonJS；子域化组织，抓取 4 公开源 → 重建 integrated）
+- [index.js](src/comparison/index.js) — comparison 域顶层聚合统一门面。
+- [compare-schema.js](src/comparison/core/compare-schema.js) — 共享契约：源 key、维度键枚举、各源 raw 快照 schema 白名单、口径归一化。
+- [compare-store.js](src/comparison/core/compare-store.js) — raw 快照读写（原子写临时文件 + rename）。
+- [rebuild-canonical.js](src/comparison/core/rebuild-canonical.js) — 多源模型名称、别名与规格确定性规范化。
+- [rebuild-collector.js](src/comparison/core/rebuild-collector.js) — 4 源快照收集聚拢与有效记录过滤。
+- [rebuild-dimensions.js](src/comparison/core/rebuild-dimensions.js) — 维度归一化与模型记录装配。
+- [rebuild-comparison.js](src/comparison/core/rebuild-comparison.js) — integrated 重建主编排器。
+- [run-comparison.js](src/comparison/core/run-comparison.js) — 抓取编排（cron 每日）：每源独立计数全量 + 失败隔离 WARN + 全绿才重建。
+- [core/index.js](src/comparison/core/index.js) — core 子域门面。
+- [compare-http.js](src/comparison/fetch/compare-http.js) — 抓取共享 HTTP 层：合理 UA + 有限重试 + 429 指数退避 + 超时。
+- [fetch-openrouter.js](src/comparison/fetch/fetch-openrouter.js) — OpenRouter 官方免 key models API 抓取。
+- [fetch-lmarena.js](src/comparison/fetch/fetch-lmarena.js) — LMArena 官方数据集抓取。
+- [fetch-livebench.js](src/comparison/fetch/fetch-livebench.js) — LiveBench 官方 CSV 抓取与聚合。
+- [fetch-llm-stats.js](src/comparison/fetch/fetch-llm-stats.js) — llm-stats RSC flight payload 确定性解析。
+- [fetch/index.js](src/comparison/fetch/index.js) — fetch 子域门面。
+- [model-identity.js](src/comparison/identity/model-identity.js) — 模型身份解析深 Module。
+- [identity-review.js](src/comparison/identity/identity-review.js) — 名称歧义离线审计 Module。
+- [identity-review-ai.js](src/comparison/identity/identity-review-ai.js) — 名称歧义 AI 建议 Adapter。
+- [model-exclusions.js](src/comparison/identity/model-exclusions.js) — integrated 重建排除规则深 Module。
+- [empty-model-filter.js](src/comparison/identity/empty-model-filter.js) — 无数据模型自动过滤。
+- [identity/index.js](src/comparison/identity/index.js) — identity 子域门面。
+- [model-series.js](src/comparison/series/model-series.js) — 模型系列分组深 Module。
+- [release-date.js](src/comparison/series/release-date.js) — 模型 release_date 多源解析 + 14 个月 cutoff 过滤。
+- [revision-date.js](src/comparison/series/revision-date.js) — revision 日期规范化。
+- [series/index.js](src/comparison/series/index.js) — series 子域门面。
 
 ## src/maintainer-web/ — 本机维护者前端（原生 HTML/CSS/JS；固定 `/api/workbench/v1/`，不参与公开静态站构建）
 - [index.html](src/maintainer-web/index.html) — 编辑部审核工作台页面骨架；待办概览、新闻首审、关键词提纯生成/采纳、Top 待选池生成/选择/公开投影、新闻摘要→工具/概念 pending 审核与 Catalog/Concept 成本确认闭环、工具更新审核/preview/确认 Apply、概念预览。
@@ -348,4 +356,40 @@
 - [product-registry.js](src/catalog/url-registry/product-registry.js) — 产品官方 URL 与更新源登记模块。
 - [catalog-seed.js](src/pending/catalog-seed.js) — 待补工具候选到 Catalog Seed 的转换。
 - [rules.js](src/pending/rules.js) — 待补候选名称与知识库匹配规则。
+
+## R5-R9 新增实现文件
+- [rebuild-canonical.js](src/comparison/core/rebuild-canonical.js) — 模型对比名称与别名多源规范化。
+- [rebuild-collector.js](src/comparison/core/rebuild-collector.js) — 4 源快照收集聚拢与有效记录过滤。
+- [rebuild-dimensions.js](src/comparison/core/rebuild-dimensions.js) — 评测维度归一化与模型指标装配。
+- [check-secrets.js](src/maintenance/check-secrets.js) — 核心密钥与高熵模式扫描守卫。
+- [news-domain.js](src/maintenance/workbench/news-domain.js) — 维护者工作台新闻首审与处理领域服务。
+- [tool-update-domain.js](src/maintenance/workbench/tool-update-domain.js) — 维护者工作台工具更新审核领域服务。
+- [catalog-domain.js](src/maintenance/workbench/catalog-domain.js) — 维护者工作台目录草稿与待补卡领域服务。
+- [workspace-domain.js](src/maintenance/workbench/workspace-domain.js) — 维护者工作台工作区清理与完成度检查。
+- [api.js](src/maintainer-web/js/api.js) — 维护者平台 API 客户端封装与 revision/token 绑定。
+- [auth.js](src/maintainer-web/js/auth.js) — 维护者平台 URL 片段 Token 解析工具。
+- [state.js](src/maintainer-web/js/state.js) — 维护者平台前端状态管理与 DOM 工具。
+- [common.js](src/maintainer-web/js/panels/common.js) — 维护者平台面板队列卡片通用构建器。
+- [overview-panel.js](src/maintainer-web/js/panels/overview-panel.js) — 维护者平台概览与清空面板。
+- [news-panel.js](src/maintainer-web/js/panels/news-panel.js) — 维护者平台新闻首审流转面板。
+- [keywords-panel.js](src/maintainer-web/js/panels/keywords-panel.js) — 维护者平台关键词提纯面板。
+- [top-panel.js](src/maintainer-web/js/panels/top-panel.js) — 维护者平台 Top 选择与发布预览面板。
+- [knowledge-panel.js](src/maintainer-web/js/panels/knowledge-panel.js) — 维护者平台知识提取与待补卡面板。
+- [catalog-panel.js](src/maintainer-web/js/panels/catalog-panel.js) — 维护者平台目录草稿生成与应用面板。
+- [concept-panel.js](src/maintainer-web/js/panels/concept-panel.js) — 维护者平台概念合成与应用面板。
+- [tool-update-panel.js](src/maintainer-web/js/panels/tool-update-panel.js) — 维护者平台工具更新审核面板。
+- [compare-chips.js](src/web/js/compare-chips.js) — 对比视图已选模型标签与变体选择组件。
+- [compare-dimensions.js](src/web/js/compare-dimensions.js) — 对比视图评测维度与图表重算渲染。
+- [compare-selector.js](src/web/js/compare-selector.js) — 对比视图左侧模型树与筛选选择器。
+- [compare-table.js](src/web/js/compare-table.js) — 对比视图规格与参数对比表格组装器。
+- [data-catalog.js](src/web/js/data-catalog.js) — 前端目录 Interface 统一读取适配层。
+- [data-comparison.js](src/web/js/data-comparison.js) — 前端模型对比数据加载与索引桥接。
+- [data-filters.js](src/web/js/data-filters.js) — 前端工具、场景与概念内存过滤管线。
+- [data-loader.js](src/web/js/data-loader.js) — 前端静态数据异步加载与骨架屏控制器。
+- [modal.js](src/web/js/modal.js) — 全站统一模态框与无障碍焦点管理。
+- [search-index.js](src/web/js/search-index.js) — 搜索三层关键词与概念词边界探测索引。
+- [search-render.js](src/web/js/search-render.js) — 搜索结果下拉面板与高亮卡片渲染。
+- [state.js](src/web/js/state.js) — 前端视图状态与路由回调状态中心。
+- [ui-helpers.js](src/web/js/ui-helpers.js) — 前端安全外链与文本转义通用辅助函数。
+- [ui-icons.js](src/web/js/ui-icons.js) — 前端通用内联 SVG 图标定义。
 

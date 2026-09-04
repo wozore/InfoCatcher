@@ -74,6 +74,7 @@ export function getFilteredTools() {
     }
   }
 
+  // EXTENSION POINT: 新增筛选维度时在此追加过滤条件
   if (state.activeFilters.access !== 'all') filtered = filtered.filter(t => t.access_level === state.activeFilters.access);
   if (state.activeFilters.price === 'free') filtered = filtered.filter(t => t.price_badge === 'free');
   if (state.activeFilters.price === 'paid') filtered = filtered.filter(t => t.price_badge !== 'free');

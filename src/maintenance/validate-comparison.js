@@ -19,12 +19,13 @@ const {
   OPENROUTER_FIELDS,
   LLM_STATS_FIELDS,
   LIVEBENCH_GROUP_FIELDS,
-} = require('../comparison/compare-schema');
-const { normalizedDisplayKey } = require('../comparison/model-identity');
-const { validateExclusionConfig, exclusionForModel } = require('../comparison/model-exclusions');
-const { isIsoDate } = require('../comparison/release-date');
+  normalizedDisplayKey,
+  validateExclusionConfig,
+  exclusionForModel,
+  isIsoDate,
+  validateSeriesProjection,
+} = require('../comparison');
 const { readRetentionState } = require('../shared/retention');
-const { validateSeriesProjection } = require('../comparison/model-series');
 
 // theme 值域（契约 §4：按评测维度自动判定的模型类型分类）
 const THEME_VALUES = ['general', 'image', 'video', 'vision'];
