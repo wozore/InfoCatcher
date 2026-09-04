@@ -10,7 +10,7 @@
 - 在项目根目录执行命令；
 - 目录模块配置的 DeepSeek provider 对应 API Key 环境变量（默认是 `DEEPSEEK_API_KEY`）；
 - 官方资料搜索和正文提取使用 Tavily。目录生成器的联网命令必须显式传入 `--tavily-access-mode keyed`，使用 `TAVILY_API_KEY`；本轮工具卡生成不使用 keyless 模式。缺少 Key 时会在发出请求前 fail-closed；不要把真实 Key 写入 Seed、配置文件、BAT 或目录 JSON。
-- 目录生成器不再使用 DeepSeek `web_search`。Tavily Search 负责发现官方来源，Tavily Extract 负责返回清洗后的正文，DeepSeek 单段式基于官方来源正文合成五层字段与来源 provenance（不再有 AtomicClaim 中间层）。
+- Tavily Search 负责发现官方来源，Tavily Extract 负责返回清洗后的正文，DeepSeek 单段式基于官方来源正文合成五层字段与来源 provenance。
 
 API Key 只通过环境变量读取，不要写入 Seed、配置文件、BAT、草案或目录 JSON。
 
@@ -67,7 +67,7 @@ $env:TAVILY_API_KEY = "你的Tavily_API_Key"
 - API Key 只按职责从环境变量读取：DeepSeek 使用 `DEEPSEEK_API_KEY`，Tavily 使用 `TAVILY_API_KEY`；Key 不进入配置文件。
 - `max_search_queries`、`max_pages`、`max_responses_calls`、`max_synthesis_calls` 是执行前就生效的硬上限；搜索请求、正文 URL 和模型请求均在执行前扣减，额度不足时返回 `COST_BUDGET_EXHAUSTED`。
 - `resume --confirm-cost` 表示维护者授权一组新的增量硬预算；历史消耗仍保留在 Draft 成本账本中，不会被重置。
-- `news` 配置目前只是统一配置预留；新闻现有执行链路仍是旧 Chat Completions，本轮没有迁移到 Tavily。
+- `news` 配置项为新闻链路模块配置。
 
 配置只读取 `modules.catalog`。
 
@@ -78,7 +78,7 @@ $env:TAVILY_API_KEY = "你的Tavily_API_Key"
 | 指令 | 功能 | 网络/API | 是否修改正式目录 |
 |---|---|---|---|
 | `plan --seed <file>` | 离线计算 CatalogProfile、ResearchScope、LayerPlan 和硬成本计划 | 否 | 否 |
-| `prepare --seed <file>` | `plan` 的兼容别名；只输出离线计划 | 否 | 否 |
+| `prepare --seed <file>` | 离线计算 CatalogProfile、ResearchScope、LayerPlan 和硬成本计划 | 否 | 否 |
 | `probe --confirm-cost --tavily-access-mode keyed` | 检查 Tavily 检索和 DeepSeek 合成配置 | 会调用一次 Tavily | 否 |
 | `new --seed <file> --confirm-cost --tavily-access-mode keyed` | 按计划联网研究并生成 schema v3 Preview Draft | 会联网并可能产生费用 | 否 |
 | `resume <draft-id> --confirm-cost --tavily-access-mode keyed` | 只补 FieldCoverage 中仍缺失字段对应的层来源并重新合成 | 会联网并可能产生费用 | 否 |
@@ -135,7 +135,7 @@ bat\catalog-generator.bat probe --confirm-cost --tavily-access-mode keyed
 - `PROFILE_MISMATCH_SUSPECTED`：`api_model` 缺少访问方式、价格徽标或 API 计价等类型成立所必需的字段；继续检索官方 developer/API/pricing/credits 资料，仍找不到时可人工考虑改建为 `product_variant`，生成器不会自动改类；
 - `SYNTHESIS_INVALID` / `LAYER_PATCH_INVALID`：派生字段引用不存在的官方来源、记录字段不完整、存在空值，或字段缺少 provenance；
 - `COST_BUDGET_EXHAUSTED`：某类硬成本额度已耗尽，本次不会继续发请求；可审核已有来源后执行一次明确授权的 `resume --confirm-cost`；
-- `DRAFT_SCHEMA_UNSUPPORTED`：旧 schema Draft 不能进入新的 Review/Apply 路径。
+- `DRAFT_SCHEMA_UNSUPPORTED`：非当前 schema 版本的 Draft 拒绝进入 Review/Apply 路径。
 
 ## 4. 准备 Seed 文件
 
@@ -286,7 +286,7 @@ API 模型会生成三级详情和工具卡；厂商卡、一级、二级是否�
 }
 ```
 
-LayerPlan 对每层独立判定：目标不存在是 `create`；目标存在且列入 `repair_layers` 是 `replace`；目标存在且未列入是 `noop`。兼容旧 `"operation":"replace"`，但它会把五层都视为修复目标，不适合只修模型层。
+LayerPlan 对每层独立判定：目标不存在是 `create`；目标存在且列入 `repair_layers` 是 `replace`；目标存在且未列入是 `noop`。五层均需替换时可将五层均列入 `repair_layers`。
 
 替换不是静默 upsert：目标必须已存在、稳定业务键必须匹配，否则生成器 fail-closed。Review 会显示每个 LayerPatch 的 `create/replace/noop`；Apply 仍使用 revision、preview hash、共同锁、staging、backup、journal 与回滚事务。普通 create 遇到相同 ID 时仍返回 `ID_CONFLICT`。
 
@@ -489,10 +489,10 @@ tool-cards-pending.json
 
 批量生成前把已知来源登记到两个相互引用的文件中：
 
-- `data/manual/archive/official-url-registry.json`：厂商表，只保存厂商级官方文档/API 入口和 `model_prefixes`。
-- `data/manual/archive/official-product-url-registry.json`：产品表，保存 Cursor、Claude Code、图像/音频工具和编程 Agent 等具体产品，通过 `vendor_key` 引用厂商表。
+- `data/manual/registries/official-url-registry.json`：厂商表，只保存厂商级官方文档/API 入口和 `model_prefixes`。
+- `data/manual/registries/official-product-url-registry.json`：产品表，保存 Cursor、Claude Code、图像/音频工具和编程 Agent 等具体产品，通过 `vendor_key` 引用厂商表。
 
-两个文件由 `src/catalog/official-url-registry.js` 统一读取。调用方不需要知道文件拆分：
+两个文件由 `src/catalog/url-registry/official-url-registry.js` 统一读取。调用方不需要知道文件拆分：
 
 - `detailKind=tool`：产品精确名称/词边界前缀优先，再回退厂商名称。
 - `detailKind=api_model`：厂商精确名称/模型前缀优先，特殊产品模型再回退产品精确名称。
@@ -541,7 +541,7 @@ tool-cards-pending.json
 
 第 5 步的日期 Apply 只允许显式 `mode: "advance_update"` 的 `tool.last_updated_date` 向前更新：新日期必须严格晚于当前日期、不晚于 Apply/扫描日，证据日期必须来自官方发布时间 metadata 或正文；模型 `release_date`、套餐、同日、回退、未来日期和非官方来源均拒绝。批量 Apply 先以同一 base revision 生成一份 preview/hash，再重新读取 registry、catalog 和 review queue，逐条确认 `review_status: approved` 与 candidate hash，任一冲突则整批不写入；成功提交只改变目标日期和必要的官方 source 追加，其他字段零漂移。
 
-planner 只接受已登记来源、`detail_kind: tool`、官方 metadata/正文日期、晚于现有 `last_updated_date` 且不晚于扫描日的候选；低置信度、实体/组件错配、日期缺失、未来/同日/回退日期均记录阻断理由。审核条目按 `product_key + source_url + proposed_date + content_hash` 去重，重扫保留人工 `approved/rejected`；同一发布的 evidence hash 变化会重新变为 pending。队列可保存 `review_decision` 与 `decision_source`，旧条目的 `ai_suggestion` 仍兼容；日期只能从持久化 evidence 的发布时间或正文摘录复算，不能只依赖 AI supporting excerpt。队列只保存官方 URL、证据摘录、hash、日期和审核建议，不保存整页正文或凭据。
+planner 只接受已登记来源、`detail_kind: tool`、官方 metadata/正文日期、晚于现有 `last_updated_date` 且不晚于扫描日的候选；低置信度、实体/组件错配、日期缺失、未来/同日/回退日期均记录阻断理由。审核条目按 `product_key + source_url + proposed_date + content_hash` 去重，重扫保留人工 `approved/rejected`；同一发布的 evidence hash 变化会重新变为 pending。队列保存 `review_decision` 与 `decision_source`；日期只能从持久化 evidence 的发布时间或正文摘录复算，不能只依赖 AI supporting excerpt。队列只保存官方 URL、证据摘录、hash、日期和审核建议，不保存整页正文或凭据。
 
 维护命令：
 
@@ -600,7 +600,7 @@ node scripts/catalog-generator.js batch --file data/manual/tools/tool-cards-pend
 
 通用 LLM 模型（`detail_kind=api_model` 且属于政策中的 `general_llm` 家族）在批量 prepare 前由「LLM 二级系列分类政策」决定归属，不再默认以模型名建组：
 
-1. **政策规则源**：`data/manual/archive/llm-series-policy.json` 声明 16 个厂商的模型家族、用途、版本轴、允许的目标二级系列、容量（同系列最多 3 个，第 4 个触发拆分）与证据状态。未知厂商/非法规则一律 fail-closed，绝不回退到以具体模型名建组。
+1. **政策规则源**：`data/manual/registries/llm-series-policy.json` 声明 16 个厂商的模型家族、用途、版本轴、允许的目标二级系列、容量（同系列最多 3 个，第 4 个触发拆分）与证据状态。未知厂商/非法规则一律 fail-closed，绝不回退到以具体模型名建组。
 2. **确定性判定**：`src/catalog/catalog-series-policy.js` 的 `planSeriesPlacement` 用品牌提示/家族 pattern 识别已知 LLM，直接产出 `existing`（加入已有系列）或 `create`（用政策稳定 id/标题新建）。已知模型不需要 AI，零成本。
 3. **AI 只作 hint**：仅当候选用途/家族无法确定性判定（`needs_ai`，如无任何品牌命中的新模型）且显式放行 `allowAiPlacement` 时，才调用 `catalog-series-placement-ai` 输出 `usage_kind/family/cohort/confidence` 建议，再由政策重算最终归属。AI 低置信、未知家族、与政策冲突一律 fail-closed；缺账本、未放行时直接 `PLACEMENT_MANUAL_REQUIRED`，绝不静默建组。
 4. **第 4 个成员触发拆分迁移**：目标系列成员数已达拆分阈值（3）时，新候选返回 `PLACEMENT_MIGRATION_REQUIRED` 并阻断该 seed，**不自动重排既有成员**。需要拆分时由维护者更新政策（声明 newest/last 系列）后执行系列迁移（见下）。
@@ -684,7 +684,7 @@ node scripts/concept-generator.js apply --terms 多智能体  # 只应用指定�
 
 ### vibe-hub 本地缓存与定时刷新
 
-vibe-hub 概念页正文会缓存到 `data/manual/archive/vibe-hub-cache.json`（按 slug，`fetched_at` + TTL 默认 3 天）。命中缓存零请求；未命中/过期才串行抓取（≥500ms 节流）。缓存只省重复抓取、**永不挡新抓取**，也永不成为证据缺失的原因。已上架的**新概念术语**由 cache-miss 自动抓取跟上。
+vibe-hub 概念页正文会缓存到 `data/manual/registries/vibe-hub-cache.json`（按 slug，`fetched_at` + TTL 默认 3 天）。命中缓存零请求；未命中/过期才串行抓取（≥500ms 节流）。缓存只省重复抓取、**永不挡新抓取**，也永不成为证据缺失的原因。已上架的**新概念术语**由 cache-miss 自动抓取跟上。
 
 `.github/workflows/refresh-vibe-hub-cache.yml` 每 3 天（北京 19:00 / UTC 11:00，即 YouTube 采集北京 20:00 前 1h）刷新过期缓存条目并直接提交回 main；空缓存/全新鲜零网络。可手动触发：
 
@@ -716,3 +716,100 @@ node scripts/refresh-vibe-hub-cache.js
 - 失败草案要保留，成功后才删除；
 - 不要提交 `data/manual/tools/catalog-drafts/`、事务 staging 或本地配置；
 - 本流程不会自动提交或推送 Git。
+
+## 15. 维护者批处理入口使用说明（9 个 .bat）
+
+项目在 `bat/` 目录下提供 9 个专供 Windows 维护者操作的批处理入口脚本。脚本均已配置 UTF-8 编码（`chcp 65001`）并自动定位项目根目录，支持双击启动或命令行带参数调用。
+
+### 批处理脚本一览
+
+| 批处理文件 | 业务领域 | 核心职责 | 调用参数 / 交互方式 | 数据写入 / 网络调用 |
+|---|---|---|---|---|
+| `bat\catalog-generator.bat` | 五模块目录 | 交互式/命令行目录生成器 | 交互式输入指令，或 CLI 参数透传 | 联网检索合成；Apply 写入五模块目录 |
+| `bat\concept-generator.bat` | 概念知识库 | 交互式/命令行概念生成器 | 交互式输入指令，或 CLI 参数透传 | 联网补充证据与合成；Apply 写入 glossary.json |
+| `bat\tool-update-review.bat` | 工具更新审核 | 编程工具版本更新审核队列 | 数字菜单交互（1~6, 0）或 CLI 参数透传 | 检查、扫描、预览；Apply 写入工具卡更新日期 |
+| `bat\identity-review.bat` | 模型对比 | 模型身份歧义审计 | 双击运行，零参数 | 零网络、零写入，输出待人工确认的歧义清单 |
+| `bat\build-dist.bat` | 静态站构建 | 重建 `dist/` 部署产物 | 双击运行，零参数 | 清空并重建 `dist/`，零外部网络 |
+| `bat\after-first-review.bat` | 热点初审推进 | 应用初审结论并生成后续清单 | 双击自动寻找 `data\manual\review.json`，或拖拽清单文件到图标 | 两阶段：串行应用初审结论 → 并行生成关键词与 Top 清单 |
+| `bat\apply-keywords.bat` | 热点关键词 | 应用维护者确认的关键词提纯 | 双击自动寻找 `data\manual\keyword-refine.json`，或拖拽清单文件到图标 | 幂等追加到 `news-config-v2.json`，不发布热点 |
+| `bat\apply-top.bat` | 热点发布 | 应用 Top 精选并重建前端 | 双击自动寻找 `data\manual\top.json`，或拖拽清单文件到图标 | 两阶段：置候选层 `top_selected=true` → 重建公开热点与 RSS |
+| `bat\archive-min.bat` | 热点收尾归档 | 归档清空候选层与当日清单 | 双击交互确认（输入 Y/N） | 归档历史、清空候选层与当日人工清单 |
+
+---
+
+### 各批处理脚本详细说明
+
+#### 1. `bat\catalog-generator.bat` —— 五模块目录生成器
+- **用途**：维护者管理与生成五模块目录的综合入口，支持离线计算计划、联网探针、新建草案、恢复草案、查看草案、删除记录与事务恢复。
+- **用法**：
+  - 双击运行：展示中文操作指令菜单，输入指令与参数后执行；
+  - 命令行调用：`bat\catalog-generator.bat <command> [options]`，所有参数直接透传至 `node scripts\catalog-generator.js`。
+- **常用指令**：
+  - `plan --seed <file>`：离线计算 CatalogProfile 与成本计划（零网络）；
+  - `new --seed <file> --confirm-cost --tavily-access-mode keyed`：联网研究并生成 Preview 草案；
+  - `apply <draft-id>`：确认后原子写入五模块目录；
+  - `batch --file <pending.json> --dry-run`：批量解析与成本预览；
+  - `recover`：恢复异常中断的目录事务。
+
+#### 2. `bat\concept-generator.bat` —— AI 概念知识库生成器
+- **用途**：将热点反哺或人工准备的待补概念卡转为正式 `glossary.json` 条目。与工具目录不同，概念批处理不会自动 Apply，始终停在预览阶段供维护者确认。
+- **用法**：
+  - 双击运行：展示中文指令菜单；
+  - 命令行调用：`bat\concept-generator.bat <command> [options]`，透传至 `node scripts\concept-generator.js`。
+- **常用指令**：
+  - `batch --file <pending.json> --dry-run`：查重与本地证据校验（零网络零费用）；
+  - `batch --file <pending.json> --confirm-cost`：抓取 vibe-hub 补充证据并由 DeepSeek 合成，输出 `concept-previews.json`；
+  - `preview`：查看当前概念预览；
+  - `apply [--terms a,b]`：将预览写入正式 `glossary.json`。
+
+#### 3. `bat\tool-update-review.bat` —— 编程工具更新审核队列
+- **用途**：维护已登记编程工具的官方更新日期的审计与向前更新推进。
+- **用法**：
+  - 双击运行：进入控制台交互菜单（1 环境检查、2 确定性扫描、3 打开审核 JSON、4 预览日期变更、5 Apply 日期变更、6 混合扫描、0 退出）；
+  - 命令行调用：`bat\tool-update-review.bat <subcommand> [flags]`。
+- **安全约束**：
+  - 确定性扫描永不调用 AI；
+  - Apply 需输入 `expected-revision` 与 `preview-hash`，仅允许向后推进 `last_updated_date`，模型 `release_date` 绝不修改。
+
+#### 4. `bat\identity-review.bat` —— 模型对比身份歧义审计
+- **用途**：对模型对比数据源中的模型名称进行交叉比对，识别潜在的同名不同版本、命名冲突或映射缺失。
+- **用法**：双击运行即可，内部执行 `node scripts\fetch-comparison.js review`。
+- **安全约束**：零网络调用、零数据写入；仅在控制台输出待审清单，绝不自动改写 `models-alias.json`。
+
+#### 5. `bat\build-dist.bat` —— 静态站全量构建
+- **用途**：将 `src/web` 前端资源、`public` 公共资产与已生成的 `data/` 正式数据整体构建至 `dist/` 目录，供 GitHub Pages 部署或本地预览。
+- **用法**：双击运行即可，内部执行 `node scripts\build-dist.js`。
+- **安全约束**：`dist/` 为派生产物，严禁手工修改其内部文件；任何源码或数据改动后均需通过此入口重建。
+
+#### 6. `bat\after-first-review.bat` —— 热点初审推进
+- **用途**：维护者完成 `data\manual\review.json` 第一次人工审核后，一键推进后续处理。
+- **用法**：
+  1. 双击运行：自动查找 `data\manual\review.json` 并应用；
+  2. 拖拽文件：将任意有效的 `review.json` 拖到脚本图标上运行。
+- **内部两阶段执行**：
+  - **第 1 步（串行）**：执行 `node scripts\news-cli.js min-review apply --file <清单>`，应用初审结论；若失败立即终止；
+  - **第 2 步（并行）**：执行 `node scripts\run-after-first-review.js`，并行生成关键词提纯清单（`keyword-refine.json`）与 AI Top 候选清单（`top.json`）。任一失败则整体失败。
+
+#### 7. `bat\apply-keywords.bat` —— 热点关键词应用
+- **用途**：维护者在 `data\manual\keyword-refine.json` 中标记 `adopted_keywords` 后，将采纳的关键词应用到配置。
+- **用法**：
+  1. 双击运行：自动查找 `data\manual\keyword-refine.json`；
+  2. 拖拽文件：将 `keyword-refine.json` 拖拽到脚本图标上运行。
+- **安全约束**：内部执行 `min-review refine-apply`，仅幂等追加关键词到 `news-config-v2.json`，供后续采集使用；不发布热点，不构建 `dist`。
+
+#### 8. `bat\apply-top.bat` —— 热点 Top 应用与发布
+- **用途**：维护者在 `data\manual\top.json` 中确认 `top_selected` 标记后，一键写入候选层并发布到前端。
+- **用法**：
+  1. 双击运行：自动查找 `data\manual\top.json`；
+  2. 拖拽文件：将 `top.json` 拖拽到脚本图标上运行。
+- **内部两阶段执行**：
+  - **第 1 步**：执行 `node scripts\news-cli.js min-review top-apply --file <清单>`，将 `top_selected=true` 写回候选层；
+  - **第 2 步**：执行 `node scripts\publish-news.js`，从候选层重建公开热点（`hotspots.json`）与 RSS（`feed.xml`）。
+
+#### 9. `bat\archive-min.bat` —— 热点收尾归档
+- **用途**：维护者确认当天审核、提纯、Top 发布全流程完成后，归档历史并清空候选层与工作区。
+- **用法**：双击运行，控制台会给出明确安全提示并要求输入 `Y` 确认。
+- **安全约束**：
+  - 操作不可逆：归档历史只保留每条候选的 `id` 与 `title`，无法恢复完整内容；
+  - 自动清理 `data\manual\` 下的当日清单（`review.json`、`transcript-requests.json`、`keyword-refine.json`、`top.json` 等）；
+  - 未输入 `Y` 确认则立即取消，不改变任何数据。

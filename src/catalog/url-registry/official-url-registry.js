@@ -2,13 +2,13 @@
  * official-url-registry.js —— 批量生成前置：人工官方 URL 登记表
  *
  * 在批量生成链路（②→③）中的位置：厂商/官方源解析的第一道命中源。
- * 维护者把已知工具的官方域名人工登记到 data/manual/archive/official-url-registry.json，
+ * 维护者把已知工具的官方域名人工登记到 data/manual/registries/official-url-registry.json，
  * 批量生成时优先查表，命中就不必花 Tavily/DeepSeek 去搜索解析。
  *
  * 数据形状：
- *   厂商表 data/manual/archive/official-url-registry.json：
+ *   厂商表 data/manual/registries/official-url-registry.json：
  *   { schema_version: 1, entries: { "<vendor_key>": { vendor_name, official_urls: [], aliases?: [], model_prefixes?: [] } } }
- *   产品表 data/manual/archive/official-product-url-registry.json：
+ *   产品表 data/manual/registries/official-product-url-registry.json：
  *   { schema_version: 1, products: { "<product_key>": { name, vendor_key, official_urls: [], update_sources?: [], aliases?: [], product_prefixes?: [], lifecycle, last_verified_at? } } }
  *   update_sources 是更新链路专用来源；GitHub URL 始终是 github.com 人类网页，REST endpoint 由后续 collector 根据 repository 构造。
  *   product_prefixes 采用词边界匹配，model_prefixes 保留旧 startsWith 兼容。

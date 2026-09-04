@@ -12,7 +12,7 @@
  *   - 先查本地缓存，命中且未过 TTL 直接返回（零请求）；未命中/过期才 GET
  *   - 请求串行 + ≥500ms 节流（尊重站点负载），User-Agent + AbortSignal.timeout
  *   - 404/网络/超时 → 返回 null（静默跳过，不阻塞概念合成；approved 摘要才是主证据）
- *   - 缓存 `data/manual/archive/vibe-hub-cache.json`，TTL 默认 3 天；缓存只省重复抓取、
+ *   - 缓存 `data/manual/registries/vibe-hub-cache.json`，TTL 默认 3 天；缓存只省重复抓取、
  *     永不挡新抓取，也永不成为证据缺失的原因
  *
  * 提取以页面 JSON-LD `<script id="vibehub-page-jsonld">` 的 DefinedTerm 为主

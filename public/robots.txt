@@ -2,5 +2,4 @@ Sitemap: https://wozore.github.io/KnowView/sitemap.xml
 User-agent: *
 Allow: /
 
-Disallow: /data/news/sources/
 Disallow: /data/news/runtime/

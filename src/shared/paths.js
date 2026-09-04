@@ -18,7 +18,8 @@ const COMPARISON_DIR = path.join(DATA_DIR, 'comparison'); // 模型对比：独�
 const COMPARISON_RAW_DIR = path.join(COMPARISON_DIR, 'raw'); // 4 源原样快照（管线写，前端不读）
 const COMPARISON_INTEGRATED_DIR = path.join(COMPARISON_DIR, 'integrated'); // 前端唯一入口层（管线重建，前端只读）
 const SHARED_DIR = path.join(DATA_DIR, 'shared'); // 跨模块共享数据段（comparison 写 / catalog 读，只数据耦合不代码耦合）
-const ARCHIVE_DIR = path.join(DATA_DIR, 'manual', 'archive'); // 喂 AI 搜索的历史数据（缓存/登记表）
+const REGISTRIES_DIR = path.join(DATA_DIR, 'manual', 'registries'); // 官方登记表与政策（URL/产品登记表、系列政策与 vibe-hub 缓存）
+const ARCHIVE_DIR = REGISTRIES_DIR; // 向后兼容只读别名
 const TOOLS_DIR = path.join(DATA_DIR, 'manual', 'tools'); // 工具链路工作目录
 const CONCEPTS_DIR = path.join(DATA_DIR, 'manual', 'concepts'); // 概念链路工作目录
 const FIXTURE_DIR = path.join(TESTS_DIR, 'fixtures');
@@ -45,10 +46,22 @@ const DIRS = Object.freeze({
   comparisonIntegrated: COMPARISON_INTEGRATED_DIR,
   shared: SHARED_DIR, // 跨模块共享数据段（retention / model-release-dates）
   fixtures: FIXTURE_DIR,
-  archive: ARCHIVE_DIR, // 喂 AI 搜索的历史数据（缓存/登记表）
+  registries: REGISTRIES_DIR, // 官方登记表与政策（URL/产品登记表、系列政策与 vibe-hub 缓存）
+  archive: ARCHIVE_DIR, // 向后兼容只读别名
   tools: TOOLS_DIR, // 工具链路工作目录（工具种子/草稿/工具待补卡）
   concepts: CONCEPTS_DIR, // 概念链路工作目录（概念待补卡/合成预览）
   manual: path.join(DATA_DIR, 'manual'), // 新闻人工清单（review/top/keyword-refine/transcript-requests）
+});
+
+const REGISTRIES_FILES = Object.freeze({
+  urlRegistry: path.join(REGISTRIES_DIR, 'official-url-registry.json'), // 厂商/模型人工官方 URL 登记表
+  productUrlRegistry: path.join(REGISTRIES_DIR, 'official-product-url-registry.json'), // AI 产品官方 URL 登记表
+  seriesPolicy: path.join(REGISTRIES_DIR, 'llm-series-policy.json'), // 厂商 LLM 系列分类政策
+  vibeHubCache: path.join(REGISTRIES_DIR, 'vibe-hub-cache.json'), // vibe-hub 概念页本地缓存
+});
+
+const DATA_FILES = Object.freeze({
+  registries: REGISTRIES_FILES,
 });
 
 const CATALOG_FILES = Object.freeze({
@@ -64,8 +77,8 @@ const CATALOG_FILES = Object.freeze({
 
 const CATALOG_GENERATOR_FILES = Object.freeze({
   draftsDir: path.join(TOOLS_DIR, 'catalog-drafts'),
-  urlRegistry: path.join(ARCHIVE_DIR, 'official-url-registry.json'), // 厂商/模型人工官方 URL 登记表（批量解析第一道命中源）
-  productUrlRegistry: path.join(ARCHIVE_DIR, 'official-product-url-registry.json'), // AI 产品官方 URL 登记表（由 registry Module 统一读取）
+  urlRegistry: REGISTRIES_FILES.urlRegistry, // 厂商/模型人工官方 URL 登记表（批量解析第一道命中源）
+  productUrlRegistry: REGISTRIES_FILES.productUrlRegistry, // AI 产品官方 URL 登记表（由 registry Module 统一读取）
   batchSeedsPreview: path.join(TOOLS_DIR, 'batch-seeds-preview.json'), // 工具 batch dry-run 解析预览
   pendingTools: path.join(TOOLS_DIR, 'tool-cards-pending.json'), // 工具待补卡（feedback 产物，batch 输入）
   localConfig: AI_CONFIG_FILES.local,
@@ -78,12 +91,12 @@ const CATALOG_GENERATOR_FILES = Object.freeze({
   audit: path.join(CATALOG_DIR, '.transactions', 'audit.json'),
   dateAudit: path.join(TOOLS_DIR, 'catalog-date-audit.json'), // 日期语义审计清单（只读正式 catalog 后生成）
   toolUpdateReview: path.join(TOOLS_DIR, 'tool-update-review.json'), // 编程工具更新人工审核清单（后续步骤使用）
-  seriesPolicy: path.join(ARCHIVE_DIR, 'llm-series-policy.json'), // 厂商 LLM 系列分类政策（阶段 1 政策契约，阶段 2 迁移与阶段 4 AI 分类规则源）
+  seriesPolicy: REGISTRIES_FILES.seriesPolicy, // 厂商 LLM 系列分类政策（阶段 1 政策契约，阶段 2 迁移与阶段 4 AI 分类规则源）
 });
 
 const CONCEPT_FILES = Object.freeze({
   previews: path.join(CONCEPTS_DIR, 'concept-previews.json'), // 概念批量：DeepSeek 合成预览（待维护者 apply）
-  vibeHubCache: path.join(ARCHIVE_DIR, 'vibe-hub-cache.json'), // 概念批量：vibe-hub 概念页本地缓存（TTL 3 天）
+  vibeHubCache: REGISTRIES_FILES.vibeHubCache, // 概念批量：vibe-hub 概念页本地缓存（TTL 3 天）
   pendingConcepts: path.join(CONCEPTS_DIR, 'concept-cards-pending.json'), // 概念待补卡（feedback 产物，batch 输入）
 });
 
@@ -126,4 +139,16 @@ const SHARED_FILES = Object.freeze({
 
 const RSS_FEED_PATH = path.join(PUBLIC_DIR, 'feed.xml');
 
-module.exports = { DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, CONCEPT_FILES, AI_CONFIG_FILES, NEWS_FILES, COMPARISON_FILES, SHARED_FILES, RSS_FEED_PATH };
+module.exports = {
+  DIRS,
+  CATALOG_FILES,
+  CATALOG_GENERATOR_FILES,
+  CONCEPT_FILES,
+  AI_CONFIG_FILES,
+  NEWS_FILES,
+  COMPARISON_FILES,
+  SHARED_FILES,
+  REGISTRIES_FILES,
+  DATA_FILES,
+  RSS_FEED_PATH,
+};

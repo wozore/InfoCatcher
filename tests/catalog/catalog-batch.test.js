@@ -98,7 +98,7 @@ test('resolveBatchCandidates 三路：登记表命中 / 解析成功 / unresolve
 });
 
 test('resolveBatchCandidates 将 detail_kind_hint 传入双表 lookup', async () => {
-  const registry = require('../../data/manual/archive/official-url-registry.json');
+  const registry = require('../../data/manual/registries/official-url-registry.json');
   const productRegistry = loadProductUrlRegistry();
   const result = await resolveBatchCandidates(
     [{ name: 'Claude Code 2.1', detail_kind_hint: 'tool' }],
@@ -115,7 +115,7 @@ test('resolveBatchCandidates 将 detail_kind_hint 传入双表 lookup', async ()
 });
 
 test('resolveBatchCandidates 兼容旧待补卡：带版本号模型误标 tool 时回退 api_model 登记表', async () => {
-  const registry = require('../../data/manual/archive/official-url-registry.json');
+  const registry = require('../../data/manual/registries/official-url-registry.json');
   const cards = ['Qwen3.8-Max', 'DeepSeek V4-Flash', 'Gemini 3.5 Pro', 'Qwen 3.8 Max', 'GPT 5.6', 'DeepSeek V4 Pro', 'GLM 5.2', 'Qwen3.7-Max']
     .map(name => ({ name, detail_kind_hint: 'tool', review_status: 'approved' }));
   const result = await resolveBatchCandidates(cards, {
@@ -335,7 +335,7 @@ test('official-url-registry vendor registry ignores product prefixes and keeps m
 });
 
 test('official-url-registry 产品条目支持正式目录工具和主流 Agent 名称', () => {
-  const registry = require('../../data/manual/archive/official-url-registry.json');
+  const registry = require('../../data/manual/registries/official-url-registry.json');
   const productRegistry = loadProductUrlRegistry();
   const names = [
     ['Cursor', 'Anysphere'],
@@ -373,7 +373,7 @@ test('official-url-registry 产品条目支持正式目录工具和主流 Agent 
 });
 
 test('official-url-registry detailKind 决定产品与厂商模型的优先级', () => {
-  const registry = require('../../data/manual/archive/official-url-registry.json');
+  const registry = require('../../data/manual/registries/official-url-registry.json');
   const productRegistry = loadProductUrlRegistry();
   const toolHit = lookupOfficialUrl('Claude Code 2.1', { registry, productRegistry, detailKind: 'tool' });
   assert.equal(toolHit.ok, true);
