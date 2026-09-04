@@ -5,21 +5,13 @@
  * 每行展示场景图标、名称、去重后的工具数量和简介；点击后展开任务—工具映射。
  * 架构概要、八个视图与扩展模式见 main.js 顶部维护文档。
  */
-import {
-  tools,
-  scenes,
-  getToolCardItem,
-  getToolLevel3Item,
-  dataLoadFailures,
-  getFilteredScenes,
-  setRegionBusy,
-  renderState,
-  escapeHtml,
-  getToolDateDisplay,
-  getToolDetailKindLabel,
-} from './data.js';
+import { state, dataLoadFailures } from './state.js';
+import { getToolCardItem, getToolLevel3Item } from './data-catalog.js';
+import { getFilteredScenes } from './data-filters.js';
+import { setRegionBusy, renderState, escapeHtml } from './ui-helpers.js';
+import { getToolDateDisplay, getToolDetailKindLabel } from './date-display.mjs';
 import { isComparableLeaf, isCompareSelected } from './compare.js';
-import { markConceptsIn } from './search.js';
+import { markConceptsIn } from './search-render.js';
 import { renderPriceTag, renderAccessTag } from './tool-cards.js';
 import { brandIconHtml } from './brand-icons.js';
 
@@ -86,7 +78,7 @@ function renderScenes() {
   if (!picker || !detail) return;
   setRegionBusy(detail, false);
 
-  if (!scenes.length) {
+  if (!state.scenes.length) {
     const sceneState = dataLoadFailures.has('scenes')
       ? renderState({ icon: '⚠️', title: '场景数据加载失败', message: '请刷新页面重试；其他资料视图仍可继续使用。', type: 'error' })
       : renderState({ icon: '○', title: '暂无场景数据', message: '当前公开资料中还没有可展示的场景。', type: 'unavailable' });
@@ -119,7 +111,7 @@ function renderScenes() {
 function renderSceneDetail() {
   const detail = document.getElementById('sceneDetail');
   if (!detail) return;
-  const scene = scenes.find(item => item.id === activeSceneId);
+  const scene = state.scenes.find(item => item.id === activeSceneId);
   if (!scene) return;
   const palette = scenePalette[scene.category] || scenePalette.learning;
   const toolIds = getSceneToolIds(scene);

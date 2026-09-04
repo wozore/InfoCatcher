@@ -1,4 +1,4 @@
-import { escapeHtml } from './data.js';
+import { escapeHtml } from './ui-helpers.js';
 import { brandIconHtml } from './brand-icons.js';
 
 function renderPriceTag(value) {

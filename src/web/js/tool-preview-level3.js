@@ -1,4 +1,6 @@
-import { escapeHtml, safeExternalUrl, formatPrice, renderTimelinessBadge, getToolDateDisplay, ICON_ARROW_LEFT, ICON_EXTERNAL } from './data.js';
+import { escapeHtml, safeExternalUrl, formatPrice, renderTimelinessBadge } from './ui-helpers.js';
+import { getToolDateDisplay } from './date-display.mjs';
+import { ICON_ARROW_LEFT, ICON_EXTERNAL } from './ui-icons.js';
 import { brandIconHtml } from './brand-icons.js';
 
 function notApplicableHtml(title, value) {

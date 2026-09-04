@@ -1,4 +1,5 @@
-import { escapeHtml, safeExternalUrl, ICON_EXTERNAL } from './data.js';
+import { escapeHtml, safeExternalUrl } from './ui-helpers.js';
+import { ICON_EXTERNAL } from './ui-icons.js';
 import { brandIconHtml } from './brand-icons.js';
 
 function renderVendorLevel1(request = {}) {

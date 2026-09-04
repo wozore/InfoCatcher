@@ -10,12 +10,10 @@
 import {
   getToolCardItems,
   getToolLevel3Item,
-  featuredPicks,
-  dataLoadFailures,
   getToolCardItem,
-  renderState,
-  escapeHtml,
-} from './data.js';
+} from './data-catalog.js';
+import { state, dataLoadFailures } from './state.js';
+import { renderState, escapeHtml } from './ui-helpers.js';
 import { renderAccessTag } from './tool-cards.js';
 import { brandIconHtml } from './brand-icons.js';
 
@@ -119,7 +117,7 @@ function renderEditorPicksForCat() {
   const grid = document.getElementById('featuredPicksGrid');
   if (!grid) return;
   const cat = FEATURED_CATEGORIES.find(c => c.key === activeEditorCat);
-  const picks = featuredPicks
+  const picks = state.featuredPicks
     .filter(p => p.category === activeEditorCat)
     .map(p => ({ ...p, tool: getToolCardItem(p.tool_id) }))
     .filter(p => p.tool);

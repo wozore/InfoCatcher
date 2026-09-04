@@ -1,35 +1,13 @@
 /**
  * 知览 KnowView MVP — AI 热点视图 (trending)：
  * 内容类型筛选 + 最近/热度排序, 按唯一内容发布时间分组
- *
- * 安全设计：
- *   所有来自外部平台（YouTube/X）的文本字段（标题、描述、
- *   作者名、来源名）在渲染前都通过 escapeHtml() 转义，防止 XSS。
- *   所有外部链接通过 safeExternalUrl() 校验协议，只允许 http/https。
- *   这两个函数是安全边界——如果去掉，恶意内容可注入 <script> 或
- *   javascript: 链接。
- *
- * 筛选与展示：
- *   getFilteredTrending() — 按内容类型筛选，按唯一内容发布时间倒序（实现在 data.js）
- *   renderTrendingStatus() — 渲染采集覆盖状态（降级/未运行/人工收录）
- *   renderTrending() — 渲染热点卡片（公开字段，按“今天/昨天/近7天/更早”分组）
- *   openHotspotDetail() — 热点详情对话框（摘要 + 来源核验 + 关联资料三段式；平台只在来源层展示）
  * 架构概要、八个视图与扩展模式见 main.js 顶部维护文档。
  */
+
+import { state, dataLoadFailures } from './state.js';
+import { showModal, closeModal, setModalScrollPosition } from './modal.js';
+import { getFilteredTrending, getHotspotHeat } from './data-filters.js';
 import {
-  tools,
-  glossary,
-  scenes,
-  hotspots,
-  activeTrendingType,
-  dataLoadFailures,
-  setHotspots,
-  setActiveTrendingType,
-  getFilteredTrending,
-  getHotspotHeat,
-  platformMeta,
-  contentTypeLabels,
-  SOURCE_TYPE_LABELS,
   escapeHtml,
   safeExternalUrl,
   timeAgo,
@@ -37,44 +15,61 @@ import {
   renderState,
   setRegionBusy,
   announceStatus,
-  searchConceptKey,
-  getToolCardItem,
-  getToolLevel3Item,
-  ICON_CLOSE,
-  ICON_EXTERNAL,
-} from './data.js';
-import { showModal, closeModal, setModalScrollPosition } from './tools.js';
+} from './ui-helpers.js';
+import { ICON_CLOSE, ICON_EXTERNAL } from './ui-icons.js';
+import { getToolCardItem, getToolLevel3Item } from './data-catalog.js';
 import { t, getLocalizedField } from './i18n.js';
 
-// ═══════════════════════════════════════════════════════════════
-// 筛选、排序与状态
-// ═══════════════════════════════════════════════════════════════
+const platformMeta = {
+  youtube: { label: t('labels.platform.youtube'), icon: '▶️' },
+  x: { label: t('labels.platform.x'), icon: '𝕏' },
+};
 
-function renderTrendingTypeFilters() {
-  const container = document.getElementById('trendingTypeTabs');
-  if (!container) return;
-  // B16 决策 65/79：只把真实内容类型作为筛选维度；unclassified（AI 分类+审核未上线）
-  // 与未知值不作为筛选标签。无真实类型时隐藏整个“内容类型”筛选区（决策 80 空状态）。
-  const types = [...new Set((hotspots.items || []).map(item => item.content_type).filter(type => type && type !== 'unclassified'))];
-  const filterSet = container.closest('.trending-filter-set');
-  if (filterSet) filterSet.hidden = types.length === 0;
-  if (activeTrendingType !== 'all' && !types.includes(activeTrendingType)) setActiveTrendingType('all');
-  container.innerHTML = '<button class="filter-chip' + (activeTrendingType === 'all' ? ' active' : '') + '" type="button" data-content-type="all" aria-pressed="' + (activeTrendingType === 'all') + '" data-i18n="trending.filter.allTypes">' + t('trending.filter.allTypes') + '</button>' +
-    types.map(type => '<button class="filter-chip' + (activeTrendingType === type ? ' active' : '') + '" type="button" data-content-type="' + escapeHtml(type) + '" aria-pressed="' + (activeTrendingType === type) + '">' + escapeHtml(contentTypeLabels[type] || type) + '</button>').join('');
+const contentTypeLabels = {
+  ai_tool: t('labels.contentType.ai_tool'),
+  ai_product: t('labels.contentType.ai_product'),
+  ai_concept: t('labels.contentType.ai_concept'),
+  ai_technology: t('labels.contentType.ai_technology'),
+  ai_industry: t('labels.contentType.ai_industry'),
+  other: t('labels.contentType.other'),
+  unclassified: t('labels.contentType.unclassified')
+};
+
+const SOURCE_TYPE_LABELS = {
+  youtube_video: t('labels.sourceType.youtube_video'),
+  x_post: t('labels.sourceType.x_post'),
+  unknown: t('labels.sourceType.unknown')
+};
+
+function searchConceptKey(term) {
+  const normalized = String(term || '').trim().toLocaleLowerCase('zh-CN').normalize('NFKC').replace(/[^\p{Letter}\p{Number}]+/gu, '-').replace(/^-+|-+$/g, '');
+  return normalized ? 'concept-' + normalized : 'concept-unknown';
 }
 
-function renderTrendingStatus() {
+export function renderTrendingTypeFilters() {
+  const container = document.getElementById('trendingTypeTabs');
+  if (!container) return;
+  const types = [...new Set((state.hotspots.items || []).map(item => item.content_type).filter(type => type && type !== 'unclassified'))];
+  const filterSet = container.closest('.trending-filter-set');
+  if (filterSet) filterSet.hidden = types.length === 0;
+  if (state.activeTrendingType !== 'all' && !types.includes(state.activeTrendingType)) state.activeTrendingType = 'all';
+  container.innerHTML = '<button class="filter-chip' + (state.activeTrendingType === 'all' ? ' active' : '') + '" type="button" data-content-type="all" aria-pressed="' + (state.activeTrendingType === 'all') + '" data-i18n="trending.filter.allTypes">' + t('trending.filter.allTypes') + '</button>' +
+    types.map(type => '<button class="filter-chip' + (state.activeTrendingType === type ? ' active' : '') + '" type="button" data-content-type="' + escapeHtml(type) + '" aria-pressed="' + (state.activeTrendingType === type) + '">' + escapeHtml(contentTypeLabels[type] || type) + '</button>').join('');
+}
+
+export function renderTrendingStatus() {
   const status = document.getElementById('trendingStatus');
-  const coverage = hotspots.coverage;
+  if (!status) return;
+  const coverage = state.hotspots.coverage;
   if (dataLoadFailures.has('hotspots')) {
     status.innerHTML = '<div class="status-note status-error" role="alert"><strong>' + t('trending.status.loadFailed') + '</strong></div>';
     return;
   }
-  if (!(hotspots.items || []).length && !hotspots.generated_at && (!coverage || coverage.status === 'not_run')) {
+  if (!(state.hotspots.items || []).length && !state.hotspots.generated_at && (!coverage || coverage.status === 'not_run')) {
     status.innerHTML = '<div class="status-note status-neutral" role="status"><strong>' + t('trending.status.building') + '</strong></div>';
     return;
   }
-  if (!(hotspots.items || []).length) {
+  if (!(state.hotspots.items || []).length) {
     status.innerHTML = '<div class="status-note status-neutral" role="status"><strong>' + t('trending.status.empty') + '</strong></div>';
     return;
   }
@@ -84,8 +79,6 @@ function renderTrendingStatus() {
   }
   const notes = [];
   const degraded = [];
-  // v2 结构 coverage.collectors.{youtube,x}。publish-news 写入的 coverage 无平台明细
-  // （如 status='published_min'）→ degraded 为空，落到中性「采集完成」。
   const sources = coverage.collectors || {};
   for (const [platform, info] of Object.entries(sources)) {
     if (info && (info.status === 'partial' || info.status === 'failed' || info.status === 'degraded')) {
@@ -100,103 +93,95 @@ function renderTrendingStatus() {
     : '<div class="status-note status-ok" role="status"><strong>' + t('trending.status.collectComplete') + '</strong></div>';
 }
 
-// B16 决策 85：热度说明通过低权重信息提示查看；默认不展示热度数值或排名。
-function renderTrendingSortHelp() {
+export function renderTrendingSortHelp() {
   const help = document.getElementById('trendingSortHelp');
   if (!help) return;
-  const hasHeat = (hotspots.items || []).some(item => getHotspotHeat(item) !== null);
-  help.textContent = hasHeat
-    ? t('trending.sort.helpWithHeat')
-    : t('trending.sort.helpWithoutHeat');
+  const hasHeat = (state.hotspots.items || []).some(item => getHotspotHeat(item) !== null);
+  help.textContent = hasHeat ? t('trending.sort.helpWithHeat') : t('trending.sort.helpWithoutHeat');
 }
 
-// 决策 80：筛选无匹配时“清除筛选”，重置内容类型筛选（平台已非列表级筛选维度），保留排序选择。
-function clearTrendingFilters() {
-  const changed = activeTrendingType !== 'all';
-  setActiveTrendingType('all');
+export function clearTrendingFilters() {
+  const changed = state.activeTrendingType !== 'all';
+  state.activeTrendingType = 'all';
   setRegionBusy(document.getElementById('trendingGrid'), true);
   renderTrending();
   if (changed) announceStatus(t('trending.filter.cleared'));
 }
 
-// 决策 80：热点数据加载失败时“重新加载”，重新拉取公开投影；失败时保留上一版数据并保持失败状态。
-async function reloadHotspots() {
+export async function reloadHotspots() {
   const grid = document.getElementById('trendingGrid');
   const status = document.getElementById('trendingStatus');
   setRegionBusy(grid, true);
   if (status) status.innerHTML = '<div class="status-note status-neutral" role="status"><strong>' + t('trending.status.reloading') + '</strong></div>';
   try {
     const resp = await fetch('data/news/output/hotspots.json');
-    if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    setHotspots(await resp.json());
+    if (!resp.ok) throw new Error('hotspots HTTP ' + resp.status);
+    state.hotspots = await resp.json();
     dataLoadFailures.delete('hotspots');
+    renderTrending();
     announceStatus(t('trending.status.reloaded'));
   } catch (error) {
     dataLoadFailures.add('hotspots');
+    renderTrending();
     announceStatus(t('trending.status.reloadFailed'));
+  } finally {
+    setRegionBusy(grid, false);
   }
-  renderTrending();
 }
 
-// ═══════════════════════════════════════════════════════════════
-// 卡片渲染
-// ═══════════════════════════════════════════════════════════════
-
-function renderHotspotMetrics(item) {
-  if (!item.metrics) return [];
-  return [['views', t('trending.metric.views')], ['likes', t('trending.metric.likes')], ['comments', t('trending.metric.comments')], ['reposts', t('trending.metric.reposts')], ['replies', t('trending.metric.replies')]]
-    .map(([key, label]) => {
-      const value = formatMetric(item.metrics[key]);
-      return value === null ? null : { label, value };
-    })
-    .filter(Boolean);
+export function formatHotspotDate(value) {
+  if (!value) return t('timeAgo.unknown');
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return String(value);
+  return d.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }) + ' ' +
+    d.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', hour12: false });
 }
 
-function formatHotspotDate(value, fallback = t('timeAgo.unknown')) {
-  const date = new Date(value);
-  return Number.isFinite(date.getTime())
-    ? date.toLocaleString('zh-CN', { dateStyle: 'medium', timeStyle: 'short' })
-    : fallback;
-}
-
-// 决策 78：按热点实体唯一内容发布时间轻量分组（今天/昨天/近 7 天/更早；无效时间归“时间未知”）
-function getTrendingGroupLabel(item) {
+export function getTrendingGroupLabel(item) {
   const time = new Date(item.published_at).getTime();
   if (!Number.isFinite(time)) return t('labels.group.unknown');
-  const diff = Date.now() - time;
-  const day = 86400000;
-  if (diff < 0 || diff < day) return t('labels.group.today');
-  if (diff < 2 * day) return t('labels.group.yesterday');
-  if (diff < 7 * day) return t('labels.group.last7d');
+  const now = new Date();
+  const itemDate = new Date(time);
+  const isSameDay = (d1, d2) => d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
+  if (isSameDay(now, itemDate)) return t('labels.group.today');
+  const yesterday = new Date(now);
+  yesterday.setDate(yesterday.getDate() - 1);
+  if (isSameDay(yesterday, itemDate)) return t('labels.group.yesterday');
+  const diffDays = (now.getTime() - time) / 86400000;
+  if (diffDays <= 7) return t('labels.group.last7d');
   return t('labels.group.earlier');
 }
 
-// 决策 74/77/87：卡片默认只显示内容类型、标题、短摘要、时间线索与低权重详情入口；
-// 平台、作者、互动、来源标签移入详情对话框，不占卡片默认区。
-function renderTrendingCard(item) {
+export function renderHotspotMetrics(metrics) {
+  if (!metrics || typeof metrics !== 'object') return '';
+  const parts = [];
+  if (metrics.views != null) parts.push(formatMetric(metrics.views) + ' 播放');
+  if (metrics.likes != null) parts.push(formatMetric(metrics.likes) + ' 点赞');
+  if (metrics.replies != null) parts.push(formatMetric(metrics.replies) + ' 回复');
+  if (metrics.reposts != null) parts.push(formatMetric(metrics.reposts) + ' 转发');
+  return parts.length ? '<span class="trending-metrics">' + escapeHtml(parts.join(' · ')) + '</span>' : '';
+}
+
+export function renderTrendingCard(item) {
+  const meta = platformMeta[item.platform] || { label: item.platform || t('labels.fallback.platform'), icon: '📰' };
   const typeLabel = contentTypeLabels[item.content_type] || item.content_type || t('labels.fallback.type');
-  const published = Number.isFinite(new Date(item.published_at).getTime()) ? timeAgo(item.published_at) : t('labels.fallback.published');
-  // 内容本地化：摘要优先（AI 总结已中文）；无总结用本地化描述（localizations.zh），再回退原文描述
-  const preview = item.summary || getLocalizedField(item, 'description') || item.description || t('labels.fallback.preview');
-  const sourceDetailId = 'trending-source-detail-' + String(item.id).replace(/[^a-zA-Z0-9_-]/g, '-');
-  const meta = platformMeta[item.platform] || { label: item.platform || t('labels.fallback.platform') };
-  const sourceUrl = item.url ? safeExternalUrl(item.url) : '#';
-  const sourceName = item.author_name || item.source_id || t('labels.fallback.author');
   const sourceTypeLabel = SOURCE_TYPE_LABELS[item.source_type] || item.source_type || t('labels.fallback.sourceType');
-  const sourceEvidence = item.evidence_excerpt || item.source_excerpt || t('labels.fallback.evidence');
+  const sourceName = item.author_name || item.source_id || t('labels.fallback.author');
+  const sourceEvidence = item.evidence || t('labels.fallback.evidence');
+  const sourceUrl = safeExternalUrl(item.url);
+  const sourceDetailId = 'source-detail-' + String(item.id).replace(/[^a-zA-Z0-9_-]/g, '-');
   const localizedTitle = getLocalizedField(item, 'title') || item.title || t('labels.fallback.title');
-  const localizedDescription = getLocalizedField(item, 'description') || item.description;
-  return '<article class="trending-card" data-hotspot-id="' + escapeHtml(item.id) + '" aria-labelledby="trending-title-' + escapeHtml(item.id) + '">' +
-    '<div class="trending-card-head"><span class="tag scene">' + escapeHtml(typeLabel) + '</span><span>' + escapeHtml(published) + '</span></div>' +
-    '<h3 id="trending-title-' + escapeHtml(item.id) + '"><span class="trending-title">' + escapeHtml(localizedTitle) + '</span></h3>' +
-    '<div class="trending-preview-wrap">' +
-      '<p class="trending-description' + (item.description || getLocalizedField(item, 'description') ? '' : ' is-missing') + '">' + escapeHtml(preview) + '</p>' +
-      (item.description
-        ? '<div class="trending-secondary-preview" aria-hidden="true"><span>' + escapeHtml(localizedDescription || item.description) + '</span></div>'
-        : '') +
+  const localizedSummary = getLocalizedField(item, 'summary') || item.summary || item.description || t('labels.fallback.summary');
+  return '<article class="trending-card" tabindex="0" role="button" data-hotspot-id="' + escapeHtml(item.id) + '" aria-label="查看热点详情：' + escapeHtml(localizedTitle) + '">' +
+    '<div class="trending-card-meta">' +
+      '<span class="trending-platform" aria-hidden="true">' + meta.icon + '</span>' +
+      '<span class="trending-type-tag">' + escapeHtml(typeLabel) + '</span>' +
+      '<span class="trending-time">' + escapeHtml(timeAgo(item.published_at)) + '</span>' +
     '</div>' +
-    '<div class="trending-card-actions">' +
-      '<button class="btn-link trending-source-toggle" type="button" data-hotspot-card-source-toggle aria-expanded="false" aria-controls="' + escapeHtml(sourceDetailId) + '">' + t('trending.card.viewSource') + '</button>' +
+    '<h3 class="trending-title">' + escapeHtml(localizedTitle) + '</h3>' +
+    '<p class="trending-summary">' + escapeHtml(localizedSummary) + '</p>' +
+    '<div class="trending-card-footer">' +
+      '<button class="btn-link trending-source-toggle" type="button" data-hotspot-source-toggle aria-expanded="false" aria-controls="' + escapeHtml(sourceDetailId) + '">' + t('trending.card.viewSource') + '</button>' +
       '<button class="btn-link trending-open-hint" type="button" data-hotspot-open>' + t('trending.card.openDetail') + '</button>' +
     '</div>' +
     '<div class="trending-card-source-detail" id="' + escapeHtml(sourceDetailId) + '" data-hotspot-card-source hidden>' +
@@ -213,7 +198,7 @@ function renderTrendingCard(item) {
   '</article>';
 }
 
-function renderTrending() {
+export function renderTrending() {
   renderTrendingTypeFilters();
   renderTrendingSortHelp();
   renderTrendingStatus();
@@ -221,15 +206,13 @@ function renderTrending() {
   const grid = document.getElementById('trendingGrid');
   setRegionBusy(grid, false);
   document.getElementById('trendingCount').textContent = items.length;
-  document.getElementById('trendingGenerated').textContent = hotspots.generated_at
-    ? t('trending.generated', { time: timeAgo(hotspots.generated_at) })
+  document.getElementById('trendingGenerated').textContent = state.hotspots.generated_at
+    ? t('trending.generated', { time: timeAgo(state.hotspots.generated_at) })
     : t('trending.notCollected');
 
   if (!items.length) {
-    const hasPublicItems = (hotspots.items || []).length > 0;
-    // 决策 80：四类空状态各自提供“下一步操作”——筛选无匹配可清除筛选；
-    // 没有公开热点/审核建设中可了解规则或返回其他视图；加载失败可重新加载。
-    const state = dataLoadFailures.has('hotspots')
+    const hasPublicItems = (state.hotspots.items || []).length > 0;
+    const stateHtml = dataLoadFailures.has('hotspots')
       ? renderState({
           icon: '⚠️', title: t('trending.empty.loadFailedTitle'),
           message: t('trending.empty.loadFailedMsg'),
@@ -243,7 +226,7 @@ function renderTrending() {
             type: 'no-match',
             actions: [{ label: t('trending.empty.clearFilters'), dataKey: 'trending-action', dataValue: 'clear-filters', primary: true }]
           })
-        : hotspots.generated_at
+        : state.hotspots.generated_at
           ? renderState({
               icon: '○', title: t('trending.empty.noPublicTitle'),
               message: t('trending.empty.noPublicMsg'),
@@ -262,12 +245,10 @@ function renderTrending() {
                 { label: t('trending.empty.gotoTools'), dataKey: 'trending-action', dataValue: 'goto-tools' }
               ]
             });
-    grid.innerHTML = state;
+    grid.innerHTML = stateHtml;
     return;
   }
 
-  // 决策 78：按唯一内容发布时间分组渲染（只显示有内容的分组；分组标签须与
-  // getTrendingGroupLabel 同源——都经 t() 取当前语言，语言切换时保持一致）
   const groupOrder = [t('labels.group.today'), t('labels.group.yesterday'), t('labels.group.last7d'), t('labels.group.earlier'), t('labels.group.unknown')];
   const groups = new Map();
   items.forEach(item => {
@@ -285,11 +266,7 @@ function renderTrending() {
     ).join('');
 }
 
-// ═══════════════════════════════════════════════════════════════
-// 热点详情对话框
-// ═══════════════════════════════════════════════════════════════
-
-function getHotspotRelatedResources(item) {
+export function getHotspotRelatedResources(item) {
   const resources = Array.isArray(item.related_resources) ? item.related_resources : [];
   return resources.map(resource => {
     if (!resource || typeof resource !== 'object') return null;
@@ -297,57 +274,42 @@ function getHotspotRelatedResources(item) {
     const type = { tool: 'tools', concept: 'concepts', scene: 'scenes' }[rawType] || rawType;
     const id = resource.id || resource.tool_id || resource.concept_id || resource.scene_id;
     if (!id || !['tools', 'concepts', 'scenes'].includes(type)) return null;
-
     if (type === 'tools') {
-      const tool = getToolCardItem(id) || tools.find(entry => entry.detail_ref?.id === id);
-      const requestedDetail = resource.detail_ref || resource.item_id || null;
-      const detailRef = requestedDetail
-        ? (String(requestedDetail).startsWith('tool-level3:') ? requestedDetail : 'tool-level3:' + requestedDetail)
-        : tool?.detail_ref?.id;
-      const detail = tool && detailRef ? getToolLevel3Item(tool.vendor_key, detailRef) : null;
-      return tool && detail
-        ? { type, id: detail.id, itemId: null, label: resource.label || detail.title || tool.title, available: true }
-        : { type, id, itemId: null, label: resource.label || id, available: false };
+      const card = getToolCardItem(id);
+      if (!card) return null;
+      const detail = card.detail_ref ? getToolLevel3Item(card.vendor_key, card.detail_ref.id) : null;
+      return { type, id: card.tool_key, title: card.title, subtitle: detail?.summary || card.summary || '', actionLabel: t('trending.detail.viewDetail'), icon: card.icon || '' };
     }
     if (type === 'concepts') {
-      const concept = glossary.find(entry => entry.term === id || searchConceptKey(entry.term) === id);
-      return concept
-        ? { type, id: concept.term, label: resource.label || concept.term, available: true }
-        : { type, id, label: resource.label || id, available: false };
+      const concept = (state.glossary || []).find(entry => entry.term === id || searchConceptKey(entry.term) === id);
+      if (!concept) return null;
+      return { type, id: concept.term, title: concept.term, subtitle: concept.summary || '', actionLabel: t('trending.detail.viewConcept'), icon: '💡' };
     }
-    const scene = scenes.find(entry => entry.id === id);
-    return scene
-      ? { type, id: scene.id, label: resource.label || scene.name, available: true }
-      : { type, id, label: resource.label || id, available: false };
+    if (type === 'scenes') {
+      const scene = (state.scenes || []).find(entry => entry.id === id);
+      if (!scene) return null;
+      return { type, id: scene.id, title: scene.name, subtitle: scene.description || '', actionLabel: t('trending.detail.viewScene'), icon: '🎯' };
+    }
+    return null;
   }).filter(Boolean);
 }
 
-function renderHotspotRelatedResources(item) {
-  const resources = getHotspotRelatedResources(item);
-  if (!resources.length) {
-    return '<p class="hotspot-detail-unavailable"><strong>' + t('labels.fallback.related') + '</strong></p>';
-  }
-
-  const groups = [
-    { key: 'tools', label: t('trending.detail.tools') },
-    { key: 'concepts', label: t('trending.detail.concepts') },
-    { key: 'scenes', label: t('trending.detail.scenes') },
-  ];
-  const grouped = groups.map(group => ({
-    ...group,
-    items: resources.filter(resource => resource.type === group.key),
-  })).filter(group => group.items.length);
-
-  return grouped.map(group => '<div class="hotspot-related-group"><h4>' + escapeHtml(group.label) + '</h4>' +
-    group.items.slice(0, 3).map(resource => resource.available
-      ? '<button class="hotspot-related-item" type="button" data-hotspot-related-type="' + escapeHtml(resource.type) + '" data-hotspot-related-id="' + escapeHtml(resource.id) + '"' + (resource.itemId ? ' data-hotspot-related-item="' + escapeHtml(resource.itemId) + '"' : '') + '>' + escapeHtml(resource.label) + ' →</button>'
-      : '<span class="hotspot-related-item hotspot-related-unavailable">' + escapeHtml(resource.label) + '：' + t('trending.detail.resourceUnavailable') + '</span>'
-    ).join('') + '</div>').join('');
+export function renderHotspotRelatedResources(item) {
+  const items = getHotspotRelatedResources(item);
+  if (!items.length) return '<p class="hotspot-detail-empty">' + t('trending.detail.noRelated') + '</p>';
+  return '<div class="hotspot-detail-grid">' + items.map(r =>
+    '<div class="hotspot-detail-card" data-resource-type="' + escapeHtml(r.type) + '" data-resource-id="' + escapeHtml(r.id) + '">' +
+      '<div class="hotspot-detail-card-head">' +
+        '<span class="hotspot-detail-card-icon" aria-hidden="true">' + escapeHtml(r.icon) + '</span>' +
+        '<h4>' + escapeHtml(r.title) + '</h4>' +
+      '</div>' +
+      (r.subtitle ? '<p>' + escapeHtml(r.subtitle) + '</p>' : '') +
+      '<button class="btn btn-small" type="button" data-open-resource="' + escapeHtml(r.type) + '" data-resource-id="' + escapeHtml(r.id) + '">' + escapeHtml(r.actionLabel) + '</button>' +
+    '</div>'
+  ).join('') + '</div>';
 }
 
-// content-summarizer：摘要区渲染——优先 AI 总结（summary + 可选要点列表），
-// 无 AI 总结时回退原始描述。所有文本经 escapeHtml 转义（沿用安全边界）。
-function renderHotspotSummary(item) {
+export function renderHotspotSummary(item) {
   const summary = item && typeof item.summary === 'string' && item.summary.trim() ? item.summary.trim() : null;
   if (summary) {
     const keyPoints = Array.isArray(item.summary_key_points) && item.summary_key_points.length
@@ -361,8 +323,8 @@ function renderHotspotSummary(item) {
   return '<p class="hotspot-detail-description">' + escapeHtml(getLocalizedField(item, 'description') || item.description || t('labels.fallback.summary')) + '</p>';
 }
 
-function openHotspotDetail(id, trigger = null) {
-  const item = (hotspots.items || []).find(entry => entry.id === id);
+export function openHotspotDetail(id, trigger = null) {
+  const item = (state.hotspots.items || []).find(entry => entry.id === id);
   const content = document.getElementById('modalContent');
   if (!item || !content) return;
   const meta = platformMeta[item.platform] || { label: item.platform || t('labels.fallback.platform'), icon: '📰' };
@@ -397,7 +359,7 @@ function openHotspotDetail(id, trigger = null) {
             '<div><dt>' + t('trending.card.updatedAt') + '</dt><dd>' + escapeHtml(formatHotspotDate(item.fetched_at)) + '</dd></div>' +
             '<div><dt>' + t('trending.card.sourceName') + '</dt><dd>' + escapeHtml(item.author_name || item.source_id || t('labels.fallback.author')) + '</dd></div>' +
           '</dl>' +
-          '<p class="hotspot-source-evidence"><strong>' + t('trending.card.evidence') + '</strong>' + t('labels.fallback.evidence') + '</p>' +
+          '<p class="hotspot-source-evidence"><strong>' + t('trending.card.evidence') + '</strong>' + escapeHtml(item.evidence || t('labels.fallback.evidence')) + '</p>' +
           (hasUrl
             ? '<a class="btn-link hotspot-source-link" href="' + escapeHtml(url) + '" target="_blank" rel="noopener noreferrer">' + t('trending.card.openOriginal') + ' ' + ICON_EXTERNAL + '</a>'
             : '<p class="hotspot-detail-unavailable">' + t('labels.fallback.sourceLink') + '</p>') +
@@ -410,20 +372,3 @@ function openHotspotDetail(id, trigger = null) {
     '</article>';
   showModal(trigger);
 }
-
-export {
-  renderTrendingTypeFilters,
-  renderTrendingStatus,
-  renderTrendingSortHelp,
-  clearTrendingFilters,
-  reloadHotspots,
-  renderTrendingCard,
-  renderTrending,
-  renderHotspotMetrics,
-  formatHotspotDate,
-  getHotspotRelatedResources,
-  renderHotspotRelatedResources,
-  renderHotspotSummary,
-  openHotspotDetail,
-  getTrendingGroupLabel,
-};
