@@ -49,7 +49,7 @@ CatalogDraft 是否可进入 Apply 的结论。只有官方来源可信、必需
 
 ## SeriesPolicy
 
-LLM 二级系列分类的唯一规则源（`data/manual/archive/llm-series-policy.json`）。声明每厂商的模型家族、用途、版本轴、允许的目标二级系列、容量（同系列最多 3 个，第 4 个才允许拆分）与证据状态。阶段 2 迁移与阶段 4 AI 分类都以此为规则门禁；未知厂商或规则不完整一律 fail-closed，绝不回退到以具体模型名建组。
+LLM 二级系列分类的唯一规则源（`data/manual/registries/llm-series-policy.json`）。声明每厂商的模型家族、用途、版本轴、允许的目标二级系列、容量（同系列最多 3 个，第 4 个才允许拆分）与证据状态。阶段 2 迁移与阶段 4 AI 分类都以此为规则门禁；未知厂商或规则不完整一律 fail-closed，绝不回退到以具体模型名建组。
 
 ## ModelFamily
 
