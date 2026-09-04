@@ -6,7 +6,7 @@ const assert = require('node:assert/strict');
 let dateDisplay;
 let detailKindLabel;
 test.before(async () => {
-  ({ getToolDateDisplay: dateDisplay, getToolDetailKindLabel: detailKindLabel } = await import('../src/web/js/date-display.mjs'));
+  ({ getToolDateDisplay: dateDisplay, getToolDetailKindLabel: detailKindLabel } = await import('../../src/web/js/date-display.mjs'));
 });
 
 test('typed dates use the detail kind contract', () => {

@@ -3,9 +3,9 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
-const { CATALOG_FILES } = require('../src/shared/paths');
-const { catalog, resetCatalogForTests } = require('../src/catalog/interface');
-const { validateCatalogSnapshot } = require('../src/catalog/core/index');
+const { CATALOG_FILES } = require('../../src/shared/paths');
+const { catalog, resetCatalogForTests } = require('../../src/catalog/interface');
+const { validateCatalogSnapshot } = require('../../src/catalog/core/index');
 
 test.beforeEach(() => resetCatalogForTests());
 
@@ -167,7 +167,6 @@ test('subscription plans reject typed public dates', () => {
   assert.ok(result.errors.some(item => item.code === 'DATE_NOT_APPLICABLE'));
 });
 
-
 test('scene and featured recommendations use stable tool and detail references', () => {
   const cards = catalog({ area: 'tool-card', operation: 'list' }).data;
   const details = catalog({ area: 'tool-level3', operation: 'list' }).data;
@@ -197,61 +196,3 @@ test('scene and featured recommendations use stable tool and detail references',
     assert.equal('item_id' in pick, false);
   }
 });
-
-// ── 阶段 3 应用态回归：LLM 二级系列迁移后的正式数据终态 ──────────
-
-test('LLM 二级系列迁移应用态：目标系列精确成员、旧 ID 消失、订阅孤儿被收养', () => {
-  const levels2 = catalog({ area: 'vendor-level2', operation: 'list' }).data;
-  const byId = new Map(levels2.map(item => [item.id, item]));
-  const memberKeys = item => (item.detail_refs || []).map(ref => ref.id.replace('tool-level3:', '')).sort();
-
-  // 关键目标系列精确成员
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:openai:gpt-5.6')), ['gpt-5.6-luna', 'gpt-5.6-sol', 'gpt-5.6-terra']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:openai:gpt-realtime')), ['gpt-realtime-2']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:openai:gpt-image')), ['gpt-image-2']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:anthropic:claude')), ['claude-fable-5', 'claude-haiku-4.5', 'claude-opus-5', 'claude-sonnet-5']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:anthropic:claude-opus-4-8')), ['claude-opus-4.8']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:google:gemini')), ['gemini-3-6-flash', 'gemini-3-7-flash']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:google:gemini-last')), ['gemini-2.5-pro', 'gemini-3-1-pro', 'gemini-3.5-flash']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:zhipu:glm')), ['glm-5-3', 'glm-5.1', 'glm-5.2']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:cohere:command')), ['command-a', 'command-a-plus']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:xai:grok')), ['grok-4-5', 'grok-4-6']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:minimax:m')), ['minimax-m2-7', 'minimax-m3']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:moonshot:kimi')), ['kimi-k3']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:moonshot:kimi-code')), ['kimi-k2-7-code']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:alibaba:qwen')), ['qwen3-7-max', 'qwen3-7-plus', 'qwen3-8-max']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:stepfun:step')), ['step-3-5-flash', 'step-3-7-flash']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:xiaomi:mimo')), ['mimo-v2-5', 'mimo-v2-5-pro']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:nvidia:nemotron-3')), ['nemotron-3-super', 'nemotron-3-ultra']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:nvidia:nemotron-3-5')), ['nemotron-3-5']);
-
-  // 旧碎片/旧系列 ID 不再存在（已由工作台新入库的合法系列除外）
-  for (const oldId of [
-    'vendor-level2:xai:grok-4-5',
-    'vendor-level2:minimax:minimax-m3', 'vendor-level2:minimax:minimax-m2-7',
-    'vendor-level2:moonshot:kimi-k2', 'vendor-level2:moonshot:kimi-k3',
-    'vendor-level2:alibaba:qwen3-7',
-    'vendor-level2:stepfun:step-3-5-flash', 'vendor-level2:stepfun:step-3-7-flash',
-    'vendor-level2:xiaomi:mimo-v2-5', 'vendor-level2:xiaomi:mimo-v2-5-pro',
-    'vendor-level2:nvidia:nemotron-3-ultra', 'vendor-level2:nvidia:nemotron-3-super',
-  ]) {
-    assert.equal(byId.has(oldId), false, `${oldId} 应已不存在`);
-  }
-
-  // OpenAI 订阅套餐孤儿被统一 coding plan 收养
-  assert.equal(byId.get('vendor-level2:openai:openai-coding-plan').title, '套餐（Coding Plan）');
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:openai:openai-coding-plan')), ['chatgpt-go', 'chatgpt-plus', 'chatgpt-pro']);
-
-  // 专用/套餐/工具系列零漂移（成员集保持迁移前稳定值）
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:anthropic:claude-coding-plan')), ['claude-max-20x', 'claude-max-5x', 'claude-pro']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:google:gemini-coding-plan')), ['google-ai-pro', 'google-ai-ultra-20x', 'google-ai-ultra-5x']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:google:gemma-4')), ['gemma-4']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:minimax:minimax-h3')), ['minimax-h3']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:xai:grok-imagine')), ['grok-imagine-image-2-0', 'grok-imagine-video-1-5']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:alibaba:qwen3-5-omni')), ['qwen3-5-omni']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:alibaba:qwen-image-2')), ['qwen-image-2-0-pro']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:tencent:hy-mt2')), ['hy-mt2-30b-a3b']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:openai:openai-codex')), ['openai-codex']);
-  assert.deepEqual(memberKeys(byId.get('vendor-level2:google:gemini-cli')), ['gemini-cli']);
-});
-

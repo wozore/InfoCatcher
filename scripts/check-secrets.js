@@ -68,11 +68,16 @@ function listFiles() {
   }
 }
 
-/**
- * 扫描整个仓库，返回命中清单。
- * @returns {{file:string,line:number,pattern:string,preview:string}[]}
- */
-function scanRepo() {
+let maintenance = null;
+try {
+  maintenance = require('../src/maintenance/check-secrets');
+} catch (error) {
+  if (error.code !== 'MODULE_NOT_FOUND' || !error.message.includes('../src/maintenance/check-secrets')) {
+    throw error;
+  }
+}
+
+const scanRepo = maintenance?.scanRepo || function scanRepo() {
   const findings = [];
   for (const file of listFiles()) {
     const rel = path.relative(PROJECT_DIR, file);
@@ -97,10 +102,10 @@ function scanRepo() {
     }
   }
   return findings;
-}
+};
 
 /** 模式自检：每个模式必须命中动态构造的正例、且不命中低熵负例 */
-function selftest() {
+const selftest = maintenance?.selftest || function selftest() {
   let ok = true;
   const negative = 'sk-abcdef 短占位 github_pat_ short AKIA1234 AIza短 无密钥';
 
@@ -119,9 +124,12 @@ function selftest() {
   }
   console.log(ok ? '✅ 密钥模式自检通过' : '❌ 密钥模式自检失败');
   return ok;
-}
+};
 
 function main() {
+  if (maintenance?.main) {
+    return maintenance.main();
+  }
   if (process.argv.includes('--selftest')) {
     process.exit(selftest() ? 0 : 1);
     return;
@@ -137,6 +145,6 @@ function main() {
   console.log(`✅ 密钥扫描通过：${listFiles().length} 个文件无高熵密钥形态`);
 }
 
-module.exports = { scanRepo, selftest, PATTERNS };
+module.exports = { scanRepo, selftest, PATTERNS, main };
 
 if (require.main === module) main();
