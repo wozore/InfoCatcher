@@ -16,7 +16,7 @@ const {
   reviewQueueRevision,
   setReviewStatusReviewQueue,
   writeReviewQueue,
-} = require('../src/catalog/tool-update-review-store');
+} = require('../src/catalog/tool-update/index');
 
 const NOW = '2026-08-30T12:00:00.000Z';
 

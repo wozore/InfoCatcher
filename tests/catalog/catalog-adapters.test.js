@@ -7,7 +7,7 @@ const {
   acquireOfficialSources,
   probeCatalogCapabilities,
   createCatalogAiAdapters,
-} = require('../../src/catalog/ai/catalog-adapters');
+} = require('../../src/catalog/intake/index');
 
 function response(data, ok = true, status = 200) {
   return { ok, status, json: async () => data, text: async () => JSON.stringify(data) };

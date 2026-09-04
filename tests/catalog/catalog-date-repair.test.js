@@ -10,8 +10,8 @@ const {
   applyDateRepair,
   applyDateRepairBatch,
   nonDateDetailFingerprint,
-} = require('../../src/catalog/catalog-date-repair');
-const { planToolUpdateCandidate } = require('../../src/catalog/tool-update-review-planner');
+} = require('../../src/catalog/tool-update');
+const { planToolUpdateCandidate } = require('../../src/catalog/tool-update/index');
 
 function snapshot(detail = {}) {
   const item = {
@@ -226,7 +226,7 @@ test('批量 advance preview 使用同一 base revision 且非日期字段零漂
   ], { asOf: '2026-08-25' });
   assert.equal(planned.ok, true, JSON.stringify(planned));
   assert.equal(planned.count, 2);
-  assert.equal(planned.before_revision, require('../../src/catalog/catalog-revision').revisionOf(before));
+  assert.equal(planned.before_revision, require('../../src/catalog/core/index').revisionOf(before));
   assert.equal(planned.changes.length, 2);
   assert.equal(planned.snapshot['tool-level3'][0].last_updated_date, '2026-08-11');
   assert.equal(planned.snapshot['tool-level3'][1].last_updated_date, '2026-08-12');

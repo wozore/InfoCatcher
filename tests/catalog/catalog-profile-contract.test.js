@@ -2,8 +2,8 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { emptySnapshot } = require('../../src/catalog/catalog-contract');
-const { planCatalogResearch } = require('../../src/catalog/catalog-profile-contract');
+const { emptySnapshot } = require('../../src/catalog/core/index');
+const { planCatalogResearch } = require('../../src/catalog/core/index');
 
 function videoSeed(overrides = {}) {
   return {

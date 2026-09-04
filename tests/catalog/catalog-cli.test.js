@@ -2,17 +2,17 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { pendingCandidateToSeed } = require('../../src/news/feedback/catalog-draft-adapter');
+const { pendingCandidateToSeed } = require('../../src/pending/index');
 const { parseArgs, tavilyAccessModeFromFlags, generatorOptionsFromFlags } = require('../../scripts/catalog-generator');
 const { publicPreview } = require('../../scripts/catalog-date-repair');
-const { probeCatalogCapabilities } = require('../../src/catalog/ai/catalog-adapters');
-const { loadGeneratorConfig, normalizeGeneratorOptions } = require('../../src/catalog/catalog-assistant');
+const { probeCatalogCapabilities } = require('../../src/catalog/intake/index');
+const { loadGeneratorConfig, normalizeGeneratorOptions } = require('../../src/catalog/draft/index');
 const { requestResponses } = require('../../src/shared/ai-transport');
 const {
   addProductUrlRegistryEntry,
   removeProductUrlRegistryEntry,
   auditProductUrlRegistry,
-} = require('../../src/catalog/official-url-registry');
+} = require('../../src/catalog/url-registry/index');
 
 test('pending hotspot candidate becomes a tool Seed without Apply capability', () => {
   const seed = pendingCandidateToSeed({ name: 'Example', description: 'Found in hotspot', source_hotspot: true, source_url: 'https://news.example/item' });

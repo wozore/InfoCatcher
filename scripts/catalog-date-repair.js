@@ -4,8 +4,8 @@ const fs = require('fs');
 const {
   planDateRepair,
   applyDateRepair,
-} = require('../src/catalog/catalog-date-repair');
-const { loadCatalogSnapshot } = require('../src/catalog/catalog-transaction-store');
+} = require('../src/catalog/tool-update/catalog-date-repair');
+const { loadCatalogSnapshot } = require('../src/catalog/core/index');
 const { parseArgs } = require('./catalog-generator');
 
 function readRepair(file) {

@@ -5,18 +5,18 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const { createCostLedger } = require('../../src/catalog/catalog-research');
+const { createCostLedger } = require('../../src/catalog/core/index');
 const {
   buildToolUpdateReviewInput,
   buildToolUpdateReviewInstructions,
   suggestToolUpdateReview,
   validateToolUpdateReviewValue,
-} = require('../../src/catalog/ai/tool-update-review-ai');
+} = require('../../src/catalog/tool-update/index');
 const {
   planToolUpdateCandidate,
   planToolUpdateCandidates,
-} = require('../../src/catalog/tool-update-review-planner');
-const { explicitDates } = require('../../src/catalog/tool-update-evidence');
+} = require('../../src/catalog/tool-update/index');
+const { explicitDates } = require('../../src/catalog/tool-update/index');
 const {
   defaultReviewQueue,
   mergeReviewQueue,
@@ -25,7 +25,7 @@ const {
   setReviewStatusReviewQueue,
   removePendingBlockedReviewItems,
   writeReviewQueue,
-} = require('../../src/catalog/tool-update-review-store');
+} = require('../../src/catalog/tool-update/index');
 
 const NOW = '2026-08-25T12:00:00.000Z';
 const SOURCE = {
@@ -316,7 +316,7 @@ test('已替代审核项不能再次写入人工结论', () => {
   const merged = mergeReviewQueue({ ...defaultReviewQueue(), items: [{ ...oldItem, review_status: 'approved' }] }, [newItem], { registry: REGISTRY, now: '2026-08-23T12:00:00Z' });
   const file = tmpFile();
   writeReviewQueue(merged.queue, { file, now: '2026-08-23T12:00:00Z' });
-  const revision = require('../../src/catalog/tool-update-review-store').reviewQueueRevision(readReviewQueue(file));
+  const revision = require('../../src/catalog/tool-update/index').reviewQueueRevision(readReviewQueue(file));
   const result = setReviewStatusReviewQueue(oldItem.candidate_key, 'rejected', { expectedRevision: revision, registry: REGISTRY, file });
   assert.equal(result.ok, false);
   assert.equal(result.code, 'TOOL_UPDATE_REVIEW_NOT_CURRENT');
@@ -341,7 +341,7 @@ test('删除旧 pending/blocked 时精确计数，保留 approved 与 rejected �
   const approved = { ...planToolUpdateCandidate('acme-tool', evidence({ content_hash: 'sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' }), suggestion(), { registry: REGISTRY, detail: detail(), now: NOW }).candidate, review_status: 'approved' };
   const rejected = { ...planToolUpdateCandidate('acme-tool', evidence({ content_hash: 'sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc' }), suggestion({ confidence: 0.2 }), { registry: REGISTRY, detail: detail(), now: NOW }).candidate, review_status: 'rejected' };
   writeReviewQueue({ ...defaultReviewQueue(), items: [pending, approved, rejected] }, { file, now: NOW });
-  const revision = require('../../src/catalog/tool-update-review-store').reviewQueueRevision(readReviewQueue(file));
+  const revision = require('../../src/catalog/tool-update/index').reviewQueueRevision(readReviewQueue(file));
   const mismatch = removePendingBlockedReviewItems({ file, expectedRevision: revision, expectedCount: 2 });
   assert.equal(mismatch.ok, false);
   assert.equal(mismatch.code, 'TOOL_UPDATE_REVIEW_REMOVE_COUNT_MISMATCH');

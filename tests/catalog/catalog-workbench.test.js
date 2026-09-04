@@ -2,7 +2,7 @@
 
 const assert = require('node:assert/strict');
 const test = require('node:test');
-const { candidateKeyOf } = require('../../src/news/feedback/pending-review-store');
+const { candidateKeyOf } = require('../../src/pending/index');
 const { createCatalogWorkbench } = require('../../src/catalog/catalog-workbench');
 
 

@@ -2,9 +2,9 @@
 
 const fs = require('fs');
 const { CATALOG_FILES } = require('../shared/paths');
-const { catalog } = require('../catalog-interface');
-const { validateCatalogSnapshot } = require('../catalog/catalog-snapshot-validator');
-const { AREAS } = require('../catalog/catalog-contract');
+const { catalog } = require('../catalog/interface');
+const { validateCatalogSnapshot } = require('../catalog/core/index');
+const { AREAS } = require('../catalog/core/index');
 
 let failed = false;
 

@@ -1,7 +1,7 @@
 'use strict';
 
 const { writeCatalogReleaseDates } = require('../shared/catalog-release-dates');
-const { loadCatalogSnapshot } = require('./catalog-snapshot-store');
+const { loadCatalogSnapshot } = require('./core/index');
 
 /**
  * catalog-shared-publish.js — catalog → comparison 方向共享投影发布

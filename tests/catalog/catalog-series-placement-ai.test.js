@@ -21,8 +21,8 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { emptySnapshot } = require('../../src/catalog/catalog-contract');
-const { loadSeriesPolicy } = require('../../src/catalog/catalog-series-policy');
+const { emptySnapshot } = require('../../src/catalog/core/index');
+const { loadSeriesPolicy } = require('../../src/catalog/series/index');
 const {
   buildSeriesPlacementInput,
   buildSeriesPlacementInstructions,
@@ -30,7 +30,7 @@ const {
   suggestSeriesPlacement,
   resolveSeriesPlacement,
   applyPlacementToSeed,
-} = require('../../src/catalog/ai/catalog-series-placement-ai');
+} = require('../../src/catalog/series/index');
 
 function candidate(overrides = {}) {
   return {

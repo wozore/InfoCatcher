@@ -18,7 +18,7 @@ const {
   requestChatCompletions,
   requestMessages,
 } = require('../../src/shared/ai-transport');
-const { synthesizeLayerFields } = require('../../src/catalog/ai/deepseek-catalog-ai');
+const { synthesizeLayerFields } = require('../../src/catalog/core/index');
 
 function okJsonResponse(data) {
   return {

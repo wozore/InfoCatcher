@@ -28,7 +28,7 @@ const {
   runConceptBatch,
   readConceptPreviews,
   applyConceptPreviews,
-} = require('../../src/catalog/concept-batch');
+} = require('../../src/catalog/concept/index');
 
 function tmpFile(prefix) {
   return path.join(fs.mkdtempSync(path.join(os.tmpdir(), prefix)), 'file.json');
@@ -117,7 +117,7 @@ test('collectConceptEvidence 只取 approved+summary，按 term 子串匹配、K
   ]);
   const [{ evidence }] = await collectConceptEvidence(
     [{ term: 'DeepSeek' }],
-    { store, skipVibeHub: true, maxEvidencePerTerm: 3 },
+    { newsEvidence: store.candidates, skipVibeHub: true, maxEvidencePerTerm: 3 },
   );
   assert.equal(evidence.length, 3, '匹配到 4 条但 K=3 只取前 3');
   assert.ok(evidence.every(item => item.kind === 'summary'));
@@ -136,7 +136,7 @@ test('collectConceptEvidence 过滤未 approved / 无 summary / 不匹配条目'
       { id: 'd', title: 'd', summary: 'RAG 幻觉控制', review_status: 'approved' }, // 有效
     ],
   };
-  const [{ evidence }] = await collectConceptEvidence([{ term: 'RAG' }], { store, skipVibeHub: true });
+  const [{ evidence }] = await collectConceptEvidence([{ term: 'RAG' }], { newsEvidence: store.candidates, skipVibeHub: true });
   assert.equal(evidence.length, 1);
   assert.equal(evidence[0].title, 'd');
 });
@@ -145,7 +145,7 @@ test('collectConceptEvidence 纯 ASCII term 尝试 vibe-hub，中文 term 跳过
   const store = approvedStore(['Chat UI 设计。', '上下文窗口 限制模型输入长度。']);
   let fetchedSlugs = [];
   const options = {
-    store,
+    newsEvidence: store.candidates,
     fetchImpl: async () => { fetchedSlugs.push('called'); return { ok: false, status: 404, text: async () => '' }; },
     readCache: () => null,
     writeCache: () => {},
@@ -176,7 +176,7 @@ test('runConceptBatch dry-run 只查重+本地证据+成本，零 AI 零网络�
   const previewFile = tmpFile('cb-dry-');
   const result = await runConceptBatch(
     [{ term: 'New Concept', review_status: 'approved' }],
-    { store, glossary: [], dryRun: true, synthesize: async () => { synthesizeCalls += 1; return { ok: true, value: {} }; }, previewFile },
+    { newsEvidence: store.candidates, glossary: [], dryRun: true, synthesize: async () => { synthesizeCalls += 1; return { ok: true, value: {} }; }, previewFile },
   );
   assert.equal(result.ok, true);
   assert.equal(result.dry_run, true);
@@ -189,7 +189,7 @@ test('runConceptBatch dry-run 只查重+本地证据+成本，零 AI 零网络�
 
 test('runConceptBatch 无 --confirm-cost 返回 COST_CONFIRMATION_REQUIRED', async () => {
   const store = approvedStore([]);
-  const result = await runConceptBatch([{ term: 'A', review_status: 'approved' }, { term: 'B', review_status: 'approved' }], { store, glossary: [] });
+  const result = await runConceptBatch([{ term: 'A', review_status: 'approved' }, { term: 'B', review_status: 'approved' }], { newsEvidence: store.candidates, glossary: [] });
   assert.equal(result.ok, false);
   assert.equal(result.code, 'COST_CONFIRMATION_REQUIRED');
   assert.deepEqual(result.cost_estimate.cost, { responses_calls: 2, synthesis_calls: 2 });
@@ -207,7 +207,7 @@ test('runConceptBatch --confirm-cost 合成写预览文件，失败隔离保留'
   const previewFile = tmpFile('cb-batch-');
   const result = await runConceptBatch(
     [{ term: 'Good Term', review_status: 'approved' }, { term: 'Bad Term', review_status: 'approved' }],
-    { store, glossary: [], confirmCost: true, synthesize, previewFile, skipVibeHub: true },
+    { newsEvidence: store.candidates, glossary: [], confirmCost: true, synthesize, previewFile, skipVibeHub: true },
   );
   assert.equal(result.ok, true);
   assert.equal(result.dry_run, false);
@@ -232,7 +232,7 @@ test('runConceptBatch 集成 vibe-hub：纯 ASCII term 补充证据进入 eviden
   const result = await runConceptBatch(
     [{ term: 'Chat UI', review_status: 'approved' }],
     {
-      store,
+      newsEvidence: store.candidates,
       glossary: [],
       confirmCost: true,
       previewFile,
@@ -258,7 +258,7 @@ test('runConceptBatch 只消费 approved 概念卡，未审核/已丢弃卡进�
       { term: 'Pending Concept', review_status: 'pending' },
       { term: 'Legacy Concept' }, // v1 无 review_status → 视为未审核
     ],
-    { store, glossary: [], confirmCost: true, skipVibeHub: true, previewFile, synthesize: async ({ card }) => { synthesizeCalls += 1; return { ok: true, value: makeValue(card.term) }; } },
+    { newsEvidence: store.candidates, glossary: [], confirmCost: true, skipVibeHub: true, previewFile, synthesize: async ({ card }) => { synthesizeCalls += 1; return { ok: true, value: makeValue(card.term) }; } },
   );
   assert.equal(result.ok, true);
   assert.equal(result.skipped.skippedNotApproved.length, 3);

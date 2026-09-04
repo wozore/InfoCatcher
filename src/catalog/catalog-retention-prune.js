@@ -2,8 +2,8 @@
 
 const fs = require('fs');
 const { CATALOG_FILES } = require('../shared/paths');
-const { planRecordRemoval, commitSnapshotChange, loadCatalogSnapshot } = require('./catalog-transaction-store');
-const { revisionOf, previewHashOf } = require('./catalog-revision');
+const { planRecordRemoval, commitSnapshotChange, loadCatalogSnapshot } = require('./transaction');
+const { revisionOf, previewHashOf } = require('./core/index');
 const { readRetentionState } = require('../shared/retention');
 
 /**
@@ -14,7 +14,7 @@ const { readRetentionState } = require('../shared/retention');
  * 早于 cutoff 月首日的三级详情视为过期，级联删除其 tool-card / vendor-level2 /
  * vendor-level1 / vendor-card（失去全部引用的父级）。subscription_plan 与无日期详情
  * 保守保留。scenes/featured/glossary 不触碰；featured 悬空项只报告不修改。
- * 复用 catalog-transaction-store 的 planRecordRemoval + commitSnapshotChange（事务/回滚/dist）。
+ * 复用 transaction 门面的 planRecordRemoval + commitSnapshotChange（事务/回滚/dist）。
  */
 
 const DATE_FIELD_BY_KIND = Object.freeze({

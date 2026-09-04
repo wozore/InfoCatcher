@@ -20,10 +20,10 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
 const { DIRS } = require('../../src/shared/paths');
-const { emptySnapshot } = require('../../src/catalog/catalog-contract');
-const { loadSeriesPolicy } = require('../../src/catalog/catalog-series-policy');
-const { planSeriesMigration } = require('../../src/catalog/catalog-series-migration');
-const { validateCatalogSnapshot } = require('../../src/catalog/catalog-snapshot-validator');
+const { emptySnapshot } = require('../../src/catalog/core/index');
+const { loadSeriesPolicy } = require('../../src/catalog/series/index');
+const { planSeriesMigration } = require('../../src/catalog/series/index');
+const { validateCatalogSnapshot } = require('../../src/catalog/core/index');
 
 // ── 合成快照构造 helpers ────────────────────────────────────────
 

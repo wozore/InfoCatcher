@@ -5,14 +5,14 @@ const path = require('path');
 const crypto = require('crypto');
 const { readJson } = require('../shared/json-store');
 const minStore = require('../news/min/min-store');
-const toolReviewStore = require('../catalog/tool-update-review-store');
-const pendingStore = require('../news/feedback/pending-review-store');
+const toolReviewStore = require('../catalog/tool-update/index');
+const pendingStore = require('../pending/index');
 const { feedbackFromSummaries, toolExists, conceptExists } = require('../news/feedback/tool-feedback');
-const conceptBatch = require('../catalog/concept-batch');
+const conceptBatch = require('../catalog/concept/index');
 const { createCatalogWorkbench } = require('../catalog/catalog-workbench');
-const { loadCatalogSnapshot } = require('../catalog/catalog-snapshot-store');
+const { loadCatalogSnapshot } = require('../catalog/core/index');
 const { DIRS, NEWS_FILES, CATALOG_GENERATOR_FILES, CONCEPT_FILES } = require('../shared/paths');
-const { loadProductUrlRegistry } = require('../catalog/official-url-registry');
+const { loadProductUrlRegistry } = require('../catalog/url-registry/index');
 const { loadDotEnv } = require('../shared/env');
 const { minReviewCommand } = require('../news/cli/cmd-min');
 const { mainMin: publishNewsProjection } = require('../../scripts/publish-news');
@@ -140,7 +140,12 @@ function createDefaultApis(options = {}) {
       readPreviews: () => conceptBatch.readConceptPreviews({ previewFile: options.conceptPreviewFile }),
       readPending: () => pendingStore.readPending('concepts', { conceptFile: options.pendingConceptFile }),
       readGlossary: () => conceptBatch.readGlossary({ glossaryFile: options.glossaryFile }),
-      runBatch: (cards, batchOptions) => conceptBatch.runConceptBatch(cards, { ...batchOptions, previewFile: options.conceptPreviewFile, glossaryFile: options.glossaryFile }),
+      runBatch: (cards, batchOptions) => conceptBatch.runConceptBatch(cards, {
+        ...batchOptions,
+        readNewsEvidence: () => store().candidates,
+        previewFile: options.conceptPreviewFile,
+        glossaryFile: options.glossaryFile,
+      }),
       apply: (preview, applyOptions) => conceptBatch.applyConceptPreviews(preview, { ...applyOptions, previewFile: options.conceptPreviewFile, glossaryFile: options.glossaryFile }),
     },
     pending: {

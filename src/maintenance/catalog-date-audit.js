@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const { CATALOG_FILES, CATALOG_GENERATOR_FILES, DIRS } = require('../shared/paths');
-const { validateCatalogSnapshot } = require('../catalog/catalog-snapshot-validator');
+const { validateCatalogSnapshot } = require('../catalog/core/index');
 
 const TARGET_FIELD_BY_KIND = Object.freeze({
   tool: 'last_updated_date',

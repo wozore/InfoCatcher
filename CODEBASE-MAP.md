@@ -333,3 +333,19 @@
 - [concept-generator.bat](bat/concept-generator.bat) — AI 概念库生成器维护者入口（concept-cards-pending → glossary.json），只转发 Node CLI，不包含凭据或业务逻辑。
 - [tool-update-review.bat](bat/tool-update-review.bat) — 编程工具更新审核中文菜单；只转发 `scripts/tool-update-review.js`，不保存凭据、业务逻辑或默认批准状态。
 - [build-dist.bat](bat/build-dist.bat) — 重建静态 dist。
+
+## R4 新增实现文件
+- [draft-options.js](src/catalog/draft/draft-options.js) — Catalog Draft 配置、Seed 校验与研究成本预算。
+- [static-site.js](src/build/static-site.js) — 静态站点复制构建器。
+- [preview-store.js](src/catalog/concept/preview-store.js) — 概念预览读写与校验。
+- [resolution.js](src/catalog/intake/resolution.js) — 待补卡批量解析与查重编排。
+- [html-collector.js](src/catalog/tool-update/html-collector.js) — 官方更新页 HTML 抓取与文本清洗。
+- [review-model.js](src/catalog/tool-update/review-model.js) — 工具更新审核队列的安全投影与排序纯函数。
+- [review-queue-store.js](src/catalog/tool-update/review-queue-store.js) — 工具更新审核队列持久化契约。
+- [directory-swap.js](src/catalog/transaction/directory-swap.js) — 目录交换、备份与 Windows 回退操作。
+- [engine.js](src/catalog/transaction/engine.js) — Catalog 快照事务、journal、回滚与恢复。
+- [removal-planner.js](src/catalog/transaction/removal-planner.js) — 精确删除目标与引用清理规划。
+- [product-registry.js](src/catalog/url-registry/product-registry.js) — 产品官方 URL 与更新源登记模块。
+- [catalog-seed.js](src/pending/catalog-seed.js) — 待补工具候选到 Catalog Seed 的转换。
+- [rules.js](src/pending/rules.js) — 待补候选名称与知识库匹配规则。
+

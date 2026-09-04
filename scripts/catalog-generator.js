@@ -4,8 +4,8 @@ const { loadDotEnv } = require('../src/shared/env');
 loadDotEnv();
 
 const fs = require('fs');
-const { loadCatalogSnapshot } = require('../src/catalog/catalog-snapshot-store');
-const { removeCatalogRecords } = require('../src/catalog/catalog-transaction-store');
+const { loadCatalogSnapshot } = require('../src/catalog/core/index');
+const { removeCatalogRecords } = require('../src/catalog/transaction');
 const {
   prepareCatalogDraft,
   resumeCatalogDraft,
@@ -17,8 +17,8 @@ const {
   probeCatalogCapabilities,
   loadGeneratorConfig,
   normalizeGeneratorOptions,
-} = require('../src/catalog/catalog-assistant');
-const { listDrafts } = require('../src/catalog/catalog-draft-store');
+} = require('../src/catalog/draft/index');
+const { listDrafts } = require('../src/catalog/draft/index');
 
 function parseArgs(argv) {
   const positional = [];
@@ -237,7 +237,7 @@ async function main(argv = process.argv.slice(2)) {
     // 批量生成：待补卡 → 查重 → 厂商/官方源解析 → 逐 seed 生成 → 自动 apply。
     // 用法：catalog-generator batch --file <待补卡.json> [--confirm-cost] [--dry-run] [--from-preview] [--seed-out <file>]
     if (!flags.file) throw new Error('请提供 --file <待补卡文件>（先运行 node scripts/news-cli.js min-review feedback 生成）');
-    const batch = require('../src/catalog/catalog-batch');
+    const batch = require('../src/catalog/intake/index');
     const cards = batch.readPendingCards(flags.file);
     const batchOptions = generatorOptionsFromFlags(flags);
     const result = await batch.runBatchFromCards(cards, {
@@ -253,7 +253,7 @@ async function main(argv = process.argv.slice(2)) {
   }
   if (command === 'url-registry') {
     // 人工官方 URL 登记表维护（批量生成解析第一道命中源）。
-    const registry = require('../src/catalog/official-url-registry');
+    const registry = require('../src/catalog/url-registry/index');
     const requestedNamespace = positional[1];
     const namespace = requestedNamespace === 'product' ? 'product' : 'vendor';
     const action = namespace === 'vendor' && !['vendor', 'product'].includes(requestedNamespace)

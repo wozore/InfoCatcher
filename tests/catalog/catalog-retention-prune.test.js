@@ -2,7 +2,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { emptySnapshot } = require('../../src/catalog/catalog-contract');
+const { emptySnapshot } = require('../../src/catalog/core/index');
 const { planRetentionPrune, collectPruneTargets, DATE_FIELD_BY_KIND } = require('../../src/catalog/catalog-retention-prune');
 
 const CUTOFF = '2025-06-01';

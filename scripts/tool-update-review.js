@@ -4,11 +4,11 @@ const { loadDotEnv } = require('../src/shared/env');
 loadDotEnv();
 
 const { CATALOG_GENERATOR_FILES } = require('../src/shared/paths');
-const { loadCatalogSnapshot } = require('../src/catalog/catalog-snapshot-store');
-const { createCostLedger } = require('../src/catalog/catalog-research');
-const { loadProductUrlRegistry, updateSourcesForProduct, validateProductUrlRegistry } = require('../src/catalog/official-url-registry');
-const { collectProductUpdateEvidence } = require('../src/catalog/tool-update-collector');
-const { suggestToolUpdateReview } = require('../src/catalog/ai/tool-update-review-ai');
+const { loadCatalogSnapshot } = require('../src/catalog/core/index');
+const { createCostLedger } = require('../src/catalog/core/index');
+const { loadProductUrlRegistry, updateSourcesForProduct, validateProductUrlRegistry } = require('../src/catalog/url-registry/index');
+const { collectProductUpdateEvidence } = require('../src/catalog/tool-update/index');
+const { suggestToolUpdateReview } = require('../src/catalog/tool-update/index');
 const { requestStructuredJson } = require('../src/shared/llm-gateway');
 const { getProvider, DEFAULT_PROVIDER_NAME } = require('../src/shared/providers');
 const { localizeCandidate } = require('../src/news/classify/content-localizer');
@@ -45,17 +45,17 @@ const {
   findToolDetail,
   sourceForEvidence,
   planToolUpdateCandidate,
-} = require('../src/catalog/tool-update-review-planner');
+} = require('../src/catalog/tool-update/index');
 const {
   readReviewQueue,
   writeReviewQueue,
   mergeAndWriteReviewQueue,
-} = require('../src/catalog/tool-update-review-store');
+} = require('../src/catalog/tool-update/index');
 const {
   approvedRepairsFromReviewQueue,
   planDateRepairBatch,
   applyDateRepairBatch,
-} = require('../src/catalog/catalog-date-repair');
+} = require('../src/catalog/tool-update');
 const { probeLocal } = require('../src/shared/local-model');
 const { probeTavily } = require('../src/shared/tavily-client');
 

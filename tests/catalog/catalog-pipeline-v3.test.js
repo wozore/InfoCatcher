@@ -2,14 +2,14 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { emptySnapshot } = require('../../src/catalog/catalog-contract');
-const { loadCatalogSnapshot } = require('../../src/catalog/catalog-snapshot-store');
-const { revisionOf } = require('../../src/catalog/catalog-revision');
-const { planCatalogResearch } = require('../../src/catalog/catalog-profile-contract');
-const { researchCatalog } = require('../../src/catalog/catalog-research');
-const { synthesizeCatalog } = require('../../src/catalog/catalog-synthesis');
-const { buildCatalogDraftEnvelope, validateCatalogDraftEnvelope } = require('../../src/catalog/catalog-draft-envelope');
-const { planCatalogPatches } = require('../../src/catalog/catalog-change-planner');
+const { emptySnapshot } = require('../../src/catalog/core/index');
+const { loadCatalogSnapshot } = require('../../src/catalog/core/index');
+const { revisionOf } = require('../../src/catalog/core/index');
+const { planCatalogResearch } = require('../../src/catalog/core/index');
+const { researchCatalog } = require('../../src/catalog/core/index');
+const { synthesizeCatalog } = require('../../src/catalog/core/index');
+const { buildCatalogDraftEnvelope, validateCatalogDraftEnvelope } = require('../../src/catalog/draft/index');
+const { planCatalogPatches } = require('../../src/catalog/core/index');
 const {
   prepareCatalogDraft,
   resumeCatalogDraft,
@@ -17,8 +17,8 @@ const {
   discardCatalogDraft,
   resumeResearchLimits,
   recoveryPlanForDraft,
-} = require('../../src/catalog/catalog-assistant');
-const { createDraft, deleteDraft } = require('../../src/catalog/catalog-draft-store');
+} = require('../../src/catalog/draft/index');
+const { createDraft, deleteDraft } = require('../../src/catalog/draft/index');
 const { klingVideoSeed, createKlingDossierAdapters } = require('./fixtures/kling-video-dossier');
 
 const LIMITS = {
@@ -239,11 +239,11 @@ test('assistant resume reuses completed research after a missing-model synthesis
     assert.equal(prepared.code, 'MODEL_REQUIRED');
     assert.equal(prepared.draft.last_error.recovery_kind, 'config_required');
     assert.deepEqual(prepared.draft.last_error.missing_config_fields, ['model']);
-    const recovery = require('../../src/catalog/catalog-assistant').recoveryPlanForDraft(draftId, {
+    const recovery = require('../../src/catalog/draft/index').recoveryPlanForDraft(draftId, {
       expectedRevision: prepared.draft.base_revision,
       generatorOptions: { model: 'deepseek-v4-flash' },
     });
-    const recoveryWithCost = require('../../src/catalog/catalog-assistant').recoveryPlanForDraft(draftId, {
+    const recoveryWithCost = require('../../src/catalog/draft/index').recoveryPlanForDraft(draftId, {
       expectedRevision: prepared.draft.base_revision,
       generatorOptions: { model: 'deepseek-v4-flash', confirmCost: true },
     });
@@ -350,7 +350,7 @@ test('assistant resume adds a new hard budget and requests only the missing deta
 });
 
 test('reviewCatalogDraftBatch merges duplicate vendor patches across drafts without duplicate error', async () => {
-  const { reviewCatalogDraftBatch } = require('../../src/catalog/catalog-assistant');
+  const { reviewCatalogDraftBatch } = require('../../src/catalog/draft/index');
   const adapters = createKlingDossierAdapters();
   const prep1 = await prepareCatalogDraft(klingVideoSeed(), { ...ASSISTANT_OPTIONS, catalogAdapters: adapters });
   const prep2 = await prepareCatalogDraft(klingVideoSeed(), { ...ASSISTANT_OPTIONS, catalogAdapters: adapters });

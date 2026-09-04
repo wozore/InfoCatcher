@@ -9,15 +9,15 @@
  */
 
 const crypto = require('crypto');
-const { readPending } = require('../news/feedback/pending-review-store');
-const { pendingCandidateToSeed } = require('../news/feedback/catalog-draft-adapter');
-const { resolveBatchCandidates, estimateResolutionNeed } = require('./catalog-batch');
-const { loadCatalogSnapshot } = require('./catalog-snapshot-store');
+const { readPending } = require('../pending/index');
+const { pendingCandidateToSeed } = require('../pending/index');
+const { resolveBatchCandidates, estimateResolutionNeed } = require('./intake/index');
+const { loadCatalogSnapshot } = require('./core/index');
 const { DIRS } = require('../shared/paths');
 const { getProvider } = require('../shared/providers');
-const assistant = require('./catalog-assistant');
-const draftStore = require('./catalog-draft-store');
-const { normalizeGatewayErrorCode } = require('./catalog-draft-envelope');
+const assistant = require('./draft/index');
+const draftStore = require('./draft/index');
+const { normalizeGatewayErrorCode } = require('./draft/index');
 
 const RETRYABLE_ERROR_CODES = new Set([
   'DEEPSEEK_TIMEOUT', 'DEEPSEEK_RATE_LIMITED', 'DEEPSEEK_PROVIDER_ERROR', 'DEEPSEEK_NETWORK_ERROR',

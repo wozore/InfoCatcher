@@ -15,7 +15,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { emptySnapshot } = require('../../src/catalog/catalog-contract');
+const { emptySnapshot } = require('../../src/catalog/core/index');
 const {
   loadSeriesPolicy,
   validateSeriesPolicy,
@@ -27,7 +27,7 @@ const {
   validatePlacementRef,
   detailKeyOf,
   detailRefIdOf,
-} = require('../../src/catalog/catalog-series-policy');
+} = require('../../src/catalog/series/index');
 
 function policy() {
   return loadSeriesPolicy();

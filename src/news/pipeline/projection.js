@@ -14,7 +14,7 @@
 const { readJson } = require('../../shared/json-store');
 const { normalizeUrl } = require('./feed-parser');
 const { CATALOG_FILES } = require('../../shared/paths');
-const { catalog } = require('../../catalog-interface');
+const { catalog } = require('../../catalog/interface');
 
 // ── 互动量级换算（自 v1 scoring.js 内联，v2 保留给 computeHotScores 使用）──
 /** 互动量级：对公开互动数据（浏览/点赞/评论/转发/回复）加权后取对数；无任何互动数据返回 null。 */
@@ -209,6 +209,7 @@ function searchConceptKey(term) {
   return normalizedTerm ? 'concept-' + normalizedTerm : 'concept-unknown';
 }
 
+/** 惰性构建标题匹配词表（一次构建只读一次；读取失败时降级为空词表）。 */
 let cachedRelatedLexicon = null;
 /** 惰性构建标题匹配词表（一次构建只读一次；读取失败时降级为空词表）。 */
 function getRelatedLexicon() {
@@ -257,6 +258,7 @@ function computeHotScores(items) {
   }
 }
 
+/** 惰性加载工具目录 URL 索引（一次构建只读一次；读取失败时降级为空索引）。 */
 let cachedToolUrlIndex = null;
 /** 惰性加载工具目录 URL 索引（一次构建只读一次；读取失败时降级为空索引）。 */
 function getToolUrlIndex() {

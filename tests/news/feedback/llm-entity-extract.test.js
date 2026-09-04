@@ -10,7 +10,7 @@ const {
   toNameList,
   extractEntitiesWithLlm,
 } = require('../../../src/news/feedback/llm-entity-extract');
-const { createCostLedger } = require('../../../src/catalog/catalog-research');
+const { createCostLedger } = require('../../../src/catalog/core/index');
 
 function response(payload, ok = true, status = 200) {
   return { ok, status, json: async () => payload, text: async () => JSON.stringify(payload) };

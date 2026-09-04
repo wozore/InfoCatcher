@@ -4,8 +4,8 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const { buildIntegratedLookup, lookupReleaseDateForSeed, slugifyModelName } = require('../../src/catalog/catalog-integrated-lookup');
-const { applyIntegratedReleaseDate } = require('../../src/catalog/ai/deepseek-catalog-ai');
-const { validateSynthesisOutput } = require('../../src/catalog/catalog-synthesis');
+const { applyIntegratedReleaseDate } = require('../../src/catalog/core/index');
+const { validateSynthesisOutput } = require('../../src/catalog/core/index');
 
 const SHARED = {
   schema_version: 1,

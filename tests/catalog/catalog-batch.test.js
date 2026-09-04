@@ -26,8 +26,8 @@ const {
   runCatalogBatch,
   runBatchFromCards,
   resolveBatchPlacements,
-} = require('../../src/catalog/catalog-batch');
-const { resolveOfficialSource } = require('../../src/catalog/ai/catalog-adapters');
+} = require('../../src/catalog/intake/index');
+const { resolveOfficialSource } = require('../../src/catalog/intake/index');
 const {
   lookupOfficialUrl,
   addUrlRegistryEntry,
@@ -36,7 +36,7 @@ const {
   loadProductUrlRegistry,
   updateSourcesForProduct,
   validateProductUrlRegistry,
-} = require('../../src/catalog/official-url-registry');
+} = require('../../src/catalog/url-registry/index');
 const { CATALOG_GENERATOR_FILES } = require('../../src/shared/paths');
 
 const GEN_OPTIONS = { maxSearchQueries: 2, maxPages: 2, maxResponsesCalls: 2, maxSynthesisCalls: 1 };
@@ -312,7 +312,7 @@ test('official-url-registry 多官方 URL：official_urls 数组全作 official_
   assert.deepEqual(hints.map(h => h.url).sort(), ['https://kling.ai/', 'https://klingai.com/document-api'].sort());
 });
 
-test('official-url-registry 产品前缀优先于模型前缀，并按词边界与最长前缀匹配', () => {
+test('official-url-registry vendor registry ignores product prefixes and keeps model boundaries', () => {
   const store = { schema_version: 1, entries: {} };
   addUrlRegistryEntry(
     { name: 'anthropic', vendor_name: 'Anthropic', official_url: 'https://docs.anthropic.com', model_prefixes: ['claude'] },
@@ -327,9 +327,9 @@ test('official-url-registry 产品前缀优先于模型前缀，并按词边界�
     { registry: store },
   );
 
-  assert.equal(lookupOfficialUrl('Claude Code 2.1', { registry: store }).official_url, 'https://code.claude.com/docs');
+  assert.equal(lookupOfficialUrl('Claude Code 2.1', { registry: store }).official_url, 'https://docs.anthropic.com/');
   assert.equal(lookupOfficialUrl('Claude Opus 5', { registry: store }).official_url, 'https://docs.anthropic.com/');
-  assert.equal(lookupOfficialUrl('Cursor Pro', { registry: store }).vendor_name, 'Anysphere');
+  assert.equal(lookupOfficialUrl('Cursor Pro', { registry: store }).ok, false);
   assert.equal(lookupOfficialUrl('Cursorless', { registry: store }).ok, false);
   assert.equal(lookupOfficialUrl('anything', { registry: store }).ok, false);
 });
@@ -695,7 +695,7 @@ test('runCatalogBatch：人工 placement 无效 → fail_closed，不进入 prep
 // ── 第 9 组：阶段 5 成本门禁与顺序状态 ─────────────────────────
 
 test('runCatalogBatch：同厂商候选顺序投影，第 3 个 existing、第 4 个 migration_required', async () => {
-  const snap = require('../../src/catalog/catalog-contract').emptySnapshot();
+  const snap = require('../../src/catalog/core/index').emptySnapshot();
   snap['vendor-level2'].push({
     id: 'vendor-level2:zhipu:glm', vendor_key: 'zhipu', title: 'GLM 5', status: 'active',
     detail_refs: [{ kind: 'tool-level3', id: 'tool-level3:glm-5.1' }, { kind: 'tool-level3', id: 'tool-level3:glm-5.2' }],
@@ -723,7 +723,7 @@ test('runCatalogBatch：同厂商候选顺序投影，第 3 个 existing、第 4
 });
 
 test('resolveBatchPlacements：from-preview/resume 复用 placement_decision，不重复调用 AI', async () => {
-  const snap = require('../../src/catalog/catalog-contract').emptySnapshot();
+  const snap = require('../../src/catalog/core/index').emptySnapshot();
   snap['vendor-level2'].push({ id: 'vendor-level2:alibaba:qwen', vendor_key: 'alibaba', title: 'Qwen 模型', detail_refs: [] });
   const ledger = { reserve: () => ({ ok: true }) };
   const seed = { detail_kind: 'api_model', name: 'X-Futuristic-Model-3000', vendor_key: 'alibaba', vendor_name: '阿里' };
@@ -747,7 +747,7 @@ test('resolveBatchPlacements：from-preview/resume 复用 placement_decision，�
 
 test('runBatchFromCards --dry-run：写 placement_decision 进 preview，from-preview 复用', async () => {
   const previewFile = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'cb-pp-')), 'preview.json');
-  const snap = require('../../src/catalog/catalog-contract').emptySnapshot();
+  const snap = require('../../src/catalog/core/index').emptySnapshot();
   snap['vendor-level2'].push({ id: 'vendor-level2:alibaba:qwen', vendor_key: 'alibaba', title: 'Qwen 模型', detail_refs: [] });
   const resolveFn = async () => ({ ok: true, vendor_name: '阿里', official_url: 'https://help.aliyun.com' });
   const mockSuggest = async () => ({

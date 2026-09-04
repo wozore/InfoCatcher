@@ -2,10 +2,10 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { buildOfficialDiscoveryQuery } = require('../../src/catalog/ai/catalog-adapters');
-const { synthesizeLayerFields } = require('../../src/catalog/ai/deepseek-catalog-ai');
-const { revisionOf, previewHashOf } = require('../../src/catalog/catalog-revision');
-const { emptySnapshot } = require('../../src/catalog/catalog-contract');
+const { buildOfficialDiscoveryQuery } = require('../../src/catalog/intake/index');
+const { synthesizeLayerFields } = require('../../src/catalog/core/index');
+const { revisionOf, previewHashOf } = require('../../src/catalog/core/index');
+const { emptySnapshot } = require('../../src/catalog/core/index');
 
 function fakeResponse(data, ok = true, status = 200) {
   return { ok, status, json: async () => data, text: async () => JSON.stringify(data) };

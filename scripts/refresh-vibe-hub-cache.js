@@ -16,7 +16,7 @@ const {
   loadVibeHubCache,
   saveVibeHubCache,
   refreshStaleVibeHubCache,
-} = require('../src/catalog/vibe-hub-evidence');
+} = require('../src/catalog/concept/index');
 
 async function main(argv = [], options = {}) {
   const cache = loadVibeHubCache(options);

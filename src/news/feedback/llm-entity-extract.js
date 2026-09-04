@@ -26,8 +26,8 @@
  */
 
 const { requestStructuredJson } = require('../../shared/llm-gateway');
-const { createCostLedger } = require('../../catalog/catalog-research');
-const { loadGeneratorConfig } = require('../../catalog/catalog-assistant');
+const { createCostLedger } = require('../../catalog/core/index');
+const { loadGeneratorConfig } = require('../../catalog/draft/index');
 const { LOCAL_API_BASE } = require('../../shared/llm-endpoints');
 
 const DEFAULT_MAX_OUTPUT_TOKENS = 600;

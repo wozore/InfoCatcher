@@ -2,10 +2,10 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { emptySnapshot } = require('../../src/catalog/catalog-contract');
-const { planCatalogResearch } = require('../../src/catalog/catalog-profile-contract');
-const { expectedLayerFields } = require('../../src/catalog/catalog-synthesis');
-const { buildSynthesisInput, buildSynthesisInstructions, DEFAULT_MAX_SOURCES_PER_LAYER, DEFAULT_MAX_SOURCE_CHARS } = require('../../src/catalog/ai/catalog-synthesis-prompt');
+const { emptySnapshot } = require('../../src/catalog/core/index');
+const { planCatalogResearch } = require('../../src/catalog/core/index');
+const { expectedLayerFields } = require('../../src/catalog/core/index');
+const { buildSynthesisInput, buildSynthesisInstructions, DEFAULT_MAX_SOURCES_PER_LAYER, DEFAULT_MAX_SOURCE_CHARS } = require('../../src/catalog/core/index');
 
 function seed() {
   return {

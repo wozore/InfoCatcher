@@ -8,7 +8,7 @@ const {
   extractVibeHubText,
   fetchVibeHubDefinition,
   refreshStaleVibeHubCache,
-} = require('../../src/catalog/vibe-hub-evidence');
+} = require('../../src/catalog/concept/index');
 
 function response(body, ok = true, status = 200) {
   return { ok, status, text: async () => body };

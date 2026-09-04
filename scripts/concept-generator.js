@@ -19,8 +19,9 @@
 const { loadDotEnv } = require('../src/shared/env');
 loadDotEnv();
 
-const concept = require('../src/catalog/concept-batch');
-const { loadGeneratorConfig, normalizeGeneratorOptions } = require('../src/catalog/catalog-assistant');
+const concept = require('../src/catalog/concept/index');
+const { readMinStore } = require('../src/news/min/min-store');
+const { loadGeneratorConfig, normalizeGeneratorOptions } = require('../src/catalog/draft/index');
 
 function parseArgs(argv) {
   const positional = [];
@@ -45,6 +46,7 @@ async function main(argv = process.argv.slice(2)) {
     const result = await concept.runConceptBatch(cards, {
       dryRun: flags.dry_run === true,
       confirmCost: flags.confirm_cost === true,
+      readNewsEvidence: () => readMinStore().candidates,
       ...normalizeGeneratorOptions(loadGeneratorConfig()), // model/provider/timeout 等透传合成
     });
     console.log(JSON.stringify(result, null, 2));

@@ -23,10 +23,16 @@
 
 const { readJson } = require('../../shared/json-store');
 const { readMinStore } = require('../min/min-store');
-const { catalog } = require('../../catalog-interface');
+const { catalog } = require('../../catalog/interface');
 const { CATALOG_FILES } = require('../../shared/paths');
 const { beijingDateKey } = require('../../shared/beijing-time');
-const { mergePending, candidateKeyOf } = require('./pending-review-store');
+const {
+  mergePending,
+  candidateKeyOf,
+  isVagueName,
+  toolExists,
+  conceptExists,
+} = require('../../pending');
 
 // ═══════════════════════════════════════════════════════════════
 // 默认实体提取（正则）
@@ -41,20 +47,8 @@ const KNOWN_AI_NAMES = [
   'Runway', 'Suno', '可灵', 'Cerebras', 'Groq', 'Deep Research',
 ];
 
-// 产品/平台/模型家族笼统名：绝不生成待补工具卡（与已删除的笼统名卡保持一致）。
-// 精确匹配（大小写不敏感）；具体模型/工具名（如 "Kling 2.6 Pro"、"GitHub Copilot"）不受影响。
-const VAGUE_FAMILY_NAMES = new Set([
-  '通义千问', '腾讯混元', '豆包', 'kimi', '天工ai', '可灵',
-  'chatgpt', 'claude', 'gemini', 'deepseek', '智谱清言', '智谱',
-  '文心一言', '讯飞星火', '海螺ai', 'grok', 'mistral', 'cohere',
-]);
-
-/** 是否产品/平台/模型家族笼统名（精确匹配，大小写不敏感）。 */
-function isVagueName(name) {
-  return VAGUE_FAMILY_NAMES.has(String(name || '').trim().toLowerCase());
-}
-
-// 精确匹配 AI 模型带版本号/后缀的结构（如 Kling 2.6 Pro, GPT-5.6, Claude Opus 4.8, Qwen3.8-Max）
+// 默认实体提取（正则）
+// ═══════════════════════════════════════════════════════════════
 const AI_MODEL_PATTERN = /\b(?:GPT|Claude|Gemini|Qwen|Llama|Kling|GLM|Mistral|DeepSeek|MiniMax|Grok)[-\s]?[vV]?\d+(?:\.\d+)?(?:[-\s]?(?:Pro|Max|Ultra|Plus|Flash|Mini|Turbo|Preview|Instruct|Reasoning))?\b/gi;
 
 function matchWordOrChinese(text, name) {
@@ -130,51 +124,7 @@ function normalizeEntities(result) {
   return entities;
 }
 
-// ═══════════════════════════════════════════════════════════════
-// 知识库比对
-// ═══════════════════════════════════════════════════════════════
-
-/** 工具库已有判定：name 或 id 子串匹配（双向，大小写不敏感）。 */
-function normalizeToolToken(val) {
-  return String(val || '').toLowerCase().replace(/[^a-z0-9一-龥]+/g, '');
-}
-
-/** 工具库已有判定：title/tool_key/name/id 子串或归一化相等匹配（双向，大小写不敏感，去标点）。 */
-function toolExists(toolName, tools) {
-  const needle = String(toolName || '').toLowerCase();
-  if (!needle) return false;
-  const needleNorm = normalizeToolToken(toolName);
-  return (tools || []).some(tool => {
-    const title = String(tool.title || tool.name || '');
-    const titleLower = title.toLowerCase();
-    const key = String(tool.tool_key || tool.id || '');
-    const keyLower = key.toLowerCase();
-    const vendor = String(tool.vendor_label || tool.vendor_name || '').toLowerCase();
-
-    if (needleNorm && (normalizeToolToken(title) === needleNorm || normalizeToolToken(key) === needleNorm)) return true;
-    return (
-      (title && titleLower.includes(needle)) ||
-      (key && keyLower.includes(needle)) ||
-      (vendor && vendor.includes(needle)) ||
-      (needle.includes(titleLower) && title) ||
-      (needle.includes(keyLower) && key)
-    );
-  });
-}
-
-/** 概念库已有判定：term 或 full_name 子串匹配（双向，大小写不敏感）。 */
-function conceptExists(conceptName, glossary) {
-  const needle = String(conceptName || '').toLowerCase();
-  if (!needle) return false;
-  return (glossary || []).some(entry =>
-    (entry.term && String(entry.term).toLowerCase().includes(needle)) ||
-    (entry.full_name && String(entry.full_name).toLowerCase().includes(needle)) ||
-    (needle.includes(String(entry.term || '').toLowerCase()) && entry.term) ||
-    (needle.includes(String(entry.full_name || '').toLowerCase()) && entry.full_name)
-  );
-}
-
-/** 生成 id 占位（英文名 → kebab；中文名原样）。 */
+/** 生成 id 占位（英文名 → kebab；中文名原样）。 *//** 生成 id 占位（英文名 → kebab；中文名原样）。 */
 function placeholderId(name) {
   const slug = String(name || '')
     .trim()

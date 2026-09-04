@@ -4,8 +4,8 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
 const { CATALOG_FILES } = require('../src/shared/paths');
-const { catalog, resetCatalogForTests } = require('../src/catalog-interface');
-const { validateCatalogSnapshot } = require('../src/catalog/catalog-snapshot-validator');
+const { catalog, resetCatalogForTests } = require('../src/catalog/interface');
+const { validateCatalogSnapshot } = require('../src/catalog/core/index');
 
 test.beforeEach(() => resetCatalogForTests());
 

@@ -2,7 +2,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { buildCatalogDraftEnvelope, validateCatalogDraftEnvelope } = require('../../src/catalog/catalog-draft-envelope');
+const { buildCatalogDraftEnvelope, validateCatalogDraftEnvelope } = require('../../src/catalog/draft/index');
 
 function plan() {
   return {

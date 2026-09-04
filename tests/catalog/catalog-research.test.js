@@ -2,9 +2,9 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { emptySnapshot } = require('../../src/catalog/catalog-contract');
-const { planCatalogResearch } = require('../../src/catalog/catalog-profile-contract');
-const { createCostLedger, researchCatalog, scopeKindsOfFields } = require('../../src/catalog/catalog-research');
+const { emptySnapshot } = require('../../src/catalog/core/index');
+const { planCatalogResearch } = require('../../src/catalog/core/index');
+const { createCostLedger, researchCatalog, scopeKindsOfFields } = require('../../src/catalog/core/index');
 
 function seed() {
   return {
@@ -156,7 +156,7 @@ test('discovery widens to registrant roots when the seed-scope pass finds nothin
 });
 
 test('registrableHostOf widens vendor subdomains but not shared hosting roots', () => {
-  const { registrableHostOf } = require('../../src/catalog/catalog-research');
+  const { registrableHostOf } = require('../../src/catalog/core/index');
   assert.equal(registrableHostOf('platform.openai.com'), 'openai.com');
   assert.equal(registrableHostOf('openai.com'), null);
   assert.equal(registrableHostOf('docs.kling.ai'), 'kling.ai');
@@ -165,7 +165,7 @@ test('registrableHostOf widens vendor subdomains but not shared hosting roots', 
 });
 
 test('official gate accepts vendor main domain once a subdomain hint exists', () => {
-  const { officialRootsOf, isTrustedOfficialUrl } = require('../../src/catalog/catalog-research');
+  const { officialRootsOf, isTrustedOfficialUrl } = require('../../src/catalog/core/index');
   const roots = officialRootsOf({
     official_url: 'https://platform.openai.com/docs',
     discovery_sources: [{ url: 'https://platform.openai.com/docs', kind: 'official_hint' }],

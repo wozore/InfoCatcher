@@ -10,7 +10,7 @@ const {
   normalizeEntities,
   isVagueName,
 } = require('../../../src/news/feedback/tool-feedback');
-const { pendingCandidateToSeed } = require('../../../src/news/feedback/catalog-draft-adapter');
+const { pendingCandidateToSeed } = require('../../../src/pending/index');
 
 // 备份/恢复待补卡文件（feedbackFromSummaries 会真实写这两个文件）
 const PENDING_TOOL = CATALOG_GENERATOR_FILES.pendingTools;

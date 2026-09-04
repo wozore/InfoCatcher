@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
-const store = require('../../../src/news/feedback/pending-review-store');
+const store = require('../../../src/pending/index');
 
 function tempFile(prefix) {
   return path.join(fs.mkdtempSync(path.join(os.tmpdir(), prefix)), 'pending.json');
@@ -50,4 +50,12 @@ test('pending store review is async and serializes concurrent writes', async () 
   assert.equal(rejected.reason.code, 'REVISION_CONFLICT');
   const after = await store.mergePending('tools', [{ name: 'Racer', description: 'v1' }], { toolFile });
   assert.equal(after.cards[0].review_status, 'approved', '并发后人工结论仍在，业务字段未变前不重置');
+});
+
+
+test('pending facade exposes seed conversion and shared catalog duplicate rules', () => {
+  assert.equal(store.isVagueName('ChatGPT'), true);
+  assert.equal(store.toolExists('Cursor', [{ title: 'Cursor' }]), true);
+  assert.equal(store.conceptExists('RAG', [{ term: 'RAG' }]), true);
+  assert.equal(store.pendingCandidateToSeed({ name: 'Kling 2.6 Pro', detail_kind_hint: 'api_model' }).detail_kind, 'api_model');
 });

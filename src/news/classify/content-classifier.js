@@ -27,7 +27,8 @@
 'use strict';
 
 const fs = require('fs');
-const { catalog } = require('../../catalog-interface');
+const { catalog } = require('../../catalog/interface');
+const { CATALOG_FILES } = require('../../shared/paths');
 const { classifyContent } = require('./llm-provider');
 
 // ═══════════════════════════════════════════════════════════════
@@ -73,19 +74,11 @@ function loadToolNames() {
   return names;
 }
 
-/** 概念名集合：glossary 的 term（用于 ai_concept 命中）。 */
 function loadConceptTerms() {
-  const terms = [];
-  try {
-    const glossary = JSON.parse(fs.readFileSync(CATALOG_FILES.glossary, 'utf8'));
-    for (const entry of glossary) if (entry.term) terms.push(entry.term);
-  } catch {
-    // catalog 缺失时退回内置最小概念表
-  }
-  return [...new Set(terms.concat([
+  return [
     'RAG', 'Transformer', 'MoE', 'LoRA', 'RLHF', 'SFT', 'Agent', 'Token',
     'Embedding', '量化', '上下文窗口', '扩散模型', '微调', '提示工程', 'Tool Use',
-  ]))];
+  ];
 }
 
 // 内置别名（catalog 未覆盖的常见称呼）

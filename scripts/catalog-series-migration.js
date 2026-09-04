@@ -16,11 +16,11 @@
  *   防止提交瞬间被并发改动。提交失败自动回滚。
  */
 
-const { loadCatalogSnapshot } = require('../src/catalog/catalog-snapshot-store');
-const { revisionOf } = require('../src/catalog/catalog-revision');
-const { loadSeriesPolicy } = require('../src/catalog/catalog-series-policy');
-const { planSeriesMigration } = require('../src/catalog/catalog-series-migration');
-const { commitSnapshotChange } = require('../src/catalog/catalog-transaction-store');
+const { loadCatalogSnapshot } = require('../src/catalog/core/index');
+const { revisionOf } = require('../src/catalog/core/index');
+const { loadSeriesPolicy } = require('../src/catalog/series/index');
+const { planSeriesMigration } = require('../src/catalog/series/index');
+const { commitSnapshotChange } = require('../src/catalog/transaction');
 
 function currentPlan() {
   const policy = loadSeriesPolicy();
