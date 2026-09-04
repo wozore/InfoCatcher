@@ -1,8 +1,8 @@
 /**
  * feed-parser.js —— 通用解析与内容标准化层
  *
- * 在热点管线中的位置：被各平台采集器（news-youtube / news-x）
- * 与编排入口（build-news.js）共享。负责把各平台的原始格式
+ * 在热点管线中的位置：被平台采集器（collector-youtube-v2 / collector-x-v2）
+ * 与投影层（projection.js）共享。负责把各平台的原始格式
  * （YouTube Atom、X TwitterAPI.io JSON）转换为统一内容模型，
  * 并提供跨平台的 HTTP 请求（requestText）与标识规范化工具。
  *

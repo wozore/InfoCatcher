@@ -1,6 +1,6 @@
 'use strict';
 
-const { getProvider, DEFAULT_PROVIDER_NAME } = require('../shared/ai-provider-registry');
+const { getProvider, DEFAULT_PROVIDER_NAME } = require('../shared/providers');
 const { loadAiModuleConfig } = require('../shared/ai-config');
 const { loadCatalogSnapshot } = require('./catalog-snapshot-store');
 const { previewHashOf, revisionOf } = require('./catalog-revision');

@@ -2853,3 +2853,37 @@
 ### 已知边界
 
 - [x] 运行中的工作台 server 进程需重启才能加载修复后的 summarize 路径（前端 JS 刷新页面即生效，服务端代码需重启进程）。
+
+## 2026-09-04 · 代码库重构 C 轮清理（垫片删除 + 旧契约清扫 + check-standards 规范门禁上线）
+
+> 全仓重构计划（本地 docs/codebase-refactor-plan.md v2）第一轮。原则：覆盖式修正——删旧路径并迁移全部调用方，不保留兼容层。全程零行为变更。
+
+### 变更实现
+
+- [x] C1/C2 兼容垫片删除：[deepseek-structured.js](../../../src/catalog/ai/deepseek-structured.js)（re-export llm-gateway）与 [ai-provider-registry.js](../../../src/shared/ai-provider-registry.js)（透传 providers）两个垫片删除，18 个调用方文件全部改指真身 `src/shared/llm-gateway.js` / `src/shared/providers/index.js`；deepseek-structured.test.js 有效用例并入 llm-gateway.test.js，ai-provider-registry.test.js 改名 providers.test.js（断言不变）。全仓零转发残留。
+- [x] C3 死导出：paths.js 删 `SOURCE_LIST_PATH`（全仓无消费者；`RSS_FEED_PATH` 保留待 R2 接线 generate-rss）。
+- [x] C4 OG 链修正（拍板保留手动工具）：generate-og-image.js 默认输出改经 `DIRS.public` 指向 `public/og-image.png`。
+- [x] C6 旧契约定点清扫（按计划 §1.4 定义：删除对象是"描述已不存在事物的叙述"，装饰形式不动）：validate-news.js 三处、news-public-gate.js、projection.js 历史叙事删除；feed-parser.js 头注释失实消费者改写、vibe-hub-evidence.js sitemap 失实描述如实化；validate-intel.js 与 catalog-snapshot-validator.js 活门禁保留逻辑本体、错误文案改写为当前契约表述（"不允许包含 queried_at/id/publisher/source_type"）。
+- [x] C7 导出面收敛：fetch-tool-intel.js 删除全部无人消费的库导出（collectIntelligence 全仓零消费者），收敛为纯 CLI 入口（require.main 守卫自运行）。
+- [x] C8 规范门禁：新增零依赖静态检查器 [check-standards.js](../../../scripts/check-standards.js)——7 类检测（依赖方向单向 / 垫片 / 旧契约叙事短语 / 体量与导出阈值 / require 图环 / console·process.exit·process.env 组装纪律 / src 文件 CODEBASE-MAP 登记完整性），前置接入 [validate.js](../../../scripts/validate.js)（全部 6 个 CI 工作流生效）；存量违规白名单 [check-standards.whitelist.json](../../../scripts/check-standards.whitelist.json)（98 条全带机器校验 count，豁免文件内违规增长报 whitelist-growth 且不可豁免；铁律只减不增）。配套 19 项 fixture 隔离测试。
+- [x] D1：[CLAUDE.md](../../../.claude/CLAUDE.md) 增补"代码规范"节（依赖方向、禁垫片、模板落位声明、旧契约判定、白名单铁律、CODEBASE-MAP 同步）。
+- [x] C5/C9/C10 本地清理：删除草稿去重本地备份 `.duplicates-backup-20260904/`、`output/workbench-acceptance.js`（一次性未提交脚本）、4 个旧 worktree 及其分支（移除前逐一确认无未提交改动）；CODEBASE-MAP 补登记 `scripts/maintainer-workbench.js`（工作台唯一启动器，此前全仓零记载）。
+- [x] CODEBASE-MAP 同步：删 4 条已删文件死条目，改写 paths/fetch-tool-intel/generate-og-image 失实条目，登记 4 个新文件。
+
+### 返工轮（1/1，Reviewer CHANGES REQUIRED 触发）
+
+- [x] 白名单 count 机器校验上线（原缺陷：`rule|file` 整文件豁免使豁免文件内新增违规零信号、绕过门禁无需改白名单）；浏览器→shared 依赖方向检测盲区封堵（isBrowser 判定提前）；validate-news.js 同文件残留旧契约清扫；白名单 2 条 shim 死条目删除（101→98）；CLAUDE.md 措辞收窄（"机械校验 src 代码文件的登记完整性"）。
+
+### 验证结果
+
+- [x] 全量测试 **711/711** 通过，逐套件对账闭合（基线 692 −12 删垫片用例 +6 并入 +6 改名 +15 checker +4 返工）；`validate.js`（含 checker 前置）/ `check-standards.js`（139 文件白名单外 0 违规）/ `build-dist.js`（93 文件）全部通过。
+- [x] 零残留：两垫片名在 src/scripts/tests/bat/.github/data/白名单/dist 全部零命中（豁免仅计划文档与 dev-log 历史记录）。
+- [x] 行为零变化：C6 活门禁经 node -e 内存调用验证拒绝路径与改前等价（错误码不变仅文案新表述）；垫片迁移为纯 require 换路径；fetch-tool-intel CLI 路径闭合。
+- [x] 新门禁端到端：whitelist-growth 触发/恰好放行/缺 count fail-closed、浏览器→shared 命中，经 tmpdir fixture 4/4 断言通过。
+- [x] 行尾完整性：普通 diff 与 `--ignore-all-space` diff 完全一致，无 CRLF 噪音。
+
+### 已知边界
+
+- [x] fetch-tool-intel.js:141 `process.exit(conflictCount > 0 ? 0 : 0)` 死表达式（无害，随 R2 acquisition 轮清理）；stripCommentsAndStrings 不解析正则字面量与模板 ${}（漏报方向、checker 头注释已声明）；cycles 白名单条目无 count 概念（增长防护靠 diff 人工审查）；whitelist-growth 理论可自豁免（编辑白名单 diff 可审，可选硬禁一行随后续轮）。
+- [x] 本机 Node v24.13.0 下 `node --test <目录>` 不展开目录（MODULE_NOT_FOUND），全量回归继续走 tests/index.js 聚合入口——计划 R8-4"统一测试入口"需按此环境事实重新评估。
+- [x] T3 验收曾因 sonnet 429 限额中断一次，限额重置后对终态完整重验通过。

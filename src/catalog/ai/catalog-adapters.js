@@ -1,11 +1,11 @@
 'use strict';
 
-const { getProvider, resolveProvider, apiKeyForProvider, DEFAULT_PROVIDER_NAME } = require('../../shared/ai-provider-registry');
+const { getProvider, resolveProvider, apiKeyForProvider, DEFAULT_PROVIDER_NAME } = require('../../shared/providers');
 const { canonicalizeUrl, searchTavily, extractTavily, probeTavily } = require('../../shared/tavily-client');
 const { LOCAL_API_BASE } = require('../../shared/llm-endpoints');
 const { registrableHostOf } = require('../catalog-research');
 const { synthesizeLayerFields } = require('./deepseek-catalog-ai');
-const { requestStructuredJson } = require('./deepseek-structured');
+const { requestStructuredJson } = require('../../shared/llm-gateway');
 
 function discoveryKeywords(predicates = []) {
   const keywords = [];

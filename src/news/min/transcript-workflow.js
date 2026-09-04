@@ -15,7 +15,7 @@
 const fs = require('fs');
 const path = require('path');
 const { DIRS } = require('../../shared/paths');
-const { DEFAULT_PROVIDER_NAME } = require('../../shared/ai-provider-registry');
+const { DEFAULT_PROVIDER_NAME } = require('../../shared/providers');
 const { readMinStore, commitMinStoreMutation, revisionOfMinStore, assertExpectedMinRevision, setCandidateTranscriptMin, setCandidateTranscriptSummaryMin } = require('./min-store');
 const { summarizeCandidate, runPool } = require('../classify/content-summarizer');
 

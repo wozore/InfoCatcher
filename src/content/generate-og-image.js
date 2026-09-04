@@ -11,6 +11,7 @@
 const zlib = require('zlib');
 const fs = require('fs');
 const path = require('path');
+const { DIRS } = require('../shared/paths');
 
 const WIDTH = 1200;
 const HEIGHT = 630;
@@ -71,7 +72,7 @@ function createImageRows() {
  * 结构：8 字节 PNG 签名 + IHDR（宽/高/位深 8/颜色类型 2=truecolor）+ IDAT（deflateSync 压缩像素行）+ IEND。
  * @returns {number} 写入的字节数
  */
-function generateOgImage(outputPath = path.resolve(__dirname, '..', '..', 'og-image.png')) {
+function generateOgImage(outputPath = path.join(DIRS.public, 'og-image.png')) {
   const header = Buffer.alloc(13);
   header.writeUInt32BE(WIDTH, 0);
   header.writeUInt32BE(HEIGHT, 4);

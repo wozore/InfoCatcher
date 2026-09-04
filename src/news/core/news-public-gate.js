@@ -92,9 +92,8 @@ function filterPublicItems(items, opts = {}) {
 
 /**
  * 对已构建的公开投影按近期窗口做一致过滤（决策 63/72）：
- * items 按窗口过滤。旧版 events / provenance / assessments 字段已随 v2 移除，
- * 不再产出也不做悬空引用清理。
- * 供 build-news.js 与 publish-news.js 等公开出口复用，与 RSS 共用同一规则。
+ * items 按窗口过滤。
+ * 供 pipeline-min.js、publish-news.js 等公开出口复用，与 RSS 共用同一规则。
  */
 function filterProjectionByWindow(output, opts = {}) {
   if (!output || !Array.isArray(output.items)) return output;

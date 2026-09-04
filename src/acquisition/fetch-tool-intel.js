@@ -1,13 +1,9 @@
 /**
- * fetch-tool-intel.js — 工具情报自动采集引擎（编排入口）
+ * fetch-tool-intel.js — 工具情报采集编排（CLI 入口）
  *
  * 职责：从厂商官方来源（llms.txt / pricing.md / HTML 表格）自动获取
  * 模型与 API 价格信息，与现有五模块三级详情做增量合并。
- *
- * 本文件保留主编排 collectIntelligence()（抓取→规范化→写入 data/）与 CLI 入口，
- * 并对拆分的子模块做汇总 re-export，保持原有导出面不变：
- *   - fetch-intel-http.js：requestText、fetchToolIntel（网络抓取层）
- *   - normalize-intel.js：解析 / 规范化 / 合并纯函数
+ * 抓取与解析纯逻辑分属 fetch-intel-http.js / normalize-intel.js，本文件只做编排。
  *
  * 三级降级链：
  *   L1: llms.txt → pricing.md → Markdown 表格解析
@@ -24,20 +20,8 @@ const fs = require('fs');
 const path = require('path');
 const { ACQUISITION_FILES } = require('../shared/paths');
 const { catalog } = require('../catalog-interface');
-const { requestText, fetchToolIntel } = require('./fetch-intel-http');
-const {
-  extractMarkdownTables,
-  parsePriceString,
-  mapRowToRateCard,
-  extractFromPricingMarkdown,
-  extractHtmlTablesSimple,
-  htmlRowsToObjects,
-  extractFromHtmlTable,
-  extractDeepSeekPricing,
-  assignPrices,
-  detectPricingChange,
-  mergeIntelData,
-} = require('./normalize-intel');
+const { fetchToolIntel } = require('./fetch-intel-http');
+const { mergeIntelData } = require('./normalize-intel');
 
 // ═══════════════════════════════════════════════════════════════
 // 类型定义（JSDoc 注释）
@@ -164,20 +148,3 @@ async function main() {
 if (require.main === module) {
   main();
 }
-
-module.exports = {
-  requestText,
-  extractMarkdownTables,
-  parsePriceString,
-  mapRowToRateCard,
-  extractFromPricingMarkdown,
-  extractHtmlTablesSimple,
-  htmlRowsToObjects,
-  extractFromHtmlTable,
-  extractDeepSeekPricing,
-  assignPrices,
-  detectPricingChange,
-  mergeIntelData,
-  fetchToolIntel,
-  collectIntelligence,
-};

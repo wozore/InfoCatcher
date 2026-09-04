@@ -114,8 +114,8 @@ function validateIntelData(intel) {
         if (card.input_uncached && card.output && card.output < card.input_uncached * 0.1) warnings.push(`${item.vendor_key}/${item.id}: output (${card.output}) 远低于 input (${card.input_uncached})`);
       }
     }
-    if (item.sources?.some(source => source.queried_at || source.id || source.publisher || source.source_type)) errors.push(`${item.vendor_key}/${item.id}: sources 含已删除采集字段`);
-    if (item.source_refs || item.api_pricing?.rate_cards?.some(rate => rate.source_refs)) errors.push(`${item.vendor_key}/${item.id}: 含已删除 source_refs`);
+    if (item.sources?.some(source => source.queried_at || source.id || source.publisher || source.source_type)) errors.push(`${item.vendor_key}/${item.id}: sources 不允许包含 queried_at/id/publisher/source_type`);
+    if (item.source_refs || item.api_pricing?.rate_cards?.some(rate => rate.source_refs)) errors.push(`${item.vendor_key}/${item.id}: 不允许包含 source_refs`);
   }
   return { valid: errors.length === 0, errors, warnings };
 }

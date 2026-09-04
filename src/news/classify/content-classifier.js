@@ -251,7 +251,7 @@ function classifyRuleBased(item) {
  * @returns {Promise<{ content_type: string, content_type_status: string, classifier: string,
  *                     ai_confidence: number|null, reasons: string[], hit_tools: string[], hit_concepts: string[] }>}
  */
-// 支持 L1 语义分类的外部 provider 白名单（开关见 shared/ai-provider-registry）。
+// 支持 L1 语义分类的外部 provider 白名单（开关见 shared/providers）。
 const L1_PROVIDERS = new Set(['deepseek', 'zhipu']);
 
 async function classifyCandidate(item, options = {}) {

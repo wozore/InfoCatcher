@@ -10,7 +10,7 @@
  *   - 返回 { ok:true, value:{...正式条目}, usage } 或深 Module 错误
  */
 
-const { requestStructuredJson } = require('./deepseek-structured');
+const { requestStructuredJson } = require('../../shared/llm-gateway');
 const { LOCAL_API_BASE } = require('../../shared/llm-endpoints');
 const {
   buildConceptSynthesisInput,

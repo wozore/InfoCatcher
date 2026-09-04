@@ -106,7 +106,7 @@ function checkLevel3(level3, cardsByDetail, errors) {
       item.api_pricing?.additional_charges?.some(charge => charge.source_refs) ||
       item.plan?.source_refs
     ) {
-      errors.push(error('NESTED_SOURCE_REFS_FORBIDDEN', path, '不允许已删除的嵌套 source_refs'));
+      errors.push(error('NESTED_SOURCE_REFS_FORBIDDEN', path, '不允许嵌套 source_refs'));
     }
   });
 }

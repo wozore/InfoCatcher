@@ -1,6 +1,6 @@
 'use strict';
 
-const { AI_PROTOCOLS, DEFAULT_PROVIDER_NAME, apiKeyForProvider, resolveProvider } = require('./ai-provider-registry');
+const { AI_PROTOCOLS, DEFAULT_PROVIDER_NAME, apiKeyForProvider, resolveProvider } = require('./providers');
 
 const DEFAULT_BASE_URL = 'https://api.deepseek.com';
 const DEFAULT_RESPONSES_ENDPOINT = `${DEFAULT_BASE_URL}/responses`;

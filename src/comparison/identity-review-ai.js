@@ -7,8 +7,8 @@
  * 两者都返回建议，绝不写人工登记表。
  */
 
-const { requestStructuredJson } = require('../catalog/ai/deepseek-structured');
-const { resolveProvider } = require('../shared/ai-provider-registry');
+const { requestStructuredJson } = require('../shared/llm-gateway');
+const { resolveProvider } = require('../shared/providers');
 const { LOCAL_API_BASE, LOCAL_MODEL } = require('../shared/llm-endpoints');
 const { validateSuggestion } = require('./identity-review');
 

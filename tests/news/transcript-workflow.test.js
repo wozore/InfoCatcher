@@ -6,7 +6,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const { createMinStore, revisionOfMinStore } = require('../../src/news/min/min-store');
-const { AI_PROTOCOLS, DEFAULT_PROVIDER_NAME, getProvider } = require('../../src/shared/ai-provider-registry');
+const { AI_PROTOCOLS, DEFAULT_PROVIDER_NAME, getProvider } = require('../../src/shared/providers');
 const {
   safeTranscriptFile,
   uploadTranscript,

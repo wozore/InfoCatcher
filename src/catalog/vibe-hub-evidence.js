@@ -5,7 +5,7 @@
  *
  * vibe-hub.org（VibeHub·Vibe Coding 术语图鉴）是用户提供的概念仓库：Next.js SSR，
  * 概念页位于 `https://vibe-hub.org/<slug>`，正文（定义/别名/相关概念/权威出处）全部
- * 服务端渲染在 HTML 中。robots.txt 允许爬取（仅禁 `/api/`），有 sitemap.xml 列全部 slug。
+ * 服务端渲染在 HTML 中。robots.txt 允许爬取（仅禁 `/api/`）；概念页 URL 由 term→slug 直接构造。
  *
  * 本模块只做纯 HTTP（零 API 成本，不计 ledger）：
  *   - term → 英文 kebab slug（含中文/非 ASCII 返回 null → 跳过）

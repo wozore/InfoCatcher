@@ -3,7 +3,6 @@
  *
  * 在热点管线中的位置：为写出 hotspots.json 前的最终投影补充公开契约字段
  * （hot_score / evidence_excerpt / related_resources）与内容去重（dedupeItems）。
- * 旧版 events/provenance/assessments 与就地迁移工具已随 v2 移除。
  *
  * 模块边界：
  *   - 只依赖 feed-parser.js（normalizeUrl）与本地 interactionValue；

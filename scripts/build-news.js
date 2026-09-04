@@ -17,7 +17,7 @@
 
 // 先加载 .env（密钥只经环境变量注入，见 src/shared/env.js），再加载实现。
 // 必须在 require 实现之前调用：实现模块顶层会读 provider 对应的环境变量
-// （ZHIPU_API_KEY / DEEPSEEK_API_KEY，见 src/shared/ai-provider-registry.js）。
+// （ZHIPU_API_KEY / DEEPSEEK_API_KEY，见 src/shared/providers/index.js）。
 const { loadDotEnv } = require('../src/shared/env');
 loadDotEnv();
 

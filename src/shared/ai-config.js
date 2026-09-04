@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const { AI_CONFIG_FILES } = require('./paths');
-const { getProvider, DEFAULT_PROVIDER_NAME } = require('./ai-provider-registry');
+const { getProvider, DEFAULT_PROVIDER_NAME } = require('./providers');
 
 // 默认外部 provider 开关（统一收口在 registry 的 DEFAULT_PROVIDER_NAME）。
 // config/catalog-generator.local.json 可按模块覆盖 provider/model/protocol。

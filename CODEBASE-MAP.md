@@ -47,8 +47,7 @@
 ## src/shared/ — 跨模块基础能力
 - [beijing-time.js](src/shared/beijing-time.js) — 固定 UTC+8 北京时间日期键、自然日键与当天零点 ISO 工具，避免本地 Windows 与 CI 时区差异。导出: `BEIJING_OFFSET_MS, beijingDateKey, beijingDayKey, beijingMidnightIso`
 - [env.js](src/shared/env.js) — dotenv 子集解析 + 项目根目录。导出: `loadDotEnv, PROJECT_DIR`
-- [paths.js](src/shared/paths.js) — 目录、catalog 文件与生成器事务路径常量，以及统一 AI 配置文件路径（全仓唯一数据登记点，含五模块 catalog、厂商/产品官方 URL 登记表、草案、锁、staging、backup、journal、日期审计清单、编程工具更新审核清单与概念链路 previews/vibeHubCache；data/manual 下分 archive 喂 AI 搜索历史 / tools 工具链路 / concepts 概念链路，待补卡路径已收拢为 CATALOG_GENERATOR_FILES.pendingTools / CONCEPT_FILES.pendingConcepts）。导出: `DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, CONCEPT_FILES, AI_CONFIG_FILES, NEWS_FILES, ACQUISITION_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH`
-- [ai-provider-registry.js](src/shared/ai-provider-registry.js) — AI provider 注册代理（透传 `src/shared/providers/index.js`），保持全仓现有 `require` 零破坏。导出: `AI_PROTOCOLS, AI_PROVIDERS, DEFAULT_PROVIDER_NAME, getProvider, resolveProvider, apiKeyForProvider`
+- [paths.js](src/shared/paths.js) — 目录、catalog 文件与生成器事务路径常量，以及统一 AI 配置文件路径（全仓唯一数据登记点，含五模块 catalog、厂商/产品官方 URL 登记表、草案、锁、staging、backup、journal、日期审计清单、编程工具更新审核清单与概念链路 previews/vibeHubCache；data/manual 下分 archive 喂 AI 搜索历史 / tools 工具链路 / concepts 概念链路，待补卡路径已收拢为 CATALOG_GENERATOR_FILES.pendingTools / CONCEPT_FILES.pendingConcepts）。导出: `DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, CONCEPT_FILES, AI_CONFIG_FILES, NEWS_FILES, ACQUISITION_FILES, RSS_FEED_PATH`
 - [providers/](src/shared/providers/) — 外部 AI 提供商独立目录，各厂商独立拥有自身元数据、端点与默认模型（开闭原则），由 `index.js` 统一汇聚导出。
   - [protocols.js](src/shared/providers/protocols.js) — 传输协议常量定义（RESPONSES / MESSAGES / CHAT）。导出: `AI_PROTOCOLS`
   - [zhipu.js](src/shared/providers/zhipu.js) — 智谱 ZhipuAI 提供方独立配置（Anthropic Messages 兼容端点，glm-5.3-flash）。
@@ -84,7 +83,6 @@
 - [catalog-transaction-store.js](src/catalog/catalog-transaction-store.js) — catalog 共同锁、五文件 staging、staged dist、journal、回滚和恢复；schema v3 通过 LayerPatches 复用事务；支持带 expected revision 和精确 area/id 列表的关系安全删除；dist 目录交换在 Windows 被占用（IDE/杀软持有目录句柄）时 rename 会 EPERM，自动回退删除重建（build-dist 同法，backup_dist 兜底）。导出: `commitSnapshotChange, commitCatalogChange, replaceToolLevel3, removeCatalogRecords, planRecordRemoval, recoverCatalogTransaction`
 - [catalog-assistant.js](src/catalog/catalog-assistant.js) — schema v3 生成器深 Module；统一离线 plan、按缺失字段研究/resume、单段合成、Review、Apply、取消和恢复 Interface；resume 的明确成本确认获得一组增量硬预算。导出: `planCatalogDraft, prepareCatalogDraft, resumeCatalogDraft, reviewCatalogDraft, applyCatalogDraft, discardCatalogDraft, recoverCatalogTransactions, researchLimits, resumeResearchLimits, estimateResearchCost, probeCatalogCapabilities`
 - [catalog-workbench.js](src/catalog/catalog-workbench.js) — 维护者知识闭环 Catalog 协调器；只消费 approved pending 工具卡，执行 plan/prepare/单 Draft review/resume/discard/显式 Apply，绝不接入自动 Apply 的 catalog batch。导出: `createCatalogWorkbench, planHashOf, projectDraft`
-- [catalog/ai/deepseek-structured.js](src/catalog/ai/deepseek-structured.js) — 结构化 JSON 向后兼容 re-export shim；委托 src/shared/llm-gateway.js 导出 requestStructuredJson、extractJsonValues、diagnosticsOf 与 toExternalChatPayload，业务消费者无需修改。导出: `extractJsonValues, diagnosticsOf, toExternalChatPayload, requestStructuredJson`
 - [catalog/ai/deepseek-catalog-ai.js](src/catalog/ai/deepseek-catalog-ai.js) — DeepSeek 结构化 Catalog Adapter；单段式调用结构化深 Module，基于官方来源正文直接合成各层字段与来源 provenance；定向 repair 按 profile 选择 `last_updated_date` 或 `release_date`，仅在 seed 指定日期且 `seed_official_hint` 正文包含同一日期时确定性修复并绑定该来源。导出: `synthesizeLayerFields`
 - [catalog/ai/catalog-adapters.js](src/catalog/ai/catalog-adapters.js) — Tavily/DeepSeek catalog 研究与合成适配器的默认组合及注入工厂。导出: `createCatalogResearchAdapters, createCatalogSynthesisAdapter`
 - [catalog/ai/catalog-synthesis-prompt.js](src/catalog/ai/catalog-synthesis-prompt.js) — 目录合成 prompt 纯函数构建；按层分组官方来源正文（截断/限量）与字段清单，保留 seed 官方来源角色与定向 repair context，按 `detail_kind` 要求工具 `last_updated_date` 或模型/变体 `release_date`，生成 instructions 与 input；硬性要求 rate_cards[].conditions 非空字符串、one_m_context 必须输出（原生 1M 或 not_applicable），否则相应字段/整层列入 missing。导出: `DEFAULT_MAX_SOURCES_PER_LAYER, DEFAULT_MAX_SOURCE_CHARS, sourcesForLayer, buildSynthesisInput, buildSynthesisInstructions`
@@ -214,12 +212,12 @@
 
 ## src/content/ — 内容生成
 - [generate-rss.js](src/content/generate-rss.js) — RSS 生成。导出: `getFeedItems, generateRss`
-- [generate-og-image.js](src/content/generate-og-image.js) — OG 图生成。导出: `generateOgImage`
+- [generate-og-image.js](src/content/generate-og-image.js) — OG 图生成；默认输出经 `DIRS.public` 写 `public/og-image.png`。导出: `generateOgImage`
 
 ## src/acquisition/ — 工具情报采集
 - [fetch-intel-http.js](src/acquisition/fetch-intel-http.js) — HTTP 抓取层。导出: `requestText, fetchToolIntel`
 - [normalize-intel.js](src/acquisition/normalize-intel.js) — 价格/表格解析与合并。导出: `extractDeepSeekPricing, assignPrices, mergeIntelData...`
-- [fetch-tool-intel.js](src/acquisition/fetch-tool-intel.js) — **采集入口（编排 + 汇总 re-export 14 个）**。refresh-tool-intel.yml 依赖 `collectIntelligence`
+- [fetch-tool-intel.js](src/acquisition/fetch-tool-intel.js) — 工具情报采集 CLI 入口（`require.main === module` 自运行，无库导出）；编排 fetch-intel-http 与 normalize-intel 完成"抓取 → 规范化 → 写 data/acquisition 产物"流程，手动运行（docs/operations.md 记载）
 - [validate-intel.js](src/acquisition/validate-intel.js) — 情报数据校验。导出: `validate, validateSourceConfig, validateIntelData`
 
 ## src/maintenance/ — 维护校验与本机工作台
@@ -250,7 +248,6 @@
 - [tool-update-review-cli.test.js](tests/catalog/tool-update-review-cli.test.js) — 工具更新 CLI 离线回归：参数解析、Tavily/DeepSeek 门禁、本地模型汉化与失败重试、外部摘要成本门禁、scan 不 Apply、localize 回填/list 只读和 Apply 三重确认门禁。
 - [concept-batch.test.js](tests/catalog/concept-batch.test.js) — 概念批量编排回归：读卡、双层查重、approved 摘要证据匹配与 K 上限、vibe-hub 补充/失败静默、成本估算、dry-run 零网络零写入、成本门禁、合成失败隔离、预览文件、apply 必填校验/去重/合并保序/terms 子集。
 - [vibe-hub-evidence.test.js](tests/catalog/vibe-hub-evidence.test.js) — vibe-hub 提取回归：term→slug（中文 null）、JSON-LD/正文结构化提取、缓存命中零网络、未命中 GET+写缓存、TTL 过期重抓、404/网络失败 null、串行节流、过期刷新与失败保留。
-- [deepseek-structured.test.js](tests/catalog/deepseek-structured.test.js) — DeepSeek 结构化 JSON 外壳、空/截断/非法响应、synthesis 预算预占与缺账本回归。
 - [catalog-profile-contract.test.js](tests/catalog/catalog-profile-contract.test.js) — CatalogProfile 适用性、video API 必需谓词、稳定目标与逐层 create/replace/noop 规划回归。
 - [catalog-series-policy.test.js](tests/catalog/catalog-series-policy.test.js) — LLM 二级系列政策契约回归：16 厂商矩阵、validator fail-closed、usageKindOf general/专用/uncovered 分类、vendor 别名、人工 placement ref（kind/存在性/vendor 归属）、稳定 ID 与 slugify 点号冲突。
 - [catalog-series-migration.test.js](tests/catalog/catalog-series-migration.test.js) — LLM 二级系列迁移规划器回归：同 id 就地改写、全新创建、专用改名、多碎片合并、多余成员搬家、专用零漂移、碎片删除与 id_map、L1 level2_refs 重写、孤儿为空、既有浮空详情入 warnings、非政策厂商零漂移；集成真实快照迁移后校验通过且关键终态符合政策。
@@ -263,8 +260,8 @@
 - [kling-video-dossier.js](tests/catalog/fixtures/kling-video-dossier.js) — 完全离线的 Kling video API 官方 dossier 与受约束单段合成 Adapter fixture。导出: `OFFICIAL_URL, EXACT_QUOTE, klingVideoSeed, createKlingDossierAdapters`
 - [catalog-cli.test.js](tests/catalog/catalog-cli.test.js) — CLI 参数、vendor/product 官方 URL 登记增删、纯本地 freshness audit、热点 Seed、catalog Tavily/DeepSeek 模块配置、Tavily 能力 fail-closed 和共享 DeepSeek transport 回归。
 - [tavily-client.test.js](tests/shared/tavily-client.test.js) — Tavily Search/Extract 请求、Key、URL canonicalization、失败响应和正文映射回归。
-- [ai-provider-registry.test.js](tests/shared/ai-provider-registry.test.js) — provider 协议、Key 环境变量映射和 Messages API fail-closed 回归。
-- [llm-gateway.test.js](tests/shared/llm-gateway.test.js) — 统一 AI 调用网关多协议路由（MESSAGES / RESPONSES / CHAT / local）、文本与结构化 JSON 提取及错误透传回归。
+- [providers.test.js](tests/shared/providers.test.js) — provider 协议、Key 环境变量映射和 Messages API fail-closed 回归。
+- [llm-gateway.test.js](tests/shared/llm-gateway.test.js) — 统一 AI 调用网关多协议路由（MESSAGES / RESPONSES / CHAT / local）、文本与结构化 JSON 提取及错误透传回归；含经真实 catalog 合成 Adapter 协作验证 `requestStructuredJson` 成本账本 fail-closed 的集成用例。
 - [ai-config.test.js](tests/shared/ai-config.test.js) — 业务模块配置合并、Tavily retrieval 配置和 protocol 校验回归。
 - [collector-x-v2.test.js](tests/news/collector-x-v2.test.js) — X 请求级 credits 硬预算回归：窗外/空长文/重试/零预算/低配置/超量响应/直接门禁。
 - [news-pipeline-min.test.js](tests/news/news-pipeline-min.test.js) — v2 全链编排、总开关、采集状态汇总、credits→last-run 透传回归。
@@ -303,6 +300,7 @@
 - [run-after-first-review.test.js](tests/news/run-after-first-review.test.js) — 首次审核后 refine/ai-top 并行编排与失败隔离回归。
 - [local-model.test.js](tests/shared/local-model.test.js) — 本地 Bonsai 探测、自动启动、轮询超时、TTL 缓存与测试注入隔离回归。
 - [check-secrets.test.js](tests/maintenance/check-secrets.test.js) — 密钥/高熵扫描与敏感文件门禁回归。
+- [check-standards.test.js](tests/maintenance/check-standards.test.js) — 规范检查器 7 类检测正反例、白名单 count 豁免与 whitelist-growth、fail-closed 与浏览器→shared 盲区回归（临时目录 fixture 隔离，不依赖 src 现状）。
 - [env.test.js](tests/maintenance/env.test.js) — `.env` 子集解析、覆盖规则与项目根目录回归。
 - [validate-comparison.test.js](tests/maintenance/validate-comparison.test.js) — integrated 对比数据、raw 快照与引用契约校验回归。
 - [fixtures/x.json](tests/fixtures/x.json) — 新闻管线 X 平台测试夹具。
@@ -320,12 +318,14 @@
 - [catalog-date-repair.js](scripts/catalog-date-repair.js) — 日期字段级修补 CLI；`plan` 只输出字段/来源/revision/preview hash，`apply` 需回传 revision/hash 并输入精确确认值。导出: `readRepair, publicPreview, main`
 - [catalog-date-audit.js](scripts/catalog-date-audit.js) — 纯本地日期语义审计 CLI；默认写入 `data/manual/tools/catalog-date-audit.json`，`--dry-run` 只输出统计，不写文件。导出: `parseArgs, main`
 - [validate.js](scripts/validate.js) — 校验聚合入口
+- [check-standards.js](scripts/check-standards.js) — 零依赖规范静态检查器（validate.js 前置门禁，全部 CI 工作流生效）：依赖方向/垫片/旧契约叙事/体量导出/环/组装纪律/src 文件 CODEBASE-MAP 登记完整性 7 类检测；存量违规白名单 `scripts/check-standards.whitelist.json`（git 跟踪，条目带机器校验 count，白名单文件内违规增长报 whitelist-growth，铁律只减不增）。导出: `runChecks, main`
 - [build-dist.js](scripts/build-dist.js) — src/web + public + data → dist/（维护者入口：bat/build-dist.bat）
 - [browser-acceptance.js](scripts/browser-acceptance.js) — 依赖零安装的 Edge/CDP 真实页面验收：读取被忽略的 `config/browser.local.json`，启动 dist 静态站与临时 Edge profile，检查 18 张模型卡搜索/详情、三级模型对比选择器的厂商/系列展开与模型搜索、revision/degree 交互、旧 Spark/xunfei 隐藏和排除模型不可见。
 - [publish-news.js](scripts/publish-news.js) — 候选 → 公开投影 + RSS 发布（**默认走 v2：min-candidates approved 按每日 top 重建 hotspots.json**）
 - [run-after-first-review.js](scripts/run-after-first-review.js) — 首次审核结论落地后安全并行 `refine` 与 `ai-top`；任一失败仅终止本次记录子进程并整体失败。导出: `runAfterFirstReview`
 - [check-secrets.js](scripts/check-secrets.js) — 密钥/高熵扫描（validate.js 反向依赖）
 - [generate-og-image.js](scripts/generate-og-image.js) — OG 图生成入口
+- [maintainer-workbench.js](scripts/maintainer-workbench.js) — 维护者工作台 server 唯一启动器：loadDotEnv 后起 `src/maintenance/maintainer-workbench-server`（仅监听 127.0.0.1），SIGINT/SIGTERM 优雅停止。导出: `main`
 
 - [after-first-review.bat](bat/after-first-review.bat) — 首次人工审核后：应用 review 清单，再安全并行生成关键词提纯与 AI top 清单。
 - [archive-min.bat](bat/archive-min.bat) — 归档当前热点候选并重置当日人工清单的维护者入口。

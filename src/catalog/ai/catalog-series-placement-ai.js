@@ -19,8 +19,8 @@
  *   否则确定性判定；needs_ai 时才允许调用 AI，再以 hint 重跑确定性 planner。
  */
 
-const { getProvider, resolveProvider, apiKeyForProvider, DEFAULT_PROVIDER_NAME } = require('../../shared/ai-provider-registry');
-const { requestStructuredJson } = require('./deepseek-structured');
+const { getProvider, resolveProvider, apiKeyForProvider, DEFAULT_PROVIDER_NAME } = require('../../shared/providers');
+const { requestStructuredJson } = require('../../shared/llm-gateway');
 const {
   normalizeVendorKey,
   policyForVendor,

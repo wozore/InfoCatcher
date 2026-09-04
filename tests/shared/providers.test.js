@@ -9,7 +9,7 @@ const {
   getProvider,
   resolveProvider,
   apiKeyForProvider,
-} = require('../../src/shared/ai-provider-registry');
+} = require('../../src/shared/providers');
 const { requestResponses, requestChatCompletions, requestMessages } = require('../../src/shared/deepseek-client');
 
 test('provider registry maps each provider to its protocol and key env', () => {

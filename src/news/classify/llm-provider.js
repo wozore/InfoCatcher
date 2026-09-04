@@ -21,7 +21,7 @@
 
 'use strict';
 
-const { AI_PROTOCOLS, getProvider, DEFAULT_PROVIDER_NAME } = require('../../shared/ai-provider-registry');
+const { AI_PROTOCOLS, getProvider, DEFAULT_PROVIDER_NAME } = require('../../shared/providers');
 const { textFromResponse } = require('../../shared/deepseek-client');
 const { LOCAL_API_BASE, LOCAL_MODEL } = require('../../shared/llm-endpoints');
 const { requestLlmText } = require('../../shared/llm-gateway');

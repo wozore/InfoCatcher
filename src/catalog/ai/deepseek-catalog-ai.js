@@ -1,6 +1,6 @@
 'use strict';
 
-const { requestStructuredJson } = require('./deepseek-structured');
+const { requestStructuredJson } = require('../../shared/llm-gateway');
 const { buildSynthesisInput, buildSynthesisInstructions } = require('./catalog-synthesis-prompt');
 
 const MONTHS = Object.freeze({

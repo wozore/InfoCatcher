@@ -25,7 +25,7 @@ const { summarizeCandidates } = require('../classify/content-summarizer');
 const { localizeCandidates, hasUsableLocalizedContent } = require('../classify/content-localizer');
 const { runPool } = require('../classify/content-reviewer');
 const { readMinStore, writeMinStore, revisionOfMinStore } = require('./min-store');
-const { getProvider, DEFAULT_PROVIDER_NAME } = require('../../shared/ai-provider-registry');
+const { getProvider, DEFAULT_PROVIDER_NAME } = require('../../shared/providers');
 
 const DEFAULT_REPAIR_LIMIT = 100;
 

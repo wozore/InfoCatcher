@@ -4,8 +4,6 @@
  * 从 validate.js 拆分出的 news 域：v2 主链仍存在的数据文件——
  * hotspots.json（公开投影）与 min-candidates.json（v2 单状态轴候选层）的校验函数与入口。
  * 失败通过本模块独立的 fail()/failed 状态记录，由 validate.js 聚合为最终退出码。
- * v1 数据文件（news-sources/news-config/news-registry/news-quota/pending-authorizations/
- * hotspot-candidates/review-events）已随 v1 管线删除（2026-08-08），不再校验。
  *
  * 用法：由 validate.js 调用 validateNews()。
  */
@@ -155,7 +153,6 @@ function validateLastRun(data, onError = fail) {
 //
 // 核心约束：
 //   - items 为数组，每条内容有完整的 id/platform/content_type/url/title/日期
-//   - 旧版 events/provenance/assessments 字段已随 v2 移除，不再校验
 // ═══════════════════════════════════════════════════════════════
 function validateHotspots(data) {
   if (!data || !Array.isArray(data.items)) {
@@ -331,10 +328,8 @@ function validateMinNews() {
 // ═══════════════════════════════════════════════════════════════
 // news 域入口：校验公开投影与 v2 候选层
 //
-// v1 数据文件（news-sources/news-config/news-registry/news-quota/
-// pending-authorizations/hotspot-candidates/review-events）已随 v1 管线删除
-// （2026-08-08，见 docs/热点管线-v1-删除清单.md），此处只校验仍存在的
-// hotspots.json（公开投影）与 min-candidates.json（v2 候选层）。
+// 只校验仍存在的数据文件：hotspots.json（公开投影）与
+// min-candidates.json（v2 候选层）。
 // ═══════════════════════════════════════════════════════════════
 function validateNews() {
   // v2 配置：总开关与 X 预算属于采集安全边界，配置非法必须阻断。

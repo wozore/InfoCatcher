@@ -25,7 +25,7 @@
  * 注入点（测试用）：options.ledger / model / apiKey / fetchImpl / timeoutMs。
  */
 
-const { requestStructuredJson } = require('../../catalog/ai/deepseek-structured');
+const { requestStructuredJson } = require('../../shared/llm-gateway');
 const { createCostLedger } = require('../../catalog/catalog-research');
 const { loadGeneratorConfig } = require('../../catalog/catalog-assistant');
 const { LOCAL_API_BASE } = require('../../shared/llm-endpoints');

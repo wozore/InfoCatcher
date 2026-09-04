@@ -5,7 +5,7 @@ const {
   DEFAULT_PROVIDER_NAME,
   getProvider,
   resolveProvider,
-} = require('./ai-provider-registry');
+} = require('./providers');
 const {
   requestResponses,
   requestChatCompletions,

@@ -9,8 +9,8 @@ const { createCostLedger } = require('../src/catalog/catalog-research');
 const { loadProductUrlRegistry, updateSourcesForProduct, validateProductUrlRegistry } = require('../src/catalog/official-url-registry');
 const { collectProductUpdateEvidence } = require('../src/catalog/tool-update-collector');
 const { suggestToolUpdateReview } = require('../src/catalog/ai/tool-update-review-ai');
-const { requestStructuredJson } = require('../src/catalog/ai/deepseek-structured');
-const { getProvider, DEFAULT_PROVIDER_NAME } = require('../src/shared/ai-provider-registry');
+const { requestStructuredJson } = require('../src/shared/llm-gateway');
+const { getProvider, DEFAULT_PROVIDER_NAME } = require('../src/shared/providers');
 const { localizeCandidate } = require('../src/news/classify/content-localizer');
 
 const TOOL_LOCALIZE_MAX_SOURCE_CHARS = 360;

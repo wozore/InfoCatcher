@@ -99,8 +99,6 @@ const NEWS_FILES = Object.freeze({
   hotspots: path.join(NEWS_OUTPUT_DIR, 'hotspots.json'),              // 公开热点投影，发布到 dist/
 });
 
-const SOURCE_LIST_PATH = path.join(RESOURCES_DIR, 'source-lists', '热点信息源清单.md');
-
 const ACQUISITION_FILES = Object.freeze({
   intelSources: path.join(ACQUISITION_DIR, 'intel-sources.json'),
 });
@@ -134,4 +132,4 @@ const SHARED_FILES = Object.freeze({
 
 const RSS_FEED_PATH = path.join(PUBLIC_DIR, 'feed.xml');
 
-module.exports = { DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, CONCEPT_FILES, AI_CONFIG_FILES, NEWS_FILES, ACQUISITION_FILES, COMPARISON_FILES, SHARED_FILES, SOURCE_LIST_PATH, RSS_FEED_PATH };
+module.exports = { DIRS, CATALOG_FILES, CATALOG_GENERATOR_FILES, CONCEPT_FILES, AI_CONFIG_FILES, NEWS_FILES, ACQUISITION_FILES, COMPARISON_FILES, SHARED_FILES, RSS_FEED_PATH };
