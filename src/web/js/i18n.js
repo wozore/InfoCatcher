@@ -10,7 +10,7 @@
  * 试点接入（热点视图）：
  *   - trending.js 渲染文案 → t()；热点内容字段 → getLocalizedField()；
  *   - index.html trending 部分静态文案 → data-i18n 属性 + applyStaticTranslations()；
- *   - data.js 共享工具（timeAgo/formatMetric/标签常量）→ t()。
+ *   - ui-helpers.js 的 timeAgo/formatMetric/标签工具 → t()。
  *   其余视图文案后续按同框架接入（加语言文件即多语言）。
  *
  * 容错语义：t() 缺 key 回退 zh → 原 key（UI 不空，未接入的文案原样显示）；

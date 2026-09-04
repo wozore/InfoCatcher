@@ -216,7 +216,7 @@ export async function prepareCatalog(button, onRefreshAll) {
 export async function previewCatalogBatch(button) {
   button.disabled = true;
   try {
-    const result = await request('catalog/batch/preview');
+    const result = await request('catalog/batch-preview');
     renderCatalogBatchPreview(result);
     showNotice(result?.ok ? 'Catalog 批次预览已就绪，可核对后一键 Apply。' : (result?.code || '批次预览被阻断。'), result?.ok ? 'success' : 'error');
   } catch (error) {
@@ -234,7 +234,7 @@ export async function applyCatalog(button, onRefreshAll) {
   }
   button.disabled = true;
   try {
-    const result = await request('catalog/batch/apply', {
+    const result = await request('catalog/apply-batch', {
       method: 'POST',
       body: JSON.stringify({
         draft_ids: batch.draft_ids,

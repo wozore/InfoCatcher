@@ -12,16 +12,6 @@
       "note": "2 处: console.warn（行 53） | console.warn（行 63）"
     },
     {
-      "file": "src/catalog/vibe-hub-evidence.js",
-      "count": 1,
-      "note": "1 处: console.error（行 188）"
-    },
-    {
-      "file": "src/comparison/run-comparison.js",
-      "count": 5,
-      "note": "5 处: console.warn（行 81） | console.warn（行 103） | console.warn（行 111） …"
-    },
-    {
       "file": "src/content/generate-og-image.js",
       "count": 1,
       "note": "1 处: console.log（行 95）"
@@ -124,54 +114,9 @@
   ],
   "size-exports": [
     {
-      "file": "src/catalog/catalog-assistant.js",
-      "count": 2,
-      "note": "2 处: 行数 588 > 400 | 导出 18 个 > 15"
-    },
-    {
-      "file": "src/catalog/catalog-batch.js",
-      "count": 1,
-      "note": "1 处: 行数 547 > 400"
-    },
-    {
-      "file": "src/catalog/catalog-contract.js",
-      "count": 1,
-      "note": "1 处: 导出 17 个 > 15"
-    },
-    {
-      "file": "src/catalog/catalog-series-policy.js",
-      "count": 2,
-      "note": "2 处: 行数 432 > 400 | 导出 20 个 > 15"
-    },
-    {
-      "file": "src/catalog/catalog-transaction-store.js",
-      "count": 1,
-      "note": "1 处: 行数 408 > 400"
-    },
-    {
       "file": "src/catalog/catalog-workbench.js",
       "count": 1,
       "note": "1 处: 行数 427 > 400"
-    },
-    {
-      "file": "src/catalog/concept-batch.js",
-      "count": 1,
-      "note": "1 处: 行数 428 > 400"
-    },
-    {
-      "file": "src/catalog/official-url-registry.js",
-      "count": 2,
-      "note": "2 处: 行数 549 > 400 | 导出 19 个 > 15"
-    },
-    {
-      "file": "src/catalog/tool-update-collector.js",
-      "count": 1,
-      "note": "1 处: 行数 447 > 400"
-    },
-    {
-      "file": "src/catalog/tool-update-review-store.js",
-      "count": 2,
-      "note": "2 处: 行数 657 > 400 | 导出 17 个 > 15"
     },
     {
       "file": "src/news/classify/llm-provider.js",
@@ -236,11 +181,6 @@
   ],
   "legacy-narrative": [
     {
-      "file": "src/catalog/catalog-assistant.js",
-      "count": 1,
-      "note": "1 处: 旧契约叙事短语: 遗留"
-    },
-    {
       "file": "src/catalog/catalog-workbench.js",
       "count": 1,
       "note": "1 处: 旧契约叙事短语: 遗留、旧版"
@@ -303,24 +243,9 @@
   ],
   "dependency-direction": [
     {
-      "file": "src/catalog/catalog-batch.js",
-      "count": 1,
-      "note": "1 处: 域间互引 catalog→news: src/news/feedback/catalog-draft-adapter.js"
-    },
-    {
-      "file": "src/catalog/catalog-transaction-store.js",
-      "count": 1,
-      "note": "1 处: src→scripts 反向依赖: ../../scripts/build-dist (行 11)"
-    },
-    {
       "file": "src/catalog/catalog-workbench.js",
       "count": 2,
       "note": "2 处: 域间互引 catalog→news: src/news/feedback/pending-review-store.js | 域间互引 catalog→news: src/news/feedback/catalog-draft-adapter.js"
-    },
-    {
-      "file": "src/catalog/concept-batch.js",
-      "count": 3,
-      "note": "3 处: 域间互引 catalog→news: src/news/min/min-store.js | 域间互引 catalog→news: src/news/feedback/tool-feedback.js | 域间互引 catalog→news: src/news/feedback/pending-review-store.js"
     },
     {
       "file": "src/content/generate-rss.js",

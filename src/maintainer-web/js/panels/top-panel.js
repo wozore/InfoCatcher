@@ -222,7 +222,7 @@ export async function publishNews(button, onRefreshAll) {
 export async function loadPreview() {
   setLoadState('previewState', '加载中…', 'loading');
   try {
-    const payload = await request('news/publish/preview');
+    const payload = await request('news/publish-preview');
     renderPreview(payload);
   } catch (error) {
     showNotice(error instanceof ApiError && error.status === 409 ? '公开预览已变化，请刷新后确认。' : '公开发布预览加载失败。', error instanceof ApiError && error.status === 409 ? 'conflict' : 'error');

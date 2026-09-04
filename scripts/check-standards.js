@@ -326,10 +326,9 @@ function checkCodemap(rootDir, files, codemapPath, violations) {
   }
   for (const file of files) {
     const rel = toRel(rootDir, file);
-    const basename = path.basename(file);
-    const relNoSrc = rel.replace(/^src\//, '');
-    if (!mapText.includes(basename) && !mapText.includes(relNoSrc)) {
-      violations.push({ rule: 'codemap', file: rel, message: '未在 CODEBASE-MAP.md 登记' });
+    const mapLink = `](${rel})`;
+    if (!mapText.includes(mapLink)) {
+      violations.push({ rule: 'codemap', file: rel, message: '未在 CODEBASE-MAP.md 以精确路径登记' });
     }
   }
 }

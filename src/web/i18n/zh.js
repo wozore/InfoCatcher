@@ -5,7 +5,7 @@
  *   - 每个语言一个文件（zh.js / 未来 en.js ...），导出 { messages }；
  *   - key 命名空间：视图.元素（trending.*）/ 通用.概念（common/labels/timeAgo/metric）；
  *   - 占位符 {name} 由 i18n.js 的 t(key, {name}) 插值；
- *   - 试点接入范围：热点视图（trending）+ data.js 共享工具；
+ *   - 试点接入范围：热点视图（trending）+ ui-helpers.js 与 data-filters.js 共享工具；
  *     其余视图（tools/search/compare/featured/glossary/scenes）文案后续接入。
  */
 
@@ -14,7 +14,7 @@ export const messages = {
     reload: '重新加载',
   },
 
-  // 通用标签（data.js 的 contentTypeLabels / SOURCE_TYPE_LABELS / platformMeta 从这里初始化）
+  // 通用标签（trending.js 与 data-filters.js 使用的标签字典）
   labels: {
     contentType: {
       ai_tool: 'AI 工具',
@@ -58,7 +58,7 @@ export const messages = {
     },
   },
 
-  // 相对时间（data.js timeAgo）
+  // 相对时间（ui-helpers.js timeAgo）
   timeAgo: {
     unknown: '时间未知',
     justNow: '刚刚',
@@ -67,7 +67,7 @@ export const messages = {
     days: '{n} 天前',
   },
 
-  // 互动指标数量格式化（data.js formatMetric）
+  // 互动指标数量格式化（ui-helpers.js formatMetric）
   metric: {
     tenThousand: '{n}万',
     thousand: '{n}千',

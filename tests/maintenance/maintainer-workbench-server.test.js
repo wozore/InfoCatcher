@@ -18,7 +18,7 @@ const service = Object.freeze({
   overview: () => ({ ok: 'overview' }), clearWorkspace: () => ({ ok: true, status: 'cleared' }), newsReview: () => ({ items: [] }), reviewNews: body => ({ body }),
   keywords: () => ({ list: null }), generateKeywords: async () => ({ generated: 'keywords' }), applyKeywords: body => ({ body }), top: () => ({ items: [] }), generateTop: async () => ({ generated: 'top' }), applyTop: body => ({ body }),
   publishNews: () => ({ published: true }), publishPreview: () => ({ items: [] }), toolUpdates: () => ({ items: [] }), previewToolUpdates: () => ({ ok: true, preview_hash: 'hash' }), applyToolUpdates: body => ({ ok: true, body }), reviewToolUpdate: (key, body) => ({ key, body }), uploadTranscript: body => ({ ok: true, candidate_id: body.candidate_id }), summarizeTranscripts: body => ({ ok: true, summarized: (body.ids || []).map(id => ({ id })) }), conceptPreviews: () => ({ preview: null }),
-  pendingTools: () => ({ revision: 'p-r1', items: [] }), pendingConcepts: () => ({ revision: 'p-r1', items: [] }), reviewPendingTool: body => ({ ok: true, candidate_key: body.candidate_key, revision: 'p-r2' }), reviewPendingConcept: body => ({ ok: true, candidate_key: body.candidate_key, revision: 'p-r2' }), extractKnowledge: async () => ({ ok: true, tools_pending: 0, concepts_pending: 0 }), catalogPlan: () => ({ ok: true, plan_hash: 'plan-h', catalog_revision: 'c-r1', pending_revision: 'p-r1' }), catalogPrepare: async () => ({ ok: true, drafts: [] }), catalogDrafts: () => ({ items: [] }), catalogDraft: id => ({ draft_id: id }), catalogReview: id => ({ ok: true, draft_id: id, current_revision: 'c-r1', preview_hash: 'ph' }), catalogRecoveryPlan: (id, body) => ({ ok: true, draft_id: id, body }), catalogResume: async (id, body) => ({ ok: true, draft: { draft_id: id }, body }), catalogDiscard: (id, body) => ({ ok: true, draft_id: id, expected_revision: body?.expected_revision }), catalogApply: body => ({ ok: true, body }), conceptPlan: async () => ({ ok: true, plan_hash: 'cplan-h', glossary_revision: 'g-r1', pending_revision: 'p-r1' }), conceptPrepare: async () => ({ ok: true, preview: null }), conceptApply: body => ({ ok: true, added: (body.terms || []).map(term => ({ term })) }),
+  pendingTools: () => ({ revision: 'p-r1', items: [] }), pendingConcepts: () => ({ revision: 'p-r1', items: [] }), reviewPendingTool: body => ({ ok: true, candidate_key: body.candidate_key, revision: 'p-r2' }), reviewPendingConcept: body => ({ ok: true, candidate_key: body.candidate_key, revision: 'p-r2' }), extractKnowledge: async () => ({ ok: true, tools_pending: 0, concepts_pending: 0 }), catalogPlan: () => ({ ok: true, plan_hash: 'plan-h', catalog_revision: 'c-r1', pending_revision: 'p-r1' }), catalogPrepare: async () => ({ ok: true, drafts: [] }), catalogDrafts: () => ({ items: [] }), catalogDraft: id => ({ draft_id: id }), catalogReview: id => ({ ok: true, draft_id: id, current_revision: 'c-r1', preview_hash: 'ph' }), catalogRecoveryPlan: (id, body) => ({ ok: true, draft_id: id, body }), catalogResume: async (id, body) => ({ ok: true, draft: { draft_id: id }, body }), catalogDiscard: (id, body) => ({ ok: true, draft_id: id, expected_revision: body?.expected_revision }), catalogApply: body => ({ ok: true, body }), catalogBatchPreview: () => ({ ok: true, batch_token: 'batch-token', draft_ids: ['draft-abc'] }), catalogApplyBatch: body => ({ ok: true, body }), conceptPlan: async () => ({ ok: true, plan_hash: 'cplan-h', glossary_revision: 'g-r1', pending_revision: 'p-r1' }), conceptPrepare: async () => ({ ok: true, preview: null }), conceptApply: body => ({ ok: true, added: (body.terms || []).map(term => ({ term })) }),
 });
 
 test('server binds localhost, provides GET API security headers, and protects mutations', async t => {
@@ -93,6 +93,24 @@ test('工作台后续动作保持同源鉴权并等待异步服务结果', async
   const apply = await request(port, 'POST', '/api/workbench/v1/tool-updates/apply', { body: { expected_revision: 'r', preview_hash: 'h', confirm: 'APPLY TOOL-UPDATES h' }, headers: auth });
   assert.equal(apply.status, 200);
   assert.equal(JSON.parse(apply.body).body.confirm, 'APPLY TOOL-UPDATES h');
+});
+
+test('工作台前端使用的批次与公开预览路由保持服务端契约一致', async t => {
+  const app = createMaintainerWorkbenchServer({ service, token: 'test-token' });
+  t.after(() => app.close());
+  const { port } = await app.start();
+  const auth = { Authorization: 'Bearer test-token', Origin: `http://127.0.0.1:${port}` };
+  const publishPreview = await request(port, 'GET', '/api/workbench/v1/news/publish-preview');
+  assert.equal(publishPreview.status, 200);
+  const batchPreview = await request(port, 'GET', '/api/workbench/v1/catalog/batch-preview');
+  assert.equal(batchPreview.status, 200);
+  assert.equal(JSON.parse(batchPreview.body).batch_token, 'batch-token');
+  const batchApply = await request(port, 'POST', '/api/workbench/v1/catalog/apply-batch', {
+    body: { batch_token: 'batch-token', draft_ids: ['draft-abc'] },
+    headers: auth,
+  });
+  assert.equal(batchApply.status, 200);
+  assert.deepEqual(JSON.parse(batchApply.body).body, { batch_token: 'batch-token', draft_ids: ['draft-abc'] });
 });
 
 test('字幕上传接受更大请求体并保留外部 AI 成本确认', async t => {

@@ -19,7 +19,6 @@ const COMPARISON_RAW_DIR = path.join(COMPARISON_DIR, 'raw'); // 4 源原样快�
 const COMPARISON_INTEGRATED_DIR = path.join(COMPARISON_DIR, 'integrated'); // 前端唯一入口层（管线重建，前端只读）
 const SHARED_DIR = path.join(DATA_DIR, 'shared'); // 跨模块共享数据段（comparison 写 / catalog 读，只数据耦合不代码耦合）
 const REGISTRIES_DIR = path.join(DATA_DIR, 'manual', 'registries'); // 官方登记表与政策（URL/产品登记表、系列政策与 vibe-hub 缓存）
-const ARCHIVE_DIR = REGISTRIES_DIR; // 向后兼容只读别名
 const TOOLS_DIR = path.join(DATA_DIR, 'manual', 'tools'); // 工具链路工作目录
 const CONCEPTS_DIR = path.join(DATA_DIR, 'manual', 'concepts'); // 概念链路工作目录
 const FIXTURE_DIR = path.join(TESTS_DIR, 'fixtures');
@@ -47,7 +46,6 @@ const DIRS = Object.freeze({
   shared: SHARED_DIR, // 跨模块共享数据段（retention / model-release-dates）
   fixtures: FIXTURE_DIR,
   registries: REGISTRIES_DIR, // 官方登记表与政策（URL/产品登记表、系列政策与 vibe-hub 缓存）
-  archive: ARCHIVE_DIR, // 向后兼容只读别名
   tools: TOOLS_DIR, // 工具链路工作目录（工具种子/草稿/工具待补卡）
   concepts: CONCEPTS_DIR, // 概念链路工作目录（概念待补卡/合成预览）
   manual: path.join(DATA_DIR, 'manual'), // 新闻人工清单（review/top/keyword-refine/transcript-requests）
