@@ -1,4 +1,5 @@
-import { escapeHtml, safeExternalUrl, ICON_ARROW_LEFT, ICON_EXTERNAL } from './data.js';
+import { escapeHtml, safeExternalUrl } from './ui-helpers.js';
+import { ICON_ARROW_LEFT, ICON_EXTERNAL } from './ui-icons.js';
 
 function renderVendorLevel2(request = {}) {
   const { preview, detailCards = [] } = request;

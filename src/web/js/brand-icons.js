@@ -1,4 +1,5 @@
-import { escapeHtml, getVendorLevel2Items } from './data.js';
+import { escapeHtml } from './ui-helpers.js';
+import { getVendorLevel2Items } from './data-catalog.js';
 
 const ICON_BUCKETS = ['model', 'series', 'tool', 'vendor'];
 const HEX_COLOR_PATTERN = /^#[0-9a-f]{3,8}$/i;

@@ -1,4 +1,4 @@
-import { escapeHtml } from './data.js';
+import { escapeHtml } from './ui-helpers.js';
 import { brandIconHtml } from './brand-icons.js';
 
 // 兼容已带「优点：/限制：」前缀的旧数据：标签由渲染端统一加，前缀先剥离避免重复

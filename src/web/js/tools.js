@@ -1,27 +1,27 @@
 /**
  * 知览 KnowView MVP — 工具库 (tools)：搜索 + 分类/访问/价格筛选 + 卡片网格 + 详情弹窗
- *
- * 本模块同时承载详情弹窗（openDetail / showModal / closeModal）：
- * 弹窗为全站复用（热点、添加对比、搜索匹配都通过它打开），因此
- * modalTrigger / modalScrollPosition 等弹窗状态也归本模块。
  * 架构概要、八个视图与扩展模式见 main.js 顶部维护文档。
  */
+
+import { state, dataLoadFailures, onCompareChange, getCurrentView } from './state.js';
 import {
-  activeFilters,
-  dataLoadFailures,
   getVendorCardItem,
   getVendorLevel2Items,
   getToolCardItems,
-  getFilteredVendorCardItems,
-  getFilteredToolCardItems,
   getVendorLevel1Item,
   getToolLevel3Item,
   getCatalogItems,
-  escapeHtml,
-  renderState,
-  setRegionBusy,
-  ICON_CLOSE,
-} from './data.js';
+} from './data-catalog.js';
+import { getFilteredVendorCardItems, getFilteredToolCardItems } from './data-filters.js';
+import { escapeHtml, renderState, setRegionBusy } from './ui-helpers.js';
+import { ICON_CLOSE } from './ui-icons.js';
+import {
+  showModal,
+  closeModal,
+  setModalScrollPosition,
+  getModalFocusableElements,
+  configureModalAccessibility,
+} from './modal.js';
 import { isComparableLeaf, isCompareSelected } from './compare.js';
 import vendorCards from './vendor-cards.js';
 import toolCards from './tool-cards.js';
@@ -29,23 +29,10 @@ import renderVendorLevel1 from './vendor-preview-level1.js';
 import renderVendorLevel2 from './vendor-preview-level2.js';
 import renderToolLevel3 from './tool-preview-level3.js';
 
-// ═══════════════════════════════════════════════════════════════
-// 详情弹窗状态（全站复用）
-// ═══════════════════════════════════════════════════════════════
-let modalTrigger = null;           // 详情弹窗打开前的焦点，用于关闭后回焦
-let modalScrollPosition = null;    // 热点等列表详情关闭时保持原列表滚动位置
-
-// 跨模块状态 setter（ESM：导入绑定只读，改值必须回到本模块）
-function setModalScrollPosition(value) { modalScrollPosition = value; }
 const MODAL_CLOSE_HTML = '<button class="modal-close" type="button" aria-label="关闭详情" onclick="closeModal()">' + ICON_CLOSE + '</button>';
-
-// ═══════════════════════════════════════════════════════════════
-// 工具库 —— 筛选、卡片渲染
-// ═══════════════════════════════════════════════════════════════
 
 let toolsViewMode = 'vendor';
 
-// 工具视图四类固定分组（分类名只作为区块大标题，卡片本身不写分类文字，分类由颜色表达）
 const TOOL_GROUPS = [
   { type: 'general', title: '通用对话与大模型入口' },
   { type: 'dev', title: 'AI 编程与开发工具' },
@@ -53,7 +40,6 @@ const TOOL_GROUPS = [
   { type: 'media', title: '视频、音乐与音频生成' },
 ];
 
-// 双视图文案：厂商视图以厂商为信息中心，工具视图以单个工具为信息中心
 const TOOLS_COPY = {
   vendor: {
     eyebrow: '厂商全景',
@@ -79,7 +65,7 @@ const TOOLS_COPY = {
   },
 };
 
-function getToolsViewMode() {
+export function getToolsViewMode() {
   return toolsViewMode;
 }
 
@@ -90,7 +76,6 @@ function syncToolsViewControls() {
   toggle.setAttribute('aria-checked', String(isToolView));
   toggle.dataset.mode = toolsViewMode;
 
-  // 同步两块视图的标题/说明/搜索区/目录文案
   const copy = TOOLS_COPY[toolsViewMode];
   const textMap = {
     toolsViewEyebrow: copy.eyebrow,
@@ -113,15 +98,13 @@ function syncToolsViewControls() {
   if (status) status.textContent = '当前为' + (isToolView ? '工具' : '厂商') + '视图';
 }
 
-function toggleToolsViewMode() {
+export function toggleToolsViewMode() {
   toolsViewMode = toolsViewMode === 'vendor' ? 'tool' : 'vendor';
   renderTools();
   return toolsViewMode;
 }
 
-// 决策（搜索结果页 v2）：外部（AI 搜索“了解更多”）强制切换到指定视图模式，
-// 不触发 renderTools（由调用方随后 switchView('tools') 渲染），只同步 toggle 控件。
-function setToolsViewMode(value) {
+export function setToolsViewMode(value) {
   if (value !== 'vendor' && value !== 'tool') return toolsViewMode;
   toolsViewMode = value;
   syncToolsViewControls();
@@ -153,8 +136,8 @@ class VendorDirectoryView {
     }
   }
 
-  renderState(state) {
-    if (this.grid) this.grid.innerHTML = renderState(state);
+  renderState(stateObj) {
+    if (this.grid) this.grid.innerHTML = renderState(stateObj);
   }
 }
 
@@ -260,9 +243,9 @@ class ToolDirectoryView {
     this.observeGroups();
   }
 
-  renderState(state) {
+  renderState(stateObj) {
     this.disconnectIndexObserver();
-    if (this.grid) this.grid.innerHTML = renderState(state);
+    if (this.grid) this.grid.innerHTML = renderState(stateObj);
     if (this.index) this.index.hidden = true;
   }
 }
@@ -278,21 +261,24 @@ function getDirectoryViews() {
   return directoryViews;
 }
 
-// 决策 94：工具库已选筛选条件的低权重标签与一键清除
-function renderSelectedFilters() {
+export function renderSelectedFilters() {
   const section = document.getElementById('toolsSelected');
   const tagEl = document.getElementById('toolsSelectedTags');
   if (!section || !tagEl) return;
   const tags = [];
-  if (activeFilters.access !== 'all') tags.push('访问：' + (activeFilters.access === '开放' ? '国内可访问' : '需科学上网'));
-  if (activeFilters.price !== 'all') tags.push(activeFilters.price === 'free' ? '价格：有免费层' : '价格：仅付费');
+  if (state.activeFilters.access !== 'all') {
+    tags.push('访问：' + (state.activeFilters.access === '开放' ? '国内可访问' : '需科学上网'));
+  }
+  if (state.activeFilters.price !== 'all') {
+    tags.push(state.activeFilters.price === 'free' ? '价格：有免费层' : '价格：仅付费');
+  }
   section.hidden = tags.length === 0;
   tagEl.innerHTML = tags.map(tag => '<span class="tag">' + escapeHtml(tag) + '</span>').join('');
 }
 
-function clearToolFilters() {
-  activeFilters.access = 'all';
-  activeFilters.price = 'all';
+export function clearToolFilters() {
+  state.activeFilters.access = 'all';
+  state.activeFilters.price = 'all';
   document.querySelectorAll('.tools-filters .filter-chip').forEach(chip => {
     const isAll = (chip.dataset.category || chip.dataset.access || chip.dataset.price) === 'all';
     chip.classList.toggle('active', isAll);
@@ -302,25 +288,7 @@ function clearToolFilters() {
   renderTools();
 }
 
-/**
- * 渲染单张工具卡片。
- * - 工具视图（tool 模式）：所有记录按 card_type 加四类主题色；具体工具含适合/不适合行；
- * - 厂商视图（vendor 模式）：只渲染 collection 厂商卡，保持中性视觉（不加主题色），
- *   标题只显示厂商名，含产品体系计数 + 快捷入口 + 优点/限制。
- */
-/**
- * 渲染工具卡片网格。
- * 1. 获取过滤后的工具列表
- * 2. 更新工具计数和筛选提示
- * 3. 空结果时显示空状态占位
- * 4. 厂商视图：平铺 collection 厂商卡；工具视图：按四类固定分组渲染（每组大标题 + 横向分割线）
- *
- * 注意：对比按钮在卡片 DOM 字符串中使用了 onclick 属性;
- * event.stopPropagation() 防止点击对比按钮同时触发卡片的 openDetail。
- * EXTENSION POINT: 方案一——>方案三变迁中时，实现在对比页面也能自定义添加工具
- * EXTENSION POINT: 方案一——>方案三变迁中时，卡片实现动态效果-描述：默认显示工具大头照，悬停时工具照向左迁移，右边显示简略的信息，点击进入详情
- */
-function renderTools() {
+export function renderTools() {
   const isToolView = toolsViewMode === 'tool';
   const filtered = isToolView ? getFilteredToolCardItems() : getFilteredVendorCardItems();
   const views = getDirectoryViews();
@@ -331,13 +299,12 @@ function renderTools() {
   renderSelectedFilters();
   syncToolsViewControls();
 
-  const visibleTools = isToolView ? filtered : filtered;
   currentView.show();
   otherView.hide();
 
-  document.getElementById('toolCount').textContent = visibleTools.length;
+  document.getElementById('toolCount').textContent = filtered.length;
   document.getElementById('filteredInfo').style.display =
-    (activeFilters.access !== 'all' || activeFilters.price !== 'all' || document.getElementById('searchInput').value)
+    (state.activeFilters.access !== 'all' || state.activeFilters.price !== 'all' || document.getElementById('searchInput').value)
     ? 'inline' : 'none';
 
   if (dataLoadFailures.has('tools')) {
@@ -345,71 +312,13 @@ function renderTools() {
     return;
   }
 
-  if (visibleTools.length === 0) {
+  if (filtered.length === 0) {
     currentView.renderState({ icon: '⌕', title: isToolView ? '没有匹配的工具' : '没有匹配的厂商', message: '请调整筛选条件或更换搜索关键词。', type: 'no-match' });
     return;
   }
-  currentView.render(visibleTools);
+  currentView.render(filtered);
 }
 
-// ═══════════════════════════════════════════════════════════════
-// 工具详情弹窗 —— 具体模型/套餐情报与模型工具面板
-// ═══════════════════════════════════════════════════════════════
-
-function renderScenarioExplanations(title, items) {
-  if (!Array.isArray(items) || items.length === 0) return '';
-  return '<div class="intelligence-scenarios"><h5>' + title + '</h5>' + items.map(item => {
-    const itemTitle = typeof item === 'string' ? item : item.title;
-    const description = typeof item === 'string' ? '' : item.description;
-    return '<div><b>' + escapeHtml(itemTitle) + (description ? '：' : '') + '</b>' + escapeHtml(description) + '</div>';
-  }).join('') + '</div>';
-}
-
-// ═══════════════════════════════════════════════════════════════
-// 弹窗打开/关闭与无障碍
-// ═══════════════════════════════════════════════════════════════
-
-function getModalFocusableElements() {
-  const content = document.getElementById('modalContent');
-  if (!content) return [];
-  return [...content.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')]
-    .filter(element => !element.hidden && element.getClientRects().length > 0);
-}
-
-function configureModalAccessibility() {
-  const overlay = document.getElementById('modalOverlay');
-  const content = document.getElementById('modalContent');
-  const title = content?.querySelector('h2, .model-panel-heading h4');
-  const description = content?.querySelector('.vendor-description, .node-description, .vendor, .section p');
-  if (!overlay || !content) return;
-  if (title) title.id = 'modalTitle';
-  if (description) {
-    description.id = 'modalDescription';
-    overlay.setAttribute('aria-describedby', 'modalDescription');
-  } else {
-    overlay.removeAttribute('aria-describedby');
-  }
-}
-
-function showModal(trigger = null) {
-  const overlay = document.getElementById('modalOverlay');
-  const content = document.getElementById('modalContent');
-  if (!overlay || !content) return;
-  const explicitTrigger = trigger instanceof HTMLElement
-    ? (trigger.matches('a[href], button, [tabindex]:not([tabindex="-1"])') ? trigger : trigger.querySelector('button, a[href], [tabindex]:not([tabindex="-1"])'))
-    : null;
-  modalTrigger = explicitTrigger || (document.activeElement instanceof HTMLElement ? document.activeElement : null);
-  configureModalAccessibility();
-  overlay.hidden = false;
-  document.body.classList.add('modal-open');
-  const focusTarget = content.querySelector('.modal-close') || content;
-  focusTarget.focus();
-}
-
-/**
- * 具体工具详情 —— 单级叶节点样式（复用 GPT-5.6 Sol 三级预览的面板视觉）。
- * 工具内部只有一级面板：不渲染返回键，仅由模态右上角 X 关闭。
- */
 function renderConcreteToolLeaf(card, backRef = null) {
   const detail = getToolLevel3Item(card.vendor_key, card.detail_ref.id);
   if (!detail) return '<div class="intelligence-unavailable">该工具详情不存在。</div>';
@@ -418,12 +327,13 @@ function renderConcreteToolLeaf(card, backRef = null) {
   return renderToolLevel3({ detail, toolKey: card.tool_key, showCompare: comparable, compareSelected: selected, backRef });
 }
 
-function openDetail(id, selectedItemId = null, trigger = null, backRef = null) {
+export function openDetail(id, _unused = null, trigger = null, backRef = null) {
   const content = document.getElementById('modalContent');
   if (!content) return;
   const level1 = id.startsWith('vendor-level1:') ? getVendorLevel1Item(id.split(':').slice(1).join(':')) : null;
   const level2 = id.startsWith('vendor-level2:') ? getCatalogItems('vendor-level2').find(item => item.id === id) : null;
   const detail = id.startsWith('tool-level3:') ? getToolLevel3Item('', id) : null;
+
   if (level1) {
     content.innerHTML = MODAL_CLOSE_HTML + '<div id="openaiDetailBody" class="openai-detail"></div>';
     content.querySelector('#openaiDetailBody').innerHTML = renderVendorLevel1({ vendor: getVendorCardItem(level1.vendor_key), preview: level1, level2: getVendorLevel2Items(level1.vendor_key) });
@@ -451,30 +361,14 @@ function openDetail(id, selectedItemId = null, trigger = null, backRef = null) {
   }
 }
 
-function closeModal() {
-  const overlay = document.getElementById('modalOverlay');
-  if (!overlay || overlay.hidden) return;
-  overlay.hidden = true;
-  document.body.classList.remove('modal-open');
-  const returnTarget = modalTrigger;
-  const scrollPosition = modalScrollPosition;
-  modalTrigger = null;
-  modalScrollPosition = null;
-  if (scrollPosition !== null) window.scrollTo({ top: scrollPosition, behavior: 'auto' });
-  if (returnTarget?.isConnected) returnTarget.focus({ preventScroll: true });
-}
+onCompareChange(() => {
+  if (getCurrentView() === 'tools') renderTools();
+});
 
 export {
+  showModal,
+  closeModal,
   setModalScrollPosition,
   getModalFocusableElements,
   configureModalAccessibility,
-  showModal,
-  openDetail,
-  closeModal,
-  renderSelectedFilters,
-  clearToolFilters,
-  getToolsViewMode,
-  toggleToolsViewMode,
-  setToolsViewMode,
-  renderTools,
 };
