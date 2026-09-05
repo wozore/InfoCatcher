@@ -6,11 +6,8 @@
  * 再用 videos.list / videoCategories.list / commentThreads.list 补详情、
  * 分类名与评论，统一输出为 v1 管线相同的内容模型。
  *
- * 与旧采集器 news-youtube.js 的区别：
- *   - 旧版：按来源名单（registry）分频道 RSS/playlist 回溯，依赖
- *     quota ledger / registry / scheduler 模块；
- *   - v2：按 config.keywords.ai_keywords 关键词搜索，不依赖旧架构的
- *     quota / registry / scheduler，使用独立配额计数，全程无来源名单。
+ * 采集模型：按 config.keywords.ai_keywords 关键词搜索，使用独立配额计数，
+ * 全程无来源名单；不依赖 quota ledger / registry / scheduler。
  *
  * 配额模型（成本要点）：
  *   - search.list：独立桶，1 单位/次（config.collection.youtube_search_cost_units），
@@ -23,7 +20,7 @@
  * 使用示例：
  *   const result = await collectYouTubeV2({
  *     config,                       // data/news/config/news-config-v2.json（缺省自动加载）
- *     apiKey: process.env.YOUTUBE_API_KEY,
+ *     apiKey,                       // 缺省读 YOUTUBE_API_KEY（经 loadCollectorConfig）
  *     now: '2026-08-07T00:00:00Z',  // 可选，测试注入
  *     fetchImpl: customFetch,       // 可选，测试注入
  *   });
@@ -32,7 +29,11 @@
 
 'use strict';
 
-const { requestText, numberOrNull, normalizeUrl, hash } = require('../pipeline/feed-parser');
+const { requestText, numberOrNull } = require('../pipeline/feed-parser');
+const { parseDuration, buildItem } = require('./collector-youtube-normalize');
+const { youtubeApiKeyOf } = require('./loadCollectorConfig');
+const { readJson } = require('../../shared/json-store');
+const { NEWS_FILES } = require('../../shared/paths');
 
 const YOUTUBE_API = 'https://www.googleapis.com/youtube/v3';
 
@@ -59,11 +60,7 @@ let cachedV2Config = null;
 /** 懒加载 news-config-v2.json；不可读时退回 DEFAULT_CONFIG。 */
 function loadV2Config() {
   if (cachedV2Config) return cachedV2Config;
-  try {
-    cachedV2Config = require('../../../data/news/config/news-config-v2.json');
-  } catch {
-    cachedV2Config = DEFAULT_CONFIG;
-  }
+  cachedV2Config = readJson(NEWS_FILES.configV2, null) || DEFAULT_CONFIG;
   return cachedV2Config;
 }
 
@@ -82,23 +79,6 @@ function resolveConfig(config) {
     collection: { ...(base.collection || {}), ...(config.collection || {}) },
     keywords: { ...(base.keywords || {}), ...(config.keywords || {}) },
   };
-}
-
-/**
- * 解析 ISO 8601 时长（PT#H#M#S / P#D 等）为秒数；不可解析返回 null。
- * contentDetails.duration 形如 'PT1H2M3S'。
- */
-function parseDuration(iso) {
-  if (!iso) return null;
-  const match = iso.match(/^P(?:(\d+)D)?T?(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/);
-  if (!match) return null;
-  const [, days, hours, mins, secs] = match;
-  const total =
-    (numberOrNull(days) || 0) * 86400 +
-    (numberOrNull(hours) || 0) * 3600 +
-    (numberOrNull(mins) || 0) * 60 +
-    (numberOrNull(secs) || 0);
-  return total > 0 ? total : null;
 }
 
 /** 错误标签：防御 requestText 可能抛 undefined 的边界情况。 */
@@ -143,63 +123,12 @@ async function runPool(items, concurrency, worker) {
 }
 
 /**
- * 将一条 videos.list 详情标准化为统一内容模型。
- * author_id/source_id 沿用 v1 的频道 id 约定（`youtube-${hash(channelId)}`），
- * 关键词发现没有来源名单，频道即来源。
- */
-function buildItem(detail, comments, categoryMap, fetchedAt) {
-  const snippet = detail.snippet || {};
-  const statistics = detail.statistics || {};
-  const contentDetails = detail.contentDetails || {};
-  const categoryId = snippet.categoryId || null;
-  const channelId = snippet.channelId || null;
-  const authorId = `youtube-${hash(channelId || detail.id)}`;
-  const linkText = `${snippet.title || ''} ${snippet.description || ''}`;
-  return {
-    id: `youtube-${hash(detail.id)}`,
-    platform: 'youtube',
-    native_id: detail.id,
-    source_type: 'youtube_video',
-    url: `https://www.youtube.com/watch?v=${detail.id}`,
-    title: snippet.title || '',
-    description: (snippet.description || '').slice(0, 600),
-    published_at: snippet.publishedAt ? new Date(snippet.publishedAt).toISOString() : null,
-    fetched_at: fetchedAt,
-    author_id: authorId,
-    author_name: snippet.channelTitle || '',
-    source_id: authorId,
-    language: 'en',
-    source_tags: [],
-    thumbnail:
-      snippet.thumbnails?.maxres?.url ||
-      snippet.thumbnails?.high?.url ||
-      snippet.thumbnails?.default?.url ||
-      null,
-    metrics: {
-      views: numberOrNull(statistics.viewCount),
-      likes: numberOrNull(statistics.likeCount),
-      comments: numberOrNull(statistics.commentCount),
-      reposts: null,
-      replies: null,
-    },
-    explicit_links: [
-      ...new Set((linkText.match(/https?:\/\/[^\s"'<>]+/g) || []).map(normalizeUrl).filter(Boolean)),
-    ].slice(0, 10),
-    content_type: null, // 评分/分类阶段再填
-    category: (categoryId && categoryMap && categoryMap[categoryId]) || null,
-    comments: comments || [],
-    tags: Array.isArray(snippet.tags) ? snippet.tags : [],
-    duration_seconds: parseDuration(contentDetails.duration),
-  };
-}
-
-/**
  * YouTube Data API v3 采集入口。
  * 任何 API 失败不抛错，降级返回部分结果与 coverage 状态。
  *
  * @param {object} options
  * @param {object} [options.config] v2 配置（缺省自动加载 news-config-v2.json）
- * @param {string} [options.apiKey] YOUTUBE_API_KEY（缺省读 process.env）
+ * @param {string} [options.apiKey] YOUTUBE_API_KEY（缺省经 loadCollectorConfig 读取）
  * @param {string|Date} [options.now] 采集参考时间（测试注入，缺省当前时间）
  * @param {string} [options.fetchedAt] fetched_at（缺省 now ISO）
  * @param {function} [options.fetchImpl] fetch 实现（测试注入）
@@ -207,7 +136,7 @@ function buildItem(detail, comments, categoryMap, fetchedAt) {
  */
 async function collectYouTubeV2(options = {}) {
   const config = resolveConfig(options.config);
-  const apiKey = options.apiKey || process.env.YOUTUBE_API_KEY;
+  const apiKey = youtubeApiKeyOf(options);
   const emptyQuota = { search_calls: 0, videos_calls: 0, comments_calls: 0, categories_calls: 0 };
 
   if (!apiKey) {

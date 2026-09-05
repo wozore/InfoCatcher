@@ -15,11 +15,12 @@
 
 const fs = require('fs');
 const { spawn } = require('child_process');
+const { envValue } = require('./env');
 const { LOCAL_API_BASE, LOCAL_MODEL } = require('./llm-endpoints');
 
 // 本地服务启动脚本（env 可覆盖；默认 Bonsai llama-server）。
 const DEFAULT_LOCAL_MODEL_SCRIPT = 'D:\\Application\\LocalModel\\Bonsai-Agent\\start_server.ps1';
-const LOCAL_MODEL_SCRIPT = process.env.KNOWVIEW_LOCAL_MODEL_SCRIPT || process.env.INFOCATCHER_LOCAL_MODEL_SCRIPT || DEFAULT_LOCAL_MODEL_SCRIPT;
+const LOCAL_MODEL_SCRIPT = envValue('KNOWVIEW_LOCAL_MODEL_SCRIPT') || envValue('INFOCATCHER_LOCAL_MODEL_SCRIPT') || DEFAULT_LOCAL_MODEL_SCRIPT;
 
 // 自动启动总开关（env '0' 关闭；关闭时仅报错不拉起）。
 const AUTOSTART_ENV = 'KNOWVIEW_AUTOSTART_LOCAL_MODEL';
@@ -34,9 +35,23 @@ let confirmedAt = 0;            // 最近一次确认在线的时间戳
 let lastStartAttemptAt = null;  // 最近一次启动尝试的时间戳（null=尚未启动；超时后 TTL 内不重复拉起）
 let startPromise = null;        // 进行中的启动任务（防并发重复启动）
 
+// 测试/CLI 通过 options.notify 消费结构化状态事件；事件只含状态码，不含脚本路径、端点或凭据。
+function notify(options, status, code, autoStarted = false) {
+  if (typeof options.notify !== 'function') return;
+  try {
+    options.notify(Object.freeze({
+      source: 'local-model',
+      status,
+      code,
+      auto_started: autoStarted,
+    }));
+  } catch {
+    // 通知是旁路可观测性，通知处理器故障不得改变模型调用的错误码与 fail-closed 语义。
+  }
+}
+
 function autostartEnabled() {
-  const value = process.env[AUTOSTART_ENV];
-  return value !== '0';
+  return envValue(AUTOSTART_ENV) !== '0';
 }
 
 /** 最小探测请求：max_tokens 1 + 关思维链，确认整条链路可用。 */
@@ -73,13 +88,13 @@ async function probeLocal(fetchImpl) {
 function startLocalServer(spawnImpl = spawn) {
   if (!LOCAL_MODEL_SCRIPT) return { started: false, error: `未配置本地模型启动脚本（${AUTOSTART_ENV}）` };
   if (!fs.existsSync(LOCAL_MODEL_SCRIPT)) {
-    return { started: false, error: `本地模型启动脚本不存在：${LOCAL_MODEL_SCRIPT}` };
+    return { started: false, error: '本地模型启动脚本不存在' };
   }
   // 平台门禁只对真实 spawn（生产路径）生效：.ps1 启动脚本仅在 Windows 可用。
   // 注入自定义 spawnImpl（测试 mock / 定制环境）时放行，由注入实现负责平台兼容，
   // 与 ensureLocalModel 注入 fetchImpl 即放行的测试隔离设计一致。
   if (spawnImpl === spawn && process.platform !== 'win32') {
-    return { started: false, error: `本地模型自动启动当前仅支持 Windows（脚本：${LOCAL_MODEL_SCRIPT}）` };
+    return { started: false, error: '本地模型自动启动当前仅支持 Windows' };
   }
   try {
     // Windows 下禁用 detached：它映射 DETACHED_PROCESS，控制台程序（powershell.exe）
@@ -93,7 +108,7 @@ function startLocalServer(spawnImpl = spawn) {
     child.unref();
     return { started: true };
   } catch (error) {
-    return { started: false, error: `本地模型启动失败：${error.message}` };
+    return { started: false, error: '本地模型启动失败' };
   }
 }
 
@@ -111,6 +126,7 @@ function sleep(ms) {
  *   nowFn          测试注入的时钟
  *   readyTimeoutMs 启动就绪总超时（测试可缩短）
  *   pollIntervalMs 就绪轮询间隔（测试可缩短）
+ *   notify        注入结构化状态通知（事件只含 source/status/code/auto_started，不含路径与凭据）
  */
 async function ensureLocalModel(options = {}) {
   const globalFetch = typeof fetch === 'function' ? fetch : null;
@@ -136,21 +152,25 @@ async function ensureLocalModel(options = {}) {
     return { ok: true };
   }
 
-  // 离线。自动启动禁用，或上次启动超时仍在 TTL 内：只报错不重复拉起。
   if (!autostartEnabled()) {
+    notify(options, 'offline', 'LOCAL_MODEL_OFFLINE');
     return { ok: false, code: 'LOCAL_MODEL_OFFLINE', error: `本地 AI 服务离线，且自动启动已禁用（${AUTOSTART_ENV}=0）`, autoStarted: false };
   }
   if (lastStartAttemptAt !== null && nowFn() - lastStartAttemptAt < READY_TIMEOUT_MS) {
-    return { ok: false, code: 'LOCAL_MODEL_STARTING', error: `本地 AI 服务离线（上次启动未就绪，${Math.ceil((READY_TIMEOUT_MS - (nowFn() - lastStartAttemptAt)) / 1000)}s 内不再重复启动；可手动执行 ${LOCAL_MODEL_SCRIPT}）`, autoStarted: false };
+    notify(options, 'starting', 'LOCAL_MODEL_STARTING');
+    return { ok: false, code: 'LOCAL_MODEL_STARTING', error: `本地 AI 服务离线（上次启动未就绪，${Math.ceil((READY_TIMEOUT_MS - (nowFn() - lastStartAttemptAt)) / 1000)}s 内不再重复启动）`, autoStarted: false };
   }
 
   // 自动启动（并发去重：进行中复用同一 promise）。
   if (!startPromise) {
     lastStartAttemptAt = nowFn();
-    console.log(`[local-model] 本地 AI 服务离线，正在自动启动（${LOCAL_MODEL_SCRIPT}）…`);
+    notify(options, 'starting', 'LOCAL_MODEL_STARTING', true);
     startPromise = (async () => {
       const launch = startLocalServer(spawnImpl);
-      if (!launch.started) return { ok: false, code: 'LOCAL_MODEL_START_FAILED', error: launch.error, autoStarted: false };
+      if (!launch.started) {
+        notify(options, 'failed', 'LOCAL_MODEL_START_FAILED', false);
+        return { ok: false, code: 'LOCAL_MODEL_START_FAILED', error: launch.error, autoStarted: false };
+      }
       const readyTimeoutMs = options.readyTimeoutMs ?? READY_TIMEOUT_MS;
       const pollIntervalMs = options.pollIntervalMs ?? POLL_INTERVAL_MS;
       const deadline = nowFn() + readyTimeoutMs;
@@ -158,13 +178,15 @@ async function ensureLocalModel(options = {}) {
         await sleep(pollIntervalMs);
         if (await probe(fetchImpl)) {
           confirmedAt = nowFn();
+          notify(options, 'ready', 'LOCAL_MODEL_READY', true);
           return { ok: true, autoStarted: true };
         }
       }
+      notify(options, 'failed', 'LOCAL_MODEL_START_TIMEOUT', true);
       return {
         ok: false,
         code: 'LOCAL_MODEL_START_TIMEOUT',
-        error: `本地 AI 服务启动后 ${Math.round(readyTimeoutMs / 1000)}s 内未就绪（${LOCAL_API_BASE}）；请检查 ${LOCAL_MODEL_SCRIPT}`,
+        error: `本地 AI 服务启动后 ${Math.round(readyTimeoutMs / 1000)}s 内未就绪`,
         autoStarted: true,
       };
     })();

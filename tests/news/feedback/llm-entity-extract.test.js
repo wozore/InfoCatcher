@@ -114,11 +114,31 @@ test('extractEntitiesWithLlm 调用失败抛错（供注入层降级正则）', 
   );
 });
 
-test('extractEntitiesWithLlm 缺 ledger 时内部自建可用（feedback 场景零配置）', async () => {
+test('extractEntitiesWithLlm 经 catalogApi 注入自建账本与模型兜底', async () => {
+  let created = 0;
   const entities = await extractEntitiesWithLlm('RAG 技术。', {
+    catalogApi: {
+      createEntityLedger: () => { created += 1; return createCostLedger({ responses_calls: 1, synthesis_calls: 0 }); },
+      resolveEntityModel: () => 'm-injected',
+    },
     apiKey: 'test-key',
-    model: 'm',
-    fetchImpl: async () => response({ output_text: '[{"name":"RAG","type":"concept"}]' }),
+    fetchImpl: async (url, init) => {
+      const body = JSON.parse(init.body);
+      assert.equal(body.model, 'm-injected', 'model 由 catalogApi.resolveEntityModel 兜底');
+      return response({ output_text: '[{"name":"RAG","type":"concept"}]' });
+    },
   });
+  assert.equal(created, 1, '账本由 catalogApi.createEntityLedger 构建');
   assert.deepEqual(entities, [{ name: 'RAG', type: 'concept' }]);
+});
+
+test('extractEntitiesWithLlm 缺 ledger 与 catalogApi 时 fail-closed 抛错', async () => {
+  await assert.rejects(
+    extractEntitiesWithLlm('RAG 技术。', {
+      apiKey: 'test-key',
+      model: 'm',
+      fetchImpl: async () => response({ output_text: '[]' }),
+    }),
+    /createEntityLedger/,
+  );
 });

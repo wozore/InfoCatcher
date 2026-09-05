@@ -15,8 +15,10 @@
  * vague 名除 LLM 判定外，由 tool-feedback 的 isVagueName 兜底拦截：
  * 即使 LLM 把笼统名误标为 tool，也绝不会进入待补工具卡。
  *
- * 复用 catalog 的 requestStructuredJson（Responses 协议 + 结构化 JSON 外壳归一化 +
- * ledger fail-closed + 有限响应诊断），比 news 旧 Chat Completions 封装更一致。
+ * 复用 shared 的 requestStructuredJson（Responses 协议 + 结构化 JSON 外壳归一化 +
+ * ledger fail-closed + 有限响应诊断）。成本账本与默认模型目录配置经
+ * options.catalogApi = { createEntityLedger, resolveEntityModel } 注入（组合根构造），
+ * 本模块不直读任何 catalog 域模块。
  *
  * 降级语义：LLM 调用失败（网络/限流/缺 key/输出非法）时【抛错】，由 cmd-min 的
  * 注入包装层捕获后回退正则提取（extractEntitiesDefault，宁多勿漏），不阻断反哺。
@@ -26,8 +28,6 @@
  */
 
 const { requestStructuredJson } = require('../../shared/llm-gateway');
-const { createCostLedger } = require('../../catalog/core/index');
-const { loadGeneratorConfig } = require('../../catalog/draft/index');
 const { LOCAL_API_BASE } = require('../../shared/llm-endpoints');
 
 const DEFAULT_MAX_OUTPUT_TOKENS = 600;
@@ -52,7 +52,7 @@ function buildEntityExtractInstructions() {
     '注意：分不清时宁可标 vague，也不要硬当 tool 或 model。';
 }
 
-/** validate：接受类型数组 [{name,type}]；兼容旧版裸字符串数组 / {names} / {entities}（逐候选试）。 */
+/** validate：接受类型数组 [{name,type}]；也接受裸字符串数组 / {names} / {entities}（逐候选试）。 */
 function validateExtractOutput(value) {
   if (Array.isArray(value)) {
     if (value.length === 0) return true;
@@ -68,7 +68,7 @@ function validateExtractOutput(value) {
   return false;
 }
 
-/** 归一化为 [{name, type}]：兼容类型数组与旧版裸字符串数组（裸字符串兜底 type: tool）。 */
+/** 归一化为 [{name, type}]：类型数组与裸字符串数组都接受（裸字符串兜底 type: tool）。 */
 function toEntityList(value) {
   const list = Array.isArray(value)
     ? value
@@ -93,19 +93,22 @@ function toNameList(value) {
   return toEntityList(value).map(entity => entity.name);
 }
 
-function defaultModel() {
-  try { return loadGeneratorConfig().model; } catch { return undefined; }
-}
-
 /**
- * 用 DeepSeek 从一段摘要提取带类型的 AI 实体。
+ * 用外部 provider 从一段摘要提取带类型的 AI 实体。
  * @param {string} text 摘要正文
- * @param {object} [options] { ledger, model, apiKey, fetchImpl, timeoutMs, maxOutputTokens }
+ * @param {object} [options] { ledger, catalogApi, model, apiKey, fetchImpl, timeoutMs, maxOutputTokens }
+ *   - catalogApi  { createEntityLedger, resolveEntityModel } 注入（组合根构造）；
+ *                 options.ledger 优先，其次 catalogApi.createEntityLedger()，都没有则抛错
+ *   - model       显式模型优先；其次 catalogApi.resolveEntityModel() 兜底
  * @returns {Promise<Array<{name: string, type: 'tool'|'model'|'concept'|'vague'}>>}
  *   实体数组；调用失败时抛错（调用方据此降级正则）。
  */
 async function extractEntitiesWithLlm(text, options = {}) {
-  const ledger = options.ledger || createCostLedger({ responses_calls: 1, synthesis_calls: 0 });
+  const catalogApi = options.catalogApi || {};
+  if (!options.ledger && typeof catalogApi.createEntityLedger !== 'function') {
+    throw new Error('实体提取需要注入 ledger 或 catalogApi.createEntityLedger（fail-closed 成本记账）');
+  }
+  const ledger = options.ledger || catalogApi.createEntityLedger();
   const result = await requestStructuredJson({
     kind: 'entity_extract',
     instructions: buildEntityExtractInstructions(),
@@ -114,7 +117,7 @@ async function extractEntitiesWithLlm(text, options = {}) {
     ledger,
     validate: validateExtractOutput,
   }, {
-    model: options.model || defaultModel(),
+    model: options.model || (typeof catalogApi.resolveEntityModel === 'function' ? catalogApi.resolveEntityModel() : undefined),
     apiKey: options.apiKey,
     fetchImpl: options.fetchImpl,
     timeoutMs: options.timeoutMs,

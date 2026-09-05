@@ -12,12 +12,8 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const {
-  revisionOfMinStore,
-  commitMinStoreMutation,
-  reviewPendingCandidates,
-  setApprovedTopSelectedMin,
-} = require('../../src/news/min/min-store');
+const { revisionOfMinStore, commitMinStoreMutation } = require('../../src/news/min/min-store');
+const { reviewPendingCandidates, setApprovedTopSelectedMin } = require('../../src/news/min/min-review-actions');
 const {
   revisionOfConfig,
   applyKeywordActions,

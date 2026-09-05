@@ -6,17 +6,46 @@
  *
  * 模块边界：
  *   - 只依赖 feed-parser.js（normalizeUrl）与本地 interactionValue；
- *   - 惰性加载工具目录 URL 索引 / 标题匹配词表（一次构建只读一次）。
+ *   - 工具目录/概念/场景数据一律经 catalogApi 注入（组合根构造），本模块不做任何
+ *     目录文件直读；enrichHotspotProjection 未注入 index/lexicon 时按空词典处理。
  */
 
 'use strict';
 
-const { readJson } = require('../../shared/json-store');
 const { normalizeUrl } = require('./feed-parser');
-const { CATALOG_FILES } = require('../../shared/paths');
-const { catalog } = require('../../catalog/interface');
 
-// ── 互动量级换算（自 v1 scoring.js 内联，v2 保留给 computeHotScores 使用）──
+/** 生成空投影输入（未注入 catalogApi 时的降级值，等价目录读失败）。 */
+function emptyProjectionInputs() {
+  return { toolUrlIndex: new Map(), relatedLexicon: [] };
+}
+
+/**
+ * 由注入的 catalogApi 构建投影输入（工具 URL 索引 + 标题匹配词表）。
+ * @param {object} catalogApi 组合根注入的目录查询集
+ *   { listToolCards, listVendorCards, readGlossary, readScenes }
+ */
+function buildProjectionInputs(catalogApi) {
+  if (!catalogApi) return emptyProjectionInputs();
+  const toolResult = catalogApi.listToolCards ? catalogApi.listToolCards() : [];
+  const vendorResult = catalogApi.listVendorCards ? catalogApi.listVendorCards() : [];
+  const tools = [
+    ...vendorResult.map(item => ({ id: item.vendor_key, name: item.title, vendor: item.title, url: item.official_url })),
+    ...toolResult.map(item => ({ id: item.tool_key, name: item.title, vendor: item.vendor_label, url: '' })),
+  ];
+  const glossary = catalogApi.readGlossary ? catalogApi.readGlossary() : [];
+  const scenes = catalogApi.readScenes ? catalogApi.readScenes() : [];
+  return {
+    toolUrlIndex: buildToolUrlIndex(toolResult.map(item => ({
+      id: item.tool_key,
+      name: item.title,
+      vendor: item.vendor_label,
+      url: item.url || '',
+    }))),
+    relatedLexicon: buildRelatedTitleLexicon(tools, glossary, scenes),
+  };
+}
+
+// ── 互动量级换算 ──
 /** 互动量级：对公开互动数据（浏览/点赞/评论/转发/回复）加权后取对数；无任何互动数据返回 null。 */
 function interactionValue(item) {
   const metrics = item.metrics || {};
@@ -195,7 +224,7 @@ function matchRelatedByTitle(item, lexicon) {
 }
 
 /**
- * 概念稳定 ID 适配层（ADR-007）：与前端 app.js searchConceptKey 同构，
+ * 概念稳定 ID 适配层（ADR-007）：与前端 searchConceptKey 同构，
  * 保证前后端对同一概念生成相同的稳定 ID。glossary 无独立 id 字段，
  * 由 term 规范化派生（concept-<term>）。
  */
@@ -207,30 +236,6 @@ function searchConceptKey(term) {
     .replace(/[^\p{Letter}\p{Number}]+/gu, '-')
     .replace(/^-+|-+$/g, '');
   return normalizedTerm ? 'concept-' + normalizedTerm : 'concept-unknown';
-}
-
-/** 惰性构建标题匹配词表（一次构建只读一次；读取失败时降级为空词表）。 */
-let cachedRelatedLexicon = null;
-/** 惰性构建标题匹配词表（一次构建只读一次；读取失败时降级为空词表）。 */
-function getRelatedLexicon() {
-  if (cachedRelatedLexicon === null) {
-    const toolResult = catalog({ area: 'tool-card', operation: 'list' });
-    const vendorResult = catalog({ area: 'vendor-card', operation: 'list' });
-    const toolCards = toolResult.ok ? toolResult.data : [];
-    const vendorCards = vendorResult.ok ? vendorResult.data : [];
-    const tools = [
-      ...vendorCards.map(item => ({ id: item.vendor_key, name: item.title, vendor: item.title, url: item.official_url })),
-      ...toolCards.map(item => ({ id: item.tool_key, name: item.title, vendor: item.vendor_label, url: '' })),
-    ];
-    let glossary = [], scenes = [];
-    try { glossary = readJson(CATALOG_FILES.glossary, []); } catch { glossary = []; }
-    try {
-      const scenesData = readJson(CATALOG_FILES.scenes, { scenes: [] });
-      scenes = Array.isArray(scenesData) ? scenesData : (scenesData.scenes || []);
-    } catch { scenes = []; }
-    cachedRelatedLexicon = buildRelatedTitleLexicon(tools, glossary, scenes);
-  }
-  return cachedRelatedLexicon;
 }
 
 /** 热度：对同一平台内的条目按互动量级归一化到 0–100；无互动数据为 null。 */
@@ -258,32 +263,15 @@ function computeHotScores(items) {
   }
 }
 
-/** 惰性加载工具目录 URL 索引（一次构建只读一次；读取失败时降级为空索引）。 */
-let cachedToolUrlIndex = null;
-/** 惰性加载工具目录 URL 索引（一次构建只读一次；读取失败时降级为空索引）。 */
-function getToolUrlIndex() {
-  if (cachedToolUrlIndex === null) {
-    const result = catalog({ area: 'tool-card', operation: 'list' });
-    const tools = result.ok ? result.data.map(item => ({
-      id: item.tool_key,
-      name: item.title,
-      vendor: item.vendor_label,
-      url: item.url || '',
-    })) : [];
-    cachedToolUrlIndex = buildToolUrlIndex(tools);
-  }
-  return cachedToolUrlIndex;
-}
-
 /**
  * 对一条热点投影的整体 items 应用公开契约补充（热度/依据片段/稳定关联）。
- * toolUrlIndex 可注入（测试用）；缺省时使用工具目录的规范 URL 索引。
- * 对同一批 items 重复调用保持幂等（各字段由现有公开字段确定性推导）。
+ * toolUrlIndex / relatedLexicon 由调用方注入（buildProjectionInputs 构建；
+ * 未注入时按空词典处理，仅补热度与依据片段）。对同一批 items 重复调用保持幂等。
  */
 function enrichHotspotProjection(items, toolUrlIndex = null, relatedLexicon = null) {
   computeHotScores(items);
-  const index = toolUrlIndex || getToolUrlIndex();
-  const lexicon = relatedLexicon || getRelatedLexicon();
+  const index = toolUrlIndex || new Map();
+  const lexicon = relatedLexicon || [];
   for (const item of items) {
     item.evidence_excerpt = buildEvidenceExcerpt(item);
     // URL 精确身份匹配 + 标题词边界匹配（B16-R7 方案 A），合并去重、确定性、上限截断。
@@ -305,14 +293,10 @@ function enrichHotspotProjection(items, toolUrlIndex = null, relatedLexicon = nu
 // ═══════════════════════════════════════════════════════════════
 // 内容去重
 //
-// 去重（dedupeItems）：按 platform:native_id 去重（与 registry 主键一致，N-P6 确认，
-//   2026-08-05）。跨平台重复观察由 v1 buildProvenance 以 duplicate_observation/repost
-//   溯源保留，不在此合并（B16 决策 46/47：保留各自观点）；v2 主链（pipeline-min）
-//   只调用 dedupeItems，不构建溯源/事件聚合（热点视图 v2 schema 不再消费 provenance/events）。
-//   保留先出现的条目。
-//   历史：此处注释曾宣称「按 url + title 组合去重」，与实现不符且语义错误——
-//   url+title 会误合并跨平台同标题内容与同平台同标题不同视频。真实数据（候选层/registry）
-//   两种键零差异，故保留实现、修正注释。
+// dedupeItems 按 platform:native_id 去重（与 registry 主键一致，N-P6 确认，
+//   2026-08-05）。跨平台重复观察保留各自条目（B16 决策 46/47：保留各自观点）；
+//   v2 主链（pipeline-min）只调用 dedupeItems，不构建溯源/事件聚合
+//   （热点视图 v2 schema 不消费 provenance/events）。保留先出现的条目。
 // ═══════════════════════════════════════════════════════════════
 
 function dedupeItems(items) {
@@ -326,6 +310,7 @@ function dedupeItems(items) {
 }
 
 module.exports = {
+  buildProjectionInputs,
   buildEvidenceExcerpt,
   buildToolUrlIndex,
   resolveRelatedResources,
@@ -336,6 +321,4 @@ module.exports = {
   computeHotScores,
   enrichHotspotProjection,
   dedupeItems,
-  getRelatedLexicon,
-  getToolUrlIndex,
 };

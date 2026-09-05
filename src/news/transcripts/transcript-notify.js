@@ -23,7 +23,8 @@
 const path = require('path');
 const fs = require('fs');
 const { writeJsonAtomic } = require('../../shared/json-store');
-const { readMinStore, toPublicItemMin } = require('../min/min-store');
+const { readMinStore } = require('../min/min-store');
+const { toPublicItemMin } = require('../min/min-review-actions');
 const { beijingDateKey } = require('../../shared/beijing-time');
 
 /**

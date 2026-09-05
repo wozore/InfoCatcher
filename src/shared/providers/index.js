@@ -1,11 +1,11 @@
 'use strict';
 
 const { AI_PROTOCOLS } = require('./protocols');
-const zhipu = require('./zhipu');
-const deepseek = require('./deepseek');
-const local = require('./local');
-const openai = require('./openai');
-const anthropic = require('./anthropic');
+const { zhipu } = require('./zhipu');
+const { deepseek } = require('./deepseek');
+const { local } = require('./local');
+const { openai } = require('./openai');
+const { anthropic } = require('./anthropic');
 
 const AI_PROVIDERS = Object.freeze({
   zhipu,

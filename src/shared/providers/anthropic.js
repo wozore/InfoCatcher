@@ -12,4 +12,4 @@ const anthropic = Object.freeze({
   implemented: false,
 });
 
-module.exports = anthropic;
+module.exports = { anthropic };

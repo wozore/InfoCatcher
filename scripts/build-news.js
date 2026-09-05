@@ -21,6 +21,8 @@
 const { loadDotEnv } = require('../src/shared/env');
 loadDotEnv();
 
+const { createNewsCatalogApi } = require('../src/maintenance/workbench/news-domain');
+
 // ── 热点管线 v2 CLI 入口（默认 / --platforms 分时）────────────────
 // 只做接线：调 runMin 编排，不重写任何 v2 模块。
 // 无 API key 时 YouTube/X 采集器各自降级返回空（coverage.status='failed'），
@@ -28,7 +30,10 @@ loadDotEnv();
 async function mainMin(platforms) {
   const { runMin } = require('../src/news/min/pipeline-min');
   const fixture = process.argv.includes('--fixture');
-  const options = fixture ? buildMinFixtureOptions() : { autoRepair: true };
+  // news 域不直读 catalog：目录查询面由组合根注入（fixture 模式同样注入，保证投影行为等价）。
+  const options = fixture
+    ? { ...buildMinFixtureOptions(), catalogApi: createNewsCatalogApi() }
+    : { autoRepair: true, catalogApi: createNewsCatalogApi() };
   if (Array.isArray(platforms) && platforms.length) options.platforms = platforms;
   // --scheduled 仅由 collect-news.yml 的 schedule 触发传入：启用 YouTube 72h 到期闸 +
   // 允许写调度状态；workflow_dispatch / 本地运行不带此标志（手动与调度节奏互不影响）。

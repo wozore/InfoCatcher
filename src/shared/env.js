@@ -47,4 +47,13 @@ function loadDotEnv(filePath) {
   return loaded;
 }
 
-module.exports = { loadDotEnv, PROJECT_DIR };
+/**
+ * 环境变量唯一读取点：src 内其他模块一律经此函数取值，不得直读 process.env
+ * （check-standards 的 ENV_EXEMPT_RE 豁免本文件）。保持惰性读取语义——
+ * 每次调用即时求值，调用方在模块加载期或请求期调用均与直读等价。
+ */
+function envValue(name) {
+  return process.env[name];
+}
+
+module.exports = { loadDotEnv, envValue, PROJECT_DIR };

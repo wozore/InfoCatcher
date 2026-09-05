@@ -13,7 +13,7 @@ const { summarizeCandidates } = require('../classify/content-summarizer');
 const { localizeCandidates, hasUsableLocalizedContent } = require('../classify/content-localizer');
 const { runPool } = require('../classify/content-reviewer');
 const { revisionOfMinStore } = require('./min-store');
-const { getProvider, DEFAULT_PROVIDER_NAME } = require('../../shared/providers');
+const { getProvider, DEFAULT_PROVIDER_NAME, apiKeyForProvider } = require('../../shared/providers');
 const {
   needsL1Review,
   needsL2Advice,
@@ -213,7 +213,7 @@ async function repairIncompleteCandidates(store, config = {}, options = {}) {
     config,
   };
 
-  const externalApiKey = options.apiKeyB || options.apiKey || process.env[externalProviderInfo.apiKeyEnv];
+  const externalApiKey = options.apiKeyB || options.apiKey || apiKeyForProvider(externalProviderInfo);
   const channelBOpts = {
     ...options,
     timeoutMs: options.channelB?.timeoutMs ?? 15000,

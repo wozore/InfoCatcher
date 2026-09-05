@@ -17,6 +17,8 @@
  * 政策红线：官方支持的「单账号内混用」，不涉及多开账号绕额度（ToS 反滥用）。
  */
 
+const { envValue } = require('./env');
+
 const SEARCH_ENDPOINT = 'https://api.tavily.com/search';
 const EXTRACT_ENDPOINT = 'https://api.tavily.com/extract';
 const DEFAULT_TIMEOUT_MS = 60000;
@@ -54,7 +56,7 @@ const keylessState = {
 let keylessChain = Promise.resolve();
 
 function apiKeyOf(explicitApiKey) {
-  return explicitApiKey ?? process.env.TAVILY_API_KEY;
+  return explicitApiKey ?? envValue('TAVILY_API_KEY');
 }
 
 function canonicalizeUrl(value) {
@@ -92,7 +94,7 @@ function classifyHttpError(status, operation) {
 /** 认证模式解析：options.accessMode → 环境变量 TAVILY_ACCESS_MODE → 按 operation 默认归属。 */
 function resolveAccessMode(operation, options = {}) {
   if (options.accessMode === 'keyless' || options.accessMode === 'keyed') return options.accessMode;
-  const envMode = String(process.env.TAVILY_ACCESS_MODE || '').toLowerCase();
+  const envMode = String(envValue('TAVILY_ACCESS_MODE') || '').toLowerCase();
   if (envMode === 'keyless' || envMode === 'keyed') return envMode;
   return KEYLESS_OPERATIONS.has(operation) ? 'keyless' : 'keyed';
 }

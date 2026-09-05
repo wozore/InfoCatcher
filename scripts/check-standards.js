@@ -4,9 +4,9 @@
  * 检测范围：src/**\/*.{js,mjs}。检测项（规范正文见 docs/codebase-refactor-plan.md §1.7）：
  *   1. dependency-direction — 域间互引 / src→scripts / 浏览器域→Node 模块 /
  *      shared→其他域 / 函数体内 require
- *   2. shim — module.exports = require(...) 透传或整体仅 re-export 的垫片文件
+ *   2. shim — module.exports = require(...) 透传、整体仅 re-export 或 ESM 纯 re-export 垫片文件
  *   3. legacy-narrative — 注释与字符串中的旧契约叙事短语
- *   4. size-exports — 行数>400 / 导出>15 / require(变量) 动态引用 / 单值默认导出
+ *   4. size-exports — 行数>400 / 导出>15 / require(变量) 动态引用 / 单值默认导出 / scripts 薄壳超标
  *   5. cycles — require/import 依赖图环
  *   6. assembly — src 内 console.* / process.exit / process.env 直读
  *   7. codemap — src 代码文件必须在 CODEBASE-MAP.md 有条目
@@ -30,8 +30,14 @@ const NODE_BUILTINS = new Set(require('module').builtinModules);
 const LEGACY_RE = /已随 v\d|旧版|已删除的|不再校验|@deprecated|遗留/g;
 const ENV_EXEMPT_RE = /(^|\/)(env\.js|providers\/|load[^/]*Config\.js$)/;
 const SHIM_EXEMPT = new Set(['src/shared/providers/index.js']);
+const SCRIPT_EXEMPT = new Set([
+  'scripts/check-standards.js',
+  'scripts/browser-acceptance.js',
+  'scripts/check-secrets.js',
+]);
 const LINE_LIMIT = 400;
 const EXPORT_LIMIT = 15;
+const SCRIPT_LINE_LIMIT = 250;
 
 // ── 文本工具：把注释替换为等长空白，保留字符串字面量（require 参数等真实代码） ──
 // 已知局限：不解析正则字面量（含 // 的正则会截断该行后续内容，漏报方向）与模板 ${} 表达式。
@@ -173,6 +179,18 @@ function checkShim(rel, src, stripped, violations) {
       .replace(/\s/g, '');
     if (isReexport && meaningful.length === 0) {
       violations.push({ rule: 'shim', file: rel, message: '整体仅 re-export 的垫片文件' });
+      return;
+    }
+  }
+  // ESM 整体仅 re-export：仅由 export ... from '...' 组成且无实质定义
+  const esmReexportRe = /^\s*export\s+(?:\*|\{[^}]*\}|\w+)\s+from\s*['"][^'"]+['"];?\s*$/gm;
+  const esmMatches = stripped.match(esmReexportRe);
+  if (esmMatches && esmMatches.length > 0) {
+    const meaningful = stripped
+      .replace(esmReexportRe, '')
+      .replace(/\s/g, '');
+    if (meaningful.length === 0) {
+      violations.push({ rule: 'shim', file: rel, message: 'ESM 整体仅 re-export 的垫片文件' });
     }
   }
 }
@@ -333,6 +351,22 @@ function checkCodemap(rootDir, files, codemapPath, violations) {
   }
 }
 
+// ── 检测项 8：scripts 薄壳行数限制 ──
+function checkScripts(rootDir, violations) {
+  const scriptsDir = path.join(rootDir, 'scripts');
+  if (!fs.existsSync(scriptsDir)) return;
+  for (const entry of fs.readdirSync(scriptsDir, { withFileTypes: true })) {
+    if (!entry.isFile() || !entry.name.endsWith('.js')) continue;
+    const rel = `scripts/${entry.name}`;
+    if (SCRIPT_EXEMPT.has(rel)) continue;
+    const full = path.join(scriptsDir, entry.name);
+    const lines = fs.readFileSync(full, 'utf8').split('\n').length;
+    if (lines > SCRIPT_LINE_LIMIT) {
+      violations.push({ rule: 'size-exports', file: rel, message: `scripts 薄壳行数 ${lines} > ${SCRIPT_LINE_LIMIT}` });
+    }
+  }
+}
+
 // ── 白名单（只减不增） ──
 // 条目格式：{ file, count, note }。count = 该文件该检测项的存量违规处数（机器校验）：
 // 实际违规数超过 count 即报 whitelist-growth（绕过门禁必须改白名单文件，diff 可审查）；
@@ -413,6 +447,7 @@ function runChecks(options = {}) {
     violations.push({ rule: 'cycles', file: scc.join('|'), message: `循环依赖: ${scc.join(' ↔ ')}` });
   }
   checkCodemap(rootDir, files, codemapPath, violations);
+  checkScripts(rootDir, violations);
   const filtered = applyWhitelist(rootDir, violations);
   const byRule = {};
   for (const v of filtered) byRule[v.rule] = (byRule[v.rule] || 0) + 1;

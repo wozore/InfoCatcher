@@ -9,6 +9,13 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const { classifyRuleBased } = require('../../src/news/classify/content-classifier');
+const { catalog } = require('../../src/catalog/interface');
+
+// 工具词典注入：L0 词典命中依赖目录 tool-card 数据（与运行时组合根注入等价）。
+const listToolCards = () => {
+  const result = catalog({ area: 'tool-card', operation: 'list' });
+  return result.ok ? result.data : [];
+};
 
 test('分类器不因短剧/二创关键词直接排除内容', () => {
   const result = classifyRuleBased({
@@ -34,6 +41,6 @@ test('真实 AI 产品/行业/技术内容正常分类', () => {
     { title: 'Claude Code 上新，支持全新 agent 功能', description: '工具更新', expect: 'ai_product' },
   ];
   for (const item of cases) {
-    assert.equal(classifyRuleBased(item).content_type, item.expect, item.title);
+    assert.equal(classifyRuleBased(item, { listToolCards }).content_type, item.expect, item.title);
   }
 });

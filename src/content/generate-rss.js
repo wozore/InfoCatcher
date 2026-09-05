@@ -60,7 +60,7 @@ function generateRss() {
     const hotspots = JSON.parse(fs.readFileSync(NEWS_FILES.hotspots, 'utf8'));
     // B16 决策 63/72：RSS 与热点视图共用同一公开过滤规则（单一来源规则，
     // 规则集中在 news-public-gate.js）；读取失败时用默认 30 天窗口。
-    // 配置只读 v2（news-config-v2.json，热点管线 v2 默认；v1 config 已随 v1 删除）。
+    // 配置只读 v2（news-config-v2.json，热点管线 v2 默认）。
     let config = null;
     try { config = JSON.parse(fs.readFileSync(NEWS_FILES.configV2, 'utf8')); } catch { config = null; }
     items = getFeedItems(hotspots, { config, now: Date.now() });

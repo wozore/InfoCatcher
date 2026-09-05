@@ -16,7 +16,8 @@ const fs = require('fs');
 const path = require('path');
 const { DIRS } = require('../../shared/paths');
 const { DEFAULT_PROVIDER_NAME } = require('../../shared/providers');
-const { readMinStore, commitMinStoreMutation, revisionOfMinStore, assertExpectedMinRevision, setCandidateTranscriptMin, setCandidateTranscriptSummaryMin } = require('./min-store');
+const { readMinStore, commitMinStoreMutation, revisionOfMinStore, assertExpectedMinRevision } = require('./min-store');
+const { setCandidateTranscriptMin, setCandidateTranscriptSummaryMin } = require('./min-review-actions');
 const { summarizeCandidate, runPool } = require('../classify/content-summarizer');
 
 const MAX_TRANSCRIPT_STORED_CHARS = 60000;

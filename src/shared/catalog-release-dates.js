@@ -39,7 +39,8 @@ function validateCatalogReleaseDatesEntries(entries) {
 
 /**
  * 读共享 catalog release_date 投影（comparison 反查只读；固定共享路径，`file` 仅供测试注入）。
- * 缺失/损坏回退空，返回校验后冻结结构，不抛。
+ * 缺失/损坏回退空，返回校验后冻结结构，不抛；损坏时以 validation_errors
+ * 携带逐条诊断（组装纪律：src 禁 console.*，诊断由调用方决定如何呈现）。
  */
 function readCatalogReleaseDates(file = SHARED_FILES.catalogReleaseDates) {
   try {
@@ -48,8 +49,7 @@ function readCatalogReleaseDates(file = SHARED_FILES.catalogReleaseDates) {
     if (!value || typeof value !== 'object' || !Array.isArray(value.entries)) return Object.freeze({ schema_version: 1, entries: [] });
     const errors = validateCatalogReleaseDatesEntries(value.entries);
     if (errors.length) {
-      console.warn(`⚠️ 共享 catalog release_date 投影损坏：${errors.join('; ')}（回退空）`);
-      return Object.freeze({ schema_version: 1, entries: [] });
+      return Object.freeze({ schema_version: 1, entries: [], validation_errors: Object.freeze([...errors]) });
     }
     const entries = Object.freeze(value.entries.map(entry => Object.freeze({ ...entry })));
     return Object.freeze({ schema_version: 1, entries });

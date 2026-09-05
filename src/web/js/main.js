@@ -3,32 +3,32 @@
  * 负责应用初始化、路由调度与全局事件编排。
  */
 
-import { loadData, renderSkeletons } from './data-loader.js';
+import { loadData, renderSkeletons } from './data/data-loader.js';
 import { state, setViewChangeHandler, onCompareChange } from './state.js';
-import { announceStatus, setRegionBusy, copyTextWithFeedback } from './ui-helpers.js';
-import { renderTools, openDetail, closeModal, clearToolFilters, toggleToolsViewMode, getModalFocusableElements } from './tools.js';
+import { announceStatus, setRegionBusy, copyTextWithFeedback } from './ui/ui-helpers.js';
+import { renderTools, openDetail, closeModal, clearToolFilters, toggleToolsViewMode, getModalFocusableElements } from './views/tools.js';
 import {
   updateCompareCount, renderCompare, renderCompareView, setCompareTab,
   toggleCompareRef, renderAddCompare, openAddComparePanel,
   compareGroupLeaves, removeCompare, quickCompare
-} from './compare.js';
-import { bindModelCompareEvents } from './compare-models.js';
-import { renderScenes, setActiveSceneId, toggleSceneToolCard } from './scenes.js';
-import { renderTrending, clearTrendingFilters, reloadHotspots, openHotspotDetail } from './trending.js';
-import { renderGlossary, openGlossaryConcept, setActiveGlossaryId } from './glossary.js';
-import { applyStaticTranslations } from './i18n.js';
-import { loadIcons } from './brand-icons.js';
-import { renderFeatured, setActiveEditorCat, setActiveHotCat } from './featured.js';
+} from './views/compare.js';
+import { bindModelCompareEvents } from './views/compare-models.js';
+import { renderScenes, setActiveSceneId, toggleSceneToolCard } from './views/scenes.js';
+import { renderTrending, clearTrendingFilters, reloadHotspots, openHotspotDetail } from './views/trending.js';
+import { renderGlossary, openGlossaryConcept, setActiveGlossaryId } from './views/glossary.js';
+import { applyStaticTranslations } from './ui/i18n.js';
+import { loadIcons } from './ui/brand-icons.js';
+import { renderFeatured, setActiveEditorCat, setActiveHotCat } from './views/featured.js';
 import {
   searchState, renderSearchHome, renderSearchProcessing, renderSearchView,
   submitSearchHome, clearSearchHomeStates, cancelSearchProcessing, returnToSearchHome,
   startSearchEditing, cancelSearchEditing, submitSearchEdit, clearSearchEditState,
   selectSearchExample, openSearchToolDetail, openSearchMoreTools
-} from './search.js';
+} from './views/search.js';
 import {
   focusSearchSource, setSearchFeedback, closeSearchConcept, openSearchConcept,
   scheduleSearchConceptOpen, scheduleSearchConceptClose
-} from './search-render.js';
+} from './views/search-render.js';
 
 export let currentView = 'search';
 

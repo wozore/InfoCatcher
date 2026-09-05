@@ -20,7 +20,10 @@ const { filterProjectionByWindow } = require('../src/news/core/news-public-gate'
 const { readJson, writeJsonAtomic } = require('../src/shared/json-store');
 const { NEWS_FILES } = require('../src/shared/paths');
 const { generateRss } = require('../src/content/generate-rss');
-const { enrichHotspotProjection } = require('../src/news/pipeline/projection');
+const { enrichHotspotProjection, buildProjectionInputs } = require('../src/news/pipeline/projection');
+const { readMinStore } = require('../src/news/min/min-store');
+const { buildDailyProjection } = require('../src/news/min/daily-projection');
+const { createNewsCatalogApi } = require('../src/maintenance/workbench/news-domain');
 
 const OUTPUT_PATH = NEWS_FILES.hotspots;
 
@@ -30,12 +33,12 @@ const OUTPUT_PATH = NEWS_FILES.hotspots;
  */
 function mainMin() {
   const dryRun = process.argv.includes('--dry-run');
-  const { readMinStore } = require('../src/news/min/min-store');
-  const { buildDailyProjection } = require('../src/news/min/daily-projection');
+  // news 域不直读 catalog：目录查询面由组合根注入。
+  const { toolUrlIndex, relatedLexicon } = buildProjectionInputs(createNewsCatalogApi());
   const config = readJson(NEWS_FILES.configV2, null);
   const store = readMinStore();
   const projection = buildDailyProjection(store, config, { now: new Date() });
-  enrichHotspotProjection(projection.items);
+  enrichHotspotProjection(projection.items, toolUrlIndex, relatedLexicon);
   const output = {
     schema_version: 1,
     generated_at: projection.generated_at,

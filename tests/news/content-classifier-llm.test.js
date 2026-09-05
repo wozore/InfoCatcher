@@ -21,11 +21,8 @@ const {
   classifyCandidates,
   CONTENT_TYPES,
 } = require('../../src/news/classify/content-classifier');
-const {
-  buildClassifyPayload,
-  normalizeLabel,
-  classifyContent,
-} = require('../../src/news/classify/llm-provider');
+const { classifyContent } = require('../../src/news/classify/llm-provider');
+const { buildClassifyPayload, normalizeLabel } = require('../../src/news/classify/llm-prompts');
 const { getProvider } = require('../../src/shared/providers');
 
 // ── mock fetch 工具 ─────────────────────────────────────────────

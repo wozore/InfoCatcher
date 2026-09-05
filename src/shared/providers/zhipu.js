@@ -12,4 +12,4 @@ const zhipu = Object.freeze({
   defaultModel: 'glm-5.3-flash',
 });
 
-module.exports = zhipu;
+module.exports = { zhipu };

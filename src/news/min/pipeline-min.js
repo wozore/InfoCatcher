@@ -1,53 +1,27 @@
 /**
  * pipeline-min.js —— 热点管线 v2 总指挥（runMin 编排）
  *
- * 在热点管线 v2 中的位置：把 v2 各模块串成完整流水线的唯一入口。
- *   collect（collector-youtube-v2 / collector-x-v2）
- *   → 去重（projection.dedupeItems）
- *   → L0 硬过滤（review-v2.l0HardFilter）
- *   → 分类（content-classifier.classifyCandidate / classifyRuleBased）
- *   → 评分（scoring-v2.assessItemV2 + history-store 历史库）
- *   → L1/L2 审核（review-v2.applyL1Verdicts）
- *   → 候选落地（min-store.mergeCandidatesMin / writeMinStore）
+ * 把 v2 各模块串成完整流水线的唯一入口：
+ *   collect（pipeline-collect → collector-youtube-v2 / collector-x-v2）
+ *   → 去重（projection.dedupeItems）→ L0 硬过滤（review-v2.l0HardFilter）
+ *   → 分类（content-classifier）→ 评分（scoring-v2 + history-store）
+ *   → L1/L2 审核（review-v2.applyL1Verdicts）→ 候选落地（min-store）
  *   → 总结（content-summarizer）+ 本地化（content-localizer）
- *   → 每日公开投影（daily-projection.buildDailyProjection + projection.enrichHotspotProjection
+ *   → 每日公开投影（daily-projection + projection.enrichHotspotProjection
  *     + news-public-gate.filterProjectionByWindow）→ 写 data/news/output/hotspots.json
  *
  * 本模块只编排，不重写任何子模块。**每步失败不抛错**：降级继续并把原因记进
  * coverage（子模块自身的失败语义已保证：LLM 失败 → 降级对象/verdict null，绝不 reject）。
  *
- * 注入点（测试 mock 用，缺省回落真实实现）：
- *   options.collectors = { youtube, x }          覆盖 collectYouTubeV2 / collectXV2
- *   options.platforms = ['youtube','x']          采集平台范围（缺省双跑；分时采集传单平台，如 ['youtube']）
- *   options.classify                             覆盖 classifyCandidate（接受单条，同步/异步均可）
- *   options.review                               覆盖 applyL1Verdicts（返回 { kept, discarded }）
- *   options.summarize                            覆盖 summarizeCandidates（批量签名 (items, options)）
- *   options.localize                             覆盖 localizeCandidates（批量签名 (items, options)）
- *   options.score                                覆盖 assessItemV2（可选）
- *   options.config                               覆盖 news-config-v2.json
- *   options.now                                  采集/评分/投影参考时间（Date 或 ISO 字符串）
- *   options.xWindow = { since, until }           覆盖 X 时间窗；缺省用「北京时间今天 0 点 → now」
- *   options.runId                                写入临时文件名标识（可选）
- *   options.minStoreIn / options.minStoreOut     覆盖候选层读写（fixture 注入内存存根，避免污染运行时文件）
- *   options.historyIn / options.historyOut       覆盖来源质量历史库读写（同上；缺省回落真实文件）
- *                                                签名：minStoreIn()→store，minStoreOut(store,runId)；
- *                                                historyIn()→store，historyOut(store,runId)
- *   options.lastRunOut                           覆盖采集运行记录写盘（签名 lastRunOut(record, runId)，
- *                                                缺省原子写 data/news/runtime/last-run.json；fixture 注入存根）
- *   options.scheduled                            标记本次为 GitHub Actions 调度触发（CLI 传 --scheduled）。
- *                                                仅调度运行受 YouTube 到期闸约束并写调度状态；
- *                                                手动 dispatch / 本地运行不受闸、不写状态（互不影响节奏）。
- *   options.scheduleStateIn / options.scheduleStateOut  覆盖调度状态读写（签名 minStoreIn/Out 同款：
- *                                                scheduleStateIn()→state，scheduleStateOut(state, runId)；
- *                                                缺省读写 data/news/runtime/schedule-state.json）
- *
- * 加平台 = platforms 数组枚举 + options.collectors 注入点：
- *   新增采集平台时，在 platforms 缺省数组枚举该平台，并在 options.collectors 提供对应采集器；
- *   未启用平台的 coverage.collectors[platform] 保持 { status:'not_run', items:0, error:null }。
- *
- * 并发语义：分类与审核（applyL1Verdicts）都按 config.collection.concurrency
- * 并发执行（DeepSeek 逐条串行会卡十几分钟，实测见 2026-08-08 基准）；
- * 总结/本地化走 summarizeCandidates / localizeCandidates 自带批量并发。
+ * 注入点（测试 mock 用，缺省回落真实实现；采集/调度注入点见 pipeline-collect 与
+ * pipeline-schedule）：
+ *   options.classify / options.review / options.summarize / options.localize / options.score
+ *   options.config / options.now / options.xWindow / options.runId
+ *   options.minStoreIn / options.minStoreOut / options.historyIn / options.historyOut
+ *   options.lastRunOut(record, runId) / options.scheduleStateIn / options.scheduleStateOut
+ *   options.catalogApi  目录查询注入 { listToolCards, listVendorCards, readGlossary, readScenes }
+ *                       （组合根构造）；未注入时公开投影按空词典处理（不关联 related_resources）
+ *   options.autoReviewList=false 关闭自动生成人工审核清单；options.autoRepair=true 开启双通道自愈兜底
  *
  * 数据文件：
  *   - 候选层  data/news/runtime/min-candidates.json（writeMinStore）
@@ -59,96 +33,35 @@
 
 'use strict';
 
-const { collectYouTubeV2 } = require('../collectors/collector-youtube-v2');
-const { collectXV2 } = require('../collectors/collector-x-v2');
 const { readHistoryStore, writeHistoryStore, appendSamples, sourceKeyOf } = require('./history-store');
 const { assessItemV2 } = require('../pipeline/scoring-v2');
 const { l0HardFilter, applyL1Verdicts } = require('./review-v2');
 const { readMinStore, writeMinStore, mergeCandidatesMin } = require('./min-store');
 const { buildDailyProjection } = require('./daily-projection');
-const { beijingMidnightIso } = require('../../shared/beijing-time');
 const { classifyCandidate } = require('../classify/content-classifier');
 const { summarizeCandidates } = require('../classify/content-summarizer');
 const { localizeCandidates } = require('../classify/content-localizer');
 const { runPool } = require('../classify/content-reviewer');
-const { dedupeItems, enrichHotspotProjection } = require('../pipeline/projection');
+const { dedupeItems, enrichHotspotProjection, buildProjectionInputs } = require('../pipeline/projection');
 const { filterProjectionByWindow } = require('../core/news-public-gate');
 const { countRepairWork } = require('./enrichment-core');
-const { readJson, writeJsonAtomic } = require('../../shared/json-store');
+const { repairIncompleteCandidates } = require('./min-repair');
+const { buildReviewList } = require('./review-list');
+const { collectPlatforms } = require('./pipeline-collect');
+const { writeJsonAtomic } = require('../../shared/json-store');
 const { NEWS_FILES } = require('../../shared/paths');
-const V2_CONFIG_PATH = '../../../data/news/config/news-config-v2.json';
-
-let cachedV2Config = null;
-
-/** 懒加载 news-config-v2.json；不可读时退回默认关闭的最小兜底配置。 */
-function loadV2Config() {
-  if (cachedV2Config) return cachedV2Config;
-  try {
-    cachedV2Config = require(V2_CONFIG_PATH);
-  } catch {
-    cachedV2Config = { schema_version: 1, collection: { enabled: false }, keywords: { ai_keywords: [] }, review: {}, scoring: {} };
-  }
-  return cachedV2Config;
-}
-
-/** 热点采集总开关：仅严格布尔 true 启用；缺失或类型错误均安全关闭。 */
-function isCollectionEnabled(config) {
-  return config?.collection?.enabled === true;
-}
-
-/** YouTube 调度采集默认最小间隔（小时）；config.schedule.youtube_interval_hours 可覆盖。 */
-const DEFAULT_YOUTUBE_INTERVAL_HOURS = 72;
-
-/**
- * YouTube 到期判定（纯函数）：距上次「调度触发」的成功采集 ≥ interval 小时才算到期。
- * 背景：GitHub cron 的日期步进按月历日触发（1,4,…,28,31），月末出现 31→1 背靠背；
- * 改为每日 cron + 管线内到期闸后，滚动间隔不再受月界与 GitHub 调度延迟影响。
- * 状态缺失 / 时间戳非法 / 时钟倒挂（未来时间）均视为到期——宁可多采不可漏采。
- */
-function isYoutubeDue(config, scheduleState, now) {
-  const intervalHours = Math.max(1, Number(config?.schedule?.youtube_interval_hours) || DEFAULT_YOUTUBE_INTERVAL_HOURS);
-  const raw = scheduleState && scheduleState.youtube_last_collected_at;
-  const lastAt = raw ? Date.parse(raw) : NaN;
-  if (!Number.isFinite(lastAt)) return true;
-  const nowMs = normalizeNow(now).getTime();
-  if (lastAt > nowMs) return true;
-  return (nowMs - lastAt) / 3600000 >= intervalHours;
-}
-
-function readScheduleState() {
-  return readJson(NEWS_FILES.scheduleState, null);
-}
-
-function writeScheduleState(state, runId) {
-  writeJsonAtomic(NEWS_FILES.scheduleState, state, runId);
-}
-
-/** 规范化 now：Date / ISO 字符串 / 非法值 → 回退当前时间。 */
-function normalizeNow(now) {
-  if (now == null) return new Date();
-  const date = now instanceof Date ? now : new Date(now);
-  return Number.isFinite(date.getTime()) ? date : new Date();
-}
+const {
+  buildLastRunRecord,
+  isCollectionEnabled,
+  isYoutubeDue,
+  loadV2Config,
+  normalizeNow,
+  resolveXWindow,
+} = require('./pipeline-schedule');
 
 /** 错误标签：防御 undefined 边界。 */
 function errorLabel(error) {
   return (error && (error.message || error.code)) || String(error);
-}
-
-/**
- * 解析 X 采集时间窗。
- * options.xWindow = { since, until } 注入时用之（since/until 可为 Date 或 ISO 字符串）；
- * 缺省用「北京时间今天 0 点 → now」（统一北京时间，不依赖 runner 系统时区）。
- * @returns {{ sinceIso: string|null, untilIso: string|null }}
- */
-function resolveXWindow(options, now) {
-  if (options && options.xWindow) {
-    return {
-      sinceIso: options.xWindow.since != null ? new Date(options.xWindow.since).toISOString() : null,
-      untilIso: options.xWindow.until != null ? new Date(options.xWindow.until).toISOString() : null,
-    };
-  }
-  return { sinceIso: beijingMidnightIso(now), untilIso: normalizeNow(now).toISOString() };
 }
 
 /**
@@ -201,103 +114,10 @@ async function runMin(options = {}) {
     errors.push(`${step}:${message}`);
   };
 
-  // ═══════════════════════════════════════════════════════════════
-  // 1. 采集：默认并行 YouTube + X（各平台失败降级返回空，不抛错）。
-  //    options.platforms 支持分时采集（YouTube 每日北京 20:00 触发、管线 72h 到期闸
-  //    决定是否真正采集；X 每日 13:00 / 22:00）：
-  //    只启动 platforms 列表内平台的采集 Task；未启用平台的 coverage.collectors[platform]
-  //    保持初始 { status:'not_run', items:0, error:null }。后续去重/评分/审核/合并/投影
-  //    仍跑全链——mergeCandidatesMin 读全量 min-candidates.json，单平台跑也产出完整每日投影。
-  // ═══════════════════════════════════════════════════════════════
-  const platforms = Array.isArray(options.platforms) && options.platforms.length
-    ? options.platforms
-    : ['youtube', 'x'];
-  const youtubeCollector = (options.collectors && options.collectors.youtube) || collectYouTubeV2;
-  const xCollector = (options.collectors && options.collectors.x) || collectXV2;
-  const xWindow = resolveXWindow(options, now);
+  // ═══ 1. 采集：默认并行 YouTube + X（各平台失败降级返回空，不抛错）。 ═══
+  const { mergedRaw, platforms } = await collectPlatforms({ options, config, now, runId, coverage, noteError });
 
-  // YouTube 到期闸：仅调度运行生效（options.scheduled 由 CLI --scheduled 注入）。
-  // 手动 dispatch / 本地运行不受闸、也不写调度状态——手动采集与调度节奏互不影响。
-  const scheduledRun = options.scheduled === true;
-  let youtubeDue = true;
-  if (platforms.includes('youtube') && scheduledRun) {
-    let scheduleState = null;
-    try {
-      scheduleState = options.scheduleStateIn ? options.scheduleStateIn() : readScheduleState();
-    } catch (error) {
-      noteError('schedule_state_read', error);
-    }
-    youtubeDue = isYoutubeDue(config, scheduleState, now);
-    if (!youtubeDue) {
-      coverage.collectors.youtube = { status: 'not_due', items: 0, error: null, reason: 'not_due' };
-    }
-  }
-
-  const collectTasks = [];
-  if (platforms.includes('youtube') && youtubeDue) {
-    collectTasks.push((async () => {
-      const slot = coverage.collectors.youtube;
-      try {
-        const result = await youtubeCollector({ config, now, apiKey: options.youtubeApiKey, fetchImpl: options.fetchImpl });
-        const collected = result && Array.isArray(result.items) ? result.items : [];
-        slot.items = collected.length;
-        slot.status = (result && result.coverage && result.coverage.status) || 'success';
-        slot.reason = (result && result.coverage && result.coverage.reason) || null;
-        return collected;
-      } catch (error) {
-        slot.status = 'failed';
-        slot.error = errorLabel(error);
-        return [];
-      }
-    })());
-  }
-  if (platforms.includes('x')) {
-    collectTasks.push((async () => {
-      const slot = coverage.collectors.x;
-      try {
-        const result = await xCollector({
-          config, now,
-          sinceIso: xWindow.sinceIso, untilIso: xWindow.untilIso,
-          xApiKey: options.xApiKey, fetchImpl: options.fetchImpl,
-        });
-        const collected = result && Array.isArray(result.items) ? result.items : [];
-        slot.items = collected.length;
-        slot.status = (result && result.coverage && result.coverage.status) || 'success';
-        slot.reason = (result && result.coverage && result.coverage.reason) || null;
-        slot.credits = result && result.credits ? result.credits : null;
-        return collected;
-      } catch (error) {
-        slot.status = 'failed';
-        slot.error = errorLabel(error);
-        return [];
-      }
-    })());
-  }
-
-  const collectedArrays = await Promise.all(collectTasks);
-  const mergedRaw = collectedArrays.flat();
-  coverage.collected_total = mergedRaw.length;
-
-  // 调度状态落盘：仅「调度运行 + YouTube 实际采集（success/partial）」刷新到期基准。
-  // not_due、failed、手动/本地运行一律不写——失败不吞窗口，手动不挤压调度节奏。
-  if (platforms.includes('youtube') && scheduledRun && youtubeDue
-    && ['success', 'partial'].includes(coverage.collectors.youtube.status)) {
-    try {
-      const scheduleState = {
-        schema_version: 1,
-        youtube_last_collected_at: now.toISOString(),
-        run_id: runId,
-      };
-      if (options.scheduleStateOut) options.scheduleStateOut(scheduleState, runId);
-      else writeScheduleState(scheduleState, runId);
-    } catch (error) {
-      noteError('schedule_state_write', error);
-    }
-  }
-
-  // ═══════════════════════════════════════════════════════════════
-  // 2. 去重（按 platform:native_id）
-  // ═══════════════════════════════════════════════════════════════
+  // ═══ 2. 去重（按 platform:native_id） ═══
   let items;
   try {
     items = dedupeItems(mergedRaw);
@@ -307,10 +127,8 @@ async function runMin(options = {}) {
   }
   coverage.after_dedupe = items.length;
 
-  // ═══════════════════════════════════════════════════════════════
-  // 3. L0 规则硬过滤：不过的标 discarded（记 coverage.l0_dropped），
-  //    不进入分类/评分/审核链；作为保留记录随候选层落盘（可人工撤销）。
-  // ═══════════════════════════════════════════════════════════════
+  // ═══ 3. L0 规则硬过滤：不过的标 discarded（记 coverage.l0_dropped），
+  //        不进入分类/评分/审核链；作为保留记录随候选层落盘（可人工撤销）。 ═══
   const l0Passed = [];
   const l0Failed = [];
   for (const item of items) {
@@ -337,10 +155,8 @@ async function runMin(options = {}) {
   // 不进入候选层，避免它出现在 review.json 或后续人工审核清单。
   const l0PersistedFailed = l0Failed.filter(item => item.discard_reason !== 'ai_generated_disclosure');
 
-  // ═══════════════════════════════════════════════════════════════
-  // 4. 分类：对过 L0 的每条填 content_type（失败留 unclassified，不阻塞）。
-  //    DeepSeek 分类按 config.collection.concurrency 并发执行（串行逐条会卡几分钟）。
-  // ═══════════════════════════════════════════════════════════════
+  // ═══ 4. 分类：对过 L0 的每条填 content_type（失败留 unclassified，不阻塞）。
+  //        外部 provider 分类按 config.collection.concurrency 并发执行。 ═══
   const classifyFn = options.classify || classifyCandidate;
   const classifyOptions = { ...options, config };
   const classifyConcurrency = Math.max(1, Number(config.collection?.concurrency) || 5);
@@ -359,11 +175,9 @@ async function runMin(options = {}) {
     }
   });
 
-  // ═══════════════════════════════════════════════════════════════
-  // 5. 评分：先持久化本轮 metrics 到历史库，再对每条 assessItemV2。
-  //    sourceKey 用 history-store.sourceKeyOf（X 去 'x-' 前缀、YouTube 去 'youtube-' 前缀），
-  //    保证 appendSamples 写入与 evaluateLongTermQuality 查询用同一把 key。
-  // ═══════════════════════════════════════════════════════════════
+  // ═══ 5. 评分：先持久化本轮 metrics 到历史库，再对每条 assessItemV2。
+  //        sourceKey 用 history-store.sourceKeyOf，保证 appendSamples 写入与
+  //        evaluateLongTermQuality 查询用同一把 key。 ═══
   let historyStore = { sources: {} };
   try {
     historyStore = options.historyIn ? options.historyIn() : readHistoryStore();
@@ -392,10 +206,8 @@ async function runMin(options = {}) {
     }
   }
 
-  // ═══════════════════════════════════════════════════════════════
-  // 6. L1/L2 审核：applyL1Verdicts → { kept, discarded }。
-  //    审核失败降级：全部保留为 pending（AI 审核失败绝不误杀）。
-  // ═══════════════════════════════════════════════════════════════
+  // ═══ 6. L1/L2 审核：applyL1Verdicts → { kept, discarded }。
+  //        审核失败降级：全部保留为 pending（AI 审核失败绝不误杀）。 ═══
   let kept = [];
   let discarded = [];
   const reviewFn = options.review || applyL1Verdicts;
@@ -418,10 +230,8 @@ async function runMin(options = {}) {
   coverage.kept = kept.length;
   coverage.discarded = discarded.length;
 
-  // ═══════════════════════════════════════════════════════════════
-  // 7. 候选落地：kept + L1 discarded + L0 丢弃保留记录 → 合并 → 落盘。
-  //    已存在候选保留既有 review_status（人工结论不因重采被重置）。
-  // ═══════════════════════════════════════════════════════════════
+  // ═══ 7. 候选落地：kept + L1 discarded + L0 丢弃保留记录 → 合并 → 落盘。
+  //        已存在候选保留既有 review_status（人工结论不因重采被重置）。 ═══
   let minStore;
   try {
     minStore = options.minStoreIn ? options.minStoreIn() : readMinStore();
@@ -437,11 +247,9 @@ async function runMin(options = {}) {
     merged = minStore;
   }
 
-  // ═══════════════════════════════════════════════════════════════
-  // 8/9. 总结 + 本地化：只处理 L1 分流后仍需人工审核的 pending 候选。
-  //      自动 approved/discarded 不进入这里，避免为确定性结果消费 token。
-  //      失败降级不阻塞，review.json 仍保留 pending 供人工处理。
-  // ═══════════════════════════════════════════════════════════════
+  // ═══ 8/9. 总结 + 本地化：只处理 L1 分流后仍需人工审核的 pending 候选。
+  //          自动 approved/discarded 不进入这里，避免为确定性结果消费 token。
+  //          失败降级不阻塞，review.json 仍保留 pending 供人工处理。 ═══
   const pendingKept = kept.filter(item => item.review_status === 'pending');
   const summarizeFn = options.summarize || summarizeCandidates;
   const localizeFn = options.localize || localizeCandidates;
@@ -465,23 +273,18 @@ async function runMin(options = {}) {
   }
   coverage.min_candidates = merged.candidates.length;
 
-  // ═══════════════════════════════════════════════════════════════
-  // 9.1 双通道自愈兜底：可选开启（options.autoRepair=true）
-  //     检测是否有初审/摘要/汉化残缺，自动触发本地+外部并发修复。
-  // ═══════════════════════════════════════════════════════════════
+  // ═══ 9.1 双通道自愈兜底：可选开启（options.autoRepair=true）。 ═══
   if (options.autoRepair === true) {
     try {
-      const { repairIncompleteCandidates } = require('./min-repair');
       const repairWork = countRepairWork(merged.candidates, {
         l2Enabled: config?.review?.l2_enabled !== false,
       });
       if (repairWork.hasWork) {
-        const repairOptions = {
+        const repaired = await repairIncompleteCandidates(merged, config, {
           ...options,
           writeStore: options.minStoreOut,
           runId,
-        };
-        const repaired = await repairIncompleteCandidates(merged, config, repairOptions);
+        });
         coverage.repaired = {
           reviewed: repaired.repairedReview,
           summarized: repaired.repairedSummary,
@@ -494,17 +297,11 @@ async function runMin(options = {}) {
     }
   }
 
-  // ═══════════════════════════════════════════════════════════════
-  // 9.5 人工审核清单（自动生成）：候选落地后、公开投影前，把 pending 候选
-  //     写 data/manual/review.json（带 id、评分倒序；文件已存在时追加新 pending、
-  //     不覆盖已有人工结论）供维护者打开编辑 review_status，编辑后用 min-review apply
-  //     （或 bat/apply-review.bat，应用后自动生成 top 名单）写回。
-  //     失败仅降级记 coverage，不阻塞管线。
-  //     测试注入 options.autoReviewList=false 可关闭（避免污染 data/manual/）。
-  // ═══════════════════════════════════════════════════════════════
+  // ═══ 9.5 人工审核清单（自动生成）：候选落地后、公开投影前，把 pending 候选
+  //        写 data/manual/review.json（带 id、评分倒序；文件已存在时追加新 pending、
+  //        不覆盖已有人工结论）；失败仅降级记 coverage，不阻塞管线。 ═══
   if (options.autoReviewList !== false) {
     try {
-      const { buildReviewList } = require('./review-list');
       const reviewList = buildReviewList(merged, config, { now });
       coverage.review_list = reviewList.skipped ? 'skipped_existing' : reviewList.total_pending;
     } catch (error) {
@@ -514,14 +311,14 @@ async function runMin(options = {}) {
     coverage.review_list = 'disabled';
   }
 
-  // ═══════════════════════════════════════════════════════════════
-  // 10. 每日公开投影：approved 候选按天取 top N → 公开契约补充
-  //     （hot_score/evidence_excerpt/related_resources）→ 近期窗口一致过滤 → 写 hotspots.json。
-  // ═══════════════════════════════════════════════════════════════
+  // ═══ 10. 每日公开投影：approved 候选按天取 top N → 公开契约补充
+  //         （hot_score/evidence_excerpt/related_resources）→ 近期窗口一致过滤
+  //         → 写 hotspots.json。空投影保护：不覆盖上一版数据（避免前端空白）。 ═══
   let publicItems = 0;
   try {
     const projection = buildDailyProjection(merged, config, { now });
-    enrichHotspotProjection(projection.items);
+    const { toolUrlIndex, relatedLexicon } = buildProjectionInputs(options.catalogApi);
+    enrichHotspotProjection(projection.items, toolUrlIndex, relatedLexicon);
     const output = {
       schema_version: 1,
       generated_at: projection.generated_at,
@@ -529,13 +326,10 @@ async function runMin(options = {}) {
       coverage,
     };
     const filtered = filterProjectionByWindow(output, { config, now: nowMs });
-    // 空投影保护（决策 R1.6）：公开投影为空（无 approved 内容）时不覆盖 hotspots.json，
-    // 保留上一版数据，避免前端突然空白（对齐 v1 决策 51/69）。
     if (filtered.items.length > 0) {
       writeJsonAtomic(NEWS_FILES.hotspots, filtered, runId);
       publicItems = filtered.items.length;
     } else {
-      // 空投影保护：保留上一版 hotspots.json（避免前端空白）
       coverage.public_projection = 'empty_skipped_write';
     }
   } catch (error) {
@@ -543,10 +337,7 @@ async function runMin(options = {}) {
   }
   coverage.public_items = publicItems;
 
-  // ═══════════════════════════════════════════════════════════════
-  // 状态汇总：本轮启用的采集平台（platforms 内 youtube/x）全失败 → failed；
-  // 任一步降级 → partial；否则 complete。缺省双平台时语义与旧版一致（双采集全失败 → failed）。
-  // ═══════════════════════════════════════════════════════════════
+  // ═══ 状态汇总：本轮启用的采集平台全失败 → failed；任一步降级 → partial；否则 complete。 ═══
   const enabledRunPlatforms = platforms.filter(p => p === 'youtube' || p === 'x');
   const enabledCollectFailed = enabledRunPlatforms.length > 0
     && enabledRunPlatforms.every(p => coverage.collectors[p] && coverage.collectors[p].status === 'failed');
@@ -561,35 +352,10 @@ async function runMin(options = {}) {
         ? 'partial'
         : 'complete';
 
-  // ═══════════════════════════════════════════════════════════════
-  // 10.5 采集运行记录：每次采集结束写 data/news/runtime/last-run.json。
-  //     这是"最后一次采集记录"的唯一权威来源（hotspots coverage 会被 publish 覆盖），
-  //     供 ai-top 判定"最后一次采集是否有 YouTube"来决定 top N（cmd-min.hasYouTubeInLastRun）。
-  //     记录 platforms、各平台 status/items，以及 X credits/请求账本；写失败仅降级记 coverage，不阻塞管线。
-  //     测试注入 options.lastRunOut 覆盖写盘，避免污染运行时文件。
-  // ═══════════════════════════════════════════════════════════════
+  // ═══ 10.5 采集运行记录：每次采集结束写 data/news/runtime/last-run.json
+  //         （"最后一次采集记录"的唯一权威来源，供 ai-top 判定 hasYouTube）。 ═══
   try {
-    const lastRun = {
-      schema_version: 1,
-      run_id: runId,
-      collected_at: now.toISOString(),
-      platforms: enabledRunPlatforms,
-      collectors: {
-        youtube: {
-          status: coverage.collectors.youtube.status,
-          items: coverage.collectors.youtube.items,
-          error: coverage.collectors.youtube.error,
-          reason: coverage.collectors.youtube.reason || null,
-        },
-        x: {
-          status: coverage.collectors.x.status,
-          items: coverage.collectors.x.items,
-          error: coverage.collectors.x.error,
-          reason: coverage.collectors.x.reason || null,
-          credits: coverage.collectors.x.credits || null,
-        },
-      },
-    };
+    const lastRun = buildLastRunRecord(coverage, { runId, now, platforms: enabledRunPlatforms });
     if (options.lastRunOut) options.lastRunOut(lastRun, runId);
     else writeJsonAtomic(NEWS_FILES.lastRun, lastRun, runId);
   } catch (error) {

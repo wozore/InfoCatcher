@@ -22,17 +22,16 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
+const { removeManualLists, MANUAL_LIST_FILES } = require('../../src/news/cli/cmd-min');
 const {
   hasYouTubeInLastRun,
   resolveAiTopConfig,
   topCandidatesForAi,
   MAX_AI_TOP_INPUT,
-  applyTopSelectedList,
-  applyRefineKeywords,
-  removeManualLists,
-  MANUAL_LIST_FILES,
-} = require('../../src/news/cli/cmd-min');
-const { selectTopCandidates } = require('../../src/news/min/ai-top');
+  selectTopCandidates,
+} = require('../../src/news/min/ai-top');
+const { applyTopSelectedList } = require('../../src/news/min/review-list');
+const { applyRefineKeywords } = require('../../src/news/min/keyword-actions');
 
 // 固定配置（不依赖真实配置文件，保证 topN 断言确定性）
 const CONFIG = { collection: { review_top_with_youtube: 15, review_top_pure_x: 10 } };

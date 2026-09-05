@@ -29,6 +29,7 @@
 'use strict';
 
 const { localizeContent, localizeWithExternal } = require('./llm-provider');
+const { providerOf, modelOf } = require('./loadContentTaskConfig');
 
 // ═══════════════════════════════════════════════════════════════
 // 固定并发池：按 concurrency 并行执行 worker，保持输入顺序。
@@ -127,8 +128,8 @@ function hasUsableLocalizedContent(item, locale = 'zh') {
 const LOCALIZE_PROVIDERS = new Set(['deepseek', 'zhipu']);
 
 async function localizeCandidate(item, options = {}) {
-  const provider = options.provider || process.env.KNOWVIEW_LOCALIZE_PROVIDER || process.env.INFOCATCHER_LOCALIZE_PROVIDER || 'deepseek';
-  const model = options.model || process.env.KNOWVIEW_LOCALIZE_MODEL || process.env.INFOCATCHER_LOCALIZE_MODEL;
+  const provider = providerOf('LOCALIZE', options, 'deepseek');
+  const model = modelOf('LOCALIZE', options);
   const locale = options.locale || 'zh';
   const source = collectLocalizeSource(item);
   const inputChars = source.title.length + source.description.length;

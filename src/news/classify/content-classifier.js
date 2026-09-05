@@ -6,8 +6,8 @@
  * ═══════════════════════════════════════════════════════════════
  * 两级分类（决策 65/66/79）：
  * ═══════════════════════════════════════════════════════════════
- *   L0 规则式基线 —— 零外部依赖、零成本、可离线。基于标题/描述关键词与
- *                     catalog 词典（tools/glossary）匹配内容类型六类。
+ *   L0 规则式基线 —— 零外部依赖、零成本、可离线。基于标题/描述关键词与注入的
+ *                     目录工具词典（options.listToolCards）匹配内容类型六类。
  *   L1 AI 分类    —— 外部 provider（默认 zhipu，可切 deepseek；llm-provider.js），
  *                     对规则式不确定的候选做语义分类；
  *                     任何失败自动回退 L0。
@@ -18,18 +18,15 @@
  *     - ai_suggested：分类器给出建议，待人工审核
  *     - reviewed：人工审核确认，可进入公开投影
  *
- * 本模块的 L0 规则式分类为纯函数、零成本、可离线；L1 AI 分类（DeepSeek，
+ * 本模块的 L0 规则式分类为纯函数、零成本、可离线；L1 AI 分类（默认 zhipu，
  * 见同目录 llm-provider.js）会发起网络请求并消费少量额度，但任何失败自动回退 L0，
- * 不阻塞采集管线。模型渠道与额度成本确认见 b16-task-status.md 第 4 项 /
- * b16-content-type-fix-plan.md §8。
+ * 不阻塞采集管线。
  */
 
 'use strict';
 
-const fs = require('fs');
-const { catalog } = require('../../catalog/interface');
-const { CATALOG_FILES } = require('../../shared/paths');
 const { classifyContent } = require('./llm-provider');
+const { providerOf, modelOf } = require('./loadContentTaskConfig');
 
 // ═══════════════════════════════════════════════════════════════
 // 常量
@@ -57,14 +54,16 @@ const CONTENT_TYPE_LABELS = Object.freeze({
 });
 
 // ═══════════════════════════════════════════════════════════════
-// 词典（catalog 数据 + 内置别名）
+// 词典（目录数据经注入 + 内置别名）
 // ═══════════════════════════════════════════════════════════════
 
-/** 工具名别名表：tool_id -> 匹配词（含 catalog 中的 name 与常见别名）。 */
-function loadToolNames() {
+/**
+ * 工具名别名表：tool_id -> 匹配词（含目录中的 name 与常见别名）。
+ * @param {() => Array} [listToolCards] 工具卡片查询函数（组合根注入；未注入时词典为空）
+ */
+function loadToolNames(listToolCards) {
   const names = new Map();
-  const result = catalog({ area: 'tool-card', operation: 'list' });
-  const tools = result.ok ? result.data : [];
+  const tools = typeof listToolCards === 'function' ? listToolCards() : [];
   for (const tool of tools) {
     const key = tool.vendor_key || tool.tool_key;
     if (!names.has(key)) names.set(key, []);
@@ -154,9 +153,11 @@ const PRODUCT_RE = /launch|release|announc|introduc|发布|上线|推出|更新|
 
 /**
  * 从候选文本中识别命中的工具 id 列表（按工具表顺序）。
+ * @param {string} text 小写化前的候选文本
+ * @param {() => Array} [listToolCards] 工具卡片查询函数（组合根注入）
  */
-function matchTools(text) {
-  const toolNames = loadToolNames();
+function matchTools(text, listToolCards) {
+  const toolNames = loadToolNames(listToolCards);
   const hits = [];
   for (const [id, names] of toolNames) {
     const aliases = TOOL_ALIASES[id] || [];
@@ -180,12 +181,13 @@ function matchConcepts(text) {
 /**
  * 规则式基线分类（L0）。
  * @param {{title?: string, description?: string, source_type?: string}} item
+ * @param {{listToolCards?: () => Array}} [deps] 目录词典注入（组合根传入 listToolCards）
  * @returns {{ content_type: string, reasons: string[], hit_tools: string[], hit_concepts: string[] }}
  */
-function classifyRuleBased(item) {
+function classifyRuleBased(item, deps = {}) {
   const text = ((item.title || '') + ' ' + (item.description || '')).toLowerCase();
   const reasons = [];
-  const hitTools = matchTools(text);
+  const hitTools = matchTools(text, deps.listToolCards || deps.catalogApi?.listToolCards);
   const hitConcepts = matchConcepts(text);
 
   // 1) 行业事件（最高优先级：明确的行业/监管/财务/安全/人事信号）
@@ -240,7 +242,8 @@ function classifyRuleBased(item) {
  *   - provider 为其他未知值：回退 L0 并标注（不产出 unclassified 占位）。
  *
  * @param {object} item - 含 title / description（可选 source_type）
- * @param {{provider?: string, model?: string, apiKey?: string, fetchImpl?: Function, concurrency?: number}} [options]
+ * @param {{provider?: string, model?: string, apiKey?: string, fetchImpl?: Function, concurrency?: number,
+ *          catalogApi?: {listToolCards?: () => Array}, listToolCards?: () => Array}} [options]
  * @returns {Promise<{ content_type: string, content_type_status: string, classifier: string,
  *                     ai_confidence: number|null, reasons: string[], hit_tools: string[], hit_concepts: string[] }>}
  */
@@ -248,9 +251,9 @@ function classifyRuleBased(item) {
 const L1_PROVIDERS = new Set(['deepseek', 'zhipu']);
 
 async function classifyCandidate(item, options = {}) {
-  const provider = options.provider || process.env.KNOWVIEW_CLASSIFY_PROVIDER || process.env.INFOCATCHER_CLASSIFY_PROVIDER;
-  const model = options.model || process.env.KNOWVIEW_CLASSIFY_MODEL || process.env.INFOCATCHER_CLASSIFY_MODEL;
-  const ruleResult = classifyRuleBased(item);
+  const provider = providerOf('CLASSIFY', options, undefined);
+  const model = modelOf('CLASSIFY', options);
+  const ruleResult = classifyRuleBased(item, options);
   let classifier = 'rule_based';
   let aiConfidence = null;
   let extraReasons = [];
@@ -313,7 +316,8 @@ async function runPool(items, concurrency, worker) {
  * 批量分类候选：每条附加分类建议（ai_suggested），不改动既有审核状态。
  * 跳过：无标题项、已 reviewed（人工结论）项。L1 开启时用并发池限流（默认 5）。
  * @param {Array<object>} items
- * @param {{provider?: string, model?: string, apiKey?: string, fetchImpl?: Function, concurrency?: number}} [options]
+ * @param {{provider?: string, model?: string, apiKey?: string, fetchImpl?: Function, concurrency?: number,
+ *          catalogApi?: {listToolCards?: () => Array}, listToolCards?: () => Array}} [options]
  * @returns {Promise<{ classified: number, skipped: number, items: Array }>}
  */
 async function classifyCandidates(items, options = {}) {

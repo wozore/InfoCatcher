@@ -279,3 +279,27 @@ test('runChecks 汇总：扫描数、退出判定与分组统计', (t) => {
   assert.strictEqual(result.total, 0);
   assert.strictEqual(Object.keys(result.byRule).length, 0);
 });
+
+test('垫片：ESM 纯 re-export 命中，有自研导出的模块放行', (t) => {
+  const root = makeFixture(t, {
+    'src/web/js/shim.js': "export * from './other.js';\n",
+    'src/web/js/named-shim.js': "export { a, b } from './other.js';\n",
+    'src/web/js/legit.js': "export { a } from './other.js';\nexport function custom() {}\n",
+    'src/web/js/other.js': "export const a = 1; export const b = 2;\n",
+  });
+  const violations = violationsFor(root, 'shim');
+  assert.ok(violations.some(v => v.file === 'src/web/js/shim.js' && v.message.includes('ESM 整体仅 re-export')));
+  assert.ok(violations.some(v => v.file === 'src/web/js/named-shim.js' && v.message.includes('ESM 整体仅 re-export')));
+  assert.ok(!violations.some(v => v.file === 'src/web/js/legit.js'), '含自主逻辑的 ESM 模块放行');
+});
+
+test('scripts 薄壳行数超标命中', (t) => {
+  const bigScript = Array.from({ length: 260 }, (_, i) => `// line ${i}`).join('\n');
+  const root = makeFixture(t, {
+    'scripts/big-cli.js': bigScript,
+    'scripts/small-cli.js': "console.log('hi');\n",
+  });
+  const violations = violationsFor(root, 'size-exports');
+  assert.ok(violations.some(v => v.file === 'scripts/big-cli.js' && v.message.includes('scripts 薄壳行数 260 > 250')));
+  assert.ok(!violations.some(v => v.file === 'scripts/small-cli.js'), '合规小脚本放行');
+});

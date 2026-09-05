@@ -118,6 +118,34 @@ test('离线时自动启动：spawn 后轮询到就绪返回 ok，且只启动�
   assert.equal(spawned, 1);
 });
 
+test('启动状态经注入通知通道传递，事件不含本机路径', async () => {
+  const clock = fakeClock(0);
+  const events = [];
+  const result = await ensureLocalModel({
+    nowFn: clock.nowFn,
+    probeImpl: flakyProbe(1),
+    spawnImpl: okSpawn,
+    readyTimeoutMs: 60_000,
+    pollIntervalMs: 1,
+    notify: event => events.push(event),
+  });
+  assert.equal(result.ok, true);
+  assert.deepEqual(events.map(event => event.code), ['LOCAL_MODEL_STARTING', 'LOCAL_MODEL_READY']);
+  assert.equal(events.every(event => event.source === 'local-model' && !Object.hasOwn(event, 'path')), true);
+});
+
+test('本地服务失败状态经注入通知通道传递', async () => {
+  process.env.KNOWVIEW_AUTOSTART_LOCAL_MODEL = '0';
+  const events = [];
+  const result = await ensureLocalModel({
+    probeImpl: async () => false,
+    spawnImpl: () => { throw new Error('不应启动'); },
+    notify: event => events.push(event),
+  });
+  assert.equal(result.code, 'LOCAL_MODEL_OFFLINE');
+  assert.deepEqual(events.map(event => event.code), ['LOCAL_MODEL_OFFLINE']);
+});
+
 test('启动后超时未就绪：报错 LOCAL_MODEL_START_TIMEOUT', async () => {
   const clock = fakeClock(0);
   let spawned = 0;

@@ -27,7 +27,8 @@
 const fs = require('fs');
 const path = require('path');
 const { readJson, writeJsonAtomic } = require('../../shared/json-store');
-const { createMinStore, setBatchReviewStatusMin } = require('./min-store');
+const { createMinStore } = require('./min-store');
+const { setBatchReviewStatusMin, setTopSelectedMin, setApprovedTopSelectedMin } = require('./min-review-actions');
 const { beijingDateKey } = require('../../shared/beijing-time');
 
 /** 排序/展示分数：final_score 优先，其次 hot_score；皆无 → null。 */
@@ -306,6 +307,41 @@ function applyReviewList(store, list) {
   };
 }
 
+/**
+ * 应用 top 清单的人工选择结论（第二阶段收尾，纯逻辑，无 I/O）：
+ * 读 top-<date>.json（ai-top 产物，candidates 带 id），把 **top_selected=true** 的条目
+ * 批量置候选层 top_selected=true；false/未标不动作（对齐 review 清单 pending 跳过语义，
+ * 幂等）。返回新 store，写盘由命令层决定。
+ * @param {object} store 候选层 store（经 setTopSelectedMin 拷贝容器；候选对象浅拷贝共享，
+ *                        与 applyReviewList 语义一致）
+ * @param {object} list top 清单对象（kind='ai_top_candidates'，含 candidates 数组）
+ * @returns {{ store, applied: number, selectedIds: string[], missing: string[], changed: number }}
+ *   无 true 条目时 changed=0（不写回）；top_selected=true 但无 id → 抛错（清单格式错误）
+ */
+function applyTopSelectedList(store, list, options = {}) {
+  const candidates = (list && Array.isArray(list.candidates)) ? list.candidates : [];
+  const selectedIds = [];
+  const noIdSummaries = [];
+  for (const entry of candidates) {
+    if (!entry || entry.top_selected !== true) continue; // 只应用 true，未选中不动作
+    if (entry.id == null || String(entry.id).trim() === '') {
+      noIdSummaries.push(String(entry.summary || '(无摘要)').slice(0, 30));
+      continue;
+    }
+    selectedIds.push(String(entry.id));
+  }
+  if (noIdSummaries.length) {
+    throw new Error(`top 清单含 top_selected=true 但无 id 的条目：${noIdSummaries.join('、')}——清单格式错误，请用 min-review ai-top 重新生成带 id 的 top 清单`);
+  }
+  if (selectedIds.length === 0) {
+    return { store, applied: 0, selectedIds, missing: [], changed: 0 };
+  }
+  const result = options.requireApproved === true
+    ? setApprovedTopSelectedMin(store, selectedIds, true, options)
+    : setTopSelectedMin(store, selectedIds, true, { requireApproved: false });
+  return { store: result.store, applied: result.updated, selectedIds, missing: result.missing, changed: result.updated };
+}
+
 module.exports = {
   scoreOf,
   suggestReview,
@@ -314,4 +350,5 @@ module.exports = {
   buildReviewList,
   loadReviewList,
   applyReviewList,
+  applyTopSelectedList,
 };

@@ -17,12 +17,8 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const {
-  buildSummaryPayload,
-  normalizeSummary,
-  summarizeContent,
-  summarizeWithExternal,
-} = require('../../src/news/classify/llm-provider');
+const { summarizeContent, summarizeWithExternal } = require('../../src/news/classify/llm-provider');
+const { buildSummaryPayload, normalizeSummary } = require('../../src/news/classify/llm-prompts');
 const { getProvider } = require('../../src/shared/providers');
 const {
   collectSummarySource,

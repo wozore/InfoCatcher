@@ -2978,3 +2978,38 @@
 - [x] `node tests/index.js`：全量测试 100% 通过（0 failure）；
 - [x] `node scripts/build-dist.js`：静态站构建完成，生成 107 个文件；
 - [x] `node scripts/browser-acceptance.js`：真实 Edge/CDP 浏览器端到端全链路验收全部通过（45 项 PASS）。
+
+## 2026-09-05 · 架构重构最终收口（News 注入解耦、Web 目录组织、scripts 薄壳化与规范门禁强化）
+
+### 变更实现
+
+- [x] **R3 News→Catalog 注入解耦与大文件收敛**：
+  - News 域彻底切断对 Catalog 的直接引用，改为经组合根（`src/maintenance/workbench/news-domain.js` 及 CLI 脚本）显式注入 `catalogApi`（`listToolCards`、`listVendorCards`、`readGlossary`、`readScenes`、`createEntityLedger`、`resolveEntityModel`）；
+  - `llm-provider.js`、`cmd-min.js`、`pipeline-min.js`、`min-store.js`、`collector-x-v2.js` 与 `collector-youtube-v2.js` 拆解收敛，拆出 `pipeline-collect.js`、`pipeline-schedule.js`、`min-review-actions.js`、`min-review-flows.js`、`llm-prompts.js`、`llm-selection.js`、`loadContentTaskConfig.js`、`loadCollectorConfig.js` 等高内聚子模块；News 域全量模块均达成 ≤ 400 行、导出 ≤ 15 个标准。
+- [x] **R4 Catalog/shared 存量违规清零与 scripts 薄壳化**：
+  - `catalog-workbench.js`（降至约 307 行）、`llm-gateway.js`（降至约 255 行）存量收敛，协议 payload 独立至 `src/shared/llm-protocol-payload.js`；
+  - `scripts/catalog-generator.js`（降至 53 行）业务实现下沉至 `src/catalog/catalog-generator-commands.js` 与 `src/catalog/catalog-workbench-view.js`；
+  - `scripts/tool-update-review.js`（降至 95 行）业务实现下沉至 `src/catalog/tool-update/`（`review-commands.js`、`review-localize.js`、`review-scan.js`），组合根保留默认交互确认与本地模型安全通知；
+  - `src/shared/providers/` 统一为 CommonJS 命名导出。
+- [x] **R7-6 Web 子域目录化**：
+  - 原平铺在 `src/web/js/` 的 30 个浏览器原生 ES 模块正式组织为 `data/`（5 个）、`ui/`（6 个）、`views/`（19 个）三个子域目录，根级仅保留 `main.js` 入口与 `state.js` 横切状态；
+  - 静态引用 117 处全部更新且相对引用 0 missing，保持零打包器原生 ES module 规范，循环依赖保持为 0，旧路径完全移除。
+- [x] **规范静态检查器强化与白名单清零式削减**：
+  - `scripts/check-standards.js` 新增 ESM 纯 re-export 垫片检查与 scripts 薄壳行数（≤ 250 行）检查，并配套自身回归测试（21/21 通过）；
+  - `scripts/check-standards.whitelist.json` 存量违规大幅削减：`size-exports`（原 13 文件 16 处）与 `legacy-narrative`（原 12 文件 12 处）完全清零；`dependency-direction` 仅留 1 项已知存量；`assembly` 从 21 文件削减至仅 6 个维护者/内容 CLI 校验文件。
+- [x] **环境与文档收口**：
+  - 修复 `.gitignore` 导致 `tests/build/` 被误忽略的问题，恢复 `tests/build/static-site.test.js`；全仓统一采用 `node tests/index.js` 测试入口；
+  - 删除旧脚本 `scripts/start-bonsai.ps1`；清理 16 个干净且无未交付内容的孤儿 worktree；
+  - 刷新 `docs/operations.md`，完整记录 6 个真实 GitHub Actions 工作流与 10 个维护批处理；更新 `docs/codebase-refactor-plan.md` 终态叙述；全量同步 `CODEBASE-MAP.md`。
+
+### 验证结果
+
+- [x] `node scripts/check-standards.js`：扫描 214 个 src 文件，白名单外违规 0 处；
+- [x] `node scripts/validate.js`：全部通过（原则 1–6 全部通过，数据校验全部通过）；
+- [x] `node tests/index.js`：全量测试 724/724 项全部通过（0 failure）；
+- [x] `node scripts/build-dist.js`：构建完成，生成 106 个静态文件（新目录结构完整，旧平铺文件零残留）。
+
+### 已知边界
+
+- [~] Edge/CDP 浏览器端到端验收在当前机器受 DevToolsActivePort/9222 端口超时阻断，作为已知机器级环境缺口记录（不阻塞静态发布与逻辑验收）。
+

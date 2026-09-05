@@ -21,7 +21,7 @@
 
 'use strict';
 
-const { isMinDisplayEligible, toPublicItemMin } = require('./min-store');
+const { isMinDisplayEligible, toPublicItemMin } = require('./min-review-actions');
 const { beijingDayKey } = require('../../shared/beijing-time');
 
 /** 组内排序分数：final_score 优先，其次 hot_score；皆无则排最末。 */

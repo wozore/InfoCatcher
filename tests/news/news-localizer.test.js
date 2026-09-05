@@ -20,11 +20,8 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const {
-  buildLocalizePayload,
-  normalizeLocalization,
-  localizeContent,
-} = require('../../src/news/classify/llm-provider');
+const { localizeContent } = require('../../src/news/classify/llm-provider');
+const { buildLocalizePayload, normalizeLocalization } = require('../../src/news/classify/llm-prompts');
 const {
   collectLocalizeSource,
   hasUsableLocalizedContent,
@@ -32,10 +29,8 @@ const {
   localizeCandidates,
   enrichCandidateLocalizations,
 } = require('../../src/news/classify/content-localizer');
-const {
-  mergeCandidatesMin,
-  toPublicItemMin,
-} = require('../../src/news/min/min-store');
+const { mergeCandidatesMin } = require('../../src/news/min/min-store');
+const { toPublicItemMin } = require('../../src/news/min/min-review-actions');
 const { buildDailyProjection } = require('../../src/news/min/daily-projection');
 
 /** 构造一个 DeepSeek 成功响应（content 为模型输出文本）。 */

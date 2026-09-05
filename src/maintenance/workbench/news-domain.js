@@ -3,15 +3,19 @@
 const path = require('path');
 const fs = require('fs');
 const minStore = require('../../news/min/min-store');
+const minActions = require('../../news/min/min-review-actions');
 const { buildDailyProjection } = require('../../news/min/daily-projection');
-const { enrichHotspotProjection } = require('../../news/pipeline/projection');
+const { enrichHotspotProjection, buildProjectionInputs } = require('../../news/pipeline/projection');
 const { filterProjectionByWindow } = require('../../news/core/news-public-gate');
 const { minReviewCommand } = require('../../news/cli/cmd-min');
 const { revisionOfConfig, commitKeywordActions, commitKeywordExclusions } = require('../../news/min/keyword-actions');
 const { uploadTranscript, summarizeTranscripts } = require('../../news/min/transcript-workflow');
+const { catalog } = require('../../catalog/interface');
+const { createCostLedger } = require('../../catalog/core/index');
+const { loadGeneratorConfig } = require('../../catalog/draft/index');
 const { generateRss } = require('../../content/generate-rss');
 const { readJson, writeJsonAtomic } = require('../../shared/json-store');
-const { DIRS, NEWS_FILES } = require('../../shared/paths');
+const { DIRS, NEWS_FILES, CATALOG_FILES } = require('../../shared/paths');
 const { loadDotEnv } = require('../../shared/env');
 
 function requireMutation(name, value) {
@@ -19,11 +23,48 @@ function requireMutation(name, value) {
   return value;
 }
 
-function publishNewsProjectionDirect() {
+/**
+ * news 域目录查询适配器（maintenance 装配层拥有，组合根注入给 news 模块）。
+ * news 域自身不 require catalog 域；本文件是唯一把目录数据翻译成 news 查询面的位置。
+ * 形状：{ listToolCards, listVendorCards, readGlossary, readScenes, createEntityLedger, resolveEntityModel }
+ */
+function createNewsCatalogApi() {
+  return {
+    listToolCards: () => {
+      const result = catalog({ area: 'tool-card', operation: 'list' });
+      return result.ok ? result.data : [];
+    },
+    listVendorCards: () => {
+      const result = catalog({ area: 'vendor-card', operation: 'list' });
+      return result.ok ? result.data : [];
+    },
+    readGlossary: () => {
+      try { return readJson(CATALOG_FILES.glossary, []); } catch { return []; }
+    },
+    readScenes: () => {
+      try {
+        const data = readJson(CATALOG_FILES.scenes, { scenes: [] });
+        return Array.isArray(data) ? data : (data.scenes || []);
+      } catch { return []; }
+    },
+    createEntityLedger: () => createCostLedger({ responses_calls: 1, synthesis_calls: 0 }),
+    resolveEntityModel: () => {
+      try { return loadGeneratorConfig().model; } catch { return undefined; }
+    },
+  };
+}
+
+// 公开投影的目录输入在进程内构建一次（与原 projection 模块级缓存同语义）。
+let cachedProjectionInputs = null;
+
+function publishNewsProjectionDirect(catalogApi = null) {
+  if (cachedProjectionInputs === null || catalogApi) {
+    cachedProjectionInputs = buildProjectionInputs(catalogApi || createNewsCatalogApi());
+  }
   const config = readJson(NEWS_FILES.configV2, null);
   const store = minStore.readMinStore();
   const projection = buildDailyProjection(store, config, { now: new Date() });
-  enrichHotspotProjection(projection.items);
+  enrichHotspotProjection(projection.items, cachedProjectionInputs.toolUrlIndex, cachedProjectionInputs.relatedLexicon);
   const output = {
     schema_version: 1,
     generated_at: projection.generated_at,
@@ -52,12 +93,13 @@ function unresolvedKeywordCount(news) {
 
 function createDefaultNewsApi(options = {}) {
   const keywordFile = options.keywordFile || path.join(DIRS.manual, 'keyword-refine.json');
+  const catalogApi = options.catalogApi || createNewsCatalogApi();
   return {
     readStore: () => minStore.readMinStore(),
     revisionOfStore: store => requireMutation('revisionOfMinStore', minStore.revisionOfMinStore)(store),
     commit: (mutation, commitOptions) => requireMutation('commitMinStoreMutation', minStore.commitMinStoreMutation)(mutation, commitOptions),
-    reviewMutation: (store, ids, decision, mutationOptions) => requireMutation('reviewPendingCandidates', minStore.reviewPendingCandidates)(store, ids, decision, mutationOptions),
-    topMutation: (store, ids, selected, mutationOptions) => requireMutation('setApprovedTopSelectedMin', minStore.setApprovedTopSelectedMin)(store, ids, selected, mutationOptions),
+    reviewMutation: (store, ids, decision, mutationOptions) => requireMutation('reviewPendingCandidates', minActions.reviewPendingCandidates)(store, ids, decision, mutationOptions),
+    topMutation: (store, ids, selected, mutationOptions) => requireMutation('setApprovedTopSelectedMin', minActions.setApprovedTopSelectedMin)(store, ids, selected, mutationOptions),
     readKeywords: () => readJson(keywordFile, null),
     readConfig: () => readJson(NEWS_FILES.configV2, {}),
     revisionOfConfig: config => revisionOfConfig(config),
@@ -77,7 +119,7 @@ function createDefaultNewsApi(options = {}) {
       loadDotEnv();
       return minReviewCommand('repair', flags);
     },
-    publish: () => publishNewsProjectionDirect(),
+    publish: () => publishNewsProjectionDirect(catalogApi),
   };
 }
 
@@ -213,6 +255,7 @@ function handleSummarizeTranscripts(body, news, { idsOf, expectedRevision }, run
 }
 
 module.exports = {
+  createNewsCatalogApi,
   publishNewsProjectionDirect,
   unresolvedKeywordCount,
   createDefaultNewsApi,

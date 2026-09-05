@@ -1,8 +1,11 @@
 'use strict';
 
-const { createCatalogWorkbench } = require('../catalog/catalog-workbench');
+const {
+  createCatalogWorkbench,
+} = require('../catalog/catalog-workbench');
 const {
   createDefaultNewsApi,
+  createNewsCatalogApi,
   handleNewsReview,
   handleReviewNews,
   handleKeywords,
@@ -50,12 +53,17 @@ function expectedRevision(body) {
 }
 
 function createDefaultApis(options = {}) {
+  // 反哺链路的目录查询面：news 域不直读 catalog，由装配层注入（可被 options 覆盖）。
+  const feedbackOptions = {
+    catalogApi: createNewsCatalogApi(),
+    ...(options.feedbackOptions || {}),
+  };
   return {
     news: createDefaultNewsApi(options),
     tools: createDefaultToolsApi(),
     concepts: createDefaultConceptsApi(options),
     pending: createDefaultPendingApi(options),
-    feedback: createDefaultFeedbackApi(options),
+    feedback: createDefaultFeedbackApi({ ...options, feedbackOptions }),
     workspace: {
       clear: () => clearWorkspaceFiles(options),
     },

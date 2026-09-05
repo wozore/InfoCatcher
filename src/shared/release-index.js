@@ -36,7 +36,8 @@ function validateReleaseIndexEntries(entries) {
 
 /**
  * 读共享 release_date 索引（固定共享路径；`file` 仅供测试注入，业务代码不传）。
- * 缺失/损坏回退空，返回校验后冻结结构，不抛。
+ * 缺失/损坏回退空，返回校验后冻结结构，不抛；损坏时以 validation_errors
+ * 携带逐条诊断（组装纪律：src 禁 console.*，诊断由调用方决定如何呈现）。
  */
 function readReleaseIndex(file = SHARED_FILES.modelReleaseDates) {
   try {
@@ -45,8 +46,7 @@ function readReleaseIndex(file = SHARED_FILES.modelReleaseDates) {
     if (!value || typeof value !== 'object' || !Array.isArray(value.entries)) return Object.freeze({ schema_version: 1, entries: [] });
     const errors = validateReleaseIndexEntries(value.entries);
     if (errors.length) {
-      console.warn(`⚠️ 共享 release_date 索引损坏：${errors.join('; ')}（回退空）`);
-      return Object.freeze({ schema_version: 1, entries: [] });
+      return Object.freeze({ schema_version: 1, entries: [], validation_errors: Object.freeze([...errors]) });
     }
     const entries = Object.freeze(value.entries.map(entry => Object.freeze({ ...entry })));
     return Object.freeze({ schema_version: 1, entries });

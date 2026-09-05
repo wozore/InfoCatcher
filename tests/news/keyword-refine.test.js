@@ -9,11 +9,8 @@ const {
   buildRuleCandidates,
   refineKeywords,
 } = require('../../src/news/min/keyword-refine');
-const {
-  buildKeywordRefinePayload,
-  normalizeKeywordRefine,
-  refineKeywords: refineKeywordsWithLlm,
-} = require('../../src/news/classify/llm-provider');
+const { refineKeywords: refineKeywordsWithLlm } = require('../../src/news/classify/llm-provider');
+const { buildKeywordRefinePayload, normalizeKeywordRefine } = require('../../src/news/classify/llm-selection');
 
 test('关键词提纯仅读取 approved 顶层原文，忽略 localizations', () => {
   const originals = collectApprovedOriginals({

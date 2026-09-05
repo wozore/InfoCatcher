@@ -12,4 +12,4 @@ const deepseek = Object.freeze({
   defaultModel: 'deepseek-v4-flash',
 });
 
-module.exports = deepseek;
+module.exports = { deepseek };

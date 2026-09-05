@@ -12,4 +12,4 @@ const openai = Object.freeze({
   defaultModel: null,
 });
 
-module.exports = openai;
+module.exports = { openai };

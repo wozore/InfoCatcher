@@ -17,11 +17,8 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const {
-  buildReviewPayload,
-  normalizeReview,
-  reviewContent,
-} = require('../../src/news/classify/llm-provider');
+const { reviewContent } = require('../../src/news/classify/llm-provider');
+const { buildReviewPayload, normalizeReview } = require('../../src/news/classify/llm-prompts');
 const {
   collectReviewSource,
   reviewCandidate,

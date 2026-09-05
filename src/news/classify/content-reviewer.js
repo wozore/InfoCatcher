@@ -30,8 +30,9 @@
 'use strict';
 
 const { reviewContent, reviewWithExternal } = require('./llm-provider');
+const { providerOf, modelOf } = require('./loadContentTaskConfig');
 
-// 合法判定集合（与 llm-provider.js 的 VALID_VERDICTS 一致）
+// 合法判定集合（与 llm-prompts.js 的判定集合一致）
 const VERDICTS = Object.freeze(['approve', 'hold', 'discard']);
 
 // 可自动应用的判定（永不包含 approve —— 通过必须由人）
@@ -94,8 +95,8 @@ function collectReviewSource(item) {
 const REVIEW_PROVIDERS = new Set(['deepseek', 'zhipu']);
 
 async function reviewCandidate(item, options = {}) {
-  const provider = options.provider || process.env.KNOWVIEW_REVIEW_PROVIDER || process.env.INFOCATCHER_REVIEW_PROVIDER || 'deepseek';
-  const model = options.model || process.env.KNOWVIEW_REVIEW_MODEL || process.env.INFOCATCHER_REVIEW_MODEL;
+  const provider = providerOf('REVIEW', options, 'deepseek');
+  const model = modelOf('REVIEW', options);
   const source = collectReviewSource(item);
   const inputChars = source.title.length + source.description.length
     + (source.transcript ? source.transcript.length : 0)

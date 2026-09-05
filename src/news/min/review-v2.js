@@ -4,8 +4,7 @@
  * 在热点管线中的位置：v2 采集（collector-youtube-v2 / collector-x-v2）落地后、
  * 评分（scoring-v2）与公开投影之前的审核步骤。与 v2 评分层同属独立数据通道。
  *
- * **不依赖旧版候选层的双状态轴（ai_processing_status / review_status 双轴），
- * 输出单状态轴判定**：
+ * **输出单状态轴判定**：
  *   review_status = 'pending'（保留，待人工）| 'discarded'（剔除）。
  * 本模块自身不写 store / 不落盘，只对传入条目计算判定并原样展开（+ 审核痕迹字段），
  * 是否持久化由调用方决定。

@@ -7,275 +7,43 @@
   ],
   "assembly": [
     {
-      "file": "src/catalog/catalog-shared-publish.js",
-      "count": 2,
-      "note": "2 处: console.warn（行 53） | console.warn（行 63）"
-    },
-    {
       "file": "src/content/generate-og-image.js",
       "count": 1,
-      "note": "1 处: console.log（行 95）"
+      "note": "1 处: console.log"
     },
     {
       "file": "src/content/generate-rss.js",
       "count": 2,
-      "note": "2 处: console.warn（行 70） | console.log（行 115）"
+      "note": "2 处: console.warn | console.log"
     },
     {
       "file": "src/maintenance/validate-catalog.js",
       "count": 4,
-      "note": "4 处: console.error（行 12） | console.log（行 96） | console.log（行 111） …"
+      "note": "4 处: validate-catalog CLI 控制台输出"
     },
     {
       "file": "src/maintenance/validate-comparison.js",
       "count": 14,
-      "note": "14 处: console.error（行 39） | console.log（行 69） | console.log（行 122） …"
+      "note": "14 处: validate-comparison CLI 控制台输出"
     },
     {
       "file": "src/maintenance/validate-news.js",
       "count": 7,
-      "note": "7 处: console.error（行 22） | console.log（行 223） | console.log（行 245） …"
+      "note": "7 处: validate-news CLI 控制台输出"
     },
     {
       "file": "src/maintenance/validate.js",
       "count": 16,
-      "note": "16 处: console.error（行 40） | console.log（行 76） | console.log（行 89） …"
-    },
-    {
-      "file": "src/news/classify/content-classifier.js",
-      "count": 4,
-      "note": "4 处: process.env 直读（行 258） | process.env 直读（行 258） | process.env 直读（行 259） …"
-    },
-    {
-      "file": "src/news/classify/content-localizer.js",
-      "count": 4,
-      "note": "4 处: process.env 直读（行 130） | process.env 直读（行 130） | process.env 直读（行 131） …"
-    },
-    {
-      "file": "src/news/classify/content-reviewer.js",
-      "count": 4,
-      "note": "4 处: process.env 直读（行 97） | process.env 直读（行 97） | process.env 直读（行 98） …"
-    },
-    {
-      "file": "src/news/classify/content-summarizer.js",
-      "count": 4,
-      "note": "4 处: process.env 直读（行 91） | process.env 直读（行 91） | process.env 直读（行 92） …"
-    },
-    {
-      "file": "src/news/cli/cmd-min.js",
-      "count": 62,
-      "note": "62 处: console.log（行 303） | console.log（行 306） | console.log（行 308） …"
-    },
-    {
-      "file": "src/news/cli/news-cli.js",
-      "count": 2,
-      "note": "2 处: console.log（行 79） | console.error（行 85）"
-    },
-    {
-      "file": "src/news/collectors/collector-x-v2.js",
-      "count": 1,
-      "note": "1 处: process.env 直读（行 277）"
-    },
-    {
-      "file": "src/news/collectors/collector-youtube-v2.js",
-      "count": 1,
-      "note": "1 处: process.env 直读（行 210）"
-    },
-    {
-      "file": "src/news/min/min-repair.js",
-      "count": 1,
-      "note": "1 处: process.env 直读（行 216）"
-    },
-    {
-      "file": "src/shared/catalog-release-dates.js",
-      "count": 1,
-      "note": "1 处: console.warn（行 51）"
-    },
-    {
-      "file": "src/shared/llm-gateway.js",
-      "count": 2,
-      "note": "2 处: console.error（行 281） | console.error（行 385）"
-    },
-    {
-      "file": "src/shared/local-model.js",
-      "count": 4,
-      "note": "4 处: console.log（行 150） | process.env 直读（行 22） | process.env 直读（行 22） …"
-    },
-    {
-      "file": "src/shared/release-index.js",
-      "count": 1,
-      "note": "1 处: console.warn（行 48）"
-    },
-    {
-      "file": "src/shared/tavily-client.js",
-      "count": 2,
-      "note": "2 处: process.env 直读（行 57） | process.env 直读（行 95）"
+      "note": "16 处: validate 校验聚合入口控制台输出与 process.exit"
     }
   ],
-  "size-exports": [
-    {
-      "file": "src/catalog/catalog-workbench.js",
-      "count": 1,
-      "note": "1 处: 行数 427 > 400"
-    },
-    {
-      "file": "src/news/classify/llm-provider.js",
-      "count": 2,
-      "note": "2 处: 行数 885 > 400 | 导出 21 个 > 15"
-    },
-    {
-      "file": "src/news/cli/cmd-min.js",
-      "count": 2,
-      "note": "2 处: 行数 800 > 400 | 导出 16 个 > 15"
-    },
-    {
-      "file": "src/news/collectors/collector-x-v2.js",
-      "count": 1,
-      "note": "1 处: 行数 439 > 400"
-    },
-    {
-      "file": "src/news/collectors/collector-youtube-v2.js",
-      "count": 1,
-      "note": "1 处: 行数 425 > 400"
-    },
-    {
-      "file": "src/news/min/min-store.js",
-      "count": 1,
-      "note": "1 处: 导出 24 个 > 15"
-    },
-    {
-      "file": "src/news/min/pipeline-min.js",
-      "count": 2,
-      "note": "2 处: 行数 609 > 400 | require(变量) 动态引用: V2_CONFIG_PATH"
-    },
-    {
-      "file": "src/shared/llm-gateway.js",
-      "count": 1,
-      "note": "1 处: 行数 479 > 400"
-    },
-    {
-      "file": "src/shared/providers/anthropic.js",
-      "count": 1,
-      "note": "1 处: CommonJS 单值默认导出（应命名导出）"
-    },
-    {
-      "file": "src/shared/providers/deepseek.js",
-      "count": 1,
-      "note": "1 处: CommonJS 单值默认导出（应命名导出）"
-    },
-    {
-      "file": "src/shared/providers/local.js",
-      "count": 1,
-      "note": "1 处: CommonJS 单值默认导出（应命名导出）"
-    },
-    {
-      "file": "src/shared/providers/openai.js",
-      "count": 1,
-      "note": "1 处: CommonJS 单值默认导出（应命名导出）"
-    },
-    {
-      "file": "src/shared/providers/zhipu.js",
-      "count": 1,
-      "note": "1 处: CommonJS 单值默认导出（应命名导出）"
-    }
-  ],
-  "legacy-narrative": [
-    {
-      "file": "src/catalog/catalog-workbench.js",
-      "count": 1,
-      "note": "1 处: 旧契约叙事短语: 遗留、旧版"
-    },
-    {
-      "file": "src/content/generate-rss.js",
-      "count": 1,
-      "note": "1 处: 旧契约叙事短语: 已随 v1"
-    },
-    {
-      "file": "src/news/cli/cmd-content.js",
-      "count": 1,
-      "note": "1 处: 旧契约叙事短语: 已随 v1"
-    },
-    {
-      "file": "src/news/cli/cmd-min.js",
-      "count": 1,
-      "note": "1 处: 旧契约叙事短语: 已随 v1、旧版"
-    },
-    {
-      "file": "src/news/cli/news-cli.js",
-      "count": 1,
-      "note": "1 处: 旧契约叙事短语: 已随 v1"
-    },
-    {
-      "file": "src/news/collectors/collector-x-v2.js",
-      "count": 1,
-      "note": "1 处: 旧契约叙事短语: 旧版"
-    },
-    {
-      "file": "src/news/collectors/collector-youtube-v2.js",
-      "count": 1,
-      "note": "1 处: 旧契约叙事短语: 旧版"
-    },
-    {
-      "file": "src/news/feedback/llm-entity-extract.js",
-      "count": 1,
-      "note": "1 处: 旧契约叙事短语: 旧版"
-    },
-    {
-      "file": "src/news/feedback/tool-feedback.js",
-      "count": 1,
-      "note": "1 处: 旧契约叙事短语: 已删除的"
-    },
-    {
-      "file": "src/news/min/min-store.js",
-      "count": 1,
-      "note": "1 处: 旧契约叙事短语: 旧版"
-    },
-    {
-      "file": "src/news/min/pipeline-min.js",
-      "count": 1,
-      "note": "1 处: 旧契约叙事短语: 旧版"
-    },
-    {
-      "file": "src/news/min/review-v2.js",
-      "count": 1,
-      "note": "1 处: 旧契约叙事短语: 旧版"
-    }
-  ],
+  "size-exports": [],
+  "legacy-narrative": [],
   "dependency-direction": [
-    {
-      "file": "src/catalog/catalog-workbench.js",
-      "count": 2,
-      "note": "2 处: 域间互引 catalog→news: src/news/feedback/pending-review-store.js | 域间互引 catalog→news: src/news/feedback/catalog-draft-adapter.js"
-    },
     {
       "file": "src/content/generate-rss.js",
       "count": 1,
       "note": "1 处: 域间互引 content→news: src/news/core/news-public-gate.js"
-    },
-    {
-      "file": "src/news/cli/cmd-min.js",
-      "count": 6,
-      "note": "6 处: 函数体内 require（应提到模块顶层）: 行 520 | 函数体内 require（应提到模块顶层）: 行 521 | 函数体内 require（应提到模块顶层）: 行 574 …"
-    },
-    {
-      "file": "src/news/collectors/collector-x-v2.js",
-      "count": 1,
-      "note": "1 处: 函数体内 require（应提到模块顶层）: 行 84"
-    },
-    {
-      "file": "src/news/collectors/collector-youtube-v2.js",
-      "count": 1,
-      "note": "1 处: 函数体内 require（应提到模块顶层）: 行 63"
-    },
-    {
-      "file": "src/news/feedback/llm-entity-extract.js",
-      "count": 2,
-      "note": "2 处: 域间互引 news→catalog: src/catalog/catalog-research.js | 域间互引 news→catalog: src/catalog/catalog-assistant.js"
-    },
-    {
-      "file": "src/news/min/pipeline-min.js",
-      "count": 2,
-      "note": "2 处: 函数体内 require（应提到模块顶层）: 行 473 | 函数体内 require（应提到模块顶层）: 行 506"
     }
   ],
   "cycles": [],

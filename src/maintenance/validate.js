@@ -130,8 +130,13 @@ try {
 // --- 原则 2: 扩展点显式化 — 前端三文件下限 ---
 try {
   const jsDir = `${DIRS.src}/web/js`;
-  const jsFiles = fs.readdirSync(jsDir).filter(f => f.endsWith('.js'));
-  const jsSrc = jsFiles.map(f => fs.readFileSync(path.join(jsDir, f), 'utf8')).join('\n');
+  const jsFiles = [];
+  (function walk(d) {
+    for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+      e.isDirectory() ? walk(path.join(d, e.name)) : /\.(js|mjs)$/.test(e.name) && jsFiles.push(path.join(d, e.name));
+    }
+  })(jsDir);
+  const jsSrc = jsFiles.map(f => fs.readFileSync(f, 'utf8')).join('\n');
   const jsEp = (jsSrc.match(/EXTENSION POINT/g) || []).length;
   if (jsEp < 5) fail(`原则2: web/js EXTENSION POINT 仅 ${jsEp} 处（下限 5）`);
 

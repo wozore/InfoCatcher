@@ -6,9 +6,9 @@
  *   1. 工具反哺（config.feedback.tool_feedback）：从 summary 提取疑似 AI 工具名，
  *      与五模块工具目录的工具卡片比对，缺失 → 生成"待补工具卡"草案（人工补全后导入）。
  *   2. 概念反哺（config.feedback.concept_feedback）：提取疑似 AI 概念名，
- *      与 data/catalog/glossary.json 比对，缺失 → 生成"待补概念卡"草案。
+ *      与注入的概念词表（catalogApi.readGlossary）比对，缺失 → 生成"待补概念卡"草案。
  *
- * 完全分离：只读 min-store + catalog（JSON），只写 manual_folder 下的待补卡文件，
+ * 完全分离：只读 min-store 与注入的知识库数据，只写 manual_folder 下的待补卡文件，
  * 不直接改五模块工具卡或 glossary.json —— 补全由维护者人工确认后导入。
  *
  * 提取方式：默认用正则匹配大写品牌名/知名模型名（DeepSeek/Ollama/Claude/GPT…）；
@@ -21,10 +21,7 @@
 
 'use strict';
 
-const { readJson } = require('../../shared/json-store');
 const { readMinStore } = require('../min/min-store');
-const { catalog } = require('../../catalog/interface');
-const { CATALOG_FILES } = require('../../shared/paths');
 const { beijingDateKey } = require('../../shared/beijing-time');
 const {
   mergePending,
@@ -148,11 +145,13 @@ function dateKeyOf(input) {
  *
  * @param {object} [store]  min-store 全文（读 store.candidates）；options.store 优先
  * @param {object} [config] news-config-v2.json（读 feedback / manual_folder）
- * @param {object} [options] { store?, now?, llmExtract?, tools?, glossary? }
+ * @param {object} [options] { store?, now?, llmExtract?, tools?, glossary?, catalogApi? }
  *   - llmExtract  实体提取注入函数 (text) => Promise<string[]>/string[]；缺省正则
  *   - now         清单日期参考（缺省当天）
- *   - tools       工具卡片数据注入（测试用）；缺省通过目录 Interface 读取
- *   - glossary    glossary.json 数据注入（测试用）；缺省读 CATALOG_FILES.glossary
+ *   - tools       工具卡片数据注入（测试用）；优先于 catalogApi
+ *   - glossary    glossary 数据注入（测试用）；优先于 catalogApi
+ *   - catalogApi  目录查询注入 { listToolCards, readGlossary }（组合根构造）；
+ *                 与 tools/glossary 均未提供时按空知识库处理
  * @returns {Promise<{
  *   toolsFound: string[], toolsPending: Array<{name,url,description,source_hotspot,pending}>,
  *   conceptsFound: string[], conceptsPending: Array<{term,definition,source_hotspot,pending}>,
@@ -185,11 +184,9 @@ async function feedbackFromSummaries(store, config, options = {}) {
     }
   }
 
-  const tools = options.tools ?? (() => {
-    const result = catalog({ area: 'tool-card', operation: 'list' });
-    return result.ok ? result.data : [];
-  })();
-  const glossary = options.glossary ?? readJson(CATALOG_FILES.glossary, []);
+  const catalogApi = options.catalogApi || {};
+  const tools = options.tools ?? (typeof catalogApi.listToolCards === 'function' ? catalogApi.listToolCards() : []);
+  const glossary = options.glossary ?? (typeof catalogApi.readGlossary === 'function' ? catalogApi.readGlossary() : []);
   const dateKey = dateKeyOf(options && options.now);
 
   const toolsFound = [];

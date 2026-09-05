@@ -11,4 +11,4 @@ const local = Object.freeze({
   defaultModel: 'bonsai',
 });
 
-module.exports = local;
+module.exports = { local };
