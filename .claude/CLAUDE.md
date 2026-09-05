@@ -30,9 +30,10 @@ Issues live in GitHub Issues owned by `wozore/KnowView`.
 
 ### Code standards (enforced by check-standards, CI-gated)
 
+- Full architecture specification, subdomain patterns, and T1–T14 templates: see `docs/manual/codebase-standards.md`.
 - Dependency direction is one-way: web/maintainer-web (browser, must not import Node modules) → HTTP → maintenance (server) → business domains → shared; business domains must not require each other; src→scripts is forbidden; shared must not depend back on business domains. Cross-domain needs move up into shared, or go through service-facade injection.
 - Compatibility shims are forbidden: `module.exports = require(...)` and pure re-export files (providers/index.js is an assembly root, exempt).
-- Before placing new code, declare its type template (T1–T14) and subdomain (template table lives in local `docs/codebase-refactor-plan.md` §1.3, not committed); single file ≤400 lines, ≤15 exports; CommonJS named exports (entry main excepted).
+- Before placing new code, declare its type template (T1–T14) and subdomain per `docs/manual/codebase-standards.md`; single file ≤400 lines, ≤15 exports; CommonJS named exports (entry main excepted).
 - A stale contract is any narrative describing things that no longer exist (history of deleted fields/files/behavior): erase it together with the code when fixing; live gates keep their logic and get their wording rewritten as current-contract statements; banner/group-number decoration is not forbidden.
 - `scripts/check-standards.js` is the zero-dependency static standards checker (wired into validate.js and all CI workflows); the whitelist `scripts/check-standards.whitelist.json` is strictly shrink-only — new violations must be fixed in code, never by adding whitelist entries.
 - Adding/moving/deleting code files requires syncing `CODEBASE-MAP.md` (check-standards mechanically verifies registration completeness of src code files).
