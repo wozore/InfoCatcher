@@ -74,17 +74,33 @@ async function assertBrowser(client, name, expression) {
   if (!value) fail(`ASSERTION_FAILED:${name}`);
   console.log(`  PASS ${name}`);
 }
+async function waitDevToolsPort(profileDir, timeout = 15000) {
+  const portFile = path.join(profileDir, 'DevToolsActivePort');
+  const end = Date.now() + timeout;
+  while (Date.now() < end) {
+    if (fs.existsSync(portFile)) {
+      try {
+        const content = fs.readFileSync(portFile, 'utf8').trim().split(/\r?\n/);
+        const port = parseInt(content[0], 10);
+        if (Number.isFinite(port) && port > 0) return port;
+      } catch {}
+    }
+    await wait(100);
+  }
+  fail(`TIMEOUT:DevToolsActivePort in ${profileDir}`);
+}
 async function main() {
   const config = readConfig();
   if (!fs.existsSync(DIST)) fail(`DIST_MISSING:${DIST}`);
   const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'knowview-edge-'));
   const serverCode = "import http.server, os; os.chdir('dist'); Handler=type('Handler',(http.server.SimpleHTTPRequestHandler,),{'extensions_map':{**http.server.SimpleHTTPRequestHandler.extensions_map,'.mjs':'text/javascript'}}); http.server.ThreadingHTTPServer((''," + PORT + "),Handler).serve_forever()";
   const server = spawn(process.platform === 'win32' ? 'python' : 'python3', ['-c', serverCode], { cwd: ROOT, stdio: 'ignore' });
-  const browser = spawn(config.executablePath, [`--headless=new`, `--disable-gpu`, `--no-first-run`, `--no-default-browser-check`, `--remote-debugging-port=9222`, `--user-data-dir=${profile}`, 'about:blank'], { stdio: 'ignore' });
+  const browser = spawn(config.executablePath, [`--headless=new`, `--disable-gpu`, `--no-first-run`, `--no-default-browser-check`, `--remote-debugging-port=0`, `--user-data-dir=${profile}`, 'about:blank'], { stdio: 'ignore' });
   let client;
   try {
     await waitHttp(`http://127.0.0.1:${PORT}/`);
-    const targets = await waitHttp('http://127.0.0.1:9222/json/list').then(response => response.json());
+    const debugPort = await waitDevToolsPort(profile);
+    const targets = await waitHttp(`http://127.0.0.1:${debugPort}/json/list`).then(response => response.json());
     const page = targets.find(target => target.type === 'page' && target.webSocketDebuggerUrl);
     if (!page) fail('BROWSER_PAGE_TARGET_MISSING');
     client = cdp(page.webSocketDebuggerUrl);

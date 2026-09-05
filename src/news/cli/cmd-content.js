@@ -35,7 +35,12 @@ async function localizeCommand(action, flags) {
     const title = flags.title || '';
     const description = flags.description || '';
     if (!title && !description) throw new Error('localize preview 需要 --title 或 --description');
-    return localizeCandidate({ title, description }, { locale: flags.locale || 'zh', model: flags.model });
+    return localizeCandidate({ title, description }, {
+      locale: flags.locale || 'zh',
+      model: flags.model,
+      provider: flags.provider,
+      external: flags.external === true || flags.external === 'true',
+    });
   }
   throw new Error(`未知 localize 命令: ${action}`);
 }

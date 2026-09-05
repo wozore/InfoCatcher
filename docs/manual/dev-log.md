@@ -3006,10 +3006,17 @@
 
 - [x] `node scripts/check-standards.js`：扫描 214 个 src 文件，白名单外违规 0 处；
 - [x] `node scripts/validate.js`：全部通过（原则 1–6 全部通过，数据校验全部通过）；
-- [x] `node tests/index.js`：全量测试 724/724 项全部通过（0 failure）；
-- [x] `node scripts/build-dist.js`：构建完成，生成 106 个静态文件（新目录结构完整，旧平铺文件零残留）。
+- [x] `node tests/index.js`：全量测试 726/726 项全部通过（0 failure）；
+- [x] `node scripts/build-dist.js`：构建完成，生成 106 个静态文件（新目录结构完整，旧平铺文件零残留）；
+- [x] `node scripts/browser-acceptance.js`：定位 Windows 端口保留范围（`9156-9255`）冲突根因，修复为动态端口分配（`--remote-debugging-port=0`），全量 47 项页面交互与断言全部通过（PASS）；
+- [x] **真实外部网络与 API 实测闭环**：
+  - 外部概念源网络抓取：`refresh-vibe-hub-cache.js` 真实 HTTP 抓取 VibeHub 概念站并成功更新 `chat-ui` 缓存；
+  - 外部官方源与 GitHub 扫描：`tool-update-review.js preflight/scan` 真实连接 GitHub API 与官方 release 来源，连通性 200 OK；
+  - 外部 Tavily 检索探测：`catalog-generator.js probe` 在 keyed 与 keyless 模式下真实连通 Tavily API，验证检索与官方回退通道畅通；
+  - 外部大模型真实 API 调用：修复 `cmd-content.js` 参数透传，`news-cli.js classify preview` 与 `localize preview` 真实调用智谱 GLM API 完成语义分类（置信度 0.85）与中文本地化翻译（输出准确），零环境阻断。
 
 ### 已知边界
 
-- [~] Edge/CDP 浏览器端到端验收在当前机器受 DevToolsActivePort/9222 端口超时阻断，作为已知机器级环境缺口记录（不阻塞静态发布与逻辑验收）。
+- [x] Edge/CDP 端口超时环境缺口已彻底消除，端到端浏览器自动化已常态化可跑通；
+- 真实第三方平台连续采集受外部配额与网络窗口约束。
 

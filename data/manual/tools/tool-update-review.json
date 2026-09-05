@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "kind": "tool_update_review",
-  "updated_at": "2026-08-31T09:34:06.895Z",
+  "updated_at": "2026-09-05T05:44:12.629Z",
   "items": [
     {
       "candidate_key": "aider|https://github.com/Aider-AI/aider/releases/tag/v0.86.0|2025-08-09|sha256:84c50ce88d1da2122ba49e1171799a44540a625f025c4b509a8e0bd4b62578bd",
@@ -51,7 +51,7 @@
       "review_status": "rejected",
       "status": "candidate",
       "created_at": "2026-08-25",
-      "updated_at": "2026-08-31T07:43:51.117Z"
+      "updated_at": "2026-09-05T05:44:12.629Z"
     },
     {
       "candidate_key": "cursor|https://cursor.com/changelog|2026-08-27|sha256:d58f5fa8ab7d34de7f907541dc6238459249bbdec0959dc68500817405bcb931",
@@ -103,7 +103,7 @@
       "review_status": "approved",
       "status": "candidate",
       "created_at": "2026-08-30T07:04:20.172Z",
-      "updated_at": "2026-08-31T07:43:51.117Z"
+      "updated_at": "2026-09-05T05:44:12.629Z"
     },
     {
       "candidate_key": "github-copilot|https://github.blog/changelog/label/copilot|2026-08-28|sha256:dd1917ff19441c64c7f1304f27f22b88f548068b27bc4fbfbb7e2991535798c9",
@@ -155,7 +155,7 @@
       "review_status": "approved",
       "status": "candidate",
       "created_at": "2026-08-30T07:04:20.172Z",
-      "updated_at": "2026-08-31T07:43:51.117Z"
+      "updated_at": "2026-09-05T05:44:12.629Z"
     },
     {
       "candidate_key": "claude-code|https://github.com/anthropics/claude-code/releases/tag/v2.1.251|2026-08-28|sha256:3af61c86db93a977517d7ea6cc018f303442e4c51fc45fd85d4ba9c220d5f09c",
@@ -205,7 +205,7 @@
       "review_status": "approved",
       "status": "candidate",
       "created_at": "2026-08-30T07:04:20.172Z",
-      "updated_at": "2026-08-31T07:43:51.117Z"
+      "updated_at": "2026-09-05T05:44:12.629Z"
     },
     {
       "candidate_key": "trae|https://docs.trae.ai/ide/changelog|2026-08-19|sha256:fa8f8a3a81bcb872b00b43b253cd2f151e259b2ee80a42f960c630274805f81d",
@@ -257,7 +257,7 @@
       "review_status": "approved",
       "status": "candidate",
       "created_at": "2026-08-30T07:04:20.172Z",
-      "updated_at": "2026-08-31T07:43:51.117Z"
+      "updated_at": "2026-09-05T05:44:12.629Z"
     },
     {
       "candidate_key": "openai-codex|https://github.com/openai/codex/releases/tag/rust-v0.151.0|2026-08-29|sha256:d68fe64691de51347111f8aeef40e0b227354d2d53baf48b8c963a7c776f70e4",
@@ -307,7 +307,7 @@
       "review_status": "approved",
       "status": "candidate",
       "created_at": "2026-08-30T07:04:20.172Z",
-      "updated_at": "2026-08-31T07:43:51.117Z"
+      "updated_at": "2026-09-05T05:44:12.629Z"
     },
     {
       "candidate_key": "gemini-cli|https://github.com/google-gemini/gemini-cli/releases/tag/v0.57.0|2026-08-25|sha256:adb3b36c826f76e520bff9154201f72514842427e59ab99886a746cb2fea8621",
@@ -359,7 +359,7 @@
       "review_status": "approved",
       "status": "candidate",
       "created_at": "2026-08-30T07:04:20.172Z",
-      "updated_at": "2026-08-31T07:43:51.117Z"
+      "updated_at": "2026-09-05T05:44:12.629Z"
     },
     {
       "candidate_key": "replit-agent|https://docs.replit.com/updates|2026-08-28|sha256:be2983c9b7a4f2845c1b21f6e36ff8227fd0f1e44fb75c21b89a476799a1030f",
@@ -417,7 +417,7 @@
       "review_status": "approved",
       "status": "candidate",
       "created_at": "2026-08-30T07:04:20.172Z",
-      "updated_at": "2026-08-31T07:43:51.117Z"
+      "updated_at": "2026-09-05T05:44:12.629Z"
     },
     {
       "candidate_key": "devin|https://docs.devin.ai/release-notes/overview|2026-08-26|sha256:e7a4ac78c6731949fe00b20065ed3b6d34b63e70dc1e02436e22f1598157e02e",
@@ -473,7 +473,7 @@
       "review_status": "approved",
       "status": "candidate",
       "created_at": "2026-08-30T07:04:20.172Z",
-      "updated_at": "2026-08-31T07:43:51.117Z"
+      "updated_at": "2026-09-05T05:44:12.629Z"
     },
     {
       "candidate_key": "augment-code|https://www.augmentcode.com/changelog|2026-08-21|sha256:6601a98759dc9cda7ca7f1c64f255f5f8ff30b17de3795ce0ffc60416e704082",
@@ -523,7 +523,7 @@
       "review_status": "approved",
       "status": "candidate",
       "created_at": "2026-08-30T07:04:20.172Z",
-      "updated_at": "2026-08-31T07:43:51.117Z"
+      "updated_at": "2026-09-05T05:44:12.629Z"
     },
     {
       "candidate_key": "kiro|https://kiro.dev/changelog/cli/|2026-08-27|sha256:f024be7b40adde0f874774f317042b7bab3a11f22857a055aacbe9ac1be8d9fd",
@@ -575,7 +575,7 @@
       "review_status": "approved",
       "status": "candidate",
       "created_at": "2026-08-30T07:04:20.172Z",
-      "updated_at": "2026-08-31T07:43:51.117Z"
+      "updated_at": "2026-09-05T05:44:12.629Z"
     },
     {
       "candidate_key": "cline|https://github.com/cline/cline/releases/tag/desktop-v0.0.20|2026-08-28|sha256:55f45db3b41418e01881ded2914aa3863b5121fe262a8a616a35a4a57a339531",
@@ -625,7 +625,7 @@
       "review_status": "approved",
       "status": "candidate",
       "created_at": "2026-08-30T07:04:20.172Z",
-      "updated_at": "2026-08-31T07:43:51.117Z"
+      "updated_at": "2026-09-05T05:44:12.629Z"
     },
     {
       "candidate_key": "continue|https://github.com/continuedev/continue/releases/tag/v2.0.0-vscode|2026-06-19|sha256:d9ba541ca7ca5e64099460936dfd9fc502df428e0b35698ce385b442d55de1b6",
@@ -675,7 +675,7 @@
       "review_status": "approved",
       "status": "candidate",
       "created_at": "2026-08-30T07:04:20.172Z",
-      "updated_at": "2026-08-31T07:43:51.117Z"
+      "updated_at": "2026-09-05T05:44:12.629Z"
     },
     {
       "candidate_key": "qoder|https://docs.qoder.com/release-notes/desktop|2026-08-25|sha256:954c7dd7d39497c31ec856d5125c47a10d87d4cae8bfe60eb6ca6074d4ead6e2",
@@ -725,7 +725,7 @@
       "review_status": "approved",
       "status": "candidate",
       "created_at": "2026-08-30T07:04:20.172Z",
-      "updated_at": "2026-08-31T07:43:51.117Z"
+      "updated_at": "2026-09-05T05:44:12.629Z"
     },
     {
       "candidate_key": "codebuddy|https://www.codebuddy.ai/docs/ide/release-notes/release-notes|2026-07-22|sha256:13e9d23e7fc8bb0d2e9c8c28a6ce4a5ac0924e3cf1965eb2fc858dcd3184425d",
@@ -769,7 +769,7 @@
       "review_status": "approved",
       "status": "candidate",
       "created_at": "2026-08-30T07:04:20.172Z",
-      "updated_at": "2026-08-31T07:43:51.117Z"
+      "updated_at": "2026-09-05T05:44:12.629Z"
     },
     {
       "candidate_key": "junie|https://junie.jetbrains.com/whats-new|2026-08-19|sha256:611c6edc53b21b228e9738ce16bd5da24caf4f98c8e45795e63e7b82a0a4894e",
@@ -813,7 +813,7 @@
       "review_status": "approved",
       "status": "candidate",
       "created_at": "2026-08-31T05:34:46.365Z",
-      "updated_at": "2026-08-31T07:43:51.117Z"
+      "updated_at": "2026-09-05T05:44:12.629Z"
     },
     {
       "candidate_key": "amazon-q-developer|https://github.com/aws/amazon-q-jetbrains/blob/main/CHANGELOG.md|2026-08-19|sha256:0a6b2788cbca0290e92181a3f784302aba63c9ee6106f015c8b9a60a43ef81cc",
@@ -857,7 +857,7 @@
       "review_status": "approved",
       "status": "candidate",
       "created_at": "2026-08-31T06:20:37.498Z",
-      "updated_at": "2026-08-31T07:43:51.117Z"
+      "updated_at": "2026-09-05T05:44:12.629Z"
     }
   ]
 }
